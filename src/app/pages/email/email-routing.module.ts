@@ -7,7 +7,7 @@ import { ComposeemailComponent } from './composeemail/composeemail.component';
 
 const routes: Routes = [
     {
-        path: 'inbox',
+        path: '',
         component: InboxComponent
     },
     {

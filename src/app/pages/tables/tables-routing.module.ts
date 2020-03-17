@@ -6,11 +6,7 @@ import { AdvancedComponent } from './advanced/advanced.component';
 
 const routes: Routes = [
     {
-        path: 'basic',
-        component: BasicComponent
-    },
-    {
-        path: 'advanced',
+        path: '',
         component: AdvancedComponent
     }
 ];

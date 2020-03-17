@@ -12,13 +12,10 @@ import { UIModule } from '../../shared/ui/ui.module';
 import { DashboardsRoutingModule } from './dashboards-routing';
 
 import { DefaultDashboardComponent } from './default/default.component';
-import { Dashboard2Component } from './dashboard2/dashboard2.component';
-import { Dashboard3Component } from './dashboard3/dashboard3.component';
-import { Dashboard4Component } from './dashboard4/dashboard4.component';
 import {EcommerceComponent} from './default/ecommerce.component';
 
 @NgModule({
-  declarations: [DefaultDashboardComponent, Dashboard2Component, Dashboard3Component, Dashboard4Component, EcommerceComponent],
+  declarations: [DefaultDashboardComponent, EcommerceComponent],
   imports: [
     CommonModule,
     FormsModule,
