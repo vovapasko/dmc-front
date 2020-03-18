@@ -1,3 +1,5 @@
+import {Token} from './token.model';
+
 export class User {
     id: string;
     email: string;
@@ -19,7 +21,9 @@ export class User {
 }
 
 export class SignupResponse {
-    status: boolean;
+    status: number;
+    token: Token;
+    user: User;
 }
 
 export class RegisterResponse {

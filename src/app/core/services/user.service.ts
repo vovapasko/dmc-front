@@ -6,7 +6,7 @@ import {map} from 'rxjs/operators';
 import {RegisterResponse, ResetResponse, SignupResponse, User} from '../models/user.models';
 
 @Injectable({providedIn: 'root'})
-export class UserProfileService {
+export class UserService {
     constructor(private http: HttpClient) {
     }
 
@@ -19,9 +19,11 @@ export class UserProfileService {
             .pipe(map((response: User) => response));
     }
 
-    signup(user: User): Observable<boolean> {
-        return this.http.post(`api/signup`, user)
-            .pipe(map((response: SignupResponse) => response.status));
+    signup(payload): Observable<User> {
+        return this.http.post(`api/confirm-user/${payload.invite}`, payload.data)
+            .pipe(map((response: SignupResponse) => {
+                return {...response.user, token: response.token};
+            }));
     }
 
     register(user: User): Observable<boolean> {
