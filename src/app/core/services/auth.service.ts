@@ -1,13 +1,17 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
-import { CookieService } from './cookie.service';
-import { User } from '../models/user.models';
+import {CookieService} from './cookie.service';
+import {User} from '../models/user.models';
+import {TokenTypes} from '../models/token.model';
 
-@Injectable({ providedIn: 'root' })
+
+@Injectable({providedIn: 'root'})
 export class AuthenticationService {
+    public static REFRESH_TOKEN_NAME = 'refresh';
+    public static ACCESS_TOKEN_NAME = 'access';
     user: User;
 
     constructor(private http: HttpClient, private cookieService: CookieService) {
@@ -23,13 +27,30 @@ export class AuthenticationService {
         return this.user;
     }
 
+    public getToken(type: string): string | null {
+        const currentUser = this.currentUser();
+        if (currentUser && currentUser.token && type in TokenTypes) {
+            return currentUser.token[type];
+        }
+        return null;
+    }
+
+    public setToken(type: string, value) {
+        const currentUser = this.currentUser();
+        if (currentUser && currentUser.token && type in TokenTypes) {
+            currentUser.token[type] = value;
+        }
+        this.cookieService.setCookie('currentUser', JSON.stringify(currentUser), 1);
+        return null;
+    }
+
     /**
      * Performs the auth
      * @param email email of user
      * @param password password of user
      */
     login(email: string, password: string) {
-        return this.http.post<any>(`/api/login`, { email, password })
+        return this.http.post<any>(`/api/login`, {email, password})
             .pipe(map(user => {
                 // login successful if there's a jwt token in the response
                 if (user && user.token) {

@@ -2,6 +2,7 @@ import {Component, OnInit, Output, EventEmitter} from '@angular/core';
 import {Router} from '@angular/router';
 
 import {AuthenticationService} from '../../core/services/auth.service';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
     selector: 'app-topbar',
@@ -27,7 +28,7 @@ export class TopbarComponent implements OnInit {
     @Output() settingsButtonClicked = new EventEmitter();
     @Output() mobileMenuButtonClicked = new EventEmitter();
 
-    constructor(private router: Router, private authService: AuthenticationService) {
+    constructor(private router: Router, private authService: AuthenticationService, private http: HttpClient) {
     }
 
     ngOnInit() {
@@ -58,6 +59,16 @@ export class TopbarComponent implements OnInit {
     toggleMobileMenu(event: any) {
         event.preventDefault();
         this.mobileMenuButtonClicked.emit();
+    }
+
+    refresh() {
+        this.http.get('/api/users').subscribe(
+            response => {
+                console.log(response);
+            },
+            error => {
+                console.log(error);
+            });
     }
 
     /**

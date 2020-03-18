@@ -10,7 +10,10 @@ export class User {
     avatar?: string;
     is_staff?: boolean;
     is_superuser?: boolean;
-    token?: string;
+    token?: {
+        access: string,
+        refresh: string
+    };
     groups?: string;
     password?: string;
 }

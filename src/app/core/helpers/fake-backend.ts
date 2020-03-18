@@ -13,10 +13,17 @@ export class FakeBackendInterceptor implements HttpInterceptor {
         ];
 
         const authHeader = request.headers.get('Authorization');
-        const isLoggedIn = authHeader && authHeader.startsWith('Bearer fake-jwt-token');
+        const isLoggedIn = authHeader && authHeader.startsWith('Bearer access-token');
 
         // wrap in delayed observable to simulate server api call
         return of(null).pipe(mergeMap(() => {
+
+            // refresh token
+            if (request.url.endsWith('api/auth/refresh') && request.method === 'POST') {
+                return ok({
+                    access: 'access-token'
+                });
+            }
 
             // authenticate - public
             if (request.url.endsWith('/api/login') && request.method === 'POST') {
@@ -27,7 +34,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                     firstName: user.first_name,
                     lastName: user.last_name,
                     email: user.email,
-                    token: `fake-jwt-token`
+                    token: {access: 'access-token', refresh: 'refresh-token'}
                 });
             }
 
