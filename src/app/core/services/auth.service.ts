@@ -70,5 +70,13 @@ export class AuthenticationService {
         this.cookieService.deleteCookie('currentUser');
         this.user = null;
     }
+
+    /**
+     *  Refresh token
+     */
+    requestAccessToken(): Observable<any> {
+        const refreshToken = this.getToken(AuthenticationService.REFRESH_TOKEN_NAME);
+        return this.http.post('api/auth/refresh', {refresh: refreshToken});
+    }
 }
 

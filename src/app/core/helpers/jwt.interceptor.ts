@@ -27,14 +27,14 @@ export class JwtInterceptor implements HttpInterceptor {
                 this.refreshTokenInProgress = true;
                 this.refreshTokenSubject.next(null);
                 return next.handle(this.injectToken(request));
-                // return this.authService.requestAccessToken().pipe(
-                //     switchMap((authResponse) => {
-                //         this.authService.setToken(AuthenticationService.ACCESS_TOKEN_NAME, authResponse.access);
-                //         this.refreshTokenInProgress = false;
-                //         this.refreshTokenSubject.next(authResponse.access);
-                //         return next.handle(this.injectToken(request));
-                //     }),
-                // );
+                return this.authService.requestAccessToken().pipe(
+                    switchMap((authResponse) => {
+                        this.authService.setToken(AuthenticationService.ACCESS_TOKEN_NAME, authResponse.access);
+                        this.refreshTokenInProgress = false;
+                        this.refreshTokenSubject.next(authResponse.access);
+                        return next.handle(this.injectToken(request));
+                    }),
+                );
             } else {
                 return this.refreshTokenSubject.pipe(
                     filter(result => result !== null),
