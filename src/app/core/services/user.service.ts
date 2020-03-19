@@ -43,7 +43,7 @@ export class UserService {
     }
 
     confirmResetPassword(payload): Observable<boolean> {
-        return this.http.post(`${api}/change-pass/${payload.confirm}`, {password: payload.password})
+        return this.http.post(`${api}/change-pass/${payload.confirm}`, payload.data)
             .pipe(map((response: ResetResponse) => response.status));
     }
 
