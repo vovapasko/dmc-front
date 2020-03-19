@@ -13,6 +13,7 @@
             </div>
 
             <form class="needs-validation" name="loginForm" [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+              <app-ui-preloader [display]="loading"></app-ui-preloader>
 
               <ngb-alert type="danger" *ngIf="error" [dismissible]="false">{{ error }}</ngb-alert>
 

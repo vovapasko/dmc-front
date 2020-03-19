@@ -37,13 +37,24 @@ export class UserService {
             .pipe(map((response: RegisterResponse) => response.status));
     }
 
-    resetPassword(user: User): Observable<boolean> {
-        return this.http.post(`${api}/change-pass`, user)
+    resetPassword(): Observable<boolean> {
+        return this.http.get(`${api}/change-password-confirm/`)
             .pipe(map((response: ResetResponse) => response.status));
     }
 
-    confirmResetPassword(user: User): Observable<boolean> {
-        return this.http.post(`${api}/change-password-confirm`, user)
+    confirmResetPassword(payload): Observable<boolean> {
+        return this.http.post(`${api}/change-pass/${payload.confirm}`, {password: payload.password})
             .pipe(map((response: ResetResponse) => response.status));
+    }
+
+    updateProfile(payload) {
+        return this.http.put(`${api}/profile/`, payload)
+            .pipe(map((response: any) => {
+                const currentUser = this.authService.currentUser();
+                const newUser = response.user;
+                const user = {...currentUser, ...newUser};
+                this.authService.setUser(user);
+                return user;
+            }));
     }
 }

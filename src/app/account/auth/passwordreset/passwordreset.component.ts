@@ -2,6 +2,7 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {Title} from '@angular/platform-browser';
+import {MustMatch} from '../../../pages/form/validation/validation.mustmatch';
 
 @Component({
   selector: 'app-passwordreset',
@@ -22,7 +23,10 @@ export class PasswordresetComponent implements OnInit, AfterViewInit {
   ngOnInit() {
 
     this.resetForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', Validators.required]
+    }, {
+      validator: MustMatch('password', 'confirmPassword'),
     });
 
     // set page title
@@ -52,10 +56,8 @@ export class PasswordresetComponent implements OnInit, AfterViewInit {
     this.loading = true;
 
     console.log(this.resetForm.value);
-    setTimeout(() => {
-      this.loading = false;
-      this.success = 'We have sent you an email containing a link to reset your password';
-    }, 1000);
+    this.router.navigate(['/account/confirm']);
+
   }
 
   public setTitle( title: string) {
