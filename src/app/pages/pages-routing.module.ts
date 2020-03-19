@@ -11,7 +11,7 @@ const routes: Routes = [
   { path: 'email', loadChildren: () => import('./email/email.module').then(m => m.EmailModule) },
   { path: 'reports', loadChildren: () => import('./tables/tables.module').then(m => m.TablesModule) },
   { path: 'profile', loadChildren: () => import('./extras/extras.module').then(m => m.ExtrasModule) },
-  { path: 'lock-screen', loadChildren: () => import('./extras/extras.module').then(m => m.ExtrasModule) }
+  { path: 'lock-screen', loadChildren: () => import('./extras/extras.module').then(m => m.ExtrasModule) },
 ];
 
 @NgModule({

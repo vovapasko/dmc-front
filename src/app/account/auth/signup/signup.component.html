@@ -9,7 +9,7 @@
               <a routerLink="/account/login">
                 <img src="assets/images/logo-dark.png" alt="" height="22" />
               </a>
-              <p class="text-muted mb-4 mt-3">Don't have an account? Create your own account, it takes less than a minute</p>
+              <p *ngIf="!invite" class="text-muted mb-4 mt-3">Если вы видите этот текст, вам нужно получить приглашение для дальнейшей регистрацию в этом приложении</p>
             </div>
 
             <form class="needs-validation" name="signupForm" [formGroup]="signupForm" (ngSubmit)="onSubmit()"
@@ -26,7 +26,7 @@
                   [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" id="first-name" placeholder="Enter your first name" />
 
                 <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
-                  <div *ngIf="f.firstName.errors.required">First name is required</div>
+                  <div *ngIf="f.firstName.errors.required">Имя обязательно</div>
                 </div>
               </div>
 
@@ -37,7 +37,7 @@
                        [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }" id="last-name" placeholder="Enter your last name" />
 
                 <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
-                  <div *ngIf="f.lastName.errors.required">Last name is required</div>
+                  <div *ngIf="f.lastName.errors.required">Фамилия обязательна</div>
                 </div>
               </div>
 
@@ -48,7 +48,8 @@
                   [ngClass]="{ 'is-invalid': submitted && f.password.errors }" id="password" placeholder="Password" />
 
                 <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                  <div *ngIf="f.password.errors.required">Password is required</div>
+                  <div *ngIf="f.password.errors.required">Пароль обязателен</div>
+                  <div *ngIf="f.password.errors.minlength">Минимальная длина пароля 6 символов</div>
                 </div>
               </div>
 
@@ -59,12 +60,12 @@
                        [ngClass]="{ 'is-invalid': submitted && f.confirmPassword.errors }" id="confirm-password" placeholder="Confirm password" />
 
                 <div *ngIf="submitted && f.confirmPassword.errors" class="invalid-feedback">
-                  <div *ngIf="f.confirmPassword.errors.required">Confirm password is required</div>
+                  <div *ngIf="f.confirmPassword.errors.mustMatch">Пароли должны совпадать</div>
                 </div>
               </div>
 
               <div class="form-group mb-0 text-center">
-                <button class="btn btn-success btn-block" type="submit">Sign Up</button>
+                <button class="btn btn-success btn-block" type="submit">Confirm</button>
               </div>
             </form>
           </div> <!-- end card-body -->

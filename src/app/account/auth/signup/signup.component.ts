@@ -5,6 +5,7 @@ import {Title} from '@angular/platform-browser';
 import {AuthenticationService} from '../../../core/services/auth.service';
 import {UserService} from '../../../core/services/user.service';
 import {User} from '../../../core/models/user.models';
+import {MustMatch} from '../../../pages/form/validation/validation.mustmatch';
 
 @Component({
     selector: 'app-signup',
@@ -39,12 +40,13 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
         });
 
         this.signupForm = this.formBuilder.group({
-            firstName: ['', Validators.required],
-            lastName: ['', Validators.required],
-            password: ['', Validators.required],
-            confirmPassword: ['', Validators.required],
+            firstName: ['', [Validators.required]],
+            lastName: ['', [Validators.required]],
+            password: ['', [Validators.required, Validators.minLength(6)]],
+            confirmPassword: ['', Validators.required]
+        }, {
+            validator: MustMatch('password', 'confirmPassword'),
         });
-
         // set page title
         this.setTitle(this.title);
     }
@@ -70,6 +72,10 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
             return;
         }
 
+        if (!this.invite) {
+            alert('У вас нет приглашения, позже вместо этого будет нормальный пуш уведомление');
+        }
+
         this.loading = true;
         const {firstName, lastName, password, confirmPassword} = this.signupForm.value;
         const payload = {
@@ -83,12 +89,10 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
         };
         this.userService.signup(payload).subscribe(
             (user: User) => {
-                this.authService.login(user.email, payload.data.password).subscribe(
-                    response => this.router.navigate(['/']),
-                    error => {}// TODO add notification
-                );
+                this.router.navigate(['/profile']);
             },
             error => {
+                this.loading = false;
                 // TODO add error notification
             }
         );

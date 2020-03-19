@@ -6,7 +6,9 @@ import {map} from 'rxjs/operators';
 import {CookieService} from './cookie.service';
 import {User} from '../models/user.models';
 import {TokenTypes} from '../models/token.model';
+import {environment} from '../../../environments/environment';
 
+const api = environment.api;
 
 @Injectable({providedIn: 'root'})
 export class AuthenticationService {
@@ -50,16 +52,20 @@ export class AuthenticationService {
      * @param password password of user
      */
     login(email: string, password: string) {
-        return this.http.post<any>(`/api/login`, {email, password})
+        return this.http.post<any>(`${api}/login`, {email, password})
             .pipe(map(user => {
                 // login successful if there's a jwt token in the response
                 if (user && user.token) {
-                    this.user = user;
-                    // store user details and jwt in cookie
-                    this.cookieService.setCookie('currentUser', JSON.stringify(user), 1);
+                    this.setUser(user);
                 }
                 return user;
             }));
+    }
+
+    setUser(user: User) {
+        this.user = user;
+        // store user details and jwt in cookie
+        this.cookieService.setCookie('currentUser', JSON.stringify(user), 1);
     }
 
     /**
@@ -76,7 +82,7 @@ export class AuthenticationService {
      */
     requestAccessToken(): Observable<any> {
         const refreshToken = this.getToken(AuthenticationService.REFRESH_TOKEN_NAME);
-        return this.http.post('api/auth/refresh', {refresh: refreshToken});
+        return this.http.post(`${api}/token-refresh`, {refresh: refreshToken});
     }
 }
 
