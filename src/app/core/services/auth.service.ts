@@ -52,13 +52,11 @@ export class AuthenticationService {
      * @param password password of user
      */
     login(email: string, password: string) {
-        return this.http.post<any>(`${api}/login`, {email, password})
-            .pipe(map(user => {
-                // login successful if there's a jwt token in the response
-                if (user && user.token) {
-                    this.setUser(user);
-                }
-                return user;
+        return this.http.post<any>(`${api}/login/`, {email, password})
+            .pipe(map(response => {
+                const currentUser = {...response.user, token: response.token};
+                this.setUser(currentUser);
+                return currentUser;
             }));
     }
 
