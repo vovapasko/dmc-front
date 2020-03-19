@@ -20,7 +20,7 @@ const routes: Routes = [
         component: ConfirmComponent
     },
     {
-        path: 'reset-password',
+        path: 'change-password/:confirm',
         component: PasswordresetComponent
     }
 ];
