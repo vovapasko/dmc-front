@@ -18,6 +18,7 @@ export class User {
     };
     groups?: string;
     password?: string;
+    groups_cascade_down?: string[];
 }
 
 export class SignupResponse {

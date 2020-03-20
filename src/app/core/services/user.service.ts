@@ -32,8 +32,8 @@ export class UserService {
             }));
     }
 
-    register(user: User): Observable<boolean> {
-        return this.http.post(`${api}/invite-new-user`, user)
+    register(payload): Observable<boolean> {
+        return this.http.post(`${api}/invite-new-user/`, payload.data)
             .pipe(map((response: RegisterResponse) => response.status));
     }
 
