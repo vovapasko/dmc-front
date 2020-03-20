@@ -1,5 +1,5 @@
 <div class="container-fluid">
-  <app-page-title title="Contacts" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+  <app-page-title title="users" [breadcrumbItems]="breadCrumbItems"></app-page-title>
 
   <div class="row">
     <div class="col-xl-8">
@@ -20,7 +20,7 @@
                     class="mdi mdi-settings"></i></button>
                 <a href="javscript: void(0);" class="btn btn-danger mb-2"
                   (click)="openModal(content)"><i class="mdi mdi-plus-circle mr-1"></i> Add
-                  Contact</a>
+                  user</a>
               </div>
             </div><!-- end col-->
           </div>
@@ -29,33 +29,45 @@
             <table class="table table-centered table-hover mb-0">
               <thead>
                 <tr>
-                  <th>Basic Info</th>
-                  <th>Phone</th>
+                  <th>Имя</th>
+                  <th>Фамилия</th>
                   <th>Email</th>
-                  <th>Company</th>
-                  <th>Created Date</th>
+                  <th>Група</th>
+                  <th>Присоединился</th>
+                  <th>Подтвержден</th>
+                  <th>Статус</th>
                   <th style="width: 82px;">Action</th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let contact of paginatedContactData |filter:term">
+                <tr *ngFor="let user of paginatedUserData |filter:term">
                   <td class="table-user">
-                    <img src="{{ contact.image }}" alt="table-user" class="mr-2 rounded-circle">
+                    <img src="{{ user.image }}" alt="table-user" class="mr-2 rounded-circle">
                     <a href="javascript:void(0);" class="text-body font-weight-semibold">
-                      {{contact.name}}
+                      {{user.first_name}}
                     </a>
                   </td>
                   <td>
-                    {{contact.phone}}
+                    {{user.last_name}}
                   </td>
                   <td>
-                    {{contact.email}}
+                    {{user.email}}
                   </td>
                   <td>
-                    {{contact.location}}
+                    <span *ngIf="user.is_superuser" class="badge bg-soft-success text-success">Superuser</span>
+                    <span *ngIf="user.is_staff" class="badge bg-soft-success text-success">Admin</span>
+                    <span *ngIf="!user.is_superuser && !user.is_staff" class="badge bg-soft-warning text-warning">Client</span>
                   </td>
                   <td>
-                    {{contact.date}}
+                    {{user.date_joined | date:'medium'}}
+                  </td>
+                  <td>
+                    <span *ngIf="user.is_confirmed" class="badge bg-soft-success text-success">Да</span>
+                    <span *ngIf="!user.is_confirmed" class="badge bg-soft-success text-success">Нет</span>
+                  </td>
+                  <td>
+                    <span *ngIf="user.is_active" class="badge bg-soft-success text-success">Онлайн</span>
+                    <span *ngIf="!user.is_active" class="badge bg-soft-warning text-error">Оффлайн</span>
                   </td>
                   <td>
                     <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
@@ -117,10 +129,10 @@
 
 </div>
 
-<!-- Contacts model  -->
+<!-- users model  -->
 <ng-template #content role="document" let-modal="close">
   <div class="modal-header bg-dark">
-    <h4 class="modal-title text-white">Add Contacts</h4>
+    <h4 class="modal-title text-white">Add users</h4>
     <button type="button" class="close text-white" aria-label="Close" (click)="modal('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>

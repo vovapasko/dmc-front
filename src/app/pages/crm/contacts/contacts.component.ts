@@ -9,6 +9,7 @@ import {Contacts} from './contacts.model';
 import {contactData} from './data';
 import {AuthenticationService} from '../../../core/services/auth.service';
 import {UserService} from '../../../core/services/user.service';
+import {User} from '../../../core/models/user.models';
 
 @Component({
     selector: 'app-contacts',
@@ -21,6 +22,7 @@ import {UserService} from '../../../core/services/user.service';
  */
 export class ContactsComponent implements OnInit {
     // bread crumb items
+    sub;
     breadCrumbItems: Array<{}>;
     selectedRole = '';
     submitted: boolean;
@@ -35,10 +37,9 @@ export class ContactsComponent implements OnInit {
     endIndex = 10;
     totalSize = 0;
     selectValue: string[];
+    users: User[] = [];
 
-
-    paginatedContactData: Array<Contacts>;
-    contacts: Array<Contacts>;
+    paginatedUserData: Array<User>;
     // validation form
     validationform: FormGroup;
 
@@ -60,11 +61,14 @@ export class ContactsComponent implements OnInit {
         const currentUser = this.authService.currentUser();
         this.selectValue = currentUser.groups_cascade_down;
 
-
+        this.sub = this.userService.getAll().subscribe(
+            response => this._fetchData(response),
+            error => console.log(error)
+        );
         /**
          * Fetches Data
          */
-        this._fetchData();
+
     }
 
     /**
@@ -108,17 +112,17 @@ export class ContactsComponent implements OnInit {
     onPageChange(page: any): void {
         this.startIndex = (page - 1) * this.pageSize;
         this.endIndex = (page - 1) * this.pageSize + this.pageSize;
-        this.paginatedContactData = this.contacts.slice(this.startIndex, this.endIndex);
+        this.paginatedUserData = this.users.slice(this.startIndex, this.endIndex);
     }
 
-    private _fetchData() {
+    private _fetchData(response) {
 
-        this.contacts = contactData;
+        this.users = response;
         // apply pagination
         this.startIndex = 0;
         this.endIndex = this.pageSize;
 
-        this.paginatedContactData = this.contacts.slice(this.startIndex, this.endIndex);
-        this.totalSize = this.contacts.length;
+        this.paginatedUserData = this.users.slice(this.startIndex, this.endIndex);
+        this.totalSize = this.users.length;
     }
 }

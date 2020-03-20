@@ -15,7 +15,8 @@ export class UserService {
     }
 
     getAll(): Observable<User[]> {
-        return this.http.get<User[]>(`${api}/users`);
+        return this.http.get<User[]>(`${api}/home/`)
+            .pipe(map(response => response));
     }
 
     getById(id: string): Observable<User> {
