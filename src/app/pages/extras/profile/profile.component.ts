@@ -3,11 +3,9 @@ import {Component, OnInit} from '@angular/core';
 import {Project, Inbox} from './profile.model';
 
 import {projectData, inboxData} from './data';
-import {CookieService} from '../../../core/services/cookie.service';
-import {User} from '../../../core/models/user.models';
+import {User} from '../../../core/models/instances/user.models';
 import {AuthenticationService} from '../../../core/services/auth.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MustMatch} from '../../form/validation/validation.mustmatch';
 import {UserService} from '../../../core/services/user.service';
 
 @Component({

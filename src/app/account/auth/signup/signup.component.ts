@@ -4,7 +4,7 @@ import {ActivatedRoute, Params, Router} from '@angular/router';
 import {Title} from '@angular/platform-browser';
 import {AuthenticationService} from '../../../core/services/auth.service';
 import {UserService} from '../../../core/services/user.service';
-import {User} from '../../../core/models/user.models';
+import {User} from '../../../core/models/instances/user.models';
 import {MustMatch} from '../../../pages/form/validation/validation.mustmatch';
 
 @Component({

@@ -1,5 +1,5 @@
-import {Token} from '../../token.model';
-import {User} from '../../user.models';
+import {Token} from '../../instances/token.model';
+import {User} from '../../instances/user.models';
 
 export interface UpdateProfileResponse {
     user?: User;

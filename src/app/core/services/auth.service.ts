@@ -1,14 +1,14 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {map} from 'rxjs/operators';
+import {map, tap} from 'rxjs/operators';
 
 import {CookieService} from './cookie.service';
-import {User} from '../models/user.models';
-import {TokenTypes} from '../models/token.model';
+import {User} from '../models/instances/user.models';
+import {TokenTypes} from '../models/instances/token.model';
 import {environment} from '../../../environments/environment';
-import {RequestAccessTokenResponse} from '../models/response/auth/requestAccessTokenResponse';
-import {Observable} from 'rxjs';
-import {LoginResponse} from '../models/response/auth/loginResponse';
+import {RequestAccessTokenResponse} from '../models/responses/auth/requestAccessTokenResponse';
+import {Observable, throwError} from 'rxjs';
+import {LoginResponse} from '../models/responses/auth/loginResponse';
 
 const api = environment.api;
 
@@ -100,15 +100,23 @@ export class AuthenticationService {
     requestAccessToken(): Observable<RequestAccessTokenResponse> {
         const refreshToken = this.getToken(AuthenticationService.REFRESH_TOKEN_NAME);
         return this.http
-            .post(`${api}/token-refresh`, {refresh: refreshToken})
+            .post(`${api}/token-refresh/`, {refresh: refreshToken})
             .pipe(
-                map(
+                tap(
                     (response: RequestAccessTokenResponse) => {
                         this.setToken(AuthenticationService.ACCESS_TOKEN_NAME, response.access);
                         return response;
-                    }
+                    },
+                    error => this.unauthorised(error)
                 )
             );
+    }
+
+    unauthorised = (error) => {
+        // auto logout if 401 response returned from api
+        this.logout();
+        location.reload();
+        return throwError({ status: 401, error: { message: 'Unauthorised' } });
     }
 }
 

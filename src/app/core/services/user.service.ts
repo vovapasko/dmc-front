@@ -5,11 +5,12 @@ import {Observable, throwError} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {environment} from '../../../environments/environment';
 import {AuthenticationService} from './auth.service';
-import {User} from '../models/user.models';
-import {SignupResponse} from '../models/response/user/signupResponse';
-import {RegisterResponse} from '../models/response/user/registerResponse';
-import {ResetPasswordResponse} from '../models/response/user/resetPasswordResponse';
-import {ConfirmResetPasswordResponse} from '../models/response/user/confirmResetPasswordResponse';
+import {User} from '../models/instances/user.models';
+import {SignupResponse} from '../models/responses/user/signupResponse';
+import {RegisterResponse} from '../models/responses/user/registerResponse';
+import {ResetPasswordResponse} from '../models/responses/user/resetPasswordResponse';
+import {ConfirmResetPasswordResponse} from '../models/responses/user/confirmResetPasswordResponse';
+import {UpdateProfileResponse} from '../models/responses/user/updateProfileResponse';
 
 const api = environment.api;
 
@@ -104,7 +105,7 @@ export class UserService {
             .put(`${api}/profile/`, payload)
             .pipe(
                 map(
-                    (response: any) => {
+                    (response: UpdateProfileResponse) => {
                         const currentUser = this.authService.currentUser();
                         const newUser = response.user;
                         const user = {...currentUser, ...newUser};

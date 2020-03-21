@@ -9,7 +9,7 @@ import {Contacts} from './contacts.model';
 import {contactData} from './data';
 import {AuthenticationService} from '../../../core/services/auth.service';
 import {UserService} from '../../../core/services/user.service';
-import {User} from '../../../core/models/user.models';
+import {User} from '../../../core/models/instances/user.models';
 
 @Component({
     selector: 'app-contacts',
