@@ -100,8 +100,15 @@ export class ContactsComponent implements OnInit {
         this.userService
             .register({data})
             .subscribe(
-                response => this.closeModal(),
-                error => console.log(error)
+                response => {
+                    // TODO add notification
+                    this.closeModal();
+                },
+                error => {
+                    // TODO add notification
+                    console.log(error);
+                    this.closeModal();
+                }
             );
     }
 

@@ -64,11 +64,13 @@ export class AuthenticationService {
         return this.http
             .post<any>(`${api}/login/`, {email, password})
             .pipe(
-                map((response: LoginResponse) => {
-                    const currentUser = {...response.user, token: response.token};
-                    this.setUser(currentUser);
-                    return currentUser;
-                })
+                map(
+                    (response: LoginResponse) => {
+                        const currentUser = {...response.user, token: response.token};
+                        this.setUser(currentUser);
+                        return currentUser;
+                    }
+                )
             );
     }
 
@@ -100,10 +102,12 @@ export class AuthenticationService {
         return this.http
             .post(`${api}/token-refresh`, {refresh: refreshToken})
             .pipe(
-                map((response: RequestAccessTokenResponse) => {
-                    this.setToken(AuthenticationService.ACCESS_TOKEN_NAME, response.access);
-                    return response;
-                })
+                map(
+                    (response: RequestAccessTokenResponse) => {
+                        this.setToken(AuthenticationService.ACCESS_TOKEN_NAME, response.access);
+                        return response;
+                    }
+                )
             );
     }
 }

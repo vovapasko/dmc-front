@@ -3,6 +3,7 @@ import {Token} from '../../token.model';
 
 export interface SignupResponse {
     status: number;
-    token: Token;
-    user: User;
+    token?: Token;
+    user?: User;
+    error?: string;
 }
