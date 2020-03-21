@@ -3,16 +3,15 @@ import {HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse}
 import {AuthenticationService} from '../services/auth.service';
 import {Observable, BehaviorSubject, Subject, throwError} from 'rxjs';
 import {switchMap, take, filter, catchError} from 'rxjs/operators';
-import {CookieService} from '../services/cookie.service';
 
-const tokenFreeUrl = ['login', 'confirm-user', 'token-refresh'];
+const tokenFreeUrls = ['login', 'confirm-user', 'token-refresh'];
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
     private refreshTokenInProgress = false;
     private refreshTokenSubject: Subject<any> = new BehaviorSubject<any>(null);
 
-    constructor(public authService: AuthenticationService, public cookieService: CookieService) {
+    constructor(public authService: AuthenticationService) {
     }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -21,7 +20,7 @@ export class JwtInterceptor implements HttpInterceptor {
             .handle(this.injectToken(request))
             .pipe(
                 catchError(error => {
-                        if (error instanceof HttpErrorResponse && error.status === 401) {
+                        if (error.status === 401) {
                             return this.refreshToken(request, next);
                         } else {
                             return throwError(error);
@@ -59,14 +58,14 @@ export class JwtInterceptor implements HttpInterceptor {
         }
     }
 
-    belongToTokenUrls(url) {
-        return !!tokenFreeUrl.filter(el => url.indexOf(el) !== -1).length;
+    belongToTokenFreeUrls(url) {
+        return !!tokenFreeUrls.filter(el => url.indexOf(el) !== -1).length;
     }
 
     injectToken(request: HttpRequest<any>) {
         const token = this.authService.getToken(AuthenticationService.ACCESS_TOKEN_NAME);
 
-        if (token && this.belongToTokenUrls(request.url)) {
+        if (token && !this.belongToTokenFreeUrls(request.url)) {
             return request.clone({
                 setHeaders: {
                     Authorization: `Bearer ${token}`

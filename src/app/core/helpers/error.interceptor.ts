@@ -12,11 +12,12 @@ export class ErrorInterceptor implements HttpInterceptor {
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(request).pipe(catchError(err => {
             const error = err.error.message || err.statusText;
-            return this.error(error);
+            const status = err.status;
+            return this.error(error, status);
         }));
     }
 
-    error(message) {
-        return throwError({ status: 400, error: { message } });
+    error(message, status) {
+        return throwError({ status, error: { message } });
     }
 }
