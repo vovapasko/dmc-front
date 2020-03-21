@@ -26,8 +26,7 @@ export class JwtInterceptor implements HttpInterceptor {
             if (!this.refreshTokenInProgress) {
                 this.refreshTokenInProgress = true;
                 return this.authService.requestAccessToken().pipe(
-                    switchMap((authResponse) => {
-                        this.authService.setToken(AuthenticationService.ACCESS_TOKEN_NAME, authResponse.access);
+                    switchMap((authResponse: any) => {
                         this.refreshTokenInProgress = false;
                         this.refreshTokenSubject.next(authResponse.access);
                         return next.handle(this.injectToken(request));

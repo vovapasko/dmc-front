@@ -12,37 +12,8 @@ export class User {
     avatar?: string;
     is_staff?: boolean;
     is_superuser?: boolean;
-    token?: {
-        access: string,
-        refresh: string
-    };
+    token?: Token;
     groups?: string;
     password?: string;
     groups_cascade_down?: string[];
 }
-
-export class SignupResponse {
-    status: number;
-    token: Token;
-    user: User;
-}
-
-export class RegisterResponse {
-    status: boolean;
-}
-
-export class ResetResponse {
-    status: boolean;
-}
-
-//     email
-//     first_name
-//     last_name
-//     date_joined
-//     date_updated
-//     is_active
-//     is_confirmed
-//     avatar
-//     is_staff
-//     is_superuser
-//     token

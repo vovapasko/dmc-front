@@ -1,12 +1,14 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {BehaviorSubject, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 
 import {CookieService} from './cookie.service';
 import {User} from '../models/user.models';
 import {TokenTypes} from '../models/token.model';
 import {environment} from '../../../environments/environment';
+import {RequestAccessTokenResponse} from '../models/response/auth/requestAccessTokenResponse';
+import {Observable} from 'rxjs';
+import {LoginResponse} from '../models/response/auth/loginResponse';
 
 const api = environment.api;
 
@@ -14,6 +16,7 @@ const api = environment.api;
 export class AuthenticationService {
     public static REFRESH_TOKEN_NAME = 'refresh';
     public static ACCESS_TOKEN_NAME = 'access';
+    public static CURRENT_USER = 'currentUser';
     user: User;
 
     constructor(private http: HttpClient, private cookieService: CookieService) {
@@ -24,11 +27,14 @@ export class AuthenticationService {
      */
     public currentUser(): User {
         if (!this.user) {
-            this.user = JSON.parse(this.cookieService.getCookie('currentUser'));
+            this.user = JSON.parse(this.cookieService.getCookie(AuthenticationService.CURRENT_USER));
         }
         return this.user;
     }
 
+    /**
+     * Get the token (access or refresh) from cookie
+     */
     public getToken(type: string): string | null {
         const currentUser = this.currentUser();
         if (currentUser && currentUser.token && type in TokenTypes) {
@@ -37,12 +43,15 @@ export class AuthenticationService {
         return null;
     }
 
+    /**
+     * Save the token (access or refresh) in cookie
+     */
     public setToken(type: string, value) {
         const currentUser = this.currentUser();
         if (currentUser && currentUser.token && type in TokenTypes) {
             currentUser.token[type] = value;
         }
-        this.cookieService.setCookie('currentUser', JSON.stringify(currentUser), 1);
+        this.cookieService.setCookie(AuthenticationService.CURRENT_USER, JSON.stringify(currentUser), 1);
         return null;
     }
 
@@ -51,19 +60,26 @@ export class AuthenticationService {
      * @param email email of user
      * @param password password of user
      */
-    login(email: string, password: string) {
-        return this.http.post<any>(`${api}/login/`, {email, password})
-            .pipe(map(response => {
-                const currentUser = {...response.user, token: response.token};
-                this.setUser(currentUser);
-                return currentUser;
-            }));
+    login(email: string, password: string): Observable<User> {
+        return this.http
+            .post<any>(`${api}/login/`, {email, password})
+            .pipe(
+                map((response: LoginResponse) => {
+                    const currentUser = {...response.user, token: response.token};
+                    this.setUser(currentUser);
+                    return currentUser;
+                })
+            );
     }
 
+    /**
+     * Save the user in cookie
+     */
     setUser(user: User) {
         this.user = user;
         // store user details and jwt in cookie
-        this.cookieService.setCookie('currentUser', JSON.stringify(user), 1);
+        this.cookieService.setCookie(AuthenticationService.CURRENT_USER, JSON.stringify(user), 1);
+        return this.user;
     }
 
     /**
@@ -71,16 +87,24 @@ export class AuthenticationService {
      */
     logout() {
         // remove user from local storage to log user out
-        this.cookieService.deleteCookie('currentUser');
+        this.cookieService.deleteCookie(AuthenticationService.CURRENT_USER);
         this.user = null;
+        return null;
     }
 
     /**
      *  Refresh token
      */
-    requestAccessToken(): Observable<any> {
+    requestAccessToken(): Observable<RequestAccessTokenResponse> {
         const refreshToken = this.getToken(AuthenticationService.REFRESH_TOKEN_NAME);
-        return this.http.post(`${api}/token-refresh`, {refresh: refreshToken});
+        return this.http
+            .post(`${api}/token-refresh`, {refresh: refreshToken})
+            .pipe(
+                map((response: RequestAccessTokenResponse) => {
+                    this.setToken(AuthenticationService.ACCESS_TOKEN_NAME, response.access);
+                    return response;
+                })
+            );
     }
 }
 
