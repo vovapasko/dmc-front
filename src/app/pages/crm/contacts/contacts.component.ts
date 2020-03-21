@@ -9,7 +9,7 @@ import {Contacts} from './contacts.model';
 import {contactData} from './data';
 import {AuthenticationService} from '../../../core/services/auth.service';
 import {UserService} from '../../../core/services/user.service';
-import {User} from '../../../core/models/user.models';
+import {User} from '../../../core/models/instances/user.models';
 
 @Component({
     selector: 'app-contacts',
@@ -100,8 +100,15 @@ export class ContactsComponent implements OnInit {
         this.userService
             .register({data})
             .subscribe(
-                response => this.closeModal(),
-                error => console.log(error)
+                response => {
+                    // TODO add notification
+                    this.closeModal();
+                },
+                error => {
+                    // TODO add notification
+                    console.log(error);
+                    this.closeModal();
+                }
             );
     }
 
