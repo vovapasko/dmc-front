@@ -63,11 +63,10 @@ export class ProfileComponent implements OnInit {
             return;
         }
 
-
         this.loading = true;
         const {firstName, lastName} = this.profileForm.value;
-
-        this.userService.updateProfile({first_name: firstName, last_name: lastName}).subscribe(
+        const data = {first_name: firstName, last_name: lastName};
+        this.userService.updateProfile({data}).subscribe(
             user => {
                 this.profileForm.controls.firstName.setValue(user.first_name);
                 this.profileForm.controls.lastName.setValue(user.last_name);

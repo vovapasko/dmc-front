@@ -32,8 +32,7 @@
                   <th>Имя</th>
                   <th>Фамилия</th>
                   <th>Email</th>
-                  <th>Група</th>
-                  <th>Присоединился</th>
+                  <th>Роль</th>
                   <th>Подтвержден</th>
                   <th>Статус</th>
                   <th style="width: 82px;">Action</th>
@@ -42,7 +41,7 @@
               <tbody>
                 <tr *ngFor="let user of paginatedUserData |filter:term">
                   <td class="table-user">
-                    <img src="{{ user.image }}" alt="table-user" class="mr-2 rounded-circle">
+                    <img [src]="api + user.avatar" alt="table-user" class="mr-2 rounded-circle">
                     <a href="javascript:void(0);" class="text-body font-weight-semibold">
                       {{user.first_name}}
                     </a>
@@ -57,9 +56,6 @@
                     <span *ngIf="user.is_superuser" class="badge bg-soft-success text-success">Superuser</span>
                     <span *ngIf="user.is_staff" class="badge bg-soft-success text-success">Admin</span>
                     <span *ngIf="!user.is_superuser && !user.is_staff" class="badge bg-soft-warning text-warning">Client</span>
-                  </td>
-                  <td>
-                    {{user.date_joined | date:'medium'}}
                   </td>
                   <td>
                     <span *ngIf="user.is_confirmed" class="badge bg-soft-success text-success">Да</span>

@@ -10,6 +10,7 @@ import {contactData} from './data';
 import {AuthenticationService} from '../../../core/services/auth.service';
 import {UserService} from '../../../core/services/user.service';
 import {User} from '../../../core/models/instances/user.models';
+import {environment} from '../../../../environments/environment';
 
 @Component({
     selector: 'app-contacts',
@@ -23,6 +24,7 @@ import {User} from '../../../core/models/instances/user.models';
 export class ContactsComponent implements OnInit {
     // bread crumb items
     sub;
+    api = environment.api;
     breadCrumbItems: Array<{}>;
     selectedRole = '';
     submitted: boolean;
@@ -122,9 +124,9 @@ export class ContactsComponent implements OnInit {
         this.paginatedUserData = this.users.slice(this.startIndex, this.endIndex);
     }
 
-    private _fetchData(response) {
+    private _fetchData(users: User[]) {
 
-        this.users = response;
+        this.users = users;
         // apply pagination
         this.startIndex = 0;
         this.endIndex = this.pageSize;
