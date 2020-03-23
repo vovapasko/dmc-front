@@ -48,6 +48,9 @@ export class PasswordResetComponent implements OnInit, AfterViewInit, OnDestroy 
         this.setTitle(this.title);
     }
 
+    /**
+     * Set page title
+     */
     public setTitle(title: string) {
         this.titleService.setTitle(title);
     }
@@ -65,7 +68,7 @@ export class PasswordResetComponent implements OnInit, AfterViewInit, OnDestroy 
     /**
      * Reset user password with new credentials
      */
-    onsubscriptionmit() {
+    onSubmit() {
         this.success = '';
         this.submitted = true;
 

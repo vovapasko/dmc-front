@@ -35,7 +35,7 @@ export class TopbarComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         // get the notifications and subscribe
-        this.subscription = this.notificationService.getObservable().subscribe(notification => this._addNotification(notification));
+        this.subscription = this.notificationService.getObservable().subscribe(notification => this.addNotification(notification));
 
         // get current user
         this.currentUser = this.authService.currentUser();
@@ -46,7 +46,7 @@ export class TopbarComponent implements OnInit, OnDestroy {
     /**
      * Add new notification to bar
      */
-    private _addNotification(notification: Notification) {
+    addNotification(notification: Notification) {
         this.notifications.push(notification);
     }
 

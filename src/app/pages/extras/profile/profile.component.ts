@@ -8,6 +8,7 @@ import {AuthenticationService} from '../../../core/services/auth.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {UserService} from '../../../core/services/user.service';
 import {environment} from '../../../../environments/environment';
+import {Title} from '@angular/platform-browser';
 
 @Component({
     selector: 'app-profile',
@@ -20,6 +21,7 @@ import {environment} from '../../../../environments/environment';
  */
 export class ProfileComponent implements OnInit {
 
+    title = 'Профиль';
     api = environment.api;
     currentUser: User;
     profileForm: FormGroup;
@@ -34,7 +36,12 @@ export class ProfileComponent implements OnInit {
 
     inboxData: Inbox[];
 
-    constructor(private authService: AuthenticationService, private formBuilder: FormBuilder, private userService: UserService) {
+    constructor(
+        private authService: AuthenticationService,
+        private formBuilder: FormBuilder,
+        private userService: UserService,
+        private titleService: Title
+    ) {
     }
 
     ngOnInit() {
@@ -52,6 +59,13 @@ export class ProfileComponent implements OnInit {
 
         // fetch emails
         this._fetchData();
+    }
+
+    /**
+     * Set page title
+     */
+    public setTitle(title: string) {
+        this.titleService.setTitle(title);
     }
 
     // convenience getter for easy access to form fields

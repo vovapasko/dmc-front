@@ -11,6 +11,7 @@ import {RegisterResponse} from '../models/responses/user/registerResponse';
 import {ResetPasswordResponse} from '../models/responses/user/resetPasswordResponse';
 import {ConfirmResetPasswordResponse} from '../models/responses/user/confirmResetPasswordResponse';
 import {UpdateProfileResponse} from '../models/responses/user/updateProfileResponse';
+import {HomeResponse} from '../models/responses/user/homeResponse';
 
 const api = environment.api;
 
@@ -23,7 +24,13 @@ export class UserService {
      *  Get all users, api returns array of users
      */
     getAll(): Observable<User[]> {
-        return this.http.get<User[]>(`${api}/home/`);
+        return this.http
+            .get(`${api}/home/`)
+            .pipe(
+                map(
+                    (response: HomeResponse) => response.data
+                )
+            );
     }
 
     /**

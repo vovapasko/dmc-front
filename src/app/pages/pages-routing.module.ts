@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-const routes: Routes = [
+export const routes: Routes = [
   {path: '', redirectTo: '/dashboards/dashboard', pathMatch: 'full'},
   { path: 'dashboard', loadChildren: () => import('./dashboards/dashboards.module').then(m => m.DashboardsModule) },
   { path: 'users', loadChildren: () => import('./crm/crm.module').then(m => m.CRMModule) },

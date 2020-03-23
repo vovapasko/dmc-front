@@ -47,6 +47,10 @@ export class LoginComponent implements OnInit, AfterViewInit {
         this.setTitle(this.title);
     }
 
+    public setTitle(title: string) {
+        this.titleService.setTitle(title);
+    }
+
     ngAfterViewInit() {
         document.body.classList.add('authentication-bg');
         document.body.classList.add('authentication-bg-pattern');
@@ -79,9 +83,5 @@ export class LoginComponent implements OnInit, AfterViewInit {
                     this.error = error;
                     this.loading = false;
                 });
-    }
-
-    public setTitle(title: string) {
-        this.titleService.setTitle(title);
     }
 }

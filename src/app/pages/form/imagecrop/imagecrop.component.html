@@ -126,6 +126,7 @@
 
                             <div class="text-center mt-2 btn-holder">
                                 <label for="inputImage"
+                                       id="upload"
                                        class="btn btn-warning waves-effect waves-light mb-2"
                                 >
                                     <i class="mdi mdi-upload"></i>
@@ -138,7 +139,10 @@
                                        accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff"
                                        (change)="handleFileInput($event.target.files)"
                                 >
-                                <button (click)="save()" class="btn btn-success waves-effect waves-light mb-2 mr-1">
+                                <button (click)="save()"
+                                        class="btn btn-success waves-effect waves-light mb-2 mr-1"
+                                        id="save"
+                                >
                                     <i class="mdi mdi-content-save"></i>
                                     Сохранить
                                 </button>

@@ -75,10 +75,8 @@ export class ContactsComponent implements OnInit {
         );
     }
 
-    /**
-     * Returns form
-     */
-    get form() {
+    // convenience getter for easy access to form fields
+    get f() {
         return this.validationform.controls;
     }
 

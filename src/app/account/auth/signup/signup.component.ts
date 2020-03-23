@@ -51,6 +51,9 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
         this.setTitle(this.title);
     }
 
+    /**
+     * Set page title
+     */
     public setTitle(title: string) {
         this.titleService.setTitle(title);
     }
