@@ -30,7 +30,7 @@
         <div class="dropdown-item noti-title" ngbDropdownItem>
           <h5 class="m-0">
             <span class="float-right">
-              <a href="javascript: void(0);" class="text-dark">
+              <a (click)="clearAll()" href="javascript: void(0);" class="text-dark">
                 <small>Clear All</small>
               </a>
             </span>Notification
@@ -39,19 +39,18 @@
 
         <div id="notification-items" class="slimscroll noti-scroll" appSlimScroll>
           <!-- item-->
-          <a *ngFor="let notification of notificationItems;" href="{{ notification.redirectTo }}"
+          <a *ngFor="let notification of notifications;"
             class="dropdown-item notify-item" ngbDropdownItem>
-            <div class="notify-icon bg-soft-{{ notification.bgColor }} text-{{ notification.bgColor }}">
-              <i class="{{ notification.icon }}"></i>
+            <div class="notify-icon bg-primary">
+              <i class="mdi mdi-comment-account-outline"></i>
             </div>
-            <p class="notify-details">{{ notification.text }}
-              <small class="text-muted">{{ notification.subText }}</small>
-            </p>
+            <p class="notify-details">{{ notification.title }}</p>
+            <small class="text-muted">{{ notification.message }}</small>
           </a>
         </div>
 
         <!-- All-->
-        <a href="javascript:void(0);" class="dropdown-item text-center text-primary notify-item notify-all">
+        <a href="javascript:void(0);" class="dropdown-item text-center text-primary notify-item notify-all" (click)="emit()">
           View All
         </a>
       </div>

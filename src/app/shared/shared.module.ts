@@ -7,7 +7,7 @@ import { UIModule } from './ui/ui.module';
   declarations: [],
   imports: [
     CommonModule,
-    UIModule
+    UIModule,
   ],
 })
 export class SharedModule { }

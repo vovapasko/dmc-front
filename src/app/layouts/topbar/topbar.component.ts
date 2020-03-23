@@ -1,54 +1,61 @@
-import {Component, OnInit, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Output, EventEmitter, OnDestroy} from '@angular/core';
 import {Router} from '@angular/router';
 
 import {AuthenticationService} from '../../core/services/auth.service';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {User} from '../../core/models/instances/user.models';
+import {Notification, NotificationType} from '../../core/models/instances/notification';
+import {Subscription} from 'rxjs';
+import {NotificationService} from '../../core/services/notification.service';
 
 @Component({
     selector: 'app-topbar',
     templateUrl: './topbar.component.html',
     styleUrls: ['./topbar.component.scss']
 })
-export class TopbarComponent implements OnInit {
+export class TopbarComponent implements OnInit, OnDestroy {
 
+    notifications: Notification[] = [];
+    private subscription: Subscription;
     api = environment.api;
     currentUser: User;
-    notificationItems: Array<{}>;
     languages: Array<{
         id: number,
         flag?: string,
         name: string
     }>;
-    selectedLanguage: {
-        id: number,
-        flag?: string,
-        name: string
-    };
-
     openMobileMenu: boolean;
 
     @Output() settingsButtonClicked = new EventEmitter();
     @Output() mobileMenuButtonClicked = new EventEmitter();
 
-    constructor(private router: Router, private authService: AuthenticationService, private http: HttpClient) {
+    constructor(
+        private router: Router,
+        private authService: AuthenticationService,
+        private http: HttpClient,
+        private notificationService: NotificationService
+    ) {
     }
 
     ngOnInit() {
         // get the notifications
-        this._fetchNotifications();
+        this.subscription = this.notificationService.getObservable().subscribe(notification => this._addNotification(notification));
+
         this.currentUser = this.authService.currentUser();
         this.openMobileMenu = false;
     }
 
+    private _addNotification(notification: Notification) {
+        this.notifications.push(notification);
+    }
 
-    /**
-     * Change the language
-     * @param language language
-     */
-    changeLanguage(language) {
-        this.selectedLanguage = language;
+    emit() {
+        this.notificationService.success('Good job', 'Hello');
+    }
+
+    close(notification: Notification) {
+        this.notifications = this.notifications.filter(notif => notif.id !== notification.id);
     }
 
     /**
@@ -74,66 +81,11 @@ export class TopbarComponent implements OnInit {
         this.router.navigate(['/account/login']);
     }
 
-    /**
-     * Fetches the notification
-     * Note: For now returns the hard coded notifications
-     */
-    _fetchNotifications() {
-        this.notificationItems = [{
-            text: 'Caleb Flakelar commented on Admin',
-            subText: '1 min ago',
-            icon: 'mdi mdi-comment-account-outline',
-            bgColor: 'primary',
-            redirectTo: '/notification/1'
-        },
-            {
-                text: 'New user registered.',
-                subText: '5 min ago',
-                icon: 'mdi mdi-account-plus',
-                bgColor: 'info',
-                redirectTo: '/notification/2'
-            },
-            {
-                text: 'Cristina Pride',
-                subText: 'Hi, How are you? What about our next meeting',
-                icon: 'mdi mdi-comment-account-outline',
-                bgColor: 'success',
-                redirectTo: '/notification/3'
-            },
-            {
-                text: 'Caleb Flakelar commented on Admin',
-                subText: '2 days ago',
-                icon: 'mdi mdi-comment-account-outline',
-                bgColor: 'danger',
-                redirectTo: '/notification/4'
-            },
-            {
-                text: 'Caleb Flakelar commented on Admin',
-                subText: '1 min ago',
-                icon: 'mdi mdi-comment-account-outline',
-                bgColor: 'primary',
-                redirectTo: '/notification/5'
-            },
-            {
-                text: 'New user registered.',
-                subText: '5 min ago',
-                icon: 'mdi mdi-account-plus',
-                bgColor: 'info',
-                redirectTo: '/notification/6'
-            },
-            {
-                text: 'Cristina Pride',
-                subText: 'Hi, How are you? What about our next meeting',
-                icon: 'mdi mdi-comment-account-outline',
-                bgColor: 'success',
-                redirectTo: '/notification/7'
-            },
-            {
-                text: 'Caleb Flakelar commented on Admin',
-                subText: '2 days ago',
-                icon: 'mdi mdi-comment-account-outline',
-                bgColor: 'danger',
-                redirectTo: '/notification/8'
-            }];
+    clearAll() {
+        this.notifications = [];
+    }
+
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
     }
 }
