@@ -3,6 +3,8 @@ import {Router} from '@angular/router';
 
 import {AuthenticationService} from '../../core/services/auth.service';
 import {HttpClient} from '@angular/common/http';
+import {environment} from '../../../environments/environment';
+import {User} from '../../core/models/instances/user.models';
 
 @Component({
     selector: 'app-topbar',
@@ -11,6 +13,8 @@ import {HttpClient} from '@angular/common/http';
 })
 export class TopbarComponent implements OnInit {
 
+    api = environment.api;
+    currentUser: User;
     notificationItems: Array<{}>;
     languages: Array<{
         id: number,
@@ -34,6 +38,7 @@ export class TopbarComponent implements OnInit {
     ngOnInit() {
         // get the notifications
         this._fetchNotifications();
+        this.currentUser = this.authService.currentUser();
         this.openMobileMenu = false;
     }
 
@@ -59,16 +64,6 @@ export class TopbarComponent implements OnInit {
     toggleMobileMenu(event: any) {
         event.preventDefault();
         this.mobileMenuButtonClicked.emit();
-    }
-
-    refresh() {
-        this.http.get('/api/users').subscribe(
-            response => {
-                console.log(response);
-            },
-            error => {
-                console.log(error);
-            });
     }
 
     /**

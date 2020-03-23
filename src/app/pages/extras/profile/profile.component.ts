@@ -7,6 +7,7 @@ import {User} from '../../../core/models/instances/user.models';
 import {AuthenticationService} from '../../../core/services/auth.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {UserService} from '../../../core/services/user.service';
+import {environment} from '../../../../environments/environment';
 
 @Component({
     selector: 'app-profile',
@@ -19,6 +20,7 @@ import {UserService} from '../../../core/services/user.service';
  */
 export class ProfileComponent implements OnInit {
 
+    api = environment.api;
     currentUser: User;
     profileForm: FormGroup;
     submitted = false;

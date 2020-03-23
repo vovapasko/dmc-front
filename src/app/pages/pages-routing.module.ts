@@ -7,6 +7,7 @@ const routes: Routes = [
   { path: 'users', loadChildren: () => import('./crm/crm.module').then(m => m.CRMModule) },
   { path: 'counterparties', loadChildren: () => import('./ecommerce/ecommerce.module').then(m => m.EcommerceModule) },
   { path: 'burst-news', loadChildren: () => import('./form/form.module').then(m => m.FormModule) },
+  { path: 'image-crop', loadChildren: () => import('./form/form.module').then(m => m.FormModule) },
   { path: 'bursted-news', loadChildren: () => import('./apps/apps.module').then(m => m.AppsModule) },
   { path: 'email', loadChildren: () => import('./email/email.module').then(m => m.EmailModule) },
   { path: 'reports', loadChildren: () => import('./tables/tables.module').then(m => m.TablesModule) },

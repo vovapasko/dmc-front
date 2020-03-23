@@ -4,8 +4,11 @@
     <div class="row">
         <div class="col-lg-4 col-xl-4">
             <div class="card-box text-center">
-                <img src="assets/images/users/user-1.jpg" class="rounded-circle avatar-xl img-thumbnail"
-                     alt="profile-image">
+                <a routerLink="/image-crop">
+                    <img [src]="api + currentUser.avatar" class="rounded-circle avatar-xl img-thumbnail"
+                         alt="profile-image">
+
+                </a>
 
                 <h4 class="mb-0">{{currentUser.first_name}} {{currentUser.last_name}}</h4>
                 <p *ngIf="currentUser.is_superuser" class="text-muted">@Superuser</p>

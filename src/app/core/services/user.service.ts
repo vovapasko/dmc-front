@@ -102,7 +102,7 @@ export class UserService {
      */
     updateProfile(payload) {
         return this.http
-            .put(`${api}/profile/`, payload)
+            .put(`${api}/profile/`, payload.data)
             .pipe(
                 map(
                     (response: UpdateProfileResponse) => {
