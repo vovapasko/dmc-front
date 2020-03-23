@@ -11,7 +11,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {ServiceWorkerModule} from '@angular/service-worker';
 import {environment} from '../environments/environment';
-import {NotificationComponent} from './shared/notification/notification.component';
+import {NotificationComponent} from './core/components/notification/notification.component';
 import {NotificationService} from './core/services/notification.service';
 
 @NgModule({

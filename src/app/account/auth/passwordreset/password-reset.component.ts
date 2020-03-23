@@ -6,13 +6,13 @@ import {MustMatch} from '../../../pages/form/validation/validation.mustmatch';
 import {UserService} from '../../../core/services/user.service';
 
 @Component({
-    selector: 'app-passwordreset',
-    templateUrl: './passwordreset.component.html',
-    styleUrls: ['./passwordreset.component.scss']
+    selector: 'app-password-reset',
+    templateUrl: './password-reset.component.html',
+    styleUrls: ['./password-reset.component.scss']
 })
-export class PasswordresetComponent implements OnInit, AfterViewInit, OnDestroy {
+export class PasswordResetComponent implements OnInit, AfterViewInit, OnDestroy {
 
-    sub;
+    subscription;
     confirm = '';
     title = 'Reset password';
     resetForm: FormGroup;
@@ -31,7 +31,7 @@ export class PasswordresetComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     ngOnInit() {
-        this.sub = this.route.params.subscribe((params: Params) => {
+        this.subscription = this.route.params.subscribe((params: Params) => {
             if (params.confirm) {
                 this.confirm = params.confirm;
             }
@@ -48,6 +48,10 @@ export class PasswordresetComponent implements OnInit, AfterViewInit, OnDestroy 
         this.setTitle(this.title);
     }
 
+    public setTitle(title: string) {
+        this.titleService.setTitle(title);
+    }
+
     ngAfterViewInit() {
         document.body.classList.add('authentication-bg');
         document.body.classList.add('authentication-bg-pattern');
@@ -59,9 +63,9 @@ export class PasswordresetComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     /**
-     * On submit form
+     * Reset user password with new credentials
      */
-    onSubmit() {
+    onsubscriptionmit() {
         this.success = '';
         this.submitted = true;
 
@@ -72,10 +76,10 @@ export class PasswordresetComponent implements OnInit, AfterViewInit, OnDestroy 
 
         this.loading = true;
 
-        console.log(this.resetForm.value);
         const {password, confirmPassword: confirm_password} = this.resetForm.value;
         const data = {password, confirm_password};
         const confirm = this.confirm;
+
         this.userService
             .confirmResetPassword({confirm, data})
             .subscribe(
@@ -84,11 +88,7 @@ export class PasswordresetComponent implements OnInit, AfterViewInit, OnDestroy 
             );
     }
 
-    public setTitle(title: string) {
-        this.titleService.setTitle(title);
-    }
-
     ngOnDestroy(): void {
-        this.sub.unsubscribe();
+        this.subscription.unsubscribe();
     }
 }

@@ -5,7 +5,7 @@ import {AuthenticationService} from '../../core/services/auth.service';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {User} from '../../core/models/instances/user.models';
-import {Notification, NotificationType} from '../../core/models/instances/notification';
+import {Notification} from '../../core/models/instances/notification';
 import {Subscription} from 'rxjs';
 import {NotificationService} from '../../core/services/notification.service';
 
@@ -20,11 +20,6 @@ export class TopbarComponent implements OnInit, OnDestroy {
     private subscription: Subscription;
     api = environment.api;
     currentUser: User;
-    languages: Array<{
-        id: number,
-        flag?: string,
-        name: string
-    }>;
     openMobileMenu: boolean;
 
     @Output() settingsButtonClicked = new EventEmitter();
@@ -39,21 +34,25 @@ export class TopbarComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        // get the notifications
+        // get the notifications and subscribe
         this.subscription = this.notificationService.getObservable().subscribe(notification => this._addNotification(notification));
 
+        // get current user
         this.currentUser = this.authService.currentUser();
+
         this.openMobileMenu = false;
     }
 
+    /**
+     * Add new notification to bar
+     */
     private _addNotification(notification: Notification) {
         this.notifications.push(notification);
     }
 
-    emit() {
-        this.notificationService.success('Good job', 'Hello');
-    }
-
+    /**
+     * Remove notification from list
+     */
     close(notification: Notification) {
         this.notifications = this.notifications.filter(notif => notif.id !== notification.id);
     }
@@ -81,6 +80,9 @@ export class TopbarComponent implements OnInit, OnDestroy {
         this.router.navigate(['/account/login']);
     }
 
+    /**
+     * Remove all notifications
+     */
     clearAll() {
         this.notifications = [];
     }

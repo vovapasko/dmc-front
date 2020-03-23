@@ -51,6 +51,10 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
         this.setTitle(this.title);
     }
 
+    public setTitle(title: string) {
+        this.titleService.setTitle(title);
+    }
+
     ngAfterViewInit() {
         document.body.classList.add('authentication-bg');
         document.body.classList.add('authentication-bg-pattern');
@@ -62,7 +66,7 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     /**
-     * On submit form
+     * Signup user with first name, last name and password
      */
     onSubmit() {
         this.submitted = true;
@@ -87,6 +91,7 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
             },
             invite: this.invite
         };
+
         this.userService.signup(payload).subscribe(
             (user: User) => {
                 this.router.navigate(['/profile']);
@@ -96,11 +101,6 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
                 // TODO add error notification
             }
         );
-        console.log(payload);
-    }
-
-    public setTitle(title: string) {
-        this.titleService.setTitle(title);
     }
 
     ngOnDestroy() {

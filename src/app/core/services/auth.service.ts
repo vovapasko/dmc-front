@@ -14,6 +14,7 @@ const api = environment.api;
 
 @Injectable({providedIn: 'root'})
 export class AuthenticationService {
+
     public static REFRESH_TOKEN_NAME = 'refresh';
     public static ACCESS_TOKEN_NAME = 'access';
     public static CURRENT_USER = 'currentUser';
@@ -116,7 +117,7 @@ export class AuthenticationService {
         // auto logout if 401 response returned from api
         this.logout();
         location.reload();
-        return throwError({ status: 401, error: { message: 'Unauthorised' } });
+        return throwError({status: 401, error: {message: 'Unauthorised'}});
     }
 }
 

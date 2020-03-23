@@ -56,21 +56,23 @@ export class ContactsComponent implements OnInit {
     ngOnInit() {
         // tslint:disable-next-line: max-line-length
         this.breadCrumbItems = [{label: 'UBold', path: '/'}, {label: 'CRM', path: '/'}, {label: 'Contacts', path: '/', active: true}];
+
+        // Form validation TODO add async check email
         this.validationform = this.formBuilder.group({
             email: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')]],
         });
 
+        // Get current user and set available groups (Add new user)
         const currentUser = this.authService.currentUser();
         this.selectValue = currentUser.groups_cascade_down;
 
+        /**
+         * Get all users and subscribe to update
+         */
         this.sub = this.userService.getAll().subscribe(
             response => this._fetchData(response),
             error => console.log(error)
         );
-        /**
-         * Fetches Data
-         */
-
     }
 
     /**
@@ -88,17 +90,21 @@ export class ContactsComponent implements OnInit {
         this.modalService.open(content, {centered: true});
     }
 
+    /**
+     * Close all modals (configure and add new user)
+     */
     closeModal() {
         this.modalService.dismissAll();
     }
 
     /**
-     * save the contacts data
+     * Invite new user with role and email
      */
     saveData() {
         const email = this.validationform.get('email').value;
         const group = this.selectedRole;
         const data = {email, group};
+
         this.userService
             .register({data})
             .subscribe(
@@ -124,6 +130,9 @@ export class ContactsComponent implements OnInit {
         this.paginatedUserData = this.users.slice(this.startIndex, this.endIndex);
     }
 
+    /**
+     * Set users for render, configure pagination
+     */
     private _fetchData(users: User[]) {
 
         this.users = users;

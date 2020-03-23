@@ -101,10 +101,13 @@ export class ImagecropComponent implements OnInit {
         const currentUser = this.authService.currentUser();
         const avatar = new File([this.avatar], 'image.png', {type: this.avatar.type});
         const {first_name, last_name} = currentUser;
+
+        // create new form data to send new avatar (only formData works for update)
         const formData = new FormData();
         formData.append('avatar', avatar);
         formData.append('first_name', first_name);
         formData.append('last_name', last_name);
+
         this.userService
             .updateProfile({data: formData})
             .subscribe(

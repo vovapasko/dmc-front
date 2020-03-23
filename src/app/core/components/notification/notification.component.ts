@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {NotificationService} from '../../core/services/notification.service';
-import {Notification, NotificationType} from '../../core/models/instances/notification';
+import {NotificationService} from '../../services/notification.service';
+import {Notification, NotificationType} from '../../models/instances/notification';
 import {Subscription} from 'rxjs';
 
 @Component({
@@ -16,6 +16,13 @@ export class NotificationComponent implements OnInit, OnDestroy {
     constructor(private notificationSvc: NotificationService) {
     }
 
+    ngOnInit() {
+        this.subscription = this.notificationSvc.getObservable().subscribe(notification => this._addNotification(notification));
+    }
+
+    /**
+     * Store notification for a while
+     */
     private _addNotification(notification: Notification) {
         this.notifications.push(notification);
 
@@ -25,15 +32,14 @@ export class NotificationComponent implements OnInit, OnDestroy {
         }
     }
 
-    ngOnInit() {
-        this.subscription = this.notificationSvc.getObservable().subscribe(notification => this._addNotification(notification));
+    /**
+     * Close notification by id
+     */
+    close(notification: Notification) {
+        this.notifications = this.notifications.filter(notif => notif.id !== notification.id);
     }
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
-    }
-
-    close(notification: Notification) {
-        this.notifications = this.notifications.filter(notif => notif.id !== notification.id);
     }
 }

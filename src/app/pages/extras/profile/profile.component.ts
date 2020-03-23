@@ -39,22 +39,29 @@ export class ProfileComponent implements OnInit {
 
     ngOnInit() {
         this.breadCrumbItems = [{label: 'UBold', path: '/'}, {label: 'Extras', path: '/'}, {label: 'Profile', path: '/', active: true}];
-        /**
-         * fetches current user
-         */
+
+        // fetches current user
         this.currentUser = this.authService.currentUser();
+
+        // creates form and validations
         this.profileForm = this.formBuilder.group({
             firstName: [this.currentUser.first_name, [Validators.required]],
             lastName: [this.currentUser.last_name, [Validators.required]],
             email: [this.currentUser.email, [Validators.required, Validators.email]],
         });
+
+        // fetch emails
         this._fetchData();
     }
 
+    // convenience getter for easy access to form fields
     get f() {
         return this.profileForm.controls;
     }
 
+    /**
+     * Update profile and set new values
+     */
     onSubmit() {
         this.submitted = true;
 
@@ -66,19 +73,27 @@ export class ProfileComponent implements OnInit {
         this.loading = true;
         const {firstName, lastName} = this.profileForm.value;
         const data = {first_name: firstName, last_name: lastName};
-        this.userService.updateProfile({data}).subscribe(
-            user => {
-                this.profileForm.controls.firstName.setValue(user.first_name);
-                this.profileForm.controls.lastName.setValue(user.last_name);
-            }
-        );
+
+        this.userService
+            .updateProfile({data})
+            .subscribe(
+                user => {
+                    this.f.firstName.setValue(user.first_name);
+                    this.f.lastName.setValue(user.last_name);
+                }
+            );
     }
 
+    /**
+     * Send email with link for change password
+     */
     changePassword() {
-        this.userService.resetPassword().subscribe(
-            response => alert('check your email pls'),
-            error => console.log(error)
-        );
+        this.userService
+            .resetPassword()
+            .subscribe(
+                response => alert('check your email pls'),
+                error => console.log(error)
+            );
     }
 
     /**

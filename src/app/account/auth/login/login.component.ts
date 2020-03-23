@@ -27,7 +27,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
         private router: Router,
         private authenticationService: AuthenticationService,
         private titleService: Title,
-        private notificationService: NotificationService
     ) {
     }
 
@@ -48,23 +47,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
         this.setTitle(this.title);
     }
 
-    sendInfo() {
-        this.notificationService.info('Hello World', 'This is an information', 5000);
-    }
-
-    sendSuccess() {
-        this.notificationService.success('Hello World', 'This is a success !');
-    }
-
-    sendWarning() {
-        this.notificationService.warning('Hello World', 'This is a warning !');
-    }
-
-    sendError() {
-        this.notificationService.error('Hello World', 'This is an error :(');
-    }
-
-
     ngAfterViewInit() {
         document.body.classList.add('authentication-bg');
         document.body.classList.add('authentication-bg-pattern');
@@ -76,7 +58,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     }
 
     /**
-     * On submit form
+     * Login user with credentials (login and password)
      */
     onSubmit() {
         this.submitted = true;
