@@ -10,3 +10,16 @@ export interface Contractor {
     date_created: Date;
     date_updated: Date;
 }
+
+export const emptyContractor = {
+    id: 0,
+    editor_name: '',
+    contact_person: '',
+    phone_number: '',
+    email: '',
+    budget: 0,
+    money_spent: 0,
+    one_post_price: 0,
+    date_created: new Date(),
+    date_updated: new Date()
+};

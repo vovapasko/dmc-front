@@ -11,14 +11,17 @@
                                 <div class="form-group mb-2">
                                     <label class="sr-only">Search</label>
                                     <input type="search" class="form-control" placeholder="Search..."
-                                        [(ngModel)]="term" name="search">
+                                           [(ngModel)]="term" name="search">
                                 </div>
                             </form>
                         </div>
                         <div class="col-md-6">
                             <div class="text-md-right">
-                                <button type="button" class="btn btn-danger mb-2 mr-2"><i
-                                        class="mdi mdi-basket mr-1"></i> Add Sellers</button>
+                                <button (click)="openModal(content)"
+                                        type="button" class="btn btn-danger mb-2 mr-2">
+                                    <i class="mdi mdi-basket mr-1"></i>
+                                    Add Sellers
+                                </button>
                                 <button type="button" class="btn btn-success mb-2 mr-1"><i
                                         class="mdi mdi-settings"></i></button>
                             </div>
@@ -28,64 +31,75 @@
                     <div class="table-responsive">
                         <table class="table table-centered table-borderless table-hover mb-0">
                             <thead class="thead-light">
-                                <tr>
-                                    <th style="width: 20px;">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="customCheck">
-                                            <label class="custom-control-label" for="customCheck">&nbsp;</label>
-                                        </div>
-                                    </th>
-                                    <th>Seller</th>
-                                    <th>Store Name</th>
-                                    <th>Products</th>
-                                    <th>Wallet Balance</th>
-                                    <th>Create Date</th>
-                                    <th>Revenue</th>
-                                    <th style="width: 82px;">Action</th>
-                                </tr>
+                            <tr>
+                                <th style="width: 20px;">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="customCheck">
+                                        <label class="custom-control-label" for="customCheck">&nbsp;</label>
+                                    </div>
+                                </th>
+                                <th>Название редакции</th>
+                                <th>Контактное лицо</th>
+                                <th>Номер телефона</th>
+                                <th>Email</th>
+                                <th>Общий бюджет</th>
+                                <th>Потрачено</th>
+                                <th>Осталось</th>
+                                <th>Стоимость</th>
+                                <th style="width: 82px;">Action</th>
+                            </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let seller of sellersData | filter:term | slice:0:10;let i = index;">
-                                    <td>
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="customCheck{{i}}">
-                                            <label class="custom-control-label" for="customCheck{{i}}">&nbsp;</label>
-                                        </div>
-                                    </td>
-                                    <td class="table-user">
-                                        <img src="{{ seller.image }}" alt="table-user" class="mr-2 rounded-circle">
-                                        <a href="javascript:void(0);"
-                                            class="text-body font-weight-semibold">{{ seller.name }}</a>
-                                    </td>
-                                    <td>
-                                        {{ seller.store }}
-                                    </td>
-                                    <td>
-                                        <span class="font-weight-semibold">{{ seller.product }}</span>
-                                    </td>
-                                    <td>
-                                        {{ seller.balance }}
-                                    </td>
-                                    <td>
-                                        {{ seller.date }}
-                                    </td>
-                                    <td>
-                                        {{ seller.revenue }}
-                                    </td>
+                            <tr *ngFor="let contractor of paginatedContractorData | filter:term | slice:0:10;let i = index;">
+                                <td>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="customCheck{{i}}">
+                                        <label class="custom-control-label" for="customCheck{{i}}">&nbsp;</label>
+                                    </div>
+                                </td>
+                                <td>
+                                    {{ contractor.editor_name }}
+                                </td>
+                                <td>
+                                    {{ contractor.contact_person }}
+                                </td>
+                                <td>
+                                    {{ contractor.phone_number }}
+                                </td>
+                                <td>
+                                    {{ contractor.email }}
+                                </td>
+                                <td>
+                                    {{ contractor.budget }}
+                                </td>
+                                <td>
+                                    {{ contractor.money_spent }}
+                                </td>
+                                <td>
+                                    {{ contractor.budget - contractor.money_spent }}
+                                </td>
+                                <td>
+                                    {{ contractor.one_post_price }}
+                                </td>
 
-                                    <td>
-                                        <a href="javascript:void(0);" class="action-icon"> <i
-                                                class="mdi mdi-square-edit-outline"></i></a>
-                                        <a href="javascript:void(0);" class="action-icon"> <i
-                                                class="mdi mdi-delete"></i></a>
-                                    </td>
-                                </tr>
+                                <td>
+                                    <a href="javascript:void(0);"
+                                       class="action-icon"
+                                       (click)="selectContractor(contractor); openModal(editModal);"
+                                    > <i
+                                            class="mdi mdi-square-edit-outline"></i></a>
+                                    <a href="javascript:void(0);"
+                                       (click)="deleteContractor(contractor)"
+                                       class="action-icon"> <i
+                                            class="mdi mdi-delete"></i></a>
+                                </td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
                     <ul class="pagination pagination-rounded justify-content-end my-2">
                         <ngb-pagination [collectionSize]="totalRecords" (pageChange)="onPageChange($event)"
-                            [(page)]="page" [pageSize]="pageSize"></ngb-pagination>
+                                        [(page)]="page" [pageSize]="pageSize"></ngb-pagination>
                     </ul>
                 </div>
             </div>
@@ -93,3 +107,232 @@
     </div>
 
 </div>
+
+<!-- Create new contractor modal  -->
+<ng-template #content role="document" let-modal="close">
+    <div class="modal-header bg-dark">
+        <h4 class="modal-title text-white">Add contractor</h4>
+        <button type="button"
+                class="close text-white"
+                aria-label="Close"
+                id="createContractorModal"
+                (click)="modal('Cross click')"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body p-3">
+        <div class="text-left">
+            <form (ngSubmit)="addContractor()" [formGroup]="validationform">
+
+                <app-ui-preloader [display]="loading"></app-ui-preloader>
+                <ngb-alert type="danger" *ngIf="error" [dismissible]="false">Пожалуйста, повторите попытку</ngb-alert>
+
+                <div class="form-group">
+                    <label for="editorName">Название редакции</label>
+                    <input type="text" formControlName="editorName" class="form-control"
+                           [ngClass]="{ 'is-invalid': submitted && f.editorName.errors }" id="editorName"
+                           placeholder="Введите название редакции"/>
+
+                    <div *ngIf="submitted && f.editorName.errors" class="invalid-feedback">
+                        <div *ngIf="f.editorName.errors.required">Название редакции обязательно</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="contactPerson">Контактное лицо</label>
+                    <input type="text" formControlName="contactPerson" class="form-control"
+                           [ngClass]="{ 'is-invalid': submitted && f.contactPerson.errors }" id="contactPerson"
+                           placeholder="Введите контактное лицо"/>
+
+                    <div *ngIf="submitted && f.contactPerson.errors" class="invalid-feedback">
+                        <div *ngIf="f.contactPerson.errors.required">Контактное лицо обязательно</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="phoneNumber">Номер телефона</label>
+                    <input type="text" formControlName="phoneNumber" class="form-control" id="phoneNumber"
+                           data-toggle="input-mask" mask="000-0000-000">
+                    <span class="font-13 text-muted">e.g "099-7777-777"</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input class="form-control" id="email" placeholder="Введите email" formControlName="email"
+                           [ngClass]="{'is-invalid': submitted && f.email.errors}">
+                    <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                        <span *ngIf="f.email.errors.required">This value is required.</span>
+                        <span *ngIf="f.email.errors.pattern">Please enter valid email.</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="budget">Общий бюджет</label>
+                    <input type="text" class="form-control" formControlName="budget" form data-toggle="input-mask"
+                           id="budget" mask="000.000.000.000.000,00"
+                           data-reverse="true" [ngClass]="{'is-invalid': submitted && f.budget.errors}">
+                    <span class="font-13 text-muted">e.g "1000"</span>
+                    <div *ngIf="submitted && f.budget.errors" class="invalid-feedback">
+                        <span *ngIf="f.budget.errors.required">This value is required.</span>
+                        <span *ngIf="f.budget.errors.pattern">Please enter valid email.</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="onePostPrice">Стоимость за одну публикацию</label>
+                    <input type="text" class="form-control" formControlName="onePostPrice" id="onePostPrice"
+                           data-toggle="input-mask" mask="000.000.000.000.000,00"
+                           data-reverse="true" [ngClass]="{'is-invalid': submitted && f.onePostPrice.errors}">
+                    <span class="font-13 text-muted">e.g "100"</span>
+                    <div *ngIf="submitted && f.onePostPrice.errors" class="invalid-feedback">
+                        <span *ngIf="f.onePostPrice.errors.required">This value is required.</span>
+                    </div>
+                </div>
+
+
+                <div class="text-right">
+                    <button type="submit" class="btn btn-success">Save</button>
+                    <button type="button" class="btn btn-danger ml-1"
+                            (click)="modal('close click')">Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</ng-template>
+
+<!-- Edit contractor modal  -->
+<ng-template #editModal role="document" let-modal="close">
+    <div class="modal-header bg-dark">
+        <h4 class="modal-title text-white">Update contractor</h4>
+        <button type="button"
+                class="close text-white"
+                aria-label="Close"
+                id="editContractorModal"
+                (click)="modal('Cross click')"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body p-3">
+        <div class="text-left">
+            <form (ngSubmit)="updateContractor()" [formGroup]="updateForm">
+
+                <app-ui-preloader [display]="loading"></app-ui-preloader>
+                <ngb-alert type="danger" *ngIf="error" [dismissible]="false">Пожалуйста, повторите попытку</ngb-alert>
+
+                <div class="form-group">
+                    <label for="updateEditorName">Название редакции</label>
+                    <input type="text"
+                           formControlName="updateEditorName"
+                           class="form-control"
+                           [ngClass]="{ 'is-invalid': submitted && updateForm.controls.updateEditorName.errors }"
+                           id="updateEditorName"
+                           placeholder="Введите название редакции"
+                    />
+
+                    <div *ngIf="submitted && updateForm.controls.updateEditorName.errors" class="invalid-feedback">
+                        <div *ngIf="updateForm.controls.updateEditorName.errors.required">Название редакции обязательно</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="updateContactPerson">Контактное лицо</label>
+                    <input type="text"
+                           formControlName="updateContactPerson"
+                           class="form-control"
+                           [ngClass]="{ 'is-invalid': submitted && f.updateContactPerson.errors }"
+                           id="updateContactPerson"
+                           placeholder="Введите контактное лицо"
+                    />
+
+                    <div *ngIf="submitted && updateForm.controls.updateContactPerson.errors" class="invalid-feedback">
+                        <div *ngIf="updateForm.controls.updateContactPerson.errors.required">Контактное лицо обязательно</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="updatePhoneNumber">Номер телефона</label>
+                    <input type="text"
+                           formControlName="updatePhoneNumber"
+                           class="form-control"
+                           id="updatePhoneNumber"
+                           data-toggle="input-mask" mask="000-0000-000"
+                    >
+                    <span class="font-13 text-muted">e.g "099-7777-777"</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="updateEmail">Email</label>
+                    <input class="form-control"
+                           id="updateEmail"
+                           placeholder="Введите email"
+                           formControlName="updateEmail"
+                           [ngClass]="{'is-invalid': submitted && updateForm.controls.updateEmail.errors}"
+                    >
+                    <div *ngIf="submitted && f.updateEmail.errors" class="invalid-feedback">
+                        <span *ngIf="updateForm.controls.updateEmail.errors.required">This value is required.</span>
+                        <span *ngIf="updateForm.controls.updateEmail.errors.pattern">Please enter valid email.</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="updateBudget">Общий бюджет</label>
+                    <input type="text"
+                           class="form-control"
+                           formControlName="updateBudget"
+                           form data-toggle="input-mask"
+                           id="updateBudget"
+                           mask="000.000.000.000.000,00"
+                           data-reverse="true" [ngClass]="{'is-invalid': submitted && updateForm.controls.updateBudget.errors}"
+                    >
+                    <span class="font-13 text-muted">e.g "1000"</span>
+                    <div *ngIf="submitted && updateForm.controls.updateBudget.errors" class="invalid-feedback">
+                        <span *ngIf="updateForm.controls.updateBudget.errors.required">This value is required.</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="updateMoneySpent">Потрачено</label>
+                    <input type="text"
+                           class="form-control"
+                           formControlName="updateMoneySpent"
+                           form data-toggle="input-mask"
+                           id="updateMoneySpent"
+                           mask="000.000.000.000.000,00"
+                           data-reverse="true" [ngClass]="{'is-invalid': submitted && updateForm.controls.updateMoneySpent.errors}"
+                    >
+                    <span class="font-13 text-muted">e.g "200"</span>
+                    <div *ngIf="submitted && updateForm.controls.updateMoneySpent.errors" class="invalid-feedback">
+                        <span *ngIf="updateForm.controls.updateMoneySpent.errors.required">This value is required.</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="updateOnePostPrice">Стоимость за одну публикацию</label>
+                    <input type="text"
+                           class="form-control"
+                           formControlName="updateOnePostPrice"
+                           id="updateOnePostPrice"
+                           data-toggle="input-mask"
+                           mask="000.000.000.000.000,00"
+                           data-reverse="true" [ngClass]="{'is-invalid': submitted && updateForm.controls.updateOnePostPrice.errors}"
+                    >
+                    <span class="font-13 text-muted">e.g "100"</span>
+                    <div *ngIf="submitted && updateForm.controls.updateOnePostPrice.errors" class="invalid-feedback">
+                        <span *ngIf="updateForm.controls.updateOnePostPrice.errors.required">This value is required.</span>
+                    </div>
+                </div>
+
+
+                <div class="text-right">
+                    <button type="submit" class="btn btn-success">Update</button>
+                    <button type="button" class="btn btn-danger ml-1"
+                            (click)="modal('close click')">Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</ng-template>
