@@ -12,12 +12,13 @@ import {ResetPasswordResponse} from '../models/responses/user/resetPasswordRespo
 import {ConfirmResetPasswordResponse} from '../models/responses/user/confirmResetPasswordResponse';
 import {UpdateProfileResponse} from '../models/responses/user/updateProfileResponse';
 import {HomeResponse} from '../models/responses/user/homeResponse';
+import {NotificationService} from './notification.service';
 
 const api = environment.api;
 
 @Injectable({providedIn: 'root'})
 export class UserService {
-    constructor(private http: HttpClient, private authService: AuthenticationService) {
+    constructor(private http: HttpClient, private authService: AuthenticationService, private notificationService: NotificationService) {
     }
 
     /**
@@ -64,12 +65,7 @@ export class UserService {
             .post(`${api}/invite-new-user/`, payload.data)
             .pipe(
                 map(
-                    (response: RegisterResponse) => {
-                        if (!response.success) {
-                            throwError(response);
-                        }
-                        return response.success;
-                    }
+                    (response: RegisterResponse) => this.handleResponse(response)
                 )
             );
     }
@@ -82,7 +78,7 @@ export class UserService {
             .get(`${api}/change-password-confirm/`)
             .pipe(
                 map(
-                    (response: ResetPasswordResponse) => response.success
+                    (response: ResetPasswordResponse) => this.handleResponse(response)
                 )
             );
     }
@@ -95,12 +91,7 @@ export class UserService {
             .post(`${api}/change-pass/${payload.confirm}`, payload.data)
             .pipe(
                 map(
-                    (response: ConfirmResetPasswordResponse) => {
-                        if (!response.success) {
-                            throwError(response);
-                        }
-                        return response.success;
-                    })
+                    (response: ConfirmResetPasswordResponse) => this.handleResponse(response))
             );
     }
 
@@ -113,13 +104,34 @@ export class UserService {
             .pipe(
                 map(
                     (response: UpdateProfileResponse) => {
+
+                        // notify about success
+                        this.notifySuccess(response);
+
+                        // returns updated user and store in cookies
                         const currentUser = this.authService.currentUser();
                         const newUser = response.user;
                         const user = {...currentUser, ...newUser};
                         this.authService.setUser(user);
+
                         return user;
                     }
                 )
             );
+    }
+
+    private handleResponse(response) {
+        // notify about success
+        this.notifySuccess(response);
+
+        // returns successful
+        return response.success;
+    }
+
+    private notifySuccess(response) {
+        if (response.success) {
+            return this.notificationService.success('Successful', response.message.message);
+        }
+        return null;
     }
 }

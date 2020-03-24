@@ -22,6 +22,7 @@ import {Title} from '@angular/platform-browser';
 export class ProfileComponent implements OnInit {
 
     title = 'Профиль';
+    error;
     api = environment.api;
     currentUser: User;
     profileForm: FormGroup;
@@ -92,6 +93,7 @@ export class ProfileComponent implements OnInit {
             .updateProfile({data})
             .subscribe(
                 user => {
+                    this.loading = false;
                     this.f.firstName.setValue(user.first_name);
                     this.f.lastName.setValue(user.last_name);
                 }
@@ -102,11 +104,19 @@ export class ProfileComponent implements OnInit {
      * Send email with link for change password
      */
     changePassword() {
+        this.loading = true;
+
         this.userService
             .resetPassword()
             .subscribe(
-                response => alert('check your email pls'),
-                error => console.log(error)
+                response => {
+                    this.error = null;
+                    this.loading = false;
+                },
+                error => {
+                    this.error = error;
+                    this.loading = false;
+                }
             );
     }
 

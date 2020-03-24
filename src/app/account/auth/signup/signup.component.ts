@@ -100,8 +100,8 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.router.navigate(['/profile']);
             },
             error => {
+                this.error = error;
                 this.loading = false;
-                // TODO add error notification
             }
         );
     }

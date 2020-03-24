@@ -103,7 +103,7 @@ export class AuthenticationService {
         return this.http
             .post(`${api}/token-refresh/`, {refresh: refreshToken})
             .pipe(
-                tap(
+                map(
                     (response: RequestAccessTokenResponse) => {
                         this.setToken(AuthenticationService.ACCESS_TOKEN_NAME, response.access);
                         return response;

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { UIModule } from '../../shared/ui/ui.module';
-import { NgbModalModule, NgbPaginationModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import {NgbAlertModule, NgbModalModule, NgbPaginationModule, NgbTypeaheadModule} from '@ng-bootstrap/ng-bootstrap';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 
@@ -28,7 +28,8 @@ import {NgSelectModule} from '@ng-select/ng-select';
         NgbTypeaheadModule,
         CRMRoutingModule,
         Ng2SearchPipeModule,
-        NgSelectModule
+        NgSelectModule,
+        NgbAlertModule
     ]
 })
 export class CRMModule { }

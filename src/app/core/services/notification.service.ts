@@ -41,7 +41,7 @@ export class NotificationService {
     /**
      * Error notification, red background
      */
-    error(title: string, message: string, timeout = 0) {
+    error(title: string, message: string, timeout = 3000) {
         this.subject.next(new Notification(this.idx++, NotificationType.error, title, message, timeout));
     }
 

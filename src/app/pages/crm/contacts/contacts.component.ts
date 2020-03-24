@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 
 import {FormBuilder, Validators, FormGroup} from '@angular/forms';
 
@@ -21,9 +21,15 @@ import {environment} from '../../../../environments/environment';
 /**
  * Contacts component - handling the contacts with sidebar and content
  */
-export class ContactsComponent implements OnInit {
+export class ContactsComponent implements OnInit, OnDestroy {
     // bread crumb items
     sub;
+    loading = false;
+    selectedUser: User = {
+        id: null,
+        email: null
+    };
+    error;
     api = environment.api;
     breadCrumbItems: Array<{}>;
     selectedRole = '';
@@ -66,13 +72,8 @@ export class ContactsComponent implements OnInit {
         const currentUser = this.authService.currentUser();
         this.selectValue = currentUser.groups_cascade_down;
 
-        /**
-         * Get all users and subscribe to update
-         */
-        this.sub = this.userService.getAll().subscribe(
-            response => this._fetchData(response),
-            error => console.log(error)
-        );
+        // get users
+        this._fetchData();
     }
 
     // convenience getter for easy access to form fields
@@ -89,6 +90,13 @@ export class ContactsComponent implements OnInit {
     }
 
     /**
+     * Select user to show details
+     */
+    selectUser(user: User) {
+        this.selectedUser = user;
+    }
+
+    /**
      * Close all modals (configure and add new user)
      */
     closeModal() {
@@ -98,7 +106,9 @@ export class ContactsComponent implements OnInit {
     /**
      * Invite new user with role and email
      */
-    saveData() {
+    registerNewUser() {
+        this.loading = true;
+
         const email = this.validationform.get('email').value;
         const group = this.selectedRole;
         const data = {email, group};
@@ -107,13 +117,21 @@ export class ContactsComponent implements OnInit {
             .register({data})
             .subscribe(
                 response => {
-                    // TODO add notification
-                    this.closeModal();
+
+                    // reset loading and error
+                    this.error = null;
+                    this.loading = false;
+
+                    // clear input values
+                    this.f.email.setValue('');
+                    this.selectedRole = '';
+
+                    // update users list
+                    this._fetchData();
                 },
                 error => {
-                    // TODO add notification
-                    console.log(error);
-                    this.closeModal();
+                    this.error = error;
+                    this.loading = false;
                 }
             );
     }
@@ -129,16 +147,31 @@ export class ContactsComponent implements OnInit {
     }
 
     /**
-     * Set users for render, configure pagination
+     * Get all users and subscribe to update
      */
-    private _fetchData(users: User[]) {
+    private _fetchData() {
+        this.sub = this.userService.getAll().subscribe(
+            response => {
 
-        this.users = users;
-        // apply pagination
-        this.startIndex = 0;
-        this.endIndex = this.pageSize;
+                // set users
+                this.users = response;
 
-        this.paginatedUserData = this.users.slice(this.startIndex, this.endIndex);
-        this.totalSize = this.users.length;
+                // apply pagination
+                this.startIndex = 0;
+                this.endIndex = this.pageSize;
+                this.paginatedUserData = this.users.slice(this.startIndex, this.endIndex);
+                this.totalSize = this.users.length;
+
+                // set default selected user
+                if (this.users.length) {
+                    this.selectedUser = this.users[0];
+                }
+            },
+            error => console.log(error)
+        );
+    }
+
+    ngOnDestroy() {
+        this.sub.unsubscribe();
     }
 }

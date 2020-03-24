@@ -87,7 +87,10 @@ export class PasswordResetComponent implements OnInit, AfterViewInit, OnDestroy 
             .confirmResetPassword({confirm, data})
             .subscribe(
                 response => this.router.navigate(['/account/confirm']),
-                error => console.log(error)
+                error => {
+                    this.error = error;
+                    this.loading = false;
+                }
             );
     }
 

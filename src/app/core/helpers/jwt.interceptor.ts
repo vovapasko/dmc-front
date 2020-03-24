@@ -17,6 +17,7 @@ export class JwtInterceptor implements HttpInterceptor {
      *   Try to inject and execute request, refresh token if unauthorised or throw error if something else
      */
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        // @ts-ignore
         return next
             .handle(this.injectToken(request))
             .pipe(
@@ -38,9 +39,9 @@ export class JwtInterceptor implements HttpInterceptor {
      */
     public refreshToken = (request, next) => {
         if (!this.refreshTokenInProgress) {
-            this.processRefreshingToken(request, next);
+            return this.processRefreshingToken(request, next);
         } else {
-            this.processHandlingRequest(request, next);
+            return this.processHandlingRequest(request, next);
         }
     }
 

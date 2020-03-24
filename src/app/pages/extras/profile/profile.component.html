@@ -60,6 +60,10 @@
                                 class="mdi mdi-account-circle mr-1"></i>
                             Персональная информация</h5>
 
+                        <app-ui-preloader [display]="loading"></app-ui-preloader>
+                        <ngb-alert type="danger" *ngIf="error" [dismissible]="false">Пожалуйста, повторите попытку</ngb-alert>
+
+
                         <div class="form-group">
                             <label for="last-name">Ваше имя</label>
 
