@@ -120,6 +120,9 @@ export class UserService {
             );
     }
 
+    /**
+     *  Handle successful response
+     */
     private handleResponse(response) {
         // notify about success
         this.notifySuccess(response);
@@ -128,6 +131,9 @@ export class UserService {
         return response.success;
     }
 
+    /**
+     *  Notify user about successful response
+     */
     private notifySuccess(response) {
         if (response.success) {
             return this.notificationService.success('Successful', response.message.message);
