@@ -8,6 +8,7 @@ import {User} from '../../core/models/instances/user.models';
 import {Notification} from '../../core/models/instances/notification';
 import {Subscription} from 'rxjs';
 import {NotificationService} from '../../core/services/notification.service';
+import {UserService} from '../../core/services/user.service';
 
 @Component({
     selector: 'app-topbar',
@@ -17,7 +18,8 @@ import {NotificationService} from '../../core/services/notification.service';
 export class TopbarComponent implements OnInit, OnDestroy {
 
     notifications: Notification[] = [];
-    private subscription: Subscription;
+    private notificationSubscription: Subscription;
+    private userSubscription: Subscription;
     api = environment.api;
     currentUser: User;
     openMobileMenu: boolean;
@@ -28,23 +30,42 @@ export class TopbarComponent implements OnInit, OnDestroy {
     constructor(
         private router: Router,
         private authService: AuthenticationService,
+        private userService: UserService,
         private http: HttpClient,
         private notificationService: NotificationService
     ) {
     }
 
     ngOnInit() {
-        // get the notifications and subscribe
-        this.subscription = this.notificationService.getObservable().subscribe(notification => this.addNotification(notification));
+        // get the notifications
+        this.notificationSubscription = this.notificationService
+            .getObservable()
+            .subscribe(
+                notification => this.addNotification(notification)
+            );
+        // get the user updates
+        this.userSubscription = this.userService
+            .getObservable()
+            .subscribe(
+                user => this.setUser(user)
+            );
 
-        // get current user
-        this.currentUser = this.authService.currentUser();
+        // set current user
+        const currentUser = this.authService.currentUser();
+        this.setUser(currentUser);
 
         this.openMobileMenu = false;
     }
 
     /**
-     * Add new notification to bar
+     * Set current user
+     */
+    setUser(user) {
+        this.currentUser = user;
+    }
+
+    /**
+     * Add new notification to bar and detect if something happens with user
      */
     addNotification(notification: Notification) {
         this.notifications.push(notification);
@@ -87,7 +108,11 @@ export class TopbarComponent implements OnInit, OnDestroy {
         this.notifications = [];
     }
 
+    /**
+     * Unsubscribe from all subscriptions
+     */
     ngOnDestroy() {
-        this.subscription.unsubscribe();
+        this.userSubscription.unsubscribe();
+        this.notificationSubscription.unsubscribe();
     }
 }

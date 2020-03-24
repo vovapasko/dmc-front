@@ -7,17 +7,18 @@ import {User} from '../models/instances/user.models';
 import {TokenTypes} from '../models/instances/token.model';
 import {environment} from '../../../environments/environment';
 import {RequestAccessTokenResponse} from '../models/responses/auth/requestAccessTokenResponse';
-import {Observable, throwError} from 'rxjs';
+import {Observable, Subject, throwError} from 'rxjs';
 import {LoginResponse} from '../models/responses/auth/loginResponse';
 
 const api = environment.api;
 
 @Injectable({providedIn: 'root'})
 export class AuthenticationService {
-
     public static REFRESH_TOKEN_NAME = 'refresh';
     public static ACCESS_TOKEN_NAME = 'access';
     public static CURRENT_USER = 'currentUser';
+
+    subscription;
     user: User;
 
     constructor(private http: HttpClient, private cookieService: CookieService) {

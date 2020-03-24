@@ -17,13 +17,25 @@
                         </div>
                         <div class="col-md-6">
                             <div class="text-md-right">
-                                <button (click)="openModal(content)"
-                                        type="button" class="btn btn-danger mb-2 mr-2">
+                                <button (click)="openModal(createModal)"
+                                        type="button"
+                                        class="btn btn-success mb-2 mr-2">
                                     <i class="mdi mdi-basket mr-1"></i>
-                                    Add Sellers
+                                    Добавить контагента
                                 </button>
-                                <button type="button" class="btn btn-success mb-2 mr-1"><i
-                                        class="mdi mdi-settings"></i></button>
+                                <button type="button"
+                                        (click)="editChecked();openModal(editModal);"
+                                        class="btn btn-warning mb-2 mr-1"
+                                ><i class="mdi mdi-settings"></i>
+                                    Изменить выбранные
+                                </button>
+                                <button type="button"
+                                        (click)="deleteChecked()"
+                                        class="btn btn-danger mb-2 mr-1"
+                                >
+                                    <i class="mdi mdi-close"></i>
+                                    Удалить выбранные
+                                </button>
                             </div>
                         </div><!-- end col-->
                     </div>
@@ -35,7 +47,7 @@
                                 <th style="width: 20px;">
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" id="customCheck">
-                                        <label class="custom-control-label" for="customCheck">&nbsp;</label>
+                                        <label (click)="checkAll()" class="custom-control-label" for="customCheck">&nbsp;</label>
                                     </div>
                                 </th>
                                 <th>Название редакции</th>
@@ -53,8 +65,14 @@
                             <tr *ngFor="let contractor of paginatedContractorData | filter:term | slice:0:10;let i = index;">
                                 <td>
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck{{i}}">
-                                        <label class="custom-control-label" for="customCheck{{i}}">&nbsp;</label>
+                                        <input type="checkbox"
+                                               class="custom-control-input"
+                                               id="customCheck{{i}}"
+                                        >
+                                        <label (click)="check(contractor)"
+                                               class="custom-control-label"
+                                               for="customCheck{{i}}"
+                                        >&nbsp;</label>
                                     </div>
                                 </td>
                                 <td>
@@ -85,11 +103,13 @@
                                 <td>
                                     <a href="javascript:void(0);"
                                        class="action-icon"
-                                       (click)="selectContractor(contractor); openModal(editModal);"
+                                       id="openEditModal"
+                                       (click)="select(contractor); openModal(editModal);"
                                     > <i
                                             class="mdi mdi-square-edit-outline"></i></a>
                                     <a href="javascript:void(0);"
-                                       (click)="deleteContractor(contractor)"
+                                       (click)="delete(contractor)"
+                                       id="deleteContractor"
                                        class="action-icon"> <i
                                             class="mdi mdi-delete"></i></a>
                                 </td>
@@ -109,7 +129,7 @@
 </div>
 
 <!-- Create new contractor modal  -->
-<ng-template #content role="document" let-modal="close">
+<ng-template #createModal role="document" let-modal="close">
     <div class="modal-header bg-dark">
         <h4 class="modal-title text-white">Add contractor</h4>
         <button type="button"
@@ -123,7 +143,7 @@
     </div>
     <div class="modal-body p-3">
         <div class="text-left">
-            <form (ngSubmit)="addContractor()" [formGroup]="validationform">
+            <form (ngSubmit)="addContractor()" [formGroup]="createForm">
 
                 <app-ui-preloader [display]="loading"></app-ui-preloader>
                 <ngb-alert type="danger" *ngIf="error" [dismissible]="false">Пожалуйста, повторите попытку</ngb-alert>
@@ -131,22 +151,22 @@
                 <div class="form-group">
                     <label for="editorName">Название редакции</label>
                     <input type="text" formControlName="editorName" class="form-control"
-                           [ngClass]="{ 'is-invalid': submitted && f.editorName.errors }" id="editorName"
+                           [ngClass]="{ 'is-invalid': submitted && cf.editorName.errors }" id="editorName"
                            placeholder="Введите название редакции"/>
 
-                    <div *ngIf="submitted && f.editorName.errors" class="invalid-feedback">
-                        <div *ngIf="f.editorName.errors.required">Название редакции обязательно</div>
+                    <div *ngIf="submitted && cf.editorName.errors" class="invalid-feedback">
+                        <div *ngIf="cf.editorName.errors.required">Название редакции обязательно</div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="contactPerson">Контактное лицо</label>
                     <input type="text" formControlName="contactPerson" class="form-control"
-                           [ngClass]="{ 'is-invalid': submitted && f.contactPerson.errors }" id="contactPerson"
+                           [ngClass]="{ 'is-invalid': submitted && cf.contactPerson.errors }" id="contactPerson"
                            placeholder="Введите контактное лицо"/>
 
-                    <div *ngIf="submitted && f.contactPerson.errors" class="invalid-feedback">
-                        <div *ngIf="f.contactPerson.errors.required">Контактное лицо обязательно</div>
+                    <div *ngIf="submitted && cf.contactPerson.errors" class="invalid-feedback">
+                        <div *ngIf="cf.contactPerson.errors.required">Контактное лицо обязательно</div>
                     </div>
                 </div>
 
@@ -160,10 +180,10 @@
                 <div class="form-group">
                     <label for="email">Email</label>
                     <input class="form-control" id="email" placeholder="Введите email" formControlName="email"
-                           [ngClass]="{'is-invalid': submitted && f.email.errors}">
-                    <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
-                        <span *ngIf="f.email.errors.required">This value is required.</span>
-                        <span *ngIf="f.email.errors.pattern">Please enter valid email.</span>
+                           [ngClass]="{'is-invalid': submitted && cf.email.errors}">
+                    <div *ngIf="submitted && cf.email.errors" class="invalid-feedback">
+                        <span *ngIf="cf.email.errors.required">This value is required.</span>
+                        <span *ngIf="cf.email.errors.pattern">Please enter valid email.</span>
                     </div>
                 </div>
 
@@ -171,11 +191,11 @@
                     <label for="budget">Общий бюджет</label>
                     <input type="text" class="form-control" formControlName="budget" form data-toggle="input-mask"
                            id="budget" mask="000.000.000.000.000,00"
-                           data-reverse="true" [ngClass]="{'is-invalid': submitted && f.budget.errors}">
+                           data-reverse="true" [ngClass]="{'is-invalid': submitted && cf.budget.errors}">
                     <span class="font-13 text-muted">e.g "1000"</span>
-                    <div *ngIf="submitted && f.budget.errors" class="invalid-feedback">
-                        <span *ngIf="f.budget.errors.required">This value is required.</span>
-                        <span *ngIf="f.budget.errors.pattern">Please enter valid email.</span>
+                    <div *ngIf="submitted && cf.budget.errors" class="invalid-feedback">
+                        <span *ngIf="cf.budget.errors.required">This value is required.</span>
+                        <span *ngIf="cf.budget.errors.pattern">Please enter valid email.</span>
                     </div>
                 </div>
 
@@ -183,10 +203,10 @@
                     <label for="onePostPrice">Стоимость за одну публикацию</label>
                     <input type="text" class="form-control" formControlName="onePostPrice" id="onePostPrice"
                            data-toggle="input-mask" mask="000.000.000.000.000,00"
-                           data-reverse="true" [ngClass]="{'is-invalid': submitted && f.onePostPrice.errors}">
+                           data-reverse="true" [ngClass]="{'is-invalid': submitted && cf.onePostPrice.errors}">
                     <span class="font-13 text-muted">e.g "100"</span>
-                    <div *ngIf="submitted && f.onePostPrice.errors" class="invalid-feedback">
-                        <span *ngIf="f.onePostPrice.errors.required">This value is required.</span>
+                    <div *ngIf="submitted && cf.onePostPrice.errors" class="invalid-feedback">
+                        <span *ngIf="cf.onePostPrice.errors.required">This value is required.</span>
                     </div>
                 </div>
 
@@ -217,7 +237,7 @@
     </div>
     <div class="modal-body p-3">
         <div class="text-left">
-            <form (ngSubmit)="updateContractor()" [formGroup]="updateForm">
+            <form (ngSubmit)="submitEditForm()" [formGroup]="updateForm">
 
                 <app-ui-preloader [display]="loading"></app-ui-preloader>
                 <ngb-alert type="danger" *ngIf="error" [dismissible]="false">Пожалуйста, повторите попытку</ngb-alert>
@@ -227,13 +247,13 @@
                     <input type="text"
                            formControlName="updateEditorName"
                            class="form-control"
-                           [ngClass]="{ 'is-invalid': submitted && updateForm.controls.updateEditorName.errors }"
+                           [ngClass]="{ 'is-invalid': submitted && uf.updateEditorName.errors }"
                            id="updateEditorName"
                            placeholder="Введите название редакции"
                     />
 
-                    <div *ngIf="submitted && updateForm.controls.updateEditorName.errors" class="invalid-feedback">
-                        <div *ngIf="updateForm.controls.updateEditorName.errors.required">Название редакции обязательно</div>
+                    <div *ngIf="submitted && uf.updateEditorName.errors" class="invalid-feedback">
+                        <div *ngIf="uf.updateEditorName.errors.required">Название редакции обязательно</div>
                     </div>
                 </div>
 
@@ -242,13 +262,13 @@
                     <input type="text"
                            formControlName="updateContactPerson"
                            class="form-control"
-                           [ngClass]="{ 'is-invalid': submitted && f.updateContactPerson.errors }"
+                           [ngClass]="{ 'is-invalid': submitted && uf.updateContactPerson.errors }"
                            id="updateContactPerson"
                            placeholder="Введите контактное лицо"
                     />
 
-                    <div *ngIf="submitted && updateForm.controls.updateContactPerson.errors" class="invalid-feedback">
-                        <div *ngIf="updateForm.controls.updateContactPerson.errors.required">Контактное лицо обязательно</div>
+                    <div *ngIf="submitted && uf.updateContactPerson.errors" class="invalid-feedback">
+                        <div *ngIf="uf.updateContactPerson.errors.required">Контактное лицо обязательно</div>
                     </div>
                 </div>
 
@@ -269,11 +289,11 @@
                            id="updateEmail"
                            placeholder="Введите email"
                            formControlName="updateEmail"
-                           [ngClass]="{'is-invalid': submitted && updateForm.controls.updateEmail.errors}"
+                           [ngClass]="{'is-invalid': submitted && uf.updateEmail.errors}"
                     >
-                    <div *ngIf="submitted && f.updateEmail.errors" class="invalid-feedback">
-                        <span *ngIf="updateForm.controls.updateEmail.errors.required">This value is required.</span>
-                        <span *ngIf="updateForm.controls.updateEmail.errors.pattern">Please enter valid email.</span>
+                    <div *ngIf="submitted && uf.updateEmail.errors" class="invalid-feedback">
+                        <span *ngIf="uf.updateEmail.errors.required">This value is required.</span>
+                        <span *ngIf="uf.updateEmail.errors.pattern">Please enter valid email.</span>
                     </div>
                 </div>
 
@@ -285,11 +305,11 @@
                            form data-toggle="input-mask"
                            id="updateBudget"
                            mask="000.000.000.000.000,00"
-                           data-reverse="true" [ngClass]="{'is-invalid': submitted && updateForm.controls.updateBudget.errors}"
+                           data-reverse="true" [ngClass]="{'is-invalid': submitted && uf.updateBudget.errors}"
                     >
                     <span class="font-13 text-muted">e.g "1000"</span>
-                    <div *ngIf="submitted && updateForm.controls.updateBudget.errors" class="invalid-feedback">
-                        <span *ngIf="updateForm.controls.updateBudget.errors.required">This value is required.</span>
+                    <div *ngIf="submitted && uf.updateBudget.errors" class="invalid-feedback">
+                        <span *ngIf="uf.updateBudget.errors.required">This value is required.</span>
                     </div>
                 </div>
 
@@ -301,11 +321,11 @@
                            form data-toggle="input-mask"
                            id="updateMoneySpent"
                            mask="000.000.000.000.000,00"
-                           data-reverse="true" [ngClass]="{'is-invalid': submitted && updateForm.controls.updateMoneySpent.errors}"
+                           data-reverse="true" [ngClass]="{'is-invalid': submitted && uf.updateMoneySpent.errors}"
                     >
                     <span class="font-13 text-muted">e.g "200"</span>
-                    <div *ngIf="submitted && updateForm.controls.updateMoneySpent.errors" class="invalid-feedback">
-                        <span *ngIf="updateForm.controls.updateMoneySpent.errors.required">This value is required.</span>
+                    <div *ngIf="submitted && uf.updateMoneySpent.errors" class="invalid-feedback">
+                        <span *ngIf="uf.updateMoneySpent.errors.required">This value is required.</span>
                     </div>
                 </div>
 
@@ -317,17 +337,18 @@
                            id="updateOnePostPrice"
                            data-toggle="input-mask"
                            mask="000.000.000.000.000,00"
-                           data-reverse="true" [ngClass]="{'is-invalid': submitted && updateForm.controls.updateOnePostPrice.errors}"
+                           data-reverse="true" [ngClass]="{'is-invalid': submitted && uf.updateOnePostPrice.errors}"
                     >
                     <span class="font-13 text-muted">e.g "100"</span>
-                    <div *ngIf="submitted && updateForm.controls.updateOnePostPrice.errors" class="invalid-feedback">
-                        <span *ngIf="updateForm.controls.updateOnePostPrice.errors.required">This value is required.</span>
+                    <div *ngIf="submitted && uf.updateOnePostPrice.errors" class="invalid-feedback">
+                        <span *ngIf="uf.updateOnePostPrice.errors.required">This value is required.</span>
                     </div>
                 </div>
 
 
                 <div class="text-right">
-                    <button type="submit" class="btn btn-success">Update</button>
+                    <button type="submit" *ngIf="!editCheckedMode" class="btn btn-success">Обновить</button>
+                    <button type="submit" *ngIf="editCheckedMode" class="btn btn-success">Обновить выбранные</button>
                     <button type="button" class="btn btn-danger ml-1"
                             (click)="modal('close click')">Cancel
                     </button>

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
-import {Observable, throwError} from 'rxjs';
+import {Observable, Subject, throwError} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {environment} from '../../../environments/environment';
 import {AuthenticationService} from './auth.service';
@@ -13,12 +13,25 @@ import {ConfirmResetPasswordResponse} from '../models/responses/user/confirmRese
 import {UpdateProfileResponse} from '../models/responses/user/updateProfileResponse';
 import {HomeResponse} from '../models/responses/user/homeResponse';
 import {NotificationService} from './notification.service';
+import {Notification, NotificationType} from '../models/instances/notification';
 
 const api = environment.api;
 
 @Injectable({providedIn: 'root'})
 export class UserService {
+
+    private subject = new Subject<User>();
+
+
     constructor(private http: HttpClient, private authService: AuthenticationService, private notificationService: NotificationService) {
+    }
+
+
+    /**
+     * Returns observable for subscribe
+     */
+    getObservable(): Observable<User> {
+        return this.subject.asObservable();
     }
 
     /**
@@ -52,6 +65,7 @@ export class UserService {
                     (response: SignupResponse) => {
                         const currentUser = {...response.user, token: response.token};
                         this.authService.setUser(currentUser);
+                        this.subject.next(currentUser);
                         return currentUser;
                     }
                 ));
@@ -113,6 +127,7 @@ export class UserService {
                         const newUser = response.user;
                         const user = {...currentUser, ...newUser};
                         this.authService.setUser(user);
+                        this.subject.next(user);
 
                         return user;
                     }
