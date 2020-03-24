@@ -157,10 +157,7 @@ export class ContactsComponent implements OnInit, OnDestroy {
                 this.users = response;
 
                 // apply pagination
-                this.startIndex = 0;
-                this.endIndex = this.pageSize;
-                this.paginatedUserData = this.users.slice(this.startIndex, this.endIndex);
-                this.totalSize = this.users.length;
+                this.applyPagination();
 
                 // set default selected user
                 if (this.users.length) {
@@ -169,6 +166,16 @@ export class ContactsComponent implements OnInit, OnDestroy {
             },
             error => console.log(error)
         );
+    }
+
+    /**
+     * Apply pagination
+     */
+    applyPagination() {
+        this.startIndex = 0;
+        this.endIndex = this.pageSize;
+        this.paginatedUserData = this.users.slice(this.startIndex, this.endIndex);
+        this.totalSize = this.users.length;
     }
 
     ngOnDestroy() {
