@@ -24,7 +24,6 @@ export class SellersComponent implements OnInit {
     error;
     api = environment.api;
     breadCrumbItems: Array<{}>;
-    selectedRole = '';
     submitted: boolean;
     term: any;
     // page number
@@ -36,15 +35,28 @@ export class SellersComponent implements OnInit {
     startIndex = 1;
     endIndex = 10;
     totalSize = 0;
-    selectValue: string[];
+    checkedAll = false;
+    editCheckedMode = false;
     contractors: Contractor[] = [];
-
+    checkedContractors: Contractor[] = [];
+    aliases = {
+        contactPerson: 'contact_person',
+        phoneNumber: 'phone_number',
+        updateEmail: 'email',
+        editorName: 'editor_name',
+        onePostPrice: 'one_post_price',
+        updateMoneySpent: 'money_spent',
+        updateContactPerson: 'contact_person',
+        updatePhoneNumber: 'phone_number',
+        updateEditorName: 'editor_name',
+        updateBudget: 'budget',
+        updateOnePostPrice: 'one_post_price',
+    };
     paginatedContractorData: Array<Contractor>;
     // validation form
-    validationform: FormGroup;
+    createForm: FormGroup;
     updateForm: FormGroup;
     // bread crumb items
-    contractorsData: Contractor[];
 
     // page number
 
@@ -59,11 +71,10 @@ export class SellersComponent implements OnInit {
         // tslint:disable-next-line: max-line-length
         this.breadCrumbItems = [{label: 'UBold', path: '/'}, {label: 'eCommerce', path: '/'}, {label: 'Sellers', path: '/', active: true}];
 
+        // init form with validators
         this.initForms();
 
-        /**
-         * fetches data
-         */
+        // fetches contractors
         this._fetchData();
     }
 
@@ -71,7 +82,8 @@ export class SellersComponent implements OnInit {
         // Form validation TODO add async check email
         const million = 1000000;
 
-        this.validationform = this.formBuilder.group({
+        // init Create Form
+        this.createForm = this.formBuilder.group({
             editorName: ['', [Validators.required, Validators.minLength(1)]],
             contactPerson: ['', [Validators.required, Validators.minLength(1)]],
             phoneNumber: ['', [Validators.required]],
@@ -80,6 +92,7 @@ export class SellersComponent implements OnInit {
             onePostPrice: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(million)]],
         });
 
+        // init Update Form
         this.updateForm = this.formBuilder.group({
             updateEditorName: ['', [Validators.required, Validators.minLength(1)]],
             updateContactPerson: ['', [Validators.required, Validators.minLength(1)]],
@@ -92,8 +105,41 @@ export class SellersComponent implements OnInit {
     }
 
     // convenience getter for easy access to form fields
-    get f() {
-        return this.validationform.controls;
+    get cf() {
+        return this.createForm.controls;
+    }
+
+    // convenience getter for easy access to form fields
+    get uf() {
+        return this.updateForm.controls;
+    }
+
+    /**
+     * Check all contractors
+     */
+    checkAll() {
+        if (this.checkedAll) {
+            this.checkedAll = false;
+            this.checkedContractors = [];
+        } else {
+            this.checkedAll = true;
+            this.checkedContractors = this.contractors;
+        }
+
+        return this.checkedContractors;
+    }
+
+    /**
+     * Check contractor
+     */
+    check(contractor: Contractor) {
+        const checked = this.checkedContractors.indexOf(contractor) !== -1;
+        if (checked) {
+            this.checkedContractors = this.checkedContractors.filter(el => el.id !== contractor.id);
+        } else {
+            this.checkedContractors.push(contractor);
+        }
+        return this.checkedContractors;
     }
 
     /**
@@ -107,63 +153,32 @@ export class SellersComponent implements OnInit {
     /**
      * Select user to show details
      */
-    selectContractor(contractor: Contractor) {
+    select(contractor: Contractor) {
         this.selectedContractor = contractor;
-        this.updateForm.controls.updateEditorName.setValue(contractor.editor_name);
-        this.updateForm.controls.updateContactPerson.setValue(contractor.contact_person);
-        this.updateForm.controls.updatePhoneNumber.setValue(contractor.phone_number);
-        this.updateForm.controls.updateEmail.setValue(contractor.email);
-        this.updateForm.controls.updateBudget.setValue(contractor.budget);
-        this.updateForm.controls.updateMoneySpent.setValue(contractor.money_spent);
-        this.updateForm.controls.updateOnePostPrice.setValue(contractor.one_post_price);
+        const fields = Object.keys(this.uf);
+        const aliases = this.aliases;
+        fields.forEach(
+            field => this.uf[field].setValue(contractor[(field in aliases ? aliases[field] : field)])
+        );
     }
 
     /**
-     * Close all modals (configure and add new user)
+     * Collect and returns data for creating or editing contractor
      */
-    closeModal() {
-        this.modalService.dismissAll();
-    }
+    createContractorData(f, defaultFields?) {
 
-    /**
-     * Collect and returns data for creating new contractor
-     */
-    createContractorData() {
-        const email = this.validationform.get('email').value;
-        const money_spent = 0;
-        const contactPerson = this.validationform.get('contactPerson').value;
-        const phoneNumber = this.validationform.get('phoneNumber').value;
-        const editorName = this.validationform.get('editorName').value;
-        const budget = this.validationform.get('budget').value;
-        const onePostPrice = this.validationform.get('onePostPrice').value;
-        return {
-            email,
-            budget,
-            money_spent,
-            contact_person: contactPerson,
-            phone_number: phoneNumber,
-            editor_name: editorName,
-            one_post_price: onePostPrice,
-        };
-    }
+        const fields = Object.keys(f);
+        const aliases = this.aliases;
 
-    createUpdatedContractorData() {
-        const email = this.updateForm.get('updateEmail').value;
-        const money_spent = this.updateForm.get('updateMoneySpent').value;
-        const contactPerson = this.updateForm.get('updateContactPerson').value;
-        const phoneNumber = this.updateForm.get('updatePhoneNumber').value;
-        const editorName = this.updateForm.get('updateEditorName').value;
-        const budget = this.updateForm.get('updateBudget').value;
-        const onePostPrice = this.updateForm.get('updateOnePostPrice').value;
-        return {
-            email,
-            budget,
-            money_spent,
-            contact_person: contactPerson,
-            phone_number: phoneNumber,
-            editor_name: editorName,
-            one_post_price: onePostPrice,
-        };
+        // collects all values [{}, {}, {}]
+        const values = fields.map(field => ({[(field in aliases ? aliases[field] : field)]: f[field].value}));
+
+        if (defaultFields) {
+            values.push(defaultFields);
+        }
+
+        // returns {}
+        return values.reduce((a, n) => ({...a, ...n}), {});
     }
 
     /**
@@ -173,7 +188,7 @@ export class SellersComponent implements OnInit {
         this.loading = true;
 
         // get payload data
-        const data = this.createContractorData();
+        const data = this.createContractorData(this.cf, {money_spent: 0});
 
         this.contractorService
             .create({data})
@@ -185,7 +200,7 @@ export class SellersComponent implements OnInit {
                     this.loading = false;
 
                     // clear input values
-                    this.clearValues();
+                    this.clearValues(this.cf);
 
                     this.contractors.push(contractor);
 
@@ -202,7 +217,7 @@ export class SellersComponent implements OnInit {
     /**
      * Delete contractor
      */
-    deleteContractor(contractor: Contractor) {
+    delete(contractor: Contractor) {
         this.loading = true;
 
         this.contractorService
@@ -225,22 +240,15 @@ export class SellersComponent implements OnInit {
     }
 
     /**
-     * Update contractor
+     * Update method, calls api
      */
-    updateContractor() {
-        this.loading = true;
-
-        // get payload data
-        const data = this.createUpdatedContractorData();
-
-        const id = this.selectedContractor.id;
-        const payload = {data, id};
-
+    update(payload) {
         this.contractorService
             .update(payload)
             .subscribe(
                 contractor => {
                     this.loading = false;
+                    this.error = false;
 
                     // update contractors list
                     this.contractors = this.contractors.map(el => el.id === contractor.id ? contractor : el);
@@ -255,18 +263,81 @@ export class SellersComponent implements OnInit {
             );
     }
 
+    /**
+     * Update single contractor
+     */
+    updateContractor() {
+        this.loading = true;
+
+        // get payload data
+        const data = this.createContractorData(this.uf);
+
+        const id = this.selectedContractor.id;
+        const payload = {data, id};
+
+        this.update(payload);
+    }
+
+    /**
+     * Update checked contractors
+     */
+    updateContractors() {
+        this.loading = true;
+
+        // get payload data
+        const data = this.createContractorData(this.uf);
+
+        this.checkedContractors
+            .forEach(
+                el => this.update({data, id: el.id})
+            );
+
+        this.editCheckedMode = false;
+        this.checkedContractors = [];
+    }
+
+    /**
+     * Calls when edit form is submitted (checked or single)
+     */
+    submitEditForm() {
+        if (this.editCheckedMode) {
+            this.updateContractors();
+        } else {
+            this.updateContractor();
+        }
+    }
 
     /**
      * Clear form values
      */
-    clearValues() {
-        this.f.email.setValue('');
-        this.f.editorName.setValue('');
-        this.f.contactPerson.setValue('');
-        this.f.phoneNumber.setValue('');
-        this.f.budget.setValue('');
-        this.f.onePostPrice.setValue('');
-        return this.f;
+    clearValues(f) {
+        f.email.setValue('');
+        f.editorName.setValue('');
+        f.contactPerson.setValue('');
+        f.phoneNumber.setValue('');
+        f.budget.setValue('');
+        f.onePostPrice.setValue('');
+        return f;
+    }
+
+    /**
+     * Performs editing all selected contractors
+     */
+    editChecked() {
+        if (this.checkedContractors.length) {
+            this.select(this.checkedContractors[0]);
+            this.editCheckedMode = true;
+        }
+    }
+
+    /**
+     * Performs deleting all selected contractors
+     */
+    deleteChecked() {
+        this.checkedContractors.forEach(
+            contractor => this.delete(contractor)
+        );
+        this.checkedContractors = [];
     }
 
     /**
