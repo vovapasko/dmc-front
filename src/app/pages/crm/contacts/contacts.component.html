@@ -154,13 +154,13 @@
                     <input class="form-control"
                            id="email"
                            placeholder="Введите email"
-                           formControlName="email"
-                           [ngClass]="{'is-invalid': (f.email.errors) && (f.email.errors.isEmailUnique || f.email.errors.isEmailValid)}"
-                    >
-                    <div *ngIf="f.email.errors" class="invalid-feedback">
-                        <span *ngIf="f.email.errors.isEmailUnique">Этот email уже используется.</span>
-                        <span *ngIf="f.email.errors.isEmailValid">Введите существующий email.</span>
-                    </div>
+                           formControlName="email">
+<!--                           [ngClass]="{'is-invalid': (f.email.errors) && (f.email.errors.isEmailUnique || f.email.errors.isEmailValid)}"-->
+
+<!--                    <div *ngIf="f.email.errors" class="invalid-feedback">-->
+<!--                        <span *ngIf="f.email.errors.isEmailUnique">Этот email уже используется.</span>-->
+<!--                        <span *ngIf="f.email.errors.isEmailValid">Введите существующий email.</span>-->
+<!--                    </div>-->
                 </div>
 
                 <div class="form-group">

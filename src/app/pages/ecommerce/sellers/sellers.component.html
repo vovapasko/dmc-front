@@ -187,13 +187,13 @@
                     <input class="form-control"
                            id="email"
                            placeholder="Введите email"
-                           formControlName="email"
-                           [ngClass]="{'is-invalid': (cf.email.errors) && (cf.email.errors.isEmailUnique || cf.email.errors.isEmailValid)}"
-                    >
-                    <div *ngIf="cf.email.errors" class="invalid-feedback">
-                        <span *ngIf="cf.email.errors.isEmailUnique">Этот email уже используется.</span>
-                        <span *ngIf="cf.email.errors.isEmailValid">Введите существующий email.</span>
-                    </div>
+                           formControlName="email">
+<!--                           [ngClass]="{'is-invalid': (cf.email.errors) && (cf.email.errors.isEmailUnique || cf.email.errors.isEmailValid)}"-->
+
+<!--                    <div *ngIf="cf.email.errors" class="invalid-feedback">-->
+<!--                        <span *ngIf="cf.email.errors.isEmailUnique">Этот email уже используется.</span>-->
+<!--                        <span *ngIf="cf.email.errors.isEmailValid">Введите существующий email.</span>-->
+<!--                    </div>-->
                 </div>
 
                 <div class="form-group">
@@ -296,13 +296,13 @@
                     <input class="form-control"
                            id="updateEmail"
                            placeholder="Введите email"
-                           formControlName="updateEmail"
-                           [ngClass]="{'is-invalid': (uf.updateEmail.errors) && (uf.updateEmail.errors.isEmailUnique || uf.updateEmail.errors.isEmailValid)}"
+                           formControlName="updateEmail">
+<!--                           [ngClass]="{'is-invalid': (uf.updateEmail.errors) && (uf.updateEmail.errors.isEmailUnique || uf.updateEmail.errors.isEmailValid)}"-->
                     >
-                    <div *ngIf="uf.updateEmail.errors" class="invalid-feedback">
-                        <span *ngIf="uf.updateEmail.errors.isEmailUnique">Этот email уже используется.</span>
-                        <span *ngIf="uf.updateEmail.errors.isEmailValid">Введите существующий email.</span>
-                    </div>
+<!--                    <div *ngIf="uf.updateEmail.errors" class="invalid-feedback">-->
+<!--                        <span *ngIf="uf.updateEmail.errors.isEmailUnique">Этот email уже используется.</span>-->
+<!--                        <span *ngIf="uf.updateEmail.errors.isEmailValid">Введите существующий email.</span>-->
+<!--                    </div>-->
 
                 </div>
 

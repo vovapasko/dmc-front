@@ -91,7 +91,7 @@ export class SellersComponent implements OnInit {
             email: [
                 '',
                 [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')],
-                [this.isEmailUnique.bind(this), this.isEmailValid.bind(this)]
+                // [this.isEmailUnique.bind(this), this.isEmailValid.bind(this)]
             ],
             arrangedNews: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(million)]],
             onePostPrice: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(million)]],
@@ -105,7 +105,7 @@ export class SellersComponent implements OnInit {
             updateEmail: [
                 '',
                 [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')],
-                [this.isEmailUnique.bind(this), this.isEmailValid.bind(this)]
+                // [this.isEmailUnique.bind(this), this.isEmailValid.bind(this)]
             ],
             updateArrangedNews: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(million)]],
             updateOnePostPrice: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(million)]],
@@ -113,37 +113,37 @@ export class SellersComponent implements OnInit {
         });
     }
 
-    /**
-     * Perform check if email is unique and not registred yet
-     */
-    isEmailUnique(control: FormControl) {
-        const email = control.value;
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                this.userService.isEmailRegisterd({email}).subscribe(() => {
-                    resolve({isEmailUnique: true});
-                }, () => {
-                    resolve(null);
-                });
-            }, 1000);
-        });
-    }
-
-    /**
-     * Perform check if email exists
-     */
-    isEmailValid(control: FormControl) {
-        const email = control.value;
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                this.userService.isEmailValid({email}).subscribe(() => {
-                    resolve(null);
-                }, () => {
-                    resolve({isEmailValid: true});
-                });
-            }, 1000);
-        });
-    }
+    // /**
+    //  * Perform check if email is unique and not registred yet
+    //  */
+    // isEmailUnique(control: FormControl) {
+    //     const email = control.value;
+    //     return new Promise((resolve, reject) => {
+    //         setTimeout(() => {
+    //             this.userService.isEmailRegisterd({email}).subscribe(() => {
+    //                 resolve({isEmailUnique: true});
+    //             }, () => {
+    //                 resolve(null);
+    //             });
+    //         }, 1000);
+    //     });
+    // }
+    //
+    // /**
+    //  * Perform check if email exists
+    //  */
+    // isEmailValid(control: FormControl) {
+    //     const email = control.value;
+    //     return new Promise((resolve, reject) => {
+    //         setTimeout(() => {
+    //             this.userService.isEmailValid({email}).subscribe(() => {
+    //                 resolve(null);
+    //             }, () => {
+    //                 resolve({isEmailValid: true});
+    //             });
+    //         }, 1000);
+    //     });
+    // }
 
     // convenience getter for easy access to form fields
     get cf() {
