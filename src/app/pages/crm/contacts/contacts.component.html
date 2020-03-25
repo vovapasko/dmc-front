@@ -158,6 +158,8 @@
                     <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                         <span *ngIf="f.email.errors.required">This value is required.</span>
                         <span *ngIf="f.email.errors.pattern">Please enter valid email.</span>
+                        <span *ngIf="f.email.errors.isEmailUnique">Этот email уже используется.</span>
+                        <span *ngIf="f.email.errors.isEmailValid">Введите существующий email.</span>
                     </div>
                 </div>
 

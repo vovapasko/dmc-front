@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 
-import {FormBuilder, Validators, FormGroup} from '@angular/forms';
+import {FormBuilder, Validators, FormGroup, FormControl} from '@angular/forms';
 
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
@@ -65,7 +65,11 @@ export class ContactsComponent implements OnInit, OnDestroy {
 
         // Form validation TODO add async check email
         this.validationform = this.formBuilder.group({
-            email: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')]],
+            email: [
+                '',
+                [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')],
+                [this.isEmailUnique.bind(this), this.isEmailValid.bind(this)]
+            ],
         });
 
         // Get current user and set available groups (Add new user)
@@ -74,6 +78,32 @@ export class ContactsComponent implements OnInit, OnDestroy {
 
         // get users
         this._fetchData();
+    }
+
+    isEmailUnique(control: FormControl) {
+        const data = {email: control.value};
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                this.userService.isEmailRegisterd({data}).subscribe(() => {
+                    resolve(null);
+                }, () => {
+                    resolve({isEmailUnique: true});
+                });
+            }, 1000);
+        });
+    }
+
+    isEmailValid(control: FormControl) {
+        const data = {email: control.value};
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                this.userService.isEmailValid({data}).subscribe(() => {
+                    resolve(null);
+                }, () => {
+                    resolve({isEmailValid: true});
+                });
+            }, 1000);
+        });
     }
 
     // convenience getter for easy access to form fields

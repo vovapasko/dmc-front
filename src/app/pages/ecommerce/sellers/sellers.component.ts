@@ -35,7 +35,6 @@ export class SellersComponent implements OnInit {
     startIndex = 1;
     endIndex = 10;
     totalSize = 0;
-    checkedAll = false;
     editCheckedMode = false;
     contractors: Contractor[] = [];
     checkedContractors: Contractor[] = [];
@@ -118,11 +117,10 @@ export class SellersComponent implements OnInit {
      * Check all contractors
      */
     checkAll() {
-        if (this.checkedAll) {
-            this.checkedAll = false;
+        const checkedAll = this.checkedContractors.length === this.contractors.length;
+        if (checkedAll) {
             this.checkedContractors = [];
         } else {
-            this.checkedAll = true;
             this.checkedContractors = this.contractors;
         }
 
@@ -299,6 +297,7 @@ export class SellersComponent implements OnInit {
 
         this.editCheckedMode = false;
         this.checkedContractors = [];
+        this.clearValues(this.uf);
     }
 
     /**
@@ -316,13 +315,10 @@ export class SellersComponent implements OnInit {
      * Clear form values
      */
     clearValues(f) {
-        f.email.setValue('');
-        f.editorName.setValue('');
-        f.contactPerson.setValue('');
-        f.phoneNumber.setValue('');
-        f.budget.setValue('');
-        f.onePostPrice.setValue('');
-        return f;
+        const fields = Object.keys(f);
+        fields.forEach(
+            field => this.uf[field].setValue('')
+        );
     }
 
     /**

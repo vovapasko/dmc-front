@@ -14,6 +14,8 @@ import {UpdateProfileResponse} from '../models/responses/user/updateProfileRespo
 import {HomeResponse} from '../models/responses/user/homeResponse';
 import {NotificationService} from './notification.service';
 import {Notification, NotificationType} from '../models/instances/notification';
+import {IsEmailValidResponse} from '../models/responses/user/isEmailValidResponse';
+import {IsEmailUniqueResponse} from '../models/responses/user/isEmailUniqueResponse';
 
 const api = environment.api;
 
@@ -132,6 +134,22 @@ export class UserService {
                         return user;
                     }
                 )
+            );
+    }
+
+    isEmailRegisterd(payload) {
+        return this.http.post(`${api}/isEmailRegisterd/`, payload.data)
+            .pipe(
+                map(
+                    (response: IsEmailUniqueResponse) => response.success)
+            );
+    }
+
+    isEmailValid(payload) {
+        return this.http.post(`${api}/isEmailValid/`, payload.data)
+            .pipe(
+                map(
+                    (response: IsEmailValidResponse) => response.success)
             );
     }
 

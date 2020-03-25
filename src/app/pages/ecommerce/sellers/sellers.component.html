@@ -46,8 +46,13 @@
                             <tr>
                                 <th style="width: 20px;">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck">
-                                        <label (click)="checkAll()" class="custom-control-label" for="customCheck">&nbsp;</label>
+                                        <input (click)="checkAll()"
+                                               [checked]="checkedContractors.length === this.contractors.length"
+                                               type="checkbox"
+                                               class="custom-control-input"
+                                               id="customCheck"
+                                        >
+                                        <label class="custom-control-label" for="customCheck">&nbsp;</label>
                                     </div>
                                 </th>
                                 <th>Название редакции</th>
@@ -64,13 +69,15 @@
                             <tbody>
                             <tr *ngFor="let contractor of paginatedContractorData | filter:term | slice:0:10;let i = index;">
                                 <td>
+
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox"
+                                               [checked]="checkedContractors.indexOf(contractor) !== -1"
+                                               (click)="check(contractor)"
                                                class="custom-control-input"
                                                id="customCheck{{i}}"
                                         >
-                                        <label (click)="check(contractor)"
-                                               class="custom-control-label"
+                                        <label class="custom-control-label"
                                                for="customCheck{{i}}"
                                         >&nbsp;</label>
                                     </div>
