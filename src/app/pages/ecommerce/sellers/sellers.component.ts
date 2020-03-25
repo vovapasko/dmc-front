@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 
 import {environment} from '../../../../environments/environment';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Contractor, emptyContractor} from '../../../core/models/instances/contractor';
 import {ContractorService} from '../../../core/services/contractor.service';
+import {UserService} from '../../../core/services/user.service';
 
 @Component({
     selector: 'app-sellers',
@@ -62,7 +63,8 @@ export class SellersComponent implements OnInit {
     constructor(
         private modalService: NgbModal,
         public formBuilder: FormBuilder,
-        private contractorService: ContractorService
+        private contractorService: ContractorService,
+        private userService: UserService
     ) {
     }
 
@@ -86,7 +88,11 @@ export class SellersComponent implements OnInit {
             editorName: ['', [Validators.required, Validators.minLength(1)]],
             contactPerson: ['', [Validators.required, Validators.minLength(1)]],
             phoneNumber: ['', [Validators.required]],
-            email: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')]],
+            email: [
+                '',
+                [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')],
+                [this.isEmailUnique.bind(this), this.isEmailValid.bind(this)]
+            ],
             arrangedNews: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(million)]],
             onePostPrice: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(million)]],
         });
@@ -96,10 +102,46 @@ export class SellersComponent implements OnInit {
             updateEditorName: ['', [Validators.required, Validators.minLength(1)]],
             updateContactPerson: ['', [Validators.required, Validators.minLength(1)]],
             updatePhoneNumber: ['', [Validators.required]],
-            updateEmail: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')]],
+            updateEmail: [
+                '',
+                [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')],
+                [this.isEmailUnique.bind(this), this.isEmailValid.bind(this)]
+            ],
             updateArrangedNews: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(million)]],
             updateOnePostPrice: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(million)]],
             updateNewsAmount: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(million)]],
+        });
+    }
+
+    /**
+     * Perform check if email is unique and not registred yet
+     */
+    isEmailUnique(control: FormControl) {
+        const email = control.value;
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                this.userService.isEmailRegisterd({email}).subscribe(() => {
+                    resolve({isEmailUnique: true});
+                }, () => {
+                    resolve(null);
+                });
+            }, 1000);
+        });
+    }
+
+    /**
+     * Perform check if email exists
+     */
+    isEmailValid(control: FormControl) {
+        const email = control.value;
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                this.userService.isEmailValid({email}).subscribe(() => {
+                    resolve(null);
+                }, () => {
+                    resolve({isEmailValid: true});
+                });
+            }, 1000);
         });
     }
 

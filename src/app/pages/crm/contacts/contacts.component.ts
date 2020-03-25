@@ -81,23 +81,23 @@ export class ContactsComponent implements OnInit, OnDestroy {
     }
 
     isEmailUnique(control: FormControl) {
-        const data = {email: control.value};
+        const email = control.value;
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                this.userService.isEmailRegisterd({data}).subscribe(() => {
-                    resolve(null);
-                }, () => {
+                this.userService.isEmailRegisterd({email}).subscribe(() => {
                     resolve({isEmailUnique: true});
+                }, () => {
+                    resolve(null);
                 });
             }, 1000);
         });
     }
 
     isEmailValid(control: FormControl) {
-        const data = {email: control.value};
+        const email = control.value;
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                this.userService.isEmailValid({data}).subscribe(() => {
+                this.userService.isEmailValid({email}).subscribe(() => {
                     resolve(null);
                 }, () => {
                     resolve({isEmailValid: true});
@@ -138,6 +138,7 @@ export class ContactsComponent implements OnInit, OnDestroy {
      */
     registerNewUser() {
         this.loading = true;
+        this.submitted = true;
 
         const email = this.validationform.get('email').value;
         const group = this.selectedRole;

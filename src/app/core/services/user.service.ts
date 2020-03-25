@@ -13,9 +13,6 @@ import {ConfirmResetPasswordResponse} from '../models/responses/user/confirmRese
 import {UpdateProfileResponse} from '../models/responses/user/updateProfileResponse';
 import {HomeResponse} from '../models/responses/user/homeResponse';
 import {NotificationService} from './notification.service';
-import {Notification, NotificationType} from '../models/instances/notification';
-import {IsEmailValidResponse} from '../models/responses/user/isEmailValidResponse';
-import {IsEmailUniqueResponse} from '../models/responses/user/isEmailUniqueResponse';
 
 const api = environment.api;
 
@@ -137,20 +134,15 @@ export class UserService {
             );
     }
 
+    /**
+     *  Checks if email already registered
+     */
     isEmailRegisterd(payload) {
-        return this.http.post(`${api}/isEmailRegisterd/`, payload.data)
-            .pipe(
-                map(
-                    (response: IsEmailUniqueResponse) => response.success)
-            );
+        return this.http.get(`${api}/email-registered/${payload.email}`)
     }
 
     isEmailValid(payload) {
-        return this.http.post(`${api}/isEmailValid/`, payload.data)
-            .pipe(
-                map(
-                    (response: IsEmailValidResponse) => response.success)
-            );
+        return this.http.get(`${api}/email-exists/${payload.email}`);
     }
 
     /**

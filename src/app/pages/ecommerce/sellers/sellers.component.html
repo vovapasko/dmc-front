@@ -105,7 +105,6 @@
                                 </td>
 
 
-
                                 <td>
                                     <a href="javascript:void(0);"
                                        class="action-icon"
@@ -185,11 +184,15 @@
 
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input class="form-control" id="email" placeholder="Введите email" formControlName="email"
-                           [ngClass]="{'is-invalid': submitted && cf.email.errors}">
-                    <div *ngIf="submitted && cf.email.errors" class="invalid-feedback">
-                        <span *ngIf="cf.email.errors.required">This value is required.</span>
-                        <span *ngIf="cf.email.errors.pattern">Please enter valid email.</span>
+                    <input class="form-control"
+                           id="email"
+                           placeholder="Введите email"
+                           formControlName="email"
+                           [ngClass]="{'is-invalid': (cf.email.errors) && (cf.email.errors.isEmailUnique || cf.email.errors.isEmailValid)}"
+                    >
+                    <div *ngIf="cf.email.errors" class="invalid-feedback">
+                        <span *ngIf="cf.email.errors.isEmailUnique">Этот email уже используется.</span>
+                        <span *ngIf="cf.email.errors.isEmailValid">Введите существующий email.</span>
                     </div>
                 </div>
 
@@ -294,12 +297,13 @@
                            id="updateEmail"
                            placeholder="Введите email"
                            formControlName="updateEmail"
-                           [ngClass]="{'is-invalid': submitted && uf.updateEmail.errors}"
+                           [ngClass]="{'is-invalid': (uf.updateEmail.errors) && (uf.updateEmail.errors.isEmailUnique || uf.updateEmail.errors.isEmailValid)}"
                     >
-                    <div *ngIf="submitted && uf.updateEmail.errors" class="invalid-feedback">
-                        <span *ngIf="uf.updateEmail.errors.required">This value is required.</span>
-                        <span *ngIf="uf.updateEmail.errors.pattern">Please enter valid email.</span>
+                    <div *ngIf="uf.updateEmail.errors" class="invalid-feedback">
+                        <span *ngIf="uf.updateEmail.errors.isEmailUnique">Этот email уже используется.</span>
+                        <span *ngIf="uf.updateEmail.errors.isEmailValid">Введите существующий email.</span>
                     </div>
+
                 </div>
 
                 <div class="form-group">

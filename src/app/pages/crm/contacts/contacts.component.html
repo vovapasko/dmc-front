@@ -17,8 +17,6 @@
                         </div>
                         <div class="col-sm-8">
                             <div class="text-sm-right">
-                                <button type="button" class="btn btn-success mb-2 mr-1"><i
-                                        class="mdi mdi-settings"></i></button>
                                 <a href="javscript: void(0);"
                                    class="btn btn-danger mb-2"
                                    id="openAddNewUserModal"
@@ -125,9 +123,9 @@
                     </span></p>
 
 
-        </div> <!-- end card-box-->
+            </div> <!-- end card-box-->
+        </div>
     </div>
-</div>
 
 </div>
 
@@ -153,11 +151,13 @@
 
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input class="form-control" id="email" placeholder="Введите email" formControlName="email"
-                           [ngClass]="{'is-invalid': submitted && f.email.errors}">
-                    <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
-                        <span *ngIf="f.email.errors.required">This value is required.</span>
-                        <span *ngIf="f.email.errors.pattern">Please enter valid email.</span>
+                    <input class="form-control"
+                           id="email"
+                           placeholder="Введите email"
+                           formControlName="email"
+                           [ngClass]="{'is-invalid': (f.email.errors) && (f.email.errors.isEmailUnique || f.email.errors.isEmailValid)}"
+                    >
+                    <div *ngIf="f.email.errors" class="invalid-feedback">
                         <span *ngIf="f.email.errors.isEmailUnique">Этот email уже используется.</span>
                         <span *ngIf="f.email.errors.isEmailValid">Введите существующий email.</span>
                     </div>
