@@ -59,12 +59,10 @@ export class AuthenticationService {
 
     /**
      * Performs the auth
-     * @param email email of user
-     * @param password password of user
      */
-    login(email: string, password: string): Observable<User> {
+    login(payload): Observable<User> {
         return this.http
-            .post<any>(`${api}/login/`, {email, password})
+            .post<any>(`${api}/login/`, payload.data)
             .pipe(
                 map(
                     (response: LoginResponse) => {

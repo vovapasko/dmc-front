@@ -20,6 +20,7 @@ export class PasswordResetComponent implements OnInit, AfterViewInit, OnDestroy 
     error = '';
     success = '';
     loading = false;
+    visible = false;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -83,6 +84,13 @@ export class PasswordResetComponent implements OnInit, AfterViewInit, OnDestroy 
         const data = {password, confirm_password};
         const confirm = this.confirm;
 
+        this.submit(confirm, data);
+    }
+
+    /**
+     * Submit data
+     */
+    submit(confirm, data) {
         this.userService
             .confirmResetPassword({confirm, data})
             .subscribe(

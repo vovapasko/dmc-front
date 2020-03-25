@@ -190,6 +190,11 @@ export class SellersComponent implements OnInit {
         // get payload data
         const data = this.createContractorData(this.cf, {money_spent: 0});
 
+        // submit data
+        this.add(data);
+    }
+
+    add(data) {
         this.contractorService
             .create({data})
             .subscribe(

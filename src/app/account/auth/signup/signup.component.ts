@@ -21,6 +21,7 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
     error = '';
     invite = '';
     loading = false;
+    visible = false;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -85,16 +86,22 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.loading = true;
         const {firstName, lastName, password, confirmPassword} = this.signupForm.value;
-        const payload = {
-            data: {
-                first_name: firstName,
-                last_name: lastName,
-                password,
-                password_confirm: confirmPassword
-            },
-            invite: this.invite
+        const data = {
+            first_name: firstName,
+            last_name: lastName,
+            password,
+            password_confirm: confirmPassword
         };
+        const invite = this.invite;
+        const payload = {data, invite};
 
+        this.submit(payload);
+    }
+
+    /**
+     * Submit data
+     */
+    submit(payload) {
         this.userService.signup(payload).subscribe(
             (user: User) => {
                 this.router.navigate(['/profile']);
@@ -105,7 +112,7 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         );
     }
-
+    
     ngOnDestroy() {
         this.sub.unsubscribe();
     }

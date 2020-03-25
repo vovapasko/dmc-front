@@ -113,6 +113,10 @@ export class ContactsComponent implements OnInit, OnDestroy {
         const group = this.selectedRole;
         const data = {email, group};
 
+        this.register(data);
+    }
+
+    register(data) {
         this.userService
             .register({data})
             .subscribe(

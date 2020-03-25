@@ -20,6 +20,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     returnUrl: string;
     error = '';
     loading = false;
+    visible = false;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -73,10 +74,21 @@ export class LoginComponent implements OnInit, AfterViewInit {
         }
 
         this.loading = true;
-        this.authenticationService.login(this.f.email.value, this.f.password.value)
+        const email = this.f.email.value;
+        const password = this.f.password.value;
+        const data = {email, password};
+
+        this.submit(data);
+    }
+
+    /**
+     * Submit data
+     */
+    submit(data) {
+        this.authenticationService.login({data})
             .pipe(first())
             .subscribe(
-                data => {
+                response => {
                     this.router.navigate([this.returnUrl]);
                 },
                 error => {
