@@ -44,11 +44,11 @@ export class SellersComponent implements OnInit {
         updateEmail: 'email',
         editorName: 'editor_name',
         onePostPrice: 'one_post_price',
-        updateMoneySpent: 'money_spent',
+        updateNewsAmount: 'news_amount',
         updateContactPerson: 'contact_person',
         updatePhoneNumber: 'phone_number',
         updateEditorName: 'editor_name',
-        updateBudget: 'budget',
+        updateArrangedNews: 'arranged_news',
         updateOnePostPrice: 'one_post_price',
     };
     paginatedContractorData: Array<Contractor>;
@@ -87,7 +87,7 @@ export class SellersComponent implements OnInit {
             contactPerson: ['', [Validators.required, Validators.minLength(1)]],
             phoneNumber: ['', [Validators.required]],
             email: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')]],
-            budget: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(million)]],
+            arrangedNews: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(million)]],
             onePostPrice: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(million)]],
         });
 
@@ -97,9 +97,9 @@ export class SellersComponent implements OnInit {
             updateContactPerson: ['', [Validators.required, Validators.minLength(1)]],
             updatePhoneNumber: ['', [Validators.required]],
             updateEmail: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')]],
-            updateBudget: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(million)]],
+            updateArrangedNews: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(million)]],
             updateOnePostPrice: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(million)]],
-            updateMoneySpent: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(million)]],
+            updateNewsAmount: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(million)]],
         });
     }
 
@@ -186,12 +186,15 @@ export class SellersComponent implements OnInit {
         this.loading = true;
 
         // get payload data
-        const data = this.createContractorData(this.cf, {money_spent: 0});
+        const data = this.createContractorData(this.cf, {news_amount: 0});
 
         // submit data
         this.add(data);
     }
 
+    /**
+     * submit data
+     */
     add(data) {
         this.contractorService
             .create({data})
@@ -317,7 +320,7 @@ export class SellersComponent implements OnInit {
     clearValues(f) {
         const fields = Object.keys(f);
         fields.forEach(
-            field => this.uf[field].setValue('')
+            field => f[field].setValue('')
         );
     }
 
