@@ -10,7 +10,6 @@ import {NgbAlertModule, NgbPaginationModule, NgbProgressbarModule} from '@ng-boo
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 
-import { SellersComponent } from './sellers/sellers.component';
 import { OrdersComponent } from './orders/orders.component';
 import { ProductsComponent } from './products/products.component';
 import { ProductdetailComponent } from './productdetail/productdetail.component';
@@ -21,7 +20,7 @@ import {NgxMaskModule} from 'ngx-mask';
 
 @NgModule({
   // tslint:disable-next-line: max-line-length
-  declarations: [SellersComponent, OrdersComponent, ProductsComponent, ProductdetailComponent, ProducteditComponent, EcommercedashboardComponent],
+  declarations: [OrdersComponent, ProductsComponent, ProductdetailComponent, ProducteditComponent, EcommercedashboardComponent],
     imports: [
         CommonModule,
         FormsModule,

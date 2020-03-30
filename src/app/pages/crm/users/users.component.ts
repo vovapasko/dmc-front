@@ -1,12 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 
-import {FormBuilder, Validators, FormGroup, FormControl} from '@angular/forms';
+import {FormBuilder, Validators, FormGroup} from '@angular/forms';
 
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
-import {Contacts} from './contacts.model';
+import {Contacts} from './users.model';
 
-import {contactData} from './data';
 import {AuthenticationService} from '../../../core/services/auth.service';
 import {UserService} from '../../../core/services/user.service';
 import {User} from '../../../core/models/instances/user.models';
@@ -14,14 +13,14 @@ import {environment} from '../../../../environments/environment';
 
 @Component({
     selector: 'app-contacts',
-    templateUrl: './contacts.component.html',
-    styleUrls: ['./contacts.component.scss'],
+    templateUrl: './users.component.html',
+    styleUrls: ['./users.component.scss'],
 })
 
 /**
  * Contacts component - handling the contacts with sidebar and content
  */
-export class ContactsComponent implements OnInit, OnDestroy {
+export class UsersComponent implements OnInit, OnDestroy {
     // bread crumb items
     sub;
     loading = false;
