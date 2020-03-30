@@ -8,17 +8,11 @@ import {NgbAlertModule, NgbProgressbarModule, NgbTabsetModule} from '@ng-bootstr
 import { LightboxModule } from 'ngx-lightbox';
 
 import { ProfileComponent } from './profile/profile.component';
-import { TimelineComponent } from './timeline/timeline.component';
-import { InvoiceComponent } from './invoice/invoice.component';
-import { PricingComponent } from './pricing/pricing.component';
-import { GalleryComponent } from './gallery/gallery.component';
-import { SitemapComponent } from './sitemap/sitemap.component';
-import { FaqsComponent } from './faqs/faqs.component';
 import {ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
   // tslint:disable-next-line: max-line-length
-  declarations: [ProfileComponent, TimelineComponent, InvoiceComponent, PricingComponent, GalleryComponent, SitemapComponent, FaqsComponent],
+  declarations: [ProfileComponent],
     imports: [
         CommonModule,
         ExtrasRoutingModule,
