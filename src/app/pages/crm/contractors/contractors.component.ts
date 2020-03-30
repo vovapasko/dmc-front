@@ -9,14 +9,14 @@ import numbers from '../../../core/constants/numbers';
 
 @Component({
     selector: 'app-sellers',
-    templateUrl: './sellers.component.html',
-    styleUrls: ['./sellers.component.scss']
+    templateUrl: './contractors.component.html',
+    styleUrls: ['./contractors.component.scss']
 })
 
 /**
- * Sellers component: handling the sellers with sidebar and content
+ * Contractors component: handling the sellers with sidebar and content
  */
-export class SellersComponent implements OnInit {
+export class ContractorsComponent implements OnInit {
 
     // bread crumb items
     sub;
@@ -116,46 +116,13 @@ export class SellersComponent implements OnInit {
             updatePhoneNumber: ['', [Validators.required]],
             updateEmail: [
                 '',
-                [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')],
-                // [this.isEmailUnique.bind(this), this.isEmailValid.bind(this)]
+                [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')]
             ],
             updateArrangedNews: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
             updateOnePostPrice: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
             updateNewsAmount: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
         });
     }
-
-    // /**
-    //  * Perform check if email is unique and not registred yet
-    //  */
-    // isEmailUnique(control: FormControl) {
-    //     const email = control.value;
-    //     return new Promise((resolve, reject) => {
-    //         setTimeout(() => {
-    //             this.userService.isEmailRegisterd({email}).subscribe(() => {
-    //                 resolve({isEmailUnique: true});
-    //             }, () => {
-    //                 resolve(null);
-    //             });
-    //         }, 1000);
-    //     });
-    // }
-    //
-    // /**
-    //  * Perform check if email exists
-    //  */
-    // isEmailValid(control: FormControl) {
-    //     const email = control.value;
-    //     return new Promise((resolve, reject) => {
-    //         setTimeout(() => {
-    //             this.userService.isEmailValid({email}).subscribe(() => {
-    //                 resolve(null);
-    //             }, () => {
-    //                 resolve({isEmailValid: true});
-    //             });
-    //         }, 1000);
-    //     });
-    // }
 
     // convenience getter for easy access to form fields
     get cf() {
