@@ -80,32 +80,6 @@ export class ContactsComponent implements OnInit, OnDestroy {
         this._fetchData();
     }
 
-    // isEmailUnique(control: FormControl) {
-    //     const email = control.value;
-    //     return new Promise((resolve, reject) => {
-    //         setTimeout(() => {
-    //             this.userService.isEmailRegisterd({email}).subscribe(() => {
-    //                 resolve({isEmailUnique: true});
-    //             }, () => {
-    //                 resolve(null);
-    //             });
-    //         }, 1000);
-    //     });
-    // }
-    //
-    // isEmailValid(control: FormControl) {
-    //     const email = control.value;
-    //     return new Promise((resolve, reject) => {
-    //         setTimeout(() => {
-    //             this.userService.isEmailValid({email}).subscribe(() => {
-    //                 resolve(null);
-    //             }, () => {
-    //                 resolve({isEmailValid: true});
-    //             });
-    //         }, 1000);
-    //     });
-    // }
-
     // convenience getter for easy access to form fields
     get f() {
         return this.validationform.controls;
@@ -124,13 +98,6 @@ export class ContactsComponent implements OnInit, OnDestroy {
      */
     selectUser(user: User) {
         this.selectedUser = user;
-    }
-
-    /**
-     * Close all modals (configure and add new user)
-     */
-    closeModal() {
-        this.modalService.dismissAll();
     }
 
     /**
