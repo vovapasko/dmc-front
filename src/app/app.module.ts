@@ -13,10 +13,14 @@ import {ServiceWorkerModule} from '@angular/service-worker';
 import {environment} from '../environments/environment';
 import {NotificationComponent} from './core/components/notification/notification.component';
 import {NotificationService} from './core/services/notification.service';
+import {Error404Component} from './pages/errors/error404/error404.component';
+import {Error500Component} from './pages/errors/error500/error500.component';
 
 @NgModule({
     declarations: [
         AppComponent,
+        Error404Component,
+        Error500Component,
         NotificationComponent
     ],
     imports: [

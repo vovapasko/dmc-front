@@ -3,6 +3,8 @@ import {Routes, RouterModule} from '@angular/router';
 
 import {AuthGuard} from './core/guards/auth.guard';
 import {LayoutComponent} from './layouts/layout.component';
+import {Error404Component} from './pages/errors/error404/error404.component';
+import {Error500Component} from './pages/errors/error500/error500.component';
 
 
 const routes: Routes = [
@@ -13,6 +15,9 @@ const routes: Routes = [
         loadChildren: () => import('./pages/pages.module').then(m => m.PagesModule),
         canActivate: [AuthGuard]
     },
+    { path: '404', component: Error404Component },
+    { path: '500', component: Error500Component },
+    {path: '**', redirectTo: '404'}
 ];
 
 @NgModule({
