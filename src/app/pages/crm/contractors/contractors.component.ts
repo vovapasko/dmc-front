@@ -89,6 +89,13 @@ export class ContractorsComponent implements OnInit {
     }
 
     /**
+     * Close all modals
+     */
+    public closeAll() {
+        this.modalService.dismissAll();
+    }
+
+    /**
      * Validators for Create Form
      */
     initCreateForm() {

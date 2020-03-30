@@ -3,6 +3,12 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {LoginComponent} from './login.component';
 import {DebugElement} from '@angular/core';
 import {By, Title} from '@angular/platform-browser';
+import {ReactiveFormsModule} from '@angular/forms';
+import {CommonModule} from '@angular/common';
+import {NgbAlertModule} from '@ng-bootstrap/ng-bootstrap';
+import {UIModule} from '../../../shared/ui/ui.module';
+import {RouterTestingModule} from '@angular/router/testing';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('LoginComponent', () => {
     let component: LoginComponent;
@@ -13,7 +19,16 @@ describe('LoginComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [LoginComponent]
+            declarations: [LoginComponent],
+            imports: [
+                CommonModule,
+                ReactiveFormsModule,
+                NgbAlertModule,
+                UIModule,
+                RouterTestingModule,
+                HttpClientModule
+            ]
+
         })
             .compileComponents();
     }));
@@ -47,6 +62,6 @@ describe('LoginComponent', () => {
     it('should set title', () => {
         const title = 'Login';
         component.setTitle(title);
-        expect(titleService.getTitle()).toBe(title);
+        expect(document.title).toBe(title);
     });
 });

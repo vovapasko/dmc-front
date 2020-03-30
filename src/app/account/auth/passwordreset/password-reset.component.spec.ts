@@ -3,6 +3,13 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {PasswordResetComponent} from './password-reset.component';
 import {DebugElement} from '@angular/core';
 import {By, Title} from '@angular/platform-browser';
+import {CommonModule} from '@angular/common';
+import {ReactiveFormsModule} from '@angular/forms';
+import {NgbAlertModule} from '@ng-bootstrap/ng-bootstrap';
+import {UIModule} from '../../../shared/ui/ui.module';
+import {RouterTestingModule} from '@angular/router/testing';
+import {HttpClientModule} from '@angular/common/http';
+import {NotificationService} from '../../../core/services/notification.service';
 
 describe('PasswordresetComponent', () => {
     const titleService: Title = new Title(null);
@@ -12,7 +19,18 @@ describe('PasswordresetComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [PasswordResetComponent]
+            declarations: [PasswordResetComponent],
+            imports: [
+                CommonModule,
+                ReactiveFormsModule,
+                NgbAlertModule,
+                UIModule,
+                RouterTestingModule,
+                HttpClientModule
+            ],
+            providers: [
+                NotificationService
+            ],
         })
             .compileComponents();
     }));
@@ -46,6 +64,6 @@ describe('PasswordresetComponent', () => {
     it('should set title', () => {
         const title = 'Reset password';
         component.setTitle(title);
-        expect(titleService.getTitle()).toBe(title);
+        expect(document.title).toBe(title);
     });
 });

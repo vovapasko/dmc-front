@@ -17,3 +17,9 @@ export class User {
     password?: string;
     groups_cascade_down?: string[];
 }
+
+export const EmptyUser: User = {
+    avatar: '',
+    id: '',
+    email: ''
+};

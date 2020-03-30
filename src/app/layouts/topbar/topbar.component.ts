@@ -4,7 +4,7 @@ import {Router} from '@angular/router';
 import {AuthenticationService} from '../../core/services/auth.service';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
-import {User} from '../../core/models/instances/user.models';
+import {EmptyUser, User} from '../../core/models/instances/user.models';
 import {Notification} from '../../core/models/instances/notification';
 import {Subscription} from 'rxjs';
 import {NotificationService} from '../../core/services/notification.service';
@@ -21,7 +21,7 @@ export class TopbarComponent implements OnInit, OnDestroy {
     private notificationSubscription: Subscription;
     private userSubscription: Subscription;
     api = environment.api;
-    currentUser: User;
+    currentUser: User = EmptyUser;
     openMobileMenu: boolean;
 
     @Output() settingsButtonClicked = new EventEmitter();
@@ -60,8 +60,10 @@ export class TopbarComponent implements OnInit, OnDestroy {
     /**
      * Set current user
      */
-    setUser(user) {
-        this.currentUser = user;
+    setUser(user: User) {
+        if (user) {
+            this.currentUser = user;
+        }
     }
 
     /**

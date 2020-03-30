@@ -3,6 +3,13 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {SignupComponent} from './signup.component';
 import {DebugElement} from '@angular/core';
 import {By, Title} from '@angular/platform-browser';
+import {CommonModule} from '@angular/common';
+import {ReactiveFormsModule} from '@angular/forms';
+import {NgbAlertModule} from '@ng-bootstrap/ng-bootstrap';
+import {UIModule} from '../../../shared/ui/ui.module';
+import {RouterTestingModule} from '@angular/router/testing';
+import {HttpClientModule} from '@angular/common/http';
+import {NotificationService} from '../../../core/services/notification.service';
 
 describe('SignupComponent', () => {
     const titleService: Title = new Title(null);
@@ -13,7 +20,18 @@ describe('SignupComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [SignupComponent]
+            declarations: [SignupComponent],
+            imports: [
+                CommonModule,
+                ReactiveFormsModule,
+                NgbAlertModule,
+                UIModule,
+                RouterTestingModule,
+                HttpClientModule
+            ],
+            providers: [
+                NotificationService
+            ],
         })
             .compileComponents();
     }));
@@ -59,6 +77,6 @@ describe('SignupComponent', () => {
     it('should set title', () => {
         const title = 'Reset password';
         component.setTitle(title);
-        expect(titleService.getTitle()).toBe(title);
+        expect(document.title).toBe(title);
     });
 });

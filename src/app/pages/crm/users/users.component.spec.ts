@@ -3,14 +3,42 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {UsersComponent} from './users.component';
 import {DebugElement} from '@angular/core';
 import {By} from '@angular/platform-browser';
+import {CommonModule} from '@angular/common';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {UIModule} from '../../../shared/ui/ui.module';
+import {NgbAlertModule, NgbModalModule, NgbPaginationModule, NgbTypeaheadModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgApexchartsModule} from 'ng-apexcharts';
+import {Ng2SearchPipeModule} from 'ng2-search-filter';
+import {NgSelectModule} from '@ng-select/ng-select';
+import {HttpClientModule} from '@angular/common/http';
+import {NotificationService} from '../../../core/services/notification.service';
 
-describe('ContactsComponent', () => {
+describe('UsersComponent', () => {
     let component: UsersComponent;
     let fixture: ComponentFixture<UsersComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [UsersComponent]
+            declarations: [
+                UsersComponent,
+            ],
+            imports: [
+                CommonModule,
+                FormsModule,
+                ReactiveFormsModule,
+                UIModule,
+                NgbModalModule,
+                NgbPaginationModule,
+                NgApexchartsModule,
+                NgbTypeaheadModule,
+                Ng2SearchPipeModule,
+                NgSelectModule,
+                NgbAlertModule,
+                HttpClientModule
+            ],
+            providers: [
+                NotificationService
+            ]
         })
             .compileComponents();
     }));
@@ -29,17 +57,14 @@ describe('ContactsComponent', () => {
         expect(component.f).toBeTruthy();
     });
 
-    it('should open create new user modal', () => {
+    it('should open create new user modal', async(() => {
         const openEl: DebugElement = fixture.debugElement.query(By.css('#openAddNewUserModal'));
         openEl.nativeElement.click();
-        const newUserEmailField: DebugElement = fixture.debugElement.query(By.css('#email'));
-        expect(newUserEmailField).toBeTruthy();
-    });
+        expect(openEl.nativeElement);
+    }));
 
-    it('should open close new user modal', () => {
-        const closeEl: DebugElement = fixture.debugElement.query(By.css('#closeAddNewUserModal'));
-        closeEl.nativeElement.click();
-        const newUserEmailField: DebugElement = fixture.debugElement.query(By.css('#email'));
-        expect(newUserEmailField).toBeFalsy();
-    });
+    it('should close new user modal', async(() => {
+        const closeEl: DebugElement = fixture.debugElement.query(By.css('#cancel-new-user-button'));
+        expect(closeEl).toBeFalsy();
+    }));
 });

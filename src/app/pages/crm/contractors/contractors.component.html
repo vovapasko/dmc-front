@@ -10,7 +10,7 @@
                             <form class="form-inline">
                                 <div class="form-group mb-2">
                                     <label class="sr-only">Search</label>
-                                    <input type="search" class="form-control" placeholder="Search..."
+                                    <input type="search" class="form-control" placeholder="Поиск..."
                                            [(ngModel)]="term" name="search">
                                 </div>
                             </form>
@@ -19,17 +19,20 @@
                             <div class="text-md-right">
                                 <button (click)="openModal(createModal)"
                                         type="button"
+                                        id="add-new-contractor-button"
                                         class="btn btn-success mb-2 mr-2">
                                     <i class="mdi mdi-basket mr-1"></i>
-                                    Добавить контагента
+                                    Добавить контрагента
                                 </button>
                                 <button type="button"
+                                        id="edit-contractor-button"
                                         (click)="editChecked();openModal(editModal);"
                                         class="btn btn-warning mb-2 mr-1"
                                 ><i class="mdi mdi-settings"></i>
                                     Изменить выбранные
                                 </button>
                                 <button type="button"
+                                        id="delete-contractor-button"
                                         (click)="deleteChecked()"
                                         class="btn btn-danger mb-2 mr-1"
                                 >
@@ -136,7 +139,7 @@
 <!-- Create new contractor modal  -->
 <ng-template #createModal role="document" let-modal="close">
     <div class="modal-header bg-dark">
-        <h4 class="modal-title text-white">Add contractor</h4>
+        <h4 class="modal-title text-white">Добавить контрагента</h4>
         <button type="button"
                 class="close text-white"
                 aria-label="Close"
@@ -220,9 +223,9 @@
                 </div>
 
                 <div class="text-right">
-                    <button type="submit" class="btn btn-success">Save</button>
+                    <button type="submit" class="btn btn-success">Сохранить</button>
                     <button type="button" class="btn btn-danger ml-1"
-                            (click)="modal('close click')">Cancel
+                            (click)="modal('close click')">Отменить
                     </button>
                 </div>
             </form>
@@ -232,8 +235,8 @@
 
 <!-- Edit contractor modal  -->
 <ng-template #editModal role="document" let-modal="close">
-    <div class="modal-header bg-dark">
-        <h4 class="modal-title text-white">Update contractor</h4>
+    <div class="modal-header bg-dark update-contractor">
+        <h4 class="modal-title text-white">Обновить контрагента</h4>
         <button type="button"
                 class="close text-white"
                 aria-label="Close"
@@ -359,7 +362,7 @@
                     <button type="submit" *ngIf="!editCheckedMode" class="btn btn-success">Обновить</button>
                     <button type="submit" *ngIf="editCheckedMode" class="btn btn-success">Обновить выбранные</button>
                     <button type="button" class="btn btn-danger ml-1"
-                            (click)="modal('close click')">Cancel
+                            (click)="modal('close click')">Отменить
                     </button>
                 </div>
             </form>

@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Title} from '@angular/platform-browser';
 
-import {User} from '../../../core/models/instances/user.models';
+import {EmptyUser, User} from '../../../core/models/instances/user.models';
 import {AuthenticationService} from '../../../core/services/auth.service';
 import {UserService} from '../../../core/services/user.service';
 import {environment} from '../../../../environments/environment';
@@ -21,7 +21,7 @@ export class ProfileComponent implements OnInit {
     title = 'Профиль';
     error;
     api = environment.api;
-    currentUser: User;
+    currentUser: User = EmptyUser;
     profileForm: FormGroup;
     submitted = false;
     loading = false;
@@ -36,9 +36,19 @@ export class ProfileComponent implements OnInit {
 
     ngOnInit() {
         // fetches current user
-        this.currentUser = this.authService.currentUser();
+        const currentUser = this.authService.currentUser();
+        this.setUser(currentUser);
 
         this.initForm();
+    }
+
+    /**
+     * Checks valid user and set user
+     */
+    setUser(user: User) {
+        if (user) {
+            this.currentUser = user;
+        }
     }
 
     /**

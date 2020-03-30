@@ -85,7 +85,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
      * Submit data
      */
     submit(data) {
-        this.authenticationService.login({data})
+        this.authenticationService
+            .login({data})
             .pipe(first())
             .subscribe(
                 response => {

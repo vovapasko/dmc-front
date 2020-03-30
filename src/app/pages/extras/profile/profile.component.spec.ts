@@ -1,28 +1,52 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {ProfileComponent} from './profile.component';
-import {DebugElement} from '@angular/core';
+import {DebugElement, NO_ERRORS_SCHEMA} from '@angular/core';
 import {By, Title} from '@angular/platform-browser';
-import {Router} from '@angular/router';
+import {Router, RouterModule} from '@angular/router';
+import {CommonModule} from '@angular/common';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {UIModule} from '../../../shared/ui/ui.module';
+import {NgbAlertModule, NgbModalModule, NgbPaginationModule, NgbTypeaheadModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgApexchartsModule} from 'ng-apexcharts';
+import {Ng2SearchPipeModule} from 'ng2-search-filter';
+import {NgSelectModule} from '@ng-select/ng-select';
+import {HttpClientModule} from '@angular/common/http';
+import {RouterTestingModule} from '@angular/router/testing';
+import {NotificationService} from '../../../core/services/notification.service';
+import {routes} from '../../pages-routing.module';
 
 describe('ProfileComponent', () => {
     const titleService: Title = new Title(null);
     const links = {
-      'image-crop': 'image-crop/'
+        'image-crop': 'image-crop/'
     };
     let component: ProfileComponent;
-    let location: Location;
     let router: Router;
     let fixture: ComponentFixture<ProfileComponent>;
     const names = {firstName: 'First name', lastName: 'Last name'};
+    const hrefs = {
+        'image-crop': '#image-crop-link'
+    };
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [ProfileComponent]
+            declarations: [ProfileComponent],
+            imports: [
+                CommonModule,
+                ReactiveFormsModule,
+                NgbAlertModule,
+                UIModule,
+                HttpClientModule,
+                RouterTestingModule.withRoutes(routes)
+            ],
+            providers: [NotificationService],
+            schemas: [
+                NO_ERRORS_SCHEMA
+            ]
         })
             .compileComponents();
         router = TestBed.get(Router);
-        location = TestBed.get(Location);
     }));
 
     beforeEach(() => {
@@ -58,14 +82,15 @@ describe('ProfileComponent', () => {
     });
 
     it('should navigate to image crop page', () => {
-        router.navigate([links['image-crop']]).then(() => {
-            expect(location.href).toBe(links['image-crop']);
-        });
+        const el = fixture.debugElement.nativeElement;
+        const li = el.querySelectorAll(hrefs['image-crop'])[0];
+        li.click();
+        expect(document.location.href.indexOf(links['image-crop']) !== 0).toBeTruthy();
     });
 
     it('should set title', () => {
         const title = 'Profile';
         component.setTitle(title);
-        expect(titleService.getTitle()).toBe(title);
+        expect(document.title).toBe(title);
     });
 });

@@ -119,8 +119,8 @@
 
 <!-- users model  -->
 <ng-template #content role="document" let-modal="close">
-    <div class="modal-header bg-dark">
-        <h4 class="modal-title text-white">Add users</h4>
+    <div class="modal-header bg-dark" id="add-new-user-modal">
+        <h4 class="modal-title text-white">Добавить пользователя</h4>
         <button type="button"
                 class="close text-white"
                 aria-label="Close"
@@ -156,9 +156,9 @@
                 </div>
 
                 <div class="text-right">
-                    <button type="submit" class="btn btn-success">Save</button>
-                    <button type="button" class="btn btn-danger ml-1"
-                            (click)="modal('close click')">Cancel
+                    <button type="submit" id="save-new-user-button" class="btn btn-success">Добавить</button>
+                    <button type="button" id="cancel-new-user-button" class="btn btn-danger ml-1"
+                            (click)="modal('close click')">Отменить
                     </button>
                 </div>
             </form>

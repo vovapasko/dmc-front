@@ -62,6 +62,28 @@ export class UsersComponent implements OnInit, OnDestroy {
         // tslint:disable-next-line: max-line-length
         this.breadCrumbItems = [{label: 'UBold', path: '/'}, {label: 'CRM', path: '/'}, {label: 'Contacts', path: '/', active: true}];
 
+        this.initForm();
+
+        this.initSelectOptions();
+
+        // get users
+        this._fetchData();
+    }
+
+    /**
+     * Get current user and set available groups (Add new user)
+     */
+    initSelectOptions() {
+        const currentUser = this.authService.currentUser();
+        if (currentUser) {
+            this.selectValue = currentUser.groups_cascade_down;
+        }
+    }
+
+    /**
+     * Init form, create validators
+     */
+    initForm() {
         // Form validation TODO add async check email
         this.validationform = this.formBuilder.group({
             email: [
@@ -70,13 +92,6 @@ export class UsersComponent implements OnInit, OnDestroy {
                 // [this.isEmailUnique.bind(this), this.isEmailValid.bind(this)]
             ],
         });
-
-        // Get current user and set available groups (Add new user)
-        const currentUser = this.authService.currentUser();
-        this.selectValue = currentUser.groups_cascade_down;
-
-        // get users
-        this._fetchData();
     }
 
     // convenience getter for easy access to form fields
