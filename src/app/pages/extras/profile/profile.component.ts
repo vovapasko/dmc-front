@@ -1,14 +1,11 @@
 import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Title} from '@angular/platform-browser';
 
-import {Project, Inbox} from './profile.model';
-
-import {projectData, inboxData} from './data';
 import {User} from '../../../core/models/instances/user.models';
 import {AuthenticationService} from '../../../core/services/auth.service';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {UserService} from '../../../core/services/user.service';
 import {environment} from '../../../../environments/environment';
-import {Title} from '@angular/platform-browser';
 
 @Component({
     selector: 'app-profile',
@@ -29,14 +26,6 @@ export class ProfileComponent implements OnInit {
     submitted = false;
     loading = false;
 
-    // bread crumb items
-    breadCrumbItems: Array<{}>;
-
-    // Projects table
-    projectData: Project[];
-
-    inboxData: Inbox[];
-
     constructor(
         private authService: AuthenticationService,
         private formBuilder: FormBuilder,
@@ -46,20 +35,22 @@ export class ProfileComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.breadCrumbItems = [{label: 'UBold', path: '/'}, {label: 'Extras', path: '/'}, {label: 'Profile', path: '/', active: true}];
-
         // fetches current user
         this.currentUser = this.authService.currentUser();
 
+        this.initForm();
+    }
+
+    /**
+     * Init form with validators
+     */
+    initForm() {
         // creates form and validations
         this.profileForm = this.formBuilder.group({
             firstName: [this.currentUser.first_name, [Validators.required]],
             lastName: [this.currentUser.last_name, [Validators.required]],
             email: [this.currentUser.email, [Validators.required, Validators.email]],
         });
-
-        // fetch emails
-        this._fetchData();
     }
 
     /**
@@ -75,20 +66,29 @@ export class ProfileComponent implements OnInit {
     }
 
     /**
-     * Update profile and set new values
+     * Collects data and calls update method
      */
     onSubmit() {
+
         this.submitted = true;
+        this.loading = true;
 
         // stop here if form is invalid
         if (this.profileForm.invalid) {
             return;
-        }
 
-        this.loading = true;
+        }
         const {firstName, lastName} = this.profileForm.value;
         const data = {first_name: firstName, last_name: lastName};
 
+        this.update(data);
+    }
+
+
+    /**
+     * Update profile and set new values
+     */
+    update(data) {
         this.userService
             .updateProfile({data})
             .subscribe(
@@ -118,14 +118,5 @@ export class ProfileComponent implements OnInit {
                     this.loading = false;
                 }
             );
-    }
-
-    /**
-     * fetches the profile value
-     */
-    private _fetchData() {
-        this.projectData = projectData;
-
-        this.inboxData = inboxData;
     }
 }
