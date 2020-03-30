@@ -5,7 +5,7 @@ export const routes: Routes = [
   {path: '', redirectTo: '/dashboards/dashboard', pathMatch: 'full'},
   { path: 'dashboard', loadChildren: () => import('./dashboards/dashboards.module').then(m => m.DashboardsModule) },
   { path: 'users', loadChildren: () => import('./crm/crm.module').then(m => m.CRMModule) },
-  { path: 'counterparties', loadChildren: () => import('./ecommerce/ecommerce.module').then(m => m.EcommerceModule) },
+  { path: 'contractors', loadChildren: () => import('./ecommerce/ecommerce.module').then(m => m.EcommerceModule) },
   { path: 'burst-news', loadChildren: () => import('./form/form.module').then(m => m.FormModule) },
   { path: 'image-crop', loadChildren: () => import('./form/form.module').then(m => m.FormModule) },
   { path: 'bursted-news', loadChildren: () => import('./apps/apps.module').then(m => m.AppsModule) },
