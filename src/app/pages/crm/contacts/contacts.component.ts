@@ -68,7 +68,7 @@ export class ContactsComponent implements OnInit, OnDestroy {
             email: [
                 '',
                 [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')],
-                [this.isEmailUnique.bind(this), this.isEmailValid.bind(this)]
+                // [this.isEmailUnique.bind(this), this.isEmailValid.bind(this)]
             ],
         });
 
@@ -80,31 +80,31 @@ export class ContactsComponent implements OnInit, OnDestroy {
         this._fetchData();
     }
 
-    isEmailUnique(control: FormControl) {
-        const email = control.value;
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                this.userService.isEmailRegisterd({email}).subscribe(() => {
-                    resolve({isEmailUnique: true});
-                }, () => {
-                    resolve(null);
-                });
-            }, 1000);
-        });
-    }
-
-    isEmailValid(control: FormControl) {
-        const email = control.value;
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                this.userService.isEmailValid({email}).subscribe(() => {
-                    resolve(null);
-                }, () => {
-                    resolve({isEmailValid: true});
-                });
-            }, 1000);
-        });
-    }
+    // isEmailUnique(control: FormControl) {
+    //     const email = control.value;
+    //     return new Promise((resolve, reject) => {
+    //         setTimeout(() => {
+    //             this.userService.isEmailRegisterd({email}).subscribe(() => {
+    //                 resolve({isEmailUnique: true});
+    //             }, () => {
+    //                 resolve(null);
+    //             });
+    //         }, 1000);
+    //     });
+    // }
+    //
+    // isEmailValid(control: FormControl) {
+    //     const email = control.value;
+    //     return new Promise((resolve, reject) => {
+    //         setTimeout(() => {
+    //             this.userService.isEmailValid({email}).subscribe(() => {
+    //                 resolve(null);
+    //             }, () => {
+    //                 resolve({isEmailValid: true});
+    //             });
+    //         }, 1000);
+    //     });
+    // }
 
     // convenience getter for easy access to form fields
     get f() {
