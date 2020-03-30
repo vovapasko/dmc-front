@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 
 import {environment} from '../../../../environments/environment';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Contractor, emptyContractor} from '../../../core/models/instances/contractor';
 import {ContractorService} from '../../../core/services/contractor.service';
-import {UserService} from '../../../core/services/user.service';
+import numbers from '../../../core/constants/numbers';
 
 @Component({
     selector: 'app-sellers',
@@ -64,7 +64,6 @@ export class SellersComponent implements OnInit {
         private modalService: NgbModal,
         public formBuilder: FormBuilder,
         private contractorService: ContractorService,
-        private userService: UserService
     ) {
     }
 
@@ -81,9 +80,18 @@ export class SellersComponent implements OnInit {
 
     initForms() {
         // Form validation TODO add async check email
-        const million = 1000000;
 
         // init Create Form
+        this.initCreateForm();
+
+        // init Update Form
+        this.initUpdateForm();
+    }
+
+    /**
+     * Validators for Create Form
+     */
+    initCreateForm() {
         this.createForm = this.formBuilder.group({
             editorName: ['', [Validators.required, Validators.minLength(1)]],
             contactPerson: ['', [Validators.required, Validators.minLength(1)]],
@@ -93,11 +101,15 @@ export class SellersComponent implements OnInit {
                 [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')],
                 // [this.isEmailUnique.bind(this), this.isEmailValid.bind(this)]
             ],
-            arrangedNews: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(million)]],
-            onePostPrice: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(million)]],
+            arrangedNews: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
+            onePostPrice: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
         });
+    }
 
-        // init Update Form
+    /**
+     * Validators for Update Form
+     */
+    initUpdateForm() {
         this.updateForm = this.formBuilder.group({
             updateEditorName: ['', [Validators.required, Validators.minLength(1)]],
             updateContactPerson: ['', [Validators.required, Validators.minLength(1)]],
@@ -107,9 +119,9 @@ export class SellersComponent implements OnInit {
                 [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')],
                 // [this.isEmailUnique.bind(this), this.isEmailValid.bind(this)]
             ],
-            updateArrangedNews: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(million)]],
-            updateOnePostPrice: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(million)]],
-            updateNewsAmount: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(million)]],
+            updateArrangedNews: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
+            updateOnePostPrice: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
+            updateNewsAmount: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
         });
     }
 
@@ -225,8 +237,6 @@ export class SellersComponent implements OnInit {
      * Add new contractor
      */
     addContractor() {
-        this.loading = true;
-
         // get payload data
         const data = this.createContractorData(this.cf, {news_amount: 0});
 
@@ -238,6 +248,8 @@ export class SellersComponent implements OnInit {
      * submit data
      */
     add(data) {
+        this.loading = true;
+
         this.contractorService
             .create({data})
             .subscribe(
@@ -291,6 +303,8 @@ export class SellersComponent implements OnInit {
      * Update method, calls api
      */
     update(payload) {
+        this.loading = true;
+
         this.contractorService
             .update(payload)
             .subscribe(
@@ -315,8 +329,6 @@ export class SellersComponent implements OnInit {
      * Update single contractor
      */
     updateContractor() {
-        this.loading = true;
-
         // get payload data
         const data = this.createContractorData(this.uf);
 
@@ -330,8 +342,6 @@ export class SellersComponent implements OnInit {
      * Update checked contractors
      */
     updateContractors() {
-        this.loading = true;
-
         // get payload data
         const data = this.createContractorData(this.uf);
 
