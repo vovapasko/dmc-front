@@ -2,8 +2,8 @@ name: Publish on Docker Hub and Deploy
 
 on: 
   push:
-    branches:
-     - master
+    branches: 
+      - master
 
 jobs:
   run_tests:
