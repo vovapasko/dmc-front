@@ -1,6 +1,6 @@
 {
-  "name": "ubold-angular-vertical",
-  "version": "1.0.0",
+  "name": "dmc-front",
+  "version": "0.9.1",
   "scripts": {
     "ng": "ng",
     "clean": "rimraf ./dist",
