@@ -1,132 +1,120 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
+import {Component, OnInit, Output, EventEmitter, OnDestroy} from '@angular/core';
+import {Router} from '@angular/router';
 
-import { AuthenticationService } from '../../core/services/auth.service';
+import {AuthenticationService} from '../../core/services/auth.service';
+import {HttpClient} from '@angular/common/http';
+import {environment} from '../../../environments/environment';
+import {EmptyUser, User} from '../../core/models/instances/user.models';
+import {Notification} from '../../core/models/instances/notification';
+import {Subscription} from 'rxjs';
+import {NotificationService} from '../../core/services/notification.service';
+import {UserService} from '../../core/services/user.service';
 
 @Component({
-  selector: 'app-topbar',
-  templateUrl: './topbar.component.html',
-  styleUrls: ['./topbar.component.scss']
+    selector: 'app-topbar',
+    templateUrl: './topbar.component.html',
+    styleUrls: ['./topbar.component.scss']
 })
-export class TopbarComponent implements OnInit {
+export class TopbarComponent implements OnInit, OnDestroy {
 
-  notificationItems: Array<{}>;
-  languages: Array<{
-    id: number,
-    flag?: string,
-    name: string
-  }>;
-  selectedLanguage: {
-    id: number,
-    flag?: string,
-    name: string
-  };
+    notifications: Notification[] = [];
+    private notificationSubscription: Subscription;
+    private userSubscription: Subscription;
+    api = environment.api;
+    currentUser: User = EmptyUser;
+    openMobileMenu: boolean;
 
-  openMobileMenu: boolean;
+    @Output() settingsButtonClicked = new EventEmitter();
+    @Output() mobileMenuButtonClicked = new EventEmitter();
 
-  @Output() settingsButtonClicked = new EventEmitter();
-  @Output() mobileMenuButtonClicked = new EventEmitter();
+    constructor(
+        private router: Router,
+        private authService: AuthenticationService,
+        private userService: UserService,
+        private http: HttpClient,
+        private notificationService: NotificationService
+    ) {
+    }
 
-  constructor(private router: Router, private authService: AuthenticationService) { }
+    ngOnInit() {
+        // get the notifications
+        this.notificationSubscription = this.notificationService
+            .getObservable()
+            .subscribe(
+                notification => this.addNotification(notification)
+            );
+        // get the user updates
+        this.userSubscription = this.userService
+            .getObservable()
+            .subscribe(
+                user => this.setUser(user)
+            );
 
-  ngOnInit() {
-    // get the notifications
-    this._fetchNotifications();
-    this.openMobileMenu = false;
-  }
+        // set current user
+        const currentUser = this.authService.currentUser();
+        this.setUser(currentUser);
 
+        this.openMobileMenu = false;
+    }
 
-  /**
-   * Change the language
-   * @param language language
-   */
-  changeLanguage(language) {
-    this.selectedLanguage = language;
-  }
+    /**
+     * Set current user
+     */
+    setUser(user: User) {
+        if (user) {
+            this.currentUser = user;
+        }
+    }
 
-  /**
-   * Toggles the right sidebar
-   */
-  toggleRightSidebar() {
-    this.settingsButtonClicked.emit();
-  }
+    /**
+     * Add new notification to bar and detect if something happens with user
+     */
+    addNotification(notification: Notification) {
+        this.notifications.push(notification);
+    }
 
-  /**
-   * Toggle the menu bar when having mobile screen
-   */
-  toggleMobileMenu(event: any) {
-    event.preventDefault();
-    this.mobileMenuButtonClicked.emit();
-  }
+    /**
+     * Remove notification from list
+     */
+    close(notification: Notification) {
+        this.notifications = this.notifications.filter(notif => notif.id !== notification.id);
+    }
 
-  /**
-   * Logout the user
-   */
-  logout() {
-    this.authService.logout();
-    this.router.navigate(['/account/login']);
-  }
+    /**
+     * Toggles the right sidebar
+     */
+    toggleRightSidebar() {
+        this.settingsButtonClicked.emit();
+    }
 
-  /**
-   * Fetches the notification
-   * Note: For now returns the hard coded notifications
-   */
-  _fetchNotifications() {
-    this.notificationItems = [{
-      text: 'Caleb Flakelar commented on Admin',
-      subText: '1 min ago',
-      icon: 'mdi mdi-comment-account-outline',
-      bgColor: 'primary',
-      redirectTo: '/notification/1'
-    },
-    {
-      text: 'New user registered.',
-      subText: '5 min ago',
-      icon: 'mdi mdi-account-plus',
-      bgColor: 'info',
-      redirectTo: '/notification/2'
-    },
-    {
-      text: 'Cristina Pride',
-      subText: 'Hi, How are you? What about our next meeting',
-      icon: 'mdi mdi-comment-account-outline',
-      bgColor: 'success',
-      redirectTo: '/notification/3'
-    },
-    {
-      text: 'Caleb Flakelar commented on Admin',
-      subText: '2 days ago',
-      icon: 'mdi mdi-comment-account-outline',
-      bgColor: 'danger',
-      redirectTo: '/notification/4'
-    },
-    {
-      text: 'Caleb Flakelar commented on Admin',
-      subText: '1 min ago',
-      icon: 'mdi mdi-comment-account-outline',
-      bgColor: 'primary',
-      redirectTo: '/notification/5'
-    },
-    {
-      text: 'New user registered.',
-      subText: '5 min ago',
-      icon: 'mdi mdi-account-plus',
-      bgColor: 'info',
-      redirectTo: '/notification/6'
-    },
-    {
-      text: 'Cristina Pride',
-      subText: 'Hi, How are you? What about our next meeting',
-      icon: 'mdi mdi-comment-account-outline',
-      bgColor: 'success',
-      redirectTo: '/notification/7'
-    },
-    {
-      text: 'Caleb Flakelar commented on Admin',
-      subText: '2 days ago',
-      icon: 'mdi mdi-comment-account-outline',
-      bgColor: 'danger',
-      redirectTo: '/notification/8'
-    }];
-  }
+    /**
+     * Toggle the menu bar when having mobile screen
+     */
+    toggleMobileMenu(event: any) {
+        event.preventDefault();
+        this.mobileMenuButtonClicked.emit();
+    }
+
+    /**
+     * Logout the user
+     */
+    logout() {
+        this.authService.logout();
+        this.router.navigate(['/account/login']);
+    }
+
+    /**
+     * Remove all notifications
+     */
+    clearAll() {
+        this.notifications = [];
+    }
+
+    /**
+     * Unsubscribe from all subscriptions
+     */
+    ngOnDestroy() {
+        this.userSubscription.unsubscribe();
+        this.notificationSubscription.unsubscribe();
+    }
 }

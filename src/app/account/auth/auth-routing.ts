@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { ConfirmComponent } from './confirm/confirm.component';
-import { PasswordresetComponent } from './passwordreset/passwordreset.component';
+import { PasswordResetComponent } from './passwordreset/password-reset.component';
 
 const routes: Routes = [
     {
@@ -12,7 +12,7 @@ const routes: Routes = [
         component: LoginComponent
     },
     {
-        path: 'signup',
+        path: 'signup/:invite',
         component: SignupComponent
     },
     {
@@ -20,9 +20,9 @@ const routes: Routes = [
         component: ConfirmComponent
     },
     {
-        path: 'reset-password',
-        component: PasswordresetComponent
-    },
+        path: 'change-password/:confirm',
+        component: PasswordResetComponent
+    }
 ];
 
 @NgModule({

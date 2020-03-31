@@ -1,0 +1,167 @@
+<div class="container-fluid">
+    <app-page-title title="Пользователи" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+
+    <div class="row">
+        <div class="col-xl-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <div class="col-sm-4">
+                            <form class="form-inline">
+                                <div class="form-group mb-2">
+                                    <label class="sr-only">Search</label>
+                                    <input class="form-control" name="search" placeholder="Поиск..."
+                                           [(ngModel)]="term">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="text-sm-right">
+                                <a href="javscript: void(0);"
+                                   class="btn btn-danger mb-2"
+                                   id="openAddNewUserModal"
+                                   (click)="openModal(content)"
+                                ><i class="mdi mdi-plus-circle mr-1"></i> Добавить пользователя</a>
+                            </div>
+                        </div><!-- end col-->
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-centered table-hover mb-0">
+                            <thead>
+                            <tr>
+                                <th>Имя</th>
+                                <th>Фамилия</th>
+                                <th>Email</th>
+                                <th>Роль</th>
+                                <th>Подтвержден</th>
+                                <th>Статус</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let user of paginatedUserData |filter:term">
+                                <td class="table-user">
+                                    <img [src]="api + user.avatar" alt="table-user" class="mr-2 rounded-circle">
+                                    <a href="javascript:void(0);"
+                                       class="text-body font-weight-semibold"
+                                       (click)="selectUser(user)"
+                                    >
+                                        {{user.first_name}}
+                                    </a>
+                                </td>
+                                <td>
+                                    {{user.last_name}}
+                                </td>
+                                <td>
+                                    {{user.email}}
+                                </td>
+                                <td>
+                                    <span *ngIf="user.is_superuser"
+                                          class="badge bg-soft-success text-success">Superuser</span>
+                                    <span *ngIf="user.is_staff" class="badge bg-soft-success text-success">Admin</span>
+                                    <span *ngIf="!user.is_superuser && !user.is_staff"
+                                          class="badge bg-soft-warning text-warning">Client</span>
+                                </td>
+                                <td>
+                                    <span *ngIf="user.is_confirmed" class="badge bg-soft-success text-success">Да</span>
+                                    <span *ngIf="!user.is_confirmed"
+                                          class="badge bg-soft-success text-success">Нет</span>
+                                </td>
+                                <td>
+                                    <span *ngIf="user.is_active"
+                                          class="badge bg-soft-success text-success">Онлайн</span>
+                                    <span *ngIf="!user.is_active"
+                                          class="badge bg-soft-warning text-error">Оффлайн</span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <ul class="pagination pagination-rounded justify-content-end my-2">
+                        <ngb-pagination (pageChange)="onPageChange($event)" [pageSize]="pageSize" [(page)]="page"
+                                        [collectionSize]="totalSize"></ngb-pagination>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="card-box">
+                <div class="media mb-3">
+                    <img class="d-flex mr-3 rounded-circle avatar-lg" [src]="api + selectedUser.avatar"
+                         alt="Generic placeholder image">
+                    <div class="media-body">
+                        <h4 class="mt-0 mb-1">{{selectedUser.first_name}} {{selectedUser.last_name}}</h4>
+                        <p class="text-muted" *ngIf="selectedUser.is_superuser">Суперпользователь</p>
+                        <p class="text-muted" *ngIf="selectedUser.is_staff">Администратор</p>
+                    </div>
+                </div>
+
+                <h4 class="font-13 text-uppercase">Обо мнe :</h4>
+
+                <p class="text-muted mb-2 font-13"><strong>Дата регистрации :</strong><span class="ml-2">
+                        {{selectedUser.date_joined | date:'medium'}}
+                    </span></p>
+
+                <p class="text-muted mb-2 font-13"><strong>Последние обновления :</strong><span class="ml-2">
+                        {{selectedUser.date_updated | date:'medium'}}
+                    </span></p>
+
+                <p class="text-muted mb-2 font-13"><strong>Email :</strong> <span class="ml-2 ">
+                        {{selectedUser.email}}
+                    </span></p>
+
+
+            </div> <!-- end card-box-->
+        </div>
+    </div>
+
+</div>
+
+<!-- users model  -->
+<ng-template #content role="document" let-modal="close">
+    <div class="modal-header bg-dark" id="add-new-user-modal">
+        <h4 class="modal-title text-white">Добавить пользователя</h4>
+        <button type="button"
+                class="close text-white"
+                aria-label="Close"
+                id="closeAddNewUserModal"
+                (click)="modal('Cross click')"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body p-3">
+        <div class="text-left">
+            <form (ngSubmit)="registerNewUser()" [formGroup]="validationform">
+
+                <app-ui-preloader [display]="loading"></app-ui-preloader>
+                <ngb-alert type="danger" *ngIf="error" [dismissible]="false">Пожалуйста, повторите попытку</ngb-alert>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input class="form-control"
+                           id="email"
+                           placeholder="Введите email"
+                           formControlName="email">
+                </div>
+
+                <div class="form-group">
+                    <label>Роль</label>
+                    <ng-select
+                            [items]="selectValue"
+                            [(ngModel)]="selectedRole"
+                            [ngModelOptions]="{standalone: true}"
+                            placeholder="Выберите роль"
+                    ></ng-select>
+                </div>
+
+                <div class="text-right">
+                    <button type="submit" id="save-new-user-button" class="btn btn-success">Добавить</button>
+                    <button type="button" id="cancel-new-user-button" class="btn btn-danger ml-1"
+                            (click)="modal('close click')">Отменить
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</ng-template>

@@ -1,13 +1,24 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {map, tap} from 'rxjs/operators';
 
-import { CookieService } from './cookie.service';
-import { User } from '../models/user.models';
+import {CookieService} from './cookie.service';
+import {User} from '../models/instances/user.models';
+import {TokenTypes} from '../models/instances/token.model';
+import {environment} from '../../../environments/environment';
+import {RequestAccessTokenResponse} from '../models/responses/auth/requestAccessTokenResponse';
+import {Observable, Subject, throwError} from 'rxjs';
+import {LoginResponse} from '../models/responses/auth/loginResponse';
 
-@Injectable({ providedIn: 'root' })
+const api = environment.api;
+
+@Injectable({providedIn: 'root'})
 export class AuthenticationService {
+    public static REFRESH_TOKEN_NAME = 'refresh';
+    public static ACCESS_TOKEN_NAME = 'access';
+    public static CURRENT_USER = 'currentUser';
+
+    subscription;
     user: User;
 
     constructor(private http: HttpClient, private cookieService: CookieService) {
@@ -18,27 +29,59 @@ export class AuthenticationService {
      */
     public currentUser(): User {
         if (!this.user) {
-            this.user = JSON.parse(this.cookieService.getCookie('currentUser'));
+            this.user = JSON.parse(this.cookieService.getCookie(AuthenticationService.CURRENT_USER));
         }
         return this.user;
     }
 
     /**
-     * Performs the auth
-     * @param email email of user
-     * @param password password of user
+     * Get the token (access or refresh) from cookie
      */
-    login(email: string, password: string) {
-        return this.http.post<any>(`/api/login`, { email, password })
-            .pipe(map(user => {
-                // login successful if there's a jwt token in the response
-                if (user && user.token) {
-                    this.user = user;
-                    // store user details and jwt in cookie
-                    this.cookieService.setCookie('currentUser', JSON.stringify(user), 1);
-                }
-                return user;
-            }));
+    public getToken(type: string): string | null {
+        const currentUser = this.currentUser();
+        if (currentUser && currentUser.token && type in TokenTypes) {
+            return currentUser.token[type];
+        }
+        return null;
+    }
+
+    /**
+     * Save the token (access or refresh) in cookie
+     */
+    public setToken(type: string, value) {
+        const currentUser = this.currentUser();
+        if (currentUser && currentUser.token && type in TokenTypes) {
+            currentUser.token[type] = value;
+        }
+        this.cookieService.setCookie(AuthenticationService.CURRENT_USER, JSON.stringify(currentUser), 1);
+        return null;
+    }
+
+    /**
+     * Performs the auth
+     */
+    login(payload): Observable<User> {
+        return this.http
+            .post<any>(`${api}/login/`, payload.data)
+            .pipe(
+                map(
+                    (response: LoginResponse) => {
+                        const currentUser = {...response.user, token: response.token};
+                        this.setUser(currentUser);
+                        return currentUser;
+                    }
+                )
+            );
+    }
+
+    /**
+     * Save the user in cookie
+     */
+    setUser(user: User) {
+        this.user = user;
+        // store user details and jwt in cookie
+        this.cookieService.setCookie(AuthenticationService.CURRENT_USER, JSON.stringify(user), 1);
+        return this.user;
     }
 
     /**
@@ -46,8 +89,34 @@ export class AuthenticationService {
      */
     logout() {
         // remove user from local storage to log user out
-        this.cookieService.deleteCookie('currentUser');
+        this.cookieService.deleteCookie(AuthenticationService.CURRENT_USER);
         this.user = null;
+        return null;
+    }
+
+    /**
+     *  Refresh token
+     */
+    requestAccessToken(): Observable<RequestAccessTokenResponse> {
+        const refreshToken = this.getToken(AuthenticationService.REFRESH_TOKEN_NAME);
+        return this.http
+            .post(`${api}/token-refresh/`, {refresh: refreshToken})
+            .pipe(
+                map(
+                    (response: RequestAccessTokenResponse) => {
+                        this.setToken(AuthenticationService.ACCESS_TOKEN_NAME, response.access);
+                        return response;
+                    },
+                    error => this.unauthorised(error)
+                )
+            );
+    }
+
+    unauthorised = (error) => {
+        // auto logout if 401 response returned from api
+        this.logout();
+        location.reload();
+        return throwError({status: 401, error: {message: 'Unauthorised'}});
     }
 }
 

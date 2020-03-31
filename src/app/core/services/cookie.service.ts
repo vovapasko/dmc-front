@@ -39,7 +39,7 @@ export class CookieService {
    * @param value cookie value
    * @param days validity in days
    */
-  public setCookie(name: string, value: string, days: number) {
+  public setCookie(name: string, value: string, days?: number) {
     let expires = '';
     if (days) {
       const date = new Date();

@@ -1,13 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Title} from '@angular/platform-browser';
 
-import { Project, Inbox } from './profile.model';
-
-import { projectData, inboxData } from './data';
+import {EmptyUser, User} from '../../../core/models/instances/user.models';
+import {AuthenticationService} from '../../../core/services/auth.service';
+import {UserService} from '../../../core/services/user.service';
+import {environment} from '../../../../environments/environment';
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+    selector: 'app-profile',
+    templateUrl: './profile.component.html',
+    styleUrls: ['./profile.component.scss']
 })
 
 /**
@@ -15,29 +18,115 @@ import { projectData, inboxData } from './data';
  */
 export class ProfileComponent implements OnInit {
 
-  // bread crumb items
-  breadCrumbItems: Array<{}>;
+    title = 'Профиль';
+    error;
+    api = environment.api;
+    currentUser: User = EmptyUser;
+    profileForm: FormGroup;
+    submitted = false;
+    loading = false;
 
-  // Projects table
-  projectData: Project[];
+    constructor(
+        private authService: AuthenticationService,
+        private formBuilder: FormBuilder,
+        private userService: UserService,
+        private titleService: Title
+    ) {
+    }
 
-  inboxData: Inbox[];
-  constructor() { }
+    ngOnInit() {
+        // fetches current user
+        const currentUser = this.authService.currentUser();
+        this.setUser(currentUser);
 
-  ngOnInit() {
-    this.breadCrumbItems = [{ label: 'UBold', path: '/' }, { label: 'Extras', path: '/' }, { label: 'Profile', path: '/', active: true }];
+        this.initForm();
+    }
+
     /**
-     * fetches data
+     * Checks valid user and set user
      */
-    this._fetchData();
-  }
+    setUser(user: User) {
+        if (user) {
+            this.currentUser = user;
+        }
+    }
 
-  /**
-   * fetches the profile value
-   */
-  private _fetchData() {
-    this.projectData = projectData;
+    /**
+     * Init form with validators
+     */
+    initForm() {
+        // creates form and validations
+        this.profileForm = this.formBuilder.group({
+            firstName: [this.currentUser.first_name, [Validators.required]],
+            lastName: [this.currentUser.last_name, [Validators.required]],
+            email: [this.currentUser.email, [Validators.required, Validators.email]],
+        });
+    }
 
-    this.inboxData = inboxData;
-  }
+    /**
+     * Set page title
+     */
+    public setTitle(title: string) {
+        this.titleService.setTitle(title);
+    }
+
+    // convenience getter for easy access to form fields
+    get f() {
+        return this.profileForm.controls;
+    }
+
+    /**
+     * Collects data and calls update method
+     */
+    onSubmit() {
+
+        this.submitted = true;
+        this.loading = true;
+
+        // stop here if form is invalid
+        if (this.profileForm.invalid) {
+            return;
+
+        }
+        const {firstName, lastName} = this.profileForm.value;
+        const data = {first_name: firstName, last_name: lastName};
+
+        this.update(data);
+    }
+
+
+    /**
+     * Update profile and set new values
+     */
+    update(data) {
+        this.userService
+            .updateProfile({data})
+            .subscribe(
+                user => {
+                    this.loading = false;
+                    this.f.firstName.setValue(user.first_name);
+                    this.f.lastName.setValue(user.last_name);
+                }
+            );
+    }
+
+    /**
+     * Send email with link for change password
+     */
+    changePassword() {
+        this.loading = true;
+
+        this.userService
+            .resetPassword()
+            .subscribe(
+                response => {
+                    this.error = null;
+                    this.loading = false;
+                },
+                error => {
+                    this.error = error;
+                    this.loading = false;
+                }
+            );
+    }
 }

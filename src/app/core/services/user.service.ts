@@ -1,36 +1,168 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
-import {Observable} from 'rxjs';
+import {Observable, Subject, throwError} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {RegisterResponse, ResetResponse, SignupResponse, User} from '../models/user.models';
+import {environment} from '../../../environments/environment';
+import {AuthenticationService} from './auth.service';
+import {User} from '../models/instances/user.models';
+import {SignupResponse} from '../models/responses/user/signupResponse';
+import {RegisterResponse} from '../models/responses/user/registerResponse';
+import {ResetPasswordResponse} from '../models/responses/user/resetPasswordResponse';
+import {ConfirmResetPasswordResponse} from '../models/responses/user/confirmResetPasswordResponse';
+import {UpdateProfileResponse} from '../models/responses/user/updateProfileResponse';
+import {HomeResponse} from '../models/responses/user/homeResponse';
+import {NotificationService} from './notification.service';
+
+const api = environment.api;
 
 @Injectable({providedIn: 'root'})
-export class UserProfileService {
-    constructor(private http: HttpClient) {
+export class UserService {
+
+    private subject = new Subject<User>();
+
+
+    constructor(private http: HttpClient, private authService: AuthenticationService, private notificationService: NotificationService) {
     }
 
+
+    /**
+     * Returns observable for subscribe
+     */
+    getObservable(): Observable<User> {
+        return this.subject.asObservable();
+    }
+
+    /**
+     *  Get all users, api returns array of users
+     */
     getAll(): Observable<User[]> {
-        return this.http.get<User[]>(`/api/login`);
+        return this.http
+            .get(`${api}/home/`)
+            .pipe(
+                map(
+                    (response: HomeResponse) => response.data
+                )
+            );
     }
 
+    /**
+     *  Get user by id, api returns single user instance
+     */
     getById(id: string): Observable<User> {
-        return this.http.get<User>(`/api/users/${id}`)
-            .pipe(map((response: User) => response));
+        return this.http.get<User>(`${api}/users/${id}`);
     }
 
-    signup(user: User): Observable<boolean> {
-        return this.http.post(`api/signup`, user)
-            .pipe(map((response: SignupResponse) => response.status));
+    /**
+     *  Sign up aka confirm-user
+     */
+    signup(payload): Observable<User> {
+        return this.http
+            .post(`${api}/confirm-user/${payload.invite}`, payload.data)
+            .pipe(
+                map(
+                    (response: SignupResponse) => {
+                        const currentUser = {...response.user, token: response.token};
+                        this.authService.setUser(currentUser);
+                        this.subject.next(currentUser);
+                        return currentUser;
+                    }
+                ));
     }
 
-    register(user: User): Observable<boolean> {
-        return this.http.post(`api/register`, user)
-            .pipe(map((response: RegisterResponse) => response.status));
+    /**
+     *  Register new user aka invite user
+     */
+    register(payload): Observable<boolean> {
+        return this.http
+            .post(`${api}/invite-new-user/`, payload.data)
+            .pipe(
+                map(
+                    (response: RegisterResponse) => this.handleResponse(response)
+                )
+            );
     }
 
-    resetPassword(user: User): Observable<boolean> {
-        return this.http.post(`api/reset`, user)
-            .pipe(map((response: ResetResponse) => response.status));
+    /**
+     *  Get link for reset password on email
+     */
+    resetPassword(): Observable<boolean> {
+        return this.http
+            .get(`${api}/change-password-confirm/`)
+            .pipe(
+                map(
+                    (response: ResetPasswordResponse) => this.handleResponse(response)
+                )
+            );
+    }
+
+    /**
+     *  Change password
+     */
+    confirmResetPassword(payload): Observable<boolean> {
+        return this.http
+            .post(`${api}/change-pass/${payload.confirm}`, payload.data)
+            .pipe(
+                map(
+                    (response: ConfirmResetPasswordResponse) => this.handleResponse(response))
+            );
+    }
+
+    /**
+     *  Update profile (current user)
+     */
+    updateProfile(payload) {
+        return this.http
+            .put(`${api}/profile/`, payload.data)
+            .pipe(
+                map(
+                    (response: UpdateProfileResponse) => {
+
+                        // notify about success
+                        this.notifySuccess(response);
+
+                        // returns updated user and store in cookies
+                        const currentUser = this.authService.currentUser();
+                        const newUser = response.user;
+                        const user = {...currentUser, ...newUser};
+                        this.authService.setUser(user);
+                        this.subject.next(user);
+
+                        return user;
+                    }
+                )
+            );
+    }
+
+    /**
+     *  Checks if email already registered
+     */
+    isEmailRegisterd(payload) {
+        return this.http.get(`${api}/email-registered/${payload.email}`)
+    }
+
+    isEmailValid(payload) {
+        return this.http.get(`${api}/email-exists/${payload.email}`);
+    }
+
+    /**
+     *  Handle successful response
+     */
+    private handleResponse(response) {
+        // notify about success
+        this.notifySuccess(response);
+
+        // returns successful
+        return response.success;
+    }
+
+    /**
+     *  Notify user about successful response
+     */
+    private notifySuccess(response) {
+        if (response.success) {
+            return this.notificationService.success('Successful', response.message.message);
+        }
+        return null;
     }
 }

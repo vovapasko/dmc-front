@@ -1,20 +1,27 @@
 {
-  "name": "ubold-angular-vertical",
-  "version": "1.0.0",
+  "name": "dmc-front",
+  "version": "0.9.1",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "clean": "rimraf ./dist",
+    "start": "node server.js",
     "build": "ng build",
-    "test": "ng test",
+    "build:prod": "ng build --prod",
+    "test": "ng test --watch=false --browsers=ChromeHeadlessCustom",
+    "test:watch": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "build:ci": "npm run clean && npm run test && npm run build:prod",
+    "heroku-postbuild": "ng build --prod"
   },
   "private": true,
   "dependencies": {
     "@agm/core": "^1.0.0-beta.7",
     "@angular/animations": "~8.0.0",
+    "@angular/cli": "~8.0.2",
     "@angular/common": "~8.0.0",
     "@angular/compiler": "~8.0.0",
+    "@angular/compiler-cli": "~8.0.0",
     "@angular/core": "~8.0.0",
     "@angular/forms": "~8.0.0",
     "@angular/platform-browser": "~8.0.0",
@@ -37,6 +44,7 @@
     "chart.js": "^2.8.0",
     "chartist": "^0.11.3",
     "core-js": "^2.5.4",
+    "express": "^4.17.1",
     "metismenujs": "^1.0.3",
     "ng-apexcharts": "^1.0.5",
     "ng-click-outside": "^4.0.0",
@@ -52,21 +60,22 @@
     "ngx-lightbox": "^2.0.1",
     "ngx-mask": "^8.0.3",
     "ngx-ui-switch": "^8.1.0",
+    "path": "^0.12.7",
     "rxjs": "^6.5.2",
     "smooth-scrollbar": "^8.3.1",
     "sweetalert2": "^8.16.3",
     "tslib": "^1.9.0",
+    "typescript": "~3.4.5",
     "zone.js": "~0.9.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.800.0",
-    "@angular/cli": "~8.0.2",
-    "@angular/compiler-cli": "~8.0.0",
     "@angular/language-service": "~8.0.0",
-    "@types/node": "~8.9.4",
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "~2.0.3",
+    "@types/node": "~8.9.4",
     "codelyzer": "^5.0.1",
+    "enhanced-resolve": "^3.3.0",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~4.0.0",
@@ -75,8 +84,12 @@
     "karma-jasmine": "~1.1.2",
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "~5.4.0",
+    "puppeteer": "^2.1.1",
     "ts-node": "~7.0.0",
-    "tslint": "~5.11.0",
-    "typescript": "~3.4.5"
+    "tslint": "~5.11.0"
+  },
+  "engines": {
+    "node": "12.14.1",
+    "npm": "6.13.4"
   }
 }
