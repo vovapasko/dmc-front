@@ -1,3 +1,5 @@
+[![build status](https://github.com/korporativi/dmc-front/workflows/Build/badge.svg)](https://github.com/korporativi/dmc-front/actions)
+
 # Ubold Angular - Vertical Layout
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.8.

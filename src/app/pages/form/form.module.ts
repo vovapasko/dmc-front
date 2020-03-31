@@ -17,10 +17,11 @@ import { FormRoutingModule } from './form-routing.module';
 import { UIModule } from '../../shared/ui/ui.module';
 
 import { ImagecropComponent } from './imagecrop/imagecrop.component';
+import {ValidationComponent} from './validation/validation.component';
 
 @NgModule({
   // tslint:disable-next-line: max-line-length
-  declarations: [ImagecropComponent],
+  declarations: [ImagecropComponent, ValidationComponent],
   imports: [
     CommonModule,
     FormsModule,
