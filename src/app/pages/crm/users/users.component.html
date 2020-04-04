@@ -41,7 +41,7 @@
                             <tbody>
                             <tr *ngFor="let user of paginatedUserData |filter:term">
                                 <td class="table-user">
-                                    <img [src]="api + user.avatar" alt="table-user" class="mr-2 rounded-circle">
+                                    <img [src]="user.avatar" alt="table-user" class="mr-2 rounded-circle">
                                     <a href="javascript:void(0);"
                                        class="text-body font-weight-semibold"
                                        (click)="selectUser(user)"
@@ -87,7 +87,7 @@
         <div class="col-xl-4">
             <div class="card-box">
                 <div class="media mb-3">
-                    <img class="d-flex mr-3 rounded-circle avatar-lg" [src]="api + selectedUser.avatar"
+                    <img class="d-flex mr-3 rounded-circle avatar-lg" [src]="selectedUser.avatar"
                          alt="Generic placeholder image">
                     <div class="media-body">
                         <h4 class="mt-0 mb-1">{{selectedUser.first_name}} {{selectedUser.last_name}}</h4>
