@@ -5,3 +5,9 @@ export interface HomeResponse {
     message: {message: string};
     data: User[];
 }
+
+export interface GetAllUsersResponse {
+    success: boolean;
+    message: {message: string};
+    data: User[];
+}

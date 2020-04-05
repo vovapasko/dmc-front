@@ -57,8 +57,8 @@ export class ProfileComponent implements OnInit {
     initForm() {
         // creates form and validations
         this.profileForm = this.formBuilder.group({
-            firstName: [this.currentUser.first_name, [Validators.required]],
-            lastName: [this.currentUser.last_name, [Validators.required]],
+            firstName: [this.currentUser.firstName, [Validators.required]],
+            lastName: [this.currentUser.lastName, [Validators.required]],
             email: [this.currentUser.email, [Validators.required, Validators.email]],
         });
     }
@@ -89,7 +89,7 @@ export class ProfileComponent implements OnInit {
 
         }
         const {firstName, lastName} = this.profileForm.value;
-        const data = {first_name: firstName, last_name: lastName};
+        const data = {firstName, lastName};
 
         this.update(data);
     }
@@ -104,8 +104,6 @@ export class ProfileComponent implements OnInit {
             .subscribe(
                 user => {
                     this.loading = false;
-                    this.f.firstName.setValue(user.first_name);
-                    this.f.lastName.setValue(user.last_name);
                 }
             );
     }

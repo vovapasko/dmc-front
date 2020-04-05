@@ -44,9 +44,9 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
             firstName: ['', [Validators.required]],
             lastName: ['', [Validators.required]],
             password: ['', [Validators.required, Validators.minLength(6)]],
-            confirmPassword: ['', Validators.required]
+            passwordConfirm: ['', Validators.required]
         }, {
-            validator: MustMatch('password', 'confirmPassword'),
+            validator: MustMatch('password', 'passwordConfirm'),
         });
         // set page title
         this.setTitle(this.title);
@@ -85,13 +85,8 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
         }
 
         this.loading = true;
-        const {firstName, lastName, password, confirmPassword} = this.signupForm.value;
-        const data = {
-            first_name: firstName,
-            last_name: lastName,
-            password,
-            password_confirm: confirmPassword
-        };
+        const {firstName, lastName, password, passwordConfirm} = this.signupForm.value;
+        const data = {firstName, lastName, password, passwordConfirm};
         const invite = this.invite;
         const payload = {data, invite};
 
@@ -103,16 +98,14 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     submit(payload) {
         this.userService.signup(payload).subscribe(
-            (user: User) => {
-                this.router.navigate(['/profile']);
-            },
+            () => this.router.navigate(['/profile']),
             error => {
                 this.error = error;
                 this.loading = false;
             }
         );
     }
-    
+
     ngOnDestroy() {
         this.sub.unsubscribe();
     }

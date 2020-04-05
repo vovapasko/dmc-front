@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {Observable, Subject} from 'rxjs';
+import {FormBuilder, Validators} from '@angular/forms';
 
-import {Observable, Subject, throwError} from 'rxjs';
-import {map} from 'rxjs/operators';
 import {environment} from '../../../environments/environment';
 import {AuthenticationService} from './auth.service';
 import {User} from '../models/instances/user.models';
@@ -12,17 +12,21 @@ import {ResetPasswordResponse} from '../models/responses/user/resetPasswordRespo
 import {ConfirmResetPasswordResponse} from '../models/responses/user/confirmResetPasswordResponse';
 import {UpdateProfileResponse} from '../models/responses/user/updateProfileResponse';
 import {HomeResponse} from '../models/responses/user/homeResponse';
-import {NotificationService} from './notification.service';
+import RequestHandler from '../helpers/request-handler';
+
 
 const api = environment.api;
 
 @Injectable({providedIn: 'root'})
 export class UserService {
+    private user$ = new Subject<User>();
 
-    private subject = new Subject<User>();
-
-
-    constructor(private http: HttpClient, private authService: AuthenticationService, private notificationService: NotificationService) {
+    constructor(
+        private http: HttpClient,
+        private authService: AuthenticationService,
+        private requestHandler: RequestHandler,
+        public formBuilder: FormBuilder,
+    ) {
     }
 
 
@@ -30,139 +34,102 @@ export class UserService {
      * Returns observable for subscribe
      */
     getObservable(): Observable<User> {
-        return this.subject.asObservable();
+        return this.user$.asObservable();
     }
 
     /**
      *  Get all users, api returns array of users
      */
     getAll(): Observable<User[]> {
-        return this.http
-            .get(`${api}/home/`)
-            .pipe(
-                map(
-                    (response: HomeResponse) => response.data
-                )
-            );
-    }
-
-    /**
-     *  Get user by id, api returns single user instance
-     */
-    getById(id: string): Observable<User> {
-        return this.http.get<User>(`${api}/users/${id}`);
+        return this.requestHandler.request(
+            `${api}/home/`,
+            'get',
+            null,
+            (response: HomeResponse) => response.data
+        );
     }
 
     /**
      *  Sign up aka confirm-user
      */
-    signup(payload): Observable<User> {
-        return this.http
-            .post(`${api}/confirm-user/${payload.invite}`, payload.data)
-            .pipe(
-                map(
-                    (response: SignupResponse) => {
-                        const currentUser = {...response.user, token: response.token};
-                        this.authService.setUser(currentUser);
-                        this.subject.next(currentUser);
-                        return currentUser;
-                    }
-                ));
+    signup(payload) {
+        return this.requestHandler.request(
+            `${api}/confirm-user/${payload.invite}`,
+            'post',
+            payload,
+            (response: SignupResponse) => {
+                this.user = {...response.user, token: response.token};
+                return this.user$;
+            }
+        );
+    }
+
+    set user(user: User) {
+        this.authService.setUser(user);
+        this.user$.next(user);
     }
 
     /**
      *  Register new user aka invite user
      */
     register(payload): Observable<boolean> {
-        return this.http
-            .post(`${api}/invite-new-user/`, payload.data)
-            .pipe(
-                map(
-                    (response: RegisterResponse) => this.handleResponse(response)
-                )
-            );
+        return this.requestHandler.request(
+            `${api}/invite-new-user/`,
+            'post',
+            payload,
+            (response: RegisterResponse) => response.success
+        );
     }
 
     /**
      *  Get link for reset password on email
      */
     resetPassword(): Observable<boolean> {
-        return this.http
-            .get(`${api}/change-password-confirm/`)
-            .pipe(
-                map(
-                    (response: ResetPasswordResponse) => this.handleResponse(response)
-                )
-            );
+        return this.requestHandler.request(
+            `${api}/change-password-confirm/`,
+            'get',
+            null,
+            (response: ResetPasswordResponse) => response.success
+        );
     }
 
     /**
      *  Change password
      */
     confirmResetPassword(payload): Observable<boolean> {
-        return this.http
-            .post(`${api}/change-pass/${payload.confirm}`, payload.data)
-            .pipe(
-                map(
-                    (response: ConfirmResetPasswordResponse) => this.handleResponse(response))
-            );
+        return this.requestHandler.request(
+            `${api}/change-pass/${payload.confirm}`,
+            'post',
+            payload,
+            (response: ConfirmResetPasswordResponse) => response.success,
+        );
     }
 
     /**
      *  Update profile (current user)
      */
     updateProfile(payload) {
-        return this.http
-            .put(`${api}/profile/`, payload.data)
-            .pipe(
-                map(
-                    (response: UpdateProfileResponse) => {
-
-                        // notify about success
-                        this.notifySuccess(response);
-
-                        // returns updated user and store in cookies
-                        const currentUser = this.authService.currentUser();
-                        const newUser = response.user;
-                        const user = {...currentUser, ...newUser};
-                        this.authService.setUser(user);
-                        this.subject.next(user);
-
-                        return user;
-                    }
-                )
-            );
+        return this.requestHandler.request(
+            `${api}/profile/`,
+            'put',
+            payload,
+            (response: UpdateProfileResponse) => {
+                // returns updated user and store in cookies
+                const currentUser = this.authService.currentUser();
+                const newUser = response.user;
+                this.user = {...currentUser, ...newUser};
+                return this.user$;
+            }
+        );
     }
 
-    /**
-     *  Checks if email already registered
-     */
-    isEmailRegisterd(payload) {
-        return this.http.get(`${api}/email-registered/${payload.email}`)
-    }
-
-    isEmailValid(payload) {
-        return this.http.get(`${api}/email-exists/${payload.email}`);
-    }
-
-    /**
-     *  Handle successful response
-     */
-    private handleResponse(response) {
-        // notify about success
-        this.notifySuccess(response);
-
-        // returns successful
-        return response.success;
-    }
-
-    /**
-     *  Notify user about successful response
-     */
-    private notifySuccess(response) {
-        if (response.success) {
-            return this.notificationService.success('Successful', response.message.message);
-        }
-        return null;
+    initializeForm() {
+        return this.formBuilder.group({
+            email: [
+                '',
+                [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')],
+                // [this.isEmailUnique.bind(this), this.isEmailValid.bind(this)]
+            ],
+        });
     }
 }

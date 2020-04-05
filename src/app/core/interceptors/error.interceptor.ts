@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
-import {HttpRequest, HttpHandler, HttpEvent, HttpInterceptor} from '@angular/common/http';
+import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
-import {NotificationService} from '../services/notification.service';
+import {ServerError} from '../models/responses/serverError';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-    constructor(private notificationService: NotificationService) {
+    constructor() {
     }
 
     /**
@@ -26,8 +26,8 @@ export class ErrorInterceptor implements HttpInterceptor {
     error(errors, status): Observable<never> {
         if (errors) {
             const errorsTitles = Object.keys(errors);
-            errorsTitles.forEach(title => this.notificationService.error(title, errors[title]));
-            return throwError({status, errors});
+            const errorEntity: ServerError = {status, error: {message: errorsTitles.toString()}, errors};
+            return throwError(errorEntity);
         }
         return throwError({status, message: 'Something went wrong'});
     }

@@ -76,12 +76,12 @@
                             <div class="form-group mb-3">
                                 <label for="confirm-password">Введите пароль ешё раз</label>
 
-                                <input type="password" formControlName="confirmPassword" class="form-control"
-                                       [ngClass]="{ 'is-invalid': submitted && f.confirmPassword.errors }"
+                                <input type="password" formControlName="passwordConfirm" class="form-control"
+                                       [ngClass]="{ 'is-invalid': submitted && f.passwordConfirm.errors }"
                                        id="confirm-password" placeholder="Введите пароль"/>
 
-                                <div *ngIf="submitted && f.confirmPassword.errors" class="invalid-feedback">
-                                    <div *ngIf="f.confirmPassword.errors.mustMatch">Пароли должны совпадать</div>
+                                <div *ngIf="submitted && f.passwordConfirm.errors" class="invalid-feedback">
+                                    <div *ngIf="f.passwordConfirm.errors.mustMatch">Пароли должны совпадать</div>
                                 </div>
                             </div>
 

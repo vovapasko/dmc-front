@@ -1,27 +1,32 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {map, tap} from 'rxjs/operators';
+import {Observable, throwError} from 'rxjs';
+import {catchError, map, tap} from 'rxjs/operators';
 
-import {CookieService} from './cookie.service';
+import {CookieService} from '../providers/cookie.service';
 import {User} from '../models/instances/user.models';
 import {TokenTypes} from '../models/instances/token.model';
 import {environment} from '../../../environments/environment';
 import {RequestAccessTokenResponse} from '../models/responses/auth/requestAccessTokenResponse';
-import {Observable, Subject, throwError} from 'rxjs';
 import {LoginResponse} from '../models/responses/auth/loginResponse';
+import {LoginPayload} from "../models/payloads/auth/login";
+import RequestHandler from "../helpers/request-handler";
 
 const api = environment.api;
 
 @Injectable({providedIn: 'root'})
 export class AuthenticationService {
-    public static REFRESH_TOKEN_NAME = 'refresh';
-    public static ACCESS_TOKEN_NAME = 'access';
-    public static CURRENT_USER = 'currentUser';
+    public static readonly REFRESH_TOKEN_NAME = 'refresh';
+    public static readonly ACCESS_TOKEN_NAME = 'access';
+    public static readonly CURRENT_USER = 'currentUser';
 
-    subscription;
     user: User;
 
-    constructor(private http: HttpClient, private cookieService: CookieService) {
+    constructor(
+        private http: HttpClient,
+        private cookieService: CookieService,
+        private requestHandler: RequestHandler
+    ) {
     }
 
     /**
@@ -60,18 +65,17 @@ export class AuthenticationService {
     /**
      * Performs the auth
      */
-    login(payload): Observable<User> {
-        return this.http
-            .post<any>(`${api}/login/`, payload.data)
-            .pipe(
-                map(
-                    (response: LoginResponse) => {
-                        const currentUser = {...response.user, token: response.token};
-                        this.setUser(currentUser);
-                        return currentUser;
-                    }
-                )
-            );
+    login(payload: LoginPayload): Observable<User> {
+        return this.requestHandler.request(
+            `${api}/login/`,
+            'post',
+            payload,
+            (response: LoginResponse) => {
+                const currentUser = {...response.user, token: response.token};
+                this.setUser(currentUser);
+                return currentUser;
+            }
+        );
     }
 
     /**
@@ -91,22 +95,20 @@ export class AuthenticationService {
         // remove user from local storage to log user out
         this.cookieService.deleteCookie(AuthenticationService.CURRENT_USER);
         this.user = null;
-        return null;
     }
 
     /**
      *  Refresh token
      */
-    requestAccessToken(): Observable<RequestAccessTokenResponse> {
+    requestAccessToken(): Observable<any> {
         const refreshToken = this.getToken(AuthenticationService.REFRESH_TOKEN_NAME);
         return this.http
             .post(`${api}/token-refresh/`, {refresh: refreshToken})
             .pipe(
-                map(
-                    (response: RequestAccessTokenResponse) => {
-                        this.setToken(AuthenticationService.ACCESS_TOKEN_NAME, response.access);
-                        return response;
-                    },
+                tap(
+                    (response: RequestAccessTokenResponse) => this.setToken(AuthenticationService.ACCESS_TOKEN_NAME, response.access)
+                ),
+                catchError(
                     error => this.unauthorised(error)
                 )
             );
