@@ -15,6 +15,9 @@ import {UpdateContractorPayload} from '../models/payloads/contractor/update';
 import {CreateContractorPayload} from '../models/payloads/contractor/create';
 import numbers from '../constants/numbers';
 import {PaginationService} from "./pagination.service";
+import {GetContractors} from "../store/actions/contractor.actions";
+import {Store} from "@ngrx/store";
+import {IAppState} from "../store/state/app.state";
 
 const api = environment.api;
 
@@ -29,7 +32,8 @@ export class ContractorService {
         private http: HttpClient,
         private requestHandler: RequestHandler,
         public formBuilder: FormBuilder,
-        private paginationService: PaginationService
+        private paginationService: PaginationService,
+        private store: Store<IAppState>
     ) {
     }
 
@@ -166,6 +170,10 @@ export class ContractorService {
         } else {
             this.checkedContractors = contractors;
         }
+    }
+
+    getAllContractors() {
+        this.store.dispatch(new GetContractors());
     }
 
     /**

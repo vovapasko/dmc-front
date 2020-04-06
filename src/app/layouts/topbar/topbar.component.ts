@@ -6,7 +6,7 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {EmptyUser, User} from '../../core/models/instances/user.models';
 import {Notification} from '../../core/models/instances/notification';
-import {Subscription} from 'rxjs';
+import {BehaviorSubject, Subscription} from 'rxjs';
 import {NotificationService} from '../../core/services/notification.service';
 import {UserService} from '../../core/services/user.service';
 
@@ -15,13 +15,10 @@ import {UserService} from '../../core/services/user.service';
     templateUrl: './topbar.component.html',
     styleUrls: ['./topbar.component.scss']
 })
-export class TopbarComponent implements OnInit, OnDestroy {
+export class TopbarComponent implements OnInit {
+    notifications$ = new BehaviorSubject<unknown>([]);
+    user$: BehaviorSubject<User>;
 
-    notifications: Notification[] = [];
-    private notificationSubscription: Subscription;
-    private userSubscription: Subscription;
-    api = environment.api;
-    currentUser: User = EmptyUser;
     openMobileMenu: boolean;
 
     @Output() settingsButtonClicked = new EventEmitter();
@@ -37,54 +34,20 @@ export class TopbarComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        // get the notifications
-        this.notificationSubscription = this.notificationService
-            .getObservable()
-            .subscribe(
-                notification => this.addNotification(notification)
-            );
-        // get the user updates
-        this.userSubscription = this.userService
-            .getObservable()
-            .subscribe(
-                user => this.setUser(user)
-            );
-
-        // set current user
-        const currentUser = this.authService.currentUser();
-        this.setUser(currentUser);
-
+        this.initSubscribes();
         this.openMobileMenu = false;
     }
 
-    /**
-     * Set current user
-     */
-    setUser(user: User) {
-        if (user) {
-            this.currentUser = user;
-        }
-    }
-
-    /**
-     * Add new notification to bar and detect if something happens with user
-     */
-    addNotification(notification: Notification) {
-        this.notifications.push(notification);
+    initSubscribes() {
+        this.notifications$ = this.notificationService.notifications$;
+        this.user$ = this.userService.user$;
     }
 
     /**
      * Remove notification from list
      */
     close(notification: Notification) {
-        this.notifications = this.notifications.filter(notif => notif.id !== notification.id);
-    }
-
-    /**
-     * Toggles the right sidebar
-     */
-    toggleRightSidebar() {
-        this.settingsButtonClicked.emit();
+        this.notificationService.close(notification);
     }
 
     /**
@@ -107,14 +70,6 @@ export class TopbarComponent implements OnInit, OnDestroy {
      * Remove all notifications
      */
     clearAll() {
-        this.notifications = [];
-    }
-
-    /**
-     * Unsubscribe from all subscriptions
-     */
-    ngOnDestroy() {
-        this.userSubscription.unsubscribe();
-        this.notificationSubscription.unsubscribe();
+        this.notificationService.notifications = [];
     }
 }

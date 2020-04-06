@@ -1,10 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable, Subject} from 'rxjs';
+import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {FormBuilder, Validators} from '@angular/forms';
 
 import {environment} from '../../../environments/environment';
-import {AuthenticationService} from './auth.service';
 import {User} from '../models/instances/user.models';
 import {SignupResponse} from '../models/responses/user/signupResponse';
 import {RegisterResponse} from '../models/responses/user/registerResponse';
@@ -13,19 +12,21 @@ import {ConfirmResetPasswordResponse} from '../models/responses/user/confirmRese
 import {UpdateProfileResponse} from '../models/responses/user/updateProfileResponse';
 import {HomeResponse} from '../models/responses/user/homeResponse';
 import RequestHandler from '../helpers/request-handler';
+import {CookieService} from '../providers/cookie.service';
+import {CURRENT_USER} from '../constants/user';
 
 
 const api = environment.api;
 
 @Injectable({providedIn: 'root'})
 export class UserService {
-    private user$ = new Subject<User>();
+    public user$ = new BehaviorSubject(new User());
 
     constructor(
         private http: HttpClient,
-        private authService: AuthenticationService,
         private requestHandler: RequestHandler,
         public formBuilder: FormBuilder,
+        private cookieService: CookieService,
     ) {
     }
 
@@ -65,8 +66,22 @@ export class UserService {
     }
 
     set user(user: User) {
-        this.authService.setUser(user);
         this.user$.next(user);
+        this.cookieService.setCookie(CURRENT_USER, JSON.stringify(user), 1);
+    }
+
+    get user() {
+        return this.user$.getValue();
+    }
+
+    /**
+     * Returns the current user
+     */
+    public currentUser(): User {
+        if (!this.user) {
+            this.user = JSON.parse(this.cookieService.getCookie(CURRENT_USER));
+        }
+        return this.user;
     }
 
     /**
@@ -115,21 +130,29 @@ export class UserService {
             payload,
             (response: UpdateProfileResponse) => {
                 // returns updated user and store in cookies
-                const currentUser = this.authService.currentUser();
+                const currentUser = this.currentUser();
                 const newUser = response.user;
-                this.user = {...currentUser, ...newUser};
-                return this.user$;
+                return {...currentUser, ...newUser};
             }
         );
     }
 
-    initializeForm() {
+    initializeInviteUserForm() {
         return this.formBuilder.group({
             email: [
                 '',
                 [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')],
                 // [this.isEmailUnique.bind(this), this.isEmailValid.bind(this)]
             ],
+        });
+    }
+
+    initializeProfileForm() {
+        const user = this.user;
+        return this.formBuilder.group({
+            firstName: [user.firstName, [Validators.required]],
+            lastName: [user.lastName, [Validators.required]],
+            email: [user.email, [Validators.required, Validators.email]],
         });
     }
 }

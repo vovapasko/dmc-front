@@ -7,11 +7,6 @@ import {Contractor} from '../../../core/models/instances/contractor';
 import {ContractorService} from '../../../core/services/contractor.service';
 import {ErrorService} from '../../../core/services/error.service';
 import {LoadingService} from '../../../core/services/loading.service';
-import {PaginationService} from '../../../core/services/pagination.service';
-import {Store, select} from "@ngrx/store";
-import {IAppState} from "../../../core/store/state/app.state";
-import {GetContractors} from "../../../core/store/actions/contractor.actions";
-import {selectContractorList} from "../../../core/store/selectors/contractor.selectors";
 
 @Component({
     selector: 'app-contractors',
@@ -28,9 +23,7 @@ export class ContractorsComponent implements OnInit {
 
     selectedContractor$: BehaviorSubject<Contractor> = new BehaviorSubject(null);
     checkedContractors$: BehaviorSubject<Array<Contractor>> = new BehaviorSubject([]);
-    contractors$: BehaviorSubject<Array<Contractor>> = new BehaviorSubject([]);
     paginatedContractorData$: BehaviorSubject<Array<Contractor>> = new BehaviorSubject([]);
-    data$ = this.store.pipe(select(selectContractorList));
 
     breadCrumbItems: Array<{}>;
     submitted: boolean;
@@ -45,24 +38,23 @@ export class ContractorsComponent implements OnInit {
         private contractorService: ContractorService,
         private errorService: ErrorService,
         private loadingService: LoadingService,
-        private store: Store<IAppState>
     ) {
     }
 
     ngOnInit() {
+        this.initSubscribes();
+        this.initBreadCrumbItems();
+        this.initForms();
+        this._fetchData();
+    }
+
+    initSubscribes() {
         this.loading$ = this.loadingService.loading$;
         this.error$ = this.errorService.error$;
 
         this.selectedContractor$ = this.contractorService.selectedContractor$;
         this.checkedContractors$ = this.contractorService.checkedContractors$;
-        this.contractors$ = this.contractorService.contractors$;
         this.paginatedContractorData$ = this.contractorService.paginatedContractorData$;
-
-        this.initBreadCrumbItems();
-        this.initForms();
-        this._fetchData();
-
-        this.store.dispatch(new GetContractors());
     }
 
     initBreadCrumbItems() {
@@ -78,11 +70,19 @@ export class ContractorsComponent implements OnInit {
         this.initUpdateForm();
     }
 
+    selectContractor(contractor: Contractor) {
+        this.contractorService.selectContractor(contractor);
+    }
+
     /**
      * Validators for Create Form
      */
     initCreateForm() {
         this.createForm = this.contractorService.initializeCreateForm();
+    }
+
+    checkAll() {
+        this.contractorService.checkAll();
     }
 
     /**
@@ -100,6 +100,10 @@ export class ContractorsComponent implements OnInit {
     // convenience getter for easy access to form fields
     get uf() {
         return this.updateForm.controls;
+    }
+
+    onPageChange(page) {
+        this.contractorService.onPageChange(page);
     }
 
     /**
@@ -158,7 +162,7 @@ export class ContractorsComponent implements OnInit {
     updateContractors() {
         // get payload data
         const data = this.contractorService.createContractorData(this.uf);
-        const payload  = {data};
+        const payload = {data};
         this.contractorService.updateContractors(this.uf, payload);
         this.editCheckedMode = false;
         this.clearValues(this.uf);

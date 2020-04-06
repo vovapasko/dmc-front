@@ -1,5 +1,5 @@
 <div class="notifications">
-    <div *ngFor="let notification of notifications" class="notification">
+    <div *ngFor="let notification of (notifications$ | async)" class="notification">
         <ng-container *ngTemplateOutlet="notificationTpl;context:{notification:notification}"></ng-container>
     </div>
 </div>
@@ -21,9 +21,6 @@
                                 class="close font__size-18"
                                 data-dismiss="alert"
                         >
-									<span aria-hidden="true"><a href="http://www.cakecounter.com/" target="_blank">
-                    <i class="fa fa-times greencross"></i>
-                    </a></span>
                             <span class="sr-only">Close</span>
                         </button>
                         <i class="start-icon far fa-check-circle faa-tada animated"></i>

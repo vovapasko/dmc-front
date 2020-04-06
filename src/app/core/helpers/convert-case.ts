@@ -1,5 +1,8 @@
 import snakeCase from 'lodash.snakecase';
 import camelCase from 'lodash.camelcase';
+import mapKeys from 'lodash.mapkeys';
+import {keysToCamel} from './utility';
+
 import {Injectable} from '@angular/core';
 
 @Injectable({
@@ -26,32 +29,14 @@ export default class ConvertCase {
     }
 
     public convertFromCamelToSnakeCase(obj) {
-        this.convert(obj, ConvertCase.convertToSnakeCase);
+        return this.convert(obj, ConvertCase.convertToSnakeCase);
     }
 
     public convertFromSnakeToCamelCase(obj) {
-        this.convert(obj, ConvertCase.convertToCamelCase);
+        return keysToCamel(obj);
     }
 
     private convert(obj: object, renameFunction) {
-        const oldNames = Object.keys(obj);
-        oldNames.forEach(oldName => this.renameKey(obj, oldName, renameFunction(oldName)));
-        return obj;
-    }
-
-    /**
-     * Performs renaming object key
-     */
-    public renameKey(obj, oldName, newName) {
-        // Do nothing if the names are the same
-        if (oldName === newName) {
-            return obj;
-        }
-        // Check for the old property name to avoid a ReferenceError in strict mode.
-        if (obj.hasOwnProperty(oldName)) {
-            obj[newName] = obj[oldName];
-            delete obj[oldName];
-        }
-        return obj;
+        return mapKeys(obj, (v, k) => renameFunction(k));
     }
 }

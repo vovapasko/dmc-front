@@ -62,7 +62,7 @@ export class UsersComponent implements OnInit {
      * Get current user and set available groups (Add new user)
      */
     initSelectOptions() {
-        const currentUser = this.authService.currentUser();
+        const currentUser = this.userService.currentUser();
         if (currentUser) {
             this.selectValue = currentUser.groupsCascadeDown;
         }
@@ -72,7 +72,7 @@ export class UsersComponent implements OnInit {
      * Init form, create validators
      */
     initForm() {
-        this.validationform = this.userService.initializeForm();
+        this.validationform = this.userService.initializeInviteUserForm();
     }
 
     // convenience getter for easy access to form fields

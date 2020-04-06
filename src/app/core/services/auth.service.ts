@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
-import {catchError, map, tap} from 'rxjs/operators';
+import {catchError, tap} from 'rxjs/operators';
 
 import {CookieService} from '../providers/cookie.service';
 import {User} from '../models/instances/user.models';
@@ -11,6 +11,7 @@ import {RequestAccessTokenResponse} from '../models/responses/auth/requestAccess
 import {LoginResponse} from '../models/responses/auth/loginResponse';
 import {LoginPayload} from '../models/payloads/auth/login';
 import RequestHandler from '../helpers/request-handler';
+import {UserService} from './user.service';
 
 const api = environment.api;
 
@@ -25,25 +26,16 @@ export class AuthenticationService {
     constructor(
         private http: HttpClient,
         private cookieService: CookieService,
-        private requestHandler: RequestHandler
+        private requestHandler: RequestHandler,
+        private userService: UserService
     ) {
-    }
-
-    /**
-     * Returns the current user
-     */
-    public currentUser(): User {
-        if (!this.user) {
-            this.user = JSON.parse(this.cookieService.getCookie(AuthenticationService.CURRENT_USER));
-        }
-        return this.user;
     }
 
     /**
      * Get the token (access or refresh) from cookie
      */
     public getToken(type: string): string | null {
-        const currentUser = this.currentUser();
+        const currentUser = this.userService.currentUser();
         if (currentUser && currentUser.token && type in TokenTypes) {
             return currentUser.token[type];
         }
@@ -54,12 +46,11 @@ export class AuthenticationService {
      * Save the token (access or refresh) in cookie
      */
     public setToken(type: string, value) {
-        const currentUser = this.currentUser();
+        const currentUser = this.userService.currentUser();
         if (currentUser && currentUser.token && type in TokenTypes) {
             currentUser.token[type] = value;
         }
         this.cookieService.setCookie(AuthenticationService.CURRENT_USER, JSON.stringify(currentUser), 1);
-        return null;
     }
 
     /**
@@ -72,20 +63,10 @@ export class AuthenticationService {
             payload,
             (response: LoginResponse) => {
                 const currentUser = {...response.user, token: response.token};
-                this.setUser(currentUser);
+                this.userService.user = currentUser;
                 return currentUser;
             }
         );
-    }
-
-    /**
-     * Save the user in cookie
-     */
-    setUser(user: User) {
-        this.user = user;
-        // store user details and jwt in cookie
-        this.cookieService.setCookie(AuthenticationService.CURRENT_USER, JSON.stringify(user), 1);
-        return this.user;
     }
 
     /**
@@ -94,7 +75,7 @@ export class AuthenticationService {
     logout() {
         // remove user from local storage to log user out
         this.cookieService.deleteCookie(AuthenticationService.CURRENT_USER);
-        this.user = null;
+        this.userService.user = null;
     }
 
     /**

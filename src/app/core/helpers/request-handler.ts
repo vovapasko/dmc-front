@@ -23,6 +23,7 @@ export default class RequestHandler {
         private http: HttpClient,
         private responseHandler: ResponseHandler,
         private errorHandler: ErrorHandler,
+        private convertCase: ConvertCase
     ) {
     }
 
@@ -39,13 +40,16 @@ export default class RequestHandler {
             | UpdateProfilePayload,
         mapHandler = (res) => {}
     ) {
-        return this.http[method](url, 'data' in payload ? payload.data : {})
+        return this.http[method](url, 'data' in payload ? this.convertCase.convertFromCamelToSnakeCase(payload.data) : {})
             .pipe(
                 tap(
                     (response: ServerResponse) => this.responseHandler.handle(response)
                 ),
                 map(
-                    (response: ServerResponse) => mapHandler(response),
+                    (response: ServerResponse) => {
+                        const convertedCaseResponse = this.convertCase.convertFromSnakeToCamelCase(response);
+                        mapHandler(convertedCaseResponse);
+                    },
                     error => this.errorHandler.handle(error)
                 )
             );
