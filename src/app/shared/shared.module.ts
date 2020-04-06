@@ -8,6 +8,9 @@ import { UIModule } from './ui/ui.module';
   imports: [
     CommonModule,
     UIModule,
+  ],
+  exports: [
+      UIModule
   ]
 })
 export class SharedModule { }

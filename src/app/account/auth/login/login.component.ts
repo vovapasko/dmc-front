@@ -89,12 +89,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
             .login({data})
             .pipe(first())
             .subscribe(
-                response => {
-                    this.router.navigate([this.returnUrl]);
-                },
-                error => {
-                    this.error = error;
-                    this.loading = false;
-                });
+                response => this.router.navigate([this.returnUrl])
+            );
     }
 }

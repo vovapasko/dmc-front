@@ -1,4 +1,4 @@
-import User from '../../models/instances/user.models';
+import {User} from '../../models/instances/user.models';
 
 export interface IUserState {
     users: User[];

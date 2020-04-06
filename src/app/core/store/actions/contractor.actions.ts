@@ -1,7 +1,6 @@
 import {Action} from '@ngrx/store';
 
-import {Contractor} from '../../models/instances/contractor.models';
-import {CreateUser, CreateUserSuccess, GetUsers, GetUsersSuccess} from "./user.actions";
+import {Contractor} from '../../models/instances/contractor';
 
 export enum EContractorActions {
     GetContractors = '[Contractor] Get contractors',

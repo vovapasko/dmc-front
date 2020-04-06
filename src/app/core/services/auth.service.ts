@@ -9,8 +9,8 @@ import {TokenTypes} from '../models/instances/token.model';
 import {environment} from '../../../environments/environment';
 import {RequestAccessTokenResponse} from '../models/responses/auth/requestAccessTokenResponse';
 import {LoginResponse} from '../models/responses/auth/loginResponse';
-import {LoginPayload} from "../models/payloads/auth/login";
-import RequestHandler from "../helpers/request-handler";
+import {LoginPayload} from '../models/payloads/auth/login';
+import RequestHandler from '../helpers/request-handler';
 
 const api = environment.api;
 

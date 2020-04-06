@@ -19,16 +19,15 @@ import {GetAllUsersResponse} from '../../models/responses/user/homeResponse';
 @Injectable()
 export class UserEffects {
     @Effect()
-    getUsers$ = this._actions$.pipe(
+    getUsers$ = this.actions$.pipe(
         ofType<GetUsers>(EUserActions.GetUsers),
-        switchMap(() => this._userService.getAll()),
-        switchMap((userHttp: GetAllUsersResponse) => of(new GetUsersSuccess(userHttp.data)))
+        switchMap(() => this.userService.getAll()),
+        switchMap((userHttp: any) => of(new GetUsersSuccess(userHttp.data)))
     );
 
     constructor(
-        private _userService: UserService,
-        private _actions$: Actions,
-        private _store: Store<IAppState>
+        private userService: UserService,
+        private actions$: Actions
     ) {
     }
 }

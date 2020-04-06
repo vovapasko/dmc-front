@@ -21,7 +21,9 @@ export default class ResponseHandler {
     public handle(response: ServerResponse) {
         // notify about success
         if (response.success) {
-            return this.notificationService.notify(NotificationType.success, 'success', response.message.message);
+            const message = response.message ? response.message.message : '';
+            const title = 'success';
+            return this.notificationService.notify(NotificationType.success, title, message);
         }
         // clear any errors
         this.errorService.clear();

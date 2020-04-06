@@ -1,6 +1,6 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
-import {FormBuilder, Validators, FormGroup} from '@angular/forms';
+import {FormGroup} from '@angular/forms';
 
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
@@ -9,12 +9,10 @@ import {Contacts} from './users.model';
 import {AuthenticationService} from '../../../core/services/auth.service';
 import {UserService} from '../../../core/services/user.service';
 import {User} from '../../../core/models/instances/user.models';
-import {select, Store} from "@ngrx/store";
-import {IAppState} from "../../../core/store/state/app.state";
-import {selectContractorList} from "../../../core/store/selectors/contractor.selectors";
-import {selectUserList} from "../../../core/store/selectors/user.selectors";
-import {GetContractors} from "../../../core/store/actions/contractor.actions";
-import {GetUsers} from "../../../core/store/actions/user.actions";
+import {select, Store} from '@ngrx/store';
+import {IAppState} from '../../../core/store/state/app.state';
+import {selectUserList} from '../../../core/store/selectors/user.selectors';
+import {GetUsers} from '../../../core/store/actions/user.actions';
 
 @Component({
     selector: 'app-users',
@@ -74,7 +72,6 @@ export class UsersComponent implements OnInit {
      * Init form, create validators
      */
     initForm() {
-        // Form validation TODO add async check email
         this.validationform = this.userService.initializeForm();
     }
 

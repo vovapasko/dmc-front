@@ -10,15 +10,17 @@ import {GetAllContractorsResponse} from '../../models/responses/contractor/getAl
 @Injectable()
 export class ContractorEffects {
     @Effect()
-    getContractors$ = this._actions$.pipe(
+    getContractors$ = this.actions$.pipe(
         ofType<GetContractors>(EContractorActions.GetContractors),
-        switchMap(() => this._contractorService.getAll()),
-        switchMap((contractorHttp: GetAllContractorsResponse) => of(new GetContractorsSuccess(contractorHttp.data)))
+        switchMap(() => this.contractorService.getAll()),
+        switchMap(
+            (contractorHttp: any) => of(new GetContractorsSuccess(contractorHttp.data))
+        )
     );
 
     constructor(
-        private _contractorService: ContractorService,
-        private _actions$: Actions
+        private contractorService: ContractorService,
+        private actions$: Actions
     ) {
     }
 }

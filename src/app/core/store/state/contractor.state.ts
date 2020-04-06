@@ -1,4 +1,4 @@
-import Contractor from '../../models/instances/contractor.models';
+import {Contractor} from '../../models/instances/contractor';
 
 export interface IContractorState {
     contractors: Contractor[];
