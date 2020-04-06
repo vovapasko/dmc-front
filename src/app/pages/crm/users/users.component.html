@@ -17,8 +17,7 @@
                         </div>
                         <div class="col-sm-8">
                             <div class="text-sm-right">
-                                <a href="javscript: void(0);"
-                                   class="btn btn-danger mb-2"
+                                <a class="btn btn-danger mb-2"
                                    id="openAddNewUserModal"
                                    (click)="openModal(content)"
                                 ><i class="mdi mdi-plus-circle mr-1"></i> Добавить пользователя</a>
@@ -42,8 +41,7 @@
                             <tr *ngFor="let user of paginatedUserData |filter:term">
                                 <td class="table-user">
                                     <img [src]="user.avatar" alt="table-user" class="mr-2 rounded-circle">
-                                    <a href="javascript:void(0);"
-                                       class="text-body font-weight-semibold"
+                                    <a class="text-body font-weight-semibold"
                                        (click)="selectUser(user)"
                                     >
                                         {{user.first_name}}
