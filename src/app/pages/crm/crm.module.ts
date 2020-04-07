@@ -4,7 +4,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {NgSelectModule} from '@ng-select/ng-select';
 
 import { UIModule } from '../../shared/ui/ui.module';
-import {NgbAlertModule, NgbModalModule, NgbPaginationModule, NgbTypeaheadModule} from '@ng-bootstrap/ng-bootstrap';
+import {
+    NgbAlertModule, NgbDatepickerModule,
+    NgbDropdownModule,
+    NgbModalModule,
+    NgbPaginationModule,
+    NgbTypeaheadModule
+} from '@ng-bootstrap/ng-bootstrap';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 
@@ -12,13 +18,18 @@ import { CRMRoutingModule } from './crm-routing.module';
 
 import { UsersComponent } from './users/users.component';
 import {ContractorsComponent} from './contractors/contractors.component';
+import { BurstNewsComponent } from './burst-news/burst-news.component';
+import {NgxEditorModule} from 'ngx-editor';
+import {ColorPickerModule} from 'ngx-color-picker';
+import {UiSwitchModule} from 'ngx-ui-switch';
+import {FileUploadModule} from '@iplab/ngx-file-upload';
+import {ArchwizardModule} from 'angular-archwizard';
+import {NgxMaskModule} from 'ngx-mask';
 
 @NgModule({
-  declarations: [ContractorsComponent, UsersComponent],
+  declarations: [ContractorsComponent, UsersComponent, BurstNewsComponent],
     imports: [
-        CommonModule,
         FormsModule,
-        ReactiveFormsModule,
         UIModule,
         NgbModalModule,
         NgbPaginationModule,
@@ -27,7 +38,17 @@ import {ContractorsComponent} from './contractors/contractors.component';
         CRMRoutingModule,
         Ng2SearchPipeModule,
         NgSelectModule,
-        NgbAlertModule
+        NgbAlertModule,
+        CommonModule,
+        ReactiveFormsModule,
+        NgxEditorModule,
+        NgbDropdownModule,
+        NgbDatepickerModule,
+        ColorPickerModule,
+        UiSwitchModule,
+        FileUploadModule,
+        ArchwizardModule,
+        NgxMaskModule.forRoot()
     ]
 })
 export class CRMModule { }
