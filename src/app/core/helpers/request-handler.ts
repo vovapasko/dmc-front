@@ -27,6 +27,16 @@ export default class RequestHandler {
     ) {
     }
 
+    processPayload(payload) {
+        if (!payload) {
+            return {};
+        }
+        if (payload && 'data' in payload && payload.data instanceof FormData) {
+            return payload.data;
+        }
+        return this.convertCase.convertFromCamelToSnakeCase(payload.data);
+    }
+
     request(
         url,
         method,
@@ -38,9 +48,14 @@ export default class RequestHandler {
             | RegisterPayload
             | SignupPayload
             | UpdateProfilePayload,
-        mapHandler = (res) => {}
+        mapHandler = (res) => {
+        }
     ) {
-        return this.http[method](url, 'data' in payload ? this.convertCase.convertFromCamelToSnakeCase(payload.data) : {})
+
+        return this.http[method](
+            url,
+            this.processPayload(payload)
+        )
             .pipe(
                 tap(
                     (response: ServerResponse) => this.responseHandler.handle(response)
@@ -48,7 +63,7 @@ export default class RequestHandler {
                 map(
                     (response: ServerResponse) => {
                         const convertedCaseResponse = this.convertCase.convertFromSnakeToCamelCase(response);
-                        mapHandler(convertedCaseResponse);
+                        return mapHandler(convertedCaseResponse);
                     },
                     error => this.errorHandler.handle(error)
                 )

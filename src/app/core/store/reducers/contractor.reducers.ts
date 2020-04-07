@@ -5,6 +5,7 @@ export const contractorReducers = (
     state = initialContractorState,
     action: ContractorActions
 ): IContractorState => {
+    console.log(action);
     switch (action.type) {
         case EContractorActions.CreateContractorsSuccess:
             return {
@@ -21,7 +22,7 @@ export const contractorReducers = (
                 ...state,
                 contractors: state.contractors.filter(el => el.id !== action.payload.id)
             };
-        case EContractorActions.SelectContractor:
+        case EContractorActions.SelectContractorSuccess:
             return {
                 ...state,
                 selectedContractor: action.payload

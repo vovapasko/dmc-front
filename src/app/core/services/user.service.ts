@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {BehaviorSubject, Observable, Subject} from 'rxjs';
+import {BehaviorSubject, Observable, of, Subject} from 'rxjs';
 import {FormBuilder, Validators} from '@angular/forms';
 
 import {environment} from '../../../environments/environment';
@@ -14,7 +14,10 @@ import {HomeResponse} from '../models/responses/user/homeResponse';
 import RequestHandler from '../helpers/request-handler';
 import {CookieService} from '../providers/cookie.service';
 import {CURRENT_USER} from '../constants/user';
-
+import {PaginationService} from './pagination.service';
+import {SignupPayload} from "../models/payloads/user/signup";
+import {RegisterPayload} from "../models/payloads/user/register";
+import {ActivatedRoute, Router} from "@angular/router";
 
 const api = environment.api;
 
@@ -22,20 +25,43 @@ const api = environment.api;
 export class UserService {
     public user$ = new BehaviorSubject(new User());
 
+    selectedUser$: BehaviorSubject<User> = new BehaviorSubject(null);
+    users$: BehaviorSubject<Array<User>> = new BehaviorSubject([]);
+    paginatedUserData$: BehaviorSubject<Array<User>> = new BehaviorSubject([]);
+
     constructor(
         private http: HttpClient,
         private requestHandler: RequestHandler,
         public formBuilder: FormBuilder,
+        private paginationService: PaginationService,
         private cookieService: CookieService,
+        private route: ActivatedRoute,
+        private router: Router
     ) {
     }
 
+    get selectedUser() {
+        return this.selectedUser$.getValue();
+    }
 
-    /**
-     * Returns observable for subscribe
-     */
-    getObservable(): Observable<User> {
-        return this.user$.asObservable();
+    set selectedUser(value: User) {
+        this.selectedUser$.next(value);
+    }
+
+    get users() {
+        return this.users$.getValue();
+    }
+
+    set users(value: Array<User>) {
+        this.users$.next(value);
+    }
+
+    get paginatedUserData() {
+        return this.paginatedUserData$.getValue();
+    }
+
+    set paginatedUserData(value: Array<User>) {
+        this.paginatedUserData$.next(value);
     }
 
     /**
@@ -46,21 +72,27 @@ export class UserService {
             `${api}/home/`,
             'get',
             null,
-            (response: HomeResponse) => response.data
+            (response: HomeResponse) => {
+                const users = response.data;
+                this.users = users;
+                this.applyPagination();
+                return users;
+            }
         );
     }
 
     /**
      *  Sign up aka confirm-user
      */
-    signup(payload) {
+    signup(payload: SignupPayload) {
         return this.requestHandler.request(
             `${api}/confirm-user/${payload.invite}`,
             'post',
             payload,
             (response: SignupResponse) => {
                 this.user = {...response.user, token: response.token};
-                return this.user$;
+                this.router.navigate(['/profile']);
+                return this.user;
             }
         );
     }
@@ -87,12 +119,15 @@ export class UserService {
     /**
      *  Register new user aka invite user
      */
-    register(payload): Observable<boolean> {
+    register(payload: any): Observable<boolean> {
         return this.requestHandler.request(
             `${api}/invite-new-user/`,
             'post',
             payload,
-            (response: RegisterResponse) => response.success
+            (response: RegisterResponse) => {
+                this.applyPagination();
+                return response.success;
+            }
         );
     }
 
@@ -116,7 +151,10 @@ export class UserService {
             `${api}/change-pass/${payload.confirm}`,
             'post',
             payload,
-            (response: ConfirmResetPasswordResponse) => response.success,
+            (response: ConfirmResetPasswordResponse) => {
+                this.router.navigate(['/account/confirm']);
+                return response.success;
+            },
         );
     }
 
@@ -132,7 +170,9 @@ export class UserService {
                 // returns updated user and store in cookies
                 const currentUser = this.currentUser();
                 const newUser = response.user;
-                return {...currentUser, ...newUser};
+                const user = {...currentUser, ...newUser};
+                this.user = user;
+                return user;
             }
         );
     }
@@ -154,5 +194,23 @@ export class UserService {
             lastName: [user.lastName, [Validators.required]],
             email: [user.email, [Validators.required, Validators.email]],
         });
+    }
+
+    selectUser(user: any) {
+        this.selectedUser = user;
+        return of(user);
+    }
+
+    public applyPagination(): void {
+        const {paginationService, users} = this;
+        paginationService.totalRecords = users;
+        paginationService.applyPagination();
+        this.paginatedUserData = paginationService.paginatedData;
+    }
+
+    public onPageChange(page: number): void {
+        const {paginationService} = this;
+        paginationService.onPageChange(page);
+        this.paginatedUserData = paginationService.paginatedData;
     }
 }

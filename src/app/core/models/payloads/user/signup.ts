@@ -1,4 +1,5 @@
 export interface SignupPayload {
+    invite: string;
     data: {
         firstName: string;
         lastName: string;

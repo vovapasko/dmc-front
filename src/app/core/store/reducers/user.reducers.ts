@@ -6,6 +6,7 @@ export const userReducers = (
     state = initialUserState,
     action: UserActions
 ): IUserState => {
+    console.log(action);
     switch (action.type) {
         case EUserActions.GetUsersSuccess: {
             return {
@@ -13,16 +14,10 @@ export const userReducers = (
                 users: action.payload
             };
         }
-        case EUserActions.SelectUser: {
+        case EUserActions.SelectUserSuccess: {
             return {
                 ...state,
                 selectedUser: action.payload
-            };
-        }
-        case EUserActions.CreateUserSuccess: {
-            return {
-                ...state,
-                users: [...state.users, action.payload]
             };
         }
         default:

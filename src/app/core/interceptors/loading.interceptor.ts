@@ -17,7 +17,7 @@ export class LoadingInterceptor {
     }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
+        console.log('loading...');
         if (this.activeRequests === 0) {
             this.loadingScreenService.startLoading();
         }

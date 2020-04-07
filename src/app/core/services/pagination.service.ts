@@ -1,25 +1,65 @@
 import {Inject, Injectable} from '@angular/core';
-import {Contractor} from '../models/instances/contractor';
-import {User} from '../models/instances/user.models';
 import {BehaviorSubject, Subject} from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
 })
 export class PaginationService {
-    // page number
-    page = 1;
-    // default page size
-    pageSize = 10;
-    data: Array<any> = [];
-    // start and end index
-    startIndex = 1;
-    endIndex = 10;
-    totalSize = 0;
-    paginatedData$: BehaviorSubject<Array<any>>;
+    page$: BehaviorSubject<number> = new BehaviorSubject<number>(1);
+    pageSize$: BehaviorSubject<number> = new BehaviorSubject<number>(10);
+    startIndex$: BehaviorSubject<number> = new BehaviorSubject<number>(1);
+    endIndex$: BehaviorSubject<number> = new BehaviorSubject<number>(10);
+    totalSize$: BehaviorSubject<number> = new BehaviorSubject<number>(10);
 
-    set records(records: Array<any>) {
-        this.data = records;
+    totalRecords$: BehaviorSubject<Array<any>> = new BehaviorSubject<Array<any>>([]);
+    paginatedData$: BehaviorSubject<Array<any>> = new BehaviorSubject<Array<any>>([]);
+
+    get page() {
+        return this.page$.getValue();
+    }
+
+    set page(value: number) {
+        this.page$.next(value);
+    }
+
+    get pageSize() {
+        return this.pageSize$.getValue();
+    }
+
+    set pageSize(value: number) {
+        this.pageSize$.next(value);
+    }
+
+    get startIndex() {
+        return this.startIndex$.getValue();
+    }
+
+    set startIndex(value: number) {
+        this.startIndex$.next(value);
+    }
+
+    get endIndex() {
+        return this.endIndex$.getValue();
+    }
+
+    set endIndex(value: number) {
+        this.endIndex$.next(value);
+    }
+
+    get totalSize() {
+        return this.totalSize$.getValue();
+    }
+
+    set totalSize(value: number) {
+        this.totalSize$.next(value);
+    }
+
+    set totalRecords(records: Array<any>) {
+        this.totalRecords$.next(records);
+    }
+
+    get totalRecords() {
+        return this.totalRecords$.getValue();
     }
 
     get paginatedData() {
@@ -31,11 +71,12 @@ export class PaginationService {
      * @param page show the page
      */
     public onPageChange(page: number): void {
-        const {pageSize, data} = this;
+        const {pageSize, totalRecords} = this;
         const startIndex = (page - 1) * pageSize;
         const endIndex = (page - 1) * pageSize + pageSize;
-        const paginatedData = data.slice(startIndex, endIndex);
+        const paginatedData = totalRecords.slice(startIndex, endIndex);
 
+        this.page = page;
         this.startIndex = startIndex;
         this.endIndex = endIndex;
         this.paginatedData$.next(paginatedData);
@@ -45,11 +86,11 @@ export class PaginationService {
      * Apply pagination
      */
     public applyPagination() {
-        const {pageSize, data} = this;
+        const {pageSize, totalRecords} = this;
         const startIndex = 0;
         const endIndex = pageSize;
-        const totalSize = data.length;
-        const paginatedData = data.slice(startIndex, endIndex);
+        const totalSize = totalRecords.length;
+        const paginatedData = totalRecords.slice(startIndex, endIndex);
 
         // apply pagination
         this.startIndex = startIndex;

@@ -3,16 +3,17 @@ import {Component, OnInit} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-
-import {Contacts} from './users.model';
-
 import {AuthenticationService} from '../../../core/services/auth.service';
 import {UserService} from '../../../core/services/user.service';
-import {User} from '../../../core/models/instances/user.models';
+import {EmptyUser, User} from '../../../core/models/instances/user.models';
 import {select, Store} from '@ngrx/store';
 import {IAppState} from '../../../core/store/state/app.state';
 import {selectUserList} from '../../../core/store/selectors/user.selectors';
-import {GetUsers} from '../../../core/store/actions/user.actions';
+import {CreateUser, GetUsers, SelectUser} from '../../../core/store/actions/user.actions';
+import {BehaviorSubject, Subject} from 'rxjs';
+import {PaginationService} from '../../../core/services/pagination.service';
+import {LoadingService} from '../../../core/services/loading.service';
+import {ErrorService} from '../../../core/services/error.service';
 
 @Component({
     selector: 'app-users',
@@ -25,37 +26,61 @@ import {GetUsers} from '../../../core/store/actions/user.actions';
  */
 export class UsersComponent implements OnInit {
     breadCrumbItems: Array<{}>;
+
+    loading$: Subject<boolean>;
+    error$: Subject<boolean>;
+
+    totalRecords$: BehaviorSubject<Array<User>> = new BehaviorSubject<Array<User>>([]);
+    page$: BehaviorSubject<number> = new BehaviorSubject(1);
+    pageSize$: BehaviorSubject<number> = new BehaviorSubject(10);
+
+    selectedUser$: BehaviorSubject<User> = new BehaviorSubject(null);
+    paginatedUserData$: BehaviorSubject<Array<User>> = new BehaviorSubject([]);
+
     selectedRole = '';
-    selectedUser: User;
     submitted: boolean;
     term: any;
     selectValue: string[];
     validationform: FormGroup;
-    users$ = this.store.pipe(select(selectUserList));
 
     constructor(
         private modalService: NgbModal,
         private authService: AuthenticationService,
         private userService: UserService,
-        private store: Store<IAppState>
+        private store: Store<IAppState>,
+        private paginationService: PaginationService,
+        private loadingService: LoadingService,
+        private errorService: ErrorService
     ) {
     }
 
     ngOnInit() {
-        // tslint:disable-next-line: max-line-length
-        this.breadCrumbItems = [{label: 'UBold', path: '/'}, {label: 'CRM', path: '/'}, {
-            label: 'Contacts',
-            path: '/',
+        this.initBreadCrumbs();
+        this.initForm();
+        this.initSelectOptions();
+        this.initSubscribes();
+    }
+
+    initSubscribes() {
+        this.loading$ = this.loadingService.loading$;
+        this.error$ = this.errorService.error$;
+
+        this.selectedUser$ = this.userService.selectedUser$;
+        this.paginatedUserData$ = this.userService.paginatedUserData$;
+
+        this.totalRecords$ = this.paginationService.totalRecords$;
+        this.page$ = this.paginationService.page$;
+        this.pageSize$ = this.paginationService.pageSize$;
+
+        this.store.dispatch(new GetUsers());
+    }
+
+    initBreadCrumbs() {
+        this.breadCrumbItems = [{label: 'Главная', path: '/'}, {
+            label: 'Пользователи',
+            path: '/contractors',
             active: true
         }];
-
-        this.initForm();
-
-        this.initSelectOptions();
-
-        // get users
-        this._fetchData();
-        this.store.dispatch(new GetUsers());
     }
 
     /**
@@ -92,7 +117,7 @@ export class UsersComponent implements OnInit {
      * Select user to show details
      */
     selectUser(user: User) {
-        this.selectedUser = user;
+        this.store.dispatch(new SelectUser(user));
     }
 
     /**
@@ -109,13 +134,10 @@ export class UsersComponent implements OnInit {
     }
 
     register(data) {
-        this.userService.register({data});
+        this.store.dispatch(new CreateUser({data}));
     }
 
-    /**
-     * Get all users and subscribe to update
-     */
-    private _fetchData() {
-        this.userService.getAll();
+    onPageChange(page) {
+        this.userService.onPageChange(page);
     }
 }

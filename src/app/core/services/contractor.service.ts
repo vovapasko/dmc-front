@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {FormBuilder, Validators} from '@angular/forms';
 
 import {environment} from '../../../environments/environment';
@@ -14,10 +14,10 @@ import {DeleteContractorPayload} from '../models/payloads/contractor/delete';
 import {UpdateContractorPayload} from '../models/payloads/contractor/update';
 import {CreateContractorPayload} from '../models/payloads/contractor/create';
 import numbers from '../constants/numbers';
-import {PaginationService} from "./pagination.service";
-import {GetContractors} from "../store/actions/contractor.actions";
-import {Store} from "@ngrx/store";
-import {IAppState} from "../store/state/app.state";
+import {PaginationService} from './pagination.service';
+import {GetContractors} from '../store/actions/contractor.actions';
+import {Store} from '@ngrx/store';
+import {IAppState} from '../store/state/app.state';
 
 const api = environment.api;
 
@@ -33,7 +33,6 @@ export class ContractorService {
         private requestHandler: RequestHandler,
         public formBuilder: FormBuilder,
         private paginationService: PaginationService,
-        private store: Store<IAppState>
     ) {
     }
 
@@ -89,7 +88,7 @@ export class ContractorService {
     /**
      *  Create contractor, api returns single contractor instance
      */
-    create(payload: CreateContractorPayload): Observable<Contractor> {
+    create(payload): Observable<Contractor> {
         return this.requestHandler.request(
             `${api}/contractor/`,
             'post',
@@ -107,15 +106,15 @@ export class ContractorService {
     /**
      *  Update contractor by id, api returns single contractor instance
      */
-    update(payload: UpdateContractorPayload): Observable<Contractor> {
+    update(payload): Observable<Contractor> {
         return this.requestHandler.request(
             `${api}/contractor/${payload.id}`,
             'put',
             payload,
             (response: UpdateContractorResponse) => {
-                // update contractors list
                 const contractor = response.contractor;
                 this.contractors = this.contractors.map(el => el.id === contractor.id ? contractor : el);
+                this.applyPagination();
                 return contractor;
             }
         );
@@ -124,19 +123,16 @@ export class ContractorService {
     /**
      *  Delete contractor by id, api returns status
      */
-    delete(payload: DeleteContractorPayload): Observable<boolean> {
+    delete(payload): Observable<boolean> {
         return this.requestHandler.request(
             `${api}/contractor/${payload.id}`,
             'delete',
             null,
             (response: DeleteContractorResponse) => {
                 const contractors = this.contractors;
-                const searchElement = contractors.find(el => el.id === payload.id);
-                const index = contractors.indexOf(searchElement);
-                contractors.splice(index, 1);
-                this.contractors = contractors;
+                this.contractors = contractors.filter(el => el.id !== payload.id);
                 this.applyPagination();
-                return response.success;
+                return payload;
             }
         );
     }
@@ -146,15 +142,11 @@ export class ContractorService {
      */
     createContractorData(f, defaultFields?) {
         const fields = Object.keys(f);
-
         // collects all values [{}, {}, {}]
         const values = fields.map(field => ({[field]: f[field].value}));
-
         if (defaultFields) {
             values.push(...defaultFields);
         }
-
-        // returns {}
         return values.reduce((a, n) => ({...a, ...n}), {});
     }
 
@@ -170,10 +162,6 @@ export class ContractorService {
         } else {
             this.checkedContractors = contractors;
         }
-    }
-
-    getAllContractors() {
-        this.store.dispatch(new GetContractors());
     }
 
     /**
@@ -226,26 +214,16 @@ export class ContractorService {
     }
 
     /**
-     * Update checked contractors
-     */
-    updateContractors(f, payload) {
-        this.checkedContractors
-            .forEach(
-                el => this.update({...payload, id: el.id})
-            );
-        this.checkedContractors = [];
-    }
-
-    /**
      * Select contractor to show details
      */
-    selectContractor(contractor: Contractor) {
+    selectContractor(contractor) {
         this.selectedContractor = contractor;
+        return of(contractor);
     }
 
     public applyPagination(): void {
         const {paginationService, contractors} = this;
-        paginationService.records = contractors;
+        paginationService.totalRecords = contractors;
         paginationService.applyPagination();
         this.paginatedContractorData = paginationService.paginatedData;
     }

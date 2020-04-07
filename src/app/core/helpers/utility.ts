@@ -31,4 +31,11 @@ export const keysToCamel = (o) => {
     }
 
     return o;
-};
+}
+
+export const setValues = (target, obj) => {
+    const fields = Object.keys(target);
+    fields.forEach(
+        field => target[field].setValue(obj[field.replace('update', '').replace(/^\w/, c => c.toLowerCase())])
+    );
+}

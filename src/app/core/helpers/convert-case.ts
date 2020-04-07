@@ -20,14 +20,6 @@ export default class ConvertCase {
         return snakeCase(value);
     }
 
-    /**
-     * (string): Returns the camel cased string.
-     * @param value [string=''] (string): The string to convert.
-     */
-    private static convertToCamelCase(value: string): string {
-        return camelCase(value);
-    }
-
     public convertFromCamelToSnakeCase(obj) {
         return this.convert(obj, ConvertCase.convertToSnakeCase);
     }
@@ -37,6 +29,6 @@ export default class ConvertCase {
     }
 
     private convert(obj: object, renameFunction) {
-        return mapKeys(obj, (v, k) => renameFunction(k));
+        return mapKeys(obj, (v, k) => renameFunction(k.replace('update', '').replace(/^\w/, c => c.toLowerCase())));
     }
 }

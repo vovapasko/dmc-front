@@ -1,5 +1,5 @@
 <div class="container-fluid">
-    <app-page-title title="Sellers" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+    <app-page-title title="Контрагенты" [breadcrumbItems]="breadCrumbItems"></app-page-title>
 
     <div class="row">
         <div class="col-12">
@@ -26,7 +26,7 @@
                                 </button>
                                 <button type="button"
                                         id="edit-contractor-button"
-                                        (click)="editChecked();openModal(editModal);"
+                                        (click)="editChecked();openModal(editModal, true);"
                                         class="btn btn-warning mb-2 mr-1"
                                 ><i class="mdi mdi-settings"></i>
                                     Изменить выбранные
@@ -50,8 +50,8 @@
                                 <th style="width: 20px;">
                                     <div class="custom-control custom-checkbox">
                                         <input (click)="checkAll()"
-                                               [checked]="checkedContractors.length !== 0 &&
-                                               checkedContractors.length === this.contractors.length"
+                                               [checked]="(checkedContractors$ | async)?.length !== 0 &&
+                                               (checkedContractors$ | async)?.length === (paginatedContractorData$ | async)?.length"
                                                type="checkbox"
                                                class="custom-control-input"
                                                id="customCheck"
@@ -70,12 +70,12 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr *ngFor="let contractor of paginatedContractorData | filter:term | slice:0:10;let i = index;">
+                            <tr *ngFor="let contractor of paginatedContractorData$ | async | filter:term;let i = index;">
                                 <td>
 
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox"
-                                               [checked]="checkedContractors.indexOf(contractor) !== -1"
+                                               [checked]="(checkedContractors$ | async).indexOf(contractor) !== -1"
                                                (click)="check(contractor)"
                                                class="custom-control-input"
                                                id="customCheck{{i}}"
@@ -124,8 +124,11 @@
                         </table>
                     </div>
                     <ul class="pagination pagination-rounded justify-content-end my-2">
-                        <ngb-pagination [collectionSize]="totalRecords" (pageChange)="onPageChange($event)"
-                                        [(page)]="page" [pageSize]="pageSize"></ngb-pagination>
+                        <ngb-pagination [collectionSize]="(totalRecords$ | async)?.length"
+                                        (pageChange)="onPageChange($event)"
+                                        [page]="page$ | async"
+                                        [pageSize]="pageSize$ | async"
+                        ></ngb-pagination>
                     </ul>
                 </div>
             </div>
@@ -151,8 +154,8 @@
         <div class="text-left">
             <form (ngSubmit)="addContractor()" [formGroup]="createForm">
 
-                <app-ui-preloader [display]="loading"></app-ui-preloader>
-                <ngb-alert type="danger" *ngIf="error" [dismissible]="false">Пожалуйста, повторите попытку</ngb-alert>
+                <app-ui-preloader [display]="loading$ | async"></app-ui-preloader>
+                <ngb-alert type="danger" *ngIf="error$ | async" [dismissible]="false">Пожалуйста, повторите попытку</ngb-alert>
 
                 <div class="form-group">
                     <label for="editorName">Название редакции</label>
@@ -248,8 +251,8 @@
         <div class="text-left">
             <form (ngSubmit)="submitEditForm()" [formGroup]="updateForm">
 
-                <app-ui-preloader [display]="loading"></app-ui-preloader>
-                <ngb-alert type="danger" *ngIf="error" [dismissible]="false">Пожалуйста, повторите попытку</ngb-alert>
+                <app-ui-preloader [display]="loading$ | async"></app-ui-preloader>
+                <ngb-alert type="danger" *ngIf="error$ | async" [dismissible]="false">Пожалуйста, повторите попытку</ngb-alert>
 
                 <div class="form-group">
                     <label for="updateEditorName">Название редакции</label>

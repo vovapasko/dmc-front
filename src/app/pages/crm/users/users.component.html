@@ -39,38 +39,38 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr *ngFor="let user of paginatedUserData |filter:term">
+                            <tr *ngFor="let user of paginatedUserData$ | async |filter:term">
                                 <td class="table-user">
                                     <img [src]="user.avatar" alt="table-user" class="mr-2 rounded-circle">
                                     <a href="javascript:void(0);"
                                        class="text-body font-weight-semibold"
                                        (click)="selectUser(user)"
                                     >
-                                        {{user.first_name}}
+                                        {{user.firstName}}
                                     </a>
                                 </td>
                                 <td>
-                                    {{user.last_name}}
+                                    {{user.lastName}}
                                 </td>
                                 <td>
                                     {{user.email}}
                                 </td>
                                 <td>
-                                    <span *ngIf="user.is_superuser"
+                                    <span *ngIf="user.isSuperuser"
                                           class="badge bg-soft-success text-success">Superuser</span>
                                     <span *ngIf="user.is_staff" class="badge bg-soft-success text-success">Admin</span>
-                                    <span *ngIf="!user.is_superuser && !user.is_staff"
+                                    <span *ngIf="!user.isSuperuser && !user.isStaff"
                                           class="badge bg-soft-warning text-warning">Client</span>
                                 </td>
                                 <td>
-                                    <span *ngIf="user.is_confirmed" class="badge bg-soft-success text-success">Да</span>
-                                    <span *ngIf="!user.is_confirmed"
+                                    <span *ngIf="user.isConfirmed" class="badge bg-soft-success text-success">Да</span>
+                                    <span *ngIf="!user.isConfirmed"
                                           class="badge bg-soft-success text-success">Нет</span>
                                 </td>
                                 <td>
-                                    <span *ngIf="user.is_active"
+                                    <span *ngIf="user.isActive"
                                           class="badge bg-soft-success text-success">Онлайн</span>
-                                    <span *ngIf="!user.is_active"
+                                    <span *ngIf="!user.isActive"
                                           class="badge bg-soft-warning text-error">Оффлайн</span>
                                 </td>
                             </tr>
@@ -78,8 +78,11 @@
                         </table>
                     </div>
                     <ul class="pagination pagination-rounded justify-content-end my-2">
-                        <ngb-pagination (pageChange)="onPageChange($event)" [pageSize]="pageSize" [(page)]="page"
-                                        [collectionSize]="totalSize"></ngb-pagination>
+                        <ngb-pagination (pageChange)="onPageChange($event)"
+                                        [pageSize]="pageSize$ | async"
+                                        [page]="page$ | async"
+                                        [collectionSize]="(totalRecords$ | async)?.length"
+                        ></ngb-pagination>
                     </ul>
                 </div>
             </div>
@@ -87,27 +90,27 @@
         <div class="col-xl-4">
             <div class="card-box">
                 <div class="media mb-3">
-                    <img class="d-flex mr-3 rounded-circle avatar-lg" [src]="selectedUser.avatar"
+                    <img class="d-flex mr-3 rounded-circle avatar-lg" [src]="(selectedUser$ | async)?.avatar"
                          alt="Generic placeholder image">
                     <div class="media-body">
-                        <h4 class="mt-0 mb-1">{{selectedUser.firstName}} {{selectedUser.lastName}}</h4>
-                        <p class="text-muted" *ngIf="selectedUser.isSuperuser">Суперпользователь</p>
-                        <p class="text-muted" *ngIf="selectedUser.isStaff">Администратор</p>
+                        <h4 class="mt-0 mb-1">{{(selectedUser$ | async)?.firstName}} {{(selectedUser$ | async)?.lastName}}</h4>
+                        <p class="text-muted" *ngIf="(selectedUser$ | async)?.isSuperuser">Суперпользователь</p>
+                        <p class="text-muted" *ngIf="(selectedUser$ | async)?.isStaff">Администратор</p>
                     </div>
                 </div>
 
                 <h4 class="font-13 text-uppercase">Обо мнe :</h4>
 
                 <p class="text-muted mb-2 font-13"><strong>Дата регистрации :</strong><span class="ml-2">
-                        {{selectedUser.dateJoined | date:'medium'}}
+                        {{(selectedUser$ | async)?.dateJoined | date:'medium'}}
                     </span></p>
 
                 <p class="text-muted mb-2 font-13"><strong>Последние обновления :</strong><span class="ml-2">
-                        {{selectedUser.dateUpdated | date:'medium'}}
+                        {{(selectedUser$ | async)?.dateUpdated | date:'medium'}}
                     </span></p>
 
                 <p class="text-muted mb-2 font-13"><strong>Email :</strong> <span class="ml-2 ">
-                        {{selectedUser.email}}
+                        {{(selectedUser$ | async)?.email}}
                     </span></p>
 
 
@@ -134,8 +137,8 @@
         <div class="text-left">
             <form (ngSubmit)="registerNewUser()" [formGroup]="validationform">
 
-                <app-ui-preloader [display]="loading"></app-ui-preloader>
-                <ngb-alert type="danger" *ngIf="error" [dismissible]="false">Пожалуйста, повторите попытку</ngb-alert>
+                <app-ui-preloader [display]="loading$ | async"></app-ui-preloader>
+                <ngb-alert type="danger" *ngIf="error$ | async" [dismissible]="false">Пожалуйста, повторите попытку</ngb-alert>
 
                 <div class="form-group">
                     <label for="email">Email</label>

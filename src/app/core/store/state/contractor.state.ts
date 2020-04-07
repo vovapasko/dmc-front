@@ -6,6 +6,6 @@ export interface IContractorState {
 }
 
 export const initialContractorState: IContractorState = {
-    contractors: null,
+    contractors: [],
     selectedContractor: null
 };

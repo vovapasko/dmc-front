@@ -12,6 +12,7 @@ import {LoginResponse} from '../models/responses/auth/loginResponse';
 import {LoginPayload} from '../models/payloads/auth/login';
 import RequestHandler from '../helpers/request-handler';
 import {UserService} from './user.service';
+import {ActivatedRoute, Router} from "@angular/router";
 
 const api = environment.api;
 
@@ -22,13 +23,17 @@ export class AuthenticationService {
     public static readonly CURRENT_USER = 'currentUser';
 
     user: User;
+    returnUrl: string;
 
     constructor(
         private http: HttpClient,
         private cookieService: CookieService,
         private requestHandler: RequestHandler,
-        private userService: UserService
+        private userService: UserService,
+        private route: ActivatedRoute,
+        private router: Router,
     ) {
+        this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/';
     }
 
     /**
@@ -64,6 +69,7 @@ export class AuthenticationService {
             (response: LoginResponse) => {
                 const currentUser = {...response.user, token: response.token};
                 this.userService.user = currentUser;
+                this.router.navigate([this.returnUrl])
                 return currentUser;
             }
         );

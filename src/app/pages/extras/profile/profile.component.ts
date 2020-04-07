@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import {Title} from '@angular/platform-browser';
 
 import {EmptyUser, User} from '../../../core/models/instances/user.models';
@@ -8,6 +8,11 @@ import {UserService} from '../../../core/services/user.service';
 import {LoadingService} from '../../../core/services/loading.service';
 import {ErrorService} from '../../../core/services/error.service';
 import {Subject} from 'rxjs';
+import {ResetPassword, UpdateProfile} from '../../../core/store/actions/user.actions';
+import {Store} from '@ngrx/store';
+import {IAppState} from '../../../core/store/state/app.state';
+import {NotificationService} from "../../../core/services/notification.service";
+import {NotificationType} from "../../../core/models/instances/notification";
 
 @Component({
     selector: 'app-profile',
@@ -19,6 +24,8 @@ import {Subject} from 'rxjs';
  * Profile component - handling the profile with sidebar and content
  */
 export class ProfileComponent implements OnInit {
+    breadCrumbItems: Array<{}>;
+
     loading$: Subject<boolean>;
     error$: Subject<boolean>;
     user$: Subject<User>;
@@ -35,13 +42,16 @@ export class ProfileComponent implements OnInit {
         private userService: UserService,
         private titleService: Title,
         private loadingService: LoadingService,
-        private errorService: ErrorService
+        private errorService: ErrorService,
+        private store: Store<IAppState>,
+        private notificationService: NotificationService
     ) {
     }
 
     ngOnInit() {
         this.initSubscribes();
         this.initForm();
+        this.initBreadCrumbs();
     }
 
     initSubscribes() {
@@ -68,6 +78,14 @@ export class ProfileComponent implements OnInit {
     // convenience getter for easy access to form fields
     get f() {
         return this.profileForm.controls;
+    }
+
+    initBreadCrumbs() {
+        this.breadCrumbItems = [{label: 'Главная', path: '/'}, {
+            label: 'Профиль',
+            path: '/profile',
+            active: true
+        }];
     }
 
     /**
@@ -98,6 +116,7 @@ export class ProfileComponent implements OnInit {
      */
     handleFileInput(files: FileList) {
         this.avatar = files.item(0);
+        this.notificationService.notify(NotificationType.info, 'Изображение было загружено', 'Нажмите сохранить чтобы увидеть изменения')
     }
 
 
@@ -105,13 +124,13 @@ export class ProfileComponent implements OnInit {
      * Update profile and set new values
      */
     update(data) {
-        this.userService.updateProfile({data});
+        this.store.dispatch(new UpdateProfile({data}));
     }
 
     /**
      * Send email with link for change password
      */
     changePassword() {
-        this.userService.resetPassword();
+        this.store.dispatch(new ResetPassword());
     }
 }
