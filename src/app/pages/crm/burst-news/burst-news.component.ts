@@ -1,7 +1,10 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, Validators, FormGroup} from '@angular/forms';
+import {Steps} from '../../../core/constants/steps';
 
 import {WizardComponent as BaseWizardComponent} from 'angular-archwizard';
+import {ChartType} from '../../dashboards/default/default.model';
+import {revenueRadialChart} from '../../dashboards/default/data';
 
 @Component({
     selector: 'app-burst-news',
@@ -16,10 +19,21 @@ export class BurstNewsComponent implements OnInit {
 
     // bread crumb items
     breadCrumbItems: Array<{}>;
+    step: Steps = 0;
+    steps = Steps;
 
     // validation form
     validationForm: FormGroup;
     profileValidationForm: FormGroup;
+
+    nature = '';
+    hashtag = '';
+    format = '';
+    method = '';
+    contractor = '';
+
+    revenueRadialChart: ChartType;
+
 
     submit: boolean;
     submitForm: boolean;
@@ -40,9 +54,15 @@ export class BurstNewsComponent implements OnInit {
          * form value validation
          */
         this.validationForm = this.formBuilder.group({
-            userName: ['', Validators.required],
-            password: ['', Validators.required],
-            confirm: ['', Validators.required],
+            client: ['', Validators.required],
+            project: ['', Validators.required],
+            nature: ['', Validators.required],
+            title: ['', Validators.required],
+            hashtags: ['', Validators.required],
+            format: ['', Validators.required],
+            method: ['', Validators.required],
+            budget: ['', Validators.required],
+            contractors: ['', Validators.required],
         });
 
         /**
@@ -56,8 +76,13 @@ export class BurstNewsComponent implements OnInit {
 
         this.submit = false;
         this.submitForm = false;
+
+        this.revenueRadialChart = revenueRadialChart;
     }
 
+    enterStep(step) {
+        console.log(step);
+    }
     /**
      * Returns form
      */
@@ -79,7 +104,12 @@ export class BurstNewsComponent implements OnInit {
         if (this.validationForm.valid) {
             this.wizard.navigation.goToNextStep();
         }
+        this.step = 1;
         this.submit = true;
+    }
+
+    onChange(changes) {
+        console.log(changes);
     }
 
     /**
