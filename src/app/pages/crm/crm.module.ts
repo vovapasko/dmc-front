@@ -26,6 +26,7 @@ import {UiSwitchModule} from 'ngx-ui-switch';
 import {FileUploadModule} from '@iplab/ngx-file-upload';
 import {ArchwizardModule} from 'angular-archwizard';
 import {NgxMaskModule} from 'ngx-mask';
+import {NestableModule} from 'ngx-nestable';
 
 @NgModule({
     declarations: [ContractorsComponent, UsersComponent, BurstNewsComponent],
@@ -42,6 +43,7 @@ import {NgxMaskModule} from 'ngx-mask';
         NgbAlertModule,
         CommonModule,
         ReactiveFormsModule,
+        NestableModule,
         QuillModule.forRoot(),
         NgxEditorModule,
         NgbDropdownModule,

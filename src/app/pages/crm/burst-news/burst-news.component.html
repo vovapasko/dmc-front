@@ -324,10 +324,35 @@
                             <form (ngSubmit)="profileFormSubmit()" [formGroup]="profileValidationForm">
 
                                 <div class="row">
-                                    <div class="col-12">
+                                    <div class="col-md-6 col-xl-3" *ngFor="let carddata of cardData">
 
-                                    </div> <!-- end col -->
-                                </div> <!-- end row -->
+                                        <!-- Simple card -->
+                                        <div class="card">
+                                            <img class="card-img-top img-fluid" src="{{carddata.image}}" alt="Card image cap">
+                                            <div class="card-body">
+                                                <h5 class="card-title" *ngIf="carddata.title">
+                                                    {{carddata.title}}
+                                                </h5>
+                                                <p class="card-text">{{carddata.text}}</p>
+                                            </div>
+                                            <ul class="list-group list-group-flush" *ngIf="carddata.list">
+<!--                                                <ngx-nestable [(list)]="carddata.list"-->
+<!--                                                              [options]="options"-->
+<!--                                                              [template]="itemTemplateNestable"-->
+<!--                                                >-->
+<!--                                                </ngx-nestable>-->
+
+<!--                                                <ng-template #itemTemplateNestable let-row>-->
+<!--                                                    <li [ngxNestableDragHandle]="row" class="list-group-item">{{row.item.id}}</li>-->
+<!--                                                </ng-template>-->
+                                            </ul>
+                                            <div class="card-body">
+                                                <a href="javascript: void(0);" class="card-link">Закрепить</a>
+                                                <a href="javascript: void(0);" class="card-link">Открепить</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <ul class="list-inline wizard mb-0">
                                     <li class="previous list-inline-item">
                                         <button class="btn btn-secondary"

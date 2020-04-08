@@ -6,6 +6,7 @@ import {EditorChangeContent, EditorChangeSelection} from 'ngx-quill';
 import {WizardComponent as BaseWizardComponent} from 'angular-archwizard';
 import {ChartType} from '../../dashboards/default/default.model';
 import {revenueRadialChart} from '../../dashboards/default/data';
+import {NestableSettings} from 'ngx-nestable/lib/nestable.models';
 
 @Component({
     selector: 'app-burst-news',
@@ -18,6 +19,10 @@ import {revenueRadialChart} from '../../dashboards/default/data';
  */
 export class BurstNewsComponent implements OnInit {
 
+    public options = {
+        fixedDepth: true
+    } as NestableSettings;
+    public list = [{id: 1}, {id: 11}];
     // bread crumb items
     breadCrumbItems: Array<{}>;
     step: Steps = 0;
@@ -32,6 +37,27 @@ export class BurstNewsComponent implements OnInit {
     format = '';
     method = '';
     contractor = '';
+
+    cardData = [
+        {
+            title: true,
+            image: 'assets/images/small/img-1.jpg',
+            text: 'Some text',
+            button: true
+        },
+        {
+            title: true,
+            image: 'assets/images/small/img-2.jpg',
+            text: 'Some text',
+            list: ['Cras justo odio', 'Dapibus ac facilisis in'],
+            link: ['Card link', 'Another link']
+        },
+        {
+            image: 'assets/images/small/img-3.jpg',
+            text: 'Some text',
+            button: true
+        }
+    ];
 
     revenueRadialChart: ChartType;
 
