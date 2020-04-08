@@ -1,6 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, Validators, FormGroup} from '@angular/forms';
 import {Steps} from '../../../core/constants/steps';
+import {EditorChangeContent, EditorChangeSelection} from 'ngx-quill';
 
 import {WizardComponent as BaseWizardComponent} from 'angular-archwizard';
 import {ChartType} from '../../dashboards/default/default.model';
@@ -34,6 +35,8 @@ export class BurstNewsComponent implements OnInit {
 
     revenueRadialChart: ChartType;
 
+    blured = false;
+    focused = false;
 
     submit: boolean;
     submitForm: boolean;
@@ -69,9 +72,7 @@ export class BurstNewsComponent implements OnInit {
          * form value validation
          */
         this.profileValidationForm = this.formBuilder.group({
-            name: ['', Validators.required],
-            surname: ['', Validators.required],
-            email: ['', Validators.required],
+            editor: ['', Validators.required]
         });
 
         this.submit = false;
@@ -83,6 +84,7 @@ export class BurstNewsComponent implements OnInit {
     enterStep(step) {
         console.log(step);
     }
+
     /**
      * Returns form
      */
@@ -101,10 +103,6 @@ export class BurstNewsComponent implements OnInit {
      * Go to next step while form value is valid
      */
     formSubmit() {
-        if (this.validationForm.valid) {
-            this.wizard.navigation.goToNextStep();
-        }
-        this.step = 1;
         this.submit = true;
     }
 
@@ -116,9 +114,30 @@ export class BurstNewsComponent implements OnInit {
      * Go to next step while second form value is valid
      */
     profileFormSubmit() {
-        if (this.profileValidationForm.valid) {
-            this.wizard.navigation.goToNextStep();
-        }
         this.submitForm = true;
+    }
+
+    created(event) {
+        // tslint:disable-next-line:no-console
+        console.log('editor-created', event);
+    }
+
+    changedEditor(event: EditorChangeContent | EditorChangeSelection) {
+        // tslint:disable-next-line:no-console
+        console.log('editor-change', event);
+    }
+
+    focus($event) {
+        // tslint:disable-next-line:no-console
+        console.log('focus', $event);
+        this.focused = true;
+        this.blured = false;
+    }
+
+    blur($event) {
+        // tslint:disable-next-line:no-console
+        console.log('blur', $event);
+        this.focused = false;
+        this.blured = true;
     }
 }

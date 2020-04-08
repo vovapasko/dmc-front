@@ -213,15 +213,15 @@
                                         </div> <!-- end card-box -->
                                     </div> <!-- end col-->
                                 </div> <!-- end row -->
+                                <ul class="list-inline wizard mb-0">
+                                    <li class="next list-inline-item float-right">
+                                        <button class="btn btn-secondary"
+                                                awNextStep
+                                                type="submit">Дальше
+                                        </button>
+                                    </li>
+                                </ul>
                             </form>
-                            <ul class="list-inline wizard mb-0">
-                                <li class="next list-inline-item float-right">
-                                    <button class="btn btn-secondary"
-                                            awNextStep
-                                            type="submit">Дальше
-                                    </button>
-                                </li>
-                            </ul>
                         </aw-wizard-step>
 
                         <aw-wizard-step (stepEnter)="step = 1" awOptionalStep [canEnter]="validationForm.valid">
@@ -261,27 +261,29 @@
                             </ul>
                             <form (ngSubmit)="profileFormSubmit()" [formGroup]="profileValidationForm">
 
-                                <div class="row">
-                                    <div class="col-12">
+                                <quill-editor [styles]="{height: '400px', 'margin-bottom': '15px'}"
+                                              (onFocus)="focus($event)"
+                                              (onEditorChanged)="changedEditor($event)"
+                                              (onBlur)="blur($event)"
+                                              formControlName="editor"
+                                              (onEditorCreated)="created($event)"
+                                ></quill-editor>
 
-                                    </div> <!-- end col -->
-                                </div> <!-- end row -->
-
+                                <ul class="list-inline wizard mb-0">
+                                    <li class="previous list-inline-item">
+                                        <button class="btn btn-secondary"
+                                                type="button"
+                                                awPreviousStep>Назад
+                                        </button>
+                                    </li>
+                                    <li class="next list-inline-item float-right">
+                                        <button class="btn btn-secondary"
+                                                awNextStep
+                                                type="submit">Дальше
+                                        </button>
+                                    </li>
+                                </ul>
                             </form>
-                            <ul class="list-inline wizard mb-0">
-                                <li class="previous list-inline-item">
-                                    <button class="btn btn-secondary"
-                                            type="button"
-                                            awPreviousStep>Назад
-                                    </button>
-                                </li>
-                                <li class="next list-inline-item float-right">
-                                    <button class="btn btn-secondary"
-                                            awNextStep
-                                            type="submit">Дальше
-                                    </button>
-                                </li>
-                            </ul>
                         </aw-wizard-step>
 
                         <aw-wizard-step (stepEnter)="step = 2" awOptionalStep [canEnter]="validationForm.valid">
@@ -326,21 +328,21 @@
 
                                     </div> <!-- end col -->
                                 </div> <!-- end row -->
+                                <ul class="list-inline wizard mb-0">
+                                    <li class="previous list-inline-item">
+                                        <button class="btn btn-secondary"
+                                                type="button"
+                                                awPreviousStep>Назад
+                                        </button>
+                                    </li>
+                                    <li class="next list-inline-item float-right">
+                                        <button class="btn btn-secondary"
+                                                awNextStep
+                                                type="submit">Дальше
+                                        </button>
+                                    </li>
+                                </ul>
                             </form>
-                            <ul class="list-inline wizard mb-0">
-                                <li class="previous list-inline-item">
-                                    <button class="btn btn-secondary"
-                                            type="button"
-                                            awPreviousStep>Назад
-                                    </button>
-                                </li>
-                                <li class="next list-inline-item float-right">
-                                    <button class="btn btn-secondary"
-                                            awNextStep
-                                            type="submit">Дальше
-                                    </button>
-                                </li>
-                            </ul>
                         </aw-wizard-step>
 
                         <aw-wizard-step (stepEnter)="step = 3" [canEnter]="validationForm.valid">

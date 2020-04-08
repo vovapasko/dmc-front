@@ -1,9 +1,10 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NgSelectModule} from '@ng-select/ng-select';
+import {QuillModule} from 'ngx-quill';
 
-import { UIModule } from '../../shared/ui/ui.module';
+import {UIModule} from '../../shared/ui/ui.module';
 import {
     NgbAlertModule, NgbDatepickerModule,
     NgbDropdownModule,
@@ -11,14 +12,14 @@ import {
     NgbPaginationModule,
     NgbTypeaheadModule
 } from '@ng-bootstrap/ng-bootstrap';
-import { NgApexchartsModule } from 'ng-apexcharts';
-import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import {NgApexchartsModule} from 'ng-apexcharts';
+import {Ng2SearchPipeModule} from 'ng2-search-filter';
 
-import { CRMRoutingModule } from './crm-routing.module';
+import {CRMRoutingModule} from './crm-routing.module';
 
-import { UsersComponent } from './users/users.component';
+import {UsersComponent} from './users/users.component';
 import {ContractorsComponent} from './contractors/contractors.component';
-import { BurstNewsComponent } from './burst-news/burst-news.component';
+import {BurstNewsComponent} from './burst-news/burst-news.component';
 import {NgxEditorModule} from 'ngx-editor';
 import {ColorPickerModule} from 'ngx-color-picker';
 import {UiSwitchModule} from 'ngx-ui-switch';
@@ -27,7 +28,7 @@ import {ArchwizardModule} from 'angular-archwizard';
 import {NgxMaskModule} from 'ngx-mask';
 
 @NgModule({
-  declarations: [ContractorsComponent, UsersComponent, BurstNewsComponent],
+    declarations: [ContractorsComponent, UsersComponent, BurstNewsComponent],
     imports: [
         FormsModule,
         UIModule,
@@ -41,6 +42,7 @@ import {NgxMaskModule} from 'ngx-mask';
         NgbAlertModule,
         CommonModule,
         ReactiveFormsModule,
+        QuillModule.forRoot(),
         NgxEditorModule,
         NgbDropdownModule,
         NgbDatepickerModule,
@@ -51,4 +53,5 @@ import {NgxMaskModule} from 'ngx-mask';
         NgxMaskModule.forRoot()
     ]
 })
-export class CRMModule { }
+export class CRMModule {
+}
