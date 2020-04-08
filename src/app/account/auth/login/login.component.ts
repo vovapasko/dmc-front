@@ -1,11 +1,13 @@
 import {Component, OnInit, AfterViewInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {first} from 'rxjs/operators';
-
 import {AuthenticationService} from '../../../core/services/auth.service';
-import {ActivatedRoute, Router} from '@angular/router';
 import {Title} from '@angular/platform-browser';
-import {NotificationService} from '../../../core/services/notification.service';
+import {Store} from '@ngrx/store';
+import {IAppState} from '../../../core/store/state/app.state';
+import {Login} from '../../../core/store/actions/user.actions';
+import {Subject} from 'rxjs';
+import {ErrorService} from '../../../core/services/error.service';
+import {LoadingService} from '../../../core/services/loading.service';
 
 @Component({
     selector: 'app-login',
@@ -17,35 +19,37 @@ export class LoginComponent implements OnInit, AfterViewInit {
     title = 'Login';
     loginForm: FormGroup;
     submitted = false;
-    returnUrl: string;
-    error = '';
-    loading = false;
+    loading$: Subject<boolean>;
+    error$: Subject<boolean>;
     visible = false;
 
     constructor(
         private formBuilder: FormBuilder,
-        private route: ActivatedRoute,
-        private router: Router,
         private authenticationService: AuthenticationService,
         private titleService: Title,
+        private store: Store<IAppState>,
+        private errorService: ErrorService,
+        private loadingService: LoadingService,
     ) {
     }
 
     ngOnInit() {
+        this.initForm();
+        this.initSubscriptions();
+        this.authenticationService.logout();
+        this.setTitle(this.title);
+    }
+
+    initSubscriptions() {
+        this.loading$ = this.loadingService.loading$;
+        this.error$ = this.errorService.error$;
+    }
+
+    initForm() {
         this.loginForm = this.formBuilder.group({
             email: ['', [Validators.required, Validators.email]],
             password: ['', Validators.required],
         });
-
-        // reset login status
-        this.authenticationService.logout();
-
-        // get return url from route parameters or default to '/'
-        // tslint:disable-next-line: no-string-literal
-        this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-
-        // set page title
-        this.setTitle(this.title);
     }
 
     public setTitle(title: string) {
@@ -73,7 +77,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
             return;
         }
 
-        this.loading = true;
         const email = this.f.email.value;
         const password = this.f.password.value;
         const data = {email, password};
@@ -85,16 +88,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
      * Submit data
      */
     submit(data) {
-        this.authenticationService
-            .login({data})
-            .pipe(first())
-            .subscribe(
-                response => {
-                    this.router.navigate([this.returnUrl]);
-                },
-                error => {
-                    this.error = error;
-                    this.loading = false;
-                });
+        this.store.dispatch(new Login({data}));
     }
 }

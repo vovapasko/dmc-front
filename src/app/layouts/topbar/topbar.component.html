@@ -6,8 +6,10 @@
             <a class="nav-link dropdown-toggle  waves-effect waves-light" href="javascript: void(0);" role="button"
                aria-haspopup="false" aria-expanded="false" ngbDropdownToggle id="notificationDropdown">
                 <i class="fe-bell noti-icon"></i>
-                <span *ngIf="notifications.length" class="badge badge-danger rounded-circle noti-icon-badge">
-          {{notifications.length}}
+                <span *ngIf="(history$ | async).length"
+                      class="badge badge-danger rounded-circle noti-icon-badge"
+                >
+          {{(history$ | async).length}}
         </span>
             </a>
             <div class="dropdown-menu dropdown-menu-right dropdown-menu-animated dropdown-lg"
@@ -26,7 +28,7 @@
 
                 <div id="notification-items" class="slimscroll noti-scroll" appSlimScroll>
                     <!-- item-->
-                    <a *ngFor="let notification of notifications;"
+                    <a *ngFor="let notification of (history$ | async);"
                        class="dropdown-item notify-item" ngbDropdownItem>
                         <div class="notify-icon bg-primary">
                             <i class="mdi mdi-comment-account-outline"></i>
@@ -49,9 +51,9 @@
             <a class="nav-link dropdown-toggle nav-user mr-0 waves-effect waves-light" ngbDropdownToggle
                id="profileDropdown"
                href="javascript: void(0);" role="button" aria-haspopup="false" aria-expanded="false">
-                <img [src]="api + currentUser.avatar" alt="user-image" class="rounded-circle">
+                <img [src]="(user$ | async).avatar" alt="user-image" class="rounded-circle">
                 <span class="pro-user-name ml-1">
-                  {{ currentUser.first_name }}
+                  {{ (user$ | async).firstName }}
                     <i class="mdi mdi-chevron-down"></i>
         </span>
             </a>
@@ -70,8 +72,8 @@
                 <div class="dropdown-divider"></div>
 
                 <!-- item-->
-                <a href="javascript:void(0);"
-                   id="logout"
+                <a id="logout"
+                   href="javascript:void(null);"
                    class="dropdown-item notify-item"
                    (click)="logout()"
                 >

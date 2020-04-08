@@ -1,11 +1,18 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import {Title} from '@angular/platform-browser';
 
 import {EmptyUser, User} from '../../../core/models/instances/user.models';
 import {AuthenticationService} from '../../../core/services/auth.service';
 import {UserService} from '../../../core/services/user.service';
-import {environment} from '../../../../environments/environment';
+import {LoadingService} from '../../../core/services/loading.service';
+import {ErrorService} from '../../../core/services/error.service';
+import {Subject} from 'rxjs';
+import {ResetPassword, UpdateProfile} from '../../../core/store/actions/user.actions';
+import {Store} from '@ngrx/store';
+import {IAppState} from '../../../core/store/state/app.state';
+import {NotificationService} from "../../../core/services/notification.service";
+import {NotificationType} from "../../../core/models/instances/notification";
 
 @Component({
     selector: 'app-profile',
@@ -17,38 +24,40 @@ import {environment} from '../../../../environments/environment';
  * Profile component - handling the profile with sidebar and content
  */
 export class ProfileComponent implements OnInit {
+    breadCrumbItems: Array<{}>;
+
+    loading$: Subject<boolean>;
+    error$: Subject<boolean>;
+    user$: Subject<User>;
 
     title = 'Профиль';
-    error;
-    api = environment.api;
-    currentUser: User = EmptyUser;
     profileForm: FormGroup;
     submitted = false;
-    loading = false;
+    avatar: File = null;
 
     constructor(
         private authService: AuthenticationService,
         private formBuilder: FormBuilder,
         private userService: UserService,
-        private titleService: Title
+        private titleService: Title,
+        private loadingService: LoadingService,
+        private errorService: ErrorService,
+        private store: Store<IAppState>,
+        private notificationService: NotificationService
     ) {
     }
 
     ngOnInit() {
-        // fetches current user
-        const currentUser = this.authService.currentUser();
-        this.setUser(currentUser);
-
+        this.initSubscribes();
         this.initForm();
+        this.initBreadCrumbs();
     }
 
-    /**
-     * Checks valid user and set user
-     */
-    setUser(user: User) {
-        if (user) {
-            this.currentUser = user;
-        }
+    initSubscribes() {
+        this.userService.currentUser();
+        this.error$ = this.errorService.error$;
+        this.loading$ = this.loadingService.loading$;
+        this.user$ = this.userService.user$;
     }
 
     /**
@@ -56,11 +65,7 @@ export class ProfileComponent implements OnInit {
      */
     initForm() {
         // creates form and validations
-        this.profileForm = this.formBuilder.group({
-            firstName: [this.currentUser.first_name, [Validators.required]],
-            lastName: [this.currentUser.last_name, [Validators.required]],
-            email: [this.currentUser.email, [Validators.required, Validators.email]],
-        });
+        this.profileForm = this.userService.initializeProfileForm();
     }
 
     /**
@@ -75,23 +80,45 @@ export class ProfileComponent implements OnInit {
         return this.profileForm.controls;
     }
 
+    initBreadCrumbs() {
+        this.breadCrumbItems = [{label: 'Главная', path: '/'}, {
+            label: 'Профиль',
+            path: '/profile',
+            active: true
+        }];
+    }
+
     /**
      * Collects data and calls update method
      */
     onSubmit() {
-
         this.submitted = true;
-        this.loading = true;
-
         // stop here if form is invalid
         if (this.profileForm.invalid) {
             return;
-
         }
-        const {firstName, lastName} = this.profileForm.value;
-        const data = {first_name: firstName, last_name: lastName};
+        this.submit();
+    }
 
-        this.update(data);
+    submit() {
+        const {firstName, lastName} = this.profileForm.value;
+        const avatar = this.avatar;
+        const formData = new FormData();
+        if (avatar) {
+            formData.append('avatar', avatar);
+        }
+        formData.append('first_name', firstName);
+        formData.append('last_name', lastName);
+        this.update(formData);
+    }
+
+
+    /**
+     * Upload new image to cropper
+     */
+    handleFileInput(files: FileList) {
+        this.avatar = files.item(0);
+        this.notificationService.notify(NotificationType.info, 'Изображение было загружено', 'Нажмите сохранить чтобы увидеть изменения')
     }
 
 
@@ -99,34 +126,13 @@ export class ProfileComponent implements OnInit {
      * Update profile and set new values
      */
     update(data) {
-        this.userService
-            .updateProfile({data})
-            .subscribe(
-                user => {
-                    this.loading = false;
-                    this.f.firstName.setValue(user.first_name);
-                    this.f.lastName.setValue(user.last_name);
-                }
-            );
+        this.store.dispatch(new UpdateProfile({data}));
     }
 
     /**
      * Send email with link for change password
      */
     changePassword() {
-        this.loading = true;
-
-        this.userService
-            .resetPassword()
-            .subscribe(
-                response => {
-                    this.error = null;
-                    this.loading = false;
-                },
-                error => {
-                    this.error = error;
-                    this.loading = false;
-                }
-            );
+        this.store.dispatch(new ResetPassword());
     }
 }

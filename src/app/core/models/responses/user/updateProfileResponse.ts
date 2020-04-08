@@ -5,5 +5,6 @@ export interface UpdateProfileResponse {
     user?: User;
     token?: Token;
     status: number;
+    success: boolean;
     errors?: string;
 }
