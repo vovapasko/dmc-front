@@ -223,8 +223,6 @@
                            formControlName="onePostPrice"
                            id="onePostPrice"
                            min="0"
-                           data-toggle="input-mask"
-                           mask="000.000.000.000.000,00"
                            data-reverse="true"
                            [ngClass]="{'is-invalid': submitted && cf.onePostPrice.errors}">
                     <span class="font-13 text-muted">e.g "100"</span>
@@ -238,10 +236,8 @@
                     <input type="number"
                            class="form-control"
                            formControlName="arrangedNews"
-                           form data-toggle="input-mask"
                            min="0"
                            id="arrangedNews"
-                           mask="000.000.000.000.000,00"
                            data-reverse="true"
                            [ngClass]="{'is-invalid': submitted && cf.arrangedNews.errors}">
                     <span class="font-13 text-muted">e.g "1000"</span>
@@ -344,9 +340,7 @@
                     <input type="number"
                            class="form-control"
                            formControlName="updateArrangedNews"
-                           form data-toggle="input-mask"
                            id="updateArrangedNews"
-                           mask="000.000.000.000.000,00"
                            data-reverse="true"
                            [ngClass]="{'is-invalid': submitted && uf.updateArrangedNews.errors}"
                     >
@@ -361,9 +355,7 @@
                     <input type="number"
                            class="form-control"
                            formControlName="updateNewsAmount"
-                           form data-toggle="input-mask"
                            id="updateNewsAmount"
-                           mask="000.000.000.000.000,00"
                            data-reverse="true"
                            [ngClass]="{'is-invalid': submitted && uf.updateNewsAmount.errors}"
                     >
@@ -379,8 +371,6 @@
                            class="form-control"
                            formControlName="updateOnePostPrice"
                            id="updateOnePostPrice"
-                           data-toggle="input-mask"
-                           mask="000.000.000.000.000,00"
                            data-reverse="true"
                            [ngClass]="{'is-invalid': submitted && uf.updateOnePostPrice.errors}"
                     >
