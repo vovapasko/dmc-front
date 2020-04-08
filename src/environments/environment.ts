@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  api: 'https://dmc-backend.herokuapp.com'
+  api: 'https://test-dmc-back.herokuapp.com'
 };
 
 /*

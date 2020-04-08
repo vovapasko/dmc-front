@@ -1,5 +1,4 @@
 import snakeCase from 'lodash.snakecase';
-import camelCase from 'lodash.camelcase';
 import mapKeys from 'lodash.mapkeys';
 import {keysToCamel} from './utility';
 
@@ -8,7 +7,7 @@ import {Injectable} from '@angular/core';
 @Injectable({
     providedIn: 'root'
 })
-export default class ConvertCase {
+export class ConvertCase {
     constructor() {
     }
 

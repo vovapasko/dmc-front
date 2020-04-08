@@ -18,8 +18,8 @@ import {
 import {Store} from '@ngrx/store';
 import {IAppState} from '../../../core/store/state/app.state';
 import {setValues} from '../../../core/helpers/utility';
-import {NotificationService} from "../../../core/services/notification.service";
-import {NotificationType} from "../../../core/models/instances/notification";
+import {NotificationService} from '../../../core/services/notification.service';
+import {NotificationType} from '../../../core/models/instances/notification';
 
 @Component({
     selector: 'app-contractors',
@@ -141,8 +141,9 @@ export class ContractorsComponent implements OnInit {
     /**
      * Modal Open
      * @param content modal content
+     * @param editMany mode
      */
-    openModal(content: string, editMany: boolean) {
+    openModal(content: string, editMany = false) {
         const checkedContractors = this.contractorService.checkedContractors;
         if (editMany && checkedContractors.length === 0) {
             this.notificationService.notify(NotificationType.warning, 'Внимание', 'Нужно выбрать элементы');
@@ -199,25 +200,54 @@ export class ContractorsComponent implements OnInit {
     updateContractors() {
         const data = this.contractorService.createContractorData(this.uf);
         const payload = {data};
-        this.contractorService.checkedContractors
-            .forEach(
-                el => this.update({...payload, id: el.id})
-            );
-        this.contractorService.checkedContractors = [];
+        const checkedContractors = this.contractorService.checkedContractors;
+        this.processMany(checkedContractors.slice(), payload, this.update.bind(this));
         this.editCheckedMode = false;
         this.updateForm.reset();
         this.modalService.dismissAll();
+        this.contractorService.checkedContractors = [];
+    }
+
+    processMany(target, payload, handler) {
+        // tslint:disable-next-line:max-line-length
+        this.notificationService.notify(NotificationType.info, 'Процесс начат', 'Пожалуйста дождитесь оконочания, не закрывайте вкладку', 1500);
+        const interval = window.setInterval(() => {
+            if (target.length) {
+                const item = target.pop();
+                handler({...payload, id: item.id});
+            } else {
+                this.notificationService.notify(NotificationType.info, 'Процесс завершен', 'Операция завершена, спасибо', 1500);
+                window.clearInterval(interval);
+            }
+        }, 3500);
+    }
+
+    /**
+     * Calls when create form is submitted (checked or single)
+     */
+    submitCreateForm() {
+        this.submitted = true;
+        if (this.createForm.invalid) {
+            return;
+        }
+        this.addContractor();
+        this.submitted = false;
     }
 
     /**
      * Calls when edit form is submitted (checked or single)
      */
     submitEditForm() {
+        this.submitted = true;
+        if (this.updateForm.invalid) {
+            return;
+        }
         if (this.editCheckedMode) {
             this.updateContractors();
         } else {
             this.updateContractor();
         }
+        this.submitted = false;
     }
 
     /**
@@ -237,9 +267,8 @@ export class ContractorsComponent implements OnInit {
      * Performs deleting all selected contractors
      */
     deleteChecked() {
-        this.contractorService.checkedContractors.forEach(
-            contractor => this.delete(contractor)
-        );
+        const checkedContractors = this.contractorService.checkedContractors;
+        this.processMany(checkedContractors.slice(), {}, this.delete.bind(this));
         this.contractorService.checkedContractors = [];
     }
 }

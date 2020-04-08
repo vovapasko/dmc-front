@@ -1,5 +1,4 @@
 import {Inject, Injectable} from '@angular/core';
-import {WINDOW} from './window.provider';
 
 @Injectable({
     providedIn: 'root'
@@ -7,21 +6,19 @@ import {WINDOW} from './window.provider';
 export class StorageService {
     readonly prefix = 'crm__';
 
-    constructor(
-        @Inject(WINDOW) private window: Window,
-    ) {}
+    constructor() {}
 
     public set<T>(key: string, data: T): void {
-        this.window.localStorage.setItem(this.prefix + key, JSON.stringify(data));
+        window.localStorage.setItem(this.prefix + key, JSON.stringify(data));
     }
 
     public get<T>(key: string): T {
         try {
-            return JSON.parse(this.window.localStorage.getItem(this.prefix + key));
+            return JSON.parse(window.localStorage.getItem(this.prefix + key));
         } catch (e) { }
     }
 
     public remove(key: string): void {
-        this.window.localStorage.removeItem(this.prefix + key);
+        window.localStorage.removeItem(this.prefix + key);
     }
 }

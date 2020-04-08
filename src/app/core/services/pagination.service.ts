@@ -5,6 +5,8 @@ import {BehaviorSubject, Subject} from 'rxjs';
     providedIn: 'root'
 })
 export class PaginationService {
+    constructor() { }
+
     page$: BehaviorSubject<number> = new BehaviorSubject<number>(1);
     pageSize$: BehaviorSubject<number> = new BehaviorSubject<number>(10);
     startIndex$: BehaviorSubject<number> = new BehaviorSubject<number>(1);

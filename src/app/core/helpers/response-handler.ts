@@ -8,7 +8,7 @@ import {ServerResponse} from '../models/responses/serverResponse';
 @Injectable({
     providedIn: 'root'
 })
-export default class ResponseHandler {
+export class ResponseHandler {
     constructor(
         private notificationService: NotificationService,
         private errorService: ErrorService

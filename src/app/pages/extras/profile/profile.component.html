@@ -9,15 +9,17 @@
                 >
                 <div class="text-center">
                     <label for="inputImage">
-                        <p class="text-black-50"> Загрузить аватар </p>
-                            <input type="file"
-                                   class="sr-only"
-                                   id="inputImage"
-                                   name="file"
-                                   accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff"
-                                   (change)="handleFileInput($event.target.files)"
-                            >
+                        <span class="text-black-50 pseudolink">
+                            Загрузить аватар
+                        </span>
                     </label>
+                    <input type="file"
+                           class="sr-only"
+                           id="inputImage"
+                           name="file"
+                           accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff"
+                           (change)="handleFileInput($event.target.files)"
+                    >
                 </div>
 
 
@@ -109,7 +111,7 @@
                         <div class="form-group">
                             <span class="form-text text-muted"><small>
                                 Нажмите здесь чтобы изменить
-                                <a (click)="changePassword()">пароль</a></small>
+                                <a href="javascript: void(0);" (click)="changePassword()">пароль</a></small>
                             </span>
                         </div>
 

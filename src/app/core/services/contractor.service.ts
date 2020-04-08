@@ -9,15 +9,9 @@ import {DeleteContractorResponse} from '../models/responses/contractor/deleteCon
 import {UpdateContractorResponse} from '../models/responses/contractor/updateContractorResponse';
 import {CreateContractorResponse} from '../models/responses/contractor/createContractorResponse';
 import {GetAllContractorsResponse} from '../models/responses/contractor/getAllContractorsResponse';
-import RequestHandler from '../helpers/request-handler';
-import {DeleteContractorPayload} from '../models/payloads/contractor/delete';
-import {UpdateContractorPayload} from '../models/payloads/contractor/update';
-import {CreateContractorPayload} from '../models/payloads/contractor/create';
+import {RequestHandler} from '../helpers/request-handler';
 import numbers from '../constants/numbers';
 import {PaginationService} from './pagination.service';
-import {GetContractors} from '../store/actions/contractor.actions';
-import {Store} from '@ngrx/store';
-import {IAppState} from '../store/state/app.state';
 
 const api = environment.api;
 
@@ -184,7 +178,7 @@ export class ContractorService {
         return this.formBuilder.group({
             editorName: ['', [Validators.required, Validators.minLength(1)]],
             contactPerson: ['', [Validators.required, Validators.minLength(1)]],
-            phoneNumber: ['', [Validators.required]],
+            phoneNumber: ['', [Validators.required, Validators.pattern('^\\+?3?8?(0\\d{9})$')]],
             email: [
                 '',
                 [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')],
@@ -202,7 +196,7 @@ export class ContractorService {
         return this.formBuilder.group({
             updateEditorName: ['', [Validators.required, Validators.minLength(1)]],
             updateContactPerson: ['', [Validators.required, Validators.minLength(1)]],
-            updatePhoneNumber: ['', [Validators.required]],
+            updatePhoneNumber: ['', [Validators.required, Validators.pattern('^\\+?3?8?(0\\d{9})$')]],
             updateEmail: [
                 '',
                 [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')]

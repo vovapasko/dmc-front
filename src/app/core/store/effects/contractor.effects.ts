@@ -12,7 +12,9 @@ import {
 } from '../actions/contractor.actions';
 import {Contractor} from '../../models/instances/contractor';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class ContractorEffects {
     @Effect()
     getContractors$ = this.actions$.pipe(

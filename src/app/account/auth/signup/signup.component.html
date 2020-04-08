@@ -17,9 +17,9 @@
                               (ngSubmit)="onSubmit()"
                               novalidate>
 
-                            <app-ui-preloader [display]="loading"></app-ui-preloader>
+                            <app-ui-preloader [display]="loading$ | async"></app-ui-preloader>
 
-                            <ngb-alert type="danger" *ngIf="error" [dismissible]="false">Пожалуйста, повторите попытку
+                            <ngb-alert type="danger" *ngIf="error$ | async" [dismissible]="false">Пожалуйста, повторите попытку
                             </ngb-alert>
 
                             <div class="form-group mb-3">

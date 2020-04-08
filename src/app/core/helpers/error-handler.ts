@@ -1,15 +1,13 @@
-import snakeCase from 'lodash.snakecase';
-import camelCase from 'lodash.camelcase';
 import {Injectable} from '@angular/core';
 import {NotificationType} from '../models/instances/notification';
-import {NotificationService} from "../services/notification.service";
-import {ErrorService} from "../services/error.service";
-import {ServerError} from "../models/responses/serverError";
+import {NotificationService} from '../services/notification.service';
+import {ErrorService} from '../services/error.service';
+import {ServerError} from '../models/responses/serverError';
 
 @Injectable({
     providedIn: 'root'
 })
-export default class ErrorHandler {
+export class ErrorHandler {
     constructor(
         private notificationService: NotificationService,
         private errorService: ErrorService

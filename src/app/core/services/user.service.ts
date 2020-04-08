@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {BehaviorSubject, Observable, of, Subject} from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {FormBuilder, Validators} from '@angular/forms';
 
 import {environment} from '../../../environments/environment';
@@ -11,19 +11,18 @@ import {ResetPasswordResponse} from '../models/responses/user/resetPasswordRespo
 import {ConfirmResetPasswordResponse} from '../models/responses/user/confirmResetPasswordResponse';
 import {UpdateProfileResponse} from '../models/responses/user/updateProfileResponse';
 import {HomeResponse} from '../models/responses/user/homeResponse';
-import RequestHandler from '../helpers/request-handler';
+import {RequestHandler} from '../helpers/request-handler';
 import {CookieService} from '../providers/cookie.service';
 import {CURRENT_USER} from '../constants/user';
 import {PaginationService} from './pagination.service';
-import {SignupPayload} from "../models/payloads/user/signup";
-import {RegisterPayload} from "../models/payloads/user/register";
-import {ActivatedRoute, Router} from "@angular/router";
+import {SignupPayload} from '../models/payloads/user/signup';
+import {ActivatedRoute, Router} from '@angular/router';
 
 const api = environment.api;
 
 @Injectable({providedIn: 'root'})
 export class UserService {
-    public user$ = new BehaviorSubject(new User());
+    public user$ = new BehaviorSubject(null);
 
     selectedUser$: BehaviorSubject<User> = new BehaviorSubject(null);
     users$: BehaviorSubject<Array<User>> = new BehaviorSubject([]);

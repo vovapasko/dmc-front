@@ -16,7 +16,7 @@ import {UserService} from '../../core/services/user.service';
     styleUrls: ['./topbar.component.scss']
 })
 export class TopbarComponent implements OnInit {
-    notifications$ = new BehaviorSubject<unknown>([]);
+    history$ = new BehaviorSubject<unknown>([]);
     user$: BehaviorSubject<User>;
 
     openMobileMenu: boolean;
@@ -39,7 +39,8 @@ export class TopbarComponent implements OnInit {
     }
 
     initSubscribes() {
-        this.notifications$ = this.notificationService.notifications$;
+        this.userService.currentUser();
+        this.history$ = this.notificationService.history$;
         this.user$ = this.userService.user$;
     }
 
@@ -47,7 +48,7 @@ export class TopbarComponent implements OnInit {
      * Remove notification from list
      */
     close(notification: Notification) {
-        this.notificationService.close(notification);
+        this.notificationService.removeFromHistory(notification);
     }
 
     /**
@@ -70,6 +71,6 @@ export class TopbarComponent implements OnInit {
      * Remove all notifications
      */
     clearAll() {
-        this.notificationService.notifications = [];
+        this.notificationService.history = [];
     }
 }

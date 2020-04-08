@@ -15,13 +15,20 @@ import {
     SelectUserSuccess,
     ResetPassword,
     ResetPasswordSuccess,
-    Login, LoginSuccess, Signup, SignupSuccess, PasswordResetConfirm, PasswordResetSuccessConfirmSuccess,
+    Login,
+    LoginSuccess,
+    Signup,
+    SignupSuccess,
+    PasswordResetConfirm,
+    PasswordResetConfirmSuccess,
 } from '../actions/user.actions';
 import {UserService} from '../../services/user.service';
 import {User} from '../../models/instances/user.models';
-import {AuthenticationService} from "../../services/auth.service";
+import {AuthenticationService} from '../../services/auth.service';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class UserEffects {
     @Effect()
     getUsers$ = this.actions$.pipe(
@@ -76,7 +83,7 @@ export class UserEffects {
     passwordReset$ = this.actions$.pipe(
         ofType<PasswordResetConfirm>(EUserActions.PasswordResetConfirm),
         switchMap((action) => this.userService.confirmResetPassword(action.payload)),
-        switchMap(() => of(new PasswordResetSuccessConfirmSuccess()))
+        switchMap(() => of(new PasswordResetConfirmSuccess()))
     );
 
     constructor(

@@ -111,11 +111,15 @@
                                 <td>
                                     <a class="action-icon"
                                        id="openEditModal"
+                                       href="javascript: void(0);"
+                                       role="button"
                                        (click)="selectContractor(contractor); openModal(editModal);"
                                     > <i
                                             class="mdi mdi-square-edit-outline"></i></a>
                                     <a (click)="delete(contractor)"
                                        id="deleteContractor"
+                                       href="javascript: void(0);"
+                                       role="button"
                                        class="action-icon"> <i
                                             class="mdi mdi-delete"></i></a>
                                 </td>
@@ -152,16 +156,20 @@
     </div>
     <div class="modal-body p-3">
         <div class="text-left">
-            <form (ngSubmit)="addContractor()" [formGroup]="createForm">
+            <form (ngSubmit)="submitCreateForm()" [formGroup]="createForm">
 
                 <app-ui-preloader [display]="loading$ | async"></app-ui-preloader>
                 <ngb-alert type="danger" *ngIf="error$ | async" [dismissible]="false">Пожалуйста, повторите попытку</ngb-alert>
 
                 <div class="form-group">
                     <label for="editorName">Название редакции</label>
-                    <input type="text" formControlName="editorName" class="form-control"
-                           [ngClass]="{ 'is-invalid': submitted && cf.editorName.errors }" id="editorName"
-                           placeholder="Введите название редакции"/>
+                    <input type="text"
+                           formControlName="editorName"
+                           class="form-control"
+                           [ngClass]="{ 'is-invalid': submitted && cf.editorName.errors }"
+                           id="editorName"
+                           placeholder="Введите название редакции"
+                    />
 
                     <div *ngIf="submitted && cf.editorName.errors" class="invalid-feedback">
                         <div *ngIf="cf.editorName.errors.required">Название редакции обязательно</div>
@@ -170,8 +178,11 @@
 
                 <div class="form-group">
                     <label for="contactPerson">Контактное лицо</label>
-                    <input type="text" formControlName="contactPerson" class="form-control"
-                           [ngClass]="{ 'is-invalid': submitted && cf.contactPerson.errors }" id="contactPerson"
+                    <input type="text"
+                           formControlName="contactPerson"
+                           class="form-control"
+                           [ngClass]="{ 'is-invalid': submitted && cf.contactPerson.errors }"
+                           id="contactPerson"
                            placeholder="Введите контактное лицо"/>
 
                     <div *ngIf="submitted && cf.contactPerson.errors" class="invalid-feedback">
@@ -181,45 +192,61 @@
 
                 <div class="form-group">
                     <label for="phoneNumber">Номер телефона</label>
-                    <input type="text" formControlName="phoneNumber" class="form-control" id="phoneNumber"
-                           data-toggle="input-mask" mask="000-0000-000">
-                    <span class="font-13 text-muted">e.g "099-7777-777"</span>
+                    <input type="text"
+                           formControlName="phoneNumber"
+                           class="form-control"
+                           id="phoneNumber"
+                           [ngClass]="{ 'is-invalid': submitted && cf.phoneNumber.errors }"
+                    >
+                    <span class="font-13 text-muted">e.g "380992314525"</span>
+                    <div *ngIf="submitted && cf.phoneNumber.errors" class="invalid-feedback">
+                        <div *ngIf="cf.phoneNumber.errors.pattern">Введите корректный номер</div>
+                    </div>
                 </div>
 
                 <div class="form-group">
                     <label for="email">Email</label>
                     <input class="form-control"
                            id="email"
+                           [ngClass]="{ 'is-invalid': submitted && cf.email.errors }"
                            placeholder="Введите email"
                            formControlName="email">
-<!--                           [ngClass]="{'is-invalid': (cf.email.errors) && (cf.email.errors.isEmailUnique || cf.email.errors.isEmailValid)}"-->
-
-<!--                    <div *ngIf="cf.email.errors" class="invalid-feedback">-->
-<!--                        <span *ngIf="cf.email.errors.isEmailUnique">Этот email уже используется.</span>-->
-<!--                        <span *ngIf="cf.email.errors.isEmailValid">Введите существующий email.</span>-->
-<!--                    </div>-->
+                    <div *ngIf="submitted && cf.email.errors" class="invalid-feedback">
+                        <div *ngIf="cf.email.errors.required">Введите корректный email</div>
+                    </div>
                 </div>
 
                 <div class="form-group">
                     <label for="onePostPrice">Стоимость за одну публикацию</label>
-                    <input type="text" class="form-control" formControlName="onePostPrice" id="onePostPrice"
-                           data-toggle="input-mask" mask="000.000.000.000.000,00"
-                           data-reverse="true" [ngClass]="{'is-invalid': submitted && cf.onePostPrice.errors}">
+                    <input type="number"
+                           class="form-control"
+                           formControlName="onePostPrice"
+                           id="onePostPrice"
+                           min="0"
+                           data-toggle="input-mask"
+                           mask="000.000.000.000.000,00"
+                           data-reverse="true"
+                           [ngClass]="{'is-invalid': submitted && cf.onePostPrice.errors}">
                     <span class="font-13 text-muted">e.g "100"</span>
                     <div *ngIf="submitted && cf.onePostPrice.errors" class="invalid-feedback">
-                        <span *ngIf="cf.onePostPrice.errors.required">This value is required.</span>
+                        <span *ngIf="cf.onePostPrice.errors.required">Введите корректное значение.</span>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="arrangedNews">Договоренность</label>
-                    <input type="text" class="form-control" formControlName="arrangedNews" form data-toggle="input-mask"
-                           id="arrangedNews" mask="000.000.000.000.000,00"
-                           data-reverse="true" [ngClass]="{'is-invalid': submitted && cf.arrangedNews.errors}">
+                    <input type="number"
+                           class="form-control"
+                           formControlName="arrangedNews"
+                           form data-toggle="input-mask"
+                           min="0"
+                           id="arrangedNews"
+                           mask="000.000.000.000.000,00"
+                           data-reverse="true"
+                           [ngClass]="{'is-invalid': submitted && cf.arrangedNews.errors}">
                     <span class="font-13 text-muted">e.g "1000"</span>
                     <div *ngIf="submitted && cf.arrangedNews.errors" class="invalid-feedback">
-                        <span *ngIf="cf.arrangedNews.errors.required">This value is required.</span>
-                        <span *ngIf="cf.arrangedNews.errors.pattern">Please enter valid email.</span>
+                        <span *ngIf="cf.arrangedNews.errors.required">Введите значение</span>
                     </div>
                 </div>
 
@@ -290,71 +317,76 @@
                            formControlName="updatePhoneNumber"
                            class="form-control"
                            id="updatePhoneNumber"
-                           data-toggle="input-mask" mask="000-0000-000"
+                           [ngClass]="{ 'is-invalid': submitted && uf.updatePhoneNumber.errors }"
                     >
-                    <span class="font-13 text-muted">e.g "099-7777-777"</span>
+                    <span class="font-13 text-muted">e.g "380992314525"</span>
+                    <div *ngIf="submitted && uf.updatePhoneNumber.errors" class="invalid-feedback">
+                        <div *ngIf="uf.updatePhoneNumber.errors.pattern">Введите корректный номер</div>
+                    </div>
                 </div>
 
                 <div class="form-group">
                     <label for="updateEmail">Email</label>
                     <input class="form-control"
                            id="updateEmail"
+                           [ngClass]="{ 'is-invalid': submitted && uf.updateEmail.errors }"
                            placeholder="Введите email"
                            formControlName="updateEmail">
-<!--                           [ngClass]="{'is-invalid': (uf.updateEmail.errors) && (uf.updateEmail.errors.isEmailUnique || uf.updateEmail.errors.isEmailValid)}"-->
-
-<!--                    <div *ngIf="uf.updateEmail.errors" class="invalid-feedback">-->
-<!--                        <span *ngIf="uf.updateEmail.errors.isEmailUnique">Этот email уже используется.</span>-->
-<!--                        <span *ngIf="uf.updateEmail.errors.isEmailValid">Введите существующий email.</span>-->
-<!--                    </div>-->
+                    <div *ngIf="submitted && uf.updateEmail.errors" class="invalid-feedback">
+                        <div *ngIf="uf.updateEmail.errors.required">Введите email</div>
+                        <div *ngIf="uf.updateEmail.errors.pattern">Введите корректный email</div>
+                    </div>
 
                 </div>
 
                 <div class="form-group">
                     <label for="updateArrangedNews">Договоренность</label>
-                    <input type="text"
+                    <input type="number"
                            class="form-control"
                            formControlName="updateArrangedNews"
                            form data-toggle="input-mask"
                            id="updateArrangedNews"
                            mask="000.000.000.000.000,00"
-                           data-reverse="true" [ngClass]="{'is-invalid': submitted && uf.updateArrangedNews.errors}"
+                           data-reverse="true"
+                           [ngClass]="{'is-invalid': submitted && uf.updateArrangedNews.errors}"
                     >
                     <span class="font-13 text-muted">e.g "1000"</span>
                     <div *ngIf="submitted && uf.updateArrangedNews.errors" class="invalid-feedback">
-                        <span *ngIf="uf.updateArrangedNews.errors.required">This value is required.</span>
+                        <span *ngIf="uf.updateArrangedNews.errors.required">Введите корректный номер</span>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="updateNewsAmount">Количество размещений</label>
-                    <input type="text"
+                    <input type="number"
                            class="form-control"
                            formControlName="updateNewsAmount"
                            form data-toggle="input-mask"
                            id="updateNewsAmount"
                            mask="000.000.000.000.000,00"
-                           data-reverse="true" [ngClass]="{'is-invalid': submitted && uf.updateNewsAmount.errors}"
+                           data-reverse="true"
+                           [ngClass]="{'is-invalid': submitted && uf.updateNewsAmount.errors}"
                     >
                     <span class="font-13 text-muted">e.g "1000"</span>
                     <div *ngIf="submitted && uf.updateNewsAmount.errors" class="invalid-feedback">
-                        <span *ngIf="uf.updateNewsAmount.errors.required">This value is required.</span>
+                        <span *ngIf="uf.updateNewsAmount.errors.required">Введите корректное значение</span>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="updateOnePostPrice">Стоимость за одну публикацию</label>
-                    <input type="text"
+                    <input type="number"
                            class="form-control"
                            formControlName="updateOnePostPrice"
                            id="updateOnePostPrice"
                            data-toggle="input-mask"
                            mask="000.000.000.000.000,00"
-                           data-reverse="true" [ngClass]="{'is-invalid': submitted && uf.updateOnePostPrice.errors}"
+                           data-reverse="true"
+                           [ngClass]="{'is-invalid': submitted && uf.updateOnePostPrice.errors}"
                     >
                     <span class="font-13 text-muted">e.g "100"</span>
                     <div *ngIf="submitted && uf.updateOnePostPrice.errors" class="invalid-feedback">
-                        <span *ngIf="uf.updateOnePostPrice.errors.required">This value is required.</span>
+                        <span *ngIf="uf.updateOnePostPrice.errors.required">Введите корректное значение</span>
                     </div>
                 </div>
 

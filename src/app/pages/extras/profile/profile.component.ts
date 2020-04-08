@@ -31,7 +31,6 @@ export class ProfileComponent implements OnInit {
     user$: Subject<User>;
 
     title = 'Профиль';
-    currentUser: User = EmptyUser;
     profileForm: FormGroup;
     submitted = false;
     avatar: File = null;
@@ -55,6 +54,7 @@ export class ProfileComponent implements OnInit {
     }
 
     initSubscribes() {
+        this.userService.currentUser();
         this.error$ = this.errorService.error$;
         this.loading$ = this.loadingService.loading$;
         this.user$ = this.userService.user$;
@@ -104,7 +104,9 @@ export class ProfileComponent implements OnInit {
         const {firstName, lastName} = this.profileForm.value;
         const avatar = this.avatar;
         const formData = new FormData();
-        formData.append('avatar', avatar);
+        if (avatar) {
+            formData.append('avatar', avatar);
+        }
         formData.append('first_name', firstName);
         formData.append('last_name', lastName);
         this.update(formData);

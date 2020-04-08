@@ -10,9 +10,9 @@ import {environment} from '../../../environments/environment';
 import {RequestAccessTokenResponse} from '../models/responses/auth/requestAccessTokenResponse';
 import {LoginResponse} from '../models/responses/auth/loginResponse';
 import {LoginPayload} from '../models/payloads/auth/login';
-import RequestHandler from '../helpers/request-handler';
+import {RequestHandler} from '../helpers/request-handler';
 import {UserService} from './user.service';
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, Router} from '@angular/router';
 
 const api = environment.api;
 
@@ -69,7 +69,7 @@ export class AuthenticationService {
             (response: LoginResponse) => {
                 const currentUser = {...response.user, token: response.token};
                 this.userService.user = currentUser;
-                this.router.navigate([this.returnUrl])
+                this.router.navigate([this.returnUrl]);
                 return currentUser;
             }
         );
