@@ -1,134 +1,127 @@
 import {Component, OnInit} from '@angular/core';
-
-import {environment} from '../../../../environments/environment';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {Contractor, emptyContractor} from '../../../core/models/instances/contractor';
+import {BehaviorSubject, Subject} from 'rxjs';
+
+import {FormGroup} from '@angular/forms';
+import {Contractor} from '../../../core/models/instances/contractor';
 import {ContractorService} from '../../../core/services/contractor.service';
-import numbers from '../../../core/constants/numbers';
+import {ErrorService} from '../../../core/services/error.service';
+import {LoadingService} from '../../../core/services/loading.service';
+import {PaginationService} from '../../../core/services/pagination.service';
+import {
+    CreateContractors,
+    DeleteContractors,
+    GetContractors,
+    SelectContractor,
+    UpdateContractors
+} from '../../../core/store/actions/contractor.actions';
+import {Store} from '@ngrx/store';
+import {IAppState} from '../../../core/store/state/app.state';
+import {setValues} from '../../../core/helpers/utility';
+import {NotificationService} from '../../../core/services/notification.service';
+import {NotificationType} from '../../../core/models/instances/notification';
 
 @Component({
-    selector: 'app-sellers',
+    selector: 'app-contractors',
     templateUrl: './contractors.component.html',
     styleUrls: ['./contractors.component.scss']
 })
 
 /**
- * Contractors component: handling the sellers with sidebar and content
+ * Contractors component: handling the contractors with sidebar and content
  */
 export class ContractorsComponent implements OnInit {
+    loading$: Subject<boolean>;
+    error$: Subject<boolean>;
 
-    // bread crumb items
-    sub;
-    loading = false;
-    selectedContractor: Contractor = emptyContractor;
-    error;
-    api = environment.api;
+    selectedContractor$: BehaviorSubject<Contractor> = new BehaviorSubject(null);
+    checkedContractors$: BehaviorSubject<Array<Contractor>> = new BehaviorSubject([]);
+    paginatedContractorData$: BehaviorSubject<Array<Contractor>> = new BehaviorSubject([]);
+
+
+    totalRecords$: BehaviorSubject<Array<Contractor>> = new BehaviorSubject<Array<Contractor>>([]);
+    page$: BehaviorSubject<number> = new BehaviorSubject(1);
+    pageSize$: BehaviorSubject<number> = new BehaviorSubject(10);
+
     breadCrumbItems: Array<{}>;
     submitted: boolean;
     term: any;
-    // page number
-    page = 1;
-    // default page size
-    pageSize = 10;
-    totalRecords;
-    // start and end index
-    startIndex = 1;
-    endIndex = 10;
-    totalSize = 0;
     editCheckedMode = false;
-    contractors: Contractor[] = [];
-    checkedContractors: Contractor[] = [];
-    aliases = {
-        contactPerson: 'contact_person',
-        phoneNumber: 'phone_number',
-        updateEmail: 'email',
-        editorName: 'editor_name',
-        onePostPrice: 'one_post_price',
-        updateNewsAmount: 'news_amount',
-        updateContactPerson: 'contact_person',
-        updatePhoneNumber: 'phone_number',
-        updateEditorName: 'editor_name',
-        updateArrangedNews: 'arranged_news',
-        updateOnePostPrice: 'one_post_price',
-    };
-    paginatedContractorData: Array<Contractor>;
-    // validation form
+
     createForm: FormGroup;
     updateForm: FormGroup;
-    // bread crumb items
-
-    // page number
 
     constructor(
         private modalService: NgbModal,
-        public formBuilder: FormBuilder,
         private contractorService: ContractorService,
+        private errorService: ErrorService,
+        private loadingService: LoadingService,
+        private paginationService: PaginationService,
+        private store: Store<IAppState>,
+        private notificationService: NotificationService
     ) {
     }
 
     ngOnInit() {
-        // tslint:disable-next-line: max-line-length
-        this.breadCrumbItems = [{label: 'UBold', path: '/'}, {label: 'eCommerce', path: '/'}, {label: 'Sellers', path: '/', active: true}];
-
-        // init form with validators
+        this.initSubscribes();
+        this.initBreadCrumbItems();
         this.initForms();
+    }
 
-        // fetches contractors
-        this._fetchData();
+    initSubscribes() {
+        this.loading$ = this.loadingService.loading$;
+        this.error$ = this.errorService.error$;
+
+        this.selectedContractor$ = this.contractorService.selectedContractor$;
+        this.checkedContractors$ = this.contractorService.checkedContractors$;
+        this.paginatedContractorData$ = this.contractorService.paginatedContractorData$;
+
+        this.totalRecords$ = this.paginationService.totalRecords$;
+        this.page$ = this.paginationService.page$;
+        this.pageSize$ = this.paginationService.pageSize$;
+
+        this.store.dispatch(new GetContractors());
+    }
+
+    initBreadCrumbItems() {
+        this.breadCrumbItems = [{label: 'Главная', path: '/'}, {
+            label: 'Контрагенты',
+            path: '/contractors',
+            active: true
+        }];
     }
 
     initForms() {
-        // Form validation TODO add async check email
-
-        // init Create Form
         this.initCreateForm();
-
-        // init Update Form
         this.initUpdateForm();
     }
 
-    /**
-     * Close all modals
-     */
-    public closeAll() {
-        this.modalService.dismissAll();
+    selectContractor(contractor: Contractor) {
+        this.store.dispatch(new SelectContractor(contractor));
+        setValues(this.uf, contractor);
     }
+
 
     /**
      * Validators for Create Form
      */
     initCreateForm() {
-        this.createForm = this.formBuilder.group({
-            editorName: ['', [Validators.required, Validators.minLength(1)]],
-            contactPerson: ['', [Validators.required, Validators.minLength(1)]],
-            phoneNumber: ['', [Validators.required]],
-            email: [
-                '',
-                [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')],
-                // [this.isEmailUnique.bind(this), this.isEmailValid.bind(this)]
-            ],
-            arrangedNews: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
-            onePostPrice: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
-        });
+        this.createForm = this.contractorService.initializeCreateForm();
+    }
+
+    checkAll() {
+        this.contractorService.checkAll();
+    }
+
+    check(contractor: Contractor) {
+        this.contractorService.check(contractor);
     }
 
     /**
      * Validators for Update Form
      */
     initUpdateForm() {
-        this.updateForm = this.formBuilder.group({
-            updateEditorName: ['', [Validators.required, Validators.minLength(1)]],
-            updateContactPerson: ['', [Validators.required, Validators.minLength(1)]],
-            updatePhoneNumber: ['', [Validators.required]],
-            updateEmail: [
-                '',
-                [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')]
-            ],
-            updateArrangedNews: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
-            updateOnePostPrice: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
-            updateNewsAmount: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
-        });
+        this.updateForm = this.contractorService.initializeUpdateForm();
     }
 
     // convenience getter for easy access to form fields
@@ -141,221 +134,131 @@ export class ContractorsComponent implements OnInit {
         return this.updateForm.controls;
     }
 
-    /**
-     * Check all contractors
-     */
-    checkAll() {
-        const checkedAll = this.checkedContractors.length === this.contractors.length;
-        if (checkedAll) {
-            this.checkedContractors = [];
-        } else {
-            this.checkedContractors = this.contractors;
-        }
-
-        return this.checkedContractors;
-    }
-
-    /**
-     * Check contractor
-     */
-    check(contractor: Contractor) {
-        const checked = this.checkedContractors.indexOf(contractor) !== -1;
-        if (checked) {
-            this.checkedContractors = this.checkedContractors.filter(el => el.id !== contractor.id);
-        } else {
-            this.checkedContractors.push(contractor);
-        }
-        return this.checkedContractors;
+    onPageChange(page) {
+        this.contractorService.onPageChange(page);
     }
 
     /**
      * Modal Open
      * @param content modal content
+     * @param editMany mode
      */
-    openModal(content: string) {
-        this.modalService.open(content, {centered: true});
-    }
-
-    /**
-     * Select user to show details
-     */
-    select(contractor: Contractor) {
-        this.selectedContractor = contractor;
-        const fields = Object.keys(this.uf);
-        const aliases = this.aliases;
-        fields.forEach(
-            field => this.uf[field].setValue(contractor[(field in aliases ? aliases[field] : field)])
-        );
-    }
-
-    /**
-     * Collect and returns data for creating or editing contractor
-     */
-    createContractorData(f, defaultFields?) {
-
-        const fields = Object.keys(f);
-        const aliases = this.aliases;
-
-        // collects all values [{}, {}, {}]
-        const values = fields.map(field => ({[(field in aliases ? aliases[field] : field)]: f[field].value}));
-
-        if (defaultFields) {
-            values.push(defaultFields);
+    openModal(content: string, editMany = false) {
+        const checkedContractors = this.contractorService.checkedContractors;
+        if (editMany && checkedContractors.length === 0) {
+            this.notificationService.notify(NotificationType.warning, 'Внимание', 'Нужно выбрать элементы');
+            return;
         }
-
-        // returns {}
-        return values.reduce((a, n) => ({...a, ...n}), {});
+        this.modalService.open(content, {centered: true});
     }
 
     /**
      * Add new contractor
      */
     addContractor() {
-        // get payload data
-        const data = this.createContractorData(this.cf, {news_amount: 0});
-
-        // submit data
+        const data = this.contractorService.createContractorData(this.cf, [{news_amount: 0}]);
         this.add(data);
+        this.modalService.dismissAll();
+        this.createForm.reset();
     }
 
     /**
      * submit data
      */
     add(data) {
-        this.loading = true;
-
-        this.contractorService
-            .create({data})
-            .subscribe(
-                contractor => {
-
-                    // reset loading and error
-                    this.error = null;
-                    this.loading = false;
-
-                    // clear input values
-                    this.clearValues(this.cf);
-
-                    this.contractors.push(contractor);
-
-                    // apply pagination
-                    this.applyPagination();
-                },
-                error => {
-                    this.error = error;
-                    this.loading = false;
-                }
-            );
+        this.store.dispatch(new CreateContractors({data}));
     }
 
     /**
      * Delete contractor
      */
     delete(contractor: Contractor) {
-        this.loading = true;
-
-        this.contractorService
-            .delete({id: contractor.id})
-            .subscribe(
-                response => {
-                    this.loading = false;
-
-                    // remove contractor from list
-                    this.contractors = this.contractors.filter(el => el.id !== contractor.id);
-
-                    // apply pagination
-                    this.applyPagination();
-                },
-                error => {
-                    this.error = error;
-                    this.loading = false;
-                }
-            );
+        this.store.dispatch(new DeleteContractors(contractor));
     }
 
     /**
      * Update method, calls api
      */
     update(payload) {
-        this.loading = true;
-
-        this.contractorService
-            .update(payload)
-            .subscribe(
-                contractor => {
-                    this.loading = false;
-                    this.error = false;
-
-                    // update contractors list
-                    this.contractors = this.contractors.map(el => el.id === contractor.id ? contractor : el);
-
-                    // apply pagination
-                    this.applyPagination();
-                },
-                error => {
-                    this.error = error;
-                    this.loading = false;
-                }
-            );
+        this.store.dispatch(new UpdateContractors(payload));
     }
 
     /**
      * Update single contractor
      */
     updateContractor() {
-        // get payload data
-        const data = this.createContractorData(this.uf);
-
-        const id = this.selectedContractor.id;
+        const data = this.contractorService.createContractorData(this.uf);
+        const id = this.contractorService.selectedContractor.id;
         const payload = {data, id};
-
         this.update(payload);
+        this.modalService.dismissAll();
     }
 
     /**
      * Update checked contractors
      */
     updateContractors() {
-        // get payload data
-        const data = this.createContractorData(this.uf);
-
-        this.checkedContractors
-            .forEach(
-                el => this.update({data, id: el.id})
-            );
-
+        const data = this.contractorService.createContractorData(this.uf);
+        const payload = {data};
+        const checkedContractors = this.contractorService.checkedContractors;
+        this.processMany(checkedContractors.slice(), payload, this.update.bind(this));
         this.editCheckedMode = false;
-        this.checkedContractors = [];
-        this.clearValues(this.uf);
+        this.updateForm.reset();
+        this.modalService.dismissAll();
+        this.contractorService.checkedContractors = [];
+    }
+
+    processMany(target, payload, handler) {
+        // tslint:disable-next-line:max-line-length
+        this.notificationService.notify(NotificationType.info, 'Процесс начат', 'Пожалуйста дождитесь оконочания, не закрывайте вкладку', 1500);
+        const interval = window.setInterval(() => {
+            if (target.length) {
+                const item = target.pop();
+                handler({...payload, id: item.id});
+            } else {
+                this.notificationService.notify(NotificationType.info, 'Процесс завершен', 'Операция завершена, спасибо', 1500);
+                window.clearInterval(interval);
+            }
+        }, 3500);
+    }
+
+    /**
+     * Calls when create form is submitted (checked or single)
+     */
+    submitCreateForm() {
+        this.submitted = true;
+        if (this.createForm.invalid) {
+            return;
+        }
+        this.addContractor();
+        this.submitted = false;
     }
 
     /**
      * Calls when edit form is submitted (checked or single)
      */
     submitEditForm() {
+        this.submitted = true;
+        if (this.updateForm.invalid) {
+            return;
+        }
         if (this.editCheckedMode) {
             this.updateContractors();
         } else {
             this.updateContractor();
         }
-    }
-
-    /**
-     * Clear form values
-     */
-    clearValues(f) {
-        const fields = Object.keys(f);
-        fields.forEach(
-            field => f[field].setValue('')
-        );
+        this.submitted = false;
     }
 
     /**
      * Performs editing all selected contractors
      */
     editChecked() {
-        if (this.checkedContractors.length) {
-            this.select(this.checkedContractors[0]);
+        const checkedContractors = this.contractorService.checkedContractors;
+        if (checkedContractors.length) {
+            const contractor = checkedContractors[0];
+            this.store.dispatch(new SelectContractor(contractor));
+            setValues(this.uf, contractor);
             this.editCheckedMode = true;
         }
     }
@@ -364,47 +267,8 @@ export class ContractorsComponent implements OnInit {
      * Performs deleting all selected contractors
      */
     deleteChecked() {
-        this.checkedContractors.forEach(
-            contractor => this.delete(contractor)
-        );
-        this.checkedContractors = [];
-    }
-
-    /**
-     * Pagination onpage change
-     * @param page show the page
-     */
-    onPageChange(page: any): void {
-        this.startIndex = (page - 1) * this.pageSize;
-        this.endIndex = (page - 1) * this.pageSize + this.pageSize;
-        this.paginatedContractorData = this.contractors.slice(this.startIndex, this.endIndex);
-    }
-
-    /**
-     * Get all users and subscribe to update
-     */
-    private _fetchData() {
-        this.sub = this.contractorService.getAll().subscribe(
-            response => {
-
-                // set users
-                this.contractors = response;
-
-                // apply pagination
-                this.applyPagination();
-            },
-            error => console.log(error)
-        );
-    }
-
-    /**
-     * Apply pagination
-     */
-    applyPagination() {
-        // apply pagination
-        this.startIndex = 0;
-        this.endIndex = this.pageSize;
-        this.paginatedContractorData = this.contractors.slice(this.startIndex, this.endIndex);
-        this.totalSize = this.contractors.length;
+        const checkedContractors = this.contractorService.checkedContractors;
+        this.processMany(checkedContractors.slice(), {}, this.delete.bind(this));
+        this.contractorService.checkedContractors = [];
     }
 }

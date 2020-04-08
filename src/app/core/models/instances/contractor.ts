@@ -1,25 +1,25 @@
 export interface Contractor {
     id: number;
-    editor_name: string;
-    contact_person: string;
-    phone_number: string;
+    editorName: string;
+    contactPerson: string;
+    phoneNumber: string;
     email: string;
-    arranged_news: number;
-    news_amount: number;
-    one_post_price: number;
-    date_created: Date;
-    date_updated: Date;
+    arrangedNews: number;
+    newsAmount: number;
+    onePostPrice: number;
+    dateCreated: Date;
+    dateUpdated: Date;
 }
 
 export const emptyContractor = {
     id: 0,
-    editor_name: '',
-    contact_person: '',
-    phone_number: '',
+    editorName: '',
+    contactPerson: '',
+    phoneNumber: '',
     email: '',
-    arranged_news: 0,
-    news_amount: 0,
-    one_post_price: 0,
-    date_created: new Date(),
-    date_updated: new Date()
+    arrangedNews: 0,
+    newsAmount: 0,
+    onePostPrice: 0,
+    dateCreated: new Date(),
+    dateUpdated: new Date()
 };

@@ -1,48 +1,64 @@
-import { Injectable } from '@angular/core';
-import { Subject, Observable } from 'rxjs';
-import { Notification, NotificationType } from '../models/instances/notification';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
+import {Notification, NotificationType} from '../models/instances/notification';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class NotificationService {
-
-    private subject = new Subject<Notification>();
-    private idx = 0;
-
     constructor() { }
 
-    /**
-     * Returns observable for subscribe
-     */
-    getObservable(): Observable<Notification> {
-        return this.subject.asObservable();
+    private idx = 0;
+    private notification$ = new BehaviorSubject({});
+
+    public notifications$ = new BehaviorSubject([]);
+    public history$ = new BehaviorSubject([]);
+
+    get notifications() {
+        return this.notifications$.getValue();
+    }
+
+    set notifications(value: Array<Notification>) {
+        this.notifications$.next(value);
+    }
+
+    get history() {
+        return this.history$.getValue();
+    }
+
+    set history(value: Array<Notification>) {
+        this.history$.next(value);
     }
 
     /**
-     * Info notification, blue background
+     * Returns nothing.
+     * Invoke notification.
+     * @param type one of NotificationType = [info, success, warning, error].
+     * @param title title of message
+     * @param message details of notification
+     * @param timeout ms
      */
-    info(title: string, message: string, timeout = 3000) {
-        this.subject.next(new Notification(this.idx++, NotificationType.info, title, message, timeout));
+    notify(type: NotificationType, title: string, message: string, timeout = 1000): void {
+        const notifications = this.notifications;
+        const history = this.history;
+        const notification = new Notification(this.idx++, type, title, message, timeout);
+        notifications.push(notification);
+        history.push(notification);
+        this.notification$.next(notification);
+        if (notification.timeout !== 0) {
+            setTimeout(() => this.close(notification), notification.timeout);
+        }
+    }
+
+    removeFromHistory(notification) {
+        const history = this.history;
+        this.history = history.filter(el => el.id !== notification.id);
     }
 
     /**
-     * Success notification, green background
+     * Close notification by id
      */
-    success(title: string, message: string, timeout = 3000) {
-        this.subject.next(new Notification(this.idx++, NotificationType.success, title, message, timeout));
+    close(notification: Notification) {
+        this.notifications = this.notifications.filter(notif => notif.id !== notification.id);
     }
-
-    /**
-     * Warning notification, yellow background
-     */
-    warning(title: string, message: string, timeout = 3000) {
-        this.subject.next(new Notification(this.idx++, NotificationType.warning, title, message, timeout));
-    }
-
-    /**
-     * Error notification, red background
-     */
-    error(title: string, message: string, timeout = 3000) {
-        this.subject.next(new Notification(this.idx++, NotificationType.error, title, message, timeout));
-    }
-
 }

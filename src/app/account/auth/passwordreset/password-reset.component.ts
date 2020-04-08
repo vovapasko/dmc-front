@@ -4,6 +4,12 @@ import {ActivatedRoute, Params, Router} from '@angular/router';
 import {Title} from '@angular/platform-browser';
 import {MustMatch} from '../../../pages/form/validation/validation.mustmatch';
 import {UserService} from '../../../core/services/user.service';
+import {Login, PasswordResetConfirm} from '../../../core/store/actions/user.actions';
+import {Store} from '@ngrx/store';
+import {IAppState} from '../../../core/store/state/app.state';
+import {Subject, Subscription} from 'rxjs';
+import {ErrorService} from '../../../core/services/error.service';
+import {LoadingService} from '../../../core/services/loading.service';
 
 @Component({
     selector: 'app-password-reset',
@@ -12,14 +18,14 @@ import {UserService} from '../../../core/services/user.service';
 })
 export class PasswordResetComponent implements OnInit, AfterViewInit, OnDestroy {
 
-    subscription;
+    routeSubscription: Subscription;
     confirm = '';
     title = 'Reset password';
     resetForm: FormGroup;
     submitted = false;
-    error = '';
+    loading$: Subject<boolean>;
+    error$: Subject<boolean>;
     success = '';
-    loading = false;
     visible = false;
 
     constructor(
@@ -27,26 +33,38 @@ export class PasswordResetComponent implements OnInit, AfterViewInit, OnDestroy 
         private route: ActivatedRoute,
         private router: Router,
         private titleService: Title,
-        private userService: UserService
+        private userService: UserService,
+        private store: Store<IAppState>,
+        private errorService: ErrorService,
+        private loadingService: LoadingService,
     ) {
     }
 
+
     ngOnInit() {
-        this.subscription = this.route.params.subscribe((params: Params) => {
+        this.routeSubscription = this.route.params.subscribe((params: Params) => {
             if (params.confirm) {
                 this.confirm = params.confirm;
             }
         });
+        this.initSubscriptions();
+        this.initForm();
+        this.setTitle(this.title);
+    }
 
+
+    initSubscriptions() {
+        this.loading$ = this.loadingService.loading$;
+        this.error$ = this.errorService.error$;
+    }
+
+    initForm() {
         this.resetForm = this.formBuilder.group({
             password: ['', [Validators.required, Validators.minLength(6)]],
             confirmPassword: ['', Validators.required]
         }, {
             validator: MustMatch('password', 'confirmPassword'),
         });
-
-        // set page title
-        this.setTitle(this.title);
     }
 
     /**
@@ -78,10 +96,8 @@ export class PasswordResetComponent implements OnInit, AfterViewInit, OnDestroy 
             return;
         }
 
-        this.loading = true;
-
-        const {password, confirmPassword: confirm_password} = this.resetForm.value;
-        const data = {password, confirm_password};
+        const {password, confirmPassword} = this.resetForm.value;
+        const data = {password, confirmPassword};
         const confirm = this.confirm;
 
         this.submit(confirm, data);
@@ -91,18 +107,10 @@ export class PasswordResetComponent implements OnInit, AfterViewInit, OnDestroy 
      * Submit data
      */
     submit(confirm, data) {
-        this.userService
-            .confirmResetPassword({confirm, data})
-            .subscribe(
-                response => this.router.navigate(['/account/confirm']),
-                error => {
-                    this.error = error;
-                    this.loading = false;
-                }
-            );
+        this.store.dispatch(new PasswordResetConfirm({data}));
     }
 
     ngOnDestroy(): void {
-        this.subscription.unsubscribe();
+        this.routeSubscription.unsubscribe();
     }
 }
