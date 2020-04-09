@@ -82,9 +82,8 @@
                                                         [items]="['Стандартная', 'Негативная']"
                                                         [closeOnSelect]="true"
                                                         placeholder="Выберите характер"
-                                                        [formControlName]="'nature'"
+                                                        formControlName="nature"
                                                         [ngClass]="{'is-invalid': submit && form.nature.errors}"
-                                                        [(ngModel)]="nature"
                                                 ></ng-select>
                                                 <div *ngIf="submit && form.nature.errors" class="invalid-feedback">
                                                     <span *ngIf="form.nature.errors.required"></span>
@@ -115,8 +114,7 @@
                                                         [closeOnSelect]="false"
                                                         [hideSelected]="true"
                                                         placeholder="Выберите ключевые слова"
-                                                        [formControlName]="'hashtags'"
-                                                        [(ngModel)]="hashtag"
+                                                        formControlName="hashtags"
                                                         [ngClass]="{'is-invalid': submit && form.hashtags.errors}"
                                                 ></ng-select>
                                                 <div *ngIf="submit && form.hashtags.errors" class="invalid-feedback">
@@ -132,8 +130,7 @@
                                                         [items]="['Напрямую', 'Баер']"
                                                         [closeOnSelect]="true"
                                                         placeholder="Выберите формат"
-                                                        [formControlName]="'format'"
-                                                        [(ngModel)]="format"
+                                                        formControlName="format"
                                                         [ngClass]="{'is-invalid': submit && form.format.errors}"
                                                 ></ng-select>
                                                 <div *ngIf="submit && form.format.errors" class="invalid-feedback">
@@ -149,8 +146,7 @@
                                                         [items]="['Напрямую', 'Баер']"
                                                         [closeOnSelect]="true"
                                                         placeholder="Выберите метод"
-                                                        [formControlName]="'method'"
-                                                        [(ngModel)]="method"
+                                                        formControlName="method"
                                                         [ngClass]="{'is-invalid': submit && form.method.errors}"
                                                 ></ng-select>
                                                 <div *ngIf="submit && form.method.errors" class="invalid-feedback">
@@ -183,8 +179,7 @@
                                                         [closeOnSelect]="false"
                                                         [hideSelected]="true"
                                                         placeholder="Выберите контрагентов"
-                                                        [formControlName]="'contractors'"
-                                                        [(ngModel)]="contractor"
+                                                        formControlName="contractors"
                                                         [ngClass]="{'is-invalid': submit && form.contractors.errors}"
                                                 >
                                                 </ng-select>
@@ -321,7 +316,6 @@
                                     </a>
                                 </li>
                             </ul>
-                            <form (ngSubmit)="profileFormSubmit()" [formGroup]="profileValidationForm">
 
                                 <div class="row">
                                     <div class="col-md-6 col-xl-3" *ngFor="let carddata of cardData">
@@ -336,16 +330,19 @@
                                                 <p class="card-text">{{carddata.text}}</p>
                                             </div>
                                             <ul class="list-group list-group-flush" *ngIf="carddata.list">
-<!--                                                <ngx-nestable [(list)]="carddata.list"-->
-<!--                                                              [options]="options"-->
-<!--                                                              [template]="itemTemplateNestable"-->
-<!--                                                >-->
-<!--                                                </ngx-nestable>-->
+                                                <ngx-nestable [(list)]="carddata.list"
+                                                              [options]="options"
+                                                              [template]="tpl"
+                                                >
+                                                </ngx-nestable>
 
-<!--                                                <ng-template #itemTemplateNestable let-row>-->
-<!--                                                    <li [ngxNestableDragHandle]="row" class="list-group-item">{{row.item.id}}</li>-->
-<!--                                                </ng-template>-->
+                                                <ng-template #tpl let-news>
+                                                    <li *ngIf="news" [ngxNestableDragHandle]="news" class="list-group-item">
+                                                        {{news?.item?.title}}
+                                                    </li>
+                                                </ng-template>
                                             </ul>
+
                                             <div class="card-body">
                                                 <a href="javascript: void(0);" class="card-link">Закрепить</a>
                                                 <a href="javascript: void(0);" class="card-link">Открепить</a>
@@ -367,7 +364,6 @@
                                         </button>
                                     </li>
                                 </ul>
-                            </form>
                         </aw-wizard-step>
 
                         <aw-wizard-step (stepEnter)="step = 3" [canEnter]="validationForm.valid">

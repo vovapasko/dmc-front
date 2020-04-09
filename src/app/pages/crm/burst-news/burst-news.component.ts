@@ -1,4 +1,12 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {
+    AfterViewChecked,
+    AfterViewInit, ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    OnInit,
+    ViewChild,
+    ViewContainerRef
+} from '@angular/core';
 import {FormBuilder, Validators, FormGroup} from '@angular/forms';
 import {Steps} from '../../../core/constants/steps';
 import {EditorChangeContent, EditorChangeSelection} from 'ngx-quill';
@@ -9,6 +17,7 @@ import {revenueRadialChart} from '../../dashboards/default/data';
 import {NestableSettings} from 'ngx-nestable/lib/nestable.models';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.OnPush,
     selector: 'app-burst-news',
     templateUrl: './burst-news.component.html',
     styleUrls: ['./burst-news.component.scss']
@@ -17,11 +26,7 @@ import {NestableSettings} from 'ngx-nestable/lib/nestable.models';
 /**
  * Form Burst news component - handling the burst news with sidebar and content
  */
-export class BurstNewsComponent implements OnInit {
-
-    public options = {
-        fixedDepth: true
-    } as NestableSettings;
+export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewChecked {
     public list = [{id: 1}, {id: 11}];
     // bread crumb items
     breadCrumbItems: Array<{}>;
@@ -31,32 +36,40 @@ export class BurstNewsComponent implements OnInit {
     // validation form
     validationForm: FormGroup;
     profileValidationForm: FormGroup;
+    distributionForm: FormGroup;
 
-    nature = '';
-    hashtag = '';
-    format = '';
-    method = '';
-    contractor = '';
+    public options = {
+        fixedDepth: true
+    } as NestableSettings;
 
     cardData = [
         {
             title: true,
             image: 'assets/images/small/img-1.jpg',
             text: 'Some text',
+            list: [{id: 7, title: 'lol Cras justo odio'}, {id: 8, title: 'kek Dapibus ac facilisis in'}],
             button: true
         },
         {
             title: true,
             image: 'assets/images/small/img-2.jpg',
             text: 'Some text',
-            list: ['Cras justo odio', 'Dapibus ac facilisis in'],
+            list: [{id: 6, title: 'test Cras justo odio'}, {id: 5, title: 'me Dapibus ac facilisis in'}],
             link: ['Card link', 'Another link']
         },
         {
             image: 'assets/images/small/img-3.jpg',
             text: 'Some text',
+            list: [{id: 2, title: 'Cras justo odio'}, {id: 3, title: 'Dapibus ac facilisis in'}],
             button: true
-        }
+        },
+        {
+            title: true,
+            image: 'assets/images/small/img-4.jpg',
+            text: 'Some text',
+            list: [{id: 10, title: 'lul Cras justo odio'}, {id: 11, title: 'wow Dapibus ac facilisis in'}],
+            button: true
+        },
     ];
 
     revenueRadialChart: ChartType;
@@ -67,8 +80,22 @@ export class BurstNewsComponent implements OnInit {
     submit: boolean;
     submitForm: boolean;
     @ViewChild('wizardForm', {static: false}) wizard: BaseWizardComponent;
+    @ViewChild('tpl', {static: false}) tpl;
 
-    constructor(public formBuilder: FormBuilder) {
+    constructor(
+        public formBuilder: FormBuilder,
+        private vcr: ViewContainerRef,
+        private cdr: ChangeDetectorRef
+    ) {
+    }
+
+    ngAfterViewInit() {
+        this.vcr.createEmbeddedView(this.tpl);
+        this.cdr.detectChanges();
+    }
+
+    ngAfterViewChecked() {
+        this.cdr.detectChanges();
     }
 
     ngOnInit() {

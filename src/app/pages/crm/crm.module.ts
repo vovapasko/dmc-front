@@ -26,7 +26,7 @@ import {UiSwitchModule} from 'ngx-ui-switch';
 import {FileUploadModule} from '@iplab/ngx-file-upload';
 import {ArchwizardModule} from 'angular-archwizard';
 import {NgxMaskModule} from 'ngx-mask';
-import {NestableModule} from 'ngx-nestable';
+import {NestableModule} from "ngx-nestable";
 
 @NgModule({
     declarations: [ContractorsComponent, UsersComponent, BurstNewsComponent],
@@ -43,7 +43,6 @@ import {NestableModule} from 'ngx-nestable';
         NgbAlertModule,
         CommonModule,
         ReactiveFormsModule,
-        NestableModule,
         QuillModule.forRoot(),
         NgxEditorModule,
         NgbDropdownModule,
@@ -52,7 +51,8 @@ import {NestableModule} from 'ngx-nestable';
         UiSwitchModule,
         FileUploadModule,
         ArchwizardModule,
-        NgxMaskModule.forRoot()
+        NgxMaskModule.forRoot(),
+        NestableModule,
     ]
 })
 export class CRMModule {
