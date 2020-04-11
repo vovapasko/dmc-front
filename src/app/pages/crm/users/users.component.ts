@@ -1,31 +1,31 @@
 import {Component, OnInit} from '@angular/core';
-
+import {BehaviorSubject, Subject} from 'rxjs';
+import {select, Store} from '@ngrx/store';
 import {FormGroup} from '@angular/forms';
-
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+
 import {AuthenticationService} from '../../../core/services/auth.service';
 import {UserService} from '../../../core/services/user.service';
-import {EmptyUser, User} from '../../../core/models/instances/user.models';
-import {select, Store} from '@ngrx/store';
+import {User} from '../../../core/models/instances/user.models';
 import {IAppState} from '../../../core/store/state/app.state';
 import {selectUserList} from '../../../core/store/selectors/user.selectors';
 import {CreateUser, DeleteUser, GetUsers, SelectUser, UpdateUser} from '../../../core/store/actions/user.actions';
-import {BehaviorSubject, Subject} from 'rxjs';
 import {PaginationService} from '../../../core/services/pagination.service';
 import {LoadingService} from '../../../core/services/loading.service';
 import {ErrorService} from '../../../core/services/error.service';
-import {Groups} from "../../../core/models/instances/groups";
+import {Groups} from '../../../core/models/instances/groups';
+
+/**
+ * Users component - handling the users with sidebar and content
+ */
 
 @Component({
     selector: 'app-users',
     templateUrl: './users.component.html',
     styleUrls: ['./users.component.scss'],
 })
-
-/**
- * Users component - handling the users with sidebar and content
- */
 export class UsersComponent implements OnInit {
+
     breadCrumbItems: Array<{}>;
 
     loading$: Subject<boolean>;
@@ -62,10 +62,10 @@ export class UsersComponent implements OnInit {
         this.initBreadCrumbs();
         this.initForm();
         this.initSelectOptions();
-        this.initSubscribes();
+        this.initSubscriptions();
     }
 
-    initSubscribes() {
+    initSubscriptions() {
         this.loading$ = this.loadingService.loading$;
         this.error$ = this.errorService.error$;
 

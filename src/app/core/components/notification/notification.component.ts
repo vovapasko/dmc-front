@@ -1,7 +1,12 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
+
 import {NotificationService} from '../../services/notification.service';
 import {Notification, NotificationType} from '../../models/instances/notification';
-import {BehaviorSubject, Subscription} from 'rxjs';
+
+/**
+ * This component for notify user
+ */
 
 @Component({
     selector: 'app-notification',
@@ -9,6 +14,7 @@ import {BehaviorSubject, Subscription} from 'rxjs';
     styleUrls: ['./notification.component.scss']
 })
 export class NotificationComponent implements OnInit {
+
     notificationTypes = NotificationType;
     notifications$: BehaviorSubject<Array<Notification>>;
 
@@ -16,6 +22,13 @@ export class NotificationComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.initSubscriptions();
+    }
+
+    /**
+     * Get notifications
+     */
+    initSubscriptions() {
         this.notifications$ = this.notificationService.notifications$;
     }
 

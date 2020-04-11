@@ -12,11 +12,21 @@ import {GetAllContractorsResponse} from '../models/responses/contractor/getAllCo
 import {RequestHandler} from '../helpers/request-handler';
 import numbers from '../constants/numbers';
 import {PaginationService} from './pagination.service';
+import {CreateContractorPayload} from "../models/payloads/contractor/create";
+import {UpdateContractorPayload} from "../models/payloads/contractor/update";
+import {DeleteContractorPayload} from "../models/payloads/contractor/delete";
 
 const api = environment.api;
 
-@Injectable({providedIn: 'root'})
+/**
+ * This service for handle actions with contractors, store, pagination, CRUD
+ */
+
+@Injectable({
+    providedIn: 'root'
+})
 export class ContractorService {
+
     selectedContractor$: BehaviorSubject<Contractor> = new BehaviorSubject(null);
     checkedContractors$: BehaviorSubject<Array<Contractor>> = new BehaviorSubject([]);
     contractors$: BehaviorSubject<Array<Contractor>> = new BehaviorSubject([]);
@@ -82,7 +92,7 @@ export class ContractorService {
     /**
      *  Create contractor, api returns single contractor instance
      */
-    create(payload): Observable<Contractor> {
+    create(payload: CreateContractorPayload): Observable<Contractor> {
         return this.requestHandler.request(
             `${api}/contractor/`,
             'post',
@@ -100,14 +110,14 @@ export class ContractorService {
     /**
      *  Update contractor by id, api returns single contractor instance
      */
-    update(payload): Observable<Contractor> {
+    update(payload: UpdateContractorPayload): Observable<Contractor> {
         return this.requestHandler.request(
             `${api}/contractor/${payload.id}`,
             'put',
             payload,
             (response: UpdateContractorResponse) => {
                 const contractor = response.contractor;
-                this.contractors = this.contractors.map(el => el.id === contractor.id ? contractor : el);
+                this.contractors = this.contractors.map(el => +el.id === +contractor.id ? contractor : el);
                 this.applyPagination();
                 return contractor;
             }
@@ -117,14 +127,14 @@ export class ContractorService {
     /**
      *  Delete contractor by id, api returns status
      */
-    delete(payload): Observable<boolean> {
+    delete(payload: DeleteContractorPayload): Observable<boolean> {
         return this.requestHandler.request(
             `${api}/contractor/${payload.id}`,
             'delete',
             null,
             (response: DeleteContractorResponse) => {
                 const contractors = this.contractors;
-                this.contractors = contractors.filter(el => el.id !== payload.id);
+                this.contractors = contractors.filter(el => +el.id !== +payload.id);
                 this.applyPagination();
                 return payload;
             }

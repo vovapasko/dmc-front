@@ -1,8 +1,13 @@
 import {Injectable} from '@angular/core';
-import {HttpInterceptor, HttpRequest, HttpHandler, HttpEvent} from '@angular/common/http';
+import {HttpRequest, HttpHandler, HttpEvent} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {finalize} from 'rxjs/operators';
+
 import {LoadingService} from '../services/loading.service';
+
+/**
+ * This interceptor for control que of requests and set loading marker
+ */
 
 @Injectable({
     providedIn: 'root'

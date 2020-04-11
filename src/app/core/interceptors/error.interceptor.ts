@@ -2,7 +2,12 @@ import {Injectable} from '@angular/core';
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
+
 import {ServerError} from '../models/responses/serverError';
+
+/**
+ * This interceptor for process errors from server in rxjs way
+ */
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {

@@ -2,14 +2,20 @@ import {Component, OnInit, AfterViewInit, OnDestroy} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {Title} from '@angular/platform-browser';
+import {Store} from '@ngrx/store';
+import {Subject, Subscription} from 'rxjs';
+
 import {MustMatch} from '../../../pages/form/validation/validation.mustmatch';
 import {UserService} from '../../../core/services/user.service';
-import {Login, PasswordResetConfirm} from '../../../core/store/actions/user.actions';
-import {Store} from '@ngrx/store';
+import {PasswordResetConfirm} from '../../../core/store/actions/user.actions';
 import {IAppState} from '../../../core/store/state/app.state';
-import {Subject, Subscription} from 'rxjs';
 import {ErrorService} from '../../../core/services/error.service';
 import {LoadingService} from '../../../core/services/loading.service';
+import {setAuthClasses} from '../../../core/helpers/utility';
+
+/**
+ * This component for change user password
+ */
 
 @Component({
     selector: 'app-password-reset',
@@ -40,20 +46,21 @@ export class PasswordResetComponent implements OnInit, AfterViewInit, OnDestroy 
     ) {
     }
 
-
     ngOnInit() {
-        this.routeSubscription = this.route.params.subscribe((params: Params) => {
-            if (params.confirm) {
-                this.confirm = params.confirm;
-            }
-        });
         this.initSubscriptions();
         this.initForm();
         this.setTitle(this.title);
     }
 
-
+    /**
+     * Set loading and error subscriptions, get confirm route value,
+     */
     initSubscriptions() {
+        this.routeSubscription = this.route.params.subscribe((params: Params) => {
+            if (params.confirm) {
+                this.confirm = params.confirm;
+            }
+        });
         this.loading$ = this.loadingService.loading$;
         this.error$ = this.errorService.error$;
     }
@@ -74,9 +81,11 @@ export class PasswordResetComponent implements OnInit, AfterViewInit, OnDestroy 
         this.titleService.setTitle(title);
     }
 
+    /**
+     * Add global css auth classes
+     */
     ngAfterViewInit() {
-        document.body.classList.add('authentication-bg');
-        document.body.classList.add('authentication-bg-pattern');
+        setAuthClasses();
     }
 
     // convenience getter for easy access to form fields
@@ -104,7 +113,7 @@ export class PasswordResetComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     /**
-     * Submit data
+     * Dispatch data
      */
     submit(confirm, data) {
         this.store.dispatch(new PasswordResetConfirm({data}));

@@ -6,6 +6,11 @@ export const toCamel = (s) => {
     });
 };
 
+export const setAuthClasses = () => {
+    const add = document.body.classList.add;
+    ['authentication-bg', 'authentication-bg-pattern'].forEach(cls => add(cls));
+};
+
 export const isArray = (a) => {
     return Array.isArray(a);
 };
@@ -31,11 +36,12 @@ export const keysToCamel = (o) => {
     }
 
     return o;
-}
+};
 
 export const setValues = (target, obj) => {
     const fields = Object.keys(target);
     fields.forEach(
         field => target[field].setValue(obj[field.replace('update', '').replace(/^\w/, c => c.toLowerCase())])
     );
-}
+};
+

@@ -15,6 +15,10 @@ import {RegisterPayload} from '../models/payloads/user/register';
 import {SignupPayload} from '../models/payloads/user/signup';
 import {UpdateProfilePayload} from '../models/payloads/user/updateProfile';
 
+/**
+ * This service handle request from client, process and send to server
+ */
+
 @Injectable({
     providedIn: 'root'
 })

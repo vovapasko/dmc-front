@@ -5,6 +5,10 @@ import {NotificationService} from '../services/notification.service';
 import {ErrorService} from '../services/error.service';
 import {ServerResponse} from '../models/responses/serverResponse';
 
+/**
+ * This service for handle response from server, convert response body from snake case to camel case and notify about success
+ */
+
 @Injectable({
     providedIn: 'root'
 })

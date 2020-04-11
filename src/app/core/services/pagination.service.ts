@@ -1,11 +1,14 @@
 import {Inject, Injectable} from '@angular/core';
-import {BehaviorSubject, Subject} from 'rxjs';
+import {BehaviorSubject} from 'rxjs';
+
+/**
+ * This service for pagination any data
+ */
 
 @Injectable({
     providedIn: 'root'
 })
 export class PaginationService {
-    constructor() { }
 
     page$: BehaviorSubject<number> = new BehaviorSubject<number>(1);
     pageSize$: BehaviorSubject<number> = new BehaviorSubject<number>(10);
@@ -15,6 +18,9 @@ export class PaginationService {
 
     totalRecords$: BehaviorSubject<Array<any>> = new BehaviorSubject<Array<any>>([]);
     paginatedData$: BehaviorSubject<Array<any>> = new BehaviorSubject<Array<any>>([]);
+
+    constructor() {
+    }
 
     get page() {
         return this.page$.getValue();
