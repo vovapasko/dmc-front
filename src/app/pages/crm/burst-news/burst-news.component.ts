@@ -9,7 +9,6 @@ import {
 } from '@angular/core';
 import {FormBuilder, Validators, FormGroup} from '@angular/forms';
 import {Steps} from '../../../core/constants/steps';
-import {EditorChangeContent, EditorChangeSelection} from 'ngx-quill';
 
 import {WizardComponent as BaseWizardComponent} from 'angular-archwizard';
 import {ChartType} from '../../dashboards/default/default.model';
@@ -175,7 +174,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
         console.log('editor-created', event);
     }
 
-    changedEditor(event: EditorChangeContent | EditorChangeSelection) {
+    changedEditor(event) {
         // tslint:disable-next-line:no-console
         console.log('editor-change', event);
     }
