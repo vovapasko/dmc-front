@@ -30,4 +30,4 @@ export const contractorReducers = (
         default:
             return state;
     }
-}
+};

@@ -5,6 +5,10 @@ import {User} from '../../models/instances/user.models';
 export enum EUserActions {
     GetUsers = '[User] Get users',
     GetUsersSuccess = '[User] Get users success',
+    UpdateUser = '[User] Update user',
+    UpdateUserSuccess = '[User] Update user success',
+    DeleteUser = '[User] Delete user',
+    DeleteUserSuccess = '[User] Delete user success',
     CreateUser = '[User] Create user',
     CreateUserSuccess = '[User] Create user success',
     SelectUser = '[User] Select user',
@@ -23,6 +27,35 @@ export enum EUserActions {
 
 export class Login implements Action {
     public readonly type = EUserActions.Login;
+
+    constructor(public payload) {
+    }
+}
+
+
+export class UpdateUser implements Action {
+    public readonly type = EUserActions.UpdateUser;
+
+    constructor(public payload) {
+    }
+}
+
+export class UpdateUserSuccess implements Action {
+    public readonly type = EUserActions.UpdateUserSuccess;
+
+    constructor(public payload: User) {
+    }
+}
+
+export class DeleteUser implements Action {
+    public readonly type = EUserActions.DeleteUser;
+
+    constructor(public payload) {
+    }
+}
+
+export class DeleteUserSuccess implements Action {
+    public readonly type = EUserActions.DeleteUserSuccess;
 
     constructor(public payload) {
     }
@@ -100,7 +133,7 @@ export class CreateUser implements Action {
 export class CreateUserSuccess implements Action {
     public readonly type = EUserActions.CreateUserSuccess;
 
-    constructor(public success: boolean) {
+    constructor(public payload: User) {
     }
 }
 
@@ -135,4 +168,8 @@ export type UserActions =
     | SignupSuccess
     | PasswordResetConfirm
     | PasswordResetConfirmSuccess
+    | UpdateUser
+    | UpdateUserSuccess
+    | DeleteUserSuccess
+    | DeleteUser
     ;

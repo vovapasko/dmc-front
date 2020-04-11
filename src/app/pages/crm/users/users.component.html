@@ -36,43 +36,74 @@
                                 <th>Роль</th>
                                 <th>Подтвержден</th>
                                 <th>Статус</th>
+                                <th>Действия</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr *ngFor="let user of paginatedUserData$ | async |filter:term">
                                 <td class="table-user">
-                                    <img [src]="user.avatar" alt="table-user" class="mr-2 rounded-circle">
+                                    <img [src]="user?.avatar" alt="table-user" class="mr-2 rounded-circle">
                                     <a href="javascript:void(0);"
                                        class="text-body font-weight-semibold"
                                        (click)="selectUser(user)"
                                     >
-                                        {{user.firstName}}
+                                        {{user?.firstName}}
                                     </a>
                                 </td>
                                 <td>
-                                    {{user.lastName}}
+                                    {{user?.lastName}}
                                 </td>
                                 <td>
-                                    {{user.email}}
+                                    {{user?.email}}
                                 </td>
                                 <td>
-                                    <span *ngIf="user.isSuperuser"
+                                    <span *ngIf="user?.isSuperuser"
                                           class="badge bg-soft-success text-success">Superuser</span>
-                                    <span *ngIf="user.is_staff" class="badge bg-soft-success text-success">Admin</span>
-                                    <span *ngIf="!user.isSuperuser && !user.isStaff"
+                                    <span *ngIf="user?.isStaff" class="badge bg-soft-success text-success">Admin</span>
+                                    <span *ngIf="!user?.isSuperuser && !user?.isStaff"
                                           class="badge bg-soft-warning text-warning">Client</span>
                                 </td>
                                 <td>
-                                    <span *ngIf="user.isConfirmed" class="badge bg-soft-success text-success">Да</span>
-                                    <span *ngIf="!user.isConfirmed"
+                                    <span *ngIf="user?.isConfirmed" class="badge bg-soft-success text-success">Да</span>
+                                    <span *ngIf="!user?.isConfirmed"
                                           class="badge bg-soft-success text-success">Нет</span>
                                 </td>
                                 <td>
-                                    <span *ngIf="user.isActive"
+                                    <span *ngIf="user?.isActive"
                                           class="badge bg-soft-success text-success">Онлайн</span>
-                                    <span *ngIf="!user.isActive"
+                                    <span *ngIf="!user?.isActive"
                                           class="badge bg-soft-warning text-error">Оффлайн</span>
                                 </td>
+                                <td>
+                                <td>
+
+                                    <div *ngIf="currentUser?.groupsCascadeDown?.length" class="dropdown" placement="top-left" ngbDropdown>
+                                        <a href="javascript:void(0);"
+                                           id="dropdownMenuLink"
+                                           ngbDropdownToggle
+                                           autoClose
+                                           class="action-icon"
+                                        >
+                                            <i class="mdi mdi-square-edit-outline"></i>
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" ngbDropdownMenu>
+                                            <a *ngFor="let group of currentUser.groupsCascadeDown"
+                                               class="dropdown-item"
+                                               (click)="updateGroup(user, group)"
+                                               href="javascript: void(0);"
+                                            >{{group}}</a>
+                                        </div>
+                                    </div>
+
+
+                                <a (click)="delete(user)"
+                                   href="javascript:void(0);"
+                                   class="action-icon"
+                                >
+                                    <i class="mdi mdi-delete"></i>
+                                </a>
+
+                            </td>
                             </tr>
                             </tbody>
                         </table>
@@ -138,7 +169,8 @@
             <form (ngSubmit)="registerNewUser()" [formGroup]="validationform">
 
                 <app-ui-preloader [display]="loading$ | async"></app-ui-preloader>
-                <ngb-alert type="danger" *ngIf="error$ | async" [dismissible]="false">Пожалуйста, повторите попытку</ngb-alert>
+                <ngb-alert type="danger" *ngIf="error$ | async" [dismissible]="false">Пожалуйста, повторите попытку
+                </ngb-alert>
 
                 <div class="form-group">
                     <label for="email">Email</label>

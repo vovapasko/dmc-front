@@ -1,6 +1,6 @@
 import {User} from '../../instances/user.models';
 
-export interface HomeResponse {
+export interface GetAllResponse {
     success: boolean;
     message: {message: string};
     data: User[];

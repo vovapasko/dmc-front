@@ -9,11 +9,12 @@ import {EmptyUser, User} from '../../../core/models/instances/user.models';
 import {select, Store} from '@ngrx/store';
 import {IAppState} from '../../../core/store/state/app.state';
 import {selectUserList} from '../../../core/store/selectors/user.selectors';
-import {CreateUser, GetUsers, SelectUser} from '../../../core/store/actions/user.actions';
+import {CreateUser, DeleteUser, GetUsers, SelectUser, UpdateUser} from '../../../core/store/actions/user.actions';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {PaginationService} from '../../../core/services/pagination.service';
 import {LoadingService} from '../../../core/services/loading.service';
 import {ErrorService} from '../../../core/services/error.service';
+import {Groups} from "../../../core/models/instances/groups";
 
 @Component({
     selector: 'app-users',
@@ -36,11 +37,14 @@ export class UsersComponent implements OnInit {
 
     selectedUser$: BehaviorSubject<User> = new BehaviorSubject(null);
     paginatedUserData$: BehaviorSubject<Array<User>> = new BehaviorSubject([]);
+    currentUser: User;
+
+    users$$ = this.store.pipe(select(selectUserList));
 
     selectedRole = '';
     submitted: boolean;
     term: any;
-    selectValue: string[];
+    selectValue: Groups[];
     validationform: FormGroup;
 
     constructor(
@@ -71,6 +75,8 @@ export class UsersComponent implements OnInit {
         this.totalRecords$ = this.paginationService.totalRecords$;
         this.page$ = this.paginationService.page$;
         this.pageSize$ = this.paginationService.pageSize$;
+
+        this.currentUser = this.userService.currentUser();
 
         this.store.dispatch(new GetUsers());
     }
@@ -139,5 +145,14 @@ export class UsersComponent implements OnInit {
 
     onPageChange(page) {
         this.userService.onPageChange(page);
+    }
+
+    delete(user: User) {
+        this.store.dispatch(new DeleteUser(user));
+    }
+
+    updateGroup(user: User, group: Groups) {
+        const data = {group};
+        this.store.dispatch(new UpdateUser({id: user.id, data}));
     }
 }

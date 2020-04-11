@@ -1,4 +1,5 @@
 import {Token} from './token.model';
+import {Groups} from './groups';
 
 export class User {
     id: string;
@@ -15,7 +16,7 @@ export class User {
     token?: Token;
     groups?: string;
     password?: string;
-    groupsCascadeDown?: string[];
+    groupsCascadeDown?: Groups[];
 }
 
 export const EmptyUser: User = {

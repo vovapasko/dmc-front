@@ -9,7 +9,7 @@ import {
     NgbAlertModule, NgbDatepickerModule,
     NgbDropdownModule,
     NgbModalModule,
-    NgbPaginationModule,
+    NgbPaginationModule, NgbPopoverModule,
     NgbTypeaheadModule
 } from '@ng-bootstrap/ng-bootstrap';
 import {NgApexchartsModule} from 'ng-apexcharts';
@@ -26,7 +26,7 @@ import {UiSwitchModule} from 'ngx-ui-switch';
 import {FileUploadModule} from '@iplab/ngx-file-upload';
 import {ArchwizardModule} from 'angular-archwizard';
 import {NgxMaskModule} from 'ngx-mask';
-import {NestableModule} from "ngx-nestable";
+import {NestableModule} from 'ngx-nestable';
 
 @NgModule({
     declarations: [ContractorsComponent, UsersComponent, BurstNewsComponent],
@@ -53,6 +53,7 @@ import {NestableModule} from "ngx-nestable";
         ArchwizardModule,
         NgxMaskModule.forRoot(),
         NestableModule,
+        NgbPopoverModule,
     ]
 })
 export class CRMModule {

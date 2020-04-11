@@ -10,13 +10,15 @@ import {RegisterResponse} from '../models/responses/user/registerResponse';
 import {ResetPasswordResponse} from '../models/responses/user/resetPasswordResponse';
 import {ConfirmResetPasswordResponse} from '../models/responses/user/confirmResetPasswordResponse';
 import {UpdateProfileResponse} from '../models/responses/user/updateProfileResponse';
-import {HomeResponse} from '../models/responses/user/homeResponse';
+import {GetAllResponse} from '../models/responses/user/getAllResponse';
 import {RequestHandler} from '../helpers/request-handler';
 import {CookieService} from '../providers/cookie.service';
 import {CURRENT_USER} from '../constants/user';
 import {PaginationService} from './pagination.service';
 import {SignupPayload} from '../models/payloads/user/signup';
 import {ActivatedRoute, Router} from '@angular/router';
+import {DeleteResponse} from "../models/responses/user/deleteResponse";
+import {UpdateResponse} from "../models/responses/user/updateResponse";
 
 const api = environment.api;
 
@@ -68,10 +70,10 @@ export class UserService {
      */
     getAll(): Observable<User[]> {
         return this.requestHandler.request(
-            `${api}/home/`,
+            `${api}/users/`,
             'get',
             null,
-            (response: HomeResponse) => {
+            (response: GetAllResponse) => {
                 const users = response.data;
                 this.users = users;
                 this.applyPagination();
@@ -118,17 +120,53 @@ export class UserService {
     /**
      *  Register new user aka invite user
      */
-    register(payload: any): Observable<boolean> {
+    register(payload: any): Observable<User> {
         return this.requestHandler.request(
             `${api}/invite-new-user/`,
             'post',
             payload,
             (response: RegisterResponse) => {
                 this.applyPagination();
-                return response.success;
+                return response.user;
             }
         );
     }
+
+    /**
+     *  Delete user
+     */
+    delete(payload: any): Observable<User> {
+        return this.requestHandler.request(
+            `${api}/users/${payload.id}`,
+            'delete',
+            payload,
+            (response: DeleteResponse) => {
+                const users = this.users;
+                this.users = users.filter(el => el.id !== payload.id);
+                this.applyPagination();
+                return payload;
+            }
+        );
+    }
+
+    /**
+     *  Delete user
+     */
+    update(payload: any): Observable<User> {
+        return this.requestHandler.request(
+            `${api}/change-group/${payload.id}`,
+            'put',
+            payload,
+            (response: UpdateResponse) => {
+                const user = response.message.user;
+                this.users = this.users.map(el => el.id === payload.id ? user : el);
+                this.applyPagination();
+                return user;
+            }
+        );
+    }
+
+
 
     /**
      *  Get link for reset password on email

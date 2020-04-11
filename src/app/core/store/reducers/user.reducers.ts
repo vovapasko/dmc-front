@@ -14,6 +14,24 @@ export const userReducers = (
                 users: action.payload
             };
         }
+        case EUserActions.CreateUserSuccess: {
+            return {
+                ...state,
+                users: [...state.users, action.payload]
+            };
+        }
+        case EUserActions.UpdateUserSuccess: {
+            return {
+                ...state,
+                users: state.users.map(el => el.id === action.payload.id ? action.payload : el)
+            };
+        }
+        case EUserActions.DeleteUserSuccess: {
+            return {
+                ...state,
+                users: state.users.filter(el => el.id !== action.payload.id)
+            };
+        }
         case EUserActions.SelectUserSuccess: {
             return {
                 ...state,
@@ -23,4 +41,4 @@ export const userReducers = (
         default:
             return state;
     }
-}
+};

@@ -20,7 +20,7 @@ import {
     Signup,
     SignupSuccess,
     PasswordResetConfirm,
-    PasswordResetConfirmSuccess,
+    PasswordResetConfirmSuccess, UpdateUser, UpdateUserSuccess, DeleteUserSuccess, DeleteUser,
 } from '../actions/user.actions';
 import {UserService} from '../../services/user.service';
 import {User} from '../../models/instances/user.models';
@@ -41,7 +41,21 @@ export class UserEffects {
     createUser$ = this.actions$.pipe(
         ofType<CreateUser>(EUserActions.CreateUser),
         switchMap((action) => this.userService.register(action.payload)),
-        switchMap((success: boolean) => of(new CreateUserSuccess(success)))
+        switchMap((user: User) => of(new CreateUserSuccess(user)))
+    );
+
+    @Effect()
+    updateUser$ = this.actions$.pipe(
+        ofType<UpdateUser>(EUserActions.UpdateUser),
+        switchMap((action) => this.userService.update(action.payload)),
+        switchMap((user: User) => of(new UpdateUserSuccess(user)))
+    );
+
+    @Effect()
+    deleteUser$ = this.actions$.pipe(
+        ofType<DeleteUser>(EUserActions.DeleteUser),
+        switchMap((action) => this.userService.delete(action.payload)),
+        switchMap((payload: any) => of(new DeleteUserSuccess(payload)))
     );
 
     @Effect()
