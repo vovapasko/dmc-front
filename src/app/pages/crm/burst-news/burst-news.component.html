@@ -1,198 +1,406 @@
 <div class="container-fluid">
-    <app-page-title title="Form Wizard" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+    <app-page-title title="Разгон новости" [breadcrumbItems]="breadCrumbItems"></app-page-title>
 
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="header-title mb-4"> Wizard With Form Validation</h4>
                     <aw-wizard #wizardForm>
-                        <aw-wizard-step>
-                          <ul class="nav nav-pills bg-light nav-justified form-wizard-header mb-4">
-                            <li class="nav-item">
-                              <a href="javascript: void(0);" data-toggle="tab" class="nav-link rounded-0 pt-2 pb-2">
-                                <i class="mdi mdi-account-circle mr-1"></i>
-                                <span class="d-none d-sm-inline">Общее</span>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="javascript: void(0);" data-toggle="tab" class="nav-link rounded-0 pt-2 pb-2 active">
-                                <i class="mdi mdi-face-profile mr-1"></i>
-                                <span class="d-none d-sm-inline">Содержание</span>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="javascript: void(0);" data-toggle="tab" class="nav-link rounded-0 pt-2 pb-2">
-                                <i class="mdi mdi-checkbox-marked-circle-outline mr-1"></i>
-                                <span class="d-none d-sm-inline">Распределение</span>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="javascript: void(0);" data-toggle="tab" class="nav-link rounded-0 pt-2 pb-2">
-                                <i class="mdi mdi-checkbox-marked-circle-outline mr-1"></i>
-                                <span class="d-none d-sm-inline">Завершение</span>
-                              </a>
-                            </li>
-                          </ul>
+
+                        <aw-wizard-step (stepEnter)="step = 0" [canExit]="validationForm.valid">
+                            <ul class="nav nav-pills bg-light nav-justified form-wizard-header mb-4">
+                                <li class="nav-item" [awGoToStep]="{stepIndex: 0}">
+                                    <a href="javascript: void(0);" data-toggle="tab"
+                                       [ngClass]="{'active': step == 0}"
+                                       class="nav-link rounded-0 pt-2 pb-2">
+                                        <i class="mdi mdi-account-circle mr-1"></i>
+                                        <span class="d-none d-sm-inline">Общее</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item" [awGoToStep]="{stepIndex: 1}">
+                                    <a href="javascript: void(0);" data-toggle="tab"
+                                       [ngClass]="{'active': step == 1}"
+                                       class="nav-link rounded-0 pt-2 pb-2 ">
+                                        <i class="mdi mdi-face-profile mr-1"></i>
+                                        <span class="d-none d-sm-inline">Содержание</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item" [awGoToStep]="{stepIndex: 2}">
+                                    <a href="javascript: void(0);" data-toggle="tab"
+                                       [ngClass]="{'active': step == 2}"
+                                       class="nav-link rounded-0 pt-2 pb-2">
+                                        <i class="mdi mdi-checkbox-marked-circle-outline mr-1"></i>
+                                        <span class="d-none d-sm-inline">Распределение</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item" [awGoToStep]="{stepIndex: 3}">
+                                    <a href="javascript: void(0);" data-toggle="tab"
+                                       [ngClass]="{'active': step == 3}"
+                                       class="nav-link rounded-0 pt-2 pb-2">
+                                        <i class="mdi mdi-checkbox-marked-circle-outline mr-1"></i>
+                                        <span class="d-none d-sm-inline">Завершение</span>
+                                    </a>
+                                </li>
+                            </ul>
                             <form (ngSubmit)="formSubmit()" [formGroup]="validationForm">
                                 <div class="row">
-                                    <div class="col-12">
+                                    <div class="col-xl-8">
 
                                         <div class="form-group row mb-3">
-                                            <label class="col-md-3 col-form-label">User name</label>
+                                            <label class="col-md-3 col-form-label"> Клиент </label>
                                             <div class="col-md-9">
-                                                <input type="text" class="form-control" formControlName="userName"
-                                                       value="Coderthemes"
-                                                       [ngClass]="{'is-invalid': submit && form.password.errors}">
-                                                <div *ngIf="submit && form.userName.errors" class="invalid-feedback">
-                                                    <span *ngIf="form.userName.errors.required"></span>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       formControlName="client"
+                                                       [ngClass]="{'is-invalid': submit && form.client.errors}"
+                                                >
+                                                <div *ngIf="submit && form.client.errors" class="invalid-feedback">
+                                                    <span *ngIf="form.client.errors.required"></span>
                                                 </div>
 
                                             </div>
                                         </div>
+
                                         <div class="form-group row mb-3">
-                                            <label class="col-md-3 col-form-label"> Password</label>
+                                            <label class="col-md-3 col-form-label"> Название проекта </label>
                                             <div class="col-md-9">
-                                                <input type="password" formControlName="password" class="form-control"
-                                                       value="123456789"
-                                                       [ngClass]="{'is-invalid': submit && form.password.errors}">
-                                                <div *ngIf="submit && form.password.errors" class="invalid-feedback">
-                                                    <span *ngIf="form.password.errors.required"></span>
+                                                <input type="text"
+                                                       formControlName="project"
+                                                       class="form-control"
+                                                       [ngClass]="{'is-invalid': submit && form.project.errors}"
+                                                >
+                                                <div *ngIf="submit && form.project.errors" class="invalid-feedback">
+                                                    <span *ngIf="form.project.errors.required"></span>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="form-group row mb-3">
-                                            <label class="col-md-3 col-form-label">Re Password</label>
+                                            <label class="col-md-3 col-form-label"> Характер новости </label>
                                             <div class="col-md-9">
-                                                <input type="password" formControlName="confirm" class="form-control"
-                                                       value="123456789"
-                                                       [ngClass]="{'is-invalid': submit && form.confirm.errors}">
-                                                <div *ngIf="submit && form.confirm.errors" class="invalid-feedback">
-                                                    <span *ngIf="form.confirm.errors.required"></span>
+                                                <ng-select
+                                                        [items]="['Стандартная', 'Негативная']"
+                                                        [closeOnSelect]="true"
+                                                        placeholder="Выберите характер"
+                                                        formControlName="nature"
+                                                        [ngClass]="{'is-invalid': submit && form.nature.errors}"
+                                                ></ng-select>
+                                                <div *ngIf="submit && form.nature.errors" class="invalid-feedback">
+                                                    <span *ngIf="form.nature.errors.required"></span>
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <div class="form-group row mb-3">
+                                            <label class="col-md-3 col-form-label"> Заглавие </label>
+                                            <div class="col-md-9">
+                                                <input type="text"
+                                                       formControlName="title"
+                                                       class="form-control"
+                                                       [ngClass]="{'is-invalid': submit && form.title.errors}"
+                                                >
+                                                <div *ngIf="submit && form.title.errors" class="invalid-feedback">
+                                                    <span *ngIf="form.title.errors.required"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row mb-3">
+                                            <label class="col-md-3 col-form-label"> Хештег </label>
+                                            <div class="col-md-9">
+                                                <ng-select
+                                                        [items]="['First', 'Last']"
+                                                        [multiple]="true"
+                                                        [closeOnSelect]="false"
+                                                        [hideSelected]="true"
+                                                        placeholder="Выберите ключевые слова"
+                                                        formControlName="hashtags"
+                                                        [ngClass]="{'is-invalid': submit && form.hashtags.errors}"
+                                                ></ng-select>
+                                                <div *ngIf="submit && form.hashtags.errors" class="invalid-feedback">
+                                                    <span *ngIf="form.hashtags.errors.required"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row mb-3">
+                                            <label class="col-md-3 col-form-label"> Формат размещения </label>
+                                            <div class="col-md-9">
+                                                <ng-select
+                                                        [items]="['Напрямую', 'Баер']"
+                                                        [closeOnSelect]="true"
+                                                        placeholder="Выберите формат"
+                                                        formControlName="format"
+                                                        [ngClass]="{'is-invalid': submit && form.format.errors}"
+                                                ></ng-select>
+                                                <div *ngIf="submit && form.format.errors" class="invalid-feedback">
+                                                    <span *ngIf="form.format.errors.required"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row mb-3">
+                                            <label class="col-md-3 col-form-label"> Метод разгона </label>
+                                            <div class="col-md-9">
+                                                <ng-select
+                                                        [items]="['Напрямую', 'Баер']"
+                                                        [closeOnSelect]="true"
+                                                        placeholder="Выберите метод"
+                                                        formControlName="method"
+                                                        [ngClass]="{'is-invalid': submit && form.method.errors}"
+                                                ></ng-select>
+                                                <div *ngIf="submit && form.method.errors" class="invalid-feedback">
+                                                    <span *ngIf="form.method.errors.required"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row mb-3">
+                                            <label class="col-md-3 col-form-label"> Бюджет разгона </label>
+                                            <div class="col-md-9">
+                                                <input type="number"
+                                                       formControlName="budget"
+                                                       class="form-control"
+                                                       [formControlName]="'budget'"
+                                                       [ngClass]="{'is-invalid': submit && form.budget.errors}"
+                                                >
+                                                <div *ngIf="submit && form.budget.errors" class="invalid-feedback">
+                                                    <span *ngIf="form.budget.errors.required"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row mb-3">
+                                            <label class="col-md-3 col-form-label"> Котрагенты </label>
+                                            <div class="col-md-9">
+                                                <ng-select
+                                                        [items]="['Vasya', 'Vova']"
+                                                        [multiple]="true"
+                                                        [closeOnSelect]="false"
+                                                        [hideSelected]="true"
+                                                        placeholder="Выберите контрагентов"
+                                                        formControlName="contractors"
+                                                        [ngClass]="{'is-invalid': submit && form.contractors.errors}"
+                                                >
+                                                </ng-select>
+                                                <div *ngIf="submit && form.contractors.errors" class="invalid-feedback">
+                                                    <span *ngIf="form.contractors.errors.required"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     </div> <!-- end col -->
+                                    <div class="col-xl-4">
+                                        <div class="card-box">
+                                            <div class="widget-chart text-center" dir="ltr">
+
+                                                <apx-chart [chart]="revenueRadialChart.chart"
+                                                           [series]="revenueRadialChart.series"
+                                                           [plotOptions]="revenueRadialChart.plotOptions"
+                                                           [colors]="revenueRadialChart.colors"
+                                                           [stroke]="revenueRadialChart.stroke"
+                                                ></apx-chart>
+                                                <h5 class="text-muted">Бюджет разгона</h5>
+                                                <h2>$178</h2>
+
+
+                                            </div>
+                                        </div> <!-- end card-box -->
+                                    </div> <!-- end col-->
                                 </div> <!-- end row -->
                                 <ul class="list-inline wizard mb-0">
-                                    <li class="previous list-inline-item">
-                                        <button class="btn btn-secondary" type="button"
-                                                awPreviousStep>Previous
-                                        </button>
-                                    </li>
                                     <li class="next list-inline-item float-right">
                                         <button class="btn btn-secondary"
-                                                type="submit">Next
+                                                awNextStep
+                                                type="submit">Дальше
                                         </button>
                                     </li>
                                 </ul>
                             </form>
                         </aw-wizard-step>
 
-                        <aw-wizard-step>
-                          <ul class="nav nav-pills bg-light nav-justified form-wizard-header mb-4">
-                            <li class="nav-item">
-                              <a href="#basictab1" data-toggle="tab" class="nav-link rounded-0 pt-2 pb-2">
-                                <i class="mdi mdi-account-circle mr-1"></i>
-                                <span class="d-none d-sm-inline">Account</span>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="#basictab2" data-toggle="tab" class="nav-link rounded-0 pt-2 pb-2 active">
-                                <i class="mdi mdi-face-profile mr-1"></i>
-                                <span class="d-none d-sm-inline">Profile</span>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="#basictab3" data-toggle="tab" class="nav-link rounded-0 pt-2 pb-2">
-                                <i class="mdi mdi-checkbox-marked-circle-outline mr-1"></i>
-                                <span class="d-none d-sm-inline">Finish</span>
-                              </a>
-                            </li>
-                          </ul>
+                        <aw-wizard-step (stepEnter)="step = 1" awOptionalStep [canEnter]="validationForm.valid">
+                            <ul class="nav nav-pills bg-light nav-justified form-wizard-header mb-4">
+                                <li class="nav-item" [awGoToStep]="{stepIndex: 0}">
+                                    <a href="javascript: void(0);" data-toggle="tab"
+                                       [ngClass]="{'active': step == 0}"
+                                       class="nav-link rounded-0 pt-2 pb-2">
+                                        <i class="mdi mdi-account-circle mr-1"></i>
+                                        <span class="d-none d-sm-inline">Общее</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item" [awGoToStep]="{stepIndex: 1}">
+                                    <a href="javascript: void(0);" data-toggle="tab"
+                                       [ngClass]="{'active': step == 1}"
+                                       class="nav-link rounded-0 pt-2 pb-2 ">
+                                        <i class="mdi mdi-face-profile mr-1"></i>
+                                        <span class="d-none d-sm-inline">Содержание</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item" [awGoToStep]="{stepIndex: 2}">
+                                    <a href="javascript: void(0);" data-toggle="tab"
+                                       [ngClass]="{'active': step == 2}"
+                                       class="nav-link rounded-0 pt-2 pb-2">
+                                        <i class="mdi mdi-checkbox-marked-circle-outline mr-1"></i>
+                                        <span class="d-none d-sm-inline">Распределение</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item" [awGoToStep]="{stepIndex: 3}">
+                                    <a href="javascript: void(0);" data-toggle="tab"
+                                       [ngClass]="{'active': step == 3}"
+                                       class="nav-link rounded-0 pt-2 pb-2">
+                                        <i class="mdi mdi-checkbox-marked-circle-outline mr-1"></i>
+                                        <span class="d-none d-sm-inline">Завершение</span>
+                                    </a>
+                                </li>
+                            </ul>
                             <form (ngSubmit)="profileFormSubmit()" [formGroup]="profileValidationForm">
 
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="form-group row mb-3">
-                                            <label class="col-md-3 col-form-label" for="name"> First name</label>
-                                            <div class="col-md-9">
-                                                <input type="text" id="name" formControlName="name" class="form-control"
-                                                       value="Francis"
-                                                       [ngClass]="{'is-invalid': submitForm && profileForm.name.errors}">
-                                                <div *ngIf="submitForm && profileForm.name.errors"
-                                                     class="invalid-feedback">
-                                                    <span *ngIf="profileForm.name.errors.required"></span>
-                                                </div>
-                                            </div>
-                                        </div>
+                                <quill-editor [styles]="{height: '400px', 'margin-bottom': '15px'}"
+                                              (onFocus)="focus($event)"
+                                              (onEditorChanged)="changedEditor($event)"
+                                              (onBlur)="blur($event)"
+                                              formControlName="editor"
+                                              (onEditorCreated)="created($event)"
+                                ></quill-editor>
 
-                                        <div class="form-group row mb-3">
-                                            <label class="col-md-3 col-form-label" for="surname"> Last name</label>
-                                            <div class="col-md-9">
-                                                <input type="text" id="surname" formControlName="surname"
-                                                       class="form-control" value="Brinkman"
-                                                       [ngClass]="{'is-invalid': submitForm && profileForm.surname.errors}">
-                                                <div *ngIf="submitForm && profileForm.surname.errors"
-                                                     class="invalid-feedback">
-                                                    <span *ngIf="profileForm.surname.errors.required"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row mb-3">
-                                            <label class="col-md-3 col-form-label" for="email">Email</label>
-                                            <div class="col-md-9">
-                                                <input type="email" id="email" formControlName="email"
-                                                       class="form-control"
-                                                       value="cory1979@hotmail.com"
-                                                       [ngClass]="{'is-invalid': submitForm && profileForm.email.errors}">
-                                                <div *ngIf="submitForm && profileForm.email.errors"
-                                                     class="invalid-feedback">
-                                                    <span *ngIf="profileForm.email.errors.required"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div> <!-- end col -->
-                                </div> <!-- end row -->
                                 <ul class="list-inline wizard mb-0">
                                     <li class="previous list-inline-item">
-                                        <button class="btn btn-secondary" type="button"
-                                                awPreviousStep>Previous
+                                        <button class="btn btn-secondary"
+                                                type="button"
+                                                awPreviousStep>Назад
                                         </button>
                                     </li>
                                     <li class="next list-inline-item float-right">
                                         <button class="btn btn-secondary"
-                                                type="submit">Next
+                                                awNextStep
+                                                type="submit">Дальше
                                         </button>
                                     </li>
                                 </ul>
                             </form>
                         </aw-wizard-step>
 
-                        <aw-wizard-step>
-                          <ul class="nav nav-pills bg-light nav-justified form-wizard-header mb-4">
-                            <li class="nav-item">
-                              <a href="#basictab1" data-toggle="tab" class="nav-link rounded-0 pt-2 pb-2">
-                                <i class="mdi mdi-account-circle mr-1"></i>
-                                <span class="d-none d-sm-inline">Account</span>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="#basictab2" data-toggle="tab" class="nav-link rounded-0 pt-2 pb-2 active">
-                                <i class="mdi mdi-face-profile mr-1"></i>
-                                <span class="d-none d-sm-inline">Profile</span>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="#basictab3" data-toggle="tab" class="nav-link rounded-0 pt-2 pb-2">
-                                <i class="mdi mdi-checkbox-marked-circle-outline mr-1"></i>
-                                <span class="d-none d-sm-inline">Finish</span>
-                              </a>
-                            </li>
-                          </ul>
+                        <aw-wizard-step (stepEnter)="step = 2" awOptionalStep [canEnter]="validationForm.valid">
+                            <ul class="nav nav-pills bg-light nav-justified form-wizard-header mb-4">
+                                <li class="nav-item" [awGoToStep]="{stepIndex: 0}">
+                                    <a href="javascript: void(0);" data-toggle="tab"
+                                       [ngClass]="{'active': step == 0}"
+                                       class="nav-link rounded-0 pt-2 pb-2">
+                                        <i class="mdi mdi-account-circle mr-1"></i>
+                                        <span class="d-none d-sm-inline">Общее</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item" [awGoToStep]="{stepIndex: 1}">
+                                    <a href="javascript: void(0);" data-toggle="tab"
+                                       [ngClass]="{'active': step == 1}"
+                                       class="nav-link rounded-0 pt-2 pb-2 ">
+                                        <i class="mdi mdi-face-profile mr-1"></i>
+                                        <span class="d-none d-sm-inline">Содержание</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item" [awGoToStep]="{stepIndex: 2}">
+                                    <a href="javascript: void(0);" data-toggle="tab"
+                                       [ngClass]="{'active': step == 2}"
+                                       class="nav-link rounded-0 pt-2 pb-2">
+                                        <i class="mdi mdi-checkbox-marked-circle-outline mr-1"></i>
+                                        <span class="d-none d-sm-inline">Распределение</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item" [awGoToStep]="{stepIndex: 3}">
+                                    <a href="javascript: void(0);" data-toggle="tab"
+                                       [ngClass]="{'active': step == 3}"
+                                       class="nav-link rounded-0 pt-2 pb-2">
+                                        <i class="mdi mdi-checkbox-marked-circle-outline mr-1"></i>
+                                        <span class="d-none d-sm-inline">Завершение</span>
+                                    </a>
+                                </li>
+                            </ul>
+
+                                <div class="row">
+                                    <div class="col-md-6 col-xl-3" *ngFor="let carddata of cardData">
+
+                                        <!-- Simple card -->
+                                        <div class="card">
+                                            <img class="card-img-top img-fluid" src="{{carddata.image}}" alt="Card image cap">
+                                            <div class="card-body">
+                                                <h5 class="card-title" *ngIf="carddata.title">
+                                                    {{carddata.title}}
+                                                </h5>
+                                                <p class="card-text">{{carddata.text}}</p>
+                                            </div>
+                                            <ul class="list-group list-group-flush" *ngIf="carddata.list">
+                                                <ngx-nestable [(list)]="carddata.list"
+                                                              [options]="options"
+                                                              [template]="tpl"
+                                                >
+                                                </ngx-nestable>
+
+                                                <ng-template #tpl let-news>
+                                                    <li *ngIf="news" [ngxNestableDragHandle]="news" class="list-group-item">
+                                                        {{news?.item?.title}}
+                                                    </li>
+                                                </ng-template>
+                                            </ul>
+
+                                            <div class="card-body">
+                                                <a href="javascript: void(0);" class="card-link">Закрепить</a>
+                                                <a href="javascript: void(0);" class="card-link">Открепить</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <ul class="list-inline wizard mb-0">
+                                    <li class="previous list-inline-item">
+                                        <button class="btn btn-secondary"
+                                                type="button"
+                                                awPreviousStep>Назад
+                                        </button>
+                                    </li>
+                                    <li class="next list-inline-item float-right">
+                                        <button class="btn btn-secondary"
+                                                awNextStep
+                                                type="submit">Дальше
+                                        </button>
+                                    </li>
+                                </ul>
+                        </aw-wizard-step>
+
+                        <aw-wizard-step (stepEnter)="step = 3" [canEnter]="validationForm.valid">
+                            <ul class="nav nav-pills bg-light nav-justified form-wizard-header mb-4">
+                                <li class="nav-item" [awGoToStep]="{stepIndex: 0}">
+                                    <a href="javascript: void(0);" data-toggle="tab"
+                                       [ngClass]="{'active': step == 0}"
+                                       class="nav-link rounded-0 pt-2 pb-2">
+                                        <i class="mdi mdi-account-circle mr-1"></i>
+                                        <span class="d-none d-sm-inline">Общее</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item" [awGoToStep]="{stepIndex: 1}">
+                                    <a href="javascript: void(0);" data-toggle="tab"
+                                       [ngClass]="{'active': step == 1}"
+                                       class="nav-link rounded-0 pt-2 pb-2 ">
+                                        <i class="mdi mdi-face-profile mr-1"></i>
+                                        <span class="d-none d-sm-inline">Содержание</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item" [awGoToStep]="{stepIndex: 2}">
+                                    <a href="javascript: void(0);" data-toggle="tab"
+                                       [ngClass]="{'active': step == 2}"
+                                       class="nav-link rounded-0 pt-2 pb-2">
+                                        <i class="mdi mdi-checkbox-marked-circle-outline mr-1"></i>
+                                        <span class="d-none d-sm-inline">Распределение</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item" [awGoToStep]="{stepIndex: 3}">
+                                    <a href="javascript: void(0);" data-toggle="tab"
+                                       [ngClass]="{'active': step == 3}"
+                                       class="nav-link rounded-0 pt-2 pb-2">
+                                        <i class="mdi mdi-checkbox-marked-circle-outline mr-1"></i>
+                                        <span class="d-none d-sm-inline">Завершение</span>
+                                    </a>
+                                </li>
+                            </ul>
                             <div class="row">
                                 <div class="col-12">
                                     <div class="text-center">
@@ -217,10 +425,9 @@
                             </div> <!-- end row -->
                             <ul class="list-inline wizard mb-0">
                                 <li class="previous list-inline-item">
-                                    <button class="btn btn-secondary" awPreviousStep>Previous</button>
-                                </li>
-                                <li class="next list-inline-item float-right">
-                                    <button class="btn btn-secondary" awNextStep>Next</button>
+                                    <button class="btn btn-secondary" awPreviousStep>
+                                        Назад
+                                    </button>
                                 </li>
                             </ul>
                         </aw-wizard-step>

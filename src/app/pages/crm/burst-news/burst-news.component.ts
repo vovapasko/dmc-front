@@ -1,9 +1,23 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {
+    AfterViewChecked,
+    AfterViewInit, ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    OnInit,
+    ViewChild,
+    ViewContainerRef
+} from '@angular/core';
 import {FormBuilder, Validators, FormGroup} from '@angular/forms';
+import {Steps} from '../../../core/constants/steps';
+import {EditorChangeContent, EditorChangeSelection} from 'ngx-quill';
 
 import {WizardComponent as BaseWizardComponent} from 'angular-archwizard';
+import {ChartType} from '../../dashboards/default/default.model';
+import {revenueRadialChart} from '../../dashboards/default/data';
+import {NestableSettings} from 'ngx-nestable/lib/nestable.models';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.OnPush,
     selector: 'app-burst-news',
     templateUrl: './burst-news.component.html',
     styleUrls: ['./burst-news.component.scss']
@@ -12,20 +26,76 @@ import {WizardComponent as BaseWizardComponent} from 'angular-archwizard';
 /**
  * Form Burst news component - handling the burst news with sidebar and content
  */
-export class BurstNewsComponent implements OnInit {
-
+export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewChecked {
+    public list = [{id: 1}, {id: 11}];
     // bread crumb items
     breadCrumbItems: Array<{}>;
+    step: Steps = 0;
+    steps = Steps;
 
     // validation form
     validationForm: FormGroup;
     profileValidationForm: FormGroup;
+    distributionForm: FormGroup;
+
+    public options = {
+        fixedDepth: true
+    } as NestableSettings;
+
+    cardData = [
+        {
+            title: true,
+            image: 'assets/images/small/img-1.jpg',
+            text: 'Some text',
+            list: [{id: 7, title: 'lol Cras justo odio'}, {id: 8, title: 'kek Dapibus ac facilisis in'}],
+            button: true
+        },
+        {
+            title: true,
+            image: 'assets/images/small/img-2.jpg',
+            text: 'Some text',
+            list: [{id: 6, title: 'test Cras justo odio'}, {id: 5, title: 'me Dapibus ac facilisis in'}],
+            link: ['Card link', 'Another link']
+        },
+        {
+            image: 'assets/images/small/img-3.jpg',
+            text: 'Some text',
+            list: [{id: 2, title: 'Cras justo odio'}, {id: 3, title: 'Dapibus ac facilisis in'}],
+            button: true
+        },
+        {
+            title: true,
+            image: 'assets/images/small/img-4.jpg',
+            text: 'Some text',
+            list: [{id: 10, title: 'lul Cras justo odio'}, {id: 11, title: 'wow Dapibus ac facilisis in'}],
+            button: true
+        },
+    ];
+
+    revenueRadialChart: ChartType;
+
+    blured = false;
+    focused = false;
 
     submit: boolean;
     submitForm: boolean;
     @ViewChild('wizardForm', {static: false}) wizard: BaseWizardComponent;
+    @ViewChild('tpl', {static: false}) tpl;
 
-    constructor(public formBuilder: FormBuilder) {
+    constructor(
+        public formBuilder: FormBuilder,
+        private vcr: ViewContainerRef,
+        private cdr: ChangeDetectorRef
+    ) {
+    }
+
+    ngAfterViewInit() {
+        this.vcr.createEmbeddedView(this.tpl);
+        this.cdr.detectChanges();
+    }
+
+    ngAfterViewChecked() {
+        this.cdr.detectChanges();
     }
 
     ngOnInit() {
@@ -40,22 +110,32 @@ export class BurstNewsComponent implements OnInit {
          * form value validation
          */
         this.validationForm = this.formBuilder.group({
-            userName: ['', Validators.required],
-            password: ['', Validators.required],
-            confirm: ['', Validators.required],
+            client: ['', Validators.required],
+            project: ['', Validators.required],
+            nature: ['', Validators.required],
+            title: ['', Validators.required],
+            hashtags: ['', Validators.required],
+            format: ['', Validators.required],
+            method: ['', Validators.required],
+            budget: ['', Validators.required],
+            contractors: ['', Validators.required],
         });
 
         /**
          * form value validation
          */
         this.profileValidationForm = this.formBuilder.group({
-            name: ['', Validators.required],
-            surname: ['', Validators.required],
-            email: ['', Validators.required],
+            editor: ['', Validators.required]
         });
 
         this.submit = false;
         this.submitForm = false;
+
+        this.revenueRadialChart = revenueRadialChart;
+    }
+
+    enterStep(step) {
+        console.log(step);
     }
 
     /**
@@ -76,19 +156,41 @@ export class BurstNewsComponent implements OnInit {
      * Go to next step while form value is valid
      */
     formSubmit() {
-        if (this.validationForm.valid) {
-            this.wizard.navigation.goToNextStep();
-        }
         this.submit = true;
+    }
+
+    onChange(changes) {
+        console.log(changes);
     }
 
     /**
      * Go to next step while second form value is valid
      */
     profileFormSubmit() {
-        if (this.profileValidationForm.valid) {
-            this.wizard.navigation.goToNextStep();
-        }
         this.submitForm = true;
+    }
+
+    created(event) {
+        // tslint:disable-next-line:no-console
+        console.log('editor-created', event);
+    }
+
+    changedEditor(event: EditorChangeContent | EditorChangeSelection) {
+        // tslint:disable-next-line:no-console
+        console.log('editor-change', event);
+    }
+
+    focus($event) {
+        // tslint:disable-next-line:no-console
+        console.log('focus', $event);
+        this.focused = true;
+        this.blured = false;
+    }
+
+    blur($event) {
+        // tslint:disable-next-line:no-console
+        console.log('blur', $event);
+        this.focused = false;
+        this.blured = true;
     }
 }
