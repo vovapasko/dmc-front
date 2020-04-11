@@ -83,7 +83,10 @@ export class PaginationService {
         const startIndex = (page - 1) * pageSize;
         const endIndex = (page - 1) * pageSize + pageSize;
         const paginatedData = totalRecords.slice(startIndex, endIndex);
+        this.changePage(page, startIndex, endIndex, paginatedData);
+    }
 
+    changePage(page, startIndex, endIndex, paginatedData) {
         this.page = page;
         this.startIndex = startIndex;
         this.endIndex = endIndex;
@@ -99,8 +102,10 @@ export class PaginationService {
         const endIndex = pageSize;
         const totalSize = totalRecords.length;
         const paginatedData = totalRecords.slice(startIndex, endIndex);
+        this.paginate(startIndex, endIndex, totalSize, paginatedData);
+    }
 
-        // apply pagination
+    paginate(startIndex, endIndex, totalSize, paginatedData) {
         this.startIndex = startIndex;
         this.endIndex = endIndex;
         this.totalSize = totalSize;
