@@ -1,14 +1,17 @@
-import {Component, OnInit, Output, EventEmitter, OnDestroy} from '@angular/core';
+import {Component, OnInit, Output, EventEmitter} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
 import {Router} from '@angular/router';
+import {HttpClient} from '@angular/common/http';
 
 import {AuthenticationService} from '../../core/services/auth.service';
-import {HttpClient} from '@angular/common/http';
-import {environment} from '../../../environments/environment';
-import {EmptyUser, User} from '../../core/models/instances/user.models';
+import {User} from '../../core/models/instances/user.models';
 import {Notification} from '../../core/models/instances/notification';
-import {BehaviorSubject, Subscription} from 'rxjs';
 import {NotificationService} from '../../core/services/notification.service';
 import {UserService} from '../../core/services/user.service';
+
+/**
+ * Top bar component - history, profile bar, logout and create new items
+ */
 
 @Component({
     selector: 'app-topbar',
@@ -16,6 +19,7 @@ import {UserService} from '../../core/services/user.service';
     styleUrls: ['./topbar.component.scss']
 })
 export class TopbarComponent implements OnInit {
+
     history$ = new BehaviorSubject<unknown>([]);
     user$: BehaviorSubject<User>;
 
@@ -34,11 +38,11 @@ export class TopbarComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.initSubscribes();
+        this.initSubscriptions();
         this.openMobileMenu = false;
     }
 
-    initSubscribes() {
+    initSubscriptions() {
         this.userService.currentUser();
         this.history$ = this.notificationService.history$;
         this.user$ = this.userService.user$;

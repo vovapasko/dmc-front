@@ -1,5 +1,6 @@
 import {Component, OnInit, AfterViewInit} from '@angular/core';
 import {Title} from '@angular/platform-browser';
+import {setAuthClasses} from '../../../core/helpers/utility';
 
 /**
  * This component informs a user that him password was changed
@@ -18,8 +19,6 @@ export class ConfirmComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit() {
-
-        // set page title
         this.setTitle(this.title);
     }
 
@@ -30,8 +29,10 @@ export class ConfirmComponent implements OnInit, AfterViewInit {
         this.titleService.setTitle(title);
     }
 
+    /**
+     * Add global css auth classes
+     */
     ngAfterViewInit() {
-        document.body.classList.add('authentication-bg');
-        document.body.classList.add('authentication-bg-pattern');
+        setAuthClasses();
     }
 }

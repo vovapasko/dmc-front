@@ -1,29 +1,31 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {Title} from '@angular/platform-browser';
+import {Subject} from 'rxjs';
+import {Store} from '@ngrx/store';
 
-import {EmptyUser, User} from '../../../core/models/instances/user.models';
+import {User} from '../../../core/models/instances/user.models';
 import {AuthenticationService} from '../../../core/services/auth.service';
 import {UserService} from '../../../core/services/user.service';
 import {LoadingService} from '../../../core/services/loading.service';
 import {ErrorService} from '../../../core/services/error.service';
-import {Subject} from 'rxjs';
 import {ResetPassword, UpdateProfile} from '../../../core/store/actions/user.actions';
-import {Store} from '@ngrx/store';
 import {IAppState} from '../../../core/store/state/app.state';
-import {NotificationService} from "../../../core/services/notification.service";
-import {NotificationType} from "../../../core/models/instances/notification";
+import {NotificationService} from '../../../core/services/notification.service';
+import {NotificationType} from '../../../core/models/instances/notification';
+
+
+/**
+ * Profile component - handling the profile with sidebar and content
+ */
 
 @Component({
     selector: 'app-profile',
     templateUrl: './profile.component.html',
     styleUrls: ['./profile.component.scss']
 })
-
-/**
- * Profile component - handling the profile with sidebar and content
- */
 export class ProfileComponent implements OnInit {
+
     breadCrumbItems: Array<{}>;
 
     loading$: Subject<boolean>;
@@ -48,12 +50,13 @@ export class ProfileComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.initSubscribes();
+        this.initSubscriptions();
         this.initForm();
         this.initBreadCrumbs();
+        this.setTitle(this.title);
     }
 
-    initSubscribes() {
+    initSubscriptions() {
         this.userService.currentUser();
         this.error$ = this.errorService.error$;
         this.loading$ = this.loadingService.loading$;
@@ -118,7 +121,7 @@ export class ProfileComponent implements OnInit {
      */
     handleFileInput(files: FileList) {
         this.avatar = files.item(0);
-        this.notificationService.notify(NotificationType.info, 'Изображение было загружено', 'Нажмите сохранить чтобы увидеть изменения')
+        this.notificationService.notify(NotificationType.info, 'Изображение было загружено', 'Нажмите сохранить чтобы увидеть изменения');
     }
 
 

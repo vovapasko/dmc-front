@@ -4,6 +4,9 @@ import {AuthenticationService} from '../services/auth.service';
 import {Observable, BehaviorSubject, Subject, throwError} from 'rxjs';
 import {switchMap, take, filter, catchError} from 'rxjs/operators';
 
+/**
+ * This interceptor for inject JWT to every, almost, request and refresh token if its needed
+ */
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {

@@ -1,13 +1,19 @@
 import {Component, OnInit, AfterViewInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AuthenticationService} from '../../../core/services/auth.service';
 import {Title} from '@angular/platform-browser';
 import {Store} from '@ngrx/store';
+import {Subject} from 'rxjs';
+
+import {AuthenticationService} from '../../../core/services/auth.service';
 import {IAppState} from '../../../core/store/state/app.state';
 import {Login} from '../../../core/store/actions/user.actions';
-import {Subject} from 'rxjs';
 import {ErrorService} from '../../../core/services/error.service';
 import {LoadingService} from '../../../core/services/loading.service';
+import {setAuthClasses} from '../../../core/helpers/utility';
+
+/**
+ * This component for login user in crm
+ */
 
 @Component({
     selector: 'app-login',
@@ -36,15 +42,21 @@ export class LoginComponent implements OnInit, AfterViewInit {
     ngOnInit() {
         this.initForm();
         this.initSubscriptions();
-        this.authenticationService.logout();
         this.setTitle(this.title);
+        this.authenticationService.logout();
     }
 
+    /**
+     * Set loading and error subscriptions
+     */
     initSubscriptions() {
         this.loading$ = this.loadingService.loading$;
         this.error$ = this.errorService.error$;
     }
 
+    /**
+     * Init form with validators
+     */
     initForm() {
         this.loginForm = this.formBuilder.group({
             email: ['', [Validators.required, Validators.email]],
@@ -52,13 +64,18 @@ export class LoginComponent implements OnInit, AfterViewInit {
         });
     }
 
+    /**
+     * Set page title
+     */
     public setTitle(title: string) {
         this.titleService.setTitle(title);
     }
 
+    /**
+     * Add global css auth classes
+     */
     ngAfterViewInit() {
-        document.body.classList.add('authentication-bg');
-        document.body.classList.add('authentication-bg-pattern');
+        setAuthClasses();
     }
 
     // convenience getter for easy access to form fields
@@ -77,15 +94,16 @@ export class LoginComponent implements OnInit, AfterViewInit {
             return;
         }
 
-        const email = this.f.email.value;
-        const password = this.f.password.value;
+        const f = this.f;
+        const email = f.email.value;
+        const password = f.password.value;
         const data = {email, password};
 
         this.submit(data);
     }
 
     /**
-     * Submit data
+     * Dispatch data
      */
     submit(data) {
         this.store.dispatch(new Login({data}));

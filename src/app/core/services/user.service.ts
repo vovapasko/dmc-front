@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, Observable, of} from 'rxjs';
 import {FormBuilder, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
 
 import {environment} from '../../../environments/environment';
 import {User} from '../models/instances/user.models';
@@ -16,11 +17,19 @@ import {CookieService} from '../providers/cookie.service';
 import {CURRENT_USER} from '../constants/user';
 import {PaginationService} from './pagination.service';
 import {SignupPayload} from '../models/payloads/user/signup';
-import {ActivatedRoute, Router} from '@angular/router';
-import {DeleteResponse} from "../models/responses/user/deleteResponse";
-import {UpdateResponse} from "../models/responses/user/updateResponse";
+import {DeleteResponse} from '../models/responses/user/deleteResponse';
+import {UpdateResponse} from '../models/responses/user/updateResponse';
+import {RegisterPayload} from "../models/payloads/user/register";
+import {DeletePayload} from "../models/payloads/user/delete";
+import {UpdatePayload} from "../models/payloads/user/update";
+import {UpdateProfilePayload} from "../models/payloads/user/updateProfile";
+import {ConfirmResetPasswordPayload} from "../models/payloads/user/confirmResetPassword";
 
 const api = environment.api;
+
+/**
+ * This service for handle actions with user, store, pagination, CRUD
+ */
 
 @Injectable({providedIn: 'root'})
 export class UserService {
@@ -65,6 +74,15 @@ export class UserService {
         this.paginatedUserData$.next(value);
     }
 
+    set user(user: User) {
+        this.user$.next(user);
+        this.cookieService.setCookie(CURRENT_USER, JSON.stringify(user), 1);
+    }
+
+    get user() {
+        return this.user$.getValue();
+    }
+
     /**
      *  Get all users, api returns array of users
      */
@@ -98,15 +116,6 @@ export class UserService {
         );
     }
 
-    set user(user: User) {
-        this.user$.next(user);
-        this.cookieService.setCookie(CURRENT_USER, JSON.stringify(user), 1);
-    }
-
-    get user() {
-        return this.user$.getValue();
-    }
-
     /**
      * Returns the current user
      */
@@ -120,7 +129,7 @@ export class UserService {
     /**
      *  Register new user aka invite user
      */
-    register(payload: any): Observable<User> {
+    register(payload: RegisterPayload): Observable<User> {
         return this.requestHandler.request(
             `${api}/invite-new-user/`,
             'post',
@@ -135,14 +144,14 @@ export class UserService {
     /**
      *  Delete user
      */
-    delete(payload: any): Observable<User> {
+    delete(payload: DeletePayload): Observable<User> {
         return this.requestHandler.request(
             `${api}/users/${payload.id}`,
             'delete',
             payload,
             (response: DeleteResponse) => {
                 const users = this.users;
-                this.users = users.filter(el => el.id !== payload.id);
+                this.users = users.filter(el => +el.id !== +payload.id);
                 this.applyPagination();
                 return payload;
             }
@@ -152,20 +161,19 @@ export class UserService {
     /**
      *  Delete user
      */
-    update(payload: any): Observable<User> {
+    update(payload: UpdatePayload): Observable<User> {
         return this.requestHandler.request(
             `${api}/change-group/${payload.id}`,
             'put',
             payload,
             (response: UpdateResponse) => {
                 const user = response.message.user;
-                this.users = this.users.map(el => el.id === payload.id ? user : el);
+                this.users = this.users.map(el => +el.id === +payload.id ? user : el);
                 this.applyPagination();
                 return user;
             }
         );
     }
-
 
 
     /**
@@ -183,7 +191,7 @@ export class UserService {
     /**
      *  Change password
      */
-    confirmResetPassword(payload): Observable<boolean> {
+    confirmResetPassword(payload: ConfirmResetPasswordPayload): Observable<boolean> {
         return this.requestHandler.request(
             `${api}/change-pass/${payload.confirm}`,
             'post',
@@ -198,7 +206,7 @@ export class UserService {
     /**
      *  Update profile (current user)
      */
-    updateProfile(payload) {
+    updateProfile(payload: UpdateProfilePayload) {
         return this.requestHandler.request(
             `${api}/profile/`,
             'put',

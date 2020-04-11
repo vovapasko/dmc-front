@@ -1,18 +1,24 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
+
 import {Notification, NotificationType} from '../models/instances/notification';
+
+/**
+ * This service for store and handle notifications
+ */
 
 @Injectable({
     providedIn: 'root'
 })
 export class NotificationService {
-    constructor() { }
 
     private idx = 0;
     private notification$ = new BehaviorSubject({});
-
     public notifications$ = new BehaviorSubject([]);
     public history$ = new BehaviorSubject([]);
+
+    constructor() {
+    }
 
     get notifications() {
         return this.notifications$.getValue();
@@ -45,11 +51,15 @@ export class NotificationService {
         notifications.push(notification);
         history.push(notification);
         this.notification$.next(notification);
+
         if (notification.timeout !== 0) {
             setTimeout(() => this.close(notification), notification.timeout);
         }
     }
 
+    /**
+     * Remove notification from history bar
+     */
     removeFromHistory(notification) {
         const history = this.history;
         this.history = history.filter(el => el.id !== notification.id);

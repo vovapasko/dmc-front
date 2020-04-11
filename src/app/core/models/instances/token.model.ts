@@ -4,6 +4,6 @@ export class Token {
 }
 
 export enum TokenTypes {
-    access,
-    refresh
+    access = 'access',
+    refresh = 'refresh'
 }

@@ -7,13 +7,18 @@ import {
     ViewChild,
     ViewContainerRef
 } from '@angular/core';
-import {FormBuilder, Validators, FormGroup} from '@angular/forms';
-import {Steps} from '../../../core/constants/steps';
-
 import {WizardComponent as BaseWizardComponent} from 'angular-archwizard';
+import {FormBuilder, Validators, FormGroup} from '@angular/forms';
+import {NestableSettings} from 'ngx-nestable/lib/nestable.models';
+
+import {Steps} from '../../../core/constants/steps';
 import {ChartType} from '../../dashboards/default/default.model';
 import {revenueRadialChart} from '../../dashboards/default/data';
-import {NestableSettings} from 'ngx-nestable/lib/nestable.models';
+
+
+/**
+ * Form Burst news component - handling the burst news with sidebar and content
+ */
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -21,21 +26,13 @@ import {NestableSettings} from 'ngx-nestable/lib/nestable.models';
     templateUrl: './burst-news.component.html',
     styleUrls: ['./burst-news.component.scss']
 })
-
-/**
- * Form Burst news component - handling the burst news with sidebar and content
- */
 export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewChecked {
-    public list = [{id: 1}, {id: 11}];
-    // bread crumb items
+
+    list = [{id: 1}, {id: 11}];
     breadCrumbItems: Array<{}>;
     step: Steps = 0;
-    steps = Steps;
-
-    // validation form
     validationForm: FormGroup;
     profileValidationForm: FormGroup;
-    distributionForm: FormGroup;
 
     public options = {
         fixedDepth: true
@@ -72,12 +69,11 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     ];
 
     revenueRadialChart: ChartType;
-
     blured = false;
     focused = false;
-
     submit: boolean;
     submitForm: boolean;
+
     @ViewChild('wizardForm', {static: false}) wizard: BaseWizardComponent;
     @ViewChild('tpl', {static: false}) tpl;
 
@@ -98,16 +94,23 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     }
 
     ngOnInit() {
-        // tslint:disable-next-line: max-line-length
-        this.breadCrumbItems = [{label: 'UBold', path: '/'}, {label: 'Forms', path: '/'}, {
-            label: 'Form Wizard',
-            path: '/',
-            active: true
-        }];
+        this.initBreadCrumbs();
+        this.initForms();
+        this.initSubscriptions();
+    }
 
-        /**
-         * form value validation
-         */
+    initSubscriptions() {
+        this.submit = false;
+        this.submitForm = false;
+        this.revenueRadialChart = revenueRadialChart;
+    }
+
+    initForms() {
+        this.initValidateForm();
+        this.initProfileForm();
+    }
+
+    initValidateForm() {
         this.validationForm = this.formBuilder.group({
             client: ['', Validators.required],
             project: ['', Validators.required],
@@ -119,22 +122,20 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
             budget: ['', Validators.required],
             contractors: ['', Validators.required],
         });
+    }
 
-        /**
-         * form value validation
-         */
+    initProfileForm() {
         this.profileValidationForm = this.formBuilder.group({
             editor: ['', Validators.required]
         });
-
-        this.submit = false;
-        this.submitForm = false;
-
-        this.revenueRadialChart = revenueRadialChart;
     }
 
-    enterStep(step) {
-        console.log(step);
+    initBreadCrumbs() {
+        this.breadCrumbItems = [{label: 'Главная', path: '/'}, {
+            label: 'Разгон новости',
+            path: '/burst-news',
+            active: true
+        }];
     }
 
     /**
@@ -142,13 +143,6 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
      */
     get form() {
         return this.validationForm.controls;
-    }
-
-    /**
-     * Returns form
-     */
-    get profileForm() {
-        return this.profileValidationForm.controls;
     }
 
     /**

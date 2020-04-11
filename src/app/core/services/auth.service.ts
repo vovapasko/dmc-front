@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
+import {ActivatedRoute, Router} from '@angular/router';
 import {catchError, tap} from 'rxjs/operators';
 
 import {CookieService} from '../providers/cookie.service';
@@ -12,15 +13,21 @@ import {LoginResponse} from '../models/responses/auth/loginResponse';
 import {LoginPayload} from '../models/payloads/auth/login';
 import {RequestHandler} from '../helpers/request-handler';
 import {UserService} from './user.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import {CURRENT_USER} from '../constants/user';
 
 const api = environment.api;
 
-@Injectable({providedIn: 'root'})
+/**
+ * This service for authentication
+ */
+
+@Injectable({
+    providedIn: 'root'
+})
 export class AuthenticationService {
-    public static readonly REFRESH_TOKEN_NAME = 'refresh';
-    public static readonly ACCESS_TOKEN_NAME = 'access';
-    public static readonly CURRENT_USER = 'currentUser';
+
+    public static readonly REFRESH_TOKEN_NAME = TokenTypes.refresh;
+    public static readonly ACCESS_TOKEN_NAME = TokenTypes.access;
 
     user: User;
     returnUrl: string;
@@ -39,9 +46,9 @@ export class AuthenticationService {
     /**
      * Get the token (access or refresh) from cookie
      */
-    public getToken(type: string): string | null {
+    public getToken(type: TokenTypes): string | null {
         const currentUser = this.userService.currentUser();
-        if (currentUser && currentUser.token && type in TokenTypes) {
+        if (currentUser && currentUser.token) {
             return currentUser.token[type];
         }
         return null;
@@ -50,12 +57,12 @@ export class AuthenticationService {
     /**
      * Save the token (access or refresh) in cookie
      */
-    public setToken(type: string, value) {
+    public setToken(type: TokenTypes, value) {
         const currentUser = this.userService.currentUser();
-        if (currentUser && currentUser.token && type in TokenTypes) {
+        if (currentUser && currentUser.token) {
             currentUser.token[type] = value;
         }
-        this.cookieService.setCookie(AuthenticationService.CURRENT_USER, JSON.stringify(currentUser), 1);
+        this.cookieService.setCookie(CURRENT_USER, JSON.stringify(currentUser), 1);
     }
 
     /**
@@ -80,7 +87,7 @@ export class AuthenticationService {
      */
     logout() {
         // remove user from local storage to log user out
-        this.cookieService.deleteCookie(AuthenticationService.CURRENT_USER);
+        this.cookieService.deleteCookie(CURRENT_USER);
         this.userService.user = null;
     }
 
@@ -101,6 +108,10 @@ export class AuthenticationService {
             );
     }
 
+
+    /**
+     *  Logout user from crm
+     */
     unauthorised = (error) => {
         // auto logout if 401 response returned from api
         this.logout();

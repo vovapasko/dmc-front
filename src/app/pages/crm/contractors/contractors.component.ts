@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {BehaviorSubject, Subject} from 'rxjs';
-
 import {FormGroup} from '@angular/forms';
+import {Store} from '@ngrx/store';
+
 import {Contractor} from '../../../core/models/instances/contractor';
 import {ContractorService} from '../../../core/services/contractor.service';
 import {ErrorService} from '../../../core/services/error.service';
@@ -15,29 +16,29 @@ import {
     SelectContractor,
     UpdateContractors
 } from '../../../core/store/actions/contractor.actions';
-import {Store} from '@ngrx/store';
 import {IAppState} from '../../../core/store/state/app.state';
 import {setValues} from '../../../core/helpers/utility';
 import {NotificationService} from '../../../core/services/notification.service';
 import {NotificationType} from '../../../core/models/instances/notification';
+
+
+/**
+ * Contractors component: handling the contractors with sidebar and content
+ */
 
 @Component({
     selector: 'app-contractors',
     templateUrl: './contractors.component.html',
     styleUrls: ['./contractors.component.scss']
 })
-
-/**
- * Contractors component: handling the contractors with sidebar and content
- */
 export class ContractorsComponent implements OnInit {
+
     loading$: Subject<boolean>;
     error$: Subject<boolean>;
 
     selectedContractor$: BehaviorSubject<Contractor> = new BehaviorSubject(null);
     checkedContractors$: BehaviorSubject<Array<Contractor>> = new BehaviorSubject([]);
     paginatedContractorData$: BehaviorSubject<Array<Contractor>> = new BehaviorSubject([]);
-
 
     totalRecords$: BehaviorSubject<Array<Contractor>> = new BehaviorSubject<Array<Contractor>>([]);
     page$: BehaviorSubject<number> = new BehaviorSubject(1);
@@ -63,12 +64,12 @@ export class ContractorsComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.initSubscribes();
+        this.initSubscriptions();
         this.initBreadCrumbItems();
         this.initForms();
     }
 
-    initSubscribes() {
+    initSubscriptions() {
         this.loading$ = this.loadingService.loading$;
         this.error$ = this.errorService.error$;
 
@@ -91,28 +92,39 @@ export class ContractorsComponent implements OnInit {
         }];
     }
 
+    /**
+     * Start init forms
+     */
     initForms() {
         this.initCreateForm();
         this.initUpdateForm();
     }
 
+    /**
+     * Dispatch contractor and set values to form
+     */
     selectContractor(contractor: Contractor) {
         this.store.dispatch(new SelectContractor(contractor));
         setValues(this.uf, contractor);
     }
 
-
     /**
-     * Validators for Create Form
+     * Get validators from contractor service
      */
     initCreateForm() {
         this.createForm = this.contractorService.initializeCreateForm();
     }
 
+    /**
+     * Mark as checked all contractors in table
+     */
     checkAll() {
         this.contractorService.checkAll();
     }
 
+    /**
+     * Mark as checked contractor in table
+     */
     check(contractor: Contractor) {
         this.contractorService.check(contractor);
     }
@@ -134,6 +146,9 @@ export class ContractorsComponent implements OnInit {
         return this.updateForm.controls;
     }
 
+    /**
+     * Handle next or previous page click
+     */
     onPageChange(page) {
         this.contractorService.onPageChange(page);
     }
@@ -187,8 +202,9 @@ export class ContractorsComponent implements OnInit {
      * Update single contractor
      */
     updateContractor() {
-        const data = this.contractorService.createContractorData(this.uf);
-        const id = this.contractorService.selectedContractor.id;
+        const contractorService = this.contractorService;
+        const data = contractorService.createContractorData(this.uf);
+        const id = contractorService.selectedContractor.id;
         const payload = {data, id};
         this.update(payload);
         this.modalService.dismissAll();
@@ -198,28 +214,42 @@ export class ContractorsComponent implements OnInit {
      * Update checked contractors
      */
     updateContractors() {
-        const data = this.contractorService.createContractorData(this.uf);
+        const contractorService = this.contractorService;
+        const data = contractorService.createContractorData(this.uf);
         const payload = {data};
-        const checkedContractors = this.contractorService.checkedContractors;
+        const checkedContractors = contractorService.checkedContractors;
         this.processMany(checkedContractors.slice(), payload, this.update.bind(this));
+
+        this.cleanAfterUpdate();
+    }
+
+    /**
+     * Reset to init state
+     */
+    cleanAfterUpdate() {
         this.editCheckedMode = false;
         this.updateForm.reset();
         this.modalService.dismissAll();
         this.contractorService.checkedContractors = [];
     }
 
+    /**
+     * Handle processing with many items, delete or update
+     */
     processMany(target, payload, handler) {
+        const notificationService = this.notificationService;
+        const timeout = 3500;
         // tslint:disable-next-line:max-line-length
-        this.notificationService.notify(NotificationType.info, 'Процесс начат', 'Пожалуйста дождитесь оконочания, не закрывайте вкладку', 1500);
+        notificationService.notify(NotificationType.info, 'Процесс начат', 'Пожалуйста дождитесь оконочания, не закрывайте вкладку', 1500);
         const interval = window.setInterval(() => {
             if (target.length) {
                 const item = target.pop();
                 handler({...payload, id: item.id});
             } else {
-                this.notificationService.notify(NotificationType.info, 'Процесс завершен', 'Операция завершена, спасибо', 1500);
+                notificationService.notify(NotificationType.info, 'Процесс завершен', 'Операция завершена, спасибо', 1500);
                 window.clearInterval(interval);
             }
-        }, 3500);
+        }, timeout);
     }
 
     /**

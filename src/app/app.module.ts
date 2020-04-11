@@ -25,7 +25,7 @@ import {Error500Component} from './pages/errors/error500/error500.component';
 
 import {UserEffects} from './core/store/effects/user.effects';
 import {ContractorEffects} from './core/store/effects/contractor.effects';
-import {appReducers} from './core/store/reducers/app.reducers';
+import {reducerProvider, reducerToken} from './core/store/reducers/app.reducers';
 
 import {environment} from '../environments/environment';
 
@@ -45,17 +45,18 @@ import {environment} from '../environments/environment';
         HttpClientModule,
         LayoutsModule,
         AppRoutingModule,
-        StoreModule.forRoot(appReducers),
+        StoreModule.forRoot(reducerToken),
         EffectsModule.forRoot([UserEffects, ContractorEffects]),
         StoreRouterConnectingModule.forRoot({stateKey: 'router'}),
         !environment.production ? StoreDevtoolsModule.instrument() : [],
         ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production}),
     ],
     providers: [
+        reducerProvider,
         {provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true},
         {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
         {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
-        NotificationService
+        NotificationService,
     ],
     bootstrap: [AppComponent]
 })
