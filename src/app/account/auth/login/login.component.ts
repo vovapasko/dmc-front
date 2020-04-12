@@ -10,6 +10,7 @@ import {Login} from '../../../core/store/actions/user.actions';
 import {ErrorService} from '../../../core/services/error.service';
 import {LoadingService} from '../../../core/services/loading.service';
 import {setAuthClasses} from '../../../core/helpers/utility';
+import {ServerError} from "../../../core/models/responses/serverError";
 
 /**
  * This component for login user in crm
@@ -26,7 +27,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     loginForm: FormGroup;
     submitted = false;
     loading$: Subject<boolean>;
-    error$: Subject<boolean>;
+    error$: Subject<any>;;
     visible = false;
 
     constructor(

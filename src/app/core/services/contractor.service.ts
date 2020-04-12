@@ -12,9 +12,9 @@ import {GetAllContractorsResponse} from '../models/responses/contractor/getAllCo
 import {RequestHandler} from '../helpers/request-handler';
 import numbers from '../constants/numbers';
 import {PaginationService} from './pagination.service';
-import {CreateContractorPayload} from "../models/payloads/contractor/create";
-import {UpdateContractorPayload} from "../models/payloads/contractor/update";
-import {DeleteContractorPayload} from "../models/payloads/contractor/delete";
+import {CreateContractorPayload} from '../models/payloads/contractor/create';
+import {UpdateContractorPayload} from '../models/payloads/contractor/update';
+import {DeleteContractorPayload} from '../models/payloads/contractor/delete';
 
 const api = environment.api;
 
@@ -81,10 +81,12 @@ export class ContractorService {
             'get',
             null,
             (response: GetAllContractorsResponse) => {
-                const contractors = response.data;
-                this.contractors = contractors;
-                this.applyPagination();
-                return contractors;
+                if (response && response.data) {
+                    const contractors = response.data;
+                    this.contractors = contractors;
+                    this.applyPagination();
+                    return contractors;
+                }
             }
         );
     }
@@ -98,11 +100,13 @@ export class ContractorService {
             'post',
             payload,
             (response: CreateContractorResponse) => {
-                const contractors = this.contractors;
-                const contractor = response.contractor;
-                this.contractors = [...contractors, contractor];
-                this.applyPagination();
-                return contractor;
+                if (response && response.contractor) {
+                    const contractors = this.contractors;
+                    const contractor = response.contractor;
+                    this.contractors = [...contractors, contractor];
+                    this.applyPagination();
+                    return contractor;
+                }
             }
         );
     }
@@ -116,10 +120,12 @@ export class ContractorService {
             'put',
             payload,
             (response: UpdateContractorResponse) => {
-                const contractor = response.contractor;
-                this.contractors = this.contractors.map(el => +el.id === +contractor.id ? contractor : el);
-                this.applyPagination();
-                return contractor;
+                if (response && response.contractor) {
+                    const contractor = response.contractor;
+                    this.contractors = this.contractors.map(el => +el.id === +contractor.id ? contractor : el);
+                    this.applyPagination();
+                    return contractor;
+                }
             }
         );
     }
@@ -133,10 +139,12 @@ export class ContractorService {
             'delete',
             null,
             (response: DeleteContractorResponse) => {
-                const contractors = this.contractors;
-                this.contractors = contractors.filter(el => +el.id !== +payload.id);
-                this.applyPagination();
-                return payload;
+                if (response) {
+                    const contractors = this.contractors;
+                    this.contractors = contractors.filter(el => +el.id !== +payload.id);
+                    this.applyPagination();
+                    return payload;
+                }
             }
         );
     }

@@ -12,12 +12,12 @@ import {ServerError} from '../models/responses/serverError';
 })
 export class ErrorService {
 
-    public error$: Subject<boolean>;
+    error$ = new Subject();
 
     constructor() { }
 
     set error(error: ServerError) {
-        this.error$.next(!!error);
+        this.error$.next(error);
     }
 
     clear() {

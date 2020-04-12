@@ -13,6 +13,7 @@ import {LoadingService} from '../../../core/services/loading.service';
 import {setAuthClasses} from '../../../core/helpers/utility';
 import {NotificationService} from '../../../core/services/notification.service';
 import {NotificationType} from '../../../core/models/instances/notification';
+import {ServerError} from "../../../core/models/responses/serverError";
 
 
 /**
@@ -32,7 +33,7 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
     submitted = false;
     invite = '';
     loading$: Subject<boolean>;
-    error$: Subject<boolean>;
+    error$: Subject<any>;;
     visible = false;
 
     constructor(

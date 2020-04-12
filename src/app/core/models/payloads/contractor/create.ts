@@ -1,11 +1,11 @@
 export interface CreateContractorPayload {
     data: {
-        editor_name: string;
-        contact_person: string;
-        phone_number: string;
+        editorName: string;
+        contactPerson: string;
+        phoneNumber: string;
         email: string;
-        news_amount: number;
-        arranged_news: number;
-        one_post_price: number;
+        newsAmount: number;
+        arrangedNews: number;
+        onePostPrice: number;
     };
 }

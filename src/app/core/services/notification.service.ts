@@ -13,7 +13,7 @@ import {Notification, NotificationType} from '../models/instances/notification';
 export class NotificationService {
 
     private idx = 0;
-    private notification$ = new BehaviorSubject({});
+    public notification$ = new BehaviorSubject(null);
     public notifications$ = new BehaviorSubject([]);
     public history$ = new BehaviorSubject([]);
 
@@ -26,6 +26,14 @@ export class NotificationService {
 
     set notifications(value: Array<Notification>) {
         this.notifications$.next(value);
+    }
+
+    get notification() {
+        return this.notification$.getValue();
+    }
+
+    set notification(notification: Notification) {
+        this.notification$.next(notification);
     }
 
     get history() {
@@ -45,15 +53,25 @@ export class NotificationService {
      * @param timeout ms
      */
     notify(type: NotificationType, title: string, message: string, timeout = 1000): void {
+        const notification = new Notification(this.idx++, type, title, message, timeout);
+        this.registerNotification(notification);
+        this.trackTime(notification);
+    }
+
+    registerNotification(notification) {
         const notifications = this.notifications;
         const history = this.history;
-        const notification = new Notification(this.idx++, type, title, message, timeout);
         notifications.push(notification);
         history.push(notification);
-        this.notification$.next(notification);
 
+        this.notification = notification;
+        this.notifications = notifications;
+        this.history = history;
+    }
+
+    trackTime(notification) {
         if (notification.timeout !== 0) {
-            setTimeout(() => this.close(notification), notification.timeout);
+            return setTimeout(() => this.close(notification), notification.timeout);
         }
     }
 

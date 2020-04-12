@@ -19,11 +19,11 @@ import {PaginationService} from './pagination.service';
 import {SignupPayload} from '../models/payloads/user/signup';
 import {DeleteResponse} from '../models/responses/user/deleteResponse';
 import {UpdateResponse} from '../models/responses/user/updateResponse';
-import {RegisterPayload} from "../models/payloads/user/register";
-import {DeletePayload} from "../models/payloads/user/delete";
-import {UpdatePayload} from "../models/payloads/user/update";
-import {UpdateProfilePayload} from "../models/payloads/user/updateProfile";
-import {ConfirmResetPasswordPayload} from "../models/payloads/user/confirmResetPassword";
+import {RegisterPayload} from '../models/payloads/user/register';
+import {DeletePayload} from '../models/payloads/user/delete';
+import {UpdatePayload} from '../models/payloads/user/update';
+import {UpdateProfilePayload} from '../models/payloads/user/updateProfile';
+import {ConfirmResetPasswordPayload} from '../models/payloads/user/confirmResetPassword';
 
 const api = environment.api;
 
@@ -92,10 +92,12 @@ export class UserService {
             'get',
             null,
             (response: GetAllResponse) => {
-                const users = response.data;
-                this.users = users;
-                this.applyPagination();
-                return users;
+                if (response && response.data) {
+                    const users = response.data;
+                    this.users = users;
+                    this.applyPagination();
+                    return users;
+                }
             }
         );
     }
@@ -109,9 +111,11 @@ export class UserService {
             'post',
             payload,
             (response: SignupResponse) => {
-                this.user = {...response.user, token: response.token};
-                this.router.navigate(['/profile']);
-                return this.user;
+                if (response && response.user) {
+                    this.user = {...response.user, token: response.token};
+                    this.router.navigate(['/profile']);
+                    return this.user;
+                }
             }
         );
     }
@@ -135,8 +139,10 @@ export class UserService {
             'post',
             payload,
             (response: RegisterResponse) => {
-                this.applyPagination();
-                return response.user;
+                if (response && response.user) {
+                    this.applyPagination();
+                    return response.user;
+                }
             }
         );
     }
@@ -167,10 +173,12 @@ export class UserService {
             'put',
             payload,
             (response: UpdateResponse) => {
-                const user = response.message.user;
-                this.users = this.users.map(el => +el.id === +payload.id ? user : el);
-                this.applyPagination();
-                return user;
+                if (response.message.user) {
+                    const user = response.message.user;
+                    this.users = this.users.map(el => +el.id === +payload.id ? user : el);
+                    this.applyPagination();
+                    return user;
+                }
             }
         );
     }
@@ -184,7 +192,11 @@ export class UserService {
             `${api}/change-password-confirm/`,
             'get',
             null,
-            (response: ResetPasswordResponse) => response.success
+            (response: ResetPasswordResponse) => {
+                if (response) {
+                    return response.success;
+                }
+            }
         );
     }
 
@@ -212,12 +224,13 @@ export class UserService {
             'put',
             payload,
             (response: UpdateProfileResponse) => {
-                // returns updated user and store in cookies
-                const currentUser = this.currentUser();
-                const newUser = response.user;
-                const user = {...currentUser, ...newUser};
-                this.user = user;
-                return user;
+                if (response && response.user) {
+                    const currentUser = this.currentUser();
+                    const newUser = response.user;
+                    const user = {...currentUser, ...newUser};
+                    this.user = user;
+                    return user;
+                }
             }
         );
     }
