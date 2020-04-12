@@ -14,6 +14,7 @@ import {PaginationService} from '../../../core/services/pagination.service';
 import {LoadingService} from '../../../core/services/loading.service';
 import {ErrorService} from '../../../core/services/error.service';
 import {Groups} from '../../../core/models/instances/groups';
+import {ServerError} from '../../../core/models/responses/serverError';
 
 /**
  * Users component - handling the users with sidebar and content
@@ -29,7 +30,7 @@ export class UsersComponent implements OnInit {
     breadCrumbItems: Array<{}>;
 
     loading$: Subject<boolean>;
-    error$: Subject<boolean>;
+    error$: Subject<any>;
 
     totalRecords$: BehaviorSubject<Array<User>> = new BehaviorSubject<Array<User>>([]);
     page$: BehaviorSubject<number> = new BehaviorSubject(1);

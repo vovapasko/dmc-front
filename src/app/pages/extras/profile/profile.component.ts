@@ -13,6 +13,7 @@ import {ResetPassword, UpdateProfile} from '../../../core/store/actions/user.act
 import {IAppState} from '../../../core/store/state/app.state';
 import {NotificationService} from '../../../core/services/notification.service';
 import {NotificationType} from '../../../core/models/instances/notification';
+import {ServerError} from '../../../core/models/responses/serverError';
 
 
 /**
@@ -29,7 +30,7 @@ export class ProfileComponent implements OnInit {
     breadCrumbItems: Array<{}>;
 
     loading$: Subject<boolean>;
-    error$: Subject<boolean>;
+    error$: Subject<any>;
     user$: Subject<User>;
 
     title = 'Профиль';

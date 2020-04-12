@@ -74,6 +74,10 @@ export class PaginationService {
         return this.paginatedData$.getValue();
     }
 
+    set paginatedData(value: any[]) {
+        this.paginatedData$.next(value);
+    }
+
     /**
      * Pagination onpage change
      * @param page show the page
@@ -90,7 +94,7 @@ export class PaginationService {
         this.page = page;
         this.startIndex = startIndex;
         this.endIndex = endIndex;
-        this.paginatedData$.next(paginatedData);
+        this.paginatedData = paginatedData;
     }
 
     /**
@@ -109,6 +113,6 @@ export class PaginationService {
         this.startIndex = startIndex;
         this.endIndex = endIndex;
         this.totalSize = totalSize;
-        this.paginatedData$.next(paginatedData);
+        this.paginatedData = paginatedData;
     }
 }
