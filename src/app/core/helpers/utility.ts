@@ -7,8 +7,12 @@ export const toCamel = (s) => {
 };
 
 export const setAuthClasses = () => {
-    const add = document.body.classList.add;
-    ['authentication-bg', 'authentication-bg-pattern'].forEach(cls => add(cls));
+    const classes = ['authentication-bg', 'authentication-bg-pattern'];
+    classes.forEach(
+        cls => {
+            document.body.classList.add(cls);
+        }
+    );
 };
 
 export const isArray = (a) => {

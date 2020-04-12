@@ -1,6 +1,8 @@
+import {Groups} from "../../instances/groups";
+
 export interface RegisterPayload {
     data: {
-        group: string;
+        group: Groups;
         email: string;
     };
 }
