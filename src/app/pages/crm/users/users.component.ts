@@ -13,7 +13,7 @@ import {CreateUser, DeleteUser, GetUsers, SelectUser, UpdateUser} from '../../..
 import {PaginationService} from '../../../core/services/pagination.service';
 import {LoadingService} from '../../../core/services/loading.service';
 import {ErrorService} from '../../../core/services/error.service';
-import {Groups} from '../../../core/models/instances/groups';
+import {Groups, ManageGroups} from '../../../core/models/instances/groups';
 import {ServerError} from '../../../core/models/responses/serverError';
 
 /**
@@ -28,6 +28,9 @@ import {ServerError} from '../../../core/models/responses/serverError';
 export class UsersComponent implements OnInit {
 
     breadCrumbItems: Array<{}>;
+    manageGroups = ManageGroups;
+
+    manage = false;
 
     loading$: Subject<boolean>;
     error$: Subject<any>;
@@ -78,8 +81,13 @@ export class UsersComponent implements OnInit {
         this.pageSize$ = this.paginationService.pageSize$;
 
         this.currentUser = this.userService.currentUser();
+        this.manage = this.belongToManage(this.currentUser);
 
         this.store.dispatch(new GetUsers());
+    }
+
+    belongToManage(user: User) {
+        return this.userService.belongToManage(user);
     }
 
     initBreadCrumbs() {
@@ -138,6 +146,7 @@ export class UsersComponent implements OnInit {
         const data = {email, group};
 
         this.register(data);
+        this.modalService.dismissAll();
     }
 
     register(data) {

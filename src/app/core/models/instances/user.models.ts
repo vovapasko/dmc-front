@@ -14,7 +14,11 @@ export class User {
     isStaff?: boolean;
     isSuperuser?: boolean;
     token?: Token;
-    groups?: string;
+    groups?: [
+        {
+            name: string
+        }
+    ];
     password?: string;
     groupsCascadeDown?: Groups[];
 }

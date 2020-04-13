@@ -4,3 +4,9 @@ export enum Groups {
     'Manager',
     'Superuser'
 }
+
+export const ManageGroups = [
+    'Admin',
+    'Manager',
+    'Superuser'
+];

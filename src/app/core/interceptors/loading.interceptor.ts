@@ -4,6 +4,7 @@ import {Observable} from 'rxjs';
 import {finalize} from 'rxjs/operators';
 
 import {LoadingService} from '../services/loading.service';
+import {dmc} from '../constants/dmc';
 
 /**
  * This interceptor for control que of requests and set loading marker
@@ -23,6 +24,8 @@ export class LoadingInterceptor {
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         console.log('loading...');
+        console.log(dmc);
+
         if (this.activeRequests === 0) {
             this.loadingScreenService.startLoading();
         }

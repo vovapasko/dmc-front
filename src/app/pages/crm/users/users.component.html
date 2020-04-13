@@ -57,11 +57,15 @@
                                     {{user?.email}}
                                 </td>
                                 <td>
-                                    <span *ngIf="user?.isSuperuser"
-                                          class="badge bg-soft-success text-success">Superuser</span>
-                                    <span *ngIf="user?.isStaff" class="badge bg-soft-success text-success">Admin</span>
-                                    <span *ngIf="!user?.isSuperuser && !user?.isStaff"
-                                          class="badge bg-soft-warning text-warning">Client</span>
+                                    <span *ngFor="let group of user.groups;"
+                                          class="badge  text-success"
+                                          [ngClass]="{
+                                            'text-success bg-soft-success': belongToManage(user),
+                                             'bg-soft-warning text-warning': !belongToManage(user)
+                                             }"
+                                    >
+                                        {{group.name}}
+                                    </span>
                                 </td>
                                 <td>
                                     <span *ngIf="user?.isConfirmed" class="badge bg-soft-success text-success">Да</span>
@@ -77,7 +81,8 @@
                                 <td>
                                 <td>
 
-                                    <div *ngIf="currentUser?.groupsCascadeDown?.length" class="dropdown" placement="top-left" ngbDropdown>
+                                    <div *ngIf="currentUser?.groupsCascadeDown?.length" class="dropdown"
+                                         placement="top-left" ngbDropdown>
                                         <a href="javascript:void(0);"
                                            id="dropdownMenuLink"
                                            ngbDropdownToggle
@@ -96,14 +101,15 @@
                                     </div>
 
 
-                                <a (click)="delete(user)"
-                                   href="javascript:void(0);"
-                                   class="action-icon"
-                                >
-                                    <i class="mdi mdi-delete"></i>
-                                </a>
+                                    <a *ngIf="manage"
+                                       (click)="delete(user)"
+                                       href="javascript:void(0);"
+                                       class="action-icon"
+                                    >
+                                        <i class="mdi mdi-delete"></i>
+                                    </a>
 
-                            </td>
+                                </td>
                             </tr>
                             </tbody>
                         </table>
@@ -127,6 +133,9 @@
                         <h4 class="mt-0 mb-1">{{(selectedUser$ | async)?.firstName}} {{(selectedUser$ | async)?.lastName}}</h4>
                         <p class="text-muted" *ngIf="(selectedUser$ | async)?.isSuperuser">Суперпользователь</p>
                         <p class="text-muted" *ngIf="(selectedUser$ | async)?.isStaff">Администратор</p>
+                        <p *ngFor="let group of (selectedUser$ | async)?.groups;" class="text-muted">
+                            {{group.name}}
+                        </p>
                     </div>
                 </div>
 
