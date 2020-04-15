@@ -170,6 +170,15 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
             return;
         }
         this.left = left;
+        this.calculatePercentage();
+    }
+
+    calculatePercentage() {
+        const {left, total} = this;
+        const percent = left / total * 100;
+        const revenue = Object.assign({}, revenueRadialChart);
+        revenue.plotOptions.radialBar.hollow = `${percent}%`;
+        this.revenueRadialChart = revenue;
     }
 
     /**
