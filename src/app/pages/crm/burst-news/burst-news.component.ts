@@ -1,6 +1,7 @@
 import {
     AfterViewChecked,
-    AfterViewInit, ChangeDetectionStrategy,
+    AfterViewInit,
+    ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
     OnInit,
@@ -8,16 +9,26 @@ import {
     ViewContainerRef
 } from '@angular/core';
 import {WizardComponent as BaseWizardComponent} from 'angular-archwizard';
-import {FormBuilder, Validators, FormGroup} from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import {NestableSettings} from 'ngx-nestable/lib/nestable.models';
 
 import {Steps} from '../../../core/constants/steps';
 import {ChartType} from '../../dashboards/default/default.model';
 import {revenueRadialChart} from '../../dashboards/default/data';
-import {Store} from '@ngrx/store';
+import {select, Store} from '@ngrx/store';
 import {IAppState} from '../../../core/store/state/app.state';
-import {GetProject, GetProjectConfiguration} from '../../../core/store/actions/news.actions';
-import {NewsService} from "../../../core/services/news.service";
+import {GetProjectConfiguration} from '../../../core/store/actions/news.actions';
+import {NewsService} from '../../../core/services/news.service';
+import {
+    selectCharacters,
+    selectContractors,
+    selectFormats,
+    selectHashtags,
+    selectMethods
+} from '../../../core/store/selectors/news.selectors';
+import {Contractor} from '../../../core/models/instances/contractor';
+import {NotificationService} from '../../../core/services/notification.service';
+import {NotificationType} from '../../../core/models/instances/notification';
 
 
 /**
@@ -34,9 +45,19 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
 
     list = [{id: 1}, {id: 11}];
     breadCrumbItems: Array<{}>;
+
+    contractors$ = this.store.pipe(select(selectContractors));
+    hashtags$ = this.store.pipe(select(selectHashtags));
+    formats$ = this.store.pipe(select(selectFormats));
+    characters$ = this.store.pipe(select(selectCharacters));
+    methods$ = this.store.pipe(select(selectMethods));
+
+    total = 0;
+    left = 0;
+
     step: Steps = 0;
     validationForm: FormGroup;
-    profileValidationForm: FormGroup;
+    editorForm: FormGroup;
 
     public options = {
         fixedDepth: true
@@ -86,7 +107,8 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
         private vcr: ViewContainerRef,
         private cdr: ChangeDetectorRef,
         private store: Store<IAppState>,
-        private newsService: NewsService
+        private newsService: NewsService,
+        private notificationService: NotificationService
     ) {
     }
 
@@ -114,27 +136,15 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
 
     initForms() {
         this.initValidateForm();
-        this.initProfileForm();
+        this.initEditorForm();
     }
 
     initValidateForm() {
-        this.validationForm = this.formBuilder.group({
-            client: ['', Validators.required],
-            project: ['', Validators.required],
-            nature: ['', Validators.required],
-            title: ['', Validators.required],
-            hashtags: ['', Validators.required],
-            format: ['', Validators.required],
-            method: ['', Validators.required],
-            budget: ['', Validators.required],
-            contractors: ['', Validators.required],
-        });
+        this.validationForm = this.newsService.initializeValidationForm();
     }
 
-    initProfileForm() {
-        this.profileValidationForm = this.formBuilder.group({
-            editor: ['', Validators.required]
-        });
+    initEditorForm() {
+        this.editorForm = this.newsService.initializeEditorForm();
     }
 
     initBreadCrumbs() {
@@ -150,6 +160,16 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
      */
     get form() {
         return this.validationForm.controls;
+    }
+
+    calculateLeft(contractors: Contractor[]) {
+        const total = this.total;
+        const left = total - contractors.reduce((a, c) => a + +c.onePostPrice, 0);
+        if (left < 0) {
+            this.notificationService.notify(NotificationType.warning, 'Внимание', 'Вы превысили бюджет', 3500);
+            return;
+        }
+        this.left = left;
     }
 
     /**

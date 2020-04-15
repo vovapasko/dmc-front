@@ -19,6 +19,13 @@ export const newsReducers = (
                 formats: action.payload
             };
         }
+        case ENewsActions.GetContractorsSuccess: {
+            return {
+                ...state,
+                contractors: action.payload
+            };
+        }
+
         case ENewsActions.GetHashtagsSuccess: {
             return {
                 ...state,

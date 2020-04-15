@@ -10,6 +10,11 @@ export const selectHashtags = createSelector(
     (state: INewsState) => state.hashtags
 );
 
+export const selectContractors = createSelector(
+    selectNews,
+    (state: INewsState) => state.contractors
+);
+
 export const selectMethods = createSelector(
     selectNews,
     (state: INewsState) => state.methods

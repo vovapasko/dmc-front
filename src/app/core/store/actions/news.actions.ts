@@ -3,11 +3,13 @@ import {Hashtag} from '../../models/instances/hashtag';
 import {Character} from '../../models/instances/character';
 import {Method} from '../../models/instances/method';
 import {Format} from '../../models/instances/format';
+import {Contractor} from '../../models/instances/contractor';
 
 export enum ENewsActions {
     GetProjectConfiguration = '[News] Get project configuration',
     GetProject = '[News] Get project',
     GetProjectSuccess = '[News] Get project success',
+    GetContractorsSuccess = '[News] Get contractors success',
     GetHashtagsSuccess = '[News] Get hashtags success',
     GetFormatsSuccess = '[News] Get formats success',
     GetCharactersSuccess = '[News] Get characters success',
@@ -17,7 +19,6 @@ export enum ENewsActions {
     CreateFormat = '[News] Create format',
     CreateFormatSuccess = '[News] Create format success'
 }
-
 
 
 export class GetProject implements Action {
@@ -45,6 +46,13 @@ export class GetHashtagsSuccess implements Action {
     public readonly type = ENewsActions.GetHashtagsSuccess;
 
     constructor(public payload: Hashtag[]) {
+    }
+}
+
+export class GetContractorsSuccess implements Action {
+    public readonly type = ENewsActions.GetContractorsSuccess;
+
+    constructor(public payload: Contractor[]) {
     }
 }
 
@@ -107,5 +115,6 @@ export type NewsActions =
     | GetHashtagsSuccess
     | GetMethodsSuccess
     | GetProjectConfiguration
+    | GetContractorsSuccess
     | GetProject;
 

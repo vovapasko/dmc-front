@@ -47,9 +47,10 @@
                                     <div class="col-xl-8">
 
                                         <div class="form-group row mb-3">
-                                            <label class="col-md-3 col-form-label"> Клиент </label>
+                                            <label for="client" class="col-md-3 col-form-label"> Клиент </label>
                                             <div class="col-md-9">
                                                 <input type="text"
+                                                       id="client"
                                                        class="form-control"
                                                        formControlName="client"
                                                        [ngClass]="{'is-invalid': submit && form.client.errors}"
@@ -62,9 +63,10 @@
                                         </div>
 
                                         <div class="form-group row mb-3">
-                                            <label class="col-md-3 col-form-label"> Название проекта </label>
+                                            <label for="project" class="col-md-3 col-form-label"> Название проекта </label>
                                             <div class="col-md-9">
                                                 <input type="text"
+                                                       id="project"
                                                        formControlName="project"
                                                        class="form-control"
                                                        [ngClass]="{'is-invalid': submit && form.project.errors}"
@@ -76,10 +78,12 @@
                                         </div>
 
                                         <div class="form-group row mb-3">
-                                            <label class="col-md-3 col-form-label"> Характер новости </label>
+                                            <label for="character" class="col-md-3 col-form-label"> Характер новости </label>
                                             <div class="col-md-9">
                                                 <ng-select
-                                                        [items]="['Стандартная', 'Негативная']"
+                                                        id="character"
+                                                        [items]="characters$ | async"
+                                                        bindLabel="character"
                                                         [closeOnSelect]="true"
                                                         placeholder="Выберите характер"
                                                         formControlName="nature"
@@ -92,9 +96,10 @@
                                         </div>
 
                                         <div class="form-group row mb-3">
-                                            <label class="col-md-3 col-form-label"> Заглавие </label>
+                                            <label for="title" class="col-md-3 col-form-label"> Заглавие </label>
                                             <div class="col-md-9">
                                                 <input type="text"
+                                                       id="title"
                                                        formControlName="title"
                                                        class="form-control"
                                                        [ngClass]="{'is-invalid': submit && form.title.errors}"
@@ -106,10 +111,12 @@
                                         </div>
 
                                         <div class="form-group row mb-3">
-                                            <label class="col-md-3 col-form-label"> Хештег </label>
+                                            <label for="hashtag" class="col-md-3 col-form-label"> Хештег </label>
                                             <div class="col-md-9">
                                                 <ng-select
-                                                        [items]="['First', 'Last']"
+                                                        id="hashtag"
+                                                        [items]="hashtags$ | async"
+                                                        bindLabel="name"
                                                         [multiple]="true"
                                                         [closeOnSelect]="false"
                                                         [hideSelected]="true"
@@ -124,10 +131,12 @@
                                         </div>
 
                                         <div class="form-group row mb-3">
-                                            <label class="col-md-3 col-form-label"> Формат размещения </label>
+                                            <label for="format" class="col-md-3 col-form-label"> Формат размещения </label>
                                             <div class="col-md-9">
                                                 <ng-select
-                                                        [items]="['Напрямую', 'Баер']"
+                                                        id="format"
+                                                        [items]="formats$ | async"
+                                                        bindLabel="postFormat"
                                                         [closeOnSelect]="true"
                                                         placeholder="Выберите формат"
                                                         formControlName="format"
@@ -140,10 +149,12 @@
                                         </div>
 
                                         <div class="form-group row mb-3">
-                                            <label class="col-md-3 col-form-label"> Метод разгона </label>
+                                            <label for="method" class="col-md-3 col-form-label"> Метод разгона </label>
                                             <div class="col-md-9">
                                                 <ng-select
-                                                        [items]="['Напрямую', 'Баер']"
+                                                        id="method"
+                                                        [items]="methods$ | async"
+                                                        bindLabel="method"
                                                         [closeOnSelect]="true"
                                                         placeholder="Выберите метод"
                                                         formControlName="method"
@@ -156,9 +167,11 @@
                                         </div>
 
                                         <div class="form-group row mb-3">
-                                            <label class="col-md-3 col-form-label"> Бюджет разгона </label>
+                                            <label for="budget" class="col-md-3 col-form-label"> Бюджет разгона </label>
                                             <div class="col-md-9">
                                                 <input type="number"
+                                                       id="budget"
+                                                       [(ngModel)]="total"
                                                        formControlName="budget"
                                                        class="form-control"
                                                        [formControlName]="'budget'"
@@ -171,14 +184,17 @@
                                         </div>
 
                                         <div class="form-group row mb-3">
-                                            <label class="col-md-3 col-form-label"> Котрагенты </label>
+                                            <label for="contractors" class="col-md-3 col-form-label"> Котрагенты </label>
                                             <div class="col-md-9">
                                                 <ng-select
-                                                        [items]="['Vasya', 'Vova']"
+                                                        id="contractors"
+                                                        [items]="contractors$ | async"
+                                                        bindLabel="editorName"
                                                         [multiple]="true"
                                                         [closeOnSelect]="false"
                                                         [hideSelected]="true"
                                                         placeholder="Выберите контрагентов"
+                                                        (change)="calculateLeft($event)"
                                                         formControlName="contractors"
                                                         [ngClass]="{'is-invalid': submit && form.contractors.errors}"
                                                 >
@@ -201,7 +217,7 @@
                                                            [stroke]="revenueRadialChart.stroke"
                                                 ></apx-chart>
                                                 <h5 class="text-muted">Бюджет разгона</h5>
-                                                <h2>$178</h2>
+                                                <h2>${{total}}</h2>
 
 
                                             </div>
@@ -254,7 +270,7 @@
                                     </a>
                                 </li>
                             </ul>
-                            <form (ngSubmit)="profileFormSubmit()" [formGroup]="profileValidationForm">
+                            <form (ngSubmit)="profileFormSubmit()" [formGroup]="editorForm">
 
                                 <quill-editor [styles]="{height: '400px', 'margin-bottom': '15px'}"
                                               (onFocus)="focus($event)"

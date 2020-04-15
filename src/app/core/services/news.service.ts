@@ -82,4 +82,24 @@ export class NewsService {
             postFormat: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(20)]],
         });
     }
+
+    initializeValidationForm() {
+        return this.formBuilder.group({
+            client: ['', Validators.required],
+            project: ['', Validators.required],
+            nature: ['', Validators.required],
+            title: ['', Validators.required],
+            hashtags: ['', Validators.required],
+            format: ['', Validators.required],
+            method: ['', Validators.required],
+            budget: ['', Validators.required],
+            contractors: ['', Validators.required],
+        });
+    }
+
+    initializeEditorForm() {
+        return this.formBuilder.group({
+            editor: ['', Validators.required]
+        });
+    }
 }

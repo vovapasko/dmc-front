@@ -6,7 +6,7 @@ import {NewsService} from '../../services/news.service';
 import {
     CreateFormat, CreateFormatSuccess,
     CreateHashtag, CreateHashtagSuccess,
-    ENewsActions, GetCharactersSuccess,
+    ENewsActions, GetCharactersSuccess, GetContractorsSuccess,
     GetFormatsSuccess,
     GetHashtagsSuccess,
     GetMethodsSuccess, GetProject, GetProjectConfiguration,
@@ -27,7 +27,8 @@ export class NewsEffects {
             new GetHashtagsSuccess(response.hashtags),
             new GetMethodsSuccess(response.burstMethods),
             new GetFormatsSuccess(response.formats),
-            new GetCharactersSuccess(response.characters)
+            new GetCharactersSuccess(response.characters),
+            new GetContractorsSuccess(response.contractors)
         ])
     );
 
