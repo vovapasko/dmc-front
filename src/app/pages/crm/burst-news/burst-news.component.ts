@@ -14,6 +14,10 @@ import {NestableSettings} from 'ngx-nestable/lib/nestable.models';
 import {Steps} from '../../../core/constants/steps';
 import {ChartType} from '../../dashboards/default/default.model';
 import {revenueRadialChart} from '../../dashboards/default/data';
+import {Store} from '@ngrx/store';
+import {IAppState} from '../../../core/store/state/app.state';
+import {GetProject, GetProjectConfiguration} from '../../../core/store/actions/news.actions';
+import {NewsService} from "../../../core/services/news.service";
 
 
 /**
@@ -80,7 +84,9 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     constructor(
         public formBuilder: FormBuilder,
         private vcr: ViewContainerRef,
-        private cdr: ChangeDetectorRef
+        private cdr: ChangeDetectorRef,
+        private store: Store<IAppState>,
+        private newsService: NewsService
     ) {
     }
 
@@ -103,6 +109,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
         this.submit = false;
         this.submitForm = false;
         this.revenueRadialChart = revenueRadialChart;
+        this.store.dispatch(new GetProjectConfiguration());
     }
 
     initForms() {

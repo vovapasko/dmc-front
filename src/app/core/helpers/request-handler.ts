@@ -73,7 +73,10 @@ export class RequestHandler {
                         const convertedCaseResponse = this.convertCase.convertFromSnakeToCamelCase(response);
                         return mapHandler(convertedCaseResponse);
                     },
-                    error => this.errorHandler.handle(error)
+                    error => {
+                        console.log(error);
+                        return this.errorHandler.handle(error);
+                    }
                 )
             );
     }

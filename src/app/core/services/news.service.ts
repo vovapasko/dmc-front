@@ -34,9 +34,18 @@ export class NewsService {
     ) {
     }
 
-    getAll(): Observable<any> {
+    getProjectConfiguration(): Observable<any> {
         return this.requestHandler.request(
-            `${api}/burst-news/`,
+            `${api}/news-projects/`,
+            'get',
+            null,
+            (response: GetAllResponse) => response
+        );
+    }
+
+    getProjectData(payload): any {
+        return this.requestHandler.request(
+            `${api}/burst-news/${payload.id}`,
             'get',
             null,
             (response: GetAllResponse) => response

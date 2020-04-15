@@ -5,7 +5,9 @@ import {Method} from '../../models/instances/method';
 import {Format} from '../../models/instances/format';
 
 export enum ENewsActions {
-    GetProjectInfo = '[News] Get project info',
+    GetProjectConfiguration = '[News] Get project configuration',
+    GetProject = '[News] Get project',
+    GetProjectSuccess = '[News] Get project success',
     GetHashtagsSuccess = '[News] Get hashtags success',
     GetFormatsSuccess = '[News] Get formats success',
     GetCharactersSuccess = '[News] Get characters success',
@@ -16,10 +18,26 @@ export enum ENewsActions {
     CreateFormatSuccess = '[News] Create format success'
 }
 
-export class GetProjectInfo implements Action {
-    public readonly type = ENewsActions.GetProjectInfo;
+
+
+export class GetProject implements Action {
+    public readonly type = ENewsActions.GetProject;
+
+    constructor(public payload) {
+    }
+}
+
+export class GetProjectConfiguration implements Action {
+    public readonly type = ENewsActions.GetProjectConfiguration;
 
     constructor() {
+    }
+}
+
+export class GetProjectSuccess implements Action {
+    public readonly type = ENewsActions.GetProjectSuccess;
+
+    constructor(public payload) {
     }
 }
 
@@ -88,5 +106,6 @@ export type NewsActions =
     | GetFormatsSuccess
     | GetHashtagsSuccess
     | GetMethodsSuccess
-    | GetProjectInfo;
+    | GetProjectConfiguration
+    | GetProject;
 

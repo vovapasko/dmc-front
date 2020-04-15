@@ -9,8 +9,7 @@ import {
     ENewsActions, GetCharactersSuccess,
     GetFormatsSuccess,
     GetHashtagsSuccess,
-    GetMethodsSuccess,
-    GetProjectInfo
+    GetMethodsSuccess, GetProject, GetProjectConfiguration,
 } from '../actions/news.actions';
 import {GetAllResponse} from '../../models/responses/news/getAllResponse';
 import {Hashtag} from '../../models/instances/hashtag';
@@ -19,11 +18,11 @@ import {Format} from '../../models/instances/format';
 @Injectable({
     providedIn: 'root'
 })
-export class ContractorEffects {
+export class NewsEffects {
     @Effect()
-    getProjectInfo$ = this.actions$.pipe(
-        ofType<GetProjectInfo>(ENewsActions.GetProjectInfo),
-        switchMap(() => this.newsService.getAll()),
+    getProjectConfiguration$ = this.actions$.pipe(
+        ofType<GetProjectConfiguration>(ENewsActions.GetProjectConfiguration),
+        switchMap(() => this.newsService.getProjectConfiguration()),
         mergeMap((response: GetAllResponse) => [
             new GetHashtagsSuccess(response.hashtags),
             new GetMethodsSuccess(response.burstMethods),

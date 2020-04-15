@@ -70,7 +70,7 @@ export class AuthenticationService {
      */
     login(payload: LoginPayload): Observable<User> {
         return this.requestHandler.request(
-            `${api}/login/`,
+            `${api}/login_service/`,
             'post',
             payload,
             (response: LoginResponse) => {
