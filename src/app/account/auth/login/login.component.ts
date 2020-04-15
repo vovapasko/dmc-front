@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     loginForm: FormGroup;
     submitted = false;
     loading$: Subject<boolean>;
-    error$: Subject<any>;;
+    error$: Subject<any>;
     visible = false;
 
     constructor(

@@ -35,7 +35,7 @@ import {ServerError} from "../../../core/models/responses/serverError";
 export class ContractorsComponent implements OnInit {
 
     loading$: Subject<boolean>;
-    error$: Subject<any>;;
+    error$: Subject<any>;
 
     selectedContractor$: BehaviorSubject<Contractor> = new BehaviorSubject(null);
     checkedContractors$: BehaviorSubject<Array<Contractor>> = new BehaviorSubject([]);

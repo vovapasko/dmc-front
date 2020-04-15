@@ -2,7 +2,7 @@ import {environment} from '../../../environments/environment';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {RequestHandler} from '../helpers/request-handler';
-import {FormBuilder} from '@angular/forms';
+import {FormBuilder, Validators} from '@angular/forms';
 import {PaginationService} from './pagination.service';
 import {CookieService} from '../providers/cookie.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -14,6 +14,7 @@ import {CreateHashtagPayload} from '../models/payloads/news/create-hashtag';
 import {CreateHashtagResponse} from '../models/responses/news/create-hashtag';
 import {CreatePostFormatPayload} from '../models/payloads/news/create-post-format';
 import {CreatePostFormatResponse} from '../models/responses/news/create-post-format';
+import numbers from "../constants/numbers";
 
 
 const api = environment.api;
@@ -68,5 +69,17 @@ export class NewsService {
             payload,
             (response: CreatePostFormatResponse) => response.postMethod
         );
+    }
+
+    initializeCreateHashtagForm() {
+        return this.formBuilder.group({
+            name: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(20)]],
+        });
+    }
+
+    initializeCreateFormatForm() {
+        return this.formBuilder.group({
+            postFormat: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(20)]],
+        });
     }
 }
