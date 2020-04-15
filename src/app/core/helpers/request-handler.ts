@@ -14,6 +14,8 @@ import {ConfirmResetPasswordPayload} from '../models/payloads/user/confirmResetP
 import {RegisterPayload} from '../models/payloads/user/register';
 import {SignupPayload} from '../models/payloads/user/signup';
 import {UpdateProfilePayload} from '../models/payloads/user/updateProfile';
+import {CreateHashtagPayload} from "../models/payloads/news/create-hashtag";
+import {CreatePostFormatPayload} from "../models/payloads/news/create-post-format";
 
 /**
  * This service handle request from client, process and send to server
@@ -51,6 +53,8 @@ export class RequestHandler {
             | ConfirmResetPasswordPayload
             | RegisterPayload
             | SignupPayload
+            | CreateHashtagPayload
+            | CreatePostFormatPayload
             | UpdateProfilePayload,
         mapHandler = (res) => {
         }
