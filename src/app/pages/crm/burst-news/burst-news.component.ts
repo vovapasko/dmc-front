@@ -9,7 +9,7 @@ import {
     ViewContainerRef
 } from '@angular/core';
 import {WizardComponent as BaseWizardComponent} from 'angular-archwizard';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {AbstractControl, FormBuilder, FormGroup} from '@angular/forms';
 import {NestableSettings} from 'ngx-nestable/lib/nestable.models';
 
 import {Steps} from '../../../core/constants/steps';
@@ -140,7 +140,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     }
 
     initValidateForm() {
-        this.validationForm = this.newsService.initializeValidationForm();
+        this.validationForm = this.newsService.initializeValidationForm(this.budgetValidator.bind(this));
     }
 
     initEditorForm() {
@@ -155,6 +155,15 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
         }];
     }
 
+    budgetValidator(control: AbstractControl): { [key: string]: boolean } | null {
+        const left = this.calculateLeft();
+        if (left < 0) {
+            this.notificationService.notify(NotificationType.warning, 'Внимание', `Вы превысили бюджет на ${left * -1}`, 3500);
+            return {budget: true};
+        }
+        return null;
+    }
+
     /**
      * Returns form
      */
@@ -163,25 +172,29 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     }
 
     calculateLeft() {
-        // @ts-ignore
-        const contractors = (this.form.contractors as unknown as Contractor[]).value || [];
-        const total = this.total;
-        const left = total - contractors.reduce((a, c) => a + +c.onePostPrice, 0);
-        if (left < 0) {
-            this.notificationService.notify(NotificationType.warning, 'Внимание', `Вы превысили бюджет на ${left * -1}`, 3500);
-            return;
+        if (this.validationForm) {
+            const contractorsControl = (this.form.contractors as unknown as Contractor[]);
+            // @ts-ignore
+            const contractors = contractorsControl ? (contractorsControl.value || []) : [];
+            const left = this.budget - contractors.reduce((a, c) => a + +c.onePostPrice, 0);
+            this.calculatePercentage(left);
+            return left;
         }
-        this.left = left;
-        this.calculatePercentage();
+        return null;
     }
 
-    calculatePercentage() {
-        const {left, total} = this;
+    get budget() {
+        const budgetControl = this.form.budget;
+        return budgetControl ? (budgetControl.value || 0) : 0;
+    }
+
+    calculatePercentage(left) {
         // tslint:disable-next-line:no-bitwise
-        const percent = ~~(left / total * 100);
+        const percent = ~~(left / this.budget * 100);
         const revenue = Object.assign({}, revenueRadialChart);
         revenue.series = [percent];
         this.revenueRadialChart = revenue;
+        this.left = left;
     }
 
     /**

@@ -174,8 +174,6 @@
                                             <div class="col-md-9">
                                                 <input type="number"
                                                        id="budget"
-                                                       [(ngModel)]="total"
-                                                       (change)="calculateLeft()"
                                                        formControlName="budget"
                                                        class="form-control"
                                                        placeholder="Введите бюджет"
@@ -199,7 +197,6 @@
                                                         [closeOnSelect]="false"
                                                         [hideSelected]="true"
                                                         placeholder="Выберите контрагентов"
-                                                        (change)="calculateLeft()"
                                                         formControlName="contractors"
                                                         [ngClass]="{'is-invalid': submit && form.contractors.errors}"
                                                 >
@@ -221,8 +218,9 @@
                                                            [colors]="revenueRadialChart.colors"
                                                            [stroke]="revenueRadialChart.stroke"
                                                 ></apx-chart>
-                                                <h5 class="text-muted">Осталось</h5>
-                                                <h2>${{left}}</h2>
+
+                                                <h5 class="text-muted">{{left > 0 ? 'Осталось' : 'Не хватает'}}</h5>
+                                                <h2>${{left > 0 ? left : left * -1}}</h2>
 
 
                                             </div>

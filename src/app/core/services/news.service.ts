@@ -83,7 +83,7 @@ export class NewsService {
         });
     }
 
-    initializeValidationForm() {
+    initializeValidationForm(validator) {
         return this.formBuilder.group({
             client: [null, Validators.required],
             project: [null, Validators.required],
@@ -92,8 +92,8 @@ export class NewsService {
             hashtags: [null, Validators.required],
             format: [null, Validators.required],
             method: [null, Validators.required],
-            budget: [null, Validators.required],
-            contractors: [null, Validators.required],
+            budget: [null, [Validators.required, validator]],
+            contractors: [null, [Validators.required, validator]],
         });
     }
 
