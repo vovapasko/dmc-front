@@ -51,6 +51,7 @@
                                             <div class="col-md-9">
                                                 <input type="text"
                                                        id="client"
+                                                       placeholder="Введите клиента"
                                                        class="form-control"
                                                        formControlName="client"
                                                        [ngClass]="{'is-invalid': submit && form.client.errors}"
@@ -67,6 +68,7 @@
                                             <div class="col-md-9">
                                                 <input type="text"
                                                        id="project"
+                                                       placeholder="Введите название проекта"
                                                        formControlName="project"
                                                        class="form-control"
                                                        [ngClass]="{'is-invalid': submit && form.project.errors}"
@@ -85,7 +87,7 @@
                                                         [items]="characters$ | async"
                                                         bindLabel="character"
                                                         [closeOnSelect]="true"
-                                                        placeholder="Выберите характер"
+                                                        placeholder="Выберите характер новости"
                                                         formControlName="nature"
                                                         [ngClass]="{'is-invalid': submit && form.nature.errors}"
                                                 ></ng-select>
@@ -101,6 +103,7 @@
                                                 <input type="text"
                                                        id="title"
                                                        formControlName="title"
+                                                       placeholder="Введите заглавие"
                                                        class="form-control"
                                                        [ngClass]="{'is-invalid': submit && form.title.errors}"
                                                 >
@@ -172,8 +175,10 @@
                                                 <input type="number"
                                                        id="budget"
                                                        [(ngModel)]="total"
+                                                       (change)="calculateLeft()"
                                                        formControlName="budget"
                                                        class="form-control"
+                                                       placeholder="Введите бюджет"
                                                        [formControlName]="'budget'"
                                                        [ngClass]="{'is-invalid': submit && form.budget.errors}"
                                                 >
@@ -194,7 +199,7 @@
                                                         [closeOnSelect]="false"
                                                         [hideSelected]="true"
                                                         placeholder="Выберите контрагентов"
-                                                        (change)="calculateLeft($event)"
+                                                        (change)="calculateLeft()"
                                                         formControlName="contractors"
                                                         [ngClass]="{'is-invalid': submit && form.contractors.errors}"
                                                 >

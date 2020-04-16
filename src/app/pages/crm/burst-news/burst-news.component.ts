@@ -162,11 +162,13 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
         return this.validationForm.controls;
     }
 
-    calculateLeft(contractors: Contractor[]) {
+    calculateLeft() {
+        // @ts-ignore
+        const contractors = (this.form.contractors as unknown as Contractor[]).value || [];
         const total = this.total;
         const left = total - contractors.reduce((a, c) => a + +c.onePostPrice, 0);
         if (left < 0) {
-            this.notificationService.notify(NotificationType.warning, 'Внимание', 'Вы превысили бюджет', 3500);
+            this.notificationService.notify(NotificationType.warning, 'Внимание', `Вы превысили бюджет на ${left * -1}`, 3500);
             return;
         }
         this.left = left;
@@ -175,9 +177,10 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
 
     calculatePercentage() {
         const {left, total} = this;
-        const percent = left / total * 100;
+        // tslint:disable-next-line:no-bitwise
+        const percent = ~~(left / total * 100);
         const revenue = Object.assign({}, revenueRadialChart);
-        revenue.plotOptions.radialBar.hollow = `${percent}%`;
+        revenue.series = [percent];
         this.revenueRadialChart = revenue;
     }
 

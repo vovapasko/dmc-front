@@ -85,15 +85,15 @@ export class NewsService {
 
     initializeValidationForm() {
         return this.formBuilder.group({
-            client: ['', Validators.required],
-            project: ['', Validators.required],
-            nature: ['', Validators.required],
-            title: ['', Validators.required],
-            hashtags: ['', Validators.required],
-            format: ['', Validators.required],
-            method: ['', Validators.required],
-            budget: ['', Validators.required],
-            contractors: ['', Validators.required],
+            client: [null, Validators.required],
+            project: [null, Validators.required],
+            nature: [null, Validators.required],
+            title: [null, Validators.required],
+            hashtags: [null, Validators.required],
+            format: [null, Validators.required],
+            method: [null, Validators.required],
+            budget: [null, Validators.required],
+            contractors: [null, Validators.required],
         });
     }
 
