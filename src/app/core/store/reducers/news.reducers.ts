@@ -50,6 +50,18 @@ export const newsReducers = (
                 hashtags: [...state.hashtags, action.payload]
             };
         }
+        case ENewsActions.CreateProjectSuccess: {
+            return {
+                ...state,
+                projects: [...state.projects, action.payload]
+            };
+        }
+        case ENewsActions.GetProjectSuccess: {
+            return {
+                ...state,
+                project: action.payload
+            };
+        }
         default:
             return state;
     }

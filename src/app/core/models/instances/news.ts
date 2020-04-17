@@ -1,3 +1,5 @@
 export interface News {
-    id: number;
+    id?: number;
+    title: string;
+    contractors: string;
 }

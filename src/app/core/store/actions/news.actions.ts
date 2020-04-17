@@ -4,11 +4,14 @@ import {Character} from '../../models/instances/character';
 import {Method} from '../../models/instances/method';
 import {Format} from '../../models/instances/format';
 import {Contractor} from '../../models/instances/contractor';
+import {Project} from '../../models/instances/project';
 
 export enum ENewsActions {
     GetProjectConfiguration = '[News] Get project configuration',
     GetProject = '[News] Get project',
     GetProjectSuccess = '[News] Get project success',
+    CreateProject = '[News] Create project',
+    CreateProjectSuccess = '[News] Create project success',
     GetContractorsSuccess = '[News] Get contractors success',
     GetHashtagsSuccess = '[News] Get hashtags success',
     GetFormatsSuccess = '[News] Get formats success',
@@ -28,6 +31,20 @@ export class GetProject implements Action {
     }
 }
 
+export class CreateProject implements Action {
+    public readonly type = ENewsActions.CreateProject;
+
+    constructor(public payload) {
+    }
+}
+
+export class CreateProjectSuccess implements Action {
+    public readonly type = ENewsActions.CreateProjectSuccess;
+
+    constructor(public payload) {
+    }
+}
+
 export class GetProjectConfiguration implements Action {
     public readonly type = ENewsActions.GetProjectConfiguration;
 
@@ -38,7 +55,7 @@ export class GetProjectConfiguration implements Action {
 export class GetProjectSuccess implements Action {
     public readonly type = ENewsActions.GetProjectSuccess;
 
-    constructor(public payload) {
+    constructor(public payload: Project) {
     }
 }
 
@@ -116,5 +133,9 @@ export type NewsActions =
     | GetMethodsSuccess
     | GetProjectConfiguration
     | GetContractorsSuccess
-    | GetProject;
+    | GetProject
+    | CreateProjectSuccess
+    | CreateProject
+    | GetProjectSuccess
+    ;
 

@@ -14,6 +14,7 @@ export interface INewsState {
     methods: Method[];
     projects: Project[];
     news: News[];
+    project: Project;
 }
 
 export const initialNewsState: INewsState = {
@@ -23,5 +24,6 @@ export const initialNewsState: INewsState = {
     characters: [],
     methods: [],
     projects: [],
-    contractors: []
+    contractors: [],
+    project: null
 };

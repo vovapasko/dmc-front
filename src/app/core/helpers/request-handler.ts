@@ -16,6 +16,7 @@ import {SignupPayload} from '../models/payloads/user/signup';
 import {UpdateProfilePayload} from '../models/payloads/user/updateProfile';
 import {CreateHashtagPayload} from "../models/payloads/news/create-hashtag";
 import {CreatePostFormatPayload} from "../models/payloads/news/create-post-format";
+import {CreateProjectPayload} from "../models/payloads/news/create-project";
 
 /**
  * This service handle request from client, process and send to server
@@ -55,7 +56,8 @@ export class RequestHandler {
             | SignupPayload
             | CreateHashtagPayload
             | CreatePostFormatPayload
-            | UpdateProfilePayload,
+            | UpdateProfilePayload
+            | CreateProjectPayload,
         mapHandler = (res) => {
         }
     ) {

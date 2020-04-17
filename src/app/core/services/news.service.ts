@@ -15,6 +15,8 @@ import {CreateHashtagResponse} from '../models/responses/news/create-hashtag';
 import {CreatePostFormatPayload} from '../models/payloads/news/create-post-format';
 import {CreatePostFormatResponse} from '../models/responses/news/create-post-format';
 import numbers from "../constants/numbers";
+import {CreateProjectPayload} from "../models/payloads/news/create-project";
+import {CreateProjectResponse} from "../models/responses/news/create-project";
 
 
 const api = environment.api;
@@ -37,16 +39,25 @@ export class NewsService {
 
     getProjectConfiguration(): Observable<any> {
         return this.requestHandler.request(
-            `${api}/news-projects/`,
+            `${api}/burst-news/`,
             'get',
             null,
             (response: GetAllResponse) => response
         );
     }
 
-    getProjectData(payload): any {
+    createProject(payload: CreateProjectPayload) {
         return this.requestHandler.request(
-            `${api}/burst-news/${payload.id}`,
+            `${api}/news-project/`,
+            'post',
+            payload,
+            (response: CreateProjectResponse) => response
+        );
+    }
+
+    getProject(payload): any {
+        return this.requestHandler.request(
+            `${api}/news-projects/${payload.id}`,
             'get',
             null,
             (response: GetAllResponse) => response
