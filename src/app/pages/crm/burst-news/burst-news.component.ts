@@ -9,7 +9,7 @@ import {
     ViewContainerRef
 } from '@angular/core';
 import {WizardComponent as BaseWizardComponent} from 'angular-archwizard';
-import {AbstractControl, FormBuilder, FormGroup} from '@angular/forms';
+import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {NestableSettings} from 'ngx-nestable/lib/nestable.models';
 
 import {Steps} from '../../../core/constants/steps';
@@ -52,12 +52,16 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     characters$ = this.store.pipe(select(selectCharacters));
     methods$ = this.store.pipe(select(selectMethods));
 
+    newsSubmit = false;
+
     total = 0;
     left = 0;
 
     step: Steps = 0;
     validationForm: FormGroup;
     editorForm: FormGroup;
+    newsForm: FormGroup;
+    controls: FormArray;
 
     public options = {
         fixedDepth: true
@@ -65,31 +69,32 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
 
     cardData = [
         {
-            title: true,
+            id: 111,
+            title: 'Title',
             image: 'assets/images/small/img-1.jpg',
-            text: 'Some text',
-            list: [{id: 7, title: 'lol Cras justo odio'}, {id: 8, title: 'kek Dapibus ac facilisis in'}],
-            button: true
+            contractors: [{id: 7, title: 'lol Cras justo odio'}, {id: 8, title: 'kek Dapibus ac facilisis in'}],
+            button: false
         },
         {
-            title: true,
+            id: 222,
+            title: 'Title',
             image: 'assets/images/small/img-2.jpg',
-            text: 'Some text',
-            list: [{id: 6, title: 'test Cras justo odio'}, {id: 5, title: 'me Dapibus ac facilisis in'}],
+            contractors: [{id: 6, title: 'test Cras justo odio'}, {id: 5, title: 'me Dapibus ac facilisis in'}],
             link: ['Card link', 'Another link']
         },
         {
+            id: 333,
+            title: 'Title',
             image: 'assets/images/small/img-3.jpg',
-            text: 'Some text',
-            list: [{id: 2, title: 'Cras justo odio'}, {id: 3, title: 'Dapibus ac facilisis in'}],
-            button: true
+            contractors: [{id: 2, title: 'Cras justo odio'}, {id: 3, title: 'Dapibus ac facilisis in'}],
+            button: false
         },
         {
-            title: true,
+            id: 444,
+            title: 'Title',
             image: 'assets/images/small/img-4.jpg',
-            text: 'Some text',
-            list: [{id: 10, title: 'lul Cras justo odio'}, {id: 11, title: 'wow Dapibus ac facilisis in'}],
-            button: true
+            contractors: [{id: 10, title: 'lul Cras justo odio'}, {id: 11, title: 'wow Dapibus ac facilisis in'}],
+            button: false
         },
     ];
 
@@ -125,6 +130,19 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
         this.initBreadCrumbs();
         this.initForms();
         this.initSubscriptions();
+
+        const toGroups = this.cardData.map(entity => {
+            return new FormGroup({
+                title: new FormControl(entity.title, Validators.required),
+                image: new FormControl(entity.image, Validators.required),
+                contractors: new FormControl(entity.contractors, Validators.required)
+            });
+        });
+        this.controls = new FormArray(toGroups);
+    }
+
+    getControl(index: number, field: string): FormControl {
+        return this.controls.at(index).get(field) as FormControl;
     }
 
     initSubscriptions() {
@@ -204,7 +222,15 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
         this.submit = true;
     }
 
+    newsFormSubmit() {
+        this.newsSubmit = true;
+    }
+
     onChange(changes) {
+        console.log(changes);
+    }
+
+    onDrop(changes) {
         console.log(changes);
     }
 
@@ -237,5 +263,20 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
         console.log('blur', $event);
         this.focused = false;
         this.blured = true;
+    }
+
+    updateField(index: number, field: string) {
+        const control = this.getControl(index, field);
+        if (control.valid) {
+            this.cardData = this.cardData.map((e, i) => {
+                if (index === i) {
+                    return {
+                        ...e,
+                        [field]: control.value
+                    };
+                }
+                return e;
+            });
+        }
     }
 }

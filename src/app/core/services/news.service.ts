@@ -14,9 +14,9 @@ import {CreateHashtagPayload} from '../models/payloads/news/create-hashtag';
 import {CreateHashtagResponse} from '../models/responses/news/create-hashtag';
 import {CreatePostFormatPayload} from '../models/payloads/news/create-post-format';
 import {CreatePostFormatResponse} from '../models/responses/news/create-post-format';
-import numbers from "../constants/numbers";
-import {CreateProjectPayload} from "../models/payloads/news/create-project";
-import {CreateProjectResponse} from "../models/responses/news/create-project";
+import numbers from '../constants/numbers';
+import {CreateProjectPayload} from '../models/payloads/news/create-project';
+import {CreateProjectResponse} from '../models/responses/news/create-project';
 
 
 const api = environment.api;

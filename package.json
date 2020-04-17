@@ -38,6 +38,7 @@
     "@iplab/ngx-file-upload": "^1.4.0",
     "@ng-bootstrap/ng-bootstrap": "^5.1.0",
     "@ng-select/ng-select": "^3.0.3",
+    "@ngneat/until-destroy": "^7.1.6",
     "@ngrx/core": "^1.2.0",
     "@ngrx/effects": "^9.0.0",
     "@ngrx/router-store": "^9.0.0",

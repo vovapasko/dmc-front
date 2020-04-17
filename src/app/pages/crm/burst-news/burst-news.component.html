@@ -64,7 +64,8 @@
                                         </div>
 
                                         <div class="form-group row mb-3">
-                                            <label for="project" class="col-md-3 col-form-label"> Название проекта </label>
+                                            <label for="project" class="col-md-3 col-form-label"> Название
+                                                проекта </label>
                                             <div class="col-md-9">
                                                 <input type="text"
                                                        id="project"
@@ -80,7 +81,8 @@
                                         </div>
 
                                         <div class="form-group row mb-3">
-                                            <label for="character" class="col-md-3 col-form-label"> Характер новости </label>
+                                            <label for="character" class="col-md-3 col-form-label"> Характер
+                                                новости </label>
                                             <div class="col-md-9">
                                                 <ng-select
                                                         id="character"
@@ -134,7 +136,8 @@
                                         </div>
 
                                         <div class="form-group row mb-3">
-                                            <label for="format" class="col-md-3 col-form-label"> Формат размещения </label>
+                                            <label for="format" class="col-md-3 col-form-label"> Формат
+                                                размещения </label>
                                             <div class="col-md-9">
                                                 <ng-select
                                                         id="format"
@@ -187,7 +190,8 @@
                                         </div>
 
                                         <div class="form-group row mb-3">
-                                            <label for="contractors" class="col-md-3 col-form-label"> Котрагенты </label>
+                                            <label for="contractors" class="col-md-3 col-form-label">
+                                                Котрагенты </label>
                                             <div class="col-md-9">
                                                 <ng-select
                                                         id="contractors"
@@ -335,54 +339,58 @@
                                     </a>
                                 </li>
                             </ul>
-
+                            <form (ngSubmit)="newsFormSubmit()" [formGroup]="newsForm">
                                 <div class="row">
-                                    <div class="col-md-6 col-xl-3" *ngFor="let carddata of cardData">
+                                    <div class="col-md-6 col-xl-3" *ngFor="let carddata of cardData; index as index">
 
                                         <!-- Simple card -->
                                         <div class="card">
-                                            <img class="card-img-top img-fluid" src="{{carddata.image}}" alt="Card image cap">
+                                            <img class="card-img-top img-fluid" src="{{carddata.image}}"
+                                                 alt="Card image cap">
                                             <div class="card-body">
-                                                <h5 class="card-title" *ngIf="carddata.title">
-                                                    {{carddata.title}}
-                                                </h5>
-                                                <p class="card-text">{{carddata.text}}</p>
+                                                <editable (update)="updateField(index, 'title')">
+                                                    <ng-template viewMode>
+                                                        {{carddata.title}}
+                                                    </ng-template>
+                                                    <ng-template editMode>
+                                                        <input [formControl]="getControl(index, 'title')" focusable>
+                                                    </ng-template>
+                                                </editable>
                                             </div>
                                             <ul class="list-group list-group-flush" *ngIf="carddata.list">
-                                                <ngx-nestable [(list)]="carddata.list"
+                                                <ngx-nestable [(list)]="carddata.contractors"
                                                               [options]="options"
                                                               [template]="tpl"
+                                                              (drop)="onDrop($event)"
                                                 >
                                                 </ngx-nestable>
 
                                                 <ng-template #tpl let-news>
-                                                    <li *ngIf="news" [ngxNestableDragHandle]="news" class="list-group-item">
+                                                    <li *ngIf="news" [ngxNestableDragHandle]="news"
+                                                        class="list-group-item">
                                                         {{news?.item?.title}}
                                                     </li>
                                                 </ng-template>
                                             </ul>
 
-                                            <div class="card-body">
-                                                <a href="javascript: void(0);" class="card-link">Закрепить</a>
-                                                <a href="javascript: void(0);" class="card-link">Открепить</a>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <ul class="list-inline wizard mb-0">
-                                    <li class="previous list-inline-item">
-                                        <button class="btn btn-secondary"
-                                                type="button"
-                                                awPreviousStep>Назад
-                                        </button>
-                                    </li>
-                                    <li class="next list-inline-item float-right">
-                                        <button class="btn btn-secondary"
-                                                awNextStep
-                                                type="submit">Дальше
-                                        </button>
-                                    </li>
-                                </ul>
+                            </form>
+                            <ul class="list-inline wizard mb-0">
+                                <li class="previous list-inline-item">
+                                    <button class="btn btn-secondary"
+                                            type="button"
+                                            awPreviousStep>Назад
+                                    </button>
+                                </li>
+                                <li class="next list-inline-item float-right">
+                                    <button class="btn btn-secondary"
+                                            awNextStep
+                                            type="submit">Дальше
+                                    </button>
+                                </li>
+                            </ul>
                         </aw-wizard-step>
 
                         <aw-wizard-step (stepEnter)="step = 3" [canEnter]="validationForm.valid">
@@ -446,6 +454,11 @@
                                 <li class="previous list-inline-item">
                                     <button class="btn btn-secondary" awPreviousStep>
                                         Назад
+                                    </button>
+                                </li>
+                                <li class="next list-inline-item float-right">
+                                    <button class="btn btn-secondary" type="submit">
+                                        Отправить
                                     </button>
                                 </li>
                             </ul>
