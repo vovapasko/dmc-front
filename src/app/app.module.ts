@@ -28,6 +28,7 @@ import {ContractorEffects} from './core/store/effects/contractor.effects';
 import {reducerProvider, reducerToken} from './core/store/reducers/app.reducers';
 
 import {environment} from '../environments/environment';
+import {NewsEffects} from './core/store/effects/news.effects';
 
 
 @NgModule({
@@ -40,13 +41,13 @@ import {environment} from '../environments/environment';
     imports: [
         SharedModule,
         CoreModule,
-        BrowserModule,
         BrowserAnimationsModule,
+        BrowserModule,
         HttpClientModule,
         LayoutsModule,
         AppRoutingModule,
         StoreModule.forRoot(reducerToken),
-        EffectsModule.forRoot([UserEffects, ContractorEffects]),
+        EffectsModule.forRoot([UserEffects, ContractorEffects, NewsEffects]),
         StoreRouterConnectingModule.forRoot({stateKey: 'router'}),
         !environment.production ? StoreDevtoolsModule.instrument() : [],
         ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production}),

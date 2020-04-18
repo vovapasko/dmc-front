@@ -14,6 +14,9 @@ import {ConfirmResetPasswordPayload} from '../models/payloads/user/confirmResetP
 import {RegisterPayload} from '../models/payloads/user/register';
 import {SignupPayload} from '../models/payloads/user/signup';
 import {UpdateProfilePayload} from '../models/payloads/user/updateProfile';
+import {CreateHashtagPayload} from "../models/payloads/news/create-hashtag";
+import {CreatePostFormatPayload} from "../models/payloads/news/create-post-format";
+import {CreateProjectPayload} from "../models/payloads/news/create-project";
 
 /**
  * This service handle request from client, process and send to server
@@ -51,7 +54,10 @@ export class RequestHandler {
             | ConfirmResetPasswordPayload
             | RegisterPayload
             | SignupPayload
-            | UpdateProfilePayload,
+            | CreateHashtagPayload
+            | CreatePostFormatPayload
+            | UpdateProfilePayload
+            | CreateProjectPayload,
         mapHandler = (res) => {
         }
     ) {
@@ -69,7 +75,10 @@ export class RequestHandler {
                         const convertedCaseResponse = this.convertCase.convertFromSnakeToCamelCase(response);
                         return mapHandler(convertedCaseResponse);
                     },
-                    error => this.errorHandler.handle(error)
+                    error => {
+                        console.log(error);
+                        return this.errorHandler.handle(error);
+                    }
                 )
             );
     }

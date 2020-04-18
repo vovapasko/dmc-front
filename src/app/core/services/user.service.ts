@@ -24,7 +24,7 @@ import {DeletePayload} from '../models/payloads/user/delete';
 import {UpdatePayload} from '../models/payloads/user/update';
 import {UpdateProfilePayload} from '../models/payloads/user/updateProfile';
 import {ConfirmResetPasswordPayload} from '../models/payloads/user/confirmResetPassword';
-import {ManageGroups} from "../models/instances/groups";
+import {ManageGroups} from '../models/instances/groups';
 
 const api = environment.api;
 

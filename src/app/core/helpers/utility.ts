@@ -1,3 +1,5 @@
+import snakeCase from 'lodash.snakecase';
+
 export const toCamel = (s) => {
     return s.replace(/([-_][a-z])/ig, ($1) => {
         return $1.toUpperCase()
@@ -23,6 +25,7 @@ export const isObject = (o) => {
     return o === Object(o) && !isArray(o) && typeof o !== 'function';
 };
 
+
 export const keysToCamel = (o) => {
     if (isObject(o)) {
         const n = {};
@@ -36,6 +39,25 @@ export const keysToCamel = (o) => {
     } else if (isArray(o)) {
         return o.map((i) => {
             return keysToCamel(i);
+        });
+    }
+
+    return o;
+};
+
+export const keysToSnake = (o) => {
+    if (isObject(o)) {
+        const n = {};
+
+        Object.keys(o)
+            .forEach((k) => {
+                n[snakeCase(k)] = keysToSnake(o[k]);
+            });
+
+        return n;
+    } else if (isArray(o)) {
+        return o.map((i) => {
+            return keysToSnake(i);
         });
     }
 

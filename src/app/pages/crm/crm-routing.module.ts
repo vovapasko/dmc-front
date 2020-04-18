@@ -4,6 +4,7 @@ import {Routes, RouterModule} from '@angular/router';
 import {UsersComponent} from './users/users.component';
 import {ContractorsComponent} from './contractors/contractors.component';
 import {BurstNewsComponent} from './burst-news/burst-news.component';
+import {ProjectsComponent} from './projects/projects.component';
 
 const routes: Routes = [
     {
@@ -17,6 +18,10 @@ const routes: Routes = [
     {
         path: 'burst-news',
         component: BurstNewsComponent
+    },
+    {
+        path: 'projects',
+        component: ProjectsComponent
     }
 ];
 

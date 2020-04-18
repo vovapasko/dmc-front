@@ -47,14 +47,14 @@ const revenueRadialChart: ChartType = {
                     color: 'rgb(241, 85, 108)',
                     offsetY: 10,
                     formatter: (val) => {
-                        return val + '';
+                        return val + '%';
                     }
                 }
             }
         }
     },
     colors: ['rgb(241, 85, 108)'],
-    series: [60],
+    series: [0],
     stroke: {
         lineCap: 'round',
     },

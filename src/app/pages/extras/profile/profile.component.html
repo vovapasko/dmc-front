@@ -3,25 +3,21 @@
     <div class="row">
         <div class="col-lg-4 col-xl-4">
             <div class="card-box text-center">
-                <img [src]="(user$ | async).avatar"
-                     class="rounded-circle avatar-xl img-thumbnail"
-                     alt="profile-image"
-                >
-                <div class="text-center">
-                    <label for="inputImage">
-                        <span class="text-black-50 pseudolink">
-                            Загрузить аватар
-                        </span>
-                    </label>
+                <label for="inputImage">
+
                     <input type="file"
                            class="sr-only"
                            id="inputImage"
-                           name="file"
-                           accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff"
-                           (change)="handleFileInput($event.target.files)"
-                    >
-                </div>
+                           alife-file-to-base64
+                           (onFileChanged)="onFileChanges($event)"
+                           [(rawFileModel)]="avatar"
+                    />
 
+                    <img [src]="avatarBase64 || (user$ | async).avatar"
+                         class="rounded-circle avatar-xl img-thumbnail"
+                         alt="profile-image"
+                    >
+                </label>
 
                 <h4 class="mb-0">{{(user$ | async).firstName}} {{(user$ | async).lastName}}</h4>
                 <p *ngIf="(user$ | async).isSuperuser" class="text-muted">@Superuser</p>
