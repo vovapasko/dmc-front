@@ -17,23 +17,117 @@ import {ChartType} from '../../dashboards/default/default.model';
 import {revenueRadialChart} from '../../dashboards/default/data';
 import {select, Store} from '@ngrx/store';
 import {IAppState} from '../../../core/store/state/app.state';
-import {CreateProject, GetProjectConfiguration} from '../../../core/store/actions/news.actions';
+import {
+    CreateProject,
+    GetProject,
+    GetProjectConfiguration, GetProjectSuccess,
+    UpdateProject
+} from '../../../core/store/actions/news.actions';
 import {NewsService} from '../../../core/services/news.service';
 import {
     selectCharacters,
     selectContractors,
     selectFormats,
     selectHashtags,
-    selectMethods
+    selectMethods, selectProject
 } from '../../../core/store/selectors/news.selectors';
 import {Contractor} from '../../../core/models/instances/contractor';
 import {NotificationService} from '../../../core/services/notification.service';
 import {NotificationType} from '../../../core/models/instances/notification';
 
 import cloneDeep from 'lodash.clonedeep';
-import {defaultNews} from "../../../core/constants/news";
-import * as ts from "typescript/lib/tsserverlibrary";
-import {Project} from "../../../core/models/instances/project";
+import {defaultNews} from '../../../core/constants/news';
+import * as ts from 'typescript/lib/tsserverlibrary';
+import {Project} from '../../../core/models/instances/project';
+import {ActivatedRoute, Params} from '@angular/router';
+import {Subject, Subscription} from 'rxjs';
+import {ErrorService} from "../../../core/services/error.service";
+import {LoadingService} from "../../../core/services/loading.service";
+
+//{
+//   "id": 3,
+//   "newsCharacter": {
+//     "id": 1,
+//     "character": "standard"
+//   },
+//   "projectPostFormat": {
+//     "id": 1,
+//     "postFormat": "news"
+//   },
+//   "projectBurstMethod": {
+//     "id": 1,
+//     "method": "direct"
+//   },
+//   "content": {
+//     "id": 3,
+//     "text": "<p>content</p>"
+//   },
+//   "projectContractors": [
+//     {
+//       "id": 1,
+//       "editorName": "Editor 1",
+//       "contactPerson": "Contact 1",
+//       "phoneNumber": "Number 1",
+//       "email": "contractor@contr.com",
+//       "newsAmount": 50,
+//       "arrangedNews": 20,
+//       "onePostPrice": 140,
+//       "dateCreated": "2020-04-17T14:24:19.543642Z",
+//       "dateUpdated": "2020-04-17T14:24:19.543938Z"
+//     },
+//     {
+//       "id": 2,
+//       "editorName": "Editor 2",
+//       "contactPerson": "Contact 2",
+//       "phoneNumber": "Number 2",
+//       "email": "contractor2@contr.com",
+//       "newsAmount": 50,
+//       "arrangedNews": 20,
+//       "onePostPrice": 140,
+//       "dateCreated": "2020-04-17T14:24:19.647988Z",
+//       "dateUpdated": "2020-04-17T14:24:19.648300Z"
+//     },
+//     {
+//       "id": 3,
+//       "editorName": "Editor 3",
+//       "contactPerson": "Contact 3",
+//       "phoneNumber": "Number 3",
+//       "email": "contractor3@contr.com",
+//       "newsAmount": 50,
+//       "arrangedNews": 20,
+//       "onePostPrice": 140,
+//       "dateCreated": "2020-04-17T14:24:19.736664Z",
+//       "dateUpdated": "2020-04-17T14:24:19.737475Z"
+//     }
+//   ],
+//   "projectHashtags": [
+//     {
+//       "id": 1,
+//       "name": "mytag1"
+//     },
+//     {
+//       "id": 2,
+//       "name": "mytag2"
+//     },
+//     {
+//       "id": 3,
+//       "name": "mytag3"
+//     }
+//   ],
+//   "newsInProject": [
+//     {
+//       "title": "title"
+//     }
+//   ],
+//   "clientName": "client",
+//   "projectName": "project",
+//   "projectTitle": "title",
+//   "projectBudget": 1000,
+//   "isConfirmed": false,
+//   "progress": 0,
+//   "dateCreated": "2020-04-18T12:28:44.175240Z",
+//   "dateUpdated": "2020-04-18T12:28:44.175454Z"
+// }
 
 /**
  * Form Burst news component - handling the burst news with sidebar and content
@@ -55,6 +149,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     formats$ = this.store.pipe(select(selectFormats));
     characters$ = this.store.pipe(select(selectCharacters));
     methods$ = this.store.pipe(select(selectMethods));
+    project$ = this.store.pipe(select(selectProject));
 
     newsSubmit = false;
 
@@ -67,6 +162,11 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     newsForm: FormGroup;
     controls: FormArray;
 
+
+    loading$: Subject<boolean>;
+    error$: Subject<any>;
+
+
     public options = {
         fixedDepth: true
     } as NestableSettings;
@@ -77,17 +177,20 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     blured = false;
     focused = false;
     submit: boolean;
+    projectId: number;
     submitForm: boolean;
 
     @ViewChild('wizardForm', {static: false}) wizard: BaseWizardComponent;
     @ViewChild('tpl', {static: false}) tpl;
 
     constructor(
-        public formBuilder: FormBuilder,
         private vcr: ViewContainerRef,
         private cdr: ChangeDetectorRef,
         private store: Store<IAppState>,
+        private route: ActivatedRoute,
         private newsService: NewsService,
+        private errorService: ErrorService,
+        private loadingService: LoadingService,
         private notificationService: NotificationService
     ) {
     }
@@ -99,6 +202,35 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
 
     ngAfterViewChecked() {
         this.cdr.detectChanges();
+    }
+
+    processProject(project: Project) {
+        if (!project) {
+            return;
+        }
+        const common = this.validationForm.controls;
+        const editor = this.editorForm.controls;
+        const newsList = project.newsInProject.map(el => ({image: {base64: el.image}}));
+        common.nature.setValue(project.newsCharacter);
+        common.format.setValue(project.projectPostFormat);
+        common.method.setValue(project.projectBurstMethod);
+        common.client.setValue(project.clientName);
+        common.project.setValue(project.projectName);
+        common.title.setValue(project.projectTitle);
+        common.budget.setValue(project.projectBudget);
+        common.contractors.setValue(project.projectContractors);
+        common.hashtags.setValue(project.projectHashtags);
+        editor.editor.setValue(project.content.text);
+        const toGroups = this.newsList.map(entity => {
+            return new FormGroup({
+                title: new FormControl(entity.title, Validators.required),
+                image: new FormControl(entity.image.base64, Validators.required),
+                contractors: new FormControl(entity.contractors, Validators.required)
+            });
+        });
+        this.controls = new FormArray(toGroups);
+        this.newsList = newsList;
+        console.log(project);
     }
 
     ngOnInit() {
@@ -113,9 +245,13 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
 
     initSubscriptions() {
         this.submit = false;
+        this.loading$ = this.loadingService.loading$;
+        this.error$ = this.errorService.error$;
         this.submitForm = false;
         this.revenueRadialChart = revenueRadialChart;
         this.store.dispatch(new GetProjectConfiguration());
+        this.projectId = +this.route.snapshot.queryParamMap.get('id');
+        this.fetchData();
     }
 
     initForms() {
@@ -298,13 +434,24 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
             content: {text: editor.editor},
             isConfirmed: false,
             newsInProject,
-            projectHashtags: common.hashtags
+            projectHashtags: common.hashtags,
         };
+        const projectId = this.projectId;
+        if (projectId) {
+            data.isConfirmed = true;
+            this.updateProject(data, projectId);
+            return;
+        }
         this.createProject(data);
     }
 
     createProject(data: Project) {
         this.store.dispatch(new CreateProject({data}));
+    }
+
+    updateProject(data: Project, projectId) {
+        this.store.dispatch(new UpdateProject({id: projectId, data}));
+        this.store.dispatch(new GetProjectSuccess(null));
     }
 
     updateField(index: number, field: string, value?: any) {
@@ -319,6 +466,14 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
                 }
                 return e;
             });
+        }
+    }
+
+    fetchData() {
+        const id = this.projectId;
+        if (id) {
+            this.store.select(selectProject).subscribe(this.processProject.bind(this));
+            this.store.dispatch(new GetProject({id}));
         }
     }
 }

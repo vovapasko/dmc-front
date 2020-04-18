@@ -10,6 +10,10 @@ export enum ENewsActions {
     GetProjectConfiguration = '[News] Get project configuration',
     GetProject = '[News] Get project',
     GetProjectSuccess = '[News] Get project success',
+    UpdateProject = '[News] Update project',
+    UpdateProjectSuccess = '[News] Update project success',
+    GetProjects = '[News] Get projects',
+    GetProjectsSuccess = '[News] Get projects success',
     CreateProject = '[News] Create project',
     CreateProjectSuccess = '[News] Create project success',
     GetContractorsSuccess = '[News] Get contractors success',
@@ -26,6 +30,34 @@ export enum ENewsActions {
 
 export class GetProject implements Action {
     public readonly type = ENewsActions.GetProject;
+
+    constructor(public payload) {
+    }
+}
+
+export class UpdateProject implements Action {
+    public readonly type = ENewsActions.UpdateProject;
+
+    constructor(public payload) {
+    }
+}
+
+export class UpdateProjectSuccess implements Action {
+    public readonly type = ENewsActions.UpdateProjectSuccess;
+
+    constructor(public payload) {
+    }
+}
+
+export class GetProjects implements Action {
+    public readonly type = ENewsActions.GetProjects;
+
+    constructor() {
+    }
+}
+
+export class GetProjectsSuccess implements Action {
+    public readonly type = ENewsActions.GetProjectsSuccess;
 
     constructor(public payload) {
     }
@@ -137,5 +169,9 @@ export type NewsActions =
     | CreateProjectSuccess
     | CreateProject
     | GetProjectSuccess
+    | GetProjects
+    | GetProjectsSuccess
+    | UpdateProjectSuccess
+    | UpdateProject
     ;
 

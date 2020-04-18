@@ -1,5 +1,5 @@
 import {INewsState, initialNewsState} from '../state/news.state';
-import {ENewsActions, NewsActions} from '../actions/news.actions';
+import {ENewsActions, NewsActions, UpdateProject} from '../actions/news.actions';
 
 export const newsReducers = (
     state = initialNewsState,
@@ -60,6 +60,18 @@ export const newsReducers = (
             return {
                 ...state,
                 project: action.payload
+            };
+        }
+        case ENewsActions.GetProjectsSuccess: {
+            return {
+                ...state,
+                projects: action.payload
+            };
+        }
+        case ENewsActions.UpdateProjectSuccess: {
+            return {
+                ...state,
+                projects: state.projects.map(el => el.id === action.payload.id ? action.payload : el)
             };
         }
         default:

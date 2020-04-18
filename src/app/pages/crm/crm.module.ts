@@ -9,7 +9,7 @@ import {
     NgbAlertModule, NgbDatepickerModule,
     NgbDropdownModule,
     NgbModalModule,
-    NgbPaginationModule, NgbPopoverModule,
+    NgbPaginationModule, NgbPopoverModule, NgbProgressbarModule, NgbTooltipModule,
     NgbTypeaheadModule
 } from '@ng-bootstrap/ng-bootstrap';
 import {NgApexchartsModule} from 'ng-apexcharts';
@@ -28,9 +28,10 @@ import {ArchwizardModule} from 'angular-archwizard';
 import {NgxMaskModule} from 'ngx-mask';
 import {NestableModule} from 'ngx-nestable';
 import {SharedModule} from '../../shared/shared.module';
+import { ProjectsComponent } from './projects/projects.component';
 
 @NgModule({
-    declarations: [ContractorsComponent, UsersComponent, BurstNewsComponent],
+    declarations: [ContractorsComponent, UsersComponent, BurstNewsComponent, ProjectsComponent],
     imports: [
         FormsModule,
         UIModule,
@@ -55,7 +56,9 @@ import {SharedModule} from '../../shared/shared.module';
         NgxMaskModule.forRoot(),
         NestableModule,
         NgbPopoverModule,
-        SharedModule
+        SharedModule,
+        NgbProgressbarModule,
+        NgbTooltipModule
     ]
 })
 export class CRMModule {

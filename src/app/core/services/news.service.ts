@@ -6,7 +6,7 @@ import {FormBuilder, Validators} from '@angular/forms';
 import {PaginationService} from './pagination.service';
 import {CookieService} from '../providers/cookie.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {User} from '../models/instances/user.models';
 import {GetAllResponse} from '../models/responses/news/getAllResponse';
 import {Hashtag} from '../models/instances/hashtag';
@@ -17,7 +17,9 @@ import {CreatePostFormatResponse} from '../models/responses/news/create-post-for
 import numbers from '../constants/numbers';
 import {CreateProjectPayload} from '../models/payloads/news/create-project';
 import {CreateProjectResponse} from '../models/responses/news/create-project';
-import {GetProjectResponse} from "../models/responses/news/get-project";
+import {GetProjectResponse} from '../models/responses/news/get-project';
+import {GetProjectsResponse} from '../models/responses/news/get-projects';
+import {UpdateProjectPayload} from "../models/payloads/news/update-project";
 
 
 const api = environment.api;
@@ -63,6 +65,25 @@ export class NewsService {
             null,
             (response: GetProjectResponse) => response.project
         );
+    }
+
+    getProjects(): any {
+        return this.requestHandler.request(
+            `${api}/news-projects/`,
+            'get',
+            null,
+            (response: GetProjectsResponse) => response.projects
+        );
+    }
+
+    updateProject(payload: UpdateProjectPayload) {
+        return of(Object.assign({}, {id: payload.id, ...payload.data}));
+        // return this.requestHandler.request(
+        //     `${api}/news-projects/${payload.id}`,
+        //     'post',
+        //     payload,
+        //     (response: CreateProjectResponse) => response.project
+        // );
     }
 
     createHashtag(payload: CreateHashtagPayload) {

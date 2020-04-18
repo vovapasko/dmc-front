@@ -4,12 +4,24 @@ import {mergeMap, switchMap} from 'rxjs/operators';
 import {of} from 'rxjs';
 import {NewsService} from '../../services/news.service';
 import {
-    CreateFormat, CreateFormatSuccess,
-    CreateHashtag, CreateHashtagSuccess, CreateProject, CreateProjectSuccess,
-    ENewsActions, GetCharactersSuccess, GetContractorsSuccess,
+    CreateFormat,
+    CreateFormatSuccess,
+    CreateHashtag,
+    CreateHashtagSuccess,
+    CreateProject,
+    CreateProjectSuccess,
+    ENewsActions,
+    GetCharactersSuccess,
+    GetContractorsSuccess,
     GetFormatsSuccess,
     GetHashtagsSuccess,
-    GetMethodsSuccess, GetProject, GetProjectConfiguration, GetProjectSuccess,
+    GetMethodsSuccess,
+    GetProject,
+    GetProjectConfiguration,
+    GetProjects,
+    GetProjectsSuccess,
+    GetProjectSuccess,
+    UpdateProject, UpdateProjectSuccess,
 } from '../actions/news.actions';
 import {GetAllResponse} from '../../models/responses/news/getAllResponse';
 import {Hashtag} from '../../models/instances/hashtag';
@@ -55,10 +67,24 @@ export class NewsEffects {
     );
 
     @Effect()
+    updateProject$ = this.actions$.pipe(
+        ofType<UpdateProject>(ENewsActions.UpdateProject),
+        switchMap((action) => this.newsService.updateProject(action.payload)),
+        switchMap((project: Project) => of(new UpdateProjectSuccess(project)))
+    );
+
+    @Effect()
     getProject$ = this.actions$.pipe(
         ofType<GetProject>(ENewsActions.GetProject),
         switchMap((action) => this.newsService.getProject(action.payload)),
         switchMap((project: Project) => of(new GetProjectSuccess(project)))
+    );
+
+    @Effect()
+    getProjects$ = this.actions$.pipe(
+        ofType<GetProjects>(ENewsActions.GetProjects),
+        switchMap(() => this.newsService.getProjects()),
+        switchMap((projects: Project) => of(new GetProjectsSuccess(projects)))
     );
 
     constructor(

@@ -6,6 +6,7 @@ import {News} from './news';
 import {Hashtag} from './hashtag';
 
 export interface Project {
+    id?: number;
     newsCharacter: Character;
     projectPostFormat: Format;
     projectBurstMethod: Method;

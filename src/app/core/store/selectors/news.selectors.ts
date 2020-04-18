@@ -20,6 +20,11 @@ export const selectProject = createSelector(
     (state: INewsState) => state.project
 );
 
+export const selectProjects = createSelector(
+    selectNews,
+    (state: INewsState) => state.projects
+);
+
 export const selectMethods = createSelector(
     selectNews,
     (state: INewsState) => state.methods

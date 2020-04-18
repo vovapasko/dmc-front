@@ -6,10 +6,12 @@ import {EditableComponent} from './editable/editable.component';
 import {EditModeDirective} from './directives/edit-mode.directive';
 import {EditableOnEnterDirective} from './directives/editable-on-enter.directive';
 import {ViewModeDirective} from './directives/view-mode.directive';
-import {AlifeFileToBase64Module} from "alife-file-to-base64";
+import {AlifeFileToBase64Module} from 'alife-file-to-base64';
+import {ProjectStatusPipe} from './pipes/project-status.pipe';
 
 @NgModule({
     declarations: [
+        ProjectStatusPipe,
         EditableComponent,
         EditModeDirective,
         EditableOnEnterDirective,
@@ -18,10 +20,11 @@ import {AlifeFileToBase64Module} from "alife-file-to-base64";
     imports: [
         CommonModule,
         UIModule,
-        AlifeFileToBase64Module
+        AlifeFileToBase64Module,
     ],
     exports: [
         UIModule,
+        ProjectStatusPipe,
         AlifeFileToBase64Module,
         EditableComponent,
         EditModeDirective,
