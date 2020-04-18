@@ -27,7 +27,7 @@ import {FileUploadModule} from '@iplab/ngx-file-upload';
 import {ArchwizardModule} from 'angular-archwizard';
 import {NgxMaskModule} from 'ngx-mask';
 import {NestableModule} from 'ngx-nestable';
-import {CoreModule} from "../../core/core.module";
+import {SharedModule} from '../../shared/shared.module';
 
 @NgModule({
     declarations: [ContractorsComponent, UsersComponent, BurstNewsComponent],
@@ -55,7 +55,7 @@ import {CoreModule} from "../../core/core.module";
         NgxMaskModule.forRoot(),
         NestableModule,
         NgbPopoverModule,
-        CoreModule,
+        SharedModule
     ]
 })
 export class CRMModule {

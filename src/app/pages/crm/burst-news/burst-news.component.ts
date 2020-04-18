@@ -30,6 +30,10 @@ import {Contractor} from '../../../core/models/instances/contractor';
 import {NotificationService} from '../../../core/services/notification.service';
 import {NotificationType} from '../../../core/models/instances/notification';
 
+import cloneDeep from 'lodash.clonedeep';
+import {defaultNews} from "../../../core/constants/news";
+import * as ts from "typescript/lib/tsserverlibrary";
+import {Project} from "../../../core/models/instances/project";
 
 /**
  * Form Burst news component - handling the burst news with sidebar and content
@@ -67,36 +71,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
         fixedDepth: true
     } as NestableSettings;
 
-    cardData = [
-        {
-            id: 111,
-            title: 'Title',
-            image: 'assets/images/small/img-1.jpg',
-            contractors: [{id: 7, title: 'lol Cras justo odio'}, {id: 8, title: 'kek Dapibus ac facilisis in'}],
-            button: false
-        },
-        {
-            id: 222,
-            title: 'Title',
-            image: 'assets/images/small/img-2.jpg',
-            contractors: [{id: 6, title: 'test Cras justo odio'}, {id: 5, title: 'me Dapibus ac facilisis in'}],
-            link: ['Card link', 'Another link']
-        },
-        {
-            id: 333,
-            title: 'Title',
-            image: 'assets/images/small/img-3.jpg',
-            contractors: [{id: 2, title: 'Cras justo odio'}, {id: 3, title: 'Dapibus ac facilisis in'}],
-            button: false
-        },
-        {
-            id: 444,
-            title: 'Title',
-            image: 'assets/images/small/img-4.jpg',
-            contractors: [{id: 10, title: 'lul Cras justo odio'}, {id: 11, title: 'wow Dapibus ac facilisis in'}],
-            button: false
-        },
-    ];
+    newsList = [cloneDeep(defaultNews)];
 
     revenueRadialChart: ChartType;
     blured = false;
@@ -130,15 +105,6 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
         this.initBreadCrumbs();
         this.initForms();
         this.initSubscriptions();
-
-        const toGroups = this.cardData.map(entity => {
-            return new FormGroup({
-                title: new FormControl(entity.title, Validators.required),
-                image: new FormControl(entity.image, Validators.required),
-                contractors: new FormControl(entity.contractors, Validators.required)
-            });
-        });
-        this.controls = new FormArray(toGroups);
     }
 
     getControl(index: number, field: string): FormControl {
@@ -155,10 +121,27 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     initForms() {
         this.initValidateForm();
         this.initEditorForm();
+        this.initNewsForm();
+        this.initControls();
+    }
+
+    initControls() {
+        const toGroups = this.newsList.map(entity => {
+            return new FormGroup({
+                title: new FormControl(null, Validators.required),
+                image: new FormControl(null, Validators.required),
+                contractors: new FormControl(null, Validators.required)
+            });
+        });
+        this.controls = new FormArray(toGroups);
     }
 
     initValidateForm() {
         this.validationForm = this.newsService.initializeValidationForm(this.budgetValidator.bind(this));
+    }
+
+    initNewsForm() {
+        this.newsForm = this.newsService.initializeNewsForm();
     }
 
     initEditorForm() {
@@ -187,6 +170,30 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
      */
     get form() {
         return this.validationForm.controls;
+    }
+
+    get distributeForm() {
+        return this.newsForm.controls;
+    }
+
+    addNew() {
+        this.addNewControl();
+        this.addNewItem();
+    }
+
+    addNewControl() {
+        const newControls = new FormGroup({
+            title: new FormControl(null, Validators.required),
+            image: new FormControl(null, Validators.required),
+            contractors: new FormControl(null, Validators.required)
+        });
+        this.controls.push(newControls);
+    }
+
+    addNewItem() {
+        const newsList = this.newsList.slice();
+        newsList.push(cloneDeep(defaultNews));
+        this.newsList = newsList;
     }
 
     calculateLeft() {
@@ -265,14 +272,48 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
         this.blured = true;
     }
 
-    updateField(index: number, field: string) {
+    onImageChange(files, index, onFile?: boolean) {
+        const image = this.newsList[index].image;
+        if (onFile) {
+            image.file = files[0];
+        } else {
+            image.base64 = files[0].base64;
+        }
+        this.updateField(index, 'image', image);
+    }
+
+    onSubmit() {
+        const common = this.validationForm.value;
+        const editor = this.editorForm.value;
+        const newsInProject = this.newsList.map(el => ({...el, image: el.image.file}));
+        const data = {
+            newsCharacter: common.nature,
+            projectPostFormat: common.format,
+            projectBurstMethod: common.method,
+            clientName: common.client,
+            projectName: common.project,
+            projectTitle: common.title,
+            projectBudget: common.budget,
+            projectContractors: common.contractors,
+            content: editor.editor,
+            newsInProject,
+            projectHashtags: common.hashtags
+        };
+        this.createProject(data);
+    }
+
+    createProject(data: Project) {
+        console.log(data);
+    }
+
+    updateField(index: number, field: string, value?: any) {
         const control = this.getControl(index, field);
         if (control.valid) {
-            this.cardData = this.cardData.map((e, i) => {
+            this.newsList = this.newsList.map((e, i) => {
                 if (index === i) {
                     return {
                         ...e,
-                        [field]: control.value
+                        [field]: value || control.value
                     };
                 }
                 return e;

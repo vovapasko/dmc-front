@@ -36,7 +36,8 @@ export class ProfileComponent implements OnInit {
     title = 'Профиль';
     profileForm: FormGroup;
     submitted = false;
-    avatar: File = null;
+    avatar: FileList = null;
+    avatarBase64 = '';
 
     constructor(
         private authService: AuthenticationService,
@@ -109,7 +110,7 @@ export class ProfileComponent implements OnInit {
         const avatar = this.avatar;
         const formData = new FormData();
         if (avatar) {
-            formData.append('avatar', avatar);
+            formData.append('avatar', avatar[0]);
         }
         formData.append('first_name', firstName);
         formData.append('last_name', lastName);
@@ -120,8 +121,8 @@ export class ProfileComponent implements OnInit {
     /**
      * Upload new image to cropper
      */
-    handleFileInput(files: FileList) {
-        this.avatar = files.item(0);
+    onFileChanges(files) {
+        this.avatarBase64 = files[0].base64;
         this.notificationService.notify(NotificationType.info, 'Изображение было загружено', 'Нажмите сохранить чтобы увидеть изменения');
     }
 

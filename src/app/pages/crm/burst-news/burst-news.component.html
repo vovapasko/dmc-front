@@ -341,40 +341,61 @@
                             </ul>
                             <form (ngSubmit)="newsFormSubmit()" [formGroup]="newsForm">
                                 <div class="row">
-                                    <div class="col-md-6 col-xl-3" *ngFor="let carddata of cardData; index as index">
+
+                                    <div class="col-md-6 col-xl-3" *ngFor="let news of newsList; index as index">
 
                                         <!-- Simple card -->
+
                                         <div class="card">
-                                            <img class="card-img-top img-fluid" src="{{carddata.image}}"
-                                                 alt="Card image cap">
-                                            <div class="card-body">
-                                                <editable (update)="updateField(index, 'title')">
-                                                    <ng-template viewMode>
-                                                        {{carddata.title}}
-                                                    </ng-template>
-                                                    <ng-template editMode>
-                                                        <input [formControl]="getControl(index, 'title')" focusable>
-                                                    </ng-template>
-                                                </editable>
-                                            </div>
-                                            <ul class="list-group list-group-flush" *ngIf="carddata.list">
-                                                <ngx-nestable [(list)]="carddata.contractors"
-                                                              [options]="options"
-                                                              [template]="tpl"
-                                                              (drop)="onDrop($event)"
+                                            <label for="image">
+                                                <input type="file"
+                                                       id="image"
+                                                       class="sr-only"
+                                                       alife-file-to-base64
+                                                       (onFileChanged)="onImageChange($event, index)"
+                                                       (rawFileModelChange)="onImageChange($event, index, true)"
+                                                />
+                                                <img class="card-img-top img-fluid"
+                                                     src="{{news.image.base64}}"
+                                                     alt="Card image cap"
                                                 >
-                                                </ngx-nestable>
+                                            </label>
 
-                                                <ng-template #tpl let-news>
-                                                    <li *ngIf="news" [ngxNestableDragHandle]="news"
-                                                        class="list-group-item">
-                                                        {{news?.item?.title}}
-                                                    </li>
-                                                </ng-template>
-                                            </ul>
+                                            <div class="card-body">
+                                                <input placeholder="Введите заглавие"
+                                                       [id]="'title' + index"
+                                                       [formControl]="getControl(index, 'title')"
+                                                       style="margin-bottom: 10px"
+                                                       class="form-control"
+                                                       (change)="updateField(index, 'title')"
+                                                >
+                                                <ng-select
+                                                        id="news-contractors"
+                                                        [items]="form.contractors.value || []"
+                                                        bindLabel="editorName"
+                                                        [multiple]="true"
+                                                        [closeOnSelect]="false"
+                                                        [hideSelected]="true"
+                                                        placeholder="Выберите контрагентов для новости"
+                                                        (change)="updateField(index, 'contractors')"
+                                                        [formControl]="getControl(index, 'contractors')"
+                                                        [ngClass]="{'is-invalid': submit && distributeForm.contractors.errors}"
+                                                >
+                                                </ng-select>
 
+                                                <a *ngIf="index === newsList.length - 1"
+                                                   (click)="addNew()"
+                                                   href="javascript: void(0);"
+                                                   class="btn btn-primary btn-block mt-3 waves-effect waves-light"
+                                                >
+                                                    <i class="mdi mdi-plus-circle"></i>
+                                                    Добавить вариант
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
+
+
                                 </div>
                             </form>
                             <ul class="list-inline wizard mb-0">
@@ -457,7 +478,10 @@
                                     </button>
                                 </li>
                                 <li class="next list-inline-item float-right">
-                                    <button class="btn btn-secondary" type="submit">
+                                    <button class="btn btn-secondary"
+                                            type="submit"
+                                            (click)="onSubmit()"
+                                    >
                                         Отправить
                                     </button>
                                 </li>

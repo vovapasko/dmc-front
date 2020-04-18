@@ -9,6 +9,7 @@ import { LightboxModule } from 'ngx-lightbox';
 
 import { ProfileComponent } from './profile/profile.component';
 import {ReactiveFormsModule} from '@angular/forms';
+import {SharedModule} from "../../shared/shared.module";
 
 @NgModule({
   // tslint:disable-next-line: max-line-length
@@ -21,7 +22,8 @@ import {ReactiveFormsModule} from '@angular/forms';
         NgbTabsetModule,
         LightboxModule,
         ReactiveFormsModule,
-        NgbAlertModule
+        NgbAlertModule,
+        SharedModule
     ]
 })
 export class ExtrasModule { }

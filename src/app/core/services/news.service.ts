@@ -113,4 +113,12 @@ export class NewsService {
             editor: ['', Validators.required]
         });
     }
+
+    initializeNewsForm() {
+        return this.formBuilder.group({
+            title: ['', Validators.required],
+            contractors: [null, Validators.required],
+            image: [null, Validators.required]
+        });
+    }
 }

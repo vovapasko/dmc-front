@@ -13,10 +13,10 @@ export interface Project {
     projectName: string;
     projectTitle: string;
     projectBudget: number;
-    isConfirmed: boolean;
+    isConfirmed?: boolean;
     projectContractors: Contractor[];
     content: string;
-    progress: number;
+    progress?: number;
     newsInProject: News[];
     projectHashtags: Hashtag[];
     dateCreated?: Date;

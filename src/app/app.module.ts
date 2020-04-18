@@ -41,8 +41,8 @@ import {NewsEffects} from './core/store/effects/news.effects';
     imports: [
         SharedModule,
         CoreModule,
-        BrowserModule,
         BrowserAnimationsModule,
+        BrowserModule,
         HttpClientModule,
         LayoutsModule,
         AppRoutingModule,

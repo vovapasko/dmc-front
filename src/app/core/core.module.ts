@@ -1,30 +1,14 @@
 import {NgModule, Optional, SkipSelf} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {EditableComponent} from './components/editable/editable.component';
-import {EditModeDirective} from './directives/edit-mode.directive';
-import {EditableOnEnterDirective} from './directives/editable-on-enter.directive';
-import {ViewModeDirective} from './directives/view-mode.directive';
 
 @NgModule({
-    declarations: [
-        EditableComponent,
-        EditModeDirective,
-        EditableOnEnterDirective,
-        ViewModeDirective
-    ],
-    exports: [
-        EditableComponent,
-        EditModeDirective,
-        EditableOnEnterDirective,
-        ViewModeDirective
-    ],
+    declarations: [],
+    exports: [],
     imports: [
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        BrowserModule
     ]
 })
 export class CoreModule {
