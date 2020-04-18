@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import mapKeys from 'lodash.mapkeys';
 import snakeCase from 'lodash.snakecase';
 
-import {keysToCamel} from './utility';
+import {keysToCamel, keysToSnake} from './utility';
 
 /**
  * This service for convert from some_case to anotherCase
@@ -27,7 +27,7 @@ export class ConvertCase {
      * Object keys converting from camelCase to snake_case
      */
     public convertFromCamelToSnakeCase(obj) {
-        return this.convert(obj, ConvertCase.convertToSnakeCase);
+        return keysToSnake(obj);
     }
 
     /**

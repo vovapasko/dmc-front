@@ -17,6 +17,7 @@ import {CreatePostFormatResponse} from '../models/responses/news/create-post-for
 import numbers from '../constants/numbers';
 import {CreateProjectPayload} from '../models/payloads/news/create-project';
 import {CreateProjectResponse} from '../models/responses/news/create-project';
+import {GetProjectResponse} from "../models/responses/news/get-project";
 
 
 const api = environment.api;
@@ -48,10 +49,10 @@ export class NewsService {
 
     createProject(payload: CreateProjectPayload) {
         return this.requestHandler.request(
-            `${api}/news-project/`,
+            `${api}/news-projects/`,
             'post',
             payload,
-            (response: CreateProjectResponse) => response
+            (response: CreateProjectResponse) => response.project
         );
     }
 
@@ -60,7 +61,7 @@ export class NewsService {
             `${api}/news-projects/${payload.id}`,
             'get',
             null,
-            (response: GetAllResponse) => response
+            (response: GetProjectResponse) => response.project
         );
     }
 

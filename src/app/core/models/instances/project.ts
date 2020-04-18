@@ -15,7 +15,9 @@ export interface Project {
     projectBudget: number;
     isConfirmed?: boolean;
     projectContractors: Contractor[];
-    content: string;
+    content: {
+        text: string;
+    };
     progress?: number;
     newsInProject: News[];
     projectHashtags: Hashtag[];

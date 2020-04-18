@@ -17,7 +17,7 @@ import {ChartType} from '../../dashboards/default/default.model';
 import {revenueRadialChart} from '../../dashboards/default/data';
 import {select, Store} from '@ngrx/store';
 import {IAppState} from '../../../core/store/state/app.state';
-import {GetProjectConfiguration} from '../../../core/store/actions/news.actions';
+import {CreateProject, GetProjectConfiguration} from '../../../core/store/actions/news.actions';
 import {NewsService} from '../../../core/services/news.service';
 import {
     selectCharacters,
@@ -150,7 +150,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
 
     initBreadCrumbs() {
         this.breadCrumbItems = [{label: 'Главная', path: '/'}, {
-            label: 'Разгон новости',
+            label: 'Разгон',
             path: '/burst-news',
             active: true
         }];
@@ -295,7 +295,8 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
             projectTitle: common.title,
             projectBudget: common.budget,
             projectContractors: common.contractors,
-            content: editor.editor,
+            content: {text: editor.editor},
+            isConfirmed: false,
             newsInProject,
             projectHashtags: common.hashtags
         };
@@ -303,7 +304,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     }
 
     createProject(data: Project) {
-        console.log(data);
+        this.store.dispatch(new CreateProject({data}));
     }
 
     updateField(index: number, field: string, value?: any) {
