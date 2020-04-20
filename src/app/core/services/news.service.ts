@@ -20,6 +20,7 @@ import {CreateProjectResponse} from '../models/responses/news/create-project';
 import {GetProjectResponse} from '../models/responses/news/get-project';
 import {GetProjectsResponse} from '../models/responses/news/get-projects';
 import {UpdateProjectPayload} from "../models/payloads/news/update-project";
+import {delay} from "rxjs/operators";
 
 
 const api = environment.api;
@@ -77,7 +78,8 @@ export class NewsService {
     }
 
     updateProject(payload: UpdateProjectPayload) {
-        return of(Object.assign({}, {id: payload.id, ...payload.data}));
+        return of(Object.assign({}, {id: payload.id, ...payload.data}))
+            .pipe(delay(2000));
         // return this.requestHandler.request(
         //     `${api}/news-projects/${payload.id}`,
         //     'post',
