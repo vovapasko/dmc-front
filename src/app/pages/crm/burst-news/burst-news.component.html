@@ -7,7 +7,7 @@
                 <div class="card-body">
                     <aw-wizard #wizardForm>
 
-                        <aw-wizard-step (stepEnter)="step = 0" [canExit]="validationForm.valid">
+                        <aw-wizard-step (stepEnter)="step = 0" [canExit]="validationForm?.valid">
                             <ul class="nav nav-pills bg-light nav-justified form-wizard-header mb-4">
                                 <li class="nav-item" [awGoToStep]="{stepIndex: 0}">
                                     <a href="javascript: void(0);" data-toggle="tab"
@@ -51,35 +51,35 @@
                                     <div class="col-xl-8">
 
                                         <div class="form-group row mb-3">
-                                            <label for="client" class="col-md-3 col-form-label"> Клиент </label>
+                                            <label for="clientName" class="col-md-3 col-form-label"> Клиент </label>
                                             <div class="col-md-9">
                                                 <input type="text"
-                                                       id="client"
+                                                       id="clientName"
                                                        placeholder="Введите клиента"
                                                        class="form-control"
-                                                       formControlName="client"
-                                                       [ngClass]="{'is-invalid': submit && form.client.errors}"
+                                                       formControlName="clientName"
+                                                       [ngClass]="{'is-invalid': submitted && form.clientName.errors}"
                                                 >
-                                                <div *ngIf="submit && form.client.errors" class="invalid-feedback">
-                                                    <span *ngIf="form.client.errors.required"></span>
+                                                <div *ngIf="submitted && form.clientName.errors" class="invalid-feedback">
+                                                    <span *ngIf="form.clientName.errors.required"></span>
                                                 </div>
 
                                             </div>
                                         </div>
 
                                         <div class="form-group row mb-3">
-                                            <label for="project" class="col-md-3 col-form-label"> Название
+                                            <label for="projectName" class="col-md-3 col-form-label"> Название
                                                 проекта </label>
                                             <div class="col-md-9">
                                                 <input type="text"
-                                                       id="project"
+                                                       id="projectName"
                                                        placeholder="Введите название проекта"
-                                                       formControlName="project"
+                                                       formControlName="projectName"
                                                        class="form-control"
-                                                       [ngClass]="{'is-invalid': submit && form.project.errors}"
+                                                       [ngClass]="{'is-invalid': submitted && form.projectName.errors}"
                                                 >
-                                                <div *ngIf="submit && form.project.errors" class="invalid-feedback">
-                                                    <span *ngIf="form.project.errors.required"></span>
+                                                <div *ngIf="submitted && form.projectName.errors" class="invalid-feedback">
+                                                    <span *ngIf="form.projectName.errors.required"></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -94,123 +94,122 @@
                                                         bindLabel="character"
                                                         [closeOnSelect]="true"
                                                         placeholder="Выберите характер новости"
-                                                        formControlName="nature"
-                                                        [ngClass]="{'is-invalid': submit && form.nature.errors}"
+                                                        formControlName="newsCharacter"
+                                                        [ngClass]="{'is-invalid': submitted && form.newsCharacter.errors}"
                                                 ></ng-select>
-                                                <div *ngIf="submit && form.nature.errors" class="invalid-feedback">
-                                                    <span *ngIf="form.nature.errors.required"></span>
+                                                <div *ngIf="submitted && form.newsCharacter.errors" class="invalid-feedback">
+                                                    <span *ngIf="form.newsCharacter.errors.required"></span>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="form-group row mb-3">
-                                            <label for="title" class="col-md-3 col-form-label"> Заглавие </label>
+                                            <label for="projectTitle" class="col-md-3 col-form-label"> Заглавие </label>
                                             <div class="col-md-9">
                                                 <input type="text"
-                                                       id="title"
-                                                       formControlName="title"
+                                                       id="projectTitle"
+                                                       formControlName="projectTitle"
                                                        placeholder="Введите заглавие"
                                                        class="form-control"
-                                                       [ngClass]="{'is-invalid': submit && form.title.errors}"
+                                                       [ngClass]="{'is-invalid': submitted && form.projectTitle.errors}"
                                                 >
-                                                <div *ngIf="submit && form.title.errors" class="invalid-feedback">
-                                                    <span *ngIf="form.title.errors.required"></span>
+                                                <div *ngIf="submitted && form.projectTitle.errors" class="invalid-feedback">
+                                                    <span *ngIf="form.projectTitle.errors.required"></span>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="form-group row mb-3">
-                                            <label for="hashtag" class="col-md-3 col-form-label"> Хештег </label>
+                                            <label for="projectHashtags" class="col-md-3 col-form-label"> Хештег </label>
                                             <div class="col-md-9">
                                                 <ng-select
-                                                        id="hashtag"
+                                                        id="projectHashtags"
                                                         [items]="hashtags$ | async"
                                                         bindLabel="name"
                                                         [multiple]="true"
                                                         [closeOnSelect]="false"
                                                         [hideSelected]="true"
                                                         placeholder="Выберите ключевые слова"
-                                                        formControlName="hashtags"
-                                                        [ngClass]="{'is-invalid': submit && form.hashtags.errors}"
+                                                        formControlName="projectHashtags"
+                                                        [ngClass]="{'is-invalid': submitted && form.projectHashtags.errors}"
                                                 ></ng-select>
-                                                <div *ngIf="submit && form.hashtags.errors" class="invalid-feedback">
-                                                    <span *ngIf="form.hashtags.errors.required"></span>
+                                                <div *ngIf="submitted && form.projectHashtags.errors" class="invalid-feedback">
+                                                    <span *ngIf="form.projectHashtags.errors.required"></span>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="form-group row mb-3">
-                                            <label for="format" class="col-md-3 col-form-label"> Формат
+                                            <label for="projectPostFormat" class="col-md-3 col-form-label"> Формат
                                                 размещения </label>
                                             <div class="col-md-9">
                                                 <ng-select
-                                                        id="format"
+                                                        id="projectPostFormat"
                                                         [items]="formats$ | async"
                                                         bindLabel="postFormat"
                                                         [closeOnSelect]="true"
                                                         placeholder="Выберите формат"
-                                                        formControlName="format"
-                                                        [ngClass]="{'is-invalid': submit && form.format.errors}"
+                                                        formControlName="projectPostFormat"
+                                                        [ngClass]="{'is-invalid': submitted && form.projectPostFormat.errors}"
                                                 ></ng-select>
-                                                <div *ngIf="submit && form.format.errors" class="invalid-feedback">
-                                                    <span *ngIf="form.format.errors.required"></span>
+                                                <div *ngIf="submitted && form.projectPostFormat.errors" class="invalid-feedback">
+                                                    <span *ngIf="form.projectPostFormat.errors.required"></span>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="form-group row mb-3">
-                                            <label for="method" class="col-md-3 col-form-label"> Метод разгона </label>
+                                            <label for="projectBurstMethod" class="col-md-3 col-form-label"> Метод разгона </label>
                                             <div class="col-md-9">
                                                 <ng-select
-                                                        id="method"
+                                                        id="projectBurstMethod"
                                                         [items]="methods$ | async"
                                                         bindLabel="method"
                                                         [closeOnSelect]="true"
                                                         placeholder="Выберите метод"
-                                                        formControlName="method"
-                                                        [ngClass]="{'is-invalid': submit && form.method.errors}"
+                                                        formControlName="projectBurstMethod"
+                                                        [ngClass]="{'is-invalid': submitted && form.projectBurstMethod.errors}"
                                                 ></ng-select>
-                                                <div *ngIf="submit && form.method.errors" class="invalid-feedback">
-                                                    <span *ngIf="form.method.errors.required"></span>
+                                                <div *ngIf="submitted && form.projectBurstMethod.errors" class="invalid-feedback">
+                                                    <span *ngIf="form.projectBurstMethod.errors.required"></span>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="form-group row mb-3">
-                                            <label for="budget" class="col-md-3 col-form-label"> Бюджет разгона </label>
+                                            <label for="projectBudget" class="col-md-3 col-form-label"> Бюджет разгона </label>
                                             <div class="col-md-9">
                                                 <input type="number"
-                                                       id="budget"
-                                                       formControlName="budget"
+                                                       id="projectBudget"
+                                                       formControlName="projectBudget"
                                                        class="form-control"
                                                        placeholder="Введите бюджет"
-                                                       [formControlName]="'budget'"
-                                                       [ngClass]="{'is-invalid': submit && form.budget.errors}"
+                                                       [ngClass]="{'is-invalid': submitted && form.projectBudget.errors}"
                                                 >
-                                                <div *ngIf="submit && form.budget.errors" class="invalid-feedback">
-                                                    <span *ngIf="form.budget.errors.required"></span>
+                                                <div *ngIf="submitted && form.projectBudget.errors" class="invalid-feedback">
+                                                    <span *ngIf="form.projectBudget.errors.required"></span>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="form-group row mb-3">
-                                            <label for="contractors" class="col-md-3 col-form-label">
+                                            <label for="projectContractors" class="col-md-3 col-form-label">
                                                 Котрагенты </label>
                                             <div class="col-md-9">
                                                 <ng-select
-                                                        id="contractors"
+                                                        id="projectContractors"
                                                         [items]="contractors$ | async"
                                                         bindLabel="editorName"
                                                         [multiple]="true"
                                                         [closeOnSelect]="false"
                                                         [hideSelected]="true"
                                                         placeholder="Выберите контрагентов"
-                                                        formControlName="contractors"
-                                                        [ngClass]="{'is-invalid': submit && form.contractors.errors}"
+                                                        formControlName="projectContractors"
+                                                        [ngClass]="{'is-invalid': submitted && form.projectContractors.errors}"
                                                 >
                                                 </ng-select>
-                                                <div *ngIf="submit && form.contractors.errors" class="invalid-feedback">
-                                                    <span *ngIf="form.contractors.errors.required"></span>
+                                                <div *ngIf="submitted && form.projectContractors.errors" class="invalid-feedback">
+                                                    <span *ngIf="form.projectContractors.errors.required"></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -246,7 +245,7 @@
                             </form>
                         </aw-wizard-step>
 
-                        <aw-wizard-step (stepEnter)="step = 1" awOptionalStep [canEnter]="validationForm.valid">
+                        <aw-wizard-step (stepEnter)="step = 1" awOptionalStep [canEnter]="validationForm?.valid">
                             <ul class="nav nav-pills bg-light nav-justified form-wizard-header mb-4">
                                 <li class="nav-item" [awGoToStep]="{stepIndex: 0}">
                                     <a href="javascript: void(0);" data-toggle="tab"
@@ -287,7 +286,7 @@
                                               (onFocus)="focus($event)"
                                               (onEditorChanged)="changedEditor($event)"
                                               (onBlur)="blur($event)"
-                                              formControlName="editor"
+                                              formControlName="text"
                                               (onEditorCreated)="created($event)"
                                 ></quill-editor>
 
@@ -308,7 +307,7 @@
                             </form>
                         </aw-wizard-step>
 
-                        <aw-wizard-step (stepEnter)="step = 2" awOptionalStep [canEnter]="validationForm.valid">
+                        <aw-wizard-step (stepEnter)="step = 2" awOptionalStep [canEnter]="validationForm?.valid">
                             <ul class="nav nav-pills bg-light nav-justified form-wizard-header mb-4">
                                 <li class="nav-item" [awGoToStep]="{stepIndex: 0}">
                                     <a href="javascript: void(0);" data-toggle="tab"
@@ -375,7 +374,7 @@
                                                 >
                                                 <ng-select
                                                         id="news-contractors"
-                                                        [items]="form.contractors.value || []"
+                                                        [items]="form.projectContractors.value || []"
                                                         bindLabel="editorName"
                                                         [multiple]="true"
                                                         [closeOnSelect]="false"
@@ -383,7 +382,7 @@
                                                         placeholder="Выберите контрагентов для новости"
                                                         (change)="updateField(index, 'contractors')"
                                                         [formControl]="getControl(index, 'contractors')"
-                                                        [ngClass]="{'is-invalid': submit && distributeForm.contractors.errors}"
+                                                        [ngClass]="{'is-invalid': submitted && distributeForm.contractors.errors}"
                                                 >
                                                 </ng-select>
 
@@ -418,7 +417,7 @@
                             </ul>
                         </aw-wizard-step>
 
-                        <aw-wizard-step (stepEnter)="step = 3" [canEnter]="validationForm.valid">
+                        <aw-wizard-step (stepEnter)="step = 3" [canEnter]="validationForm?.valid">
                             <ul class="nav nav-pills bg-light nav-justified form-wizard-header mb-4">
                                 <li class="nav-item" [awGoToStep]="{stepIndex: 0}">
                                     <a href="javascript: void(0);" data-toggle="tab"

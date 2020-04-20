@@ -31,103 +31,14 @@ import {
     selectHashtags,
     selectMethods, selectProject
 } from '../../../core/store/selectors/news.selectors';
-import {Contractor} from '../../../core/models/instances/contractor';
 import {NotificationService} from '../../../core/services/notification.service';
-import {NotificationType} from '../../../core/models/instances/notification';
-
 import cloneDeep from 'lodash.clonedeep';
 import {defaultNews} from '../../../core/constants/news';
-import * as ts from 'typescript/lib/tsserverlibrary';
 import {Project} from '../../../core/models/instances/project';
 import {ActivatedRoute, Params} from '@angular/router';
 import {Subject, Subscription} from 'rxjs';
-import {ErrorService} from "../../../core/services/error.service";
-import {LoadingService} from "../../../core/services/loading.service";
-
-//{
-//   "id": 3,
-//   "newsCharacter": {
-//     "id": 1,
-//     "character": "standard"
-//   },
-//   "projectPostFormat": {
-//     "id": 1,
-//     "postFormat": "news"
-//   },
-//   "projectBurstMethod": {
-//     "id": 1,
-//     "method": "direct"
-//   },
-//   "content": {
-//     "id": 3,
-//     "text": "<p>content</p>"
-//   },
-//   "projectContractors": [
-//     {
-//       "id": 1,
-//       "editorName": "Editor 1",
-//       "contactPerson": "Contact 1",
-//       "phoneNumber": "Number 1",
-//       "email": "contractor@contr.com",
-//       "newsAmount": 50,
-//       "arrangedNews": 20,
-//       "onePostPrice": 140,
-//       "dateCreated": "2020-04-17T14:24:19.543642Z",
-//       "dateUpdated": "2020-04-17T14:24:19.543938Z"
-//     },
-//     {
-//       "id": 2,
-//       "editorName": "Editor 2",
-//       "contactPerson": "Contact 2",
-//       "phoneNumber": "Number 2",
-//       "email": "contractor2@contr.com",
-//       "newsAmount": 50,
-//       "arrangedNews": 20,
-//       "onePostPrice": 140,
-//       "dateCreated": "2020-04-17T14:24:19.647988Z",
-//       "dateUpdated": "2020-04-17T14:24:19.648300Z"
-//     },
-//     {
-//       "id": 3,
-//       "editorName": "Editor 3",
-//       "contactPerson": "Contact 3",
-//       "phoneNumber": "Number 3",
-//       "email": "contractor3@contr.com",
-//       "newsAmount": 50,
-//       "arrangedNews": 20,
-//       "onePostPrice": 140,
-//       "dateCreated": "2020-04-17T14:24:19.736664Z",
-//       "dateUpdated": "2020-04-17T14:24:19.737475Z"
-//     }
-//   ],
-//   "projectHashtags": [
-//     {
-//       "id": 1,
-//       "name": "mytag1"
-//     },
-//     {
-//       "id": 2,
-//       "name": "mytag2"
-//     },
-//     {
-//       "id": 3,
-//       "name": "mytag3"
-//     }
-//   ],
-//   "newsInProject": [
-//     {
-//       "title": "title"
-//     }
-//   ],
-//   "clientName": "client",
-//   "projectName": "project",
-//   "projectTitle": "title",
-//   "projectBudget": 1000,
-//   "isConfirmed": false,
-//   "progress": 0,
-//   "dateCreated": "2020-04-18T12:28:44.175240Z",
-//   "dateUpdated": "2020-04-18T12:28:44.175454Z"
-// }
+import {ErrorService} from '../../../core/services/error.service';
+import {LoadingService} from '../../../core/services/loading.service';
 
 /**
  * Form Burst news component - handling the burst news with sidebar and content
@@ -176,7 +87,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     revenueRadialChart: ChartType;
     blured = false;
     focused = false;
-    submit: boolean;
+    submitted = false;
     projectId: number;
     submitForm: boolean;
 
@@ -205,32 +116,20 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     }
 
     processProject(project: Project) {
-        if (!project) {
-            return;
+        const data = this.newsService
+            .processProject(
+                project,
+                this.validationForm,
+                this.editorForm
+            );
+        this.setProjectData(data);
+    }
+
+    setProjectData(data) {
+        if (data) {
+            this.controls = data.controls;
+            this.newsList = data.newsList;
         }
-        const common = this.validationForm.controls;
-        const editor = this.editorForm.controls;
-        const newsList = project.newsInProject.map(el => ({image: {base64: el.image}}));
-        common.nature.setValue(project.newsCharacter);
-        common.format.setValue(project.projectPostFormat);
-        common.method.setValue(project.projectBurstMethod);
-        common.client.setValue(project.clientName);
-        common.project.setValue(project.projectName);
-        common.title.setValue(project.projectTitle);
-        common.budget.setValue(project.projectBudget);
-        common.contractors.setValue(project.projectContractors);
-        common.hashtags.setValue(project.projectHashtags);
-        editor.editor.setValue(project.content.text);
-        const toGroups = this.newsList.map(entity => {
-            return new FormGroup({
-                title: new FormControl(entity.title, Validators.required),
-                image: new FormControl(entity.image.base64, Validators.required),
-                contractors: new FormControl(entity.contractors, Validators.required)
-            });
-        });
-        this.controls = new FormArray(toGroups);
-        this.newsList = newsList;
-        console.log(project);
     }
 
     ngOnInit() {
@@ -244,7 +143,6 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     }
 
     initSubscriptions() {
-        this.submit = false;
         this.loading$ = this.loadingService.loading$;
         this.error$ = this.errorService.error$;
         this.submitForm = false;
@@ -262,14 +160,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     }
 
     initControls() {
-        const toGroups = this.newsList.map(entity => {
-            return new FormGroup({
-                title: new FormControl(null, Validators.required),
-                image: new FormControl(null, Validators.required),
-                contractors: new FormControl(null, Validators.required)
-            });
-        });
-        this.controls = new FormArray(toGroups);
+        this.controls = this.newsService.initControls(this.newsList);
     }
 
     initValidateForm() {
@@ -294,22 +185,22 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
 
     budgetValidator(control: AbstractControl): { [key: string]: boolean } | null {
         const left = this.calculateLeft();
-        if (left < 0) {
-            this.notificationService.notify(NotificationType.warning, 'Внимание', `Вы превысили бюджет на ${left * -1}`, 3500);
-            return {budget: true};
-        }
-        return null;
+        return this.newsService.budgetValidate(left);
     }
 
     /**
      * Returns form
      */
     get form() {
-        return this.validationForm.controls;
+        if (this.validationForm) {
+            return this.validationForm.controls;
+        }
     }
 
     get distributeForm() {
-        return this.newsForm.controls;
+        if (this.newsForm) {
+            return this.newsForm.controls;
+        }
     }
 
     addNew() {
@@ -318,63 +209,41 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     }
 
     addNewControl() {
-        const newControls = new FormGroup({
-            title: new FormControl(null, Validators.required),
-            image: new FormControl(null, Validators.required),
-            contractors: new FormControl(null, Validators.required)
-        });
-        this.controls.push(newControls);
+        const controls = this.controls;
+        this.controls = this.newsService.addNewControl(controls);
     }
 
     addNewItem() {
-        const newsList = this.newsList.slice();
-        newsList.push(cloneDeep(defaultNews));
-        this.newsList = newsList;
+        const newsList = this.newsList;
+        this.newsList = this.newsService.addNewItem(newsList);
     }
 
     calculateLeft() {
-        if (this.validationForm) {
-            const contractorsControl = (this.form.contractors as unknown as Contractor[]);
-            // @ts-ignore
-            const contractors = contractorsControl ? (contractorsControl.value || []) : [];
-            const left = this.budget - contractors.reduce((a, c) => a + +c.onePostPrice, 0);
-            this.calculatePercentage(left);
-            return left;
-        }
-        return null;
+        this.left = this.newsService.calculateLeft(this.budget, this.validationForm);
+        this.calculatePercentage();
     }
 
     get budget() {
-        const budgetControl = this.form.budget;
-        return budgetControl ? (budgetControl.value || 0) : 0;
+        if (this.form) {
+            const budgetControl = this.form.projectBudget;
+            return budgetControl ? (budgetControl.value || 0) : 0;
+        }
+        return 0;
     }
 
-    calculatePercentage(left) {
-        // tslint:disable-next-line:no-bitwise
-        const percent = ~~(left / this.budget * 100);
-        const revenue = Object.assign({}, revenueRadialChart);
-        revenue.series = [percent];
-        this.revenueRadialChart = revenue;
-        this.left = left;
+    calculatePercentage() {
+        this.revenueRadialChart = this.newsService.calculatePercentage(this.left, this.budget);
     }
 
     /**
      * Go to next step while form value is valid
      */
     formSubmit() {
-        this.submit = true;
+        this.submitted = true;
     }
 
     newsFormSubmit() {
         this.newsSubmit = true;
-    }
-
-    onChange(changes) {
-        console.log(changes);
-    }
-
-    onDrop(changes) {
-        console.log(changes);
     }
 
     /**
@@ -409,40 +278,23 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     }
 
     onImageChange(files, index, onFile?: boolean) {
-        const image = this.newsList[index].image;
-        if (onFile) {
-            image.file = files[0];
-        } else {
-            image.base64 = files[0].base64;
-        }
+        const newsList = this.newsList;
+        const image = this.newsService.onImageChange(files, index, onFile, newsList);
         this.updateField(index, 'image', image);
     }
 
     onSubmit() {
-        const common = this.validationForm.value;
-        const editor = this.editorForm.value;
-        const newsInProject = this.newsList.map(el => ({...el, image: el.image.file}));
-        const data = {
-            newsCharacter: common.nature,
-            projectPostFormat: common.format,
-            projectBurstMethod: common.method,
-            clientName: common.client,
-            projectName: common.project,
-            projectTitle: common.title,
-            projectBudget: common.budget,
-            projectContractors: common.contractors,
-            content: {text: editor.editor},
-            isConfirmed: false,
-            newsInProject,
-            projectHashtags: common.hashtags,
-        };
         const projectId = this.projectId;
+        const data = this.newsService.onSubmit(this.validationForm, this.editorForm, this.newsList, !!projectId);
+        this.submit(data, projectId);
+    }
+
+    submit(data, projectId) {
         if (projectId) {
-            data.isConfirmed = true;
             this.updateProject(data, projectId);
-            return;
+        } else {
+            this.createProject(data);
         }
-        this.createProject(data);
     }
 
     createProject(data: Project) {
@@ -456,17 +308,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
 
     updateField(index: number, field: string, value?: any) {
         const control = this.getControl(index, field);
-        if (control.valid) {
-            this.newsList = this.newsList.map((e, i) => {
-                if (index === i) {
-                    return {
-                        ...e,
-                        [field]: value || control.value
-                    };
-                }
-                return e;
-            });
-        }
+        this.newsList = this.newsService.updateField(index, field, value, control, this.newsList);
     }
 
     fetchData() {
