@@ -141,6 +141,9 @@ export class UserService {
             payload,
             (response: RegisterResponse) => {
                 if (response && response.user) {
+                    const user = response.user;
+                    const users = this.users;
+                    this.users = [...users, user];
                     this.applyPagination();
                     return response.user;
                 }
