@@ -6,6 +6,7 @@ import {Router} from '@angular/router';
 import {ErrorService} from '../../../core/services/error.service';
 import {LoadingService} from '../../../core/services/loading.service';
 import {Subject} from 'rxjs';
+import images from "../../../core/constants/images";
 
 @Component({
     selector: 'app-projects',
@@ -23,6 +24,7 @@ export class ProjectsComponent implements OnInit {
     projects$ = this.store.pipe(select(selectProjects));
     loading$: Subject<boolean>;
     error$: Subject<any>;
+    noImage = images.defaultImage;
 
     order = null;
 

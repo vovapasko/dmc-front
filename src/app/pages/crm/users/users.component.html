@@ -3,9 +3,7 @@
 
     <div class="row">
         <app-ui-preloader [display]="loading$ | async"></app-ui-preloader>
-        <ngb-alert type="danger" *ngIf="error$ | async" [dismissible]="false">Пожалуйста,
-            повторите попытку
-        </ngb-alert>
+
         <div class="col-xl-8">
             <div class="card">
                 <div class="card-body">

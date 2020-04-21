@@ -45,9 +45,7 @@
                             <form (ngSubmit)="formSubmit()" [formGroup]="validationForm">
                                 <div class="row">
                                     <app-ui-preloader [display]="loading$ | async"></app-ui-preloader>
-                                    <ngb-alert type="danger" *ngIf="error$ | async" [dismissible]="false">Пожалуйста,
-                                        повторите попытку
-                                    </ngb-alert>
+
                                     <div class="col-xl-8">
 
                                         <div class="form-group row mb-3">
@@ -359,7 +357,7 @@
                                                        (rawFileModelChange)="onImageChange($event, index, true)"
                                                 />
                                                 <img class="card-img-top img-fluid"
-                                                     src="{{news.image.base64}}"
+                                                     src="{{news?.image?.base64 || noImage}}"
                                                      alt="Card image cap"
                                                 >
                                             </label>
@@ -454,9 +452,6 @@
                             </ul>
                             <div class="row">
                                 <app-ui-preloader [display]="loading$ | async"></app-ui-preloader>
-                                <ngb-alert type="danger" *ngIf="error$ | async" [dismissible]="false">Пожалуйста,
-                                    повторите попытку
-                                </ngb-alert>
                                 <div class="col-12">
                                     <div class="text-center">
                                         <h2 class="mt-0"><i class="mdi mdi-check-all"></i></h2>

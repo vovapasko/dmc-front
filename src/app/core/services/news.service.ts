@@ -186,14 +186,13 @@ export class NewsService {
 
 
     addNewControl(controls) {
-        const list = controls.slice();
         const newControls = new FormGroup({
             title: new FormControl(null, Validators.required),
             image: new FormControl(null, Validators.required),
             contractors: new FormControl(null, Validators.required)
         });
-        list.push(newControls);
-        return list;
+        controls.push(newControls);
+        return controls;
     }
 
     processProject(project: Project, validationForm, editorForm) {

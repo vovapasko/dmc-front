@@ -27,7 +27,6 @@
 
   <div class="row">
     <app-ui-preloader [display]="loading$ | async"></app-ui-preloader>
-    <ngb-alert type="danger" *ngIf="error$ | async" [dismissible]="false">Пожалуйста, повторите попытку</ngb-alert>
 
     <div class="col-xl-4" *ngFor="let project of projects$ | async | projectStatus:order; index as index">
       <div class="card-box project-box">
@@ -69,7 +68,7 @@
           <a *ngFor="let news of project?.newsInProject" href="javascript: void(0);" class="avatar-group-item">
             <img placement="top"
                  [ngbTooltip]="news?.title"
-                 src="{{news?.image}}"
+                 src="{{news?.image || noImage}}"
                  class="rounded-circle avatar-sm" alt="news"
             />
           </a>

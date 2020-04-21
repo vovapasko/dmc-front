@@ -4,6 +4,7 @@ import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 
 import {ServerError} from '../models/responses/serverError';
+import {ErrorHandler} from "../helpers/error-handler";
 
 /**
  * This interceptor for process errors from server in rxjs way
@@ -11,7 +12,9 @@ import {ServerError} from '../models/responses/serverError';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-    constructor() {
+    constructor(
+        private errorHandler: ErrorHandler
+    ) {
     }
 
     /**
@@ -29,11 +32,13 @@ export class ErrorInterceptor implements HttpInterceptor {
      * Handling errors
      */
     error(errors, status): Observable<never> {
+        let errorEntity: ServerError = {status, error: {message: 'Something went wrong'}};
         if (errors) {
             const errorsTitles = Object.keys(errors);
-            const errorEntity: ServerError = {status, error: {message: errorsTitles.toString()}, errors};
+            errorEntity = {status, error: {message: errorsTitles.toString()}, errors};
+            this.errorHandler.handle(errorEntity);
             return throwError(errorEntity);
         }
-        return throwError({status, message: 'Something went wrong'});
+        return throwError(errorEntity);
     }
 }

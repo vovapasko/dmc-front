@@ -77,7 +77,6 @@ export class RequestHandler {
                     },
                     error => {
                         console.log(error);
-                        return this.errorHandler.handle(error);
                     }
                 )
             );

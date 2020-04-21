@@ -39,6 +39,7 @@ import {ActivatedRoute, Params} from '@angular/router';
 import {Subject, Subscription} from 'rxjs';
 import {ErrorService} from '../../../core/services/error.service';
 import {LoadingService} from '../../../core/services/loading.service';
+import images from "../../../core/constants/images";
 
 /**
  * Form Burst news component - handling the burst news with sidebar and content
@@ -64,6 +65,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
 
     newsSubmit = false;
 
+    noImage = images.defaultImage;
     total = 0;
     left = 0;
 
