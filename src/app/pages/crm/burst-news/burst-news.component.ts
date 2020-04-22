@@ -9,7 +9,7 @@ import {
     ViewContainerRef
 } from '@angular/core';
 import {WizardComponent as BaseWizardComponent} from 'angular-archwizard';
-import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormArray, FormControl, FormGroup} from '@angular/forms';
 import {NestableSettings} from 'ngx-nestable/lib/nestable.models';
 
 import {Steps} from '../../../core/constants/steps';
@@ -32,14 +32,16 @@ import {
     selectMethods, selectProject
 } from '../../../core/store/selectors/news.selectors';
 import {NotificationService} from '../../../core/services/notification.service';
-import cloneDeep from 'lodash.clonedeep';
-import {defaultNews} from '../../../core/constants/news';
 import {Project} from '../../../core/models/instances/project';
-import {ActivatedRoute, Params} from '@angular/router';
-import {Subject, Subscription} from 'rxjs';
+import {ActivatedRoute} from '@angular/router';
+import {Subject} from 'rxjs';
 import {ErrorService} from '../../../core/services/error.service';
 import {LoadingService} from '../../../core/services/loading.service';
-import images from "../../../core/constants/images";
+import images from '../../../core/constants/images';
+import {News} from '../../../core/models/instances/news';
+import {AlifeFile} from '../../../core/models/instances/alife-file';
+import {CreateProjectPayload} from '../../../core/models/payloads/news/project/create';
+import {UpdateProjectPayload} from '../../../core/models/payloads/news/project/update';
 
 /**
  * Form Burst news component - handling the burst news with sidebar and content
@@ -84,7 +86,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
         fixedDepth: true
     } as NestableSettings;
 
-    newsList = [cloneDeep(defaultNews)];
+    newsList = [new News('', [], {base64: this.noImage, file: null})];
 
     revenueRadialChart: ChartType;
     blured = false;
@@ -117,7 +119,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
         this.cdr.detectChanges();
     }
 
-    processProject(project: Project) {
+    private processProject(project: Project): void {
         const data = this.newsService
             .processProject(
                 project,
@@ -127,7 +129,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
         this.setProjectData(data);
     }
 
-    setProjectData(data) {
+    private setProjectData(data: any): void {
         if (data) {
             this.controls = data.controls;
             this.newsList = data.newsList;
@@ -140,11 +142,11 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
         this.initSubscriptions();
     }
 
-    getControl(index: number, field: string): FormControl {
+    private getControl(index: number, field: string): FormControl {
         return this.controls.at(index).get(field) as FormControl;
     }
 
-    initSubscriptions() {
+    private initSubscriptions(): void {
         this.loading$ = this.loadingService.loading$;
         this.error$ = this.errorService.error$;
         this.submitForm = false;
@@ -154,30 +156,30 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
         this.fetchData();
     }
 
-    initForms() {
+    private initForms(): void {
         this.initValidateForm();
         this.initEditorForm();
         this.initNewsForm();
         this.initControls();
     }
 
-    initControls() {
+    private initControls(): void {
         this.controls = this.newsService.initControls(this.newsList);
     }
 
-    initValidateForm() {
+    private initValidateForm(): void {
         this.validationForm = this.newsService.initializeValidationForm(this.budgetValidator.bind(this));
     }
 
-    initNewsForm() {
+    private initNewsForm(): void {
         this.newsForm = this.newsService.initializeNewsForm();
     }
 
-    initEditorForm() {
+    private initEditorForm(): void {
         this.editorForm = this.newsService.initializeEditorForm();
     }
 
-    initBreadCrumbs() {
+    private initBreadCrumbs(): void {
         this.breadCrumbItems = [{label: 'Главная', path: '/'}, {
             label: 'Разгон',
             path: '/burst-news',
@@ -185,7 +187,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
         }];
     }
 
-    budgetValidator(control: AbstractControl): { [key: string]: boolean } | null {
+    public budgetValidator(control: AbstractControl): { [key: string]: boolean } | null {
         const left = this.calculateLeft();
         return this.newsService.budgetValidate(left);
     }
@@ -205,24 +207,25 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
         }
     }
 
-    addNew() {
+    public addNew(): void {
         this.addNewControl();
         this.addNewItem();
     }
 
-    addNewControl() {
+    private addNewControl(): void {
         const controls = this.controls;
         this.controls = this.newsService.addNewControl(controls);
     }
 
-    addNewItem() {
+    private addNewItem(): void {
         const newsList = this.newsList;
         this.newsList = this.newsService.addNewItem(newsList);
     }
 
-    calculateLeft() {
+    private calculateLeft(): number {
         this.left = this.newsService.calculateLeft(this.budget, this.validationForm);
         this.calculatePercentage();
+        return this.left;
     }
 
     get budget() {
@@ -233,87 +236,89 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
         return 0;
     }
 
-    calculatePercentage() {
+    private calculatePercentage(): void {
         this.revenueRadialChart = this.newsService.calculatePercentage(this.left, this.budget);
     }
 
     /**
      * Go to next step while form value is valid
      */
-    formSubmit() {
+    public formSubmit(): void {
         this.submitted = true;
     }
 
-    newsFormSubmit() {
+    public newsFormSubmit(): void {
         this.newsSubmit = true;
     }
 
     /**
      * Go to next step while second form value is valid
      */
-    profileFormSubmit() {
+    public profileFormSubmit(): void {
         this.submitForm = true;
     }
 
-    created(event) {
+    public created(event): void {
         // tslint:disable-next-line:no-console
         console.log('editor-created', event);
     }
 
-    changedEditor(event) {
+    public changedEditor(event): void {
         // tslint:disable-next-line:no-console
         console.log('editor-change', event);
     }
 
-    focus($event) {
+    public focus($event): void {
         // tslint:disable-next-line:no-console
         console.log('focus', $event);
         this.focused = true;
         this.blured = false;
     }
 
-    blur($event) {
+    public blur($event): void {
         // tslint:disable-next-line:no-console
         console.log('blur', $event);
         this.focused = false;
         this.blured = true;
     }
 
-    onImageChange(files, index, onFile?: boolean) {
+    public onImageChange(files: AlifeFile[], index: number, onFile?: boolean): void {
         const newsList = this.newsList;
         const image = this.newsService.onImageChange(files, index, onFile, newsList);
         this.updateField(index, 'image', image);
     }
 
-    onSubmit() {
+    public onSubmit(): void {
         const projectId = this.projectId;
-        const data = this.newsService.onSubmit(this.validationForm, this.editorForm, this.newsList, !!projectId);
-        this.submit(data, projectId);
+        const payload = this.newsService.onSubmit(this.validationForm, this.editorForm, this.newsList, !!projectId);
+        this.submit(payload, projectId);
     }
 
-    submit(data, projectId) {
+    public submit(payload: CreateProjectPayload | UpdateProjectPayload, projectId): void {
         if (projectId) {
-            this.updateProject(data, projectId);
+            payload.id = projectId;
+            // @ts-ignore
+            this.updateProject(payload);
         } else {
-            this.createProject(data);
+            this.createProject(payload);
         }
     }
 
-    createProject(data: Project) {
-        this.store.dispatch(new CreateProject({data}));
+    private createProject(payload: CreateProjectPayload): void {
+        this.store.dispatch(new CreateProject(payload));
     }
 
-    updateProject(data: Project, projectId) {
-        this.store.dispatch(new UpdateProject({id: projectId, data}));
+    private updateProject(payload: UpdateProjectPayload): void {
+        this.store.dispatch(new UpdateProject(payload));
         this.store.dispatch(new GetProjectSuccess(null));
     }
 
-    updateField(index: number, field: string, value?: any) {
+    public updateField(index: number, field: string, value?: any): void {
         const control = this.getControl(index, field);
         this.newsList = this.newsService.updateField(index, field, value, control, this.newsList);
     }
 
-    fetchData() {
+    private fetchData(): void {
         const id = this.projectId;
         if (id) {
             this.store.select(selectProject).subscribe(this.processProject.bind(this));

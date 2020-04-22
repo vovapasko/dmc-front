@@ -1,3 +1,3 @@
-export interface DeletePayload {
+export interface DeleteUserPayload {
     id: number;
 }

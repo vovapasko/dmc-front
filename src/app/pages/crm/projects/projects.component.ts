@@ -1,12 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {select, Store} from '@ngrx/store';
 import {IAppState} from '../../../core/store/state/app.state';
-import {selectContractors, selectProjects} from '../../../core/store/selectors/news.selectors';
+import {selectProjects} from '../../../core/store/selectors/news.selectors';
 import {Router} from '@angular/router';
 import {ErrorService} from '../../../core/services/error.service';
 import {LoadingService} from '../../../core/services/loading.service';
 import {Subject} from 'rxjs';
-import images from "../../../core/constants/images";
+import images from '../../../core/constants/images';
+import {Orders} from '../../../core/constants/orders';
 
 @Component({
     selector: 'app-projects',
@@ -25,7 +26,7 @@ export class ProjectsComponent implements OnInit {
     loading$: Subject<boolean>;
     error$: Subject<any>;
     noImage = images.defaultImage;
-
+    orders = Orders;
     order = null;
 
     constructor(
@@ -47,17 +48,16 @@ export class ProjectsComponent implements OnInit {
         this._fetchData();
     }
 
-    initSubscriptions() {
+    private initSubscriptions(): void {
         this.loading$ = this.loadingService.loading$;
         this.error$ = this.errorService.error$;
-
     }
 
-    onCreateProject() {
+    public onCreateProject(): void {
         this.router.navigate(['crm', 'burst-news']);
     }
 
-    onChange(id) {
+    public onChange(id): void {
         this.router.navigate(['crm', 'burst-news'], {queryParams: {id}});
     }
 

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, Observable, of} from 'rxjs';
-import {FormBuilder, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 
 import {environment} from '../../../environments/environment';
@@ -20,10 +20,10 @@ import {SignupPayload} from '../models/payloads/user/signup';
 import {DeleteResponse} from '../models/responses/user/deleteResponse';
 import {UpdateResponse} from '../models/responses/user/updateResponse';
 import {RegisterPayload} from '../models/payloads/user/register';
-import {DeletePayload} from '../models/payloads/user/delete';
+import {DeleteUserPayload} from '../models/payloads/user/delete';
 import {UpdatePayload} from '../models/payloads/user/update';
-import {UpdateProfilePayload} from '../models/payloads/user/updateProfile';
-import {ConfirmResetPasswordPayload} from '../models/payloads/user/confirmResetPassword';
+import {UpdateProfilePayload} from '../models/payloads/user/update-profile';
+import {ConfirmResetPasswordPayload} from '../models/payloads/user/confirm-reset-password';
 import {ManageGroups} from '../models/instances/groups';
 
 const api = environment.api;
@@ -51,10 +51,6 @@ export class UserService {
     ) {
     }
 
-    get selectedUser() {
-        return this.selectedUser$.getValue();
-    }
-
     set selectedUser(value: User) {
         this.selectedUser$.next(value);
     }
@@ -65,10 +61,6 @@ export class UserService {
 
     set users(value: Array<User>) {
         this.users$.next(value);
-    }
-
-    get paginatedUserData() {
-        return this.paginatedUserData$.getValue();
     }
 
     set paginatedUserData(value: Array<User>) {
@@ -87,7 +79,7 @@ export class UserService {
     /**
      *  Get all users, api returns array of users
      */
-    getAll(): Observable<User[]> {
+    public getAll(): Observable<User[]> {
         return this.requestHandler.request(
             `${api}/users/`,
             'get',
@@ -106,7 +98,7 @@ export class UserService {
     /**
      *  Sign up aka confirm-user
      */
-    signup(payload: SignupPayload) {
+    public signup(payload: SignupPayload): Observable<User> {
         return this.requestHandler.request(
             `${api}/confirm-user/${payload.invite}`,
             'post',
@@ -134,7 +126,7 @@ export class UserService {
     /**
      *  Register new user aka invite user
      */
-    register(payload: RegisterPayload): Observable<User> {
+    public register(payload: RegisterPayload): Observable<User> {
         return this.requestHandler.request(
             `${api}/invite-new-user/`,
             'post',
@@ -154,7 +146,7 @@ export class UserService {
     /**
      *  Delete user
      */
-    delete(payload: DeletePayload): Observable<User> {
+    public delete(payload: DeleteUserPayload): Observable<User> {
         return this.requestHandler.request(
             `${api}/users/${payload.id}`,
             'delete',
@@ -171,7 +163,7 @@ export class UserService {
     /**
      *  Delete user
      */
-    update(payload: UpdatePayload): Observable<User> {
+    public update(payload: UpdatePayload): Observable<User> {
         return this.requestHandler.request(
             `${api}/change-group/${payload.id}`,
             'put',
@@ -191,7 +183,7 @@ export class UserService {
     /**
      *  Get link for reset password on email
      */
-    resetPassword(): Observable<boolean> {
+    public resetPassword(): Observable<boolean> {
         return this.requestHandler.request(
             `${api}/change-password-confirm/`,
             'get',
@@ -207,7 +199,7 @@ export class UserService {
     /**
      *  Change password
      */
-    confirmResetPassword(payload: ConfirmResetPasswordPayload): Observable<boolean> {
+    public confirmResetPassword(payload: ConfirmResetPasswordPayload): Observable<boolean> {
         return this.requestHandler.request(
             `${api}/change-pass/${payload.confirm}`,
             'post',
@@ -222,7 +214,7 @@ export class UserService {
     /**
      *  Update profile (current user)
      */
-    updateProfile(payload: UpdateProfilePayload) {
+    public updateProfile(payload: UpdateProfilePayload): Observable<User> {
         return this.requestHandler.request(
             `${api}/profile/`,
             'put',
@@ -239,7 +231,7 @@ export class UserService {
         );
     }
 
-    initializeInviteUserForm() {
+    public initializeInviteUserForm(): FormGroup {
         return this.formBuilder.group({
             email: [
                 '',
@@ -249,7 +241,7 @@ export class UserService {
         });
     }
 
-    initializeProfileForm() {
+    public initializeProfileForm(): FormGroup {
         const user = this.user;
         return this.formBuilder.group({
             firstName: [user.firstName, [Validators.required]],
@@ -258,11 +250,11 @@ export class UserService {
         });
     }
 
-    belongToManage(user: User) {
+    public belongToManage(user: User): boolean {
         return !!user.groups.find(group => ManageGroups.indexOf(group.name) !== -1);
     }
 
-    selectUser(user: any) {
+    public selectUser(user: User): Observable<User> {
         this.selectedUser = user;
         return of(user);
     }

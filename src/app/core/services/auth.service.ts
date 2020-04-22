@@ -57,7 +57,7 @@ export class AuthenticationService {
     /**
      * Save the token (access or refresh) in cookie
      */
-    public setToken(type: TokenTypes, value) {
+    public setToken(type: TokenTypes, value: any): void {
         const currentUser = this.userService.currentUser();
         if (currentUser && currentUser.token) {
             currentUser.token[type] = value;
@@ -68,7 +68,7 @@ export class AuthenticationService {
     /**
      * Performs the auth
      */
-    login(payload: LoginPayload): Observable<User> {
+    public login(payload: LoginPayload): Observable<User> {
         return this.requestHandler.request(
             `${api}/login/`,
             'post',
@@ -85,7 +85,7 @@ export class AuthenticationService {
     /**
      * Logout the user
      */
-    logout() {
+    public logout(): void {
         // remove user from local storage to log user out
         this.cookieService.deleteCookie(CURRENT_USER);
         this.userService.user = null;
@@ -94,7 +94,7 @@ export class AuthenticationService {
     /**
      *  Refresh token
      */
-    requestAccessToken(): Observable<any> {
+    public requestAccessToken(): Observable<any> {
         const refreshToken = this.getToken(AuthenticationService.REFRESH_TOKEN_NAME);
         return this.http
             .post(`${api}/token-refresh/`, {refresh: refreshToken})
@@ -102,9 +102,7 @@ export class AuthenticationService {
                 tap(
                     (response: RequestAccessTokenResponse) => this.setToken(AuthenticationService.ACCESS_TOKEN_NAME, response.access)
                 ),
-                catchError(
-                    error => this.unauthorised(error)
-                )
+                catchError(this.unauthorised.bind(this))
             );
     }
 
@@ -112,7 +110,7 @@ export class AuthenticationService {
     /**
      *  Logout user from crm
      */
-    unauthorised = (error) => {
+    public unauthorised(): Observable<never> {
         // auto logout if 401 response returned from api
         this.logout();
         location.reload();

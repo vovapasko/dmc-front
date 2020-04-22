@@ -2,26 +2,31 @@ import {environment} from '../../../environments/environment';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {RequestHandler} from '../helpers/request-handler';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, Form, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Observable, of} from 'rxjs';
 import {GetAllResponse} from '../models/responses/news/getAllResponse';
-import {CreateHashtagPayload} from '../models/payloads/news/create-hashtag';
+import {CreateHashtagPayload} from '../models/payloads/news/hashtag/create';
 import {CreateHashtagResponse} from '../models/responses/news/create-hashtag';
-import {CreatePostFormatPayload} from '../models/payloads/news/create-post-format';
+import {CreatePostFormatPayload} from '../models/payloads/news/format/create';
 import {CreatePostFormatResponse} from '../models/responses/news/create-post-format';
-import {CreateProjectPayload} from '../models/payloads/news/create-project';
+import {CreateProjectPayload} from '../models/payloads/news/project/create';
 import {CreateProjectResponse} from '../models/responses/news/create-project';
 import {GetProjectResponse} from '../models/responses/news/get-project';
 import {GetProjectsResponse} from '../models/responses/news/get-projects';
-import {UpdateProjectPayload} from '../models/payloads/news/update-project';
+import {UpdateProjectPayload} from '../models/payloads/news/project/update';
 import {delay} from 'rxjs/operators';
 import {NotificationType} from '../models/instances/notification';
 import {Contractor} from '../models/instances/contractor';
 import {revenueRadialChart} from 'src/app/pages/dashboards/default/data';
 import {NotificationService} from './notification.service';
-import {defaultNews} from '../constants/news';
-import cloneDeep from 'lodash.clonedeep';
 import {Project} from '../models/instances/project';
+import {News, NewsImage} from '../models/instances/news';
+import images from '../constants/images';
+import {Hashtag} from '../models/instances/hashtag';
+import {Format} from '../models/instances/format';
+import {ChartType} from '../../pages/dashboards/default/default.model';
+import {setProjectValues} from '../helpers/utility';
+import {AlifeFile} from '../models/instances/alife-file';
 
 const api = environment.api;
 
@@ -39,7 +44,7 @@ export class NewsService {
     ) {
     }
 
-    getProjectConfiguration(): Observable<any> {
+    public getProjectConfiguration(): Observable<any> {
         return this.requestHandler.request(
             `${api}/burst-news/`,
             'get',
@@ -48,7 +53,7 @@ export class NewsService {
         );
     }
 
-    createProject(payload: CreateProjectPayload) {
+    public createProject(payload: CreateProjectPayload): Observable<Project> {
         return this.requestHandler.request(
             `${api}/news-projects/`,
             'post',
@@ -57,7 +62,7 @@ export class NewsService {
         );
     }
 
-    getProject(payload): any {
+    public getProject(payload): Observable<Project> {
         return this.requestHandler.request(
             `${api}/news-projects/${payload.id}`,
             'get',
@@ -66,7 +71,7 @@ export class NewsService {
         );
     }
 
-    getProjects(): any {
+    public getProjects(): Observable<Project[]> {
         return this.requestHandler.request(
             `${api}/news-projects/`,
             'get',
@@ -75,7 +80,7 @@ export class NewsService {
         );
     }
 
-    updateProject(payload: UpdateProjectPayload) {
+    public updateProject(payload: UpdateProjectPayload): Observable<Project> {
         return of(Object.assign({}, {id: payload.id, ...payload.data}))
             .pipe(delay(2000));
         // return this.requestHandler.request(
@@ -86,7 +91,7 @@ export class NewsService {
         // );
     }
 
-    createHashtag(payload: CreateHashtagPayload) {
+    public createHashtag(payload: CreateHashtagPayload): Observable<Hashtag> {
         return this.requestHandler.request(
             `${api}/hashtags/`,
             'post',
@@ -95,7 +100,7 @@ export class NewsService {
         );
     }
 
-    createFormat(payload: CreatePostFormatPayload) {
+    public createFormat(payload: CreatePostFormatPayload): Observable<Format> {
         return this.requestHandler.request(
             `${api}/post-format/`,
             'post',
@@ -104,19 +109,19 @@ export class NewsService {
         );
     }
 
-    initializeCreateHashtagForm() {
+    public initializeCreateHashtagForm(): FormGroup {
         return this.formBuilder.group({
             name: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(20)]],
         });
     }
 
-    initializeCreateFormatForm() {
+    public initializeCreateFormatForm(): FormGroup {
         return this.formBuilder.group({
             postFormat: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(20)]],
         });
     }
 
-    initializeValidationForm(validator) {
+    public initializeValidationForm(validator): FormGroup {
         return this.formBuilder.group({
             clientName: [null, Validators.required],
             projectName: [null, Validators.required],
@@ -130,13 +135,13 @@ export class NewsService {
         });
     }
 
-    initializeEditorForm() {
+    public initializeEditorForm(): FormGroup {
         return this.formBuilder.group({
             text: ['', Validators.required]
         });
     }
 
-    initializeNewsForm() {
+    public initializeNewsForm(): FormGroup {
         return this.formBuilder.group({
             title: ['', Validators.required],
             contractors: [null, Validators.required],
@@ -144,7 +149,7 @@ export class NewsService {
         });
     }
 
-    initControls(list) {
+    public initControls(list: Array<News>): FormArray {
         const toGroups = list.map(entity => {
             return new FormGroup({
                 title: new FormControl(entity.title, Validators.required),
@@ -155,7 +160,7 @@ export class NewsService {
         return new FormArray(toGroups);
     }
 
-    budgetValidate(left) {
+    public budgetValidate(left: number): { [key: string]: boolean } | null {
         if (left < 0) {
             this.notificationService.notify(NotificationType.warning, 'Внимание', `Вы превысили бюджет на ${left * -1}`, 3500);
             return {budget: true};
@@ -163,20 +168,18 @@ export class NewsService {
         return null;
     }
 
-    calculateLeft(budget, validationForm) {
+    public calculateLeft(budget: number, validationForm: FormGroup): number | null {
         if (validationForm) {
             const controls = validationForm.controls;
             const contractorsControl = (controls.projectContractors as unknown as Contractor[]);
             // @ts-ignore
             const contractors = contractorsControl ? (contractorsControl.value || []) : [];
-            const left = budget - contractors.reduce((a, c) => a + +c.onePostPrice, 0);
-            this.calculatePercentage(left, budget);
-            return left;
+            return budget - contractors.reduce((a, c) => a + +c.onePostPrice, 0);
         }
         return null;
     }
 
-    calculatePercentage(left, budget) {
+    public calculatePercentage(left: number, budget: number): ChartType {
         // tslint:disable-next-line:no-bitwise
         const percent = ~~(left / budget * 100);
         const revenue = Object.assign({}, revenueRadialChart);
@@ -185,7 +188,7 @@ export class NewsService {
     }
 
 
-    addNewControl(controls) {
+    public addNewControl(controls: FormArray): FormArray {
         const newControls = new FormGroup({
             title: new FormControl(null, Validators.required),
             image: new FormControl(null, Validators.required),
@@ -195,34 +198,32 @@ export class NewsService {
         return controls;
     }
 
-    processProject(project: Project, validationForm, editorForm) {
+    public processProject(project: Project, validationForm: FormGroup, editorForm: FormGroup): object {
         if (!project || !validationForm || !editorForm) {
             return;
         }
         const common = validationForm.controls;
         const editor = editorForm.controls;
-        const newsList = project.newsInProject.map(el => ({...el, image: {base64: el.image}}));
+        const newsList = project.newsInProject
+            .map(
+                el => (new News(el.title, el.contractors, el.image, el.id))
+            );
         const controls = this.initControls(newsList);
-        this.setValues(common, editor, project);
+        setProjectValues(common, editor, project);
         return {controls, newsList};
     }
 
-    setValues(common, editor, project) {
-        Object.keys(common).forEach(
-            key => common[key].setValue(project[key])
-        );
-        editor.text.setValue(project.content.text);
-    }
 
-    addNewItem(newsList) {
+    public addNewItem(newsList: News[]): News[] {
         const list = newsList.slice();
-        list.push(cloneDeep(defaultNews));
+        list.push(new News('', [], {base64: images.defaultImage, file: null}));
         return list;
     }
 
-    onImageChange(files, index, onFile: boolean, list) {
+    public onImageChange(files: AlifeFile[], index: number, onFile: boolean, list: News[]): NewsImage {
         const image = list[index].image;
         if (onFile) {
+            // @ts-ignore
             image.file = files[0];
         } else {
             image.base64 = files[0].base64;
@@ -230,24 +231,19 @@ export class NewsService {
         return image;
     }
 
-    updateField(index: number, field: string, value: any, control, list) {
+    public updateField(index: number, field: string, value: any, control: AbstractControl, list: News[]): News[] {
         if (control.valid) {
-            return list.map((e, i) => {
-                if (index === i) {
-                    return {
-                        ...e,
-                        [field]: value || control.value
-                    };
-                }
-                return e;
-            });
+            const element = list[index];
+            list[index] = {...element, [field]: value || control.value};
+            return list;
         }
+        return null;
     }
 
-    onSubmit(validationForm, editorForm, list, forUpdate) {
+    public onSubmit(validationForm: FormGroup, editorForm: FormGroup, list: News[], forUpdate: boolean): CreateProjectPayload | UpdateProjectPayload {
         const common = validationForm.value;
         const editor = editorForm.value;
-        const newsInProject = list.map(el => ({...el, image: el.image.file}));
+        const newsInProject = list;
         const data = {
             ...common,
             content: {text: editor.text},
@@ -257,6 +253,6 @@ export class NewsService {
         if (forUpdate) {
             data.isConfirmed = true;
         }
-        return data;
+        return {data};
     }
 }

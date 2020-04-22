@@ -20,7 +20,8 @@ import {IAppState} from '../../../core/store/state/app.state';
 import {setValues} from '../../../core/helpers/utility';
 import {NotificationService} from '../../../core/services/notification.service';
 import {NotificationType} from '../../../core/models/instances/notification';
-import {ServerError} from "../../../core/models/responses/serverError";
+import {UpdateContractorPayload} from "../../../core/models/payloads/contractor/update";
+import {DeleteContractorPayload} from "../../../core/models/payloads/contractor/delete";
 
 
 /**
@@ -70,7 +71,7 @@ export class ContractorsComponent implements OnInit {
         this.initForms();
     }
 
-    initSubscriptions() {
+    private initSubscriptions(): void {
         this.loading$ = this.loadingService.loading$;
         this.error$ = this.errorService.error$;
 
@@ -85,7 +86,7 @@ export class ContractorsComponent implements OnInit {
         this.store.dispatch(new GetContractors());
     }
 
-    initBreadCrumbItems() {
+    private initBreadCrumbItems(): void {
         this.breadCrumbItems = [{label: 'Главная', path: '/'}, {
             label: 'Контрагенты',
             path: '/contractors',
@@ -96,7 +97,7 @@ export class ContractorsComponent implements OnInit {
     /**
      * Start init forms
      */
-    initForms() {
+    private initForms(): void {
         this.initCreateForm();
         this.initUpdateForm();
     }
@@ -104,7 +105,7 @@ export class ContractorsComponent implements OnInit {
     /**
      * Dispatch contractor and set values to form
      */
-    selectContractor(contractor: Contractor) {
+    public selectContractor(contractor: Contractor): void {
         this.store.dispatch(new SelectContractor(contractor));
         setValues(this.uf, contractor);
     }
@@ -112,28 +113,28 @@ export class ContractorsComponent implements OnInit {
     /**
      * Get validators from contractor service
      */
-    initCreateForm() {
+    private initCreateForm(): void {
         this.createForm = this.contractorService.initializeCreateForm();
     }
 
     /**
      * Mark as checked all contractors in table
      */
-    checkAll() {
+    public checkAll(): void {
         this.contractorService.checkAll();
     }
 
     /**
      * Mark as checked contractor in table
      */
-    check(contractor: Contractor) {
+    public check(contractor: Contractor): void {
         this.contractorService.check(contractor);
     }
 
     /**
      * Validators for Update Form
      */
-    initUpdateForm() {
+    private initUpdateForm(): void {
         this.updateForm = this.contractorService.initializeUpdateForm();
     }
 
@@ -150,7 +151,7 @@ export class ContractorsComponent implements OnInit {
     /**
      * Handle next or previous page click
      */
-    onPageChange(page) {
+    public onPageChange(page: number): void {
         this.contractorService.onPageChange(page);
     }
 
@@ -159,7 +160,7 @@ export class ContractorsComponent implements OnInit {
      * @param content modal content
      * @param editMany mode
      */
-    openModal(content: string, editMany = false) {
+    public openModal(content: string, editMany = false): void {
         const checkedContractors = this.contractorService.checkedContractors;
         if (editMany && checkedContractors.length === 0) {
             this.notificationService.notify(NotificationType.warning, 'Внимание', 'Нужно выбрать элементы');
@@ -171,7 +172,7 @@ export class ContractorsComponent implements OnInit {
     /**
      * Add new contractor
      */
-    addContractor() {
+    public addContractor(): void {
         const data = this.contractorService.createContractorData(this.cf, [{news_amount: 0}]);
         this.add(data);
         this.modalService.dismissAll();
@@ -181,28 +182,28 @@ export class ContractorsComponent implements OnInit {
     /**
      * submit data
      */
-    add(data) {
+    public add(data): void {
         this.store.dispatch(new CreateContractors({data}));
     }
 
     /**
      * Delete contractor
      */
-    delete(contractor: Contractor) {
+    public delete(contractor: Contractor): void {
         this.store.dispatch(new DeleteContractors(contractor));
     }
 
     /**
      * Update method, calls api
      */
-    update(payload) {
+    public update(payload): void {
         this.store.dispatch(new UpdateContractors(payload));
     }
 
     /**
      * Update single contractor
      */
-    updateContractor() {
+    public updateContractor(): void {
         const contractorService = this.contractorService;
         const data = contractorService.createContractorData(this.uf);
         const id = contractorService.selectedContractor.id;
@@ -214,7 +215,7 @@ export class ContractorsComponent implements OnInit {
     /**
      * Update checked contractors
      */
-    updateContractors() {
+    public updateContractors(): void {
         const contractorService = this.contractorService;
         const data = contractorService.createContractorData(this.uf);
         const payload = {data};
@@ -227,7 +228,7 @@ export class ContractorsComponent implements OnInit {
     /**
      * Reset to init state
      */
-    cleanAfterUpdate() {
+    private cleanAfterUpdate(): void {
         this.editCheckedMode = false;
         this.updateForm.reset();
         this.modalService.dismissAll();
@@ -237,7 +238,7 @@ export class ContractorsComponent implements OnInit {
     /**
      * Handle processing with many items, delete or update
      */
-    processMany(target, payload, handler) {
+    private processMany(target: Array<Contractor>, payload: any, handler: any): void {
         const notificationService = this.notificationService;
         const timeout = 3500;
         // tslint:disable-next-line:max-line-length
@@ -256,7 +257,7 @@ export class ContractorsComponent implements OnInit {
     /**
      * Calls when create form is submitted (checked or single)
      */
-    submitCreateForm() {
+    public submitCreateForm(): void {
         this.submitted = true;
         if (this.createForm.invalid) {
             return;
@@ -268,7 +269,7 @@ export class ContractorsComponent implements OnInit {
     /**
      * Calls when edit form is submitted (checked or single)
      */
-    submitEditForm() {
+    public submitEditForm(): void {
         this.submitted = true;
         if (this.updateForm.invalid) {
             return;
@@ -284,7 +285,7 @@ export class ContractorsComponent implements OnInit {
     /**
      * Performs editing all selected contractors
      */
-    editChecked() {
+    public editChecked(): void {
         const checkedContractors = this.contractorService.checkedContractors;
         if (checkedContractors.length) {
             const contractor = checkedContractors[0];
@@ -297,7 +298,7 @@ export class ContractorsComponent implements OnInit {
     /**
      * Performs deleting all selected contractors
      */
-    deleteChecked() {
+    public deleteChecked(): void {
         const checkedContractors = this.contractorService.checkedContractors;
         this.processMany(checkedContractors.slice(), {}, this.delete.bind(this));
         this.contractorService.checkedContractors = [];

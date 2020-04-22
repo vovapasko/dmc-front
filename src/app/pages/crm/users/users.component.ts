@@ -14,7 +14,7 @@ import {PaginationService} from '../../../core/services/pagination.service';
 import {LoadingService} from '../../../core/services/loading.service';
 import {ErrorService} from '../../../core/services/error.service';
 import {Groups, ManageGroups} from '../../../core/models/instances/groups';
-import {ServerError} from '../../../core/models/responses/serverError';
+import {RegisterPayload} from "../../../core/models/payloads/user/register";
 
 /**
  * Users component - handling the users with sidebar and content
@@ -69,7 +69,7 @@ export class UsersComponent implements OnInit {
         this.initSubscriptions();
     }
 
-    initSubscriptions() {
+    private initSubscriptions(): void {
         this.loading$ = this.loadingService.loading$;
         this.error$ = this.errorService.error$;
 
@@ -86,11 +86,11 @@ export class UsersComponent implements OnInit {
         this.store.dispatch(new GetUsers());
     }
 
-    belongToManage(user: User) {
+    public belongToManage(user: User): boolean {
         return this.userService.belongToManage(user);
     }
 
-    initBreadCrumbs() {
+    public initBreadCrumbs(): void {
         this.breadCrumbItems = [{label: 'Главная', path: '/'}, {
             label: 'Пользователи',
             path: '/contractors',
@@ -101,7 +101,7 @@ export class UsersComponent implements OnInit {
     /**
      * Get current user and set available groups (Add new user)
      */
-    initSelectOptions() {
+    public initSelectOptions(): void {
         const currentUser = this.userService.currentUser();
         if (currentUser) {
             this.selectValue = currentUser.groupsCascadeDown;
@@ -111,7 +111,7 @@ export class UsersComponent implements OnInit {
     /**
      * Init form, create validators
      */
-    initForm() {
+    private initForm(): void {
         this.validationform = this.userService.initializeInviteUserForm();
     }
 
@@ -124,44 +124,44 @@ export class UsersComponent implements OnInit {
      * Modal Open
      * @param content modal content
      */
-    openModal(content: string) {
+    public openModal(content: string): void {
         this.modalService.open(content, {centered: true});
     }
 
     /**
      * Select user to show details
      */
-    selectUser(user: User) {
+    public selectUser(user: User): void {
         this.store.dispatch(new SelectUser(user));
     }
 
     /**
      * Invite new user with role and email
      */
-    registerNewUser() {
+    public registerNewUser(): void {
         this.submitted = true;
 
-        const email = this.validationform.get('email').value;
-        const group = this.selectedRole;
+        const email = (this.validationform.get('email').value as string);
+        const group = (this.selectedRole as unknown as Groups);
         const data = {email, group};
 
-        this.register(data);
+        this.register({data});
         this.modalService.dismissAll();
     }
 
-    register(data) {
-        this.store.dispatch(new CreateUser({data}));
+    public register(payload: RegisterPayload): void {
+        this.store.dispatch(new CreateUser(payload));
     }
 
-    onPageChange(page) {
+    public onPageChange(page: number): void {
         this.userService.onPageChange(page);
     }
 
-    delete(user: User) {
+    public delete(user: User) {
         this.store.dispatch(new DeleteUser(user));
     }
 
-    updateGroup(user: User, group: Groups) {
+    public updateGroup(user: User, group: Groups): void {
         const data = {group};
         this.store.dispatch(new UpdateUser({id: user.id, data}));
     }

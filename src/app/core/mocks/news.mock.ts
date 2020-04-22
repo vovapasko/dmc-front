@@ -64,4 +64,4 @@ export const mockProject = {
 
 export const mockPayload = {
     id: 1
-}
+};

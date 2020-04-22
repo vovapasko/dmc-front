@@ -67,4 +67,4 @@ export const data = [
         list: [{id: 6, title: 'test Cras justo odio'}, {id: 5, title: 'me Dapibus ac facilisis in'}],
         link: ['Card link', 'Another link']
     }
-]
+];

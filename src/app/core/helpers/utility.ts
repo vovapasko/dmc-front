@@ -50,3 +50,19 @@ export const setValues = (target, obj) => {
     );
 };
 
+export const setProjectValues = (common, editor, project) => {
+    Object.keys(common).forEach(
+        key => common[key].setValue(project[key])
+    );
+    editor.text.setValue(project.content.text);
+};
+
+export const collectDataFromForm = (f, defaultFields) => {
+    const fields = Object.keys(f);
+    // collects all values [{}, {}, {}]
+    const values = fields.map(field => ({[field]: f[field].value}));
+    if (defaultFields) {
+        values.push(...defaultFields);
+    }
+    return values.reduce((a, n) => ({...a, ...n}), {});
+}

@@ -12,7 +12,7 @@ import {IAppState} from '../../../core/store/state/app.state';
 import {ErrorService} from '../../../core/services/error.service';
 import {LoadingService} from '../../../core/services/loading.service';
 import {setAuthClasses} from '../../../core/helpers/utility';
-import {ConfirmResetPasswordPayload} from '../../../core/models/payloads/user/confirmResetPassword';
+import {ConfirmResetPasswordPayload} from '../../../core/models/payloads/user/confirm-reset-password';
 
 /**
  * This component for change user password

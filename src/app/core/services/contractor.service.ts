@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, Observable, of} from 'rxjs';
-import {FormBuilder, Validators} from '@angular/forms';
+import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 import {environment} from '../../../environments/environment';
 import {Contractor} from '../models/instances/contractor';
@@ -15,6 +15,7 @@ import {PaginationService} from './pagination.service';
 import {CreateContractorPayload} from '../models/payloads/contractor/create';
 import {UpdateContractorPayload} from '../models/payloads/contractor/update';
 import {DeleteContractorPayload} from '../models/payloads/contractor/delete';
+import {collectDataFromForm} from "../helpers/utility";
 
 const api = environment.api;
 
@@ -64,10 +65,6 @@ export class ContractorService {
         this.contractors$.next(value);
     }
 
-    get paginatedContractorData() {
-        return this.paginatedContractorData$.getValue();
-    }
-
     set paginatedContractorData(value: Array<Contractor>) {
         this.paginatedContractorData$.next(value);
     }
@@ -75,7 +72,7 @@ export class ContractorService {
     /**
      *  Get all users, api returns array of users
      */
-    getAll(): Observable<Contractor[]> {
+    public getAll(): Observable<Contractor[]> {
         return this.requestHandler.request(
             `${api}/contractor/`,
             'get',
@@ -94,7 +91,7 @@ export class ContractorService {
     /**
      *  Create contractor, api returns single contractor instance
      */
-    create(payload: CreateContractorPayload): Observable<Contractor> {
+    public create(payload: CreateContractorPayload): Observable<Contractor> {
         return this.requestHandler.request(
             `${api}/contractor/`,
             'post',
@@ -114,7 +111,7 @@ export class ContractorService {
     /**
      *  Update contractor by id, api returns single contractor instance
      */
-    update(payload: UpdateContractorPayload): Observable<Contractor> {
+    public update(payload: UpdateContractorPayload): Observable<Contractor> {
         return this.requestHandler.request(
             `${api}/contractor/${payload.id}`,
             'put',
@@ -133,7 +130,7 @@ export class ContractorService {
     /**
      *  Delete contractor by id, api returns status
      */
-    delete(payload: DeleteContractorPayload): Observable<boolean> {
+    public delete(payload: DeleteContractorPayload): Observable<boolean> {
         return this.requestHandler.request(
             `${api}/contractor/${payload.id}`,
             'delete',
@@ -152,20 +149,14 @@ export class ContractorService {
     /**
      * Collect and returns data for creating or editing contractor
      */
-    createContractorData(f, defaultFields?) {
-        const fields = Object.keys(f);
-        // collects all values [{}, {}, {}]
-        const values = fields.map(field => ({[field]: f[field].value}));
-        if (defaultFields) {
-            values.push(...defaultFields);
-        }
-        return values.reduce((a, n) => ({...a, ...n}), {});
+    public createContractorData(f: { [p: string]: AbstractControl }, defaultFields: Array<object> = []): { [p: string]: any } {
+        return collectDataFromForm(f, defaultFields);
     }
 
     /**
      * Mark as checked all contractors
      */
-    checkAll() {
+    public checkAll(): void {
         const contractors = this.contractors;
         const checkedContractors = this.checkedContractors;
         const checkedAll = checkedContractors.length === contractors.length;
@@ -179,7 +170,7 @@ export class ContractorService {
     /**
      * Mark contractor as check
      */
-    check(contractor: Contractor) {
+    public check(contractor: Contractor): void {
         const checkedContractors = this.checkedContractors;
         const checked = checkedContractors.indexOf(contractor) !== -1;
         if (checked) {
@@ -192,7 +183,7 @@ export class ContractorService {
     /**
      * Validators for Create Form
      */
-    initializeCreateForm() {
+    public initializeCreateForm(): FormGroup {
         return this.formBuilder.group({
             editorName: ['', [Validators.required, Validators.minLength(1)]],
             contactPerson: ['', [Validators.required, Validators.minLength(1)]],
@@ -210,7 +201,7 @@ export class ContractorService {
     /**
      * Validators for Update Form
      */
-    initializeUpdateForm() {
+    public initializeUpdateForm(): FormGroup {
         return this.formBuilder.group({
             updateEditorName: ['', [Validators.required, Validators.minLength(1)]],
             updateContactPerson: ['', [Validators.required, Validators.minLength(1)]],
@@ -228,7 +219,7 @@ export class ContractorService {
     /**
      * Select contractor to show details
      */
-    selectContractor(contractor) {
+    public selectContractor(contractor: Contractor): Observable<Contractor> {
         this.selectedContractor = contractor;
         return of(contractor);
     }

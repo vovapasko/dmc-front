@@ -1,5 +1,6 @@
-import {Inject, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
+import numbers from '../constants/numbers';
 
 /**
  * This service for pagination any data
@@ -85,12 +86,12 @@ export class PaginationService {
     public onPageChange(page: number): void {
         const {pageSize, totalRecords} = this;
         const startIndex = (page - 1) * pageSize;
-        const endIndex = (page - 1) * pageSize + pageSize;
+        const endIndex = startIndex + pageSize;
         const paginatedData = totalRecords ? totalRecords.slice(startIndex, endIndex) : [];
         this.changePage(page, startIndex, endIndex, paginatedData);
     }
 
-    changePage(page, startIndex, endIndex, paginatedData) {
+    private changePage(page, startIndex, endIndex, paginatedData) {
         this.page = page;
         this.startIndex = startIndex;
         this.endIndex = endIndex;
@@ -104,12 +105,12 @@ export class PaginationService {
         const {pageSize, totalRecords} = this;
         const startIndex = 0;
         const endIndex = pageSize;
-        const totalSize = totalRecords ? totalRecords.length : 10;
+        const totalSize = totalRecords ? totalRecords.length : numbers.pageSize;
         const paginatedData = totalRecords ? totalRecords.slice(startIndex, endIndex) : [];
         this.paginate(startIndex, endIndex, totalSize, paginatedData);
     }
 
-    paginate(startIndex, endIndex, totalSize, paginatedData) {
+    private paginate(startIndex, endIndex, totalSize, paginatedData) {
         this.startIndex = startIndex;
         this.endIndex = endIndex;
         this.totalSize = totalSize;

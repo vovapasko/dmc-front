@@ -20,7 +20,7 @@ export class ErrorService {
         this.error$.next(error);
     }
 
-    clear() {
+    public clear(): void {
         this.error$.next(null);
     }
 }

@@ -10,13 +10,14 @@ import {LoginPayload} from '../models/payloads/auth/login';
 import {CreateContractorPayload} from '../models/payloads/contractor/create';
 import {DeleteContractorPayload} from '../models/payloads/contractor/delete';
 import {UpdateContractorPayload} from '../models/payloads/contractor/update';
-import {ConfirmResetPasswordPayload} from '../models/payloads/user/confirmResetPassword';
+import {ConfirmResetPasswordPayload} from '../models/payloads/user/confirm-reset-password';
 import {RegisterPayload} from '../models/payloads/user/register';
 import {SignupPayload} from '../models/payloads/user/signup';
-import {UpdateProfilePayload} from '../models/payloads/user/updateProfile';
-import {CreateHashtagPayload} from "../models/payloads/news/create-hashtag";
-import {CreatePostFormatPayload} from "../models/payloads/news/create-post-format";
-import {CreateProjectPayload} from "../models/payloads/news/create-project";
+import {UpdateProfilePayload} from '../models/payloads/user/update-profile';
+import {CreateHashtagPayload} from '../models/payloads/news/hashtag/create';
+import {CreatePostFormatPayload} from '../models/payloads/news/format/create';
+import {CreateProjectPayload} from '../models/payloads/news/project/create';
+import {Payloads} from "../models/payloads/payload";
 
 /**
  * This service handle request from client, process and send to server
@@ -47,19 +48,8 @@ export class RequestHandler {
     request(
         url,
         method,
-        payload?: LoginPayload
-            | CreateContractorPayload
-            | DeleteContractorPayload
-            | UpdateContractorPayload
-            | ConfirmResetPasswordPayload
-            | RegisterPayload
-            | SignupPayload
-            | CreateHashtagPayload
-            | CreatePostFormatPayload
-            | UpdateProfilePayload
-            | CreateProjectPayload,
-        mapHandler = (res) => {
-        }
+        payload?: Payloads,
+        mapHandler = (res) => {}
     ) {
 
         return this.http[method](

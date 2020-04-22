@@ -13,7 +13,6 @@ import {Notification, NotificationType} from '../models/instances/notification';
 export class NotificationService {
 
     private idx = 0;
-    public notification$ = new BehaviorSubject(null);
     public notifications$ = new BehaviorSubject([]);
     public history$ = new BehaviorSubject([]);
 
@@ -26,14 +25,6 @@ export class NotificationService {
 
     set notifications(value: Array<Notification>) {
         this.notifications$.next(value);
-    }
-
-    get notification() {
-        return this.notification$.getValue();
-    }
-
-    set notification(notification: Notification) {
-        this.notification$.next(notification);
     }
 
     get history() {
@@ -52,33 +43,27 @@ export class NotificationService {
      * @param message details of notification
      * @param timeout ms
      */
-    notify(type: NotificationType, title: string, message: string, timeout = 1000): void {
+    public notify(type: NotificationType, title: string, message: string, timeout = 1000): void {
         const notification = new Notification(this.idx++, type, title, message, timeout);
         this.registerNotification(notification);
         this.trackTime(notification);
     }
 
-    registerNotification(notification) {
-        const notifications = this.notifications;
-        const history = this.history;
-        notifications.push(notification);
-        history.push(notification);
-
-        this.notification = notification;
-        this.notifications = notifications;
-        this.history = history;
+    private registerNotification(notification: Notification): void {
+        this.notifications.push(notification);
+        this.history.push(notification);
     }
 
-    trackTime(notification) {
+    private trackTime(notification: Notification): void {
         if (notification.timeout !== 0) {
-            return setTimeout(() => this.close(notification), notification.timeout);
+            setTimeout(() => this.close(notification), notification.timeout);
         }
     }
 
     /**
      * Remove notification from history bar
      */
-    removeFromHistory(notification) {
+    public removeFromHistory(notification): void {
         const history = this.history;
         this.history = history.filter(el => el.id !== notification.id);
     }
@@ -86,7 +71,7 @@ export class NotificationService {
     /**
      * Close notification by id
      */
-    close(notification: Notification) {
+    public close(notification: Notification): void {
         this.notifications = this.notifications.filter(notif => notif.id !== notification.id);
     }
 }

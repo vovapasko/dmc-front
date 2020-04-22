@@ -14,11 +14,11 @@ export class LoadingService {
 
     constructor() { }
 
-    startLoading() {
+    public startLoading(): void {
         this.loading$.next(true);
     }
 
-    stopLoading() {
+    public stopLoading(): void {
         this.loading$.next(false);
     }
 }
