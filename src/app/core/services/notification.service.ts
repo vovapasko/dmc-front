@@ -49,14 +49,18 @@ export class NotificationService {
         this.trackTime(notification);
     }
 
-    private registerNotification(notification: Notification): void {
-        this.notifications.push(notification);
-        this.history.push(notification);
+    public registerNotification(notification: Notification): void {
+        const notifications = this.notifications;
+        const history = this.history;
+        notifications.push(notification);
+        history.push(notification);
+        this.history = history;
+        this.notifications = notifications;
     }
 
-    private trackTime(notification: Notification): void {
+    public trackTime(notification: Notification): any {
         if (notification.timeout !== 0) {
-            setTimeout(() => this.close(notification), notification.timeout);
+            return setTimeout(() => this.close(notification), notification.timeout);
         }
     }
 

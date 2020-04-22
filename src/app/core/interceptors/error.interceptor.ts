@@ -3,7 +3,7 @@ import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/com
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 
-import {ServerError} from '../models/responses/serverError';
+import {ServerError} from '../models/responses/server/error';
 import {ErrorHandler} from "../helpers/error-handler";
 
 /**

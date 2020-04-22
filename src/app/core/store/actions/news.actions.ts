@@ -59,7 +59,7 @@ export class GetProjects implements Action {
 export class GetProjectsSuccess implements Action {
     public readonly type = ENewsActions.GetProjectsSuccess;
 
-    constructor(public payload) {
+    constructor(public payload: Project[]) {
     }
 }
 

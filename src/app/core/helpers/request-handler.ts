@@ -2,22 +2,11 @@ import {Injectable} from '@angular/core';
 import {map, tap} from 'rxjs/operators';
 import {HttpClient} from '@angular/common/http';
 
-import {ServerResponse} from '../models/responses/serverResponse';
+import {ServerResponse} from '../models/responses/server/response';
 import {ResponseHandler} from './response-handler';
 import {ErrorHandler} from './error-handler';
 import {ConvertCase} from './convert-case';
-import {LoginPayload} from '../models/payloads/auth/login';
-import {CreateContractorPayload} from '../models/payloads/contractor/create';
-import {DeleteContractorPayload} from '../models/payloads/contractor/delete';
-import {UpdateContractorPayload} from '../models/payloads/contractor/update';
-import {ConfirmResetPasswordPayload} from '../models/payloads/user/confirm-reset-password';
-import {RegisterPayload} from '../models/payloads/user/register';
-import {SignupPayload} from '../models/payloads/user/signup';
-import {UpdateProfilePayload} from '../models/payloads/user/update-profile';
-import {CreateHashtagPayload} from '../models/payloads/news/hashtag/create';
-import {CreatePostFormatPayload} from '../models/payloads/news/format/create';
-import {CreateProjectPayload} from '../models/payloads/news/project/create';
-import {Payloads} from "../models/payloads/payload";
+import {Payloads} from '../models/payloads/payload';
 
 /**
  * This service handle request from client, process and send to server

@@ -6,19 +6,19 @@ import {ActivatedRoute, Router} from '@angular/router';
 
 import {environment} from '../../../environments/environment';
 import {User} from '../models/instances/user.models';
-import {SignupResponse} from '../models/responses/user/signupResponse';
-import {RegisterResponse} from '../models/responses/user/registerResponse';
-import {ResetPasswordResponse} from '../models/responses/user/resetPasswordResponse';
-import {ConfirmResetPasswordResponse} from '../models/responses/user/confirmResetPasswordResponse';
-import {UpdateProfileResponse} from '../models/responses/user/updateProfileResponse';
-import {GetAllResponse} from '../models/responses/user/getAllResponse';
+import {SignupResponse} from '../models/responses/user/signup';
+import {RegisterResponse} from '../models/responses/user/register';
+import {ResetPassword} from '../models/responses/user/reset-password';
+import {ConfirmResetPasswordResponse} from '../models/responses/user/confirm-reset-password';
+import {UpdateProfileResponse} from '../models/responses/user/update-profile';
+import {GetAllResponse} from '../models/responses/user/get-all';
 import {RequestHandler} from '../helpers/request-handler';
 import {CookieService} from '../providers/cookie.service';
 import {CURRENT_USER} from '../constants/user';
 import {PaginationService} from './pagination.service';
 import {SignupPayload} from '../models/payloads/user/signup';
-import {DeleteResponse} from '../models/responses/user/deleteResponse';
-import {UpdateResponse} from '../models/responses/user/updateResponse';
+import {DeleteResponse} from '../models/responses/user/delete';
+import {UpdateResponse} from '../models/responses/user/update';
 import {RegisterPayload} from '../models/payloads/user/register';
 import {DeleteUserPayload} from '../models/payloads/user/delete';
 import {UpdatePayload} from '../models/payloads/user/update';
@@ -146,7 +146,7 @@ export class UserService {
     /**
      *  Delete user
      */
-    public delete(payload: DeleteUserPayload): Observable<User> {
+    public delete(payload: DeleteUserPayload): Observable<DeleteUserPayload> {
         return this.requestHandler.request(
             `${api}/users/${payload.id}`,
             'delete',
@@ -188,7 +188,7 @@ export class UserService {
             `${api}/change-password-confirm/`,
             'get',
             null,
-            (response: ResetPasswordResponse) => {
+            (response: ResetPassword) => {
                 if (response) {
                     return response.success;
                 }

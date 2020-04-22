@@ -147,7 +147,7 @@ export class UpdateProfile implements Action {
 export class UpdateProfileSuccess implements Action {
     public readonly type = EUserActions.UpdateProfileSuccess;
 
-    constructor(public success: boolean) {
+    constructor(public user: User) {
     }
 }
 

@@ -5,17 +5,17 @@ import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/form
 
 import {environment} from '../../../environments/environment';
 import {Contractor} from '../models/instances/contractor';
-import {DeleteContractorResponse} from '../models/responses/contractor/deleteContractorResponse';
-import {UpdateContractorResponse} from '../models/responses/contractor/updateContractorResponse';
-import {CreateContractorResponse} from '../models/responses/contractor/createContractorResponse';
-import {GetAllContractorsResponse} from '../models/responses/contractor/getAllContractorsResponse';
+import {DeleteContractorResponse} from '../models/responses/contractor/delete';
+import {UpdateContractorResponse} from '../models/responses/contractor/update';
+import {CreateContractorResponse} from '../models/responses/contractor/create';
+import {GetAllContractorsResponse} from '../models/responses/contractor/get-all';
 import {RequestHandler} from '../helpers/request-handler';
 import numbers from '../constants/numbers';
 import {PaginationService} from './pagination.service';
 import {CreateContractorPayload} from '../models/payloads/contractor/create';
 import {UpdateContractorPayload} from '../models/payloads/contractor/update';
 import {DeleteContractorPayload} from '../models/payloads/contractor/delete';
-import {collectDataFromForm} from "../helpers/utility";
+import {collectDataFromForm} from '../helpers/utility';
 
 const api = environment.api;
 
@@ -130,7 +130,7 @@ export class ContractorService {
     /**
      *  Delete contractor by id, api returns status
      */
-    public delete(payload: DeleteContractorPayload): Observable<boolean> {
+    public delete(payload: DeleteContractorPayload): Observable<DeleteContractorPayload> {
         return this.requestHandler.request(
             `${api}/contractor/${payload.id}`,
             'delete',

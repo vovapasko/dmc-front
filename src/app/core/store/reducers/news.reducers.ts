@@ -1,5 +1,5 @@
 import {INewsState, initialNewsState} from '../state/news.state';
-import {ENewsActions, NewsActions, UpdateProject} from '../actions/news.actions';
+import {ENewsActions, NewsActions} from '../actions/news.actions';
 
 export const newsReducers = (
     state = initialNewsState,

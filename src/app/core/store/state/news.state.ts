@@ -3,8 +3,8 @@ import {Format} from '../../models/instances/format';
 import {Character} from '../../models/instances/character';
 import {Method} from '../../models/instances/method';
 import {Project} from '../../models/instances/project';
-import {News} from "../../models/instances/news";
-import {Contractor} from "../../models/instances/contractor";
+import {News} from '../../models/instances/news';
+import {Contractor} from '../../models/instances/contractor';
 
 export interface INewsState {
     hashtags: Hashtag[];

@@ -3,7 +3,7 @@ import {Injectable} from '@angular/core';
 import {NotificationType} from '../models/instances/notification';
 import {NotificationService} from '../services/notification.service';
 import {ErrorService} from '../services/error.service';
-import {ServerResponse} from '../models/responses/serverResponse';
+import {ServerResponse} from '../models/responses/server/response';
 
 /**
  * This service for handle response from server, convert response body from snake case to camel case and notify about success
