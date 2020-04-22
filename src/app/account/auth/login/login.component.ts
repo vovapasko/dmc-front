@@ -10,7 +10,7 @@ import {Login} from '../../../core/store/actions/user.actions';
 import {ErrorService} from '../../../core/services/error.service';
 import {LoadingService} from '../../../core/services/loading.service';
 import {setAuthClasses} from '../../../core/helpers/utility';
-import {ServerError} from "../../../core/models/responses/serverError";
+import {LoginPayload} from '../../../core/models/payloads/auth/login';
 
 /**
  * This component for login user in crm
@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     /**
      * Set loading and error subscriptions
      */
-    initSubscriptions() {
+    private initSubscriptions(): void {
         this.loading$ = this.loadingService.loading$;
         this.error$ = this.errorService.error$;
     }
@@ -58,7 +58,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     /**
      * Init form with validators
      */
-    initForm() {
+    private initForm(): void {
         this.loginForm = this.formBuilder.group({
             email: ['', [Validators.required, Validators.email]],
             password: ['', Validators.required],
@@ -68,7 +68,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     /**
      * Set page title
      */
-    public setTitle(title: string) {
+    public setTitle(title: string): void {
         this.titleService.setTitle(title);
     }
 
@@ -87,7 +87,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     /**
      * Login user with credentials (login and password)
      */
-    onSubmit() {
+    private onSubmit(): void {
         this.submitted = true;
 
         // stop here if form is invalid
@@ -100,13 +100,13 @@ export class LoginComponent implements OnInit, AfterViewInit {
         const password = f.password.value;
         const data = {email, password};
 
-        this.submit(data);
+        this.submit({data});
     }
 
     /**
      * Dispatch data
      */
-    submit(data) {
-        this.store.dispatch(new Login({data}));
+    private submit(payload: LoginPayload): void {
+        this.store.dispatch(new Login(payload));
     }
 }

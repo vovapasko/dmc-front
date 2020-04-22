@@ -28,14 +28,14 @@ export class NotificationComponent implements OnInit {
     /**
      * Get notifications
      */
-    initSubscriptions() {
+    initSubscriptions(): void {
         this.notifications$ = this.notificationService.notifications$;
     }
 
     /**
      * Close notification by id
      */
-    close(notification: Notification) {
+    close(notification: Notification): void {
         this.notificationService.close(notification);
     }
 }

@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {Title} from '@angular/platform-browser';
 import {Subject, Subscription} from 'rxjs';
@@ -13,7 +13,7 @@ import {LoadingService} from '../../../core/services/loading.service';
 import {setAuthClasses} from '../../../core/helpers/utility';
 import {NotificationService} from '../../../core/services/notification.service';
 import {NotificationType} from '../../../core/models/instances/notification';
-import {ServerError} from "../../../core/models/responses/serverError";
+import {SignupPayload} from "../../../core/models/payloads/user/signup";
 
 
 /**
@@ -57,7 +57,7 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
     /**
      * Set loading and error subscriptions, get invite route value,
      */
-    initSubscriptions() {
+    initSubscriptions(): void {
         this.inviteSubscription = this.route.params.subscribe((params: Params) => {
             if (params.invite) {
                 this.invite = params.invite;
@@ -67,7 +67,7 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
         this.error$ = this.errorService.error$;
     }
 
-    initForm() {
+    initForm(): void {
         this.signupForm = this.formBuilder.group({
             firstName: ['', [Validators.required]],
             lastName: ['', [Validators.required]],
@@ -81,7 +81,7 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
     /**
      * Set page title
      */
-    public setTitle(title: string) {
+    public setTitle(title: string): void {
         this.titleService.setTitle(title);
     }
 
@@ -93,14 +93,14 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     // convenience getter for easy access to form fields
-    get f() {
+    get f(): { [p: string]: AbstractControl } {
         return this.signupForm.controls;
     }
 
     /**
      * Signup user with first name, last name and password
      */
-    onSubmit() {
+    onSubmit(): void {
         this.submitted = true;
 
         // stop here if form is invalid
@@ -124,7 +124,7 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
     /**
      * Submit data
      */
-    submit(payload) {
+    submit(payload: SignupPayload): void {
         this.store.dispatch(new Signup(payload));
     }
 

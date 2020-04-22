@@ -25,7 +25,7 @@ export class ConfirmComponent implements OnInit, AfterViewInit {
     /**
      * Set page title
      */
-    public setTitle(title: string) {
+    public setTitle(title: string): void {
         this.titleService.setTitle(title);
     }
 
