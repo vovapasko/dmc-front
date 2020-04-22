@@ -1,6 +1,6 @@
 export enum Steps {
-    'common' ,
-    'content' ,
-    'distribution' ,
-    'finish'
+  'common',
+  'content',
+  'distribution',
+  'finish',
 }

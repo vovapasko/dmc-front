@@ -1,5 +1,5 @@
 export interface CreatePostFormatPayload {
-    data: {
-        postFormat: string;
-    };
+  data: {
+    postFormat: string;
+  };
 }

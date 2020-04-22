@@ -6,7 +6,7 @@ import { MustMatch } from './validation.mustmatch';
 @Component({
   selector: 'app-validation',
   templateUrl: './validation.component.html',
-  styleUrls: ['./validation.component.scss']
+  styleUrls: ['./validation.component.scss'],
 })
 
 /**
@@ -31,11 +31,15 @@ export class ValidationComponent implements OnInit {
   typesubmit: boolean;
   rangesubmit: boolean;
   horizontalsubmit: boolean;
-  constructor(public formBuilder: FormBuilder) { }
+  constructor(public formBuilder: FormBuilder) {}
 
   ngOnInit() {
     // tslint:disable-next-line: max-line-length
-    this.breadCrumbItems = [{ label: 'UBold', path: '/' }, { label: 'Forms', path: '/' }, { label: 'Form Validation', path: '/', active: true }];
+    this.breadCrumbItems = [
+      { label: 'UBold', path: '/' },
+      { label: 'Forms', path: '/' },
+      { label: 'Form Validation', path: '/', active: true },
+    ];
     /**
      * Bootstrap validation form data
      */
@@ -63,44 +67,52 @@ export class ValidationComponent implements OnInit {
     /**
      * Basic form validation
      */
-    this.basicFormvalidation = this.formBuilder.group({
-      user: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9]+')]],
-      email: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmpwd: ['', Validators.required],
-    }, {
+    this.basicFormvalidation = this.formBuilder.group(
+      {
+        user: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9]+')]],
+        email: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$')]],
+        password: ['', [Validators.required, Validators.minLength(6)]],
+        confirmpwd: ['', Validators.required],
+      },
+      {
         validator: MustMatch('password', 'confirmpwd'),
-      });
+      }
+    );
 
     /**
      * Horizontal form validation
      */
-    this.horizontalFormValidation = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      url: ['', [Validators.required, Validators.pattern('https?://.+')]],
-      confirmpwd: ['', Validators.required],
-    }, {
+    this.horizontalFormValidation = this.formBuilder.group(
+      {
+        email: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$')]],
+        password: ['', [Validators.required, Validators.minLength(6)]],
+        url: ['', [Validators.required, Validators.pattern('https?://.+')]],
+        confirmpwd: ['', Validators.required],
+      },
+      {
         validator: MustMatch('password', 'confirmpwd'),
-      });
+      }
+    );
 
     /**
      * Type validation form
      */
-    this.typeValidationForm = this.formBuilder.group({
-      text: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')]],
-      url: ['', [Validators.required, Validators.pattern('https?://.+')]],
-      digits: ['', [Validators.required, Validators.pattern('[0-9]+')]],
-      number: ['', [Validators.required, Validators.pattern('[0-9]+')]],
-      alphanum: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9]+')]],
-      textarea: ['', [Validators.required]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmpwd: ['', Validators.required]
-    }, {
+    this.typeValidationForm = this.formBuilder.group(
+      {
+        text: ['', [Validators.required]],
+        email: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$')]],
+        url: ['', [Validators.required, Validators.pattern('https?://.+')]],
+        digits: ['', [Validators.required, Validators.pattern('[0-9]+')]],
+        number: ['', [Validators.required, Validators.pattern('[0-9]+')]],
+        alphanum: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9]+')]],
+        textarea: ['', [Validators.required]],
+        password: ['', [Validators.required, Validators.minLength(6)]],
+        confirmpwd: ['', Validators.required],
+      },
+      {
         validator: MustMatch('password', 'confirmpwd'),
-      });
-
+      }
+    );
 
     /**
      * Range validation form
@@ -207,5 +219,3 @@ export class ValidationComponent implements OnInit {
     this.rangesubmit = true;
   }
 }
-
-

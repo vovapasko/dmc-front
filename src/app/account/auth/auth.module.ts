@@ -12,12 +12,6 @@ import { PasswordResetComponent } from './passwordreset/password-reset.component
 
 @NgModule({
   declarations: [LoginComponent, SignupComponent, ConfirmComponent, PasswordResetComponent],
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    NgbAlertModule,
-    UIModule,
-    AuthRoutingModule
-  ]
+  imports: [CommonModule, ReactiveFormsModule, NgbAlertModule, UIModule, AuthRoutingModule],
 })
-export class AuthModule { }
+export class AuthModule {}

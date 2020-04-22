@@ -1,4 +1,4 @@
 export interface AlifeFile {
-    base64: string;
-    file: File;
+  base64: string;
+  file: File;
 }

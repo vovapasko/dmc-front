@@ -8,9 +8,8 @@ describe('WidgetComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ WidgetComponent ]
-    })
-    .compileComponents();
+      declarations: [WidgetComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

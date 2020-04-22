@@ -1,9 +1,9 @@
-import {User} from '../../instances/user.models';
+import { User } from '../../instances/user.models';
 
 export interface UpdateResponse {
-    success: boolean;
-    message?: {
-        message: string,
-        user?: User;
-    };
+  success: boolean;
+  message?: {
+    message: string;
+    user?: User;
+  };
 }

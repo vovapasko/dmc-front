@@ -1,8 +1,8 @@
 import { Directive, TemplateRef } from '@angular/core';
 
 @Directive({
-    selector: '[editMode]'
+  selector: '[editMode]',
 })
 export class EditModeDirective {
-    constructor(public tpl: TemplateRef<any>) { }
+  constructor(public tpl: TemplateRef<any>) {}
 }

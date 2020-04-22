@@ -2,7 +2,12 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { NgbCollapseModule, NgbDatepickerModule, NgbTimepickerModule, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbCollapseModule,
+  NgbDatepickerModule,
+  NgbTimepickerModule,
+  NgbDropdownModule,
+} from '@ng-bootstrap/ng-bootstrap';
 import { ClickOutsideModule } from 'ng-click-outside';
 
 import { SlimscrollDirective } from './slimscroll.directive';
@@ -16,7 +21,15 @@ import { WidgetComponent } from './widget/widget.component';
 
 @NgModule({
   // tslint:disable-next-line: max-line-length
-  declarations: [SlimscrollDirective, PreloaderComponent, PagetitleComponent, PortletComponent, WidgetComponent, EmaillistComponent, CountToDirective],
+  declarations: [
+    SlimscrollDirective,
+    PreloaderComponent,
+    PagetitleComponent,
+    PortletComponent,
+    WidgetComponent,
+    EmaillistComponent,
+    CountToDirective,
+  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -24,9 +37,17 @@ import { WidgetComponent } from './widget/widget.component';
     NgbCollapseModule,
     NgbDatepickerModule,
     NgbTimepickerModule,
-    NgbDropdownModule
+    NgbDropdownModule,
   ],
   // tslint:disable-next-line: max-line-length
-  exports: [SlimscrollDirective, PreloaderComponent, PagetitleComponent, PortletComponent, WidgetComponent, EmaillistComponent, CountToDirective]
+  exports: [
+    SlimscrollDirective,
+    PreloaderComponent,
+    PagetitleComponent,
+    PortletComponent,
+    WidgetComponent,
+    EmaillistComponent,
+    CountToDirective,
+  ],
 })
-export class UIModule { }
+export class UIModule {}

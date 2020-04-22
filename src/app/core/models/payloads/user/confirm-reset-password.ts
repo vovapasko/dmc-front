@@ -1,6 +1,6 @@
 export interface ConfirmResetPasswordPayload {
-    confirm: string;
-    data: {
-        password: string;
-    };
+  confirm: string;
+  data: {
+    password: string;
+  };
 }

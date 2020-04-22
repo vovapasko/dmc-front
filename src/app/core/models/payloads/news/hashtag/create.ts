@@ -1,5 +1,5 @@
 export interface CreateHashtagPayload {
-    data: {
-        name: string;
-    };
+  data: {
+    name: string;
+  };
 }

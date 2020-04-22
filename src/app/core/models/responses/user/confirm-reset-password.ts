@@ -1,7 +1,7 @@
 export interface ConfirmResetPasswordResponse {
-    success: boolean;
-    errors?: {
-        email?: string,
-        permission?: string
-    };
+  success: boolean;
+  errors?: {
+    email?: string;
+    permission?: string;
+  };
 }

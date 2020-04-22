@@ -2,7 +2,7 @@ import { Directive, OnChanges, ElementRef, Input, OnInit } from '@angular/core';
 
 @Directive({
   // tslint:disable-next-line: directive-selector
-  selector: '[CountTo]'
+  selector: '[CountTo]',
 })
 export class CountToDirective implements OnChanges, OnInit {
   @Input()
@@ -19,11 +19,9 @@ export class CountToDirective implements OnChanges, OnInit {
   step = 0;
   increment: number;
 
-  constructor(private el: ElementRef) {
-  }
+  constructor(private el: ElementRef) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   ngOnChanges() {
     if (this.CountTo) {
@@ -35,7 +33,7 @@ export class CountToDirective implements OnChanges, OnInit {
     this.duration = this.duration * 1000;
 
     this.steps = Math.ceil(this.duration / this.refreshInterval);
-    this.increment = ((this.CountTo - this.from) / this.steps);
+    this.increment = (this.CountTo - this.from) / this.steps;
     this.num = this.from;
   }
 
@@ -47,7 +45,9 @@ export class CountToDirective implements OnChanges, OnInit {
         this.num = this.CountTo;
         this.e.textContent = this.CountTo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
       } else {
-        this.e.textContent = Math.round(this.num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Math.round(this.num);
+        this.e.textContent = Math.round(this.num)
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Math.round(this.num);
         this.tick();
       }
     }, this.refreshInterval);

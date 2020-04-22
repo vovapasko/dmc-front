@@ -1,6 +1,6 @@
-import {Project} from '../../../instances/project';
+import { Project } from '../../../instances/project';
 
 export interface CreateProjectPayload {
-    data: Project;
-    id?: number;
+  data: Project;
+  id?: number;
 }

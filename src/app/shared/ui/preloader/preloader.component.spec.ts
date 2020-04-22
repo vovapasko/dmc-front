@@ -8,9 +8,8 @@ describe('PreloaderComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PreloaderComponent ]
-    })
-    .compileComponents();
+      declarations: [PreloaderComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

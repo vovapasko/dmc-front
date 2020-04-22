@@ -1,6 +1,6 @@
 export interface DeleteResponse {
-    success: boolean;
-    message?: {
-        message: string
-    };
+  success: boolean;
+  message?: {
+    message: string;
+  };
 }

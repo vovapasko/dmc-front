@@ -1,3 +1,3 @@
 export interface ResetPassword {
-    success: boolean;
+  success: boolean;
 }

@@ -1,11 +1,11 @@
-import {Contractor} from '../../models/instances/contractor';
+import { Contractor } from '../../models/instances/contractor';
 
 export interface IContractorState {
-    contractors: Contractor[];
-    selectedContractor: Contractor;
+  contractors: Contractor[];
+  selectedContractor: Contractor;
 }
 
 export const initialContractorState: IContractorState = {
-    contractors: [],
-    selectedContractor: null
+  contractors: [],
+  selectedContractor: null,
 };

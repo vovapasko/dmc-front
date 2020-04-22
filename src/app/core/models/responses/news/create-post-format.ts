@@ -1,12 +1,12 @@
-import {Format} from '../../instances/format';
+import { Format } from '../../instances/format';
 
 export interface CreatePostFormatResponse {
-    success: boolean;
-    errors?: {
-        postFormat: Array<string>
-    };
-    message: {
-        message: string;
-    };
-    postMethod?: Format;
+  success: boolean;
+  errors?: {
+    postFormat: Array<string>;
+  };
+  message: {
+    message: string;
+  };
+  postMethod?: Format;
 }

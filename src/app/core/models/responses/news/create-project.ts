@@ -1,9 +1,9 @@
-import {Project} from '../../instances/project';
+import { Project } from '../../instances/project';
 
 export interface CreateProjectResponse {
-    success: boolean;
-    message?: {
-        message: string;
-    };
-    project?: Project;
+  success: boolean;
+  message?: {
+    message: string;
+  };
+  project?: Project;
 }
