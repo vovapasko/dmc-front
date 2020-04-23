@@ -10,6 +10,7 @@ import images from '../../../core/constants/images';
 import { Orders } from '../../../core/constants/orders';
 import { ServerError } from '../../../core/models/responses/server/error';
 import { urls } from '../../../core/constants/urls';
+import { GetProjects } from '../../../core/store/actions/news.actions';
 
 @Component({
   selector: 'app-projects',
@@ -64,6 +65,6 @@ export class ProjectsComponent implements OnInit {
    * fetches project value
    */
   private _fetchData() {
-    // this.store.dispatch(new GetProjects());
+    this.store.dispatch(new GetProjects());
   }
 }

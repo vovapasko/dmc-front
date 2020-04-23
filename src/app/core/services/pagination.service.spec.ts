@@ -1,5 +1,6 @@
 import { PaginationService } from './pagination.service';
 import { data } from '../mocks/pagination.mock';
+import { PaginationType } from '../constants/pagination';
 
 describe('PaginationService', () => {
   let service: PaginationService;
@@ -85,11 +86,6 @@ describe('PaginationService', () => {
     expect(service.totalRecords.length).toEqual(0);
   });
 
-  it('should create totalRecords$ setter', () => {
-    service.totalRecords = data;
-    expect(service.totalRecords.length).toEqual(data.length);
-  });
-
   it('should create paginatedData$ behavior subject', () => {
     expect(service.paginatedData$).toBeTruthy();
   });
@@ -99,7 +95,7 @@ describe('PaginationService', () => {
   });
 
   it('should create paginatedData$ setter', () => {
-    service.paginatedData = data;
+    service.paginatedData = (data as unknown as PaginationType[]);
     expect(service.paginatedData.length).toEqual(data.length);
   });
 
@@ -108,7 +104,7 @@ describe('PaginationService', () => {
       expect(page).toBeTruthy();
       done();
     });
-    service.totalRecords = data;
+    service.paginatedData = (data as unknown as PaginationType[]);
     service.onPageChange(2);
   });
 
@@ -117,7 +113,7 @@ describe('PaginationService', () => {
       expect(startIndex).toBeTruthy();
       done();
     });
-    service.totalRecords = data;
+    service.paginatedData = (data as unknown as PaginationType[]);
     service.onPageChange(2);
   });
 
@@ -126,16 +122,7 @@ describe('PaginationService', () => {
       expect(endIndex).toBeTruthy();
       done();
     });
-    service.totalRecords = data;
-    service.onPageChange(2);
-  });
-
-  it('should change page and set paginated data', (done: DoneFn) => {
-    service.paginatedData$.subscribe((paginatedData) => {
-      expect(paginatedData.length).toBeFalsy();
-      done();
-    });
-    service.totalRecords = data;
+    service.paginatedData = (data as unknown as PaginationType[]);
     service.onPageChange(2);
   });
 
@@ -146,7 +133,7 @@ describe('PaginationService', () => {
         done();
       }
     });
-    service.totalRecords = data;
+    service.paginatedData = (data as unknown as PaginationType[]);
     service.applyPagination();
   });
 
@@ -155,16 +142,7 @@ describe('PaginationService', () => {
       expect(endIndex).toEqual(10);
       done();
     });
-    service.totalRecords = data;
-    service.applyPagination();
-  });
-
-  it('should apply pagination and set total size', (done: DoneFn) => {
-    service.totalSize$.subscribe((totalSize) => {
-      expect(totalSize).toEqual(10);
-      done();
-    });
-    service.totalRecords = data;
+    service.paginatedData = (data as unknown as PaginationType[]);
     service.applyPagination();
   });
 
@@ -175,7 +153,7 @@ describe('PaginationService', () => {
         done();
       }
     });
-    service.totalRecords = data;
+    service.paginatedData = (data as unknown as PaginationType[]);
     service.applyPagination();
   });
 });
