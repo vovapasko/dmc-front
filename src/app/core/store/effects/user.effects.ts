@@ -30,6 +30,11 @@ import { UserService } from '../../services/user.service';
 import { User } from '../../models/instances/user.models';
 import { AuthenticationService } from '../../services/auth.service';
 import { DeleteUserPayload } from '../../models/payloads/user/delete';
+import { RegisterPayload } from '../../models/payloads/user/register';
+import { UpdatePayload } from '../../models/payloads/user/update';
+import { LoginPayload } from '../../models/payloads/auth/login';
+import { SignupPayload } from '../../models/payloads/user/signup';
+import { ConfirmResetPasswordPayload } from '../../models/payloads/user/confirm-reset-password';
 
 @Injectable({
   providedIn: 'root',
@@ -45,28 +50,28 @@ export class UserEffects {
   @Effect()
   createUser$ = this.actions$.pipe(
     ofType<CreateUser>(EUserActions.CreateUser),
-    switchMap((action: object) => this.userService.register(action.payload)),
+    switchMap((action: {payload: RegisterPayload}) => this.userService.register(action.payload)),
     switchMap((user: User) => of(new CreateUserSuccess(user)))
   );
 
   @Effect()
   updateUser$ = this.actions$.pipe(
     ofType<UpdateUser>(EUserActions.UpdateUser),
-    switchMap((action: object) => this.userService.update(action.payload)),
+    switchMap((action: {payload: UpdatePayload}) => this.userService.update(action.payload)),
     switchMap((user: User) => of(new UpdateUserSuccess(user)))
   );
 
   @Effect()
   deleteUser$ = this.actions$.pipe(
     ofType<DeleteUser>(EUserActions.DeleteUser),
-    switchMap((action: object) => this.userService.delete(action.payload)),
+    switchMap((action: {payload: DeleteUserPayload}) => this.userService.delete(action.payload)),
     switchMap((payload: DeleteUserPayload) => of(new DeleteUserSuccess(payload)))
   );
 
   @Effect()
   selectUser$ = this.actions$.pipe(
     ofType<SelectUser>(EUserActions.SelectUser),
-    switchMap((action: object) => this.userService.selectUser(action.payload)),
+    switchMap((action: {payload: User}) => this.userService.selectUser(action.payload)),
     switchMap((user: User) => of(new SelectUserSuccess(user)))
   );
 
@@ -87,21 +92,21 @@ export class UserEffects {
   @Effect()
   login$ = this.actions$.pipe(
     ofType<Login>(EUserActions.Login),
-    switchMap((action: object) => this.authService.login(action.payload)),
+    switchMap((action: {payload: LoginPayload}) => this.authService.login(action.payload)),
     switchMap(() => of(new LoginSuccess()))
   );
 
   @Effect()
   signup$ = this.actions$.pipe(
     ofType<Signup>(EUserActions.Signup),
-    switchMap((action: object) => this.userService.signup(action.payload)),
+    switchMap((action: {payload: SignupPayload}) => this.userService.signup(action.payload)),
     switchMap(() => of(new SignupSuccess()))
   );
 
   @Effect()
   passwordReset$ = this.actions$.pipe(
     ofType<PasswordResetConfirm>(EUserActions.PasswordResetConfirm),
-    switchMap((action: object) => this.userService.confirmResetPassword(action.payload)),
+    switchMap((action: {payload: ConfirmResetPasswordPayload}) => this.userService.confirmResetPassword(action.payload)),
     switchMap(() => of(new PasswordResetConfirmSuccess()))
   );
 

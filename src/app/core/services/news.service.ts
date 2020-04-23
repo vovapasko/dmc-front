@@ -58,7 +58,7 @@ export class NewsService {
     );
   }
 
-  public getProject(payload): Observable<Project> {
+  public getProject(payload: Project): Observable<Project> {
     return this.requestHandler.request(
       `${api}/news-projects/${payload.id}`,
       'get',
