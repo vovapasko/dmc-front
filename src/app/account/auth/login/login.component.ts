@@ -11,6 +11,7 @@ import { ErrorService } from '../../../core/services/error.service';
 import { LoadingService } from '../../../core/services/loading.service';
 import { setAuthClasses } from '../../../core/helpers/utility';
 import { LoginPayload } from '../../../core/models/payloads/auth/login';
+import { ServerError } from '../../../core/models/responses/server/error';
 
 /**
  * This component for login user in crm
@@ -19,14 +20,14 @@ import { LoginPayload } from '../../../core/models/payloads/auth/login';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit, AfterViewInit {
   title = 'Login';
   loginForm: FormGroup;
   submitted = false;
   loading$: Subject<boolean>;
-  error$: Subject<any>;
+  error$: Subject<ServerError>;
   visible = false;
 
   constructor(
@@ -36,7 +37,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
     private store: Store<IAppState>,
     private errorService: ErrorService,
     private loadingService: LoadingService
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.initForm();
@@ -59,7 +61,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   private initForm(): void {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
+      password: ['', Validators.required]
     });
   }
 
@@ -87,18 +89,11 @@ export class LoginComponent implements OnInit, AfterViewInit {
    */
   public onSubmit(): void {
     this.submitted = true;
-
-    // stop here if form is invalid
-    if (this.loginForm.invalid) {
-      return;
+    if (this.loginForm.valid) {
+      const { email, password } = this.f;
+      const data = { email: email.value, password: password.value };
+      this.submit({ data });
     }
-
-    const f = this.f;
-    const email = f.email.value;
-    const password = f.password.value;
-    const data = { email, password };
-
-    this.submit({ data });
   }
 
   /**

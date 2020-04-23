@@ -12,8 +12,8 @@ import { ErrorService } from '../../../core/services/error.service';
 import { ResetPassword, UpdateProfile } from '../../../core/store/actions/user.actions';
 import { IAppState } from '../../../core/store/state/app.state';
 import { NotificationService } from '../../../core/services/notification.service';
-import { NotificationType } from '../../../core/models/instances/notification';
 import { ServerError } from '../../../core/models/responses/server/error';
+import { Infos } from '../../../core/constants/notifications';
 
 /**
  * Profile component - handling the profile with sidebar and content
@@ -28,7 +28,7 @@ export class ProfileComponent implements OnInit {
   breadCrumbItems: Array<{}>;
 
   loading$: Subject<boolean>;
-  error$: Subject<any>;
+  error$: Subject<ServerError>;
   user$: Subject<User>;
 
   title = 'Профиль';
@@ -56,7 +56,7 @@ export class ProfileComponent implements OnInit {
   }
 
   initSubscriptions() {
-    this.userService.currentUser();
+    this.userService.loadCurrentUser();
     this.error$ = this.errorService.error$;
     this.loading$ = this.loadingService.loading$;
     this.user$ = this.userService.user$;
@@ -122,11 +122,8 @@ export class ProfileComponent implements OnInit {
    */
   onFileChanges(files) {
     this.avatarBase64 = files[0].base64;
-    this.notificationService.notify(
-      NotificationType.info,
-      'Изображение было загружено',
-      'Нажмите сохранить чтобы увидеть изменения'
-    );
+    const {type, title, message} = Infos.IMAGE_HAS_BEEN_LOADED;
+    this.notificationService.notify(type, title, message);
   }
 
   /**

@@ -12,8 +12,9 @@ import { ErrorService } from '../../../core/services/error.service';
 import { LoadingService } from '../../../core/services/loading.service';
 import { setAuthClasses } from '../../../core/helpers/utility';
 import { NotificationService } from '../../../core/services/notification.service';
-import { NotificationType } from '../../../core/models/instances/notification';
 import { SignupPayload } from '../../../core/models/payloads/user/signup';
+import { Warnings } from '../../../core/constants/notifications';
+import { ServerError } from '../../../core/models/responses/server/error';
 
 /**
  * This component for sign up new user
@@ -22,7 +23,7 @@ import { SignupPayload } from '../../../core/models/payloads/user/signup';
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.scss'],
+  styleUrls: ['./signup.component.scss']
 })
 export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
   inviteSubscription: Subscription;
@@ -31,7 +32,7 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
   submitted = false;
   invite = '';
   loading$: Subject<boolean>;
-  error$: Subject<any>;
+  error$: Subject<ServerError>;
   visible = false;
 
   constructor(
@@ -43,7 +44,8 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
     private errorService: ErrorService,
     private loadingService: LoadingService,
     private notificationService: NotificationService
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.initSubscriptions();
@@ -70,10 +72,10 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
         firstName: ['', [Validators.required]],
         lastName: ['', [Validators.required]],
         password: ['', [Validators.required, Validators.minLength(6)]],
-        passwordConfirm: ['', Validators.required],
+        passwordConfirm: ['', Validators.required]
       },
       {
-        validator: MustMatch('password', 'passwordConfirm'),
+        validator: MustMatch('password', 'passwordConfirm')
       }
     );
   }
@@ -100,35 +102,28 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
   /**
    * Signup user with first name, last name and password
    */
-  onSubmit(): void {
+  public onSubmit(): void {
     this.submitted = true;
-
-    // stop here if form is invalid
-    if (this.signupForm.invalid) {
-      return;
-    }
-
     if (!this.invite) {
-      // tslint:disable-next-line:max-line-length
-      this.notificationService.notify(
-        NotificationType.warning,
-        'Внимание',
-        'У вас нет приглашения, попросите приглашения у кого то из зарегистрированных пользователей'
-      );
+      const { type, title, message } = Warnings.NO_INVITE;
+      this.notificationService.notify(type, title, message);
+    } else if (this.signupForm.valid) {
+      this.processSubmit();
     }
+  }
 
+  public processSubmit(): void {
     const { firstName, lastName, password, passwordConfirm } = this.signupForm.value;
     const data = { firstName, lastName, password, passwordConfirm };
     const invite = this.invite;
     const payload = { data, invite };
-
     this.submit(payload);
   }
 
   /**
    * Submit data
    */
-  submit(payload: SignupPayload): void {
+  private submit(payload: SignupPayload): void {
     this.store.dispatch(new Signup(payload));
   }
 

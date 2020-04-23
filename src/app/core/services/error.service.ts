@@ -11,7 +11,7 @@ import { ServerError } from '../models/responses/server/error';
   providedIn: 'root',
 })
 export class ErrorService {
-  error$ = new Subject();
+  error$ = new Subject<ServerError>();
 
   constructor() {}
 

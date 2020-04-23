@@ -58,3 +58,4 @@ export const collectDataFromForm = (f, defaultFields) => {
   }
   return values.reduce((a, n) => ({ ...a, ...n }), {});
 };
+

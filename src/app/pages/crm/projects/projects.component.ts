@@ -8,6 +8,8 @@ import { LoadingService } from '../../../core/services/loading.service';
 import { Subject } from 'rxjs';
 import images from '../../../core/constants/images';
 import { Orders } from '../../../core/constants/orders';
+import { ServerError } from '../../../core/models/responses/server/error';
+import { urls } from '../../../core/constants/urls';
 
 @Component({
   selector: 'app-projects',
@@ -23,7 +25,7 @@ export class ProjectsComponent implements OnInit {
   breadCrumbItems: Array<{}>;
   projects$ = this.store.pipe(select(selectProjects));
   loading$: Subject<boolean>;
-  error$: Subject<any>;
+  error$: Subject<ServerError>;
   noImage = images.defaultImage;
   orders = Orders;
   order = null;
@@ -41,10 +43,6 @@ export class ProjectsComponent implements OnInit {
       { label: 'Главная', path: '/' },
       { label: 'Проекты', path: '/crm/projects' },
     ];
-
-    /**
-     * fetches data
-     */
     this.initSubscriptions();
     this._fetchData();
   }
@@ -55,11 +53,11 @@ export class ProjectsComponent implements OnInit {
   }
 
   public onCreateProject(): void {
-    this.router.navigate(['crm', 'burst-news']);
+    this.router.navigate([urls.CRM, urls.BURST_NEWS]);
   }
 
   public onChange(id): void {
-    this.router.navigate(['crm', 'burst-news'], { queryParams: { id } });
+    this.router.navigate([urls.CRM, urls.BURST_NEWS], { queryParams: { id } });
   }
 
   /**

@@ -45,28 +45,28 @@ export class UserEffects {
   @Effect()
   createUser$ = this.actions$.pipe(
     ofType<CreateUser>(EUserActions.CreateUser),
-    switchMap((action: any) => this.userService.register(action.payload)),
+    switchMap((action: object) => this.userService.register(action.payload)),
     switchMap((user: User) => of(new CreateUserSuccess(user)))
   );
 
   @Effect()
   updateUser$ = this.actions$.pipe(
     ofType<UpdateUser>(EUserActions.UpdateUser),
-    switchMap((action: any) => this.userService.update(action.payload)),
+    switchMap((action: object) => this.userService.update(action.payload)),
     switchMap((user: User) => of(new UpdateUserSuccess(user)))
   );
 
   @Effect()
   deleteUser$ = this.actions$.pipe(
     ofType<DeleteUser>(EUserActions.DeleteUser),
-    switchMap((action: any) => this.userService.delete(action.payload)),
+    switchMap((action: object) => this.userService.delete(action.payload)),
     switchMap((payload: DeleteUserPayload) => of(new DeleteUserSuccess(payload)))
   );
 
   @Effect()
   selectUser$ = this.actions$.pipe(
     ofType<SelectUser>(EUserActions.SelectUser),
-    switchMap((action: any) => this.userService.selectUser(action.payload)),
+    switchMap((action: object) => this.userService.selectUser(action.payload)),
     switchMap((user: User) => of(new SelectUserSuccess(user)))
   );
 
@@ -87,21 +87,21 @@ export class UserEffects {
   @Effect()
   login$ = this.actions$.pipe(
     ofType<Login>(EUserActions.Login),
-    switchMap((action: any) => this.authService.login(action.payload)),
+    switchMap((action: object) => this.authService.login(action.payload)),
     switchMap(() => of(new LoginSuccess()))
   );
 
   @Effect()
   signup$ = this.actions$.pipe(
     ofType<Signup>(EUserActions.Signup),
-    switchMap((action: any) => this.userService.signup(action.payload)),
+    switchMap((action: object) => this.userService.signup(action.payload)),
     switchMap(() => of(new SignupSuccess()))
   );
 
   @Effect()
   passwordReset$ = this.actions$.pipe(
     ofType<PasswordResetConfirm>(EUserActions.PasswordResetConfirm),
-    switchMap((action: any) => this.userService.confirmResetPassword(action.payload)),
+    switchMap((action: object) => this.userService.confirmResetPassword(action.payload)),
     switchMap(() => of(new PasswordResetConfirmSuccess()))
   );
 

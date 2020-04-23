@@ -50,35 +50,35 @@ export class NewsEffects {
   @Effect()
   createHashtag$ = this.actions$.pipe(
     ofType<CreateHashtag>(ENewsActions.CreateHashtag),
-    switchMap((action: any) => this.newsService.createHashtag(action.payload)),
+    switchMap((action: object) => this.newsService.createHashtag(action.payload)),
     switchMap((hashtag: Hashtag) => of(new CreateHashtagSuccess(hashtag)))
   );
 
   @Effect()
   createFormat$ = this.actions$.pipe(
     ofType<CreateFormat>(ENewsActions.CreateFormat),
-    switchMap((action: any) => this.newsService.createFormat(action.payload)),
+    switchMap((action: object) => this.newsService.createFormat(action.payload)),
     switchMap((format: Format) => of(new CreateFormatSuccess(format)))
   );
 
   @Effect()
   createProject$ = this.actions$.pipe(
     ofType<CreateProject>(ENewsActions.CreateProject),
-    switchMap((action: any) => this.newsService.createProject(action.payload)),
+    switchMap((action: object) => this.newsService.createProject(action.payload)),
     switchMap((project: Project) => of(new CreateProjectSuccess(project)))
   );
 
   @Effect()
   updateProject$ = this.actions$.pipe(
     ofType<UpdateProject>(ENewsActions.UpdateProject),
-    switchMap((action: any) => this.newsService.updateProject(action.payload)),
+    switchMap((action: object) => this.newsService.updateProject(action.payload)),
     switchMap((project: Project) => of(new UpdateProjectSuccess(project)))
   );
 
   @Effect()
   getProject$ = this.actions$.pipe(
     ofType<GetProject>(ENewsActions.GetProject),
-    switchMap((action: any) => this.newsService.getProject(action.payload)),
+    switchMap((action: object) => this.newsService.getProject(action.payload)),
     switchMap((project: Project) => of(new GetProjectSuccess(project)))
   );
 

@@ -102,7 +102,7 @@ describe('UserService', () => {
   });
 
   describe('#delete', () => {
-    it('should return an Observable<any>', () => {
+    it('should return an Observable<User>', () => {
       service.delete(mockDelete).subscribe((payload) => {
         expect(payload).toBeTruthy();
       });
@@ -126,7 +126,7 @@ describe('UserService', () => {
   });
 
   describe('#resetPassword', () => {
-    it('should return an Observable<any>', () => {
+    it('should return an Observable<User>', () => {
       service.resetPassword().subscribe((response) => {
         expect(response).toBeTruthy();
       });
@@ -138,7 +138,7 @@ describe('UserService', () => {
   });
 
   describe('#confirmResetPassword', () => {
-    it('should return an Observable<any>', () => {
+    it('should return an Observable<User>', () => {
       service.confirmResetPassword(mockConfirmResetPassword).subscribe((response) => {
         expect(response).toBeTruthy();
       });

@@ -19,9 +19,10 @@ import {
 import { IAppState } from '../../../core/store/state/app.state';
 import { setValues } from '../../../core/helpers/utility';
 import { NotificationService } from '../../../core/services/notification.service';
-import { NotificationType } from '../../../core/models/instances/notification';
-import { UpdateContractorPayload } from '../../../core/models/payloads/contractor/update';
-import { DeleteContractorPayload } from '../../../core/models/payloads/contractor/delete';
+import { Infos, Warnings } from '../../../core/constants/notifications';
+import { ServerError } from '../../../core/models/responses/server/error';
+import { PaginationType } from '../../../core/constants/pagination';
+import numbers from '../../../core/constants/numbers';
 
 /**
  * Contractors component: handling the contractors with sidebar and content
@@ -34,19 +35,19 @@ import { DeleteContractorPayload } from '../../../core/models/payloads/contracto
 })
 export class ContractorsComponent implements OnInit {
   loading$: Subject<boolean>;
-  error$: Subject<any>;
+  error$: Subject<ServerError>;
 
   selectedContractor$: BehaviorSubject<Contractor> = new BehaviorSubject(null);
   checkedContractors$: BehaviorSubject<Array<Contractor>> = new BehaviorSubject([]);
   paginatedContractorData$: BehaviorSubject<Array<Contractor>> = new BehaviorSubject([]);
 
-  totalRecords$: BehaviorSubject<Array<Contractor>> = new BehaviorSubject<Array<Contractor>>([]);
+  totalRecords$: BehaviorSubject<Array<PaginationType>> = new BehaviorSubject<Array<PaginationType>>([]);
   page$: BehaviorSubject<number> = new BehaviorSubject(1);
   pageSize$: BehaviorSubject<number> = new BehaviorSubject(10);
 
   breadCrumbItems: Array<{}>;
   submitted: boolean;
-  term: any;
+  term = '';
   editCheckedMode = false;
 
   createForm: FormGroup;
@@ -65,7 +66,7 @@ export class ContractorsComponent implements OnInit {
   ngOnInit() {
     this.initSubscriptions();
     this.initBreadCrumbItems();
-    this.initForms();
+    this.initFormGroups();
   }
 
   private initSubscriptions(): void {
@@ -97,7 +98,7 @@ export class ContractorsComponent implements OnInit {
   /**
    * Start init forms
    */
-  private initForms(): void {
+  private initFormGroups(): void {
     this.initCreateForm();
     this.initUpdateForm();
   }
@@ -163,7 +164,8 @@ export class ContractorsComponent implements OnInit {
   public openModal(content: string, editMany = false): void {
     const checkedContractors = this.contractorService.checkedContractors;
     if (editMany && checkedContractors.length === 0) {
-      this.notificationService.notify(NotificationType.warning, 'Внимание', 'Нужно выбрать элементы');
+      const {type, title, message, timeout} = Warnings.NO_ELEMENTS_SELECTED;
+      this.notificationService.notify(type, title, message, timeout);
       return;
     }
     this.modalService.open(content, { centered: true });
@@ -173,7 +175,7 @@ export class ContractorsComponent implements OnInit {
    * Add new contractor
    */
   public addContractor(): void {
-    const data = this.contractorService.createContractorData(this.cf, [{ news_amount: 0 }]);
+    const data = this.contractorService.createContractorData(this.cf, [{ news_amount: numbers.zero }]);
     this.add(data);
     this.modalService.dismissAll();
     this.createForm.reset();
@@ -238,25 +240,26 @@ export class ContractorsComponent implements OnInit {
   /**
    * Handle processing with many items, delete or update
    */
-  private processMany(target: Array<Contractor>, payload: any, handler: any): void {
+  // tslint:disable-next-line:ban-types
+  private processMany(target: Array<Contractor>, payload: object, handler: Function): void {
     const notificationService = this.notificationService;
-    const timeout = 3500;
-    // tslint:disable-next-line:max-line-length
-    notificationService.notify(
-      NotificationType.info,
-      'Процесс начат',
-      'Пожалуйста дождитесь оконочания, не закрывайте вкладку',
-      1500
-    );
+    const {type, title, message, timeout} = Infos.PROCESS_HAS_BEEN_STARTED;
+    notificationService.notify(type, title, message, timeout);
+    this.handleProcessMany(target, payload, handler, timeout);
+  }
+
+  // tslint:disable-next-line:ban-types
+  private handleProcessMany(target: Array<Contractor>, payload: object, handler: Function, time: number): void {
     const interval = window.setInterval(() => {
       if (target.length) {
         const item = target.pop();
         handler({ ...payload, id: item.id });
       } else {
-        notificationService.notify(NotificationType.info, 'Процесс завершен', 'Операция завершена, спасибо', 1500);
+        const {type, title, message, timeout} = Infos.PROCESS_HAS_BEEN_FINISHED;
+        this.notificationService.notify(type, title, message, timeout);
         window.clearInterval(interval);
       }
-    }, timeout);
+    }, time);
   }
 
   /**
@@ -264,11 +267,10 @@ export class ContractorsComponent implements OnInit {
    */
   public submitCreateForm(): void {
     this.submitted = true;
-    if (this.createForm.invalid) {
-      return;
+    if (this.createForm.valid) {
+      this.addContractor();
+      this.submitted = false;
     }
-    this.addContractor();
-    this.submitted = false;
   }
 
   /**
@@ -304,8 +306,9 @@ export class ContractorsComponent implements OnInit {
    * Performs deleting all selected contractors
    */
   public deleteChecked(): void {
-    const checkedContractors = this.contractorService.checkedContractors;
+    const contractorService = this.contractorService;
+    const checkedContractors = contractorService.checkedContractors;
     this.processMany(checkedContractors.slice(), {}, this.delete.bind(this));
-    this.contractorService.checkedContractors = [];
+    contractorService.checkedContractors = [];
   }
 }

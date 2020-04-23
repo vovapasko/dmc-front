@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { select, Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { FormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -8,13 +8,14 @@ import { AuthenticationService } from '../../../core/services/auth.service';
 import { UserService } from '../../../core/services/user.service';
 import { User } from '../../../core/models/instances/user.models';
 import { IAppState } from '../../../core/store/state/app.state';
-import { selectUserList } from '../../../core/store/selectors/user.selectors';
 import { CreateUser, DeleteUser, GetUsers, SelectUser, UpdateUser } from '../../../core/store/actions/user.actions';
 import { PaginationService } from '../../../core/services/pagination.service';
 import { LoadingService } from '../../../core/services/loading.service';
 import { ErrorService } from '../../../core/services/error.service';
-import { Groups, ManageGroups } from '../../../core/models/instances/groups';
+import { Groups } from '../../../core/models/instances/groups';
 import { RegisterPayload } from '../../../core/models/payloads/user/register';
+import { ServerError } from '../../../core/models/responses/server/error';
+import { paginationPage, paginationPageSize, PaginationType } from '../../../core/constants/pagination';
 
 /**
  * Users component - handling the users with sidebar and content
@@ -27,26 +28,23 @@ import { RegisterPayload } from '../../../core/models/payloads/user/register';
 })
 export class UsersComponent implements OnInit {
   breadCrumbItems: Array<{}>;
-  manageGroups = ManageGroups;
 
   manage = false;
 
   loading$: Subject<boolean>;
-  error$: Subject<any>;
+  error$: Subject<ServerError>;
 
-  totalRecords$: BehaviorSubject<Array<User>> = new BehaviorSubject<Array<User>>([]);
-  page$: BehaviorSubject<number> = new BehaviorSubject(1);
-  pageSize$: BehaviorSubject<number> = new BehaviorSubject(10);
+  totalRecords$: BehaviorSubject<Array<PaginationType>> = new BehaviorSubject<Array<PaginationType>>([]);
+  page$: BehaviorSubject<number> = new BehaviorSubject(paginationPage);
+  pageSize$: BehaviorSubject<number> = new BehaviorSubject(paginationPageSize);
 
   selectedUser$: BehaviorSubject<User> = new BehaviorSubject(null);
   paginatedUserData$: BehaviorSubject<Array<User>> = new BehaviorSubject([]);
   currentUser: User;
 
-  users$$ = this.store.pipe(select(selectUserList));
-
   selectedRole = '';
   submitted: boolean;
-  term: any;
+  term = '';
   selectValue: Groups[];
   validationform: FormGroup;
 
@@ -78,7 +76,7 @@ export class UsersComponent implements OnInit {
     this.page$ = this.paginationService.page$;
     this.pageSize$ = this.paginationService.pageSize$;
 
-    this.currentUser = this.userService.currentUser();
+    this.currentUser = this.userService.loadCurrentUser();
     this.manage = this.belongToManage(this.currentUser);
 
     this.store.dispatch(new GetUsers());
@@ -103,7 +101,7 @@ export class UsersComponent implements OnInit {
    * Get current user and set available groups (Add new user)
    */
   public initSelectOptions(): void {
-    const currentUser = this.userService.currentUser();
+    const currentUser = this.userService.loadCurrentUser();
     if (currentUser) {
       this.selectValue = currentUser.groupsCascadeDown;
     }

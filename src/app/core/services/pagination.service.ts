@@ -1,6 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import numbers from '../constants/numbers';
+import {
+  paginationEndIndex,
+  paginationPage,
+  paginationPageSize,
+  paginationStartIndex,
+  paginationTotalSize, PaginationType
+} from '../constants/pagination';
 
 /**
  * This service for pagination any data
@@ -10,14 +17,14 @@ import numbers from '../constants/numbers';
   providedIn: 'root',
 })
 export class PaginationService {
-  page$: BehaviorSubject<number> = new BehaviorSubject<number>(1);
-  pageSize$: BehaviorSubject<number> = new BehaviorSubject<number>(10);
-  startIndex$: BehaviorSubject<number> = new BehaviorSubject<number>(1);
-  endIndex$: BehaviorSubject<number> = new BehaviorSubject<number>(10);
-  totalSize$: BehaviorSubject<number> = new BehaviorSubject<number>(10);
+  page$: BehaviorSubject<number> = new BehaviorSubject<number>(paginationPage);
+  pageSize$: BehaviorSubject<number> = new BehaviorSubject<number>(paginationPageSize);
+  startIndex$: BehaviorSubject<number> = new BehaviorSubject<number>(paginationStartIndex);
+  endIndex$: BehaviorSubject<number> = new BehaviorSubject<number>(paginationEndIndex);
+  totalSize$: BehaviorSubject<number> = new BehaviorSubject<number>(paginationTotalSize);
 
-  totalRecords$: BehaviorSubject<Array<any>> = new BehaviorSubject<Array<any>>([]);
-  paginatedData$: BehaviorSubject<Array<any>> = new BehaviorSubject<Array<any>>([]);
+  totalRecords$: BehaviorSubject<PaginationType[]> = new BehaviorSubject<PaginationType[]>([]);
+  paginatedData$: BehaviorSubject<PaginationType[]> = new BehaviorSubject<PaginationType[]>([]);
 
   constructor() {}
 
@@ -61,7 +68,7 @@ export class PaginationService {
     this.totalSize$.next(value);
   }
 
-  set totalRecords(records: Array<any>) {
+  set totalRecords(records: PaginationType[]) {
     this.totalRecords$.next(records);
   }
 
@@ -73,7 +80,7 @@ export class PaginationService {
     return this.paginatedData$.getValue();
   }
 
-  set paginatedData(value: any[]) {
+  set paginatedData(value: PaginationType[]) {
     this.paginatedData$.next(value);
   }
 
@@ -89,7 +96,7 @@ export class PaginationService {
     this.changePage(page, startIndex, endIndex, paginatedData);
   }
 
-  private changePage(page, startIndex, endIndex, paginatedData) {
+  private changePage(page: number, startIndex: number, endIndex: number, paginatedData: PaginationType[]) {
     this.page = page;
     this.startIndex = startIndex;
     this.endIndex = endIndex;
@@ -102,7 +109,7 @@ export class PaginationService {
   public applyPagination() {
     const { pageSize, totalRecords } = this;
     const startIndex = 0;
-    const endIndex = pageSize;
+    const endIndex = this.pageSize;
     const totalSize = totalRecords ? totalRecords.length : numbers.pageSize;
     const paginatedData = totalRecords ? totalRecords.slice(startIndex, endIndex) : [];
     this.paginate(startIndex, endIndex, totalSize, paginatedData);

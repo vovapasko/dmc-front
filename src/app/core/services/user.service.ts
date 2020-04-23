@@ -110,7 +110,7 @@ export class UserService {
   /**
    * Returns the current user
    */
-  public currentUser(): User {
+  public loadCurrentUser(): User {
     if (!this.user) {
       this.user = JSON.parse(this.cookieService.getCookie(CURRENT_USER));
     }
@@ -195,7 +195,7 @@ export class UserService {
   public updateProfile(payload: UpdateProfilePayload): Observable<User> {
     return this.requestHandler.request(`${api}/profile/`, 'put', payload, (response: UpdateProfileResponse) => {
       if (response && response.user) {
-        const currentUser = this.currentUser();
+        const currentUser = this.loadCurrentUser();
         const newUser = response.user;
         const user = { ...currentUser, ...newUser };
         this.user = user;
@@ -236,12 +236,14 @@ export class UserService {
     const { paginationService, users } = this;
     paginationService.totalRecords = users;
     paginationService.applyPagination();
+    // @ts-ignore
     this.paginatedUserData = paginationService.paginatedData;
   }
 
   public onPageChange(page: number): void {
     const { paginationService } = this;
     paginationService.onPageChange(page);
+    // @ts-ignore
     this.paginatedUserData = paginationService.paginatedData;
   }
 }

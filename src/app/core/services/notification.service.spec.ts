@@ -18,7 +18,7 @@ describe('NotificationService', () => {
   });
 
   it('should create history behavior subject', () => {
-    expect(service.history$).toBeTruthy();
+    expect(service.notificationHistory$).toBeTruthy();
   });
 
   it('should get notifications', () => {
@@ -50,7 +50,7 @@ describe('NotificationService', () => {
   });
 
   it('should register notification in history behavior subject', (done: DoneFn) => {
-    service.history$.subscribe((history: Notification[]) => {
+    service.notificationHistory$.subscribe((history: Notification[]) => {
       if (history.length) {
         expect(history.indexOf(mockNotification) !== -1).toBeTruthy();
         done();

@@ -16,6 +16,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { IAppState } from '../../core/store/state/app.state';
 import { CreateFormat, CreateHashtag } from '../../core/store/actions/news.actions';
+import { ServerError } from '../../core/models/responses/server/error';
 
 /**
  * Top bar component - history, profile bar, logout and create new items
@@ -27,10 +28,10 @@ import { CreateFormat, CreateHashtag } from '../../core/store/actions/news.actio
   styleUrls: ['./topbar.component.scss'],
 })
 export class TopbarComponent implements OnInit {
-  history$ = new BehaviorSubject<unknown>([]);
+  notificationHistory$ = new BehaviorSubject<unknown>([]);
   user$: BehaviorSubject<User>;
   loading$: Subject<boolean>;
-  error$: Subject<any>;
+  error$: Subject<ServerError>;
 
   openMobileMenu: boolean;
   submitted = false;
@@ -55,7 +56,7 @@ export class TopbarComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.initForms();
+    this.initFormGroups();
     this.initSubscriptions();
     this.openMobileMenu = false;
   }
@@ -63,12 +64,12 @@ export class TopbarComponent implements OnInit {
   initSubscriptions() {
     this.loading$ = this.loadingService.loading$;
     this.error$ = this.errorService.error$;
-    this.userService.currentUser();
-    this.history$ = this.notificationService.history$;
+    this.userService.loadCurrentUser();
+    this.notificationHistory$ = this.notificationService.notificationHistory$;
     this.user$ = this.userService.user$;
   }
 
-  initForms() {
+  initFormGroups() {
     this.initCreateHashtagForm();
     this.initCreateFormatForm();
   }
@@ -138,7 +139,7 @@ export class TopbarComponent implements OnInit {
   /**
    * Toggle the menu bar when having mobile screen
    */
-  toggleMobileMenu(event: any) {
+  toggleMobileMenu(event) {
     event.preventDefault();
     this.mobileMenuButtonClicked.emit();
   }

@@ -28,6 +28,7 @@ import { Format } from '../models/instances/format';
 import { ChartType } from '../../pages/dashboards/default/default.model';
 import { setProjectValues } from '../helpers/utility';
 import { AlifeFile } from '../models/instances/alife-file';
+import { Warnings } from '../constants/notifications';
 
 const api = environment.api;
 
@@ -44,7 +45,7 @@ export class NewsService {
     private notificationService: NotificationService
   ) {}
 
-  public getProjectConfiguration(): Observable<any> {
+  public getProjectConfiguration(): Observable<GetAllResponse> {
     return this.requestHandler.request(`${api}/burst-news/`, 'get', null, (response: GetAllResponse) => response);
   }
 
@@ -76,13 +77,12 @@ export class NewsService {
   }
 
   public updateProject(payload: UpdateProjectPayload): Observable<Project> {
-    return of(Object.assign({}, { id: payload.id, ...payload.data })).pipe(delay(2000));
-    // return this.requestHandler.request(
-    //     `${api}/news-projects/${payload.id}`,
-    //     'post',
-    //     payload,
-    //     (response: CreateProjectResponse) => response.project
-    // );
+    return this.requestHandler.request(
+        `${api}/news-projects/${payload.id}`,
+        'post',
+        payload,
+        (response: CreateProjectResponse) => response
+    );
   }
 
   public createHashtag(payload: CreateHashtagPayload): Observable<Hashtag> {
@@ -156,12 +156,9 @@ export class NewsService {
 
   public budgetValidate(left: number): { [key: string]: boolean } | null {
     if (left < 0) {
-      this.notificationService.notify(
-        NotificationType.warning,
-        'Внимание',
-        `Вы превысили бюджет на ${left * -1}`,
-        3500
-      );
+      const {type, title, timeout} = Warnings.NO_LEFT;
+      const message = `Вы превысили бюджет на ${left * -1}`;
+      this.notificationService.notify(type, title, message, timeout);
       return { budget: true };
     }
     return null;
@@ -196,7 +193,7 @@ export class NewsService {
     return controls;
   }
 
-  public processProject(project: Project, validationForm: FormGroup, editorForm: FormGroup): object {
+  public processProject(project: Project, validationForm: FormGroup, editorForm: FormGroup): { controls: FormArray, newsList: News[] } {
     if (!project || !validationForm || !editorForm) {
       return;
     }
@@ -225,7 +222,7 @@ export class NewsService {
     return image;
   }
 
-  public updateField(index: number, field: string, value: any, control: AbstractControl, list: News[]): News[] {
+  public updateField(index: number, field: string, value: string | number | null | object, control: AbstractControl, list: News[]): News[] {
     if (control.valid) {
       const element = list[index];
       list[index] = { ...element, [field]: value || control.value };

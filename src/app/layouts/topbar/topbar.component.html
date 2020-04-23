@@ -12,8 +12,8 @@
         id="notificationDropdown"
       >
         <i class="fe-bell noti-icon"></i>
-        <span *ngIf="(history$ | async).length" class="badge badge-danger rounded-circle noti-icon-badge">
-          {{ (history$ | async).length }}
+        <span *ngIf="(notificationHistory$ | async).length" class="badge badge-danger rounded-circle noti-icon-badge">
+          {{ (notificationHistory$ | async).length }}
         </span>
       </a>
       <div
@@ -34,7 +34,7 @@
 
         <div id="notification-items" class="slimscroll noti-scroll" appSlimScroll>
           <!-- item-->
-          <a *ngFor="let notification of history$ | async" class="dropdown-item notify-item" ngbDropdownItem>
+          <a *ngFor="let notification of notificationHistory$ | async" class="dropdown-item notify-item" ngbDropdownItem>
             <div class="notify-icon bg-primary">
               <i class="mdi mdi-comment-account-outline"></i>
             </div>

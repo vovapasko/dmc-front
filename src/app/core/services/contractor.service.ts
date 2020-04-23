@@ -140,7 +140,7 @@ export class ContractorService {
   public createContractorData(
     f: { [p: string]: AbstractControl },
     defaultFields: Array<object> = []
-  ): { [p: string]: any } {
+  ): { [p: string]: string | number | null | object } {
     return collectDataFromForm(f, defaultFields);
   }
 
@@ -216,12 +216,14 @@ export class ContractorService {
     const { paginationService, contractors } = this;
     paginationService.totalRecords = contractors;
     paginationService.applyPagination();
+    // @ts-ignore
     this.paginatedContractorData = paginationService.paginatedData;
   }
 
   public onPageChange(page: number): void {
     const { paginationService } = this;
     paginationService.onPageChange(page);
+    // @ts-ignore
     this.paginatedContractorData = paginationService.paginatedData;
   }
 }

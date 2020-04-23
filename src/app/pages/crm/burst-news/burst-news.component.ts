@@ -6,11 +6,10 @@ import {
   Component,
   OnInit,
   ViewChild,
-  ViewContainerRef,
+  ViewContainerRef
 } from '@angular/core';
 import { WizardComponent as BaseWizardComponent } from 'angular-archwizard';
 import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
-import { NestableSettings } from 'ngx-nestable/lib/nestable.models';
 
 import { Steps } from '../../../core/constants/steps';
 import { ChartType } from '../../dashboards/default/default.model';
@@ -22,7 +21,7 @@ import {
   GetProject,
   GetProjectConfiguration,
   GetProjectSuccess,
-  UpdateProject,
+  UpdateProject
 } from '../../../core/store/actions/news.actions';
 import { NewsService } from '../../../core/services/news.service';
 import {
@@ -31,7 +30,7 @@ import {
   selectFormats,
   selectHashtags,
   selectMethods,
-  selectProject,
+  selectProject
 } from '../../../core/store/selectors/news.selectors';
 import { NotificationService } from '../../../core/services/notification.service';
 import { Project } from '../../../core/models/instances/project';
@@ -44,6 +43,8 @@ import { News } from '../../../core/models/instances/news';
 import { AlifeFile } from '../../../core/models/instances/alife-file';
 import { CreateProjectPayload } from '../../../core/models/payloads/news/project/create';
 import { UpdateProjectPayload } from '../../../core/models/payloads/news/project/update';
+import { ServerError } from '../../../core/models/responses/server/error';
+import numbers from '../../../core/constants/numbers';
 
 /**
  * Form Burst news component - handling the burst news with sidebar and content
@@ -53,40 +54,26 @@ import { UpdateProjectPayload } from '../../../core/models/payloads/news/project
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-burst-news',
   templateUrl: './burst-news.component.html',
-  styleUrls: ['./burst-news.component.scss'],
+  styleUrls: ['./burst-news.component.scss']
 })
 export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewChecked {
-  list = [{ id: 1 }, { id: 11 }];
   breadCrumbItems: Array<{}>;
-
   contractors$ = this.store.pipe(select(selectContractors));
   hashtags$ = this.store.pipe(select(selectHashtags));
   formats$ = this.store.pipe(select(selectFormats));
   characters$ = this.store.pipe(select(selectCharacters));
   methods$ = this.store.pipe(select(selectMethods));
-  project$ = this.store.pipe(select(selectProject));
-
   newsSubmit = false;
-
   noImage = images.defaultImage;
-  total = 0;
-  left = 0;
-
-  step: Steps = 0;
+  left = numbers.zero;
+  step: Steps = numbers.zero;
   validationForm: FormGroup;
   editorForm: FormGroup;
   newsForm: FormGroup;
   controls: FormArray;
-
   loading$: Subject<boolean>;
-  error$: Subject<any>;
-
-  public options = {
-    fixedDepth: true,
-  } as NestableSettings;
-
+  error$: Subject<ServerError>;
   newsList = [new News('', [], { base64: this.noImage, file: null })];
-
   revenueRadialChart: ChartType;
   blured = false;
   focused = false;
@@ -106,7 +93,8 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     private errorService: ErrorService,
     private loadingService: LoadingService,
     private notificationService: NotificationService
-  ) {}
+  ) {
+  }
 
   ngAfterViewInit() {
     this.vcr.createEmbeddedView(this.tpl);
@@ -122,7 +110,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     this.setProjectData(data);
   }
 
-  private setProjectData(data: any): void {
+  private setProjectData(data: { controls: FormArray, newsList: News[] }): void {
     if (data) {
       this.controls = data.controls;
       this.newsList = data.newsList;
@@ -131,8 +119,9 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
 
   ngOnInit() {
     this.initBreadCrumbs();
-    this.initForms();
+    this.initFormGroups();
     this.initSubscriptions();
+    this.fetchData();
   }
 
   private getControl(index: number, field: string): FormControl {
@@ -146,10 +135,9 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     this.revenueRadialChart = revenueRadialChart;
     this.store.dispatch(new GetProjectConfiguration());
     this.projectId = +this.route.snapshot.queryParamMap.get('id');
-    this.fetchData();
   }
 
-  private initForms(): void {
+  private initFormGroups(): void {
     this.initValidateForm();
     this.initEditorForm();
     this.initNewsForm();
@@ -178,8 +166,8 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
       {
         label: 'Разгон',
         path: '/burst-news',
-        active: true,
-      },
+        active: true
+      }
     ];
   }
 
@@ -264,18 +252,19 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     console.log('editor-change', event);
   }
 
-  public focus($event): void {
-    // tslint:disable-next-line:no-console
-    console.log('focus', $event);
-    this.focused = true;
-    this.blured = false;
+  public focus(value: boolean): void {
+    this.focused = value;
+    this.blured = !value;
   }
 
-  public blur($event): void {
-    // tslint:disable-next-line:no-console
-    console.log('blur', $event);
-    this.focused = false;
-    this.blured = true;
+  public blur(value: boolean): void {
+    this.focused = value;
+    this.blured = !value;
+  }
+
+  public onEvent($event): void {
+    this.blur(false);
+    this.focus(true);
   }
 
   public onImageChange(files: AlifeFile[], index: number, onFile?: boolean): void {
@@ -305,20 +294,23 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   private updateProject(payload: UpdateProjectPayload): void {
-    this.store.dispatch(new UpdateProject(payload));
-    this.store.dispatch(new GetProjectSuccess(null));
+    const store = this.store;
+    store.dispatch(new UpdateProject(payload));
+    store.dispatch(new GetProjectSuccess(null));
   }
 
-  public updateField(index: number, field: string, value?: any): void {
+  public updateField(index: number, field: string, value?: string | number | object): void {
     const control = this.getControl(index, field);
     this.newsList = this.newsService.updateField(index, field, value, control, this.newsList);
   }
 
   private fetchData(): void {
     const id = this.projectId;
+    const store = this.store;
     if (id) {
-      this.store.select(selectProject).subscribe(this.processProject.bind(this));
-      this.store.dispatch(new GetProject({ id }));
+      store.select(selectProject).subscribe(this.processProject.bind(this));
+      store.dispatch(new GetProject({ id }));
     }
   }
 }
+

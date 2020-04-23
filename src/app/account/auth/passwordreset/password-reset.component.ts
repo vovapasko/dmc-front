@@ -13,6 +13,7 @@ import { ErrorService } from '../../../core/services/error.service';
 import { LoadingService } from '../../../core/services/loading.service';
 import { setAuthClasses } from '../../../core/helpers/utility';
 import { ConfirmResetPasswordPayload } from '../../../core/models/payloads/user/confirm-reset-password';
+import { ServerError } from '../../../core/models/responses/server/error';
 
 /**
  * This component for change user password
@@ -30,7 +31,7 @@ export class PasswordResetComponent implements OnInit, AfterViewInit, OnDestroy 
   resetForm: FormGroup;
   submitted = false;
   loading$: Subject<boolean>;
-  error$: Subject<any>;
+  error$: Subject<ServerError>;
   success = '';
   visible = false;
 
@@ -101,17 +102,12 @@ export class PasswordResetComponent implements OnInit, AfterViewInit, OnDestroy 
   onSubmit(): void {
     this.success = '';
     this.submitted = true;
-
-    // stop here if form is invalid
-    if (this.resetForm.invalid) {
-      return;
+    if (this.resetForm.valid) {
+      const { password, confirmPassword } = this.resetForm.value;
+      const data = { password, confirmPassword };
+      const confirm = this.confirm;
+      this.submit({ confirm, data });
     }
-
-    const { password, confirmPassword } = this.resetForm.value;
-    const data = { password, confirmPassword };
-    const confirm = this.confirm;
-
-    this.submit({ confirm, data });
   }
 
   /**

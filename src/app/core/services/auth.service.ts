@@ -6,7 +6,7 @@ import { catchError, tap } from 'rxjs/operators';
 
 import { CookieService } from '../providers/cookie.service';
 import { User } from '../models/instances/user.models';
-import { TokenTypes } from '../models/instances/token.model';
+import { Token, TokenTypes } from '../models/instances/token.model';
 import { environment } from '../../../environments/environment';
 import { RequestAccessTokenResponse } from '../models/responses/auth/request-access-token-response';
 import { LoginResponse } from '../models/responses/auth/login-response';
@@ -46,7 +46,7 @@ export class AuthenticationService {
    * Get the token (access or refresh) from cookie
    */
   public getToken(type: TokenTypes): string | null {
-    const currentUser = this.userService.currentUser();
+    const currentUser = this.userService.loadCurrentUser();
     if (currentUser && currentUser.token) {
       return currentUser.token[type];
     }
@@ -56,8 +56,8 @@ export class AuthenticationService {
   /**
    * Save the token (access or refresh) in cookie
    */
-  public setToken(type: TokenTypes, value: any): void {
-    const currentUser = this.userService.currentUser();
+  public setToken(type: TokenTypes, value: string): void {
+    const currentUser = this.userService.loadCurrentUser();
     if (currentUser && currentUser.token) {
       currentUser.token[type] = value;
     }
@@ -88,7 +88,7 @@ export class AuthenticationService {
   /**
    *  Refresh token
    */
-  public requestAccessToken(): Observable<any> {
+  public requestAccessToken(): Observable<Token> {
     const refreshToken = this.getToken(AuthenticationService.REFRESH_TOKEN_NAME);
     return this.http.post(`${api}/token-refresh/`, { refresh: refreshToken }).pipe(
       tap((response: RequestAccessTokenResponse) =>

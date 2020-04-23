@@ -5,5 +5,5 @@ export interface LoginResponse {
   success: boolean;
   token?: Token;
   user?: User;
-  errors?: any;
+  errors?: object;
 }

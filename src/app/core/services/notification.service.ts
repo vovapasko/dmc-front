@@ -13,7 +13,7 @@ import { Notification, NotificationType } from '../models/instances/notification
 export class NotificationService {
   private idx = 0;
   public notifications$ = new BehaviorSubject([]);
-  public history$ = new BehaviorSubject([]);
+  public notificationHistory$ = new BehaviorSubject([]);
 
   constructor() {}
 
@@ -26,11 +26,11 @@ export class NotificationService {
   }
 
   get history() {
-    return this.history$.getValue();
+    return this.notificationHistory$.getValue();
   }
 
   set history(value: Array<Notification>) {
-    this.history$.next(value);
+    this.notificationHistory$.next(value);
   }
 
   /**
@@ -56,7 +56,7 @@ export class NotificationService {
     this.notifications = notifications;
   }
 
-  public trackTime(notification: Notification): any {
+  public trackTime(notification: Notification) {
     if (notification.timeout !== 0) {
       return setTimeout(() => this.close(notification), notification.timeout);
     }

@@ -3,6 +3,7 @@ import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/c
 import { AuthenticationService } from '../services/auth.service';
 import { Observable, BehaviorSubject, Subject, throwError } from 'rxjs';
 import { switchMap, take, filter, catchError } from 'rxjs/operators';
+import { Token } from '../models/instances/token.model';
 
 /**
  * This interceptor for inject JWT to every, almost, request and refresh token if its needed
@@ -53,7 +54,7 @@ export class JwtInterceptor implements HttpInterceptor {
   private processRefreshingToken(request, next) {
     this.refreshTokenInProgress = true;
     return this.authService.requestAccessToken().pipe(
-      switchMap((authResponse: any) => {
+      switchMap((authResponse: Token) => {
         this.refreshTokenInProgress = false;
         this.refreshTokenSubject.next(authResponse.access);
         return next.handle(this.injectToken(request));
