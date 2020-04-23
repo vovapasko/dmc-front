@@ -1,3 +1,3 @@
 export interface DeleteContractorPayload {
-    id: number;
+  id: number;
 }

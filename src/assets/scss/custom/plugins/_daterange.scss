@@ -3,9 +3,11 @@
 //
 
 .daterangepicker {
-    font-family: $font-family-base;
+  font-family: $font-family-base;
 
-    td.active,td.active:hover,.ranges li.active {
-        background-color: $primary;
-    }
+  td.active,
+  td.active:hover,
+  .ranges li.active {
+    background-color: $primary;
+  }
 }

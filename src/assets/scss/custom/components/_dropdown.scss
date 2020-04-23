@@ -32,7 +32,7 @@
   padding: 20px;
   left: 20px !important;
   right: 20px !important;
-  background-image: url("/assets/images/megamenu-bg.png");
+  background-image: url('/assets/images/megamenu-bg.png');
   background-position: right bottom;
   background-repeat: no-repeat;
 }
@@ -51,10 +51,10 @@
     }
 
     &:before {
-      content: "\F130";
+      content: '\F130';
       position: absolute;
       left: 0;
-      font-family: "Material Design Icons";
+      font-family: 'Material Design Icons';
       font-size: 9px;
       line-height: 24px;
     }

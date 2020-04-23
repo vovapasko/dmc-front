@@ -16,7 +16,7 @@ import { FormRoutingModule } from './form-routing.module';
 
 import { UIModule } from '../../shared/ui/ui.module';
 
-import {ValidationComponent} from './validation/validation.component';
+import { ValidationComponent } from './validation/validation.component';
 
 @NgModule({
   declarations: [ValidationComponent],
@@ -35,7 +35,7 @@ import {ValidationComponent} from './validation/validation.component';
     FileUploadModule,
     ArchwizardModule,
     NgSelectModule,
-    NgxMaskModule.forRoot()
-  ]
+    NgxMaskModule.forRoot(),
+  ],
 })
-export class FormModule { }
+export class FormModule {}

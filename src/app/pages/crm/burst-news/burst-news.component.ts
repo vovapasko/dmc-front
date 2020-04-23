@@ -1,323 +1,316 @@
 import {
-    AfterViewChecked,
-    AfterViewInit,
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    OnInit,
-    ViewChild,
-    ViewContainerRef
+  AfterViewChecked,
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  ViewChild,
+  ViewContainerRef
 } from '@angular/core';
-import {WizardComponent as BaseWizardComponent} from 'angular-archwizard';
-import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {NestableSettings} from 'ngx-nestable/lib/nestable.models';
+import { WizardComponent as BaseWizardComponent } from 'angular-archwizard';
+import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
 
-import {Steps} from '../../../core/constants/steps';
-import {ChartType} from '../../dashboards/default/default.model';
-import {revenueRadialChart} from '../../dashboards/default/data';
-import {select, Store} from '@ngrx/store';
-import {IAppState} from '../../../core/store/state/app.state';
+import { Steps } from '../../../core/constants/steps';
+import { ChartType } from '../../dashboards/default/default.model';
+import { revenueRadialChart } from '../../dashboards/default/data';
+import { select, Store } from '@ngrx/store';
+import { IAppState } from '../../../core/store/state/app.state';
 import {
-    CreateProject,
-    GetProject,
-    GetProjectConfiguration, GetProjectSuccess,
-    UpdateProject
+  CreateProject,
+  GetProject,
+  GetProjectConfiguration,
+  GetProjectSuccess,
+  UpdateProject
 } from '../../../core/store/actions/news.actions';
-import {NewsService} from '../../../core/services/news.service';
+import { NewsService } from '../../../core/services/news.service';
 import {
-    selectCharacters,
-    selectContractors,
-    selectFormats,
-    selectHashtags,
-    selectMethods, selectProject
+  selectCharacters,
+  selectContractors,
+  selectFormats,
+  selectHashtags,
+  selectMethods,
+  selectProject
 } from '../../../core/store/selectors/news.selectors';
-import {NotificationService} from '../../../core/services/notification.service';
-import cloneDeep from 'lodash.clonedeep';
-import {defaultNews} from '../../../core/constants/news';
-import {Project} from '../../../core/models/instances/project';
-import {ActivatedRoute, Params} from '@angular/router';
-import {Subject, Subscription} from 'rxjs';
-import {ErrorService} from '../../../core/services/error.service';
-import {LoadingService} from '../../../core/services/loading.service';
-import images from "../../../core/constants/images";
+import { NotificationService } from '../../../core/services/notification.service';
+import { Project } from '../../../core/models/instances/project';
+import { ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs';
+import { ErrorService } from '../../../core/services/error.service';
+import { LoadingService } from '../../../core/services/loading.service';
+import images from '../../../core/constants/images';
+import { News } from '../../../core/models/instances/news';
+import { AlifeFile } from '../../../core/models/instances/alife-file';
+import { CreateProjectPayload } from '../../../core/models/payloads/news/project/create';
+import { UpdateProjectPayload } from '../../../core/models/payloads/news/project/update';
+import { ServerError } from '../../../core/models/responses/server/error';
+import numbers from '../../../core/constants/numbers';
 
 /**
  * Form Burst news component - handling the burst news with sidebar and content
  */
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: 'app-burst-news',
-    templateUrl: './burst-news.component.html',
-    styleUrls: ['./burst-news.component.scss']
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-burst-news',
+  templateUrl: './burst-news.component.html',
+  styleUrls: ['./burst-news.component.scss']
 })
 export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewChecked {
+  breadCrumbItems: Array<{}>;
+  contractors$ = this.store.pipe(select(selectContractors));
+  hashtags$ = this.store.pipe(select(selectHashtags));
+  formats$ = this.store.pipe(select(selectFormats));
+  characters$ = this.store.pipe(select(selectCharacters));
+  methods$ = this.store.pipe(select(selectMethods));
+  newsSubmit = false;
+  noImage = images.defaultImage;
+  left = numbers.zero;
+  step: Steps = numbers.zero;
+  validationForm: FormGroup;
+  editorForm: FormGroup;
+  newsForm: FormGroup;
+  controls: FormArray;
+  loading$: Subject<boolean>;
+  error$: Subject<ServerError>;
+  newsList = [new News('', [], { base64: this.noImage, file: null })];
+  revenueRadialChart: ChartType;
+  blured = false;
+  focused = false;
+  submitted = false;
+  projectId: number;
+  submitForm: boolean;
 
-    list = [{id: 1}, {id: 11}];
-    breadCrumbItems: Array<{}>;
+  @ViewChild('wizardForm', { static: false }) wizard: BaseWizardComponent;
+  @ViewChild('tpl', { static: false }) tpl;
 
-    contractors$ = this.store.pipe(select(selectContractors));
-    hashtags$ = this.store.pipe(select(selectHashtags));
-    formats$ = this.store.pipe(select(selectFormats));
-    characters$ = this.store.pipe(select(selectCharacters));
-    methods$ = this.store.pipe(select(selectMethods));
-    project$ = this.store.pipe(select(selectProject));
+  constructor(
+    private vcr: ViewContainerRef,
+    private cdr: ChangeDetectorRef,
+    private store: Store<IAppState>,
+    private route: ActivatedRoute,
+    private newsService: NewsService,
+    private errorService: ErrorService,
+    private loadingService: LoadingService,
+    private notificationService: NotificationService
+  ) {
+  }
 
-    newsSubmit = false;
+  ngAfterViewInit() {
+    this.vcr.createEmbeddedView(this.tpl);
+    this.cdr.detectChanges();
+  }
 
-    noImage = images.defaultImage;
-    total = 0;
-    left = 0;
+  ngAfterViewChecked() {
+    this.cdr.detectChanges();
+  }
 
-    step: Steps = 0;
-    validationForm: FormGroup;
-    editorForm: FormGroup;
-    newsForm: FormGroup;
-    controls: FormArray;
+  private processProject(project: Project): void {
+    const data = this.newsService.processProject(project, this.validationForm, this.editorForm);
+    this.setProjectData(data);
+  }
 
-
-    loading$: Subject<boolean>;
-    error$: Subject<any>;
-
-
-    public options = {
-        fixedDepth: true
-    } as NestableSettings;
-
-    newsList = [cloneDeep(defaultNews)];
-
-    revenueRadialChart: ChartType;
-    blured = false;
-    focused = false;
-    submitted = false;
-    projectId: number;
-    submitForm: boolean;
-
-    @ViewChild('wizardForm', {static: false}) wizard: BaseWizardComponent;
-    @ViewChild('tpl', {static: false}) tpl;
-
-    constructor(
-        private vcr: ViewContainerRef,
-        private cdr: ChangeDetectorRef,
-        private store: Store<IAppState>,
-        private route: ActivatedRoute,
-        private newsService: NewsService,
-        private errorService: ErrorService,
-        private loadingService: LoadingService,
-        private notificationService: NotificationService
-    ) {
+  private setProjectData(data: { controls: FormArray, newsList: News[] }): void {
+    if (data) {
+      this.controls = data.controls;
+      this.newsList = data.newsList;
     }
+  }
 
-    ngAfterViewInit() {
-        this.vcr.createEmbeddedView(this.tpl);
-        this.cdr.detectChanges();
-    }
+  ngOnInit() {
+    this.initBreadCrumbs();
+    this.initFormGroups();
+    this.initSubscriptions();
+    this.fetchData();
+  }
 
-    ngAfterViewChecked() {
-        this.cdr.detectChanges();
-    }
+  private getControl(index: number, field: string): FormControl {
+    return this.controls.at(index).get(field) as FormControl;
+  }
 
-    processProject(project: Project) {
-        const data = this.newsService
-            .processProject(
-                project,
-                this.validationForm,
-                this.editorForm
-            );
-        this.setProjectData(data);
-    }
+  private initSubscriptions(): void {
+    this.loading$ = this.loadingService.loading$;
+    this.error$ = this.errorService.error$;
+    this.submitForm = false;
+    this.revenueRadialChart = revenueRadialChart;
+    this.store.dispatch(new GetProjectConfiguration());
+    this.projectId = +this.route.snapshot.queryParamMap.get('id');
+  }
 
-    setProjectData(data) {
-        if (data) {
-            this.controls = data.controls;
-            this.newsList = data.newsList;
-        }
-    }
+  private initFormGroups(): void {
+    this.initValidateForm();
+    this.initEditorForm();
+    this.initNewsForm();
+    this.initControls();
+  }
 
-    ngOnInit() {
-        this.initBreadCrumbs();
-        this.initForms();
-        this.initSubscriptions();
-    }
+  private initControls(): void {
+    this.controls = this.newsService.initControls(this.newsList);
+  }
 
-    getControl(index: number, field: string): FormControl {
-        return this.controls.at(index).get(field) as FormControl;
-    }
+  private initValidateForm(): void {
+    this.validationForm = this.newsService.initializeValidationForm(this.budgetValidator.bind(this));
+  }
 
-    initSubscriptions() {
-        this.loading$ = this.loadingService.loading$;
-        this.error$ = this.errorService.error$;
-        this.submitForm = false;
-        this.revenueRadialChart = revenueRadialChart;
-        this.store.dispatch(new GetProjectConfiguration());
-        this.projectId = +this.route.snapshot.queryParamMap.get('id');
-        this.fetchData();
-    }
+  private initNewsForm(): void {
+    this.newsForm = this.newsService.initializeNewsForm();
+  }
 
-    initForms() {
-        this.initValidateForm();
-        this.initEditorForm();
-        this.initNewsForm();
-        this.initControls();
-    }
+  private initEditorForm(): void {
+    this.editorForm = this.newsService.initializeEditorForm();
+  }
 
-    initControls() {
-        this.controls = this.newsService.initControls(this.newsList);
-    }
+  private initBreadCrumbs(): void {
+    this.breadCrumbItems = [
+      { label: 'Главная', path: '/' },
+      {
+        label: 'Разгон',
+        path: '/burst-news',
+        active: true
+      }
+    ];
+  }
 
-    initValidateForm() {
-        this.validationForm = this.newsService.initializeValidationForm(this.budgetValidator.bind(this));
-    }
+  public budgetValidator(control: AbstractControl): { [key: string]: boolean } | null {
+    const left = this.calculateLeft();
+    return this.newsService.budgetValidate(left);
+  }
 
-    initNewsForm() {
-        this.newsForm = this.newsService.initializeNewsForm();
+  /**
+   * Returns form
+   */
+  get form() {
+    if (this.validationForm) {
+      return this.validationForm.controls;
     }
+  }
 
-    initEditorForm() {
-        this.editorForm = this.newsService.initializeEditorForm();
+  get distributeForm() {
+    if (this.newsForm) {
+      return this.newsForm.controls;
     }
+  }
 
-    initBreadCrumbs() {
-        this.breadCrumbItems = [{label: 'Главная', path: '/'}, {
-            label: 'Разгон',
-            path: '/burst-news',
-            active: true
-        }];
-    }
+  public addNew(): void {
+    this.addNewControl();
+    this.addNewItem();
+  }
 
-    budgetValidator(control: AbstractControl): { [key: string]: boolean } | null {
-        const left = this.calculateLeft();
-        return this.newsService.budgetValidate(left);
-    }
+  private addNewControl(): void {
+    const controls = this.controls;
+    this.controls = this.newsService.addNewControl(controls);
+  }
 
-    /**
-     * Returns form
-     */
-    get form() {
-        if (this.validationForm) {
-            return this.validationForm.controls;
-        }
-    }
+  private addNewItem(): void {
+    const newsList = this.newsList;
+    this.newsList = this.newsService.addNewItem(newsList);
+  }
 
-    get distributeForm() {
-        if (this.newsForm) {
-            return this.newsForm.controls;
-        }
-    }
+  private calculateLeft(): number {
+    this.left = this.newsService.calculateLeft(this.budget, this.validationForm);
+    this.calculatePercentage();
+    return this.left;
+  }
 
-    addNew() {
-        this.addNewControl();
-        this.addNewItem();
+  get budget() {
+    if (this.form) {
+      const budgetControl = this.form.projectBudget;
+      return budgetControl ? budgetControl.value || 0 : 0;
     }
+    return 0;
+  }
 
-    addNewControl() {
-        const controls = this.controls;
-        this.controls = this.newsService.addNewControl(controls);
-    }
+  private calculatePercentage(): void {
+    this.revenueRadialChart = this.newsService.calculatePercentage(this.left, this.budget);
+  }
 
-    addNewItem() {
-        const newsList = this.newsList;
-        this.newsList = this.newsService.addNewItem(newsList);
-    }
+  /**
+   * Go to next step while form value is valid
+   */
+  public formSubmit(): void {
+    this.submitted = true;
+  }
 
-    calculateLeft() {
-        this.left = this.newsService.calculateLeft(this.budget, this.validationForm);
-        this.calculatePercentage();
-    }
+  public newsFormSubmit(): void {
+    this.newsSubmit = true;
+  }
 
-    get budget() {
-        if (this.form) {
-            const budgetControl = this.form.projectBudget;
-            return budgetControl ? (budgetControl.value || 0) : 0;
-        }
-        return 0;
-    }
+  /**
+   * Go to next step while second form value is valid
+   */
+  public profileFormSubmit(): void {
+    this.submitForm = true;
+  }
 
-    calculatePercentage() {
-        this.revenueRadialChart = this.newsService.calculatePercentage(this.left, this.budget);
-    }
+  public created(event): void {
+    // tslint:disable-next-line:no-console
+    console.log('editor-created', event);
+  }
 
-    /**
-     * Go to next step while form value is valid
-     */
-    formSubmit() {
-        this.submitted = true;
-    }
+  public changedEditor(event): void {
+    // tslint:disable-next-line:no-console
+    console.log('editor-change', event);
+  }
 
-    newsFormSubmit() {
-        this.newsSubmit = true;
-    }
+  public focus(value: boolean): void {
+    this.focused = value;
+    this.blured = !value;
+  }
 
-    /**
-     * Go to next step while second form value is valid
-     */
-    profileFormSubmit() {
-        this.submitForm = true;
-    }
+  public blur(value: boolean): void {
+    this.focused = value;
+    this.blured = !value;
+  }
 
-    created(event) {
-        // tslint:disable-next-line:no-console
-        console.log('editor-created', event);
-    }
+  public onEvent($event): void {
+    this.blur(false);
+    this.focus(true);
+  }
 
-    changedEditor(event) {
-        // tslint:disable-next-line:no-console
-        console.log('editor-change', event);
-    }
+  public onImageChange(files: AlifeFile[], index: number, onFile?: boolean): void {
+    const newsList = this.newsList;
+    const image = this.newsService.onImageChange(files, index, onFile, newsList);
+    this.updateField(index, 'image', image);
+  }
 
-    focus($event) {
-        // tslint:disable-next-line:no-console
-        console.log('focus', $event);
-        this.focused = true;
-        this.blured = false;
-    }
+  public onSubmit(): void {
+    const projectId = this.projectId;
+    const payload = this.newsService.onSubmit(this.validationForm, this.editorForm, this.newsList, !!projectId);
+    this.submit(payload, projectId);
+  }
 
-    blur($event) {
-        // tslint:disable-next-line:no-console
-        console.log('blur', $event);
-        this.focused = false;
-        this.blured = true;
+  public submit(payload: CreateProjectPayload | UpdateProjectPayload, projectId): void {
+    if (projectId) {
+      payload.id = projectId;
+      // @ts-ignore
+      this.updateProject(payload);
+    } else {
+      this.createProject(payload);
     }
+  }
 
-    onImageChange(files, index, onFile?: boolean) {
-        const newsList = this.newsList;
-        const image = this.newsService.onImageChange(files, index, onFile, newsList);
-        this.updateField(index, 'image', image);
-    }
+  private createProject(payload: CreateProjectPayload): void {
+    this.store.dispatch(new CreateProject(payload));
+  }
 
-    onSubmit() {
-        const projectId = this.projectId;
-        const data = this.newsService.onSubmit(this.validationForm, this.editorForm, this.newsList, !!projectId);
-        this.submit(data, projectId);
-    }
+  private updateProject(payload: UpdateProjectPayload): void {
+    const store = this.store;
+    store.dispatch(new UpdateProject(payload));
+    store.dispatch(new GetProjectSuccess(null));
+  }
 
-    submit(data, projectId) {
-        if (projectId) {
-            this.updateProject(data, projectId);
-        } else {
-            this.createProject(data);
-        }
-    }
+  public updateField(index: number, field: string, value?: string | number | object): void {
+    const control = this.getControl(index, field);
+    this.newsList = this.newsService.updateField(index, field, value, control, this.newsList);
+  }
 
-    createProject(data: Project) {
-        this.store.dispatch(new CreateProject({data}));
+  private fetchData(): void {
+    const id = this.projectId;
+    const store = this.store;
+    if (id) {
+      store.select(selectProject).subscribe(this.processProject.bind(this));
+      store.dispatch(new GetProject({ id }));
     }
-
-    updateProject(data: Project, projectId) {
-        this.store.dispatch(new UpdateProject({id: projectId, data}));
-        this.store.dispatch(new GetProjectSuccess(null));
-    }
-
-    updateField(index: number, field: string, value?: any) {
-        const control = this.getControl(index, field);
-        this.newsList = this.newsService.updateField(index, field, value, control, this.newsList);
-    }
-
-    fetchData() {
-        const id = this.projectId;
-        if (id) {
-            this.store.select(selectProject).subscribe(this.processProject.bind(this));
-            this.store.dispatch(new GetProject({id}));
-        }
-    }
+  }
 }
+

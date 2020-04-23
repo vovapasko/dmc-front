@@ -1,3 +1,3 @@
 export interface GetProjectPayload {
-    id: number;
+  id: number;
 }

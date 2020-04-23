@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   // api: 'https://dmc-backend.herokuapp.com'
-  api: 'http://127.0.0.1:8000'
+  api: 'http://127.0.0.1:8000',
 };
 
 /*

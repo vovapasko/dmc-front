@@ -1,62 +1,58 @@
 <!-- ========== Left Sidebar Start ========== -->
 <ng-template #contentTemplate>
-    <!--- Sidemenu -->
-    <div id="sidebar-menu">
-        <ul class="metismenu" id="side-menu" #sideMenu>
+  <!--- Sidemenu -->
+  <div id="sidebar-menu">
+    <ul class="metismenu" id="side-menu" #sideMenu>
+      <li class="menu-title">Навигация</li>
 
-            <li class="menu-title">Навигация</li>
+      <li>
+        <a routerLink="/dashboard" routerLinkActive="active" class="side-nav-link-ref">
+          <i class="fe-airplay"></i>
+          <span> Главная </span>
+        </a>
+      </li>
 
-            <li>
-                <a routerLink="/dashboard" routerLinkActive="active" class="side-nav-link-ref">
-                    <i class="fe-airplay"></i>
-                    <span> Главная </span>
-                </a>
-            </li>
+      <li>
+        <a routerLink="/crm/users" routerLinkActive="active" class="side-nav-link-ref">
+          <i class="fe-users"></i>
+          <span> Пользователи </span>
+        </a>
+      </li>
 
-            <li>
-                <a routerLink="/crm/users" routerLinkActive="active" class="side-nav-link-ref">
-                    <i class="fe-users"></i>
-                    <span> Пользователи </span>
-                </a>
-            </li>
+      <li>
+        <a routerLink="/crm/contractors" routerLinkActive="active" class="side-nav-link-ref">
+          <i class="fe-database"></i>
+          <span> Контрагенты </span>
+        </a>
+      </li>
 
-            <li>
-                <a routerLink="/crm/contractors" routerLinkActive="active" class="side-nav-link-ref">
-                    <i class="fe-database"></i>
-                    <span> Контрагенты </span>
-                </a>
-            </li>
+      <li>
+        <a routerLink="/crm/burst-news" routerLinkActive="active" class="side-nav-link-ref">
+          <i class="fe-trending-up"></i>
+          <span> Разгон </span>
+        </a>
+      </li>
 
-            <li>
-                <a routerLink="/crm/burst-news" routerLinkActive="active" class="side-nav-link-ref">
-                    <i class="fe-trending-up"></i>
-                    <span> Разгон </span>
-                </a>
-            </li>
+      <li>
+        <a routerLink="/crm/projects" routerLinkActive="active" class="side-nav-link-ref">
+          <i class="fe-folder-minus"></i>
+          <span> Проекты </span>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <!-- End Sidebar -->
 
-            <li>
-                <a routerLink="/crm/projects" routerLinkActive="active" class="side-nav-link-ref">
-                    <i class="fe-folder-minus"></i>
-                    <span> Проекты </span>
-                </a>
-            </li>
-
-        </ul>
-
-    </div>
-    <!-- End Sidebar -->
-
-    <div class="clearfix"></div>
+  <div class="clearfix"></div>
 </ng-template>
 
-
 <div class="left-side-menu">
-    <div class="slimscroll-menu" appSlimScroll *ngIf="!isCondensed">
-        <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
-    </div>
+  <div class="slimscroll-menu" appSlimScroll *ngIf="!isCondensed">
+    <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
+  </div>
 
-    <div class="slimscroll-menu" *ngIf="isCondensed">
-        <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
-    </div>
+  <div class="slimscroll-menu" *ngIf="isCondensed">
+    <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
+  </div>
 </div>
 <!-- Left Sidebar End -->

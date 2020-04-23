@@ -1,4 +1,4 @@
 export interface Format {
-    id: number;
-    postFormat: string;
+  id: number;
+  postFormat: string;
 }

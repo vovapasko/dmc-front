@@ -1,4 +1,4 @@
 export interface Character {
-    id: number;
-    character: string;
+  id: number;
+  character: string;
 }

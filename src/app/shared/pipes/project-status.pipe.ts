@@ -1,17 +1,20 @@
-import {Pipe, PipeTransform} from '@angular/core';
-import {Project} from '../../core/models/instances/project';
+import { Pipe, PipeTransform } from '@angular/core';
+import { Project } from '../../core/models/instances/project';
+import { Orders } from '../../core/constants/orders';
 
-
-@Pipe({name: 'projectStatus'})
+@Pipe({ name: 'projectStatus' })
 export class ProjectStatusPipe implements PipeTransform {
-    transform(data: Project[], order) {
-        return data.filter(project => {
-            if (order === 'confirmed') {
-                return project.isConfirmed;
-            } else if (order === 'notconfirmed') {
-                return !project.isConfirmed;
-            }
-            return true;
-        });
-    }
+  transform(data: Project[], order: Orders) {
+    return data.filter((project) => {
+      if (order === Orders.confirmed) {
+        // pass only confirmed items
+        return project.isConfirmed;
+      } else if (order === Orders.notconfirmed) {
+        // pass only not confirmed items
+        return !project.isConfirmed;
+      }
+      // pass any items
+      return true;
+    });
+  }
 }

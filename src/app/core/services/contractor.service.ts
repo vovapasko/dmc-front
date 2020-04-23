@@ -1,20 +1,21 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {BehaviorSubject, Observable, of} from 'rxjs';
-import {FormBuilder, Validators} from '@angular/forms';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import {environment} from '../../../environments/environment';
-import {Contractor} from '../models/instances/contractor';
-import {DeleteContractorResponse} from '../models/responses/contractor/deleteContractorResponse';
-import {UpdateContractorResponse} from '../models/responses/contractor/updateContractorResponse';
-import {CreateContractorResponse} from '../models/responses/contractor/createContractorResponse';
-import {GetAllContractorsResponse} from '../models/responses/contractor/getAllContractorsResponse';
-import {RequestHandler} from '../helpers/request-handler';
+import { environment } from '../../../environments/environment';
+import { Contractor } from '../models/instances/contractor';
+import { DeleteContractorResponse } from '../models/responses/contractor/delete';
+import { UpdateContractorResponse } from '../models/responses/contractor/update';
+import { CreateContractorResponse } from '../models/responses/contractor/create';
+import { GetAllContractorsResponse } from '../models/responses/contractor/get-all';
+import { RequestHandler } from '../helpers/request-handler';
 import numbers from '../constants/numbers';
-import {PaginationService} from './pagination.service';
-import {CreateContractorPayload} from '../models/payloads/contractor/create';
-import {UpdateContractorPayload} from '../models/payloads/contractor/update';
-import {DeleteContractorPayload} from '../models/payloads/contractor/delete';
+import { PaginationService } from './pagination.service';
+import { CreateContractorPayload } from '../models/payloads/contractor/create';
+import { UpdateContractorPayload } from '../models/payloads/contractor/update';
+import { DeleteContractorPayload } from '../models/payloads/contractor/delete';
+import { collectDataFromForm } from '../helpers/utility';
 
 const api = environment.api;
 
@@ -23,226 +24,206 @@ const api = environment.api;
  */
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
 export class ContractorService {
+  selectedContractor$: BehaviorSubject<Contractor> = new BehaviorSubject(null);
+  checkedContractors$: BehaviorSubject<Array<Contractor>> = new BehaviorSubject([]);
+  contractors$: BehaviorSubject<Array<Contractor>> = new BehaviorSubject([]);
+  paginatedContractorData$: BehaviorSubject<Array<Contractor>> = new BehaviorSubject([]);
 
-    selectedContractor$: BehaviorSubject<Contractor> = new BehaviorSubject(null);
-    checkedContractors$: BehaviorSubject<Array<Contractor>> = new BehaviorSubject([]);
-    contractors$: BehaviorSubject<Array<Contractor>> = new BehaviorSubject([]);
-    paginatedContractorData$: BehaviorSubject<Array<Contractor>> = new BehaviorSubject([]);
+  constructor(
+    private http: HttpClient,
+    private requestHandler: RequestHandler,
+    public formBuilder: FormBuilder,
+    private paginationService: PaginationService
+  ) {}
 
-    constructor(
-        private http: HttpClient,
-        private requestHandler: RequestHandler,
-        public formBuilder: FormBuilder,
-        private paginationService: PaginationService,
-    ) {
-    }
+  get selectedContractor() {
+    return this.selectedContractor$.getValue();
+  }
 
-    get selectedContractor() {
-        return this.selectedContractor$.getValue();
-    }
+  set selectedContractor(value: Contractor) {
+    this.selectedContractor$.next(value);
+  }
 
-    set selectedContractor(value: Contractor) {
-        this.selectedContractor$.next(value);
-    }
+  get checkedContractors() {
+    return this.checkedContractors$.getValue();
+  }
 
-    get checkedContractors() {
-        return this.checkedContractors$.getValue();
-    }
+  set checkedContractors(value: Array<Contractor>) {
+    this.checkedContractors$.next(value);
+  }
 
-    set checkedContractors(value: Array<Contractor>) {
-        this.checkedContractors$.next(value);
-    }
+  get contractors() {
+    return this.contractors$.getValue();
+  }
 
-    get contractors() {
-        return this.contractors$.getValue();
-    }
+  set contractors(value: Array<Contractor>) {
+    this.contractors$.next(value);
+  }
 
-    set contractors(value: Array<Contractor>) {
-        this.contractors$.next(value);
-    }
+  set paginatedContractorData(value: Array<Contractor>) {
+    this.paginatedContractorData$.next(value);
+  }
 
-    get paginatedContractorData() {
-        return this.paginatedContractorData$.getValue();
-    }
+  /**
+   *  Get all users, api returns array of users
+   */
+  public getAll(): Observable<Contractor[]> {
+    return this.requestHandler.request(`${api}/contractor/`, 'get', null, (response: GetAllContractorsResponse) => {
+      if (response && response.data) {
+        const contractors = response.data;
+        this.contractors = contractors;
+        this.applyPagination();
+        return contractors;
+      }
+    });
+  }
 
-    set paginatedContractorData(value: Array<Contractor>) {
-        this.paginatedContractorData$.next(value);
-    }
-
-    /**
-     *  Get all users, api returns array of users
-     */
-    getAll(): Observable<Contractor[]> {
-        return this.requestHandler.request(
-            `${api}/contractor/`,
-            'get',
-            null,
-            (response: GetAllContractorsResponse) => {
-                if (response && response.data) {
-                    const contractors = response.data;
-                    this.contractors = contractors;
-                    this.applyPagination();
-                    return contractors;
-                }
-            }
-        );
-    }
-
-    /**
-     *  Create contractor, api returns single contractor instance
-     */
-    create(payload: CreateContractorPayload): Observable<Contractor> {
-        return this.requestHandler.request(
-            `${api}/contractor/`,
-            'post',
-            payload,
-            (response: CreateContractorResponse) => {
-                if (response && response.contractor) {
-                    const contractors = this.contractors;
-                    const contractor = response.contractor;
-                    this.contractors = [...contractors, contractor];
-                    this.applyPagination();
-                    return contractor;
-                }
-            }
-        );
-    }
-
-    /**
-     *  Update contractor by id, api returns single contractor instance
-     */
-    update(payload: UpdateContractorPayload): Observable<Contractor> {
-        return this.requestHandler.request(
-            `${api}/contractor/${payload.id}`,
-            'put',
-            payload,
-            (response: UpdateContractorResponse) => {
-                if (response && response.contractor) {
-                    const contractor = response.contractor;
-                    this.contractors = this.contractors.map(el => +el.id === +contractor.id ? contractor : el);
-                    this.applyPagination();
-                    return contractor;
-                }
-            }
-        );
-    }
-
-    /**
-     *  Delete contractor by id, api returns status
-     */
-    delete(payload: DeleteContractorPayload): Observable<boolean> {
-        return this.requestHandler.request(
-            `${api}/contractor/${payload.id}`,
-            'delete',
-            null,
-            (response: DeleteContractorResponse) => {
-                if (response) {
-                    const contractors = this.contractors;
-                    this.contractors = contractors.filter(el => +el.id !== +payload.id);
-                    this.applyPagination();
-                    return payload;
-                }
-            }
-        );
-    }
-
-    /**
-     * Collect and returns data for creating or editing contractor
-     */
-    createContractorData(f, defaultFields?) {
-        const fields = Object.keys(f);
-        // collects all values [{}, {}, {}]
-        const values = fields.map(field => ({[field]: f[field].value}));
-        if (defaultFields) {
-            values.push(...defaultFields);
-        }
-        return values.reduce((a, n) => ({...a, ...n}), {});
-    }
-
-    /**
-     * Mark as checked all contractors
-     */
-    checkAll() {
+  /**
+   *  Create contractor, api returns single contractor instance
+   */
+  public create(payload: CreateContractorPayload): Observable<Contractor> {
+    return this.requestHandler.request(`${api}/contractor/`, 'post', payload, (response: CreateContractorResponse) => {
+      if (response && response.contractor) {
         const contractors = this.contractors;
-        const checkedContractors = this.checkedContractors;
-        const checkedAll = checkedContractors.length === contractors.length;
-        if (checkedAll) {
-            this.checkedContractors = [];
-        } else {
-            this.checkedContractors = contractors;
+        const contractor = response.contractor;
+        this.contractors = [...contractors, contractor];
+        this.applyPagination();
+        return contractor;
+      }
+    });
+  }
+
+  /**
+   *  Update contractor by id, api returns single contractor instance
+   */
+  public update(payload: UpdateContractorPayload): Observable<Contractor> {
+    return this.requestHandler.request(
+      `${api}/contractor/${payload.id}`,
+      'put',
+      payload,
+      (response: UpdateContractorResponse) => {
+        if (response && response.contractor) {
+          const contractor = response.contractor;
+          this.contractors = this.contractors.map((el) => (+el.id === +contractor.id ? contractor : el));
+          this.applyPagination();
+          return contractor;
         }
-    }
+      }
+    );
+  }
 
-    /**
-     * Mark contractor as check
-     */
-    check(contractor: Contractor) {
-        const checkedContractors = this.checkedContractors;
-        const checked = checkedContractors.indexOf(contractor) !== -1;
-        if (checked) {
-            this.checkedContractors = checkedContractors.filter(el => el.id !== contractor.id);
-        } else {
-            this.checkedContractors = [...checkedContractors, contractor];
+  /**
+   *  Delete contractor by id, api returns status
+   */
+  public delete(payload: DeleteContractorPayload): Observable<DeleteContractorPayload> {
+    return this.requestHandler.request(
+      `${api}/contractor/${payload.id}`,
+      'delete',
+      null,
+      (response: DeleteContractorResponse) => {
+        if (response) {
+          const contractors = this.contractors;
+          this.contractors = contractors.filter((el) => +el.id !== +payload.id);
+          this.applyPagination();
+          return payload;
         }
-    }
+      }
+    );
+  }
 
-    /**
-     * Validators for Create Form
-     */
-    initializeCreateForm() {
-        return this.formBuilder.group({
-            editorName: ['', [Validators.required, Validators.minLength(1)]],
-            contactPerson: ['', [Validators.required, Validators.minLength(1)]],
-            phoneNumber: ['', [Validators.required, Validators.pattern('^\\+?3?8?(0\\d{9})$')]],
-            email: [
-                '',
-                [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')],
-                // [this.isEmailUnique.bind(this), this.isEmailValid.bind(this)]
-            ],
-            arrangedNews: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
-            onePostPrice: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
-        });
-    }
+  /**
+   * Collect and returns data for creating or editing contractor
+   */
+  public createContractorData(
+    f: { [p: string]: AbstractControl },
+    defaultFields: Array<object> = []
+  ): { [p: string]: string | number | null | object } {
+    return collectDataFromForm(f, defaultFields);
+  }
 
-    /**
-     * Validators for Update Form
-     */
-    initializeUpdateForm() {
-        return this.formBuilder.group({
-            updateEditorName: ['', [Validators.required, Validators.minLength(1)]],
-            updateContactPerson: ['', [Validators.required, Validators.minLength(1)]],
-            updatePhoneNumber: ['', [Validators.required, Validators.pattern('^\\+?3?8?(0\\d{9})$')]],
-            updateEmail: [
-                '',
-                [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')]
-            ],
-            updateArrangedNews: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
-            updateOnePostPrice: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
-            updateNewsAmount: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
-        });
+  /**
+   * Mark as checked all contractors
+   */
+  public checkAll(): void {
+    const contractors = this.contractors;
+    const checkedContractors = this.checkedContractors;
+    const checkedAll = checkedContractors.length === contractors.length;
+    if (checkedAll) {
+      this.checkedContractors = [];
+    } else {
+      this.checkedContractors = contractors;
     }
+  }
 
-    /**
-     * Select contractor to show details
-     */
-    selectContractor(contractor) {
-        this.selectedContractor = contractor;
-        return of(contractor);
+  /**
+   * Mark contractor as check
+   */
+  public check(contractor: Contractor): void {
+    const checkedContractors = this.checkedContractors;
+    const checked = checkedContractors.indexOf(contractor) !== -1;
+    if (checked) {
+      this.checkedContractors = checkedContractors.filter((el) => el.id !== contractor.id);
+    } else {
+      this.checkedContractors = [...checkedContractors, contractor];
     }
+  }
 
-    public applyPagination(): void {
-        const {paginationService, contractors} = this;
-        paginationService.totalRecords = contractors;
-        paginationService.applyPagination();
-        this.paginatedContractorData = paginationService.paginatedData;
-    }
+  /**
+   * Validators for Create Form
+   */
+  public initializeCreateForm(): FormGroup {
+    return this.formBuilder.group({
+      editorName: ['', [Validators.required, Validators.minLength(1)]],
+      contactPerson: ['', [Validators.required, Validators.minLength(1)]],
+      phoneNumber: ['', [Validators.required, Validators.pattern('^\\+?3?8?(0\\d{9})$')]],
+      email: [
+        '',
+        [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$')],
+        // [this.isEmailUnique.bind(this), this.isEmailValid.bind(this)]
+      ],
+      arrangedNews: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
+      onePostPrice: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
+    });
+  }
 
-    public onPageChange(page: number): void {
-        const {paginationService} = this;
-        paginationService.onPageChange(page);
-        this.paginatedContractorData = paginationService.paginatedData;
-    }
+  /**
+   * Validators for Update Form
+   */
+  public initializeUpdateForm(): FormGroup {
+    return this.formBuilder.group({
+      updateEditorName: ['', [Validators.required, Validators.minLength(1)]],
+      updateContactPerson: ['', [Validators.required, Validators.minLength(1)]],
+      updatePhoneNumber: ['', [Validators.required, Validators.pattern('^\\+?3?8?(0\\d{9})$')]],
+      updateEmail: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$')]],
+      updateArrangedNews: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
+      updateOnePostPrice: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
+      updateNewsAmount: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
+    });
+  }
+
+  /**
+   * Select contractor to show details
+   */
+  public selectContractor(contractor: Contractor): Observable<Contractor> {
+    this.selectedContractor = contractor;
+    return of(contractor);
+  }
+
+  public applyPagination(): void {
+    const { paginationService, contractors } = this;
+    paginationService.totalRecords = contractors;
+    paginationService.applyPagination();
+    // @ts-ignore
+    this.paginatedContractorData = paginationService.paginatedData;
+  }
+
+  public onPageChange(page: number): void {
+    const { paginationService } = this;
+    paginationService.onPageChange(page);
+    // @ts-ignore
+    this.paginatedContractorData = paginationService.paginatedData;
+  }
 }

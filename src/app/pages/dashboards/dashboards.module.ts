@@ -4,7 +4,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // tslint:disable-next-line: max-line-length
-import { NgbDatepickerModule, NgbDropdownModule, NgbProgressbarModule, NgbCollapseModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbDatepickerModule,
+  NgbDropdownModule,
+  NgbProgressbarModule,
+  NgbCollapseModule,
+  NgbTooltipModule,
+} from '@ng-bootstrap/ng-bootstrap';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { ChartsModule } from 'ng2-charts';
 
@@ -12,7 +18,7 @@ import { UIModule } from '../../shared/ui/ui.module';
 import { DashboardsRoutingModule } from './dashboards-routing';
 
 import { DefaultDashboardComponent } from './default/default.component';
-import {EcommerceComponent} from './default/ecommerce.component';
+import { EcommerceComponent } from './default/ecommerce.component';
 
 @NgModule({
   declarations: [DefaultDashboardComponent, EcommerceComponent],
@@ -28,7 +34,7 @@ import {EcommerceComponent} from './default/ecommerce.component';
     ChartsModule,
     NgbCollapseModule,
     UIModule,
-    DashboardsRoutingModule
-  ]
+    DashboardsRoutingModule,
+  ],
 })
-export class DashboardsModule { }
+export class DashboardsModule {}

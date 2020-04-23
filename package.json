@@ -13,7 +13,10 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build:ci": "npm run clean && npm run test && npm run build:prod",
-    "heroku-postbuild": "ng build --prod"
+    "heroku-postbuild": "ng build --prod",
+    "format:fix": "pretty-quick --staged",
+    "precommit": "run-s format:fix lint",
+    "format:check": "prettier --config ./.prettierrc --list-different \"src/{app,environments,assets}/**/*{.ts,.js,.json,.css,.scss}\""
   },
   "private": true,
   "dependencies": {
@@ -92,6 +95,7 @@
     "@types/node": "~8.9.4",
     "codelyzer": "^5.0.1",
     "enhanced-resolve": "^3.3.0",
+    "husky": "^4.2.5",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~4.0.0",
@@ -99,6 +103,9 @@
     "karma-coverage-istanbul-reporter": "~2.0.1",
     "karma-jasmine": "~1.1.2",
     "karma-jasmine-html-reporter": "^0.2.2",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.0.5",
+    "pretty-quick": "^2.0.1",
     "protractor": "~5.4.0",
     "puppeteer": "^2.1.1",
     "ts-node": "~7.0.0",

@@ -1,70 +1,62 @@
-import {Component, ContentChild, ElementRef, EventEmitter, OnInit, Output} from '@angular/core';
-import {ViewModeDirective} from '../directives/view-mode.directive';
-import {EditModeDirective} from '../directives/edit-mode.directive';
-import {fromEvent, Subject} from 'rxjs';
-import {filter, switchMapTo, take} from 'rxjs/operators';
-import {untilDestroyed} from '@ngneat/until-destroy';
+import { Component, ContentChild, ElementRef, EventEmitter, OnInit, Output } from '@angular/core';
+import { ViewModeDirective } from '../directives/view-mode.directive';
+import { EditModeDirective } from '../directives/edit-mode.directive';
+import { fromEvent, Subject } from 'rxjs';
+import { filter, switchMapTo, take } from 'rxjs/operators';
+import { untilDestroyed } from '@ngneat/until-destroy';
 
 @Component({
-    selector: 'editable',
-    template: `
-    <ng-container *ngTemplateOutlet="currentView"></ng-container>
-  `
+  selector: 'editable',
+  template: ` <ng-container *ngTemplateOutlet="currentView"></ng-container> `,
 })
 export class EditableComponent implements OnInit {
-    @Output() update = new EventEmitter();
-    @ContentChild(ViewModeDirective, {static: false}) viewModeTpl: ViewModeDirective;
-    @ContentChild(EditModeDirective, {static: false}) editModeTpl: EditModeDirective;
+  @Output() update = new EventEmitter();
+  @ContentChild(ViewModeDirective, { static: false }) viewModeTpl: ViewModeDirective;
+  @ContentChild(EditModeDirective, { static: false }) editModeTpl: EditModeDirective;
 
+  editMode = new Subject();
+  editMode$ = this.editMode.asObservable();
 
-    editMode = new Subject();
-    editMode$ = this.editMode.asObservable();
+  mode: 'view' | 'edit' = 'view';
 
-    mode: 'view' | 'edit' = 'view';
+  constructor(private host: ElementRef) {}
 
-    constructor(private host: ElementRef) {
-    }
+  get currentView() {
+    return this.mode === 'view' ? this.viewModeTpl.tpl : this.editModeTpl.tpl;
+  }
 
-    get currentView() {
-        return this.mode === 'view' ? this.viewModeTpl.tpl : this.editModeTpl.tpl;
-    }
+  ngOnInit() {
+    this.viewModeHandler();
+    this.editModeHandler();
+  }
 
-    ngOnInit() {
-        this.viewModeHandler();
-        this.editModeHandler();
-    }
+  private get element() {
+    return this.host.nativeElement;
+  }
 
-    private get element() {
-        return this.host.nativeElement;
-    }
+  private viewModeHandler() {
+    fromEvent(this.element, 'dblclick')
+      .pipe(untilDestroyed(this))
+      .subscribe(() => {
+        this.mode = 'edit';
+        this.editMode.next(true);
+      });
+  }
 
-    private viewModeHandler() {
-        fromEvent(this.element, 'dblclick').pipe(
-            untilDestroyed(this)
-        ).subscribe(() => {
-            this.mode = 'edit';
-            this.editMode.next(true);
-        });
-    }
+  private editModeHandler() {
+    const clickOutside$ = fromEvent(document, 'click').pipe(
+      filter(({ target }) => this.element.contains(target) === false),
+      take(1)
+    );
 
+    this.editMode$.pipe(switchMapTo(clickOutside$), untilDestroyed(this)).subscribe((event) => {
+      this.update.next();
+      this.mode = 'view';
+    });
+  }
 
-    private editModeHandler() {
-        const clickOutside$ = fromEvent(document, 'click').pipe(
-            filter(({ target }) => this.element.contains(target) === false),
-            take(1)
-        );
-
-        this.editMode$.pipe(
-            switchMapTo(clickOutside$),
-            untilDestroyed(this)
-        ).subscribe(event => {
-            this.update.next();
-            this.mode = 'view';
-        });
-    }
-
-    toViewMode() {
-        this.update.next();
-        this.mode = 'view';
-    }
+  toViewMode() {
+    this.update.next();
+    this.mode = 'view';
+  }
 }

@@ -1,4 +1,4 @@
 export interface Method {
-    id: number;
-    method: string;
+  id: number;
+  method: string;
 }

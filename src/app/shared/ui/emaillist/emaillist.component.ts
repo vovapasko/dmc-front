@@ -7,16 +7,14 @@ import { emailList, emailLabel } from './data';
 @Component({
   selector: 'app-emaillist',
   templateUrl: './emaillist.component.html',
-  styleUrls: ['./emaillist.component.scss']
+  styleUrls: ['./emaillist.component.scss'],
 })
-
 export class EmaillistComponent implements OnInit {
-
   // Email left sidebar data
   emailList: List[];
   emailLabel: Label[];
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
     /**
@@ -29,7 +27,6 @@ export class EmaillistComponent implements OnInit {
    * fetches the list and label value
    */
   private _fetchData() {
-
     // leftbar list
     this.emailList = emailList;
     // leftbar label

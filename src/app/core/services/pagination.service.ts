@@ -1,118 +1,124 @@
-import {Inject, Injectable} from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import numbers from '../constants/numbers';
+import {
+  paginationEndIndex,
+  paginationPage,
+  paginationPageSize,
+  paginationStartIndex,
+  paginationTotalSize, PaginationType
+} from '../constants/pagination';
 
 /**
  * This service for pagination any data
  */
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
 export class PaginationService {
+  page$: BehaviorSubject<number> = new BehaviorSubject<number>(paginationPage);
+  pageSize$: BehaviorSubject<number> = new BehaviorSubject<number>(paginationPageSize);
+  startIndex$: BehaviorSubject<number> = new BehaviorSubject<number>(paginationStartIndex);
+  endIndex$: BehaviorSubject<number> = new BehaviorSubject<number>(paginationEndIndex);
+  totalSize$: BehaviorSubject<number> = new BehaviorSubject<number>(paginationTotalSize);
 
-    page$: BehaviorSubject<number> = new BehaviorSubject<number>(1);
-    pageSize$: BehaviorSubject<number> = new BehaviorSubject<number>(10);
-    startIndex$: BehaviorSubject<number> = new BehaviorSubject<number>(1);
-    endIndex$: BehaviorSubject<number> = new BehaviorSubject<number>(10);
-    totalSize$: BehaviorSubject<number> = new BehaviorSubject<number>(10);
+  totalRecords$: BehaviorSubject<PaginationType[]> = new BehaviorSubject<PaginationType[]>([]);
+  paginatedData$: BehaviorSubject<PaginationType[]> = new BehaviorSubject<PaginationType[]>([]);
 
-    totalRecords$: BehaviorSubject<Array<any>> = new BehaviorSubject<Array<any>>([]);
-    paginatedData$: BehaviorSubject<Array<any>> = new BehaviorSubject<Array<any>>([]);
+  constructor() {}
 
-    constructor() {
-    }
+  get page() {
+    return this.page$.getValue();
+  }
 
-    get page() {
-        return this.page$.getValue();
-    }
+  set page(value: number) {
+    this.page$.next(value);
+  }
 
-    set page(value: number) {
-        this.page$.next(value);
-    }
+  get pageSize() {
+    return this.pageSize$.getValue();
+  }
 
-    get pageSize() {
-        return this.pageSize$.getValue();
-    }
+  set pageSize(value: number) {
+    this.pageSize$.next(value);
+  }
 
-    set pageSize(value: number) {
-        this.pageSize$.next(value);
-    }
+  get startIndex() {
+    return this.startIndex$.getValue();
+  }
 
-    get startIndex() {
-        return this.startIndex$.getValue();
-    }
+  set startIndex(value: number) {
+    this.startIndex$.next(value);
+  }
 
-    set startIndex(value: number) {
-        this.startIndex$.next(value);
-    }
+  get endIndex() {
+    return this.endIndex$.getValue();
+  }
 
-    get endIndex() {
-        return this.endIndex$.getValue();
-    }
+  set endIndex(value: number) {
+    this.endIndex$.next(value);
+  }
 
-    set endIndex(value: number) {
-        this.endIndex$.next(value);
-    }
+  get totalSize() {
+    return this.totalSize$.getValue();
+  }
 
-    get totalSize() {
-        return this.totalSize$.getValue();
-    }
+  set totalSize(value: number) {
+    this.totalSize$.next(value);
+  }
 
-    set totalSize(value: number) {
-        this.totalSize$.next(value);
-    }
+  set totalRecords(records: PaginationType[]) {
+    this.totalRecords$.next(records);
+  }
 
-    set totalRecords(records: Array<any>) {
-        this.totalRecords$.next(records);
-    }
+  get totalRecords() {
+    return this.totalRecords$.getValue();
+  }
 
-    get totalRecords() {
-        return this.totalRecords$.getValue();
-    }
+  get paginatedData() {
+    return this.paginatedData$.getValue();
+  }
 
-    get paginatedData() {
-        return this.paginatedData$.getValue();
-    }
+  set paginatedData(value: PaginationType[]) {
+    this.paginatedData$.next(value);
+  }
 
-    set paginatedData(value: any[]) {
-        this.paginatedData$.next(value);
-    }
+  /**
+   * Pagination onpage change
+   * @param page show the page
+   */
+  public onPageChange(page: number): void {
+    const { pageSize, totalRecords } = this;
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    const paginatedData = totalRecords ? totalRecords.slice(startIndex, endIndex) : [];
+    this.changePage(page, startIndex, endIndex, paginatedData);
+  }
 
-    /**
-     * Pagination onpage change
-     * @param page show the page
-     */
-    public onPageChange(page: number): void {
-        const {pageSize, totalRecords} = this;
-        const startIndex = (page - 1) * pageSize;
-        const endIndex = (page - 1) * pageSize + pageSize;
-        const paginatedData = totalRecords ? totalRecords.slice(startIndex, endIndex) : [];
-        this.changePage(page, startIndex, endIndex, paginatedData);
-    }
+  private changePage(page: number, startIndex: number, endIndex: number, paginatedData: PaginationType[]) {
+    this.page = page;
+    this.startIndex = startIndex;
+    this.endIndex = endIndex;
+    this.paginatedData = paginatedData;
+  }
 
-    changePage(page, startIndex, endIndex, paginatedData) {
-        this.page = page;
-        this.startIndex = startIndex;
-        this.endIndex = endIndex;
-        this.paginatedData = paginatedData;
-    }
+  /**
+   * Apply pagination
+   */
+  public applyPagination() {
+    const { pageSize, totalRecords } = this;
+    const startIndex = 0;
+    const endIndex = this.pageSize;
+    const totalSize = totalRecords ? totalRecords.length : numbers.pageSize;
+    const paginatedData = totalRecords ? totalRecords.slice(startIndex, endIndex) : [];
+    this.paginate(startIndex, endIndex, totalSize, paginatedData);
+  }
 
-    /**
-     * Apply pagination
-     */
-    public applyPagination() {
-        const {pageSize, totalRecords} = this;
-        const startIndex = 0;
-        const endIndex = pageSize;
-        const totalSize = totalRecords ? totalRecords.length : 10;
-        const paginatedData = totalRecords ? totalRecords.slice(startIndex, endIndex) : [];
-        this.paginate(startIndex, endIndex, totalSize, paginatedData);
-    }
-
-    paginate(startIndex, endIndex, totalSize, paginatedData) {
-        this.startIndex = startIndex;
-        this.endIndex = endIndex;
-        this.totalSize = totalSize;
-        this.paginatedData = paginatedData;
-    }
+  private paginate(startIndex, endIndex, totalSize, paginatedData) {
+    this.startIndex = startIndex;
+    this.endIndex = endIndex;
+    this.totalSize = totalSize;
+    this.paginatedData = paginatedData;
+  }
 }

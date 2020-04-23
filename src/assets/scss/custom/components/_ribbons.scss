@@ -1,11 +1,11 @@
-// 
+//
 // ribbons.scss
 //
 
 .ribbon-box {
   position: relative;
 
-  .ribbon{
+  .ribbon {
     position: relative;
     clear: both;
     padding: 5px 12px;
@@ -15,8 +15,8 @@
     font-size: 13px;
     font-weight: $font-weight-semibold;
 
-    &:before{
-      content: " ";
+    &:before {
+      content: ' ';
       border-style: solid;
       border-width: 10px;
       display: block;
@@ -34,12 +34,11 @@
       margin-right: -30px;
       border-radius: 3px 0 0 3px;
 
-      &:before{
+      &:before {
         right: 0;
       }
     }
     &.float-center {
-
       span {
         margin: 0 auto 20px auto;
       }
@@ -49,17 +48,16 @@
   .ribbon-content {
     clear: both;
   }
-  
+
   @each $color, $value in $theme-colors {
     .ribbon-#{$color} {
-        background: ($value);
+      background: ($value);
 
-        &:before {
-          border-color: darken(($value),10%) transparent transparent;
-        }
+      &:before {
+        border-color: darken(($value), 10%) transparent transparent;
+      }
     }
   }
-
 
   /* Ribbon two */
   .ribbon-two {
@@ -88,7 +86,7 @@
       font-weight: $font-weight-semibold;
 
       &:before {
-        content: "";
+        content: '';
         position: absolute;
         left: 0;
         top: 100%;
@@ -98,7 +96,7 @@
       }
 
       &:after {
-        content: "";
+        content: '';
         position: absolute;
         right: 0;
         top: 100%;
@@ -111,18 +109,17 @@
 
   @each $color, $value in $theme-colors {
     .ribbon-two-#{$color} {
-
       span {
         background: ($value);
-  
+
         &:before {
-          border-left: 3px solid darken(($value),15%);
-          border-top: 3px solid darken(($value),15%);
+          border-left: 3px solid darken(($value), 15%);
+          border-top: 3px solid darken(($value), 15%);
         }
-  
+
         &:after {
-          border-right: 3px solid darken(($value),15%);
-          border-top: 3px solid darken(($value),15%);
+          border-right: 3px solid darken(($value), 15%);
+          border-top: 3px solid darken(($value), 15%);
         }
       }
     }

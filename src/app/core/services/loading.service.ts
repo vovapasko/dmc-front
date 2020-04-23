@@ -6,19 +6,18 @@ import { Subject } from 'rxjs';
  */
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
 export class LoadingService {
+  loading$: Subject<boolean> = new Subject();
 
-    loading$: Subject<boolean> = new Subject();
+  constructor() {}
 
-    constructor() { }
+  public startLoading(): void {
+    this.loading$.next(true);
+  }
 
-    startLoading() {
-        this.loading$.next(true);
-    }
-
-    stopLoading() {
-        this.loading$.next(false);
-    }
+  public stopLoading(): void {
+    this.loading$.next(false);
+  }
 }
