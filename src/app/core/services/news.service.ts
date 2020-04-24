@@ -29,6 +29,8 @@ import { ChartType } from '../../pages/dashboards/default/default.model';
 import { setProjectValues } from '../helpers/utility';
 import { AlifeFile } from '../models/instances/alife-file';
 import { Warnings } from '../constants/notifications';
+import { endpoints } from '../constants/endpoints';
+import { methods } from '../constants/methods';
 
 const api = environment.api;
 
@@ -46,13 +48,13 @@ export class NewsService {
   ) {}
 
   public getProjectConfiguration(): Observable<GetAllResponse> {
-    return this.requestHandler.request(`${api}/burst-news/`, 'get', null, (response: GetAllResponse) => response);
+    return this.requestHandler.request(`${api}/${endpoints.BURST_NEWS}/`, methods.GET, null, (response: GetAllResponse) => response);
   }
 
   public createProject(payload: CreateProjectPayload): Observable<Project> {
     return this.requestHandler.request(
-      `${api}/news-projects/`,
-      'post',
+      `${api}/${endpoints.MANAGE_NEWS_PROJECTS}/`,
+      methods.POST,
       payload,
       (response: CreateProjectResponse) => response.project
     );
@@ -60,8 +62,8 @@ export class NewsService {
 
   public getProject(payload: Project): Observable<Project> {
     return this.requestHandler.request(
-      `${api}/news-projects/${payload.id}`,
-      'get',
+      `${api}/${endpoints.MANAGE_NEWS_PROJECTS}/${payload.id}`,
+      methods.GET,
       null,
       (response: GetProjectResponse) => response.project
     );
@@ -69,8 +71,8 @@ export class NewsService {
 
   public getProjects(): Observable<Project[]> {
     return this.requestHandler.request(
-      `${api}/news-projects/`,
-      'get',
+      `${api}/${endpoints.NEWS_PROJECTS}/`,
+      methods.GET,
       null,
       (response: GetProjectsResponse) => response.projects
     );
@@ -78,8 +80,8 @@ export class NewsService {
 
   public updateProject(payload: UpdateProjectPayload): Observable<Project> {
     return this.requestHandler.request(
-        `${api}/news-projects/${payload.id}`,
-        'post',
+        `${api}/${endpoints.MANAGE_NEWS_PROJECTS}/${payload.id}`,
+        methods.PUT,
         payload,
         (response: CreateProjectResponse) => response
     );
@@ -87,8 +89,8 @@ export class NewsService {
 
   public createHashtag(payload: CreateHashtagPayload): Observable<Hashtag> {
     return this.requestHandler.request(
-      `${api}/hashtags/`,
-      'post',
+      `${api}/${endpoints.HASHTAGS}/`,
+      methods.POST,
       payload,
       (response: CreateHashtagResponse) => response.hashtag
     );
@@ -96,8 +98,8 @@ export class NewsService {
 
   public createFormat(payload: CreatePostFormatPayload): Observable<Format> {
     return this.requestHandler.request(
-      `${api}/post-format/`,
-      'post',
+      `${api}/${endpoints.POST_FORMAT}/`,
+      methods.POST,
       payload,
       (response: CreatePostFormatResponse) => response.postMethod
     );

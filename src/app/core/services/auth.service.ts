@@ -14,6 +14,8 @@ import { LoginPayload } from '../models/payloads/auth/login';
 import { RequestHandler } from '../helpers/request-handler';
 import { UserService } from './user.service';
 import { CURRENT_USER } from '../constants/user';
+import { methods } from '../constants/methods';
+import { endpoints } from '../constants/endpoints';
 
 const api = environment.api;
 
@@ -68,7 +70,7 @@ export class AuthenticationService {
    * Performs the auth
    */
   public login(payload: LoginPayload): Observable<User> {
-    return this.requestHandler.request(`${api}/login/`, 'post', payload, (response: LoginResponse) => {
+    return this.requestHandler.request(`${api}/${endpoints.LOGIN}/`, methods.POST, payload, (response: LoginResponse) => {
       const currentUser = { ...response.user, token: response.token };
       this.userService.user = currentUser;
       this.router.navigate([this.returnUrl]);
@@ -90,7 +92,7 @@ export class AuthenticationService {
    */
   public requestAccessToken(): Observable<Token> {
     const refreshToken = this.getToken(AuthenticationService.REFRESH_TOKEN_NAME);
-    return this.http.post(`${api}/token-refresh/`, { refresh: refreshToken }).pipe(
+    return this.http.post(`${api}/${endpoints.TOKEN_REFRESH}/`, { refresh: refreshToken }).pipe(
       tap((response: RequestAccessTokenResponse) =>
         this.setToken(AuthenticationService.ACCESS_TOKEN_NAME, response.access)
       ),

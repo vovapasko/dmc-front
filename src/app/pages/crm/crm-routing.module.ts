@@ -5,22 +5,23 @@ import { UsersComponent } from './users/users.component';
 import { ContractorsComponent } from './contractors/contractors.component';
 import { BurstNewsComponent } from './burst-news/burst-news.component';
 import { ProjectsComponent } from './projects/projects.component';
+import { urls } from '../../core/constants/urls';
 
 const routes: Routes = [
   {
-    path: 'users',
+    path: urls.USERS,
     component: UsersComponent,
   },
   {
-    path: 'contractors',
+    path: urls.CONTRACTORS,
     component: ContractorsComponent,
   },
   {
-    path: 'burst-news',
+    path: urls.BURST_NEWS,
     component: BurstNewsComponent,
   },
   {
-    path: 'projects',
+    path: urls.PROJECTS,
     component: ProjectsComponent,
   },
 ];

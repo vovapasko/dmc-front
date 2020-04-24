@@ -5,22 +5,23 @@ import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { ConfirmComponent } from './confirm/confirm.component';
 import { PasswordResetComponent } from './passwordreset/password-reset.component';
+import { urls } from '../../core/constants/urls';
 
 const routes: Routes = [
   {
-    path: 'login',
+    path: urls.LOGIN,
     component: LoginComponent,
   },
   {
-    path: 'signup/:invite',
+    path: `${urls.SIGNUP}/:invite`,
     component: SignupComponent,
   },
   {
-    path: 'confirm',
+    path: urls.CONFIRM,
     component: ConfirmComponent,
   },
   {
-    path: 'change-password/:confirm',
+    path: `${urls.CHANGE_PASSWORD}/:confirm`,
     component: PasswordResetComponent,
   },
 ];

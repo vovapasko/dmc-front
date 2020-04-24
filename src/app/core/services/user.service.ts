@@ -25,6 +25,8 @@ import { UpdatePayload } from '../models/payloads/user/update';
 import { UpdateProfilePayload } from '../models/payloads/user/update-profile';
 import { ConfirmResetPasswordPayload } from '../models/payloads/user/confirm-reset-password';
 import { ManageGroups } from '../models/instances/groups';
+import { endpoints } from '../constants/endpoints';
+import { methods } from '../constants/methods';
 
 const api = environment.api;
 
@@ -79,7 +81,7 @@ export class UserService {
    *  Get all users, api returns array of users
    */
   public getAll(): Observable<User[]> {
-    return this.requestHandler.request(`${api}/users/`, 'get', null, (response: GetAllResponse) => {
+    return this.requestHandler.request(`${api}/${endpoints.USERS}/`, methods.GET, null, (response: GetAllResponse) => {
       if (response && response.data) {
         const users = response.data;
         this.users = users;
@@ -94,8 +96,8 @@ export class UserService {
    */
   public signup(payload: SignupPayload): Observable<User> {
     return this.requestHandler.request(
-      `${api}/confirm-user/${payload.invite}`,
-      'post',
+      `${api}/${endpoints.CONFIRM_USER}/${payload.invite}`,
+      methods.POST,
       payload,
       (response: SignupResponse) => {
         if (response && response.user) {
@@ -121,7 +123,7 @@ export class UserService {
    *  Register new user aka invite user
    */
   public register(payload: RegisterPayload): Observable<User> {
-    return this.requestHandler.request(`${api}/invite-new-user/`, 'post', payload, (response: RegisterResponse) => {
+    return this.requestHandler.request(`${api}/${endpoints.INVITE_NEW_USER}/`, methods.POST, payload, (response: RegisterResponse) => {
       if (response && response.user) {
         const user = response.user;
         const users = this.users;
@@ -136,7 +138,7 @@ export class UserService {
    *  Delete user
    */
   public delete(payload: DeleteUserPayload): Observable<DeleteUserPayload> {
-    return this.requestHandler.request(`${api}/users/${payload.id}`, 'delete', payload, (response: DeleteResponse) => {
+    return this.requestHandler.request(`${api}/${endpoints.USERS}/${payload.id}`, methods.DELETE, payload, (response: DeleteResponse) => {
       const users = this.users;
       this.users = users.filter((el) => +el.id !== +payload.id);
       this.applyPagination();
@@ -149,8 +151,8 @@ export class UserService {
    */
   public update(payload: UpdatePayload): Observable<User> {
     return this.requestHandler.request(
-      `${api}/change-group/${payload.id}`,
-      'put',
+      `${api}/${endpoints.CHANGE_GROUP}/${payload.id}`,
+      methods.PUT,
       payload,
       (response: UpdateResponse) => {
         if (response.message.user) {
@@ -167,7 +169,7 @@ export class UserService {
    *  Get link for reset password on email
    */
   public resetPassword(): Observable<boolean> {
-    return this.requestHandler.request(`${api}/change-password-confirm/`, 'get', null, (response: ResetPassword) => {
+    return this.requestHandler.request(`${api}/${endpoints.CHANGE_PASSWORD_CONFIRM}/`, methods.GET, null, (response: ResetPassword) => {
       if (response) {
         return response.success;
       }
@@ -179,8 +181,8 @@ export class UserService {
    */
   public confirmResetPassword(payload: ConfirmResetPasswordPayload): Observable<boolean> {
     return this.requestHandler.request(
-      `${api}/change-pass/${payload.confirm}`,
-      'post',
+      `${api}/${endpoints.CHANGE_PASS}/${payload.confirm}`,
+      methods.POST,
       payload,
       (response: ConfirmResetPasswordResponse) => {
         this.router.navigate(['/account/confirm']);
@@ -193,7 +195,7 @@ export class UserService {
    *  Update profile (current user)
    */
   public updateProfile(payload: UpdateProfilePayload): Observable<User> {
-    return this.requestHandler.request(`${api}/profile/`, 'put', payload, (response: UpdateProfileResponse) => {
+    return this.requestHandler.request(`${api}/${endpoints.PROFILE}/`, methods.PUT, payload, (response: UpdateProfileResponse) => {
       if (response && response.user) {
         const currentUser = this.loadCurrentUser();
         const newUser = response.user;

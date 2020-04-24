@@ -16,6 +16,8 @@ import { CreateContractorPayload } from '../models/payloads/contractor/create';
 import { UpdateContractorPayload } from '../models/payloads/contractor/update';
 import { DeleteContractorPayload } from '../models/payloads/contractor/delete';
 import { collectDataFromForm } from '../helpers/utility';
+import { endpoints } from '../constants/endpoints';
+import { methods } from '../constants/methods';
 
 const api = environment.api;
 
@@ -71,7 +73,7 @@ export class ContractorService {
    *  Get all users, api returns array of users
    */
   public getAll(): Observable<Contractor[]> {
-    return this.requestHandler.request(`${api}/contractor/`, 'get', null, (response: GetAllContractorsResponse) => {
+    return this.requestHandler.request(`${api}/${endpoints.CONTRACTOR}/`, methods.GET, null, (response: GetAllContractorsResponse) => {
       if (response && response.data) {
         const contractors = response.data;
         this.contractors = contractors;
@@ -85,7 +87,7 @@ export class ContractorService {
    *  Create contractor, api returns single contractor instance
    */
   public create(payload: CreateContractorPayload): Observable<Contractor> {
-    return this.requestHandler.request(`${api}/contractor/`, 'post', payload, (response: CreateContractorResponse) => {
+    return this.requestHandler.request(`${api}/${endpoints.CONTRACTOR}/`, methods.POST, payload, (response: CreateContractorResponse) => {
       if (response && response.contractor) {
         const contractors = this.contractors;
         const contractor = response.contractor;
@@ -101,8 +103,8 @@ export class ContractorService {
    */
   public update(payload: UpdateContractorPayload): Observable<Contractor> {
     return this.requestHandler.request(
-      `${api}/contractor/${payload.id}`,
-      'put',
+      `${api}/${endpoints.CONTRACTOR}/${payload.id}`,
+      methods.PUT,
       payload,
       (response: UpdateContractorResponse) => {
         if (response && response.contractor) {
@@ -120,8 +122,8 @@ export class ContractorService {
    */
   public delete(payload: DeleteContractorPayload): Observable<DeleteContractorPayload> {
     return this.requestHandler.request(
-      `${api}/contractor/${payload.id}`,
-      'delete',
+      `${api}/${endpoints.CONTRACTOR}/${payload.id}`,
+      methods.DELETE,
       null,
       (response: DeleteContractorResponse) => {
         if (response) {
