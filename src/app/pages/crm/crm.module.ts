@@ -14,7 +14,7 @@ import {
   NgbPopoverModule,
   NgbProgressbarModule,
   NgbTooltipModule,
-  NgbTypeaheadModule,
+  NgbTypeaheadModule
 } from '@ng-bootstrap/ng-bootstrap';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
@@ -33,9 +33,12 @@ import { NgxMaskModule } from 'ngx-mask';
 import { NestableModule } from 'ngx-nestable';
 import { SharedModule } from '../../shared/shared.module';
 import { ProjectsComponent } from './projects/projects.component';
+import { ReportsComponent } from './reports/reports.component';
+import { ContractorsCost } from '../../shared/pipes/contractors-cost';
+import { ContractorsNames } from '../../shared/pipes/contractors-names';
 
 @NgModule({
-  declarations: [ContractorsComponent, UsersComponent, BurstNewsComponent, ProjectsComponent],
+  declarations: [ContractorsComponent, UsersComponent, BurstNewsComponent, ProjectsComponent, ReportsComponent, ContractorsCost, ContractorsNames],
   imports: [
     FormsModule,
     UIModule,
@@ -62,7 +65,8 @@ import { ProjectsComponent } from './projects/projects.component';
     NgbPopoverModule,
     SharedModule,
     NgbProgressbarModule,
-    NgbTooltipModule,
-  ],
+    NgbTooltipModule
+  ]
 })
-export class CRMModule {}
+export class CRMModule {
+}

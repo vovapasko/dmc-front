@@ -6,6 +6,7 @@ import { ContractorsComponent } from './contractors/contractors.component';
 import { BurstNewsComponent } from './burst-news/burst-news.component';
 import { ProjectsComponent } from './projects/projects.component';
 import { urls } from '../../core/constants/urls';
+import { ReportsComponent } from './reports/reports.component';
 
 const routes: Routes = [
   {
@@ -23,6 +24,10 @@ const routes: Routes = [
   {
     path: urls.PROJECTS,
     component: ProjectsComponent,
+  },
+  {
+    path: urls.REPORTS,
+    component: ReportsComponent,
   },
 ];
 

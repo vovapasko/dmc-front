@@ -1,6 +1,7 @@
 export const urls = {
   CRM: 'crm',
   BURST_NEWS: 'burst-news',
+  REPORTS: 'reports',
   USERS: 'users',
   CONTRACTORS: 'contractors',
   PROJECTS: 'projects',
