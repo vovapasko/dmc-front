@@ -47,7 +47,7 @@ describe('NewsService', () => {
         expect(response).toBeTruthy();
       });
 
-      const req = httpMock.expectOne(`${api}/news-projects/`);
+      const req = httpMock.expectOne(`${api}/manage-news-projects/`);
       expect(req.request.method).toBe('POST');
       req.flush({
         project: mockProject,
@@ -62,7 +62,7 @@ describe('NewsService', () => {
         expect(response).toBeTruthy();
       });
 
-      const req = httpMock.expectOne(`${api}/news-projects/${mockPayload.id}`);
+      const req = httpMock.expectOne(`${api}/manage-news-projects/${mockPayload.id}`);
       expect(req.request.method).toBe('GET');
       req.flush({
         project: mockProject,
