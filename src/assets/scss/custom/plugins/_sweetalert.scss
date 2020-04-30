@@ -1,7 +1,7 @@
 //
 // sweetalert.scss
 //
-@import "sweetalert2/src/sweetalert2.scss";
+@import 'sweetalert2/src/sweetalert2.scss';
 
 .swal2-modal {
   font-family: $font-family-base;
@@ -57,8 +57,8 @@
   border-color: $success;
 
   .line,
-  [class^="swal2-success-line"][class$="long"],
-  [class^="swal2-success-line"] {
+  [class^='swal2-success-line'][class$='long'],
+  [class^='swal2-success-line'] {
     background-color: $success !important;
   }
 

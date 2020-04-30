@@ -16,12 +16,10 @@ import { FormRoutingModule } from './form-routing.module';
 
 import { UIModule } from '../../shared/ui/ui.module';
 
-import { ImagecropComponent } from './imagecrop/imagecrop.component';
-import {ValidationComponent} from './validation/validation.component';
+import { ValidationComponent } from './validation/validation.component';
 
 @NgModule({
-  // tslint:disable-next-line: max-line-length
-  declarations: [ImagecropComponent, ValidationComponent],
+  declarations: [ValidationComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -37,7 +35,7 @@ import {ValidationComponent} from './validation/validation.component';
     FileUploadModule,
     ArchwizardModule,
     NgSelectModule,
-    NgxMaskModule.forRoot()
-  ]
+    NgxMaskModule.forRoot(),
+  ],
 })
-export class FormModule { }
+export class FormModule {}

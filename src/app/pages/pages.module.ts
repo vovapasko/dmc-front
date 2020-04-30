@@ -11,14 +11,6 @@ import { PagesRoutingModule } from './pages-routing.module';
 
 @NgModule({
   declarations: [],
-  imports: [
-    CommonModule,
-    NgbDropdownModule,
-    DashboardsModule,
-    ExtrasModule,
-    FormModule,
-    CRMModule,
-    PagesRoutingModule,
-  ]
+  imports: [CommonModule, NgbDropdownModule, DashboardsModule, ExtrasModule, FormModule, CRMModule, PagesRoutingModule],
 })
-export class PagesModule { }
+export class PagesModule {}

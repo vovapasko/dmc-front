@@ -1,100 +1,105 @@
-import {Component, OnInit, AfterViewInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {first} from 'rxjs/operators';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
+import { Store } from '@ngrx/store';
+import { Subject } from 'rxjs';
 
-import {AuthenticationService} from '../../../core/services/auth.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Title} from '@angular/platform-browser';
-import {NotificationService} from '../../../core/services/notification.service';
+import { AuthenticationService } from '../../../core/services/auth.service';
+import { IAppState } from '../../../core/store/state/app.state';
+import { Login } from '../../../core/store/actions/user.actions';
+import { ErrorService } from '../../../core/services/error.service';
+import { LoadingService } from '../../../core/services/loading.service';
+import { setAuthClasses } from '../../../core/helpers/utility';
+import { LoginPayload } from '../../../core/models/payloads/auth/login';
+import { ServerError } from '../../../core/models/responses/server/error';
+
+/**
+ * This component for login user in crm
+ */
 
 @Component({
-    selector: 'app-login',
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.scss']
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit, AfterViewInit {
+  title = 'Login';
+  loginForm: FormGroup;
+  submitted = false;
+  loading$: Subject<boolean>;
+  error$: Subject<ServerError>;
+  visible = false;
 
-    title = 'Login';
-    loginForm: FormGroup;
-    submitted = false;
-    returnUrl: string;
-    error = '';
-    loading = false;
-    visible = false;
+  constructor(
+    private formBuilder: FormBuilder,
+    private authenticationService: AuthenticationService,
+    private titleService: Title,
+    private store: Store<IAppState>,
+    private errorService: ErrorService,
+    private loadingService: LoadingService
+  ) {
+  }
 
-    constructor(
-        private formBuilder: FormBuilder,
-        private route: ActivatedRoute,
-        private router: Router,
-        private authenticationService: AuthenticationService,
-        private titleService: Title,
-    ) {
+  ngOnInit() {
+    this.initForm();
+    this.initSubscriptions();
+    this.setTitle(this.title);
+    this.authenticationService.logout();
+  }
+
+  /**
+   * Set loading and error subscriptions
+   */
+  private initSubscriptions(): void {
+    this.loading$ = this.loadingService.loading$;
+    this.error$ = this.errorService.error$;
+  }
+
+  /**
+   * Init form with validators
+   */
+  private initForm(): void {
+    this.loginForm = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required]
+    });
+  }
+
+  /**
+   * Set page title
+   */
+  public setTitle(title: string): void {
+    this.titleService.setTitle(title);
+  }
+
+  /**
+   * Add global css auth classes
+   */
+  ngAfterViewInit() {
+    setAuthClasses();
+  }
+
+  // convenience getter for easy access to form fields
+  get f() {
+    return this.loginForm.controls;
+  }
+
+  /**
+   * Login user with credentials (login and password)
+   */
+  public onSubmit(): void {
+    this.submitted = true;
+    if (this.loginForm.valid) {
+      const { email, password } = this.f;
+      const data = { email: email.value, password: password.value };
+      this.submit({ data });
     }
+  }
 
-    ngOnInit() {
-        this.loginForm = this.formBuilder.group({
-            email: ['', [Validators.required, Validators.email]],
-            password: ['', Validators.required],
-        });
-
-        // reset login status
-        this.authenticationService.logout();
-
-        // get return url from route parameters or default to '/'
-        // tslint:disable-next-line: no-string-literal
-        this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-
-        // set page title
-        this.setTitle(this.title);
-    }
-
-    public setTitle(title: string) {
-        this.titleService.setTitle(title);
-    }
-
-    ngAfterViewInit() {
-        document.body.classList.add('authentication-bg');
-        document.body.classList.add('authentication-bg-pattern');
-    }
-
-    // convenience getter for easy access to form fields
-    get f() {
-        return this.loginForm.controls;
-    }
-
-    /**
-     * Login user with credentials (login and password)
-     */
-    onSubmit() {
-        this.submitted = true;
-
-        // stop here if form is invalid
-        if (this.loginForm.invalid) {
-            return;
-        }
-
-        this.loading = true;
-        const email = this.f.email.value;
-        const password = this.f.password.value;
-        const data = {email, password};
-
-        this.submit(data);
-    }
-
-    /**
-     * Submit data
-     */
-    submit(data) {
-        this.authenticationService
-            .login({data})
-            .pipe(first())
-            .subscribe(
-                response => {
-                    this.router.navigate([this.returnUrl]);
-                },
-                error => {
-                    this.error = error;
-                    this.loading = false;
-                });
-    }
+  /**
+   * Dispatch data
+   */
+  private submit(payload: LoginPayload): void {
+    this.store.dispatch(new Login(payload));
+  }
 }

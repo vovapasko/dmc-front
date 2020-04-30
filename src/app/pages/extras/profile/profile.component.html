@@ -1,103 +1,135 @@
 <div class="container-fluid">
+  <app-page-title title="Профиль" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+  <div class="row">
+    <div class="col-lg-4 col-xl-4">
+      <div class="card-box text-center">
+        <label for="inputImage">
+          <input
+            type="file"
+            class="sr-only"
+            id="inputImage"
+            alife-file-to-base64
+            (onFileChanged)="onFileChanges($event)"
+            [(rawFileModel)]="avatar"
+          />
 
-    <div class="row">
-        <div class="col-lg-4 col-xl-4">
-            <div class="card-box text-center">
-                <a routerLink="/image-crop" id="image-crop-link">
-                    <img [src]="api + currentUser.avatar" class="rounded-circle avatar-xl img-thumbnail"
-                         alt="profile-image">
+          <img
+            [src]="avatarBase64 || (user$ | async).avatar"
+            class="rounded-circle avatar-xl img-thumbnail"
+            alt="profile-image"
+          />
+        </label>
 
-                </a>
+        <h4 class="mb-0">{{ (user$ | async).firstName }} {{ (user$ | async).lastName }}</h4>
+        <p *ngIf="(user$ | async).isSuperuser" class="text-muted">@Superuser</p>
 
-                <h4 class="mb-0">{{currentUser.first_name}} {{currentUser.last_name}}</h4>
-                <p *ngIf="currentUser.is_superuser" class="text-muted">@Superuser</p>
+        <div class="text-left mt-3">
+          <h4 class="font-13 text-uppercase">Обо мнe :</h4>
+          <p class="text-muted mb-2 font-13">
+            <strong>Полное имя :</strong>
+            <span class="ml-2">{{ (user$ | async).firstName }} {{ (user$ | async).lastName }}</span>
+          </p>
 
-                <div class="text-left mt-3">
-                    <h4 class="font-13 text-uppercase">Обо мнe :</h4>
-                    <p class="text-muted mb-2 font-13"><strong>Полное имя :</strong> <span class="ml-2">{{currentUser.first_name}} {{currentUser.last_name}}</span></p>
+          <p class="text-muted mb-2 font-13">
+            <strong>Дата регистрации :</strong
+            ><span class="ml-2">
+              {{ (user$ | async).dateJoined | date: 'medium' }}
+            </span>
+          </p>
 
-                    <p class="text-muted mb-2 font-13"><strong>Дата регистрации :</strong><span class="ml-2">
-                        {{currentUser.date_joined | date:'medium'}}
-                    </span></p>
+          <p class="text-muted mb-2 font-13">
+            <strong>Последние обновления :</strong
+            ><span class="ml-2">
+              {{ (user$ | async).dateUpdated | date: 'medium' }}
+            </span>
+          </p>
 
-                    <p class="text-muted mb-2 font-13"><strong>Последние обновления :</strong><span class="ml-2">
-                        {{currentUser.date_updated | date:'medium'}}
-                    </span></p>
-
-                    <p class="text-muted mb-2 font-13"><strong>Email :</strong> <span class="ml-2 ">
-                        {{currentUser.email}}
-                    </span></p>
-
-                </div>
-
-            </div> <!-- end card-box -->
-
+          <p class="text-muted mb-2 font-13">
+            <strong>Email :</strong>
+            <span class="ml-2">
+              {{ (user$ | async).email }}
+            </span>
+          </p>
         </div>
-
-        <div class="col-lg-8 col-xl-8">
-            <div class="card-box">
-
-                <div class="tab-pane" id="settings">
-
-                    <form name="profileForm" [formGroup]="profileForm" (ngSubmit)="onSubmit()">
-                        <h5 class="mb-3 text-uppercase bg-light p-2"><i
-                                class="mdi mdi-account-circle mr-1"></i>
-                            Персональная информация</h5>
-
-                        <app-ui-preloader [display]="loading"></app-ui-preloader>
-                        <ngb-alert type="danger" *ngIf="error" [dismissible]="false">Пожалуйста, повторите попытку</ngb-alert>
-
-
-                        <div class="form-group">
-                            <label for="last-name">Ваше имя</label>
-
-                            <input type="text" formControlName="firstName" class="form-control"
-                                   [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" id="first-name" placeholder="Введите ваше имя" />
-
-                            <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
-                                <div *ngIf="f.firstName.errors.required">Имя обязательно</div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="last-name">Ваша фамилия</label>
-
-                            <input type="text" formControlName="lastName" class="form-control"
-                                   [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }" id="last-name" placeholder="Введите вашу фамилию" />
-
-                            <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
-                                <div *ngIf="f.lastName.errors.required">Фамилия обязательна</div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email"
-                                   formControlName="email"
-                                   class="form-control"
-                                   id="email"
-                                   placeholder="Email"
-                                   [readonly]="true"
-                            />
-                        </div>
-
-                        <div class="form-group">
-                            <span class="form-text text-muted"><small> Нажмите здесь чтобы изменить <a
-                                    href="javascript: void(0);" (click)="changePassword()">пароль</a></small></span>
-                        </div>
-
-
-                        <div class="text-right">
-                            <button type="submit"
-                                    class="btn btn-success mt-2"><i
-                                    class="mdi mdi-content-save"></i> Сохранить
-                            </button>
-                        </div>
-                    </form>
-                </div>
-                <!-- end settings content-->
-
-            </div>
-        </div>
+      </div>
+      <!-- end card-box -->
     </div>
+
+    <div class="col-lg-8 col-xl-8">
+      <div class="card-box">
+        <div class="tab-pane" id="settings">
+          <form name="profileForm" [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+            <h5 class="mb-3 text-uppercase bg-light p-2">
+              <i class="mdi mdi-account-circle mr-1"></i> Персональная информация
+            </h5>
+
+            <app-ui-preloader [display]="loading$ | async"></app-ui-preloader>
+            <ngb-alert type="danger" *ngIf="error$ | async" [dismissible]="false">
+              Пожалуйста, повторите попытку
+            </ngb-alert>
+
+            <div class="form-group">
+              <label for="first-name">Ваше имя</label>
+
+              <input
+                type="text"
+                formControlName="firstName"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }"
+                id="first-name"
+                placeholder="Введите ваше имя"
+              />
+
+              <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
+                <div *ngIf="f.firstName.errors.required">Имя обязательно</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="last-name">Ваша фамилия</label>
+
+              <input
+                type="text"
+                formControlName="lastName"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }"
+                id="last-name"
+                placeholder="Введите вашу фамилию"
+              />
+
+              <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
+                <div *ngIf="f.lastName.errors.required">Фамилия обязательна</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input
+                type="email"
+                formControlName="email"
+                class="form-control"
+                id="email"
+                placeholder="Email"
+                [readonly]="true"
+              />
+            </div>
+
+            <div class="form-group">
+              <span class="form-text text-muted"
+                ><small>
+                  Нажмите здесь чтобы изменить
+                  <a href="javascript: void(0);" (click)="changePassword()">пароль</a></small
+                >
+              </span>
+            </div>
+
+            <div class="text-right">
+              <button type="submit" class="btn btn-success mt-2"><i class="mdi mdi-content-save"></i> Сохранить</button>
+            </div>
+          </form>
+        </div>
+        <!-- end settings content-->
+      </div>
+    </div>
+  </div>
 </div>

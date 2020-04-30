@@ -1,120 +1,161 @@
-import {Component, OnInit, Output, EventEmitter, OnDestroy} from '@angular/core';
-import {Router} from '@angular/router';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
-import {AuthenticationService} from '../../core/services/auth.service';
-import {HttpClient} from '@angular/common/http';
-import {environment} from '../../../environments/environment';
-import {EmptyUser, User} from '../../core/models/instances/user.models';
-import {Notification} from '../../core/models/instances/notification';
-import {Subscription} from 'rxjs';
-import {NotificationService} from '../../core/services/notification.service';
-import {UserService} from '../../core/services/user.service';
+import { AuthenticationService } from '../../core/services/auth.service';
+import { User } from '../../core/models/instances/user.models';
+import { Notification } from '../../core/models/instances/notification';
+import { NotificationService } from '../../core/services/notification.service';
+import { UserService } from '../../core/services/user.service';
+import { FormGroup } from '@angular/forms';
+import { NewsService } from '../../core/services/news.service';
+import { LoadingService } from '../../core/services/loading.service';
+import { ErrorService } from '../../core/services/error.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Store } from '@ngrx/store';
+import { IAppState } from '../../core/store/state/app.state';
+import { CreateFormat, CreateHashtag } from '../../core/store/actions/news.actions';
+import { ServerError } from '../../core/models/responses/server/error';
+
+/**
+ * Top bar component - history, profile bar, logout and create new items
+ */
 
 @Component({
-    selector: 'app-topbar',
-    templateUrl: './topbar.component.html',
-    styleUrls: ['./topbar.component.scss']
+  selector: 'app-topbar',
+  templateUrl: './topbar.component.html',
+  styleUrls: ['./topbar.component.scss'],
 })
-export class TopbarComponent implements OnInit, OnDestroy {
+export class TopbarComponent implements OnInit {
+  notificationHistory$ = new BehaviorSubject<unknown>([]);
+  user$: BehaviorSubject<User>;
+  loading$: Subject<boolean>;
+  error$: Subject<ServerError>;
 
-    notifications: Notification[] = [];
-    private notificationSubscription: Subscription;
-    private userSubscription: Subscription;
-    api = environment.api;
-    currentUser: User = EmptyUser;
-    openMobileMenu: boolean;
+  openMobileMenu: boolean;
+  submitted = false;
 
-    @Output() settingsButtonClicked = new EventEmitter();
-    @Output() mobileMenuButtonClicked = new EventEmitter();
+  createHashtagForm: FormGroup;
+  createFormatForm: FormGroup;
 
-    constructor(
-        private router: Router,
-        private authService: AuthenticationService,
-        private userService: UserService,
-        private http: HttpClient,
-        private notificationService: NotificationService
-    ) {
+  @Output() settingsButtonClicked = new EventEmitter();
+  @Output() mobileMenuButtonClicked = new EventEmitter();
+
+  constructor(
+    private router: Router,
+    private authService: AuthenticationService,
+    private userService: UserService,
+    private http: HttpClient,
+    private notificationService: NotificationService,
+    private newsService: NewsService,
+    private loadingService: LoadingService,
+    private errorService: ErrorService,
+    private modalService: NgbModal,
+    private store: Store<IAppState>
+  ) {}
+
+  ngOnInit() {
+    this.initFormGroups();
+    this.initSubscriptions();
+    this.openMobileMenu = false;
+  }
+
+  initSubscriptions() {
+    this.loading$ = this.loadingService.loading$;
+    this.error$ = this.errorService.error$;
+    this.userService.loadCurrentUser();
+    this.notificationHistory$ = this.notificationService.notificationHistory$;
+    this.user$ = this.userService.user$;
+  }
+
+  initFormGroups() {
+    this.initCreateHashtagForm();
+    this.initCreateFormatForm();
+  }
+
+  initCreateHashtagForm() {
+    this.createHashtagForm = this.newsService.initializeCreateHashtagForm();
+  }
+
+  openModal(content: string) {
+    this.modalService.open(content, { centered: true });
+  }
+
+  initCreateFormatForm() {
+    this.createFormatForm = this.newsService.initializeCreateFormatForm();
+  }
+
+  submitCreateHashtagForm() {
+    const ch = this.ch;
+    const name = ch.name.value;
+    const data = { name };
+    this.submit(this.createHashtagForm, this.createHashtag.bind(this), { data });
+  }
+
+  submit(f: FormGroup, handler, payload) {
+    this.submitted = true;
+    if (f.invalid) {
+      return;
     }
+    handler(payload);
+    this.submitted = false;
+    f.reset();
+    this.modalService.dismissAll();
+  }
 
-    ngOnInit() {
-        // get the notifications
-        this.notificationSubscription = this.notificationService
-            .getObservable()
-            .subscribe(
-                notification => this.addNotification(notification)
-            );
-        // get the user updates
-        this.userSubscription = this.userService
-            .getObservable()
-            .subscribe(
-                user => this.setUser(user)
-            );
+  createHashtag(payload) {
+    this.store.dispatch(new CreateHashtag(payload));
+  }
 
-        // set current user
-        const currentUser = this.authService.currentUser();
-        this.setUser(currentUser);
+  submitCreateFormatForm() {
+    const cf = this.cf;
+    const postFormat = cf.postFormat.value;
+    const data = { postFormat };
+    this.submit(this.createFormatForm, this.createFormat.bind(this), { data });
+  }
 
-        this.openMobileMenu = false;
-    }
+  createFormat(payload) {
+    this.store.dispatch(new CreateFormat(payload));
+  }
 
-    /**
-     * Set current user
-     */
-    setUser(user: User) {
-        if (user) {
-            this.currentUser = user;
-        }
-    }
+  // convenience getter for easy access to form fields
+  get ch() {
+    return this.createHashtagForm.controls;
+  }
 
-    /**
-     * Add new notification to bar and detect if something happens with user
-     */
-    addNotification(notification: Notification) {
-        this.notifications.push(notification);
-    }
+  // convenience getter for easy access to form fields
+  get cf() {
+    return this.createFormatForm.controls;
+  }
 
-    /**
-     * Remove notification from list
-     */
-    close(notification: Notification) {
-        this.notifications = this.notifications.filter(notif => notif.id !== notification.id);
-    }
+  /**
+   * Remove notification from list
+   */
+  close(notification: Notification) {
+    this.notificationService.removeFromHistory(notification);
+  }
 
-    /**
-     * Toggles the right sidebar
-     */
-    toggleRightSidebar() {
-        this.settingsButtonClicked.emit();
-    }
+  /**
+   * Toggle the menu bar when having mobile screen
+   */
+  toggleMobileMenu(event) {
+    event.preventDefault();
+    this.mobileMenuButtonClicked.emit();
+  }
 
-    /**
-     * Toggle the menu bar when having mobile screen
-     */
-    toggleMobileMenu(event: any) {
-        event.preventDefault();
-        this.mobileMenuButtonClicked.emit();
-    }
+  /**
+   * Logout the user
+   */
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/account/login']);
+  }
 
-    /**
-     * Logout the user
-     */
-    logout() {
-        this.authService.logout();
-        this.router.navigate(['/account/login']);
-    }
-
-    /**
-     * Remove all notifications
-     */
-    clearAll() {
-        this.notifications = [];
-    }
-
-    /**
-     * Unsubscribe from all subscriptions
-     */
-    ngOnDestroy() {
-        this.userSubscription.unsubscribe();
-        this.notificationSubscription.unsubscribe();
-    }
+  /**
+   * Remove all notifications
+   */
+  clearAll() {
+    this.notificationService.history = [];
+  }
 }

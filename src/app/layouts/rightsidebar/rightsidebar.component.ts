@@ -7,16 +7,14 @@ import { inboxData } from './data';
 @Component({
   selector: 'app-rightsidebar',
   templateUrl: './rightsidebar.component.html',
-  styleUrls: ['./rightsidebar.component.scss']
+  styleUrls: ['./rightsidebar.component.scss'],
 })
 export class RightsidebarComponent implements OnInit {
-
   inboxData: Inbox[];
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
-
     // Right sidebar inbox data
     this.inboxData = inboxData;
   }
@@ -27,5 +25,4 @@ export class RightsidebarComponent implements OnInit {
   public hide() {
     document.body.classList.remove('right-bar-enabled');
   }
-
 }

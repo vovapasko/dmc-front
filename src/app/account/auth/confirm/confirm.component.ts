@@ -1,37 +1,36 @@
-import {Component, OnInit, AfterViewInit} from '@angular/core';
-import {Title} from '@angular/platform-browser';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+import { setAuthClasses } from '../../../core/helpers/utility';
 
 /**
  * This component informs a user that him password was changed
  */
 
 @Component({
-    selector: 'app-confirm',
-    templateUrl: './confirm.component.html',
-    styleUrls: ['./confirm.component.scss']
+  selector: 'app-confirm',
+  templateUrl: './confirm.component.html',
+  styleUrls: ['./confirm.component.scss'],
 })
 export class ConfirmComponent implements OnInit, AfterViewInit {
+  title = 'Confirm email';
 
-    title = 'Confirm email';
+  constructor(private titleService: Title) {}
 
-    constructor(private titleService: Title) {
-    }
+  ngOnInit() {
+    this.setTitle(this.title);
+  }
 
-    ngOnInit() {
+  /**
+   * Set page title
+   */
+  public setTitle(title: string): void {
+    this.titleService.setTitle(title);
+  }
 
-        // set page title
-        this.setTitle(this.title);
-    }
-
-    /**
-     * Set page title
-     */
-    public setTitle(title: string) {
-        this.titleService.setTitle(title);
-    }
-
-    ngAfterViewInit() {
-        document.body.classList.add('authentication-bg');
-        document.body.classList.add('authentication-bg-pattern');
-    }
+  /**
+   * Add global css auth classes
+   */
+  ngAfterViewInit() {
+    setAuthClasses();
+  }
 }

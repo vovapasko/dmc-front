@@ -1,4 +1,4 @@
-// 
+//
 // progress.scss
 //
 
@@ -9,12 +9,10 @@
   height: 5px;
 }
 
-
 // Progress height medium
 .progress-md {
   height: 8px;
 }
-
 
 // Progress height large
 .progress-lg {
@@ -25,7 +23,6 @@
 .progress-xl {
   height: 15px;
 }
-
 
 /* Progressbar Vertical */
 .progress-vertical {
@@ -54,7 +51,7 @@
     width: 5px;
   }
 }
-.progress-vertical-bottom{
+.progress-vertical-bottom {
   min-height: 250px;
   height: 250px;
   position: relative;

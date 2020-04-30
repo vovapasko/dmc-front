@@ -1,114 +1,231 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import {Observable, throwError} from 'rxjs';
-import {map} from 'rxjs/operators';
-import {environment} from '../../../environments/environment';
-import {User} from '../models/instances/user.models';
-import {HomeResponse} from '../models/responses/user/homeResponse';
-import {NotificationService} from './notification.service';
-import {Contractor} from '../models/instances/contractor';
-import {DeleteContractorResponse} from '../models/responses/contractor/deleteContractorResponse';
-import {UpdateContractorResponse} from '../models/responses/contractor/updateContractorResponse';
-import {CreateContractorResponse} from '../models/responses/contractor/createContractorResponse';
-import {GetAllContractorsResponse} from '../models/responses/contractor/getAllContractorsResponse';
+import { environment } from '../../../environments/environment';
+import { Contractor } from '../models/instances/contractor';
+import { DeleteContractorResponse } from '../models/responses/contractor/delete';
+import { UpdateContractorResponse } from '../models/responses/contractor/update';
+import { CreateContractorResponse } from '../models/responses/contractor/create';
+import { GetAllContractorsResponse } from '../models/responses/contractor/get-all';
+import { RequestHandler } from '../helpers/request-handler';
+import numbers from '../constants/numbers';
+import { PaginationService } from './pagination.service';
+import { CreateContractorPayload } from '../models/payloads/contractor/create';
+import { UpdateContractorPayload } from '../models/payloads/contractor/update';
+import { DeleteContractorPayload } from '../models/payloads/contractor/delete';
+import { collectDataFromForm } from '../helpers/utility';
+import { endpoints } from '../constants/endpoints';
+import { methods } from '../constants/methods';
 
 const api = environment.api;
 
-@Injectable({providedIn: 'root'})
+/**
+ * This service for handle actions with contractors, store, pagination, CRUD
+ */
+
+@Injectable({
+  providedIn: 'root',
+})
 export class ContractorService {
-    constructor(private http: HttpClient, private notificationService: NotificationService) {
-    }
+  selectedContractor$: BehaviorSubject<Contractor> = new BehaviorSubject(null);
+  checkedContractors$: BehaviorSubject<Array<Contractor>> = new BehaviorSubject([]);
+  contractors$: BehaviorSubject<Array<Contractor>> = new BehaviorSubject([]);
+  paginatedContractorData$: BehaviorSubject<Array<Contractor>> = new BehaviorSubject([]);
 
-    /**
-     *  Get all users, api returns array of users
-     */
-    getAll(): Observable<Contractor[]> {
-        return this.http
-            .get(`${api}/contractor/`)
-            .pipe(
-                map(
-                    (response: GetAllContractorsResponse ) => response.data
-                )
-            );
-    }
+  constructor(
+    private http: HttpClient,
+    private requestHandler: RequestHandler,
+    public formBuilder: FormBuilder,
+    private paginationService: PaginationService
+  ) {}
 
-    /**
-     *  Get user by id, api returns single user instance
-     */
-    getById(id: string): Observable<User> {
-        return this.http.get<User>(`${api}/contractor/${id}`);
-    }
+  get selectedContractor() {
+    return this.selectedContractor$.getValue();
+  }
 
-    /**
-     *  Create contractor, api returns single contractor instance
-     */
-    create(payload): Observable<Contractor> {
-        return this.http
-            .post(`${api}/contractor/`, payload.data)
-            .pipe(
-                map(
-                    (response: CreateContractorResponse) => {
-                        // notify success
-                        this.notifySuccess(response);
+  set selectedContractor(value: Contractor) {
+    this.selectedContractor$.next(value);
+  }
 
-                        // returns created contractor
-                        return response.contractor;
-                    }
-                )
-            );
-    }
+  get checkedContractors() {
+    return this.checkedContractors$.getValue();
+  }
 
-    /**
-     *  Update contractor by id, api returns single contractor instance
-     */
-    update(payload): Observable<Contractor> {
-        return this.http
-            .put(`${api}/contractor/${payload.id}`, payload.data)
-            .pipe(
-                map(
-                    (response: UpdateContractorResponse) => {
-                        // notify success
-                        this.notifySuccess(response);
+  set checkedContractors(value: Array<Contractor>) {
+    this.checkedContractors$.next(value);
+  }
 
-                        // returns created contractor
-                        return response.contractor;
-                    }
-                )
-            );
-    }
+  get contractors() {
+    return this.contractors$.getValue();
+  }
 
-    /**
-     *  Delete contractor by id, api returns status
-     */
-    delete(payload): Observable<boolean> {
-        return this.http
-            .delete(`${api}/contractor/${payload.id}`)
-            .pipe(
-                map(
-                    (response: DeleteContractorResponse) => this.handleResponse(response)
-                )
-            );
-    }
+  set contractors(value: Array<Contractor>) {
+    this.contractors$.next(value);
+  }
 
-    /**
-     *  Handle successful response
-     */
-    private handleResponse(response) {
-        // notify about success
-        this.notifySuccess(response);
+  set paginatedContractorData(value: Array<Contractor>) {
+    this.paginatedContractorData$.next(value);
+  }
 
-        // returns successful
-        return response.success;
-    }
+  /**
+   *  Get all users, api returns array of users
+   */
+  public getAll(): Observable<Contractor[]> {
+    return this.requestHandler.request(`${api}/${endpoints.CONTRACTOR}/`, methods.GET, null, (response: GetAllContractorsResponse) => {
+      if (response && response.data) {
+        const contractors = response.data;
+        this.contractors = contractors;
+        this.applyPagination();
+        return contractors;
+      }
+    });
+  }
 
-    /**
-     *  Notify user about successful response
-     */
-    private notifySuccess(response) {
-        if (response.success) {
-            return this.notificationService.success('Successful', response.message.message);
+  /**
+   *  Create contractor, api returns single contractor instance
+   */
+  public create(payload: CreateContractorPayload): Observable<Contractor> {
+    return this.requestHandler.request(`${api}/${endpoints.CONTRACTOR}/`, methods.POST, payload, (response: CreateContractorResponse) => {
+      if (response && response.contractor) {
+        const contractors = this.contractors;
+        const contractor = response.contractor;
+        this.contractors = [...contractors, contractor];
+        this.applyPagination();
+        return contractor;
+      }
+    });
+  }
+
+  /**
+   *  Update contractor by id, api returns single contractor instance
+   */
+  public update(payload: UpdateContractorPayload): Observable<Contractor> {
+    return this.requestHandler.request(
+      `${api}/${endpoints.CONTRACTOR}/${payload.id}`,
+      methods.PUT,
+      payload,
+      (response: UpdateContractorResponse) => {
+        if (response && response.contractor) {
+          const contractor = response.contractor;
+          this.contractors = this.contractors.map((el) => (+el.id === +contractor.id ? contractor : el));
+          this.applyPagination();
+          return contractor;
         }
-        return null;
+      }
+    );
+  }
+
+  /**
+   *  Delete contractor by id, api returns status
+   */
+  public delete(payload: DeleteContractorPayload): Observable<DeleteContractorPayload> {
+    return this.requestHandler.request(
+      `${api}/${endpoints.CONTRACTOR}/${payload.id}`,
+      methods.DELETE,
+      null,
+      (response: DeleteContractorResponse) => {
+        if (response) {
+          const contractors = this.contractors;
+          this.contractors = contractors.filter((el) => +el.id !== +payload.id);
+          this.applyPagination();
+          return payload;
+        }
+      }
+    );
+  }
+
+  /**
+   * Collect and returns data for creating or editing contractor
+   */
+  public createContractorData(
+    f: { [p: string]: AbstractControl },
+    defaultFields: Array<object> = []
+  ): { [p: string]: string | number | null | object } {
+    return collectDataFromForm(f, defaultFields);
+  }
+
+  /**
+   * Mark as checked all contractors
+   */
+  public checkAll(): void {
+    const contractors = this.contractors;
+    const checkedContractors = this.checkedContractors;
+    const checkedAll = checkedContractors.length === contractors.length;
+    if (checkedAll) {
+      this.checkedContractors = [];
+    } else {
+      this.checkedContractors = contractors;
     }
+  }
+
+  /**
+   * Mark contractor as check
+   */
+  public check(contractor: Contractor): void {
+    const checkedContractors = this.checkedContractors;
+    const checked = checkedContractors.indexOf(contractor) !== -1;
+    if (checked) {
+      this.checkedContractors = checkedContractors.filter((el) => el.id !== contractor.id);
+    } else {
+      this.checkedContractors = [...checkedContractors, contractor];
+    }
+  }
+
+  /**
+   * Validators for Create Form
+   */
+  public initializeCreateForm(): FormGroup {
+    return this.formBuilder.group({
+      editorName: ['', [Validators.required, Validators.minLength(1)]],
+      contactPerson: ['', [Validators.required, Validators.minLength(1)]],
+      phoneNumber: ['', [Validators.required, Validators.pattern('^\\+?3?8?(0\\d{9})$')]],
+      email: [
+        '',
+        [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$')],
+        // [this.isEmailUnique.bind(this), this.isEmailValid.bind(this)]
+      ],
+      arrangedNews: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
+      onePostPrice: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
+    });
+  }
+
+  /**
+   * Validators for Update Form
+   */
+  public initializeUpdateForm(): FormGroup {
+    return this.formBuilder.group({
+      updateEditorName: ['', [Validators.required, Validators.minLength(1)]],
+      updateContactPerson: ['', [Validators.required, Validators.minLength(1)]],
+      updatePhoneNumber: ['', [Validators.required, Validators.pattern('^\\+?3?8?(0\\d{9})$')]],
+      updateEmail: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$')]],
+      updateArrangedNews: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
+      updateOnePostPrice: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
+      updateNewsAmount: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
+    });
+  }
+
+  /**
+   * Select contractor to show details
+   */
+  public selectContractor(contractor: Contractor): Observable<Contractor> {
+    this.selectedContractor = contractor;
+    return of(contractor);
+  }
+
+  public applyPagination(): void {
+    const { paginationService, contractors } = this;
+    paginationService.totalRecords = contractors;
+    paginationService.applyPagination();
+    // @ts-ignore
+    this.paginatedContractorData = paginationService.paginatedData;
+  }
+
+  public onPageChange(page: number): void {
+    const { paginationService } = this;
+    paginationService.onPageChange(page);
+    // @ts-ignore
+    this.paginatedContractorData = paginationService.paginatedData;
+  }
 }

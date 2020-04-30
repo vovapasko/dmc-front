@@ -1,168 +1,251 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import {Observable, Subject, throwError} from 'rxjs';
-import {map} from 'rxjs/operators';
-import {environment} from '../../../environments/environment';
-import {AuthenticationService} from './auth.service';
-import {User} from '../models/instances/user.models';
-import {SignupResponse} from '../models/responses/user/signupResponse';
-import {RegisterResponse} from '../models/responses/user/registerResponse';
-import {ResetPasswordResponse} from '../models/responses/user/resetPasswordResponse';
-import {ConfirmResetPasswordResponse} from '../models/responses/user/confirmResetPasswordResponse';
-import {UpdateProfileResponse} from '../models/responses/user/updateProfileResponse';
-import {HomeResponse} from '../models/responses/user/homeResponse';
-import {NotificationService} from './notification.service';
+import { environment } from '../../../environments/environment';
+import { User } from '../models/instances/user.models';
+import { SignupResponse } from '../models/responses/user/signup';
+import { RegisterResponse } from '../models/responses/user/register';
+import { ResetPassword } from '../models/responses/user/reset-password';
+import { ConfirmResetPasswordResponse } from '../models/responses/user/confirm-reset-password';
+import { UpdateProfileResponse } from '../models/responses/user/update-profile';
+import { GetAllResponse } from '../models/responses/user/get-all';
+import { RequestHandler } from '../helpers/request-handler';
+import { CookieService } from '../providers/cookie.service';
+import { CURRENT_USER } from '../constants/user';
+import { PaginationService } from './pagination.service';
+import { SignupPayload } from '../models/payloads/user/signup';
+import { DeleteResponse } from '../models/responses/user/delete';
+import { UpdateResponse } from '../models/responses/user/update';
+import { RegisterPayload } from '../models/payloads/user/register';
+import { DeleteUserPayload } from '../models/payloads/user/delete';
+import { UpdatePayload } from '../models/payloads/user/update';
+import { UpdateProfilePayload } from '../models/payloads/user/update-profile';
+import { ConfirmResetPasswordPayload } from '../models/payloads/user/confirm-reset-password';
+import { ManageGroups } from '../models/instances/groups';
+import { endpoints } from '../constants/endpoints';
+import { methods } from '../constants/methods';
 
 const api = environment.api;
 
-@Injectable({providedIn: 'root'})
+/**
+ * This service for handle actions with user, store, pagination, CRUD
+ */
+
+@Injectable({ providedIn: 'root' })
 export class UserService {
+  public user$ = new BehaviorSubject(null);
 
-    private subject = new Subject<User>();
+  selectedUser$: BehaviorSubject<User> = new BehaviorSubject(null);
+  users$: BehaviorSubject<Array<User>> = new BehaviorSubject([]);
+  paginatedUserData$: BehaviorSubject<Array<User>> = new BehaviorSubject([]);
 
+  constructor(
+    private http: HttpClient,
+    private requestHandler: RequestHandler,
+    public formBuilder: FormBuilder,
+    private paginationService: PaginationService,
+    private cookieService: CookieService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
-    constructor(private http: HttpClient, private authService: AuthenticationService, private notificationService: NotificationService) {
-    }
+  set selectedUser(value: User) {
+    this.selectedUser$.next(value);
+  }
 
+  get users() {
+    return this.users$.getValue();
+  }
 
-    /**
-     * Returns observable for subscribe
-     */
-    getObservable(): Observable<User> {
-        return this.subject.asObservable();
-    }
+  set users(value: Array<User>) {
+    this.users$.next(value);
+  }
 
-    /**
-     *  Get all users, api returns array of users
-     */
-    getAll(): Observable<User[]> {
-        return this.http
-            .get(`${api}/home/`)
-            .pipe(
-                map(
-                    (response: HomeResponse) => response.data
-                )
-            );
-    }
+  set paginatedUserData(value: Array<User>) {
+    this.paginatedUserData$.next(value);
+  }
 
-    /**
-     *  Get user by id, api returns single user instance
-     */
-    getById(id: string): Observable<User> {
-        return this.http.get<User>(`${api}/users/${id}`);
-    }
+  set user(user: User) {
+    this.user$.next(user);
+    this.cookieService.setCookie(CURRENT_USER, JSON.stringify(user), 1);
+  }
 
-    /**
-     *  Sign up aka confirm-user
-     */
-    signup(payload): Observable<User> {
-        return this.http
-            .post(`${api}/confirm-user/${payload.invite}`, payload.data)
-            .pipe(
-                map(
-                    (response: SignupResponse) => {
-                        const currentUser = {...response.user, token: response.token};
-                        this.authService.setUser(currentUser);
-                        this.subject.next(currentUser);
-                        return currentUser;
-                    }
-                ));
-    }
+  get user() {
+    return this.user$.getValue();
+  }
 
-    /**
-     *  Register new user aka invite user
-     */
-    register(payload): Observable<boolean> {
-        return this.http
-            .post(`${api}/invite-new-user/`, payload.data)
-            .pipe(
-                map(
-                    (response: RegisterResponse) => this.handleResponse(response)
-                )
-            );
-    }
+  /**
+   *  Get all users, api returns array of users
+   */
+  public getAll(): Observable<User[]> {
+    return this.requestHandler.request(`${api}/${endpoints.USERS}/`, methods.GET, null, (response: GetAllResponse) => {
+      if (response && response.data) {
+        const users = response.data;
+        this.users = users;
+        this.applyPagination();
+        return users;
+      }
+    });
+  }
 
-    /**
-     *  Get link for reset password on email
-     */
-    resetPassword(): Observable<boolean> {
-        return this.http
-            .get(`${api}/change-password-confirm/`)
-            .pipe(
-                map(
-                    (response: ResetPasswordResponse) => this.handleResponse(response)
-                )
-            );
-    }
-
-    /**
-     *  Change password
-     */
-    confirmResetPassword(payload): Observable<boolean> {
-        return this.http
-            .post(`${api}/change-pass/${payload.confirm}`, payload.data)
-            .pipe(
-                map(
-                    (response: ConfirmResetPasswordResponse) => this.handleResponse(response))
-            );
-    }
-
-    /**
-     *  Update profile (current user)
-     */
-    updateProfile(payload) {
-        return this.http
-            .put(`${api}/profile/`, payload.data)
-            .pipe(
-                map(
-                    (response: UpdateProfileResponse) => {
-
-                        // notify about success
-                        this.notifySuccess(response);
-
-                        // returns updated user and store in cookies
-                        const currentUser = this.authService.currentUser();
-                        const newUser = response.user;
-                        const user = {...currentUser, ...newUser};
-                        this.authService.setUser(user);
-                        this.subject.next(user);
-
-                        return user;
-                    }
-                )
-            );
-    }
-
-    /**
-     *  Checks if email already registered
-     */
-    isEmailRegisterd(payload) {
-        return this.http.get(`${api}/email-registered/${payload.email}`)
-    }
-
-    isEmailValid(payload) {
-        return this.http.get(`${api}/email-exists/${payload.email}`);
-    }
-
-    /**
-     *  Handle successful response
-     */
-    private handleResponse(response) {
-        // notify about success
-        this.notifySuccess(response);
-
-        // returns successful
-        return response.success;
-    }
-
-    /**
-     *  Notify user about successful response
-     */
-    private notifySuccess(response) {
-        if (response.success) {
-            return this.notificationService.success('Successful', response.message.message);
+  /**
+   *  Sign up aka confirm-user
+   */
+  public signup(payload: SignupPayload): Observable<User> {
+    return this.requestHandler.request(
+      `${api}/${endpoints.CONFIRM_USER}/${payload.invite}`,
+      methods.POST,
+      payload,
+      (response: SignupResponse) => {
+        if (response && response.user) {
+          this.user = { ...response.user, token: response.token };
+          this.router.navigate(['/profile']);
+          return this.user;
         }
-        return null;
+      }
+    );
+  }
+
+  /**
+   * Returns the current user
+   */
+  public loadCurrentUser(): User {
+    if (!this.user) {
+      this.user = JSON.parse(this.cookieService.getCookie(CURRENT_USER));
     }
+    return this.user;
+  }
+
+  /**
+   *  Register new user aka invite user
+   */
+  public register(payload: RegisterPayload): Observable<User> {
+    return this.requestHandler.request(`${api}/${endpoints.INVITE_NEW_USER}/`, methods.POST, payload, (response: RegisterResponse) => {
+      if (response && response.user) {
+        const user = response.user;
+        const users = this.users;
+        this.users = [...users, user];
+        this.applyPagination();
+        return response.user;
+      }
+    });
+  }
+
+  /**
+   *  Delete user
+   */
+  public delete(payload: DeleteUserPayload): Observable<DeleteUserPayload> {
+    return this.requestHandler.request(`${api}/${endpoints.USERS}/${payload.id}`, methods.DELETE, payload, (response: DeleteResponse) => {
+      const users = this.users;
+      this.users = users.filter((el) => +el.id !== +payload.id);
+      this.applyPagination();
+      return payload;
+    });
+  }
+
+  /**
+   *  Delete user
+   */
+  public update(payload: UpdatePayload): Observable<User> {
+    return this.requestHandler.request(
+      `${api}/${endpoints.CHANGE_GROUP}/${payload.id}`,
+      methods.PUT,
+      payload,
+      (response: UpdateResponse) => {
+        if (response.message.user) {
+          const user = response.message.user;
+          this.users = this.users.map((el) => (+el.id === +payload.id ? user : el));
+          this.applyPagination();
+          return user;
+        }
+      }
+    );
+  }
+
+  /**
+   *  Get link for reset password on email
+   */
+  public resetPassword(): Observable<boolean> {
+    return this.requestHandler.request(`${api}/${endpoints.CHANGE_PASSWORD_CONFIRM}/`, methods.GET, null, (response: ResetPassword) => {
+      if (response) {
+        return response.success;
+      }
+    });
+  }
+
+  /**
+   *  Change password
+   */
+  public confirmResetPassword(payload: ConfirmResetPasswordPayload): Observable<boolean> {
+    return this.requestHandler.request(
+      `${api}/${endpoints.CHANGE_PASS}/${payload.confirm}`,
+      methods.POST,
+      payload,
+      (response: ConfirmResetPasswordResponse) => {
+        this.router.navigate(['/account/confirm']);
+        return response.success;
+      }
+    );
+  }
+
+  /**
+   *  Update profile (current user)
+   */
+  public updateProfile(payload: UpdateProfilePayload): Observable<User> {
+    return this.requestHandler.request(`${api}/${endpoints.PROFILE}/`, methods.PUT, payload, (response: UpdateProfileResponse) => {
+      if (response && response.user) {
+        const currentUser = this.loadCurrentUser();
+        const newUser = response.user;
+        const user = { ...currentUser, ...newUser };
+        this.user = user;
+        return user;
+      }
+    });
+  }
+
+  public initializeInviteUserForm(): FormGroup {
+    return this.formBuilder.group({
+      email: [
+        '',
+        [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$')],
+        // [this.isEmailUnique.bind(this), this.isEmailValid.bind(this)]
+      ],
+    });
+  }
+
+  public initializeProfileForm(): FormGroup {
+    const user = this.user;
+    return this.formBuilder.group({
+      firstName: [user.firstName, [Validators.required]],
+      lastName: [user.lastName, [Validators.required]],
+      email: [user.email, [Validators.required, Validators.email]],
+    });
+  }
+
+  public belongToManage(user: User): boolean {
+    return !!user.groups.find((group) => ManageGroups.indexOf(group.name) !== -1);
+  }
+
+  public selectUser(user: User): Observable<User> {
+    this.selectedUser = user;
+    return of(user);
+  }
+
+  public applyPagination(): void {
+    const { paginationService, users } = this;
+    paginationService.totalRecords = users;
+    paginationService.applyPagination();
+    // @ts-ignore
+    this.paginatedUserData = paginationService.paginatedData;
+  }
+
+  public onPageChange(page: number): void {
+    const { paginationService } = this;
+    paginationService.onPageChange(page);
+    // @ts-ignore
+    this.paginatedUserData = paginationService.paginatedData;
+  }
 }

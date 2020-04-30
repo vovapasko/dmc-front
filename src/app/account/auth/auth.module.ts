@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-
 import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { UIModule } from '../../shared/ui/ui.module';
@@ -13,12 +12,6 @@ import { PasswordResetComponent } from './passwordreset/password-reset.component
 
 @NgModule({
   declarations: [LoginComponent, SignupComponent, ConfirmComponent, PasswordResetComponent],
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    NgbAlertModule,
-    UIModule,
-    AuthRoutingModule
-  ]
+  imports: [CommonModule, ReactiveFormsModule, NgbAlertModule, UIModule, AuthRoutingModule],
 })
-export class AuthModule { }
+export class AuthModule {}

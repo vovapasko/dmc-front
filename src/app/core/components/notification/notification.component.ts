@@ -1,45 +1,39 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {NotificationService} from '../../services/notification.service';
-import {Notification, NotificationType} from '../../models/instances/notification';
-import {Subscription} from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+
+import { NotificationService } from '../../services/notification.service';
+import { Notification, NotificationType } from '../../models/instances/notification';
+
+/**
+ * This component for notify user
+ */
 
 @Component({
-    selector: 'app-notification',
-    templateUrl: './notification.component.html',
-    styleUrls: ['./notification.component.scss']
+  selector: 'app-notification',
+  templateUrl: './notification.component.html',
+  styleUrls: ['./notification.component.scss'],
 })
-export class NotificationComponent implements OnInit, OnDestroy {
-    notificationTypes = NotificationType;
-    notifications: Notification[] = [];
-    private subscription: Subscription;
+export class NotificationComponent implements OnInit {
+  notificationTypes = NotificationType;
+  notifications$: BehaviorSubject<Array<Notification>>;
 
-    constructor(private notificationSvc: NotificationService) {
-    }
+  constructor(private notificationService: NotificationService) {}
 
-    ngOnInit() {
-        this.subscription = this.notificationSvc.getObservable().subscribe(notification => this._addNotification(notification));
-    }
+  ngOnInit() {
+    this.initSubscriptions();
+  }
 
-    /**
-     * Store notification for a while
-     */
-    private _addNotification(notification: Notification) {
-        this.notifications.push(notification);
+  /**
+   * Get notifications
+   */
+  initSubscriptions(): void {
+    this.notifications$ = this.notificationService.notifications$;
+  }
 
-        if (notification.timeout !== 0) {
-            setTimeout(() => this.close(notification), notification.timeout);
-
-        }
-    }
-
-    /**
-     * Close notification by id
-     */
-    close(notification: Notification) {
-        this.notifications = this.notifications.filter(notif => notif.id !== notification.id);
-    }
-
-    ngOnDestroy() {
-        this.subscription.unsubscribe();
-    }
+  /**
+   * Close notification by id
+   */
+  close(notification: Notification): void {
+    this.notificationService.close(notification);
+  }
 }

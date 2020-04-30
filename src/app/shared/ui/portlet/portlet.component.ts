@@ -3,11 +3,9 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 @Component({
   selector: 'app-portlet',
   templateUrl: './portlet.component.html',
-  styleUrls: ['./portlet.component.scss']
+  styleUrls: ['./portlet.component.scss'],
 })
-
 export class PortletComponent implements OnInit {
-
   @Input() title: string;
   @Input() color: string;
   @Input() text: string;
@@ -20,7 +18,7 @@ export class PortletComponent implements OnInit {
   isVisible: boolean;
   isCollapsed: boolean;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
     // set the value
@@ -49,7 +47,4 @@ export class PortletComponent implements OnInit {
   remove() {
     this.isVisible = false;
   }
-
 }
-
-

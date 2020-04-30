@@ -3,7 +3,7 @@
 //
 
 // Metis Menu Overwrite
-@import "~metismenujs/scss/metismenujs";
+@import '~metismenujs/scss/metismenujs';
 
 .metismenu {
   padding: 0;
@@ -11,7 +11,7 @@
   li {
     list-style: none;
     a {
-      &[aria-expanded="true"] {
+      &[aria-expanded='true'] {
         color: $menu-item-active !important;
       }
     }
@@ -134,13 +134,13 @@
     position: absolute;
     right: 20px;
     display: inline-block;
-    font-family: "Material Design Icons";
+    font-family: 'Material Design Icons';
     text-rendering: auto;
     line-height: 1.5rem;
     font-size: 1.1rem;
     transform: translate(0, 0);
     &:before {
-      content: "\F142";
+      content: '\F142';
     }
   }
   .badge {
