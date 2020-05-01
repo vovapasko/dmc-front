@@ -44,9 +44,9 @@ export const setValues = (target, obj) => {
   );
 };
 
-export const setProjectValues = (common, editor, project) => {
+export const setProjectValues = (common, editor, project, getSafeHtml) => {
   Object.keys(common).forEach((key) => common[key].setValue(project[key]));
-  editor.text.setValue(project.content.text);
+  editor.text.setValue(getSafeHtml(project.content.text).changingThisBreaksApplicationSecurity);
 };
 
 export const collectDataFromForm = (f, defaultFields) => {

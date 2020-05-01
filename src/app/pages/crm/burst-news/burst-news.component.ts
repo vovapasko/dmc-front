@@ -32,7 +32,6 @@ import {
   selectMethods,
   selectProject
 } from '../../../core/store/selectors/news.selectors';
-import { NotificationService } from '../../../core/services/notification.service';
 import { Project } from '../../../core/models/instances/project';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -92,7 +91,6 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     private newsService: NewsService,
     private errorService: ErrorService,
     private loadingService: LoadingService,
-    private notificationService: NotificationService
   ) {
   }
 
