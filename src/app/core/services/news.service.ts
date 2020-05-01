@@ -31,6 +31,7 @@ import { AlifeFile } from '../models/instances/alife-file';
 import { Warnings } from '../constants/notifications';
 import { endpoints } from '../constants/endpoints';
 import { methods } from '../constants/methods';
+import { SecurityService } from './security.service';
 
 const api = environment.api;
 
@@ -44,7 +45,8 @@ export class NewsService {
     private http: HttpClient,
     private requestHandler: RequestHandler,
     public formBuilder: FormBuilder,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private securityService: SecurityService
   ) {}
 
   public getProjectConfiguration(): Observable<GetAllResponse> {
@@ -203,7 +205,7 @@ export class NewsService {
     const editor = editorForm.controls;
     const newsList = project.newsInProject.map((el) => new News(el.title, el.contractors, el.image, el.id));
     const controls = this.initControls(newsList);
-    setProjectValues(common, editor, project);
+    setProjectValues(common, editor, project, this.securityService.getSafeHtml.bind(this.securityService));
     return { controls, newsList };
   }
 
@@ -242,9 +244,11 @@ export class NewsService {
     const common = validationForm.value;
     const editor = editorForm.value;
     const newsInProject = list;
+    // @ts-ignore
+    const text = this.securityService.getSafeHtml(editor.text).changingThisBreaksApplicationSecurity;
     const data = {
       ...common,
-      content: { text: editor.text },
+      content: { text },
       isConfirmed: false,
       newsInProject,
     };
