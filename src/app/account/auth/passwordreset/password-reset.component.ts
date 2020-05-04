@@ -22,7 +22,7 @@ import { ServerError } from '../../../core/models/responses/server/error';
 @Component({
   selector: 'app-password-reset',
   templateUrl: './password-reset.component.html',
-  styleUrls: ['./password-reset.component.scss'],
+  styleUrls: ['./password-reset.component.scss']
 })
 export class PasswordResetComponent implements OnInit, AfterViewInit, OnDestroy {
   routeSubscription: Subscription;
@@ -44,7 +44,8 @@ export class PasswordResetComponent implements OnInit, AfterViewInit, OnDestroy 
     private store: Store<IAppState>,
     private errorService: ErrorService,
     private loadingService: LoadingService
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.initSubscriptions();
@@ -55,24 +56,25 @@ export class PasswordResetComponent implements OnInit, AfterViewInit, OnDestroy 
   /**
    * Set loading and error subscriptions, get confirm route value,
    */
-  private initSubscriptions(): void {
-    this.routeSubscription = this.route.params.subscribe((params: Params) => {
-      if (params.confirm) {
-        this.confirm = params.confirm;
-      }
-    });
+  public initSubscriptions(): void {
+    this.routeSubscription = this.route.params
+      .subscribe((params: Params) => {
+        if (params.confirm) {
+          this.confirm = params.confirm;
+        }
+      });
     this.loading$ = this.loadingService.loading$;
     this.error$ = this.errorService.error$;
   }
 
-  initForm(): void {
+  public initForm(): void {
     this.resetForm = this.formBuilder.group(
       {
         password: ['', [Validators.required, Validators.minLength(6)]],
-        confirmPassword: ['', Validators.required],
+        confirmPassword: ['', Validators.required]
       },
       {
-        validator: MustMatch('password', 'confirmPassword'),
+        validator: MustMatch('password', 'confirmPassword')
       }
     );
   }

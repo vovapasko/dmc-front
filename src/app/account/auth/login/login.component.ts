@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   /**
    * Set loading and error subscriptions
    */
-  private initSubscriptions(): void {
+  public initSubscriptions(): void {
     this.loading$ = this.loadingService.loading$;
     this.error$ = this.errorService.error$;
   }
@@ -58,7 +58,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   /**
    * Init form with validators
    */
-  private initForm(): void {
+  public initForm(): void {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
@@ -80,7 +80,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   // convenience getter for easy access to form fields
-  get f() {
+  get f(): { [p: string]: AbstractControl } {
     return this.loginForm.controls;
   }
 
@@ -99,7 +99,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   /**
    * Dispatch data
    */
-  private submit(payload: LoginPayload): void {
+  public submit(payload: LoginPayload): void {
     this.store.dispatch(new Login(payload));
   }
 }
