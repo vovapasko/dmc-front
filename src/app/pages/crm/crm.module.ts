@@ -34,11 +34,11 @@ import { NestableModule } from 'ngx-nestable';
 import { SharedModule } from '../../shared/shared.module';
 import { ProjectsComponent } from './projects/projects.component';
 import { ReportsComponent } from './reports/reports.component';
-import { ContractorsCost } from '../../shared/pipes/contractors-cost';
-import { ContractorsNames } from '../../shared/pipes/contractors-names';
+import { ContractorsCostPipe } from '../../shared/pipes/contractors-cost.pipe';
+import { ContractorsNamesPipe } from '../../shared/pipes/contractors-names.pipe';
 
 @NgModule({
-  declarations: [ContractorsComponent, UsersComponent, BurstNewsComponent, ProjectsComponent, ReportsComponent, ContractorsCost, ContractorsNames],
+  declarations: [ContractorsComponent, UsersComponent, BurstNewsComponent, ProjectsComponent, ReportsComponent, ContractorsCostPipe, ContractorsNamesPipe],
   imports: [
     FormsModule,
     UIModule,

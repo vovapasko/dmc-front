@@ -17,7 +17,7 @@ import { Hashtag } from '../models/instances/hashtag';
 import { Format } from '../models/instances/format';
 import { Character } from '../models/instances/character';
 import { Method } from '../models/instances/method';
-import { mockPayload, mockProject } from '../mocks/news.mock';
+import { mockPayload, mockProject } from '../mocks/project.mock';
 
 describe('NewsService', () => {
   let injector: TestBed;

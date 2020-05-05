@@ -41,13 +41,13 @@
                                     {{ project?.clientName }}
                                 </td>
                                 <td>
-                                    {{ project?.projectContractors | contractorsNames }}
+                                    {{ project?.projectContractors | ContractorsNamesPipe }}
                                 </td>
                                 <td>
                                     {{ project?.projectBudget }}
                                 </td>
                                 <td>
-                                    {{ project?.projectContractors | contractorsCost }}
+                                    {{ project?.projectContractors | ContractorsCostPipe }}
                                 </td>
                                 <td>
                                     <a href="javascript:void(0);" class="action-icon">

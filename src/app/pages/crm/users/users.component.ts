@@ -16,6 +16,7 @@ import { Groups } from '../../../core/models/instances/groups';
 import { RegisterPayload } from '../../../core/models/payloads/user/register';
 import { ServerError } from '../../../core/models/responses/server/error';
 import { paginationPage, paginationPageSize, PaginationType } from '../../../core/constants/pagination';
+import { Title } from '@angular/platform-browser';
 
 /**
  * Users component - handling the users with sidebar and content
@@ -27,6 +28,8 @@ import { paginationPage, paginationPageSize, PaginationType } from '../../../cor
   styleUrls: ['./users.component.scss'],
 })
 export class UsersComponent implements OnInit {
+  
+  title = 'Пользователи'
   breadCrumbItems: Array<{}>;
 
   manage = false;
@@ -55,30 +58,28 @@ export class UsersComponent implements OnInit {
     private store: Store<IAppState>,
     private paginationService: PaginationService,
     private loadingService: LoadingService,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private titleService: Title
   ) {}
 
   ngOnInit() {
-    this.initBreadCrumbs();
+    this.initBreadCrumbItems();
     this.initForm();
     this.initSelectOptions();
     this.initSubscriptions();
+    this.setTitle(this.title);
   }
 
-  private initSubscriptions(): void {
+  public initSubscriptions(): void {
     this.loading$ = this.loadingService.loading$;
     this.error$ = this.errorService.error$;
-
     this.selectedUser$ = this.userService.selectedUser$;
     this.paginatedUserData$ = this.userService.paginatedUserData$;
-
     this.totalRecords$ = this.paginationService.totalRecords$;
     this.page$ = this.paginationService.page$;
     this.pageSize$ = this.paginationService.pageSize$;
-
     this.currentUser = this.userService.loadCurrentUser();
     this.manage = this.belongToManage(this.currentUser);
-
     this.store.dispatch(new GetUsers());
   }
 
@@ -86,7 +87,7 @@ export class UsersComponent implements OnInit {
     return this.userService.belongToManage(user);
   }
 
-  public initBreadCrumbs(): void {
+  public initBreadCrumbItems(): void {
     this.breadCrumbItems = [
       { label: 'Главная', path: '/' },
       {
@@ -110,7 +111,7 @@ export class UsersComponent implements OnInit {
   /**
    * Init form, create validators
    */
-  private initForm(): void {
+  public initForm(): void {
     this.validationform = this.userService.initializeInviteUserForm();
   }
 
@@ -163,5 +164,12 @@ export class UsersComponent implements OnInit {
   public updateGroup(user: User, group: Groups): void {
     const data = { group };
     this.store.dispatch(new UpdateUser({ id: user.id, data }));
+  }
+
+  /**
+   * Set page title
+   */
+  public setTitle(title: string): void {
+    this.titleService.setTitle(title);
   }
 }

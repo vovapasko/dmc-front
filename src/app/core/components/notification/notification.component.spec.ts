@@ -2,6 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NotificationComponent } from './notification.component';
 import { NotificationService } from '../../services/notification.service';
+import { Notification, NotificationType } from '../../models/instances/notification';
 
 describe('NotificationComponent', () => {
   let component: NotificationComponent;
@@ -18,9 +19,21 @@ describe('NotificationComponent', () => {
     fixture = TestBed.createComponent(NotificationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+
+    spyOn(component, 'close');
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should initSubscriptions', () => {
+    component.initSubscriptions();
+    expect(component.notifications$).toBeTruthy();
+  });
+
+  it('should call close', () => {
+    component.close(new Notification(0, NotificationType.info, 'test', 'test', 1000));
+    expect(component.close).toHaveBeenCalled();
+  })
 });

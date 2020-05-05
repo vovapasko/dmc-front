@@ -23,6 +23,9 @@ import { Infos, Warnings } from '../../../core/constants/notifications';
 import { ServerError } from '../../../core/models/responses/server/error';
 import { PaginationType } from '../../../core/constants/pagination';
 import numbers from '../../../core/constants/numbers';
+import { Title } from '@angular/platform-browser';
+import { CreateContractorPayload } from '../../../core/models/payloads/contractor/create';
+import { UpdateContractorPayload } from '../../../core/models/payloads/contractor/update';
 
 /**
  * Contractors component: handling the contractors with sidebar and content
@@ -34,6 +37,8 @@ import numbers from '../../../core/constants/numbers';
   styleUrls: ['./contractors.component.scss'],
 })
 export class ContractorsComponent implements OnInit {
+
+  title = 'Контрагенты';
   loading$: Subject<boolean>;
   error$: Subject<ServerError>;
 
@@ -60,16 +65,18 @@ export class ContractorsComponent implements OnInit {
     private loadingService: LoadingService,
     private paginationService: PaginationService,
     private store: Store<IAppState>,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private titleService: Title
   ) {}
 
   ngOnInit() {
     this.initSubscriptions();
     this.initBreadCrumbItems();
     this.initFormGroups();
+    this.setTitle(this.title);
   }
 
-  private initSubscriptions(): void {
+  public initSubscriptions(): void {
     this.loading$ = this.loadingService.loading$;
     this.error$ = this.errorService.error$;
 
@@ -84,7 +91,7 @@ export class ContractorsComponent implements OnInit {
     this.store.dispatch(new GetContractors());
   }
 
-  private initBreadCrumbItems(): void {
+  public initBreadCrumbItems(): void {
     this.breadCrumbItems = [
       { label: 'Главная', path: '/' },
       {
@@ -98,7 +105,7 @@ export class ContractorsComponent implements OnInit {
   /**
    * Start init forms
    */
-  private initFormGroups(): void {
+  public initFormGroups(): void {
     this.initCreateForm();
     this.initUpdateForm();
   }
@@ -114,7 +121,7 @@ export class ContractorsComponent implements OnInit {
   /**
    * Get validators from contractor service
    */
-  private initCreateForm(): void {
+  public initCreateForm(): void {
     this.createForm = this.contractorService.initializeCreateForm();
   }
 
@@ -135,7 +142,7 @@ export class ContractorsComponent implements OnInit {
   /**
    * Validators for Update Form
    */
-  private initUpdateForm(): void {
+  public initUpdateForm(): void {
     this.updateForm = this.contractorService.initializeUpdateForm();
   }
 
@@ -176,7 +183,8 @@ export class ContractorsComponent implements OnInit {
    */
   public addContractor(): void {
     const data = this.contractorService.createContractorData(this.cf, [{ news_amount: numbers.zero }]);
-    this.add(data);
+    const payload = {data} as unknown as CreateContractorPayload;
+    this.add(payload);
     this.modalService.dismissAll();
     this.createForm.reset();
   }
@@ -184,8 +192,8 @@ export class ContractorsComponent implements OnInit {
   /**
    * submit data
    */
-  public add(data): void {
-    this.store.dispatch(new CreateContractors({ data }));
+  public add(payload: CreateContractorPayload): void {
+    this.store.dispatch(new CreateContractors(payload));
   }
 
   /**
@@ -198,7 +206,7 @@ export class ContractorsComponent implements OnInit {
   /**
    * Update method, calls api
    */
-  public update(payload): void {
+  public update(payload: UpdateContractorPayload): void {
     this.store.dispatch(new UpdateContractors(payload));
   }
 
@@ -209,7 +217,7 @@ export class ContractorsComponent implements OnInit {
     const contractorService = this.contractorService;
     const data = contractorService.createContractorData(this.uf);
     const id = contractorService.selectedContractor.id;
-    const payload = { data, id };
+    const payload = { data, id } as unknown as UpdateContractorPayload;
     this.update(payload);
     this.modalService.dismissAll();
   }
@@ -230,7 +238,7 @@ export class ContractorsComponent implements OnInit {
   /**
    * Reset to init state
    */
-  private cleanAfterUpdate(): void {
+  public cleanAfterUpdate(): void {
     this.editCheckedMode = false;
     this.updateForm.reset();
     this.modalService.dismissAll();
@@ -241,7 +249,7 @@ export class ContractorsComponent implements OnInit {
    * Handle processing with many items, delete or update
    */
   // tslint:disable-next-line:ban-types
-  private processMany(target: Array<Contractor>, payload: object, handler: Function): void {
+  public processMany(target: Array<Contractor>, payload: object, handler: Function): void {
     const notificationService = this.notificationService;
     const {type, title, message, timeout} = Infos.PROCESS_HAS_BEEN_STARTED;
     notificationService.notify(type, title, message, timeout);
@@ -249,7 +257,7 @@ export class ContractorsComponent implements OnInit {
   }
 
   // tslint:disable-next-line:ban-types
-  private handleProcessMany(target: Array<Contractor>, payload: object, handler: Function, time: number): void {
+  public handleProcessMany(target: Array<Contractor>, payload: object, handler: Function, time: number): void {
     const interval = window.setInterval(() => {
       if (target.length) {
         const item = target.pop();
@@ -300,6 +308,13 @@ export class ContractorsComponent implements OnInit {
       setValues(this.uf, contractor);
       this.editCheckedMode = true;
     }
+  }
+
+  /**
+   * Set page title
+   */
+  public setTitle(title: string): void {
+    this.titleService.setTitle(title);
   }
 
   /**
