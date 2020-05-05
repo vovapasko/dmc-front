@@ -36,9 +36,10 @@ import { ProjectsComponent } from './projects/projects.component';
 import { ReportsComponent } from './reports/reports.component';
 import { ContractorsCostPipe } from '../../shared/pipes/contractors-cost.pipe';
 import { ContractorsNamesPipe } from '../../shared/pipes/contractors-names.pipe';
+import { ProjectStatusPipe } from '../../shared/pipes/project-status.pipe';
 
 @NgModule({
-  declarations: [ContractorsComponent, UsersComponent, BurstNewsComponent, ProjectsComponent, ReportsComponent, ContractorsCostPipe, ContractorsNamesPipe],
+  declarations: [ContractorsComponent, UsersComponent, BurstNewsComponent, ProjectsComponent, ReportsComponent],
   imports: [
     FormsModule,
     UIModule,

@@ -140,13 +140,14 @@ export class UsersComponent implements OnInit {
    */
   public registerNewUser(): void {
     this.submitted = true;
+    if(this.validationform) {
+      const email = this.validationform.get('email').value as string;
+      const group = (this.selectedRole as unknown) as Groups;
+      const data = { email, group };
 
-    const email = this.validationform.get('email').value as string;
-    const group = (this.selectedRole as unknown) as Groups;
-    const data = { email, group };
-
-    this.register({ data });
-    this.modalService.dismissAll();
+      this.register({ data });
+      this.modalService.dismissAll();
+    }
   }
 
   public register(payload: RegisterPayload): void {

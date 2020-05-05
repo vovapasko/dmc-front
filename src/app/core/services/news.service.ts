@@ -47,7 +47,8 @@ export class NewsService {
     public formBuilder: FormBuilder,
     private notificationService: NotificationService,
     private securityService: SecurityService
-  ) {}
+  ) {
+  }
 
   public getProjectConfiguration(): Observable<GetAllResponse> {
     return this.requestHandler.request(`${api}/${endpoints.BURST_NEWS}/`, methods.GET, null, (response: GetAllResponse) => response);
@@ -82,10 +83,10 @@ export class NewsService {
 
   public updateProject(payload: UpdateProjectPayload): Observable<Project> {
     return this.requestHandler.request(
-        `${api}/${endpoints.MANAGE_NEWS_PROJECTS}/${payload.id}`,
-        methods.PUT,
-        payload,
-        (response: CreateProjectResponse) => response
+      `${api}/${endpoints.MANAGE_NEWS_PROJECTS}/${payload.id}`,
+      methods.PUT,
+      payload,
+      (response: CreateProjectResponse) => response
     );
   }
 
@@ -109,13 +110,13 @@ export class NewsService {
 
   public initializeCreateHashtagForm(): FormGroup {
     return this.formBuilder.group({
-      name: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(20)]],
+      name: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(20)]]
     });
   }
 
   public initializeCreateFormatForm(): FormGroup {
     return this.formBuilder.group({
-      postFormat: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(20)]],
+      postFormat: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(20)]]
     });
   }
 
@@ -129,13 +130,13 @@ export class NewsService {
       projectPostFormat: [null, Validators.required],
       projectBurstMethod: [null, Validators.required],
       projectBudget: [null, [Validators.required, validator]],
-      projectContractors: [null, [Validators.required, validator]],
+      projectContractors: [null, [Validators.required, validator]]
     });
   }
 
   public initializeEditorForm(): FormGroup {
     return this.formBuilder.group({
-      text: ['', Validators.required],
+      text: ['', Validators.required]
     });
   }
 
@@ -143,7 +144,7 @@ export class NewsService {
     return this.formBuilder.group({
       title: ['', Validators.required],
       contractors: [null, Validators.required],
-      image: [null, Validators.required],
+      image: [null, Validators.required]
     });
   }
 
@@ -152,7 +153,7 @@ export class NewsService {
       return new FormGroup({
         title: new FormControl(entity.title, Validators.required),
         image: new FormControl(entity.image, Validators.required),
-        contractors: new FormControl(entity.contractors, Validators.required),
+        contractors: new FormControl(entity.contractors, Validators.required)
       });
     });
     return new FormArray(toGroups);
@@ -160,7 +161,7 @@ export class NewsService {
 
   public budgetValidate(left: number): { [key: string]: boolean } | null {
     if (left < 0) {
-      const {type, title, timeout} = Warnings.NO_LEFT;
+      const { type, title, timeout } = Warnings.NO_LEFT;
       const message = `Вы превысили бюджет на ${left * -1}`;
       this.notificationService.notify(type, title, message, timeout);
       return { budget: true };
@@ -188,13 +189,16 @@ export class NewsService {
   }
 
   public addNewControl(controls: FormArray): FormArray {
-    const newControls = new FormGroup({
-      title: new FormControl(null, Validators.required),
-      image: new FormControl(null, Validators.required),
-      contractors: new FormControl(null, Validators.required),
-    });
-    controls.push(newControls);
-    return controls;
+    if (controls) {
+      const newControls = new FormGroup({
+        title: new FormControl(null, Validators.required),
+        image: new FormControl(null, Validators.required),
+        contractors: new FormControl(null, Validators.required)
+      });
+      controls.push(newControls);
+      return controls;
+    }
+    return null;
   }
 
   public processProject(project: Project, validationForm: FormGroup, editorForm: FormGroup): { controls: FormArray, newsList: News[] } {
@@ -210,9 +214,12 @@ export class NewsService {
   }
 
   public addNewItem(newsList: News[]): News[] {
-    const list = newsList.slice();
-    list.push(new News('', [], { base64: images.defaultImage, file: null }));
-    return list;
+    if(newsList) {
+      const list = newsList.slice();
+      list.push(new News('', [], { base64: images.defaultImage, file: null }));
+      return list;
+    }
+    return null;
   }
 
   public onImageChange(files: AlifeFile[], index: number, onFile: boolean, list: News[]): NewsImage {
@@ -250,7 +257,7 @@ export class NewsService {
       ...common,
       content: { text },
       isConfirmed: false,
-      newsInProject,
+      newsInProject
     };
     if (forUpdate) {
       data.isConfirmed = true;

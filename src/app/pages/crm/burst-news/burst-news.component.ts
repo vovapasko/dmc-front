@@ -58,7 +58,7 @@ import { Title } from '@angular/platform-browser';
 })
 export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
-  title = 'Разгон'
+  title = 'Разгон';
   breadCrumbItems: Array<{}>;
   contractors$ = this.store.pipe(select(selectContractors));
   hashtags$ = this.store.pipe(select(selectHashtags));
@@ -116,7 +116,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   public processProject(project: Project): void {
-    if(project) {
+    if (project) {
       const data = this.newsService.processProject(project, this.validationForm, this.editorForm);
       this.setProjectData(data);
     }
@@ -130,7 +130,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   public getControl(index: number, field: string): FormControl {
-    if(field) {
+    if (field) {
       return this.controls.at(index).get(field) as FormControl;
     }
     return null;
@@ -274,7 +274,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   public onImageChange(files: AlifeFile[], index: number, onFile?: boolean): void {
-    if(files) {
+    if (files) {
       const newsList = this.newsList;
       const image = this.newsService.onImageChange(files, index, onFile, newsList);
       this.updateField(index, 'image', image);

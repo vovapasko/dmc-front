@@ -89,7 +89,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
    */
   public onSubmit(): void {
     this.submitted = true;
-    if (this.loginForm.valid) {
+    const loginForm = this.loginForm;
+    if (loginForm && loginForm.valid) {
       const { email, password } = this.f;
       const data = { email: email.value, password: password.value };
       this.submit({ data });

@@ -102,9 +102,10 @@ export class PasswordResetComponent implements OnInit, AfterViewInit, OnDestroy 
    * Reset user password with new credentials
    */
   onSubmit(): void {
+    const resetForm = this.resetForm;
     this.success = '';
     this.submitted = true;
-    if (this.resetForm.valid) {
+    if (resetForm && resetForm.valid) {
       const { password, confirmPassword } = this.resetForm.value;
       const data = { password, confirmPassword };
       const confirm = this.confirm;

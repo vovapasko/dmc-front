@@ -27,12 +27,8 @@ describe('ConfirmComponent', () => {
   });
 
   it('should setTitle', () => {
-    // * arrange
-    const title = 'Hey there, i hope you are enjoying this article';
-    // * act
-    component.setTitle(title);
+    component.setTitle(component.title);
     fixture.detectChanges();
-    // * assert
-    expect(document.title).toContain(title);
+    expect(document.title).toContain(component.title);
   });
 });

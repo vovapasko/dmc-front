@@ -5,7 +5,7 @@ import { Orders } from '../../core/constants/orders';
 @Pipe({ name: 'projectStatus' })
 export class ProjectStatusPipe implements PipeTransform {
   transform(data: Project[], order: Orders) {
-    return data.filter((project) => {
+    return data && data.length ? data.filter((project) => {
       if (order === Orders.confirmed) {
         // pass only confirmed items
         return project.isConfirmed;
@@ -15,6 +15,6 @@ export class ProjectStatusPipe implements PipeTransform {
       }
       // pass any items
       return true;
-    });
+    }) : [];
   }
 }

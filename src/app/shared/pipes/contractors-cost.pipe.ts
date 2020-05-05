@@ -5,6 +5,6 @@ import { Contractor } from '../../core/models/instances/contractor';
 export class ContractorsCostPipe implements PipeTransform {
   transform(data: Contractor[]) {
     const reducer = (a, c) => +a + +c.onePostPrice;
-    return data.reduce(reducer, 0);
+    return data && data.length ? data.reduce(reducer, 0) : 0;
   }
 }

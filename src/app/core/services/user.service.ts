@@ -219,9 +219,9 @@ export class UserService {
   public initializeProfileForm(): FormGroup {
     const user = this.user;
     return this.formBuilder.group({
-      firstName: [user.firstName, [Validators.required]],
-      lastName: [user.lastName, [Validators.required]],
-      email: [user.email, [Validators.required, Validators.email]],
+      firstName: [user ? user.firstName : null, [Validators.required]],
+      lastName: [user ? user.lastName : null, [Validators.required]],
+      email: [user ? user.email : null, [Validators.required, Validators.email]],
     });
   }
 

@@ -2,21 +2,35 @@ import { LoginComponent } from './login.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CommonModule } from '@angular/common';
 import { LoginPayload } from '../../../core/models/payloads/auth/login';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule, Title } from '@angular/platform-browser';
+import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
+import { UIModule } from '../../../shared/ui/ui.module';
+import { AuthRoutingModule } from '../auth-routing';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { HttpClient, HttpHandler } from '@angular/common/http';
+import { AuthenticationService } from '../../../core/services/auth.service';
+import { ErrorService } from '../../../core/services/error.service';
+import { LoadingService } from '../../../core/services/loading.service';
+import { RouterTestingModule } from '@angular/router/testing';
+import { Store, StoreModule } from '@ngrx/store';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let element: HTMLElement;
   let fixture: ComponentFixture<LoginComponent>;
-  const loginPayload = {data: {email: 'login', password: 'password'}} as LoginPayload;
+  const loginPayload = { data: { email: 'login', password: 'password' } } as LoginPayload;
 
   // * We use beforeEach so our tests are run in isolation
   beforeEach(() => {
     TestBed.configureTestingModule({
       // * here we configure our testing module with all the declarations,
       // * imports, and providers necessary to this component
-      imports: [CommonModule],
-      providers: [],
-      declarations: [LoginComponent],
+      imports: [
+        CommonModule, ReactiveFormsModule, NgbAlertModule, UIModule, RouterTestingModule, StoreModule.forRoot({})
+      ],
+      providers: [HttpClient, HttpHandler, FormBuilder, AuthenticationService, Title, ErrorService, LoadingService, Store],
+      declarations: [LoginComponent]
     }).compileComponents();
 
     fixture = TestBed.createComponent(LoginComponent);
@@ -53,12 +67,8 @@ describe('LoginComponent', () => {
   });
 
   it('should setTitle', () => {
-    // * arrange
-    const title = 'Hey there, i hope you are enjoying this article';
-    // * act
-    component.setTitle(title);
+    component.setTitle(component.title);
     fixture.detectChanges();
-    // * assert
-    expect(document.title).toContain(title);
+    expect(document.title).toContain(component.title);
   });
 });

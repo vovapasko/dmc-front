@@ -96,15 +96,17 @@ export class TopbarComponent implements OnInit {
     this.submit(this.createHashtagForm, this.createHashtag.bind(this), payload);
   }
 
-  public submit(f: FormGroup, handler, payload: CreateHashtagPayload | CreatePostFormatPayload): void {
-    this.submitted = true;
-    if (f.invalid) {
-      return;
+  public submit(form: FormGroup, handler, payload: CreateHashtagPayload | CreatePostFormatPayload): void {
+    if(form) {
+      this.submitted = true;
+      if (form && form.invalid) {
+        return;
+      }
+      handler(payload);
+      this.submitted = false;
+      form.reset();
+      this.modalService.dismissAll();
     }
-    handler(payload);
-    this.submitted = false;
-    f.reset();
-    this.modalService.dismissAll();
   }
 
   public createHashtag(payload: CreateHashtagPayload): void {

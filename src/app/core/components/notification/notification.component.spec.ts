@@ -19,8 +19,6 @@ describe('NotificationComponent', () => {
     fixture = TestBed.createComponent(NotificationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-
-    spyOn(component, 'close');
   });
 
   it('should create', () => {
@@ -33,6 +31,7 @@ describe('NotificationComponent', () => {
   });
 
   it('should call close', () => {
+    spyOn(component, 'close');
     component.close(new Notification(0, NotificationType.info, 'test', 'test', 1000));
     expect(component.close).toHaveBeenCalled();
   })

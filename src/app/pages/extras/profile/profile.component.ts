@@ -98,11 +98,11 @@ export class ProfileComponent implements OnInit {
    * Collects data and calls update method
    */
   onSubmit() {
-    this.submitted = true;
-    // stop here if form is invalid
-    if (this.profileForm.invalid) {
+    const profileForm = this.profileForm;
+    if (!profileForm || (profileForm && profileForm.invalid)) {
       return;
     }
+    this.submitted = true;
     this.submit();
   }
 
