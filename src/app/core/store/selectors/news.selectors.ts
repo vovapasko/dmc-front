@@ -11,7 +11,7 @@ export const selectContractors = createSelector(selectNews, (state: INewsState) 
 
 export const selectProject = createSelector(selectNews, (state: INewsState) => state.project);
 
-export const selectProjects = createSelector(selectNews, (state: INewsState) => state.projects);
+export const selectProjects = createSelector(selectNews, (state: INewsState) => state ? state.projects : []);
 
 export const selectMethods = createSelector(selectNews, (state: INewsState) => state.methods);
 

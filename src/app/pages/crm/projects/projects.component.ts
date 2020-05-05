@@ -11,6 +11,7 @@ import { Orders } from '../../../core/constants/orders';
 import { ServerError } from '../../../core/models/responses/server/error';
 import { urls } from '../../../core/constants/urls';
 import { GetProjects } from '../../../core/store/actions/news.actions';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-projects',
@@ -22,7 +23,9 @@ import { GetProjects } from '../../../core/store/actions/news.actions';
  * Projects component - handling the projects with sidebar and content
  */
 export class ProjectsComponent implements OnInit {
+
   // bread crumb items
+  title = 'Проекты'
   breadCrumbItems: Array<{}>;
   projects$ = this.store.pipe(select(selectProjects));
   loading$: Subject<boolean>;
@@ -35,20 +38,26 @@ export class ProjectsComponent implements OnInit {
     private store: Store<IAppState>,
     private router: Router,
     private errorService: ErrorService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private titleService: Title
   ) {}
 
   ngOnInit() {
+    this.initBreadCrumbItems();
+    this.initSubscriptions();
+    this.setTitle(this.title);
+    this._fetchData();
+  }
+
+  public initBreadCrumbItems(): void {
     // tslint:disable-next-line: max-line-length
     this.breadCrumbItems = [
       { label: 'Главная', path: '/' },
       { label: 'Проекты', path: '/crm/projects' },
     ];
-    this.initSubscriptions();
-    this._fetchData();
   }
 
-  private initSubscriptions(): void {
+  public initSubscriptions(): void {
     this.loading$ = this.loadingService.loading$;
     this.error$ = this.errorService.error$;
   }
@@ -62,9 +71,16 @@ export class ProjectsComponent implements OnInit {
   }
 
   /**
+   * Set page title
+   */
+  public setTitle(title: string): void {
+    this.titleService.setTitle(title);
+  }
+
+  /**
    * fetches project value
    */
-  private _fetchData() {
+  public _fetchData() {
     this.store.dispatch(new GetProjects());
   }
 }

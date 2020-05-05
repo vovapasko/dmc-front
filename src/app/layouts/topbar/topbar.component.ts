@@ -8,7 +8,7 @@ import { User } from '../../core/models/instances/user.models';
 import { Notification } from '../../core/models/instances/notification';
 import { NotificationService } from '../../core/services/notification.service';
 import { UserService } from '../../core/services/user.service';
-import { FormGroup } from '@angular/forms';
+import { AbstractControl, FormGroup } from '@angular/forms';
 import { NewsService } from '../../core/services/news.service';
 import { LoadingService } from '../../core/services/loading.service';
 import { ErrorService } from '../../core/services/error.service';
@@ -17,6 +17,8 @@ import { Store } from '@ngrx/store';
 import { IAppState } from '../../core/store/state/app.state';
 import { CreateFormat, CreateHashtag } from '../../core/store/actions/news.actions';
 import { ServerError } from '../../core/models/responses/server/error';
+import { CreateHashtagPayload } from '../../core/models/payloads/news/hashtag/create';
+import { CreatePostFormatPayload } from '../../core/models/payloads/news/format/create';
 
 /**
  * Top bar component - history, profile bar, logout and create new items
@@ -61,7 +63,7 @@ export class TopbarComponent implements OnInit {
     this.openMobileMenu = false;
   }
 
-  initSubscriptions() {
+  public initSubscriptions(): void {
     this.loading$ = this.loadingService.loading$;
     this.error$ = this.errorService.error$;
     this.userService.loadCurrentUser();
@@ -69,77 +71,81 @@ export class TopbarComponent implements OnInit {
     this.user$ = this.userService.user$;
   }
 
-  initFormGroups() {
+  public initFormGroups(): void {
     this.initCreateHashtagForm();
     this.initCreateFormatForm();
   }
 
-  initCreateHashtagForm() {
+  public initCreateHashtagForm(): void {
     this.createHashtagForm = this.newsService.initializeCreateHashtagForm();
   }
 
-  openModal(content: string) {
+  public openModal(content: string): void {
     this.modalService.open(content, { centered: true });
   }
 
-  initCreateFormatForm() {
+  public initCreateFormatForm(): void {
     this.createFormatForm = this.newsService.initializeCreateFormatForm();
   }
 
-  submitCreateHashtagForm() {
+  public submitCreateHashtagForm(): void {
     const ch = this.ch;
     const name = ch.name.value;
     const data = { name };
-    this.submit(this.createHashtagForm, this.createHashtag.bind(this), { data });
+    const payload = { data } as unknown as CreateHashtagPayload;
+    this.submit(this.createHashtagForm, this.createHashtag.bind(this), payload);
   }
 
-  submit(f: FormGroup, handler, payload) {
-    this.submitted = true;
-    if (f.invalid) {
-      return;
+  public submit(form: FormGroup, handler, payload: CreateHashtagPayload | CreatePostFormatPayload): void {
+    if(form) {
+      this.submitted = true;
+      if (form && form.invalid) {
+        return;
+      }
+      handler(payload);
+      this.submitted = false;
+      form.reset();
+      this.modalService.dismissAll();
     }
-    handler(payload);
-    this.submitted = false;
-    f.reset();
-    this.modalService.dismissAll();
   }
 
-  createHashtag(payload) {
+  public createHashtag(payload: CreateHashtagPayload): void {
     this.store.dispatch(new CreateHashtag(payload));
   }
 
-  submitCreateFormatForm() {
+  public submitCreateFormatForm(): void {
     const cf = this.cf;
     const postFormat = cf.postFormat.value;
     const data = { postFormat };
-    this.submit(this.createFormatForm, this.createFormat.bind(this), { data });
+    const payload = {data} as unknown as CreatePostFormatPayload;
+    this.submit(this.createFormatForm, this.createFormat.bind(this), payload);
   }
 
-  createFormat(payload) {
+  public createFormat(payload: CreatePostFormatPayload): void {
     this.store.dispatch(new CreateFormat(payload));
   }
 
   // convenience getter for easy access to form fields
-  get ch() {
+  get ch(): { [p: string]: AbstractControl } {
     return this.createHashtagForm.controls;
   }
 
   // convenience getter for easy access to form fields
-  get cf() {
+  get cf(): { [p: string]: AbstractControl } {
     return this.createFormatForm.controls;
   }
 
   /**
    * Remove notification from list
    */
-  close(notification: Notification) {
+  public close(notification: Notification): void {
     this.notificationService.removeFromHistory(notification);
   }
 
   /**
    * Toggle the menu bar when having mobile screen
    */
-  toggleMobileMenu(event) {
+  public toggleMobileMenu(event): void {
     event.preventDefault();
     this.mobileMenuButtonClicked.emit();
   }
@@ -147,7 +153,7 @@ export class TopbarComponent implements OnInit {
   /**
    * Logout the user
    */
-  logout() {
+  public logout(): void {
     this.authService.logout();
     this.router.navigate(['/account/login']);
   }
@@ -155,7 +161,7 @@ export class TopbarComponent implements OnInit {
   /**
    * Remove all notifications
    */
-  clearAll() {
+  public clearAll(): void {
     this.notificationService.history = [];
   }
 }

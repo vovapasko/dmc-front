@@ -300,9 +300,9 @@
               <form (ngSubmit)="profileFormSubmit()" [formGroup]="editorForm">
                 <quill-editor
                   [styles]="{ height: '400px', 'margin-bottom': '15px' }"
-                  (onFocus)="onEvent($event)"
+                  (onFocus)="onEvent($event, true)"
                   (onEditorChanged)="changedEditor($event)"
-                  (onBlur)="onEvent($event)"
+                  (onBlur)="onEvent($event, false)"
                   formControlName="text"
                   (onEditorCreated)="created($event)"
                 ></quill-editor>

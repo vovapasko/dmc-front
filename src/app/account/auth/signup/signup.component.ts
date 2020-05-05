@@ -57,11 +57,12 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
    * Set loading and error subscriptions, get invite route value,
    */
   initSubscriptions(): void {
-    this.inviteSubscription = this.route.params.subscribe((params: Params) => {
-      if (params.invite) {
-        this.invite = params.invite;
-      }
-    });
+    this.inviteSubscription = this.route.params
+      .subscribe((params: Params) => {
+        if (params.invite) {
+          this.invite = params.invite;
+        }
+      });
     this.loading$ = this.loadingService.loading$;
     this.error$ = this.errorService.error$;
   }
@@ -123,7 +124,7 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
   /**
    * Submit data
    */
-  private submit(payload: SignupPayload): void {
+  public submit(payload: SignupPayload): void {
     this.store.dispatch(new Signup(payload));
   }
 

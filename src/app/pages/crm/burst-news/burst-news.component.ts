@@ -44,6 +44,7 @@ import { CreateProjectPayload } from '../../../core/models/payloads/news/project
 import { UpdateProjectPayload } from '../../../core/models/payloads/news/project/update';
 import { ServerError } from '../../../core/models/responses/server/error';
 import numbers from '../../../core/constants/numbers';
+import { Title } from '@angular/platform-browser';
 
 /**
  * Form Burst news component - handling the burst news with sidebar and content
@@ -56,6 +57,8 @@ import numbers from '../../../core/constants/numbers';
   styleUrls: ['./burst-news.component.scss']
 })
 export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewChecked {
+
+  title = 'Разгон';
   breadCrumbItems: Array<{}>;
   contractors$ = this.store.pipe(select(selectContractors));
   hashtags$ = this.store.pipe(select(selectHashtags));
@@ -91,6 +94,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     private newsService: NewsService,
     private errorService: ErrorService,
     private loadingService: LoadingService,
+    private titleService: Title
   ) {
   }
 
@@ -99,34 +103,40 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     this.cdr.detectChanges();
   }
 
+  ngOnInit() {
+    this.initBreadCrumbs();
+    this.initFormGroups();
+    this.initSubscriptions();
+    this.fetchData();
+    this.setTitle(this.title);
+  }
+
   ngAfterViewChecked() {
     this.cdr.detectChanges();
   }
 
-  private processProject(project: Project): void {
-    const data = this.newsService.processProject(project, this.validationForm, this.editorForm);
-    this.setProjectData(data);
+  public processProject(project: Project): void {
+    if (project) {
+      const data = this.newsService.processProject(project, this.validationForm, this.editorForm);
+      this.setProjectData(data);
+    }
   }
 
-  private setProjectData(data: { controls: FormArray, newsList: News[] }): void {
+  public setProjectData(data: { controls: FormArray, newsList: News[] }): void {
     if (data) {
       this.controls = data.controls;
       this.newsList = data.newsList;
     }
   }
 
-  ngOnInit() {
-    this.initBreadCrumbs();
-    this.initFormGroups();
-    this.initSubscriptions();
-    this.fetchData();
+  public getControl(index: number, field: string): FormControl {
+    if (field) {
+      return this.controls.at(index).get(field) as FormControl;
+    }
+    return null;
   }
 
-  private getControl(index: number, field: string): FormControl {
-    return this.controls.at(index).get(field) as FormControl;
-  }
-
-  private initSubscriptions(): void {
+  public initSubscriptions(): void {
     this.loading$ = this.loadingService.loading$;
     this.error$ = this.errorService.error$;
     this.submitForm = false;
@@ -135,7 +145,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     this.projectId = +this.route.snapshot.queryParamMap.get('id');
   }
 
-  private initFormGroups(): void {
+  public initFormGroups(): void {
     this.initValidateForm();
     this.initEditorForm();
     this.initNewsForm();
@@ -158,7 +168,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     this.editorForm = this.newsService.initializeEditorForm();
   }
 
-  private initBreadCrumbs(): void {
+  public initBreadCrumbs(): void {
     this.breadCrumbItems = [
       { label: 'Главная', path: '/' },
       {
@@ -199,12 +209,12 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     this.controls = this.newsService.addNewControl(controls);
   }
 
-  private addNewItem(): void {
+  public addNewItem(): void {
     const newsList = this.newsList;
     this.newsList = this.newsService.addNewItem(newsList);
   }
 
-  private calculateLeft(): number {
+  public calculateLeft(): number {
     this.left = this.newsService.calculateLeft(this.budget, this.validationForm);
     this.calculatePercentage();
     return this.left;
@@ -218,7 +228,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     return 0;
   }
 
-  private calculatePercentage(): void {
+  public calculatePercentage(): void {
     this.revenueRadialChart = this.newsService.calculatePercentage(this.left, this.budget);
   }
 
@@ -252,23 +262,23 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
 
   public focus(value: boolean): void {
     this.focused = value;
-    this.blured = !value;
   }
 
   public blur(value: boolean): void {
-    this.focused = value;
-    this.blured = !value;
+    this.blured = value;
   }
 
-  public onEvent($event): void {
-    this.blur(false);
-    this.focus(true);
+  public onEvent($event, focus: boolean): void {
+    this.focus(focus);
+    this.blur(!focus);
   }
 
   public onImageChange(files: AlifeFile[], index: number, onFile?: boolean): void {
-    const newsList = this.newsList;
-    const image = this.newsService.onImageChange(files, index, onFile, newsList);
-    this.updateField(index, 'image', image);
+    if (files) {
+      const newsList = this.newsList;
+      const image = this.newsService.onImageChange(files, index, onFile, newsList);
+      this.updateField(index, 'image', image);
+    }
   }
 
   public onSubmit(): void {
@@ -287,11 +297,11 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     }
   }
 
-  private createProject(payload: CreateProjectPayload): void {
+  public createProject(payload: CreateProjectPayload): void {
     this.store.dispatch(new CreateProject(payload));
   }
 
-  private updateProject(payload: UpdateProjectPayload): void {
+  public updateProject(payload: UpdateProjectPayload): void {
     const store = this.store;
     store.dispatch(new UpdateProject(payload));
     store.dispatch(new GetProjectSuccess(null));
@@ -302,7 +312,14 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     this.newsList = this.newsService.updateField(index, field, value, control, this.newsList);
   }
 
-  private fetchData(): void {
+  /**
+   * Set page title
+   */
+  public setTitle(title: string): void {
+    this.titleService.setTitle(title);
+  }
+
+  public fetchData(): void {
     const id = this.projectId;
     const store = this.store;
     if (id) {
