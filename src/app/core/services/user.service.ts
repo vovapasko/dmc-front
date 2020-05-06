@@ -50,7 +50,8 @@ export class UserService {
     private cookieService: CookieService,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) {
+  }
 
   set selectedUser(value: User) {
     this.selectedUser$.next(value);
@@ -80,15 +81,19 @@ export class UserService {
   /**
    *  Get all users, api returns array of users
    */
-  public getAll(): Observable<User[]> {
-    return this.requestHandler.request(`${api}/${endpoints.USERS}/`, methods.GET, null, (response: GetAllResponse) => {
-      if (response && response.data) {
-        const users = response.data;
-        this.users = users;
-        this.applyPagination();
-        return users;
-      }
-    });
+  public getAll(page = 1): Observable<User[]> {
+    return this.requestHandler.request(`${api}/${endpoints.USERS}/?page=${page}`,
+      methods.GET,
+      null,
+      (response: GetAllResponse) => {
+        if (response && response.results) {
+          const users = response.results;
+          this.users = users;
+          this.paginationService.totalSize = response.count;
+          this.paginationService.page = page;
+          return users;
+        }
+      });
   }
 
   /**
@@ -128,7 +133,6 @@ export class UserService {
         const user = response.user;
         const users = this.users;
         this.users = [...users, user];
-        this.applyPagination();
         return response.user;
       }
     });
@@ -141,7 +145,6 @@ export class UserService {
     return this.requestHandler.request(`${api}/${endpoints.USERS}/${payload.id}`, methods.DELETE, payload, (response: DeleteResponse) => {
       const users = this.users;
       this.users = users.filter((el) => +el.id !== +payload.id);
-      this.applyPagination();
       return payload;
     });
   }
@@ -158,7 +161,6 @@ export class UserService {
         if (response.message.user) {
           const user = response.message.user;
           this.users = this.users.map((el) => (+el.id === +payload.id ? user : el));
-          this.applyPagination();
           return user;
         }
       }
@@ -210,9 +212,9 @@ export class UserService {
     return this.formBuilder.group({
       email: [
         '',
-        [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$')],
+        [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$')]
         // [this.isEmailUnique.bind(this), this.isEmailValid.bind(this)]
-      ],
+      ]
     });
   }
 
@@ -221,7 +223,7 @@ export class UserService {
     return this.formBuilder.group({
       firstName: [user ? user.firstName : null, [Validators.required]],
       lastName: [user ? user.lastName : null, [Validators.required]],
-      email: [user ? user.email : null, [Validators.required, Validators.email]],
+      email: [user ? user.email : null, [Validators.required, Validators.email]]
     });
   }
 
@@ -234,18 +236,7 @@ export class UserService {
     return of(user);
   }
 
-  public applyPagination(): void {
-    const { paginationService, users } = this;
-    paginationService.totalRecords = users;
-    paginationService.applyPagination();
-    // @ts-ignore
-    this.paginatedUserData = paginationService.paginatedData;
-  }
-
   public onPageChange(page: number): void {
-    const { paginationService } = this;
-    paginationService.onPageChange(page);
-    // @ts-ignore
-    this.paginatedUserData = paginationService.paginatedData;
+    this.getAll(page);
   }
 }

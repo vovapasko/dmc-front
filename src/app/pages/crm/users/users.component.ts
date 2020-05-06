@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { FormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -15,8 +15,15 @@ import { ErrorService } from '../../../core/services/error.service';
 import { Groups } from '../../../core/models/instances/groups';
 import { RegisterPayload } from '../../../core/models/payloads/user/register';
 import { ServerError } from '../../../core/models/responses/server/error';
-import { paginationPage, paginationPageSize, PaginationType } from '../../../core/constants/pagination';
+import {
+  paginationPage,
+  paginationPageSize,
+  paginationTotalSize,
+  PaginationType
+} from '../../../core/constants/pagination';
 import { Title } from '@angular/platform-browser';
+import { selectProjects } from '../../../core/store/selectors/news.selectors';
+import { selectUserList } from '../../../core/store/selectors/user.selectors';
 
 /**
  * Users component - handling the users with sidebar and content
@@ -31,19 +38,17 @@ export class UsersComponent implements OnInit {
   
   title = 'Пользователи'
   breadCrumbItems: Array<{}>;
-
   manage = false;
-
   loading$: Subject<boolean>;
   error$: Subject<ServerError>;
 
-  totalRecords$: BehaviorSubject<Array<PaginationType>> = new BehaviorSubject<Array<PaginationType>>([]);
+  totalSize$: BehaviorSubject<number> = new BehaviorSubject<number>(paginationTotalSize);
   page$: BehaviorSubject<number> = new BehaviorSubject(paginationPage);
   pageSize$: BehaviorSubject<number> = new BehaviorSubject(paginationPageSize);
 
   selectedUser$: BehaviorSubject<User> = new BehaviorSubject(null);
-  paginatedUserData$: BehaviorSubject<Array<User>> = new BehaviorSubject([]);
   currentUser: User;
+  users$ = this.store.pipe(select(selectUserList));
 
   selectedRole = '';
   submitted: boolean;
@@ -68,19 +73,18 @@ export class UsersComponent implements OnInit {
     this.initSelectOptions();
     this.initSubscriptions();
     this.setTitle(this.title);
+    this._fetchData();
   }
 
   public initSubscriptions(): void {
     this.loading$ = this.loadingService.loading$;
     this.error$ = this.errorService.error$;
     this.selectedUser$ = this.userService.selectedUser$;
-    this.paginatedUserData$ = this.userService.paginatedUserData$;
-    this.totalRecords$ = this.paginationService.totalRecords$;
+    this.totalSize$ = this.paginationService.totalSize$;
     this.page$ = this.paginationService.page$;
     this.pageSize$ = this.paginationService.pageSize$;
     this.currentUser = this.userService.loadCurrentUser();
     this.manage = this.belongToManage(this.currentUser);
-    this.store.dispatch(new GetUsers());
   }
 
   public belongToManage(user: User): boolean {
@@ -172,5 +176,9 @@ export class UsersComponent implements OnInit {
    */
   public setTitle(title: string): void {
     this.titleService.setTitle(title);
+  }
+
+  public _fetchData(): void {
+    this.store.dispatch(new GetUsers());
   }
 }

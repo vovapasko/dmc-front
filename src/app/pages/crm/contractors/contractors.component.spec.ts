@@ -116,8 +116,6 @@ describe('ContractorsComponent', () => {
     expect(component.checkedContractors$).toBeTruthy();
     expect(component.page$).toBeTruthy();
     expect(component.pageSize$).toBeTruthy();
-    expect(component.paginatedContractorData$).toBeTruthy();
-    expect(component.totalRecords$).toBeTruthy();
   });
 
   it('should initBreadCrumbItems', () => {

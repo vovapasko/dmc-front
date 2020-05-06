@@ -21,11 +21,12 @@ import { setValues } from '../../../core/helpers/utility';
 import { NotificationService } from '../../../core/services/notification.service';
 import { Infos, Warnings } from '../../../core/constants/notifications';
 import { ServerError } from '../../../core/models/responses/server/error';
-import { PaginationType } from '../../../core/constants/pagination';
+import { paginationTotalSize, PaginationType } from '../../../core/constants/pagination';
 import numbers from '../../../core/constants/numbers';
 import { Title } from '@angular/platform-browser';
 import { CreateContractorPayload } from '../../../core/models/payloads/contractor/create';
 import { UpdateContractorPayload } from '../../../core/models/payloads/contractor/update';
+import { selectContractorList } from '../../../core/store/selectors/contractor.selectors';
 
 /**
  * Contractors component: handling the contractors with sidebar and content
@@ -44,9 +45,9 @@ export class ContractorsComponent implements OnInit {
 
   selectedContractor$: BehaviorSubject<Contractor> = new BehaviorSubject(null);
   checkedContractors$: BehaviorSubject<Array<Contractor>> = new BehaviorSubject([]);
-  paginatedContractorData$: BehaviorSubject<Array<Contractor>> = new BehaviorSubject([]);
 
-  totalRecords$: BehaviorSubject<Array<PaginationType>> = new BehaviorSubject<Array<PaginationType>>([]);
+  contractors$ = this.store.select(selectContractorList);
+  totalSize$: BehaviorSubject<number> = new BehaviorSubject<number>(paginationTotalSize);
   page$: BehaviorSubject<number> = new BehaviorSubject(1);
   pageSize$: BehaviorSubject<number> = new BehaviorSubject(10);
 
@@ -74,21 +75,17 @@ export class ContractorsComponent implements OnInit {
     this.initBreadCrumbItems();
     this.initFormGroups();
     this.setTitle(this.title);
+    this._fetchData();
   }
 
   public initSubscriptions(): void {
     this.loading$ = this.loadingService.loading$;
     this.error$ = this.errorService.error$;
-
     this.selectedContractor$ = this.contractorService.selectedContractor$;
     this.checkedContractors$ = this.contractorService.checkedContractors$;
-    this.paginatedContractorData$ = this.contractorService.paginatedContractorData$;
-
-    this.totalRecords$ = this.paginationService.totalRecords$;
+    this.totalSize$ = this.paginationService.totalSize$;
     this.page$ = this.paginationService.page$;
     this.pageSize$ = this.paginationService.pageSize$;
-
-    this.store.dispatch(new GetContractors());
   }
 
   public initBreadCrumbItems(): void {
@@ -325,5 +322,9 @@ export class ContractorsComponent implements OnInit {
     const checkedContractors = contractorService.checkedContractors;
     this.processMany(checkedContractors.slice(), {}, this.delete.bind(this));
     contractorService.checkedContractors = [];
+  }
+
+  public _fetchData(): void {
+    this.store.dispatch(new GetContractors());
   }
 }

@@ -39,9 +39,9 @@ describe('ContractorService', () => {
         expect(contractors.length).toBe(mockContractors.length);
       });
 
-      const req = httpMock.expectOne(`${api}/contractor/`);
+      const req = httpMock.expectOne(`${api}/contractor/?page=1`);
       expect(req.request.method).toBe('GET');
-      req.flush({ data: mockContractors });
+      req.flush({ results: mockContractors });
     });
   });
 

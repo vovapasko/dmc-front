@@ -80,7 +80,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let contractor of paginatedContractorData$ | async | filter: term; let i = index">
+                <tr *ngFor="let contractor of contractors$ | async | filter: term; let i = index">
                   <td>
                     <div class="custom-control custom-checkbox">
                       <input
@@ -141,7 +141,7 @@
           </div>
           <ul class="pagination pagination-rounded justify-content-end my-2">
             <ngb-pagination
-              [collectionSize]="(totalRecords$ | async)?.length"
+              [collectionSize]="totalSize$ | async"
               (pageChange)="onPageChange($event)"
               [page]="page$ | async"
               [pageSize]="pageSize$ | async"

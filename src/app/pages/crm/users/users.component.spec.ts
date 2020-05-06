@@ -114,7 +114,6 @@ describe('UsersComponent', () => {
     expect(component.selectedUser$).toBeTruthy();
     expect(component.page$).toBeTruthy();
     expect(component.pageSize$).toBeTruthy();
-    expect(component.paginatedUserData$).toBeTruthy();
     expect(component.error$).toBeTruthy();
   });
 
