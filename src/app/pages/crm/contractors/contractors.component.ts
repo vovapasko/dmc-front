@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { FormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 
 import { Contractor } from '../../../core/models/instances/contractor';
@@ -58,6 +58,8 @@ export class ContractorsComponent implements OnInit {
 
   createForm: FormGroup;
   updateForm: FormGroup;
+  controls: FormArray;
+
 
   constructor(
     private modalService: NgbModal,
@@ -324,7 +326,44 @@ export class ContractorsComponent implements OnInit {
     contractorService.checkedContractors = [];
   }
 
+  public getControl(index: number, field: string): FormControl {
+    if (field) {
+      return this.controls.at(index).get(field) as FormControl;
+    }
+    return null;
+  }
+
+  public updateField(index: number, field: string ): void {
+    const control = this.getControl(index, field);
+    if (control.valid) {
+      const contractors = this.contractorService.contractors;
+      this.contractorService.contractors = contractors.map((e, i) => {
+        if (index === i) {
+          return {
+            ...e,
+            [field]: control.value
+          }
+        }
+        return e;
+      })
+    }
+  }
+
+  public initControls(contractors: Contractor[]): void {
+    const toGroups = contractors.map(contractor => {
+      return new FormGroup({
+        onePostPrice: new FormControl(contractor.onePostPrice, Validators.required),
+        newsAmount: new FormControl(contractor.newsAmount, Validators.required),
+        arrangedNews: new FormControl(contractor.arrangedNews, Validators.required),
+
+      });
+    });
+    this.controls = new FormArray(toGroups);
+  }
+
   public _fetchData(): void {
-    this.store.dispatch(new GetContractors());
+    const store = this.store;
+    store.select(selectContractorList).subscribe(this.initControls.bind(this));
+    store.dispatch(new GetContractors());
   }
 }

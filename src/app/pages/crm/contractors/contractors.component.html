@@ -1,412 +1,427 @@
 <div class="container-fluid">
-  <app-page-title title="Контрагенты" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+    <app-page-title title="Контрагенты" [breadcrumbItems]="breadCrumbItems"></app-page-title>
 
-  <div class="row">
-    <div class="col-12">
-      <div class="card">
-        <div class="card-body">
-          <div class="row mb-2">
-            <div class="col-md-6">
-              <form class="form-inline">
-                <div class="form-group mb-2">
-                  <label class="sr-only">Search</label>
-                  <input type="search" class="form-control" placeholder="Поиск..." [(ngModel)]="term" name="search" />
-                </div>
-              </form>
-            </div>
-            <div class="col-md-6">
-              <div class="text-md-right">
-                <button
-                  (click)="openModal(createModal)"
-                  type="button"
-                  id="add-new-contractor-button"
-                  class="btn btn-success mb-2 mr-2"
-                >
-                  <i class="mdi mdi-basket mr-1"></i>
-                  Добавить контрагента
-                </button>
-                <button
-                  type="button"
-                  id="edit-contractor-button"
-                  (click)="editChecked(); openModal(editModal, true)"
-                  class="btn btn-warning mb-2 mr-1"
-                >
-                  <i class="mdi mdi-settings"></i>
-                  Изменить выбранные
-                </button>
-                <button
-                  type="button"
-                  id="delete-contractor-button"
-                  (click)="deleteChecked()"
-                  class="btn btn-danger mb-2 mr-1"
-                >
-                  <i class="mdi mdi-close"></i>
-                  Удалить выбранные
-                </button>
-              </div>
-            </div>
-            <!-- end col-->
-          </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <form class="form-inline">
+                                <div class="form-group mb-2">
+                                    <label class="sr-only">Search</label>
+                                    <input type="search" class="form-control" placeholder="Поиск..." [(ngModel)]="term"
+                                           name="search"/>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="text-md-right">
+                                <button
+                                        (click)="openModal(createModal)"
+                                        type="button"
+                                        id="add-new-contractor-button"
+                                        class="btn btn-success mb-2 mr-2"
+                                >
+                                    <i class="mdi mdi-basket mr-1"></i>
+                                    Добавить контрагента
+                                </button>
+                                <button
+                                        type="button"
+                                        id="edit-contractor-button"
+                                        (click)="editChecked(); openModal(editModal, true)"
+                                        class="btn btn-warning mb-2 mr-1"
+                                >
+                                    <i class="mdi mdi-settings"></i>
+                                    Изменить выбранные
+                                </button>
+                                <button
+                                        type="button"
+                                        id="delete-contractor-button"
+                                        (click)="deleteChecked()"
+                                        class="btn btn-danger mb-2 mr-1"
+                                >
+                                    <i class="mdi mdi-close"></i>
+                                    Удалить выбранные
+                                </button>
+                            </div>
+                        </div>
+                        <!-- end col-->
+                    </div>
 
-          <div class="table-responsive">
-            <app-ui-preloader [display]="loading$ | async"></app-ui-preloader>
+                    <div class="table-responsive">
+                        <app-ui-preloader [display]="loading$ | async"></app-ui-preloader>
 
-            <table class="table table-centered table-borderless table-hover mb-0">
-              <thead class="thead-light">
-                <tr>
-                  <th style="width: 20px;">
-                    <div class="custom-control custom-checkbox">
-                      <input
-                        (click)="checkAll()"
-                        [checked]="
+                        <table class="table table-centered table-borderless table-hover mb-0">
+                            <thead class="thead-light">
+                            <tr>
+                                <th style="width: 20px;">
+                                    <div class="custom-control custom-checkbox">
+                                        <input
+                                                (click)="checkAll()"
+                                                [checked]="
                           (checkedContractors$ | async)?.length !== 0 &&
                           (checkedContractors$ | async)?.length === (paginatedContractorData$ | async)?.length
                         "
-                        type="checkbox"
-                        class="custom-control-input"
-                        id="customCheck"
-                      />
-                      <label class="custom-control-label" for="customCheck">&nbsp;</label>
+                                                type="checkbox"
+                                                class="custom-control-input"
+                                                id="customCheck"
+                                        />
+                                        <label class="custom-control-label" for="customCheck">&nbsp;</label>
+                                    </div>
+                                </th>
+                                <th>Название редакции</th>
+                                <th>Контактное лицо</th>
+                                <th>Номер телефона</th>
+                                <th>Email</th>
+                                <th>Стоимость</th>
+                                <th>Количество размещений</th>
+                                <th>Договоренности</th>
+                                <th style="width: 82px;">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let contractor of contractors$ | async | filter: term; let i = index">
+                                <td>
+                                    <div class="custom-control custom-checkbox">
+                                        <input
+                                                type="checkbox"
+                                                [checked]="(checkedContractors$ | async).indexOf(contractor) !== -1"
+                                                (click)="check(contractor)"
+                                                class="custom-control-input"
+                                                id="customCheck{{ i }}"
+                                        />
+                                        <label class="custom-control-label" for="customCheck{{ i }}">&nbsp;</label>
+                                    </div>
+                                </td>
+                                <td>
+                                    {{ contractor.editorName }}
+                                </td>
+                                <td>
+                                    {{ contractor.contactPerson }}
+                                </td>
+                                <td>
+                                    {{ contractor.phoneNumber }}
+                                </td>
+                                <td>
+                                    {{ contractor.email }}
+                                </td>
+                                <td>
+                                    <editable (update)="updateField(i, 'onePostPrice')">
+                                        <ng-template viewMode>{{contractor.onePostPrice}}</ng-template>
+                                        <ng-template editMode>
+                                            <input [formControl]="getControl(i, 'onePostPrice')">
+                                        </ng-template>
+                                    </editable>
+                                </td>
+                                <td>
+                                    <editable (update)="updateField(i, 'newsAmount')">
+                                        <ng-template viewMode>{{contractor.newsAmount}}</ng-template>
+                                        <ng-template editMode>
+                                            <input [formControl]="getControl(i, 'newsAmount')">
+                                        </ng-template>
+                                    </editable>
+                                </td>
+                                <td>
+                                    <editable (update)="updateField(i, 'arrangedNews')">
+                                        <ng-template viewMode>{{contractor.arrangedNews}}</ng-template>
+                                        <ng-template editMode>
+                                            <input [formControl]="getControl(i, 'arrangedNews')">
+                                        </ng-template>
+                                    </editable>
+                                </td>
+                                <td>
+                                    <a
+                                            class="action-icon"
+                                            id="openEditModal"
+                                            href="javascript: void(0);"
+                                            role="button"
+                                            (click)="selectContractor(contractor); openModal(editModal)"
+                                    >
+                                        <i class="mdi mdi-square-edit-outline"></i
+                                        ></a>
+                                    <a
+                                            (click)="delete(contractor)"
+                                            id="deleteContractor"
+                                            href="javascript: void(0);"
+                                            role="button"
+                                            class="action-icon"
+                                    >
+                                        <i class="mdi mdi-delete"></i
+                                        ></a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
-                  </th>
-                  <th>Название редакции</th>
-                  <th>Контактное лицо</th>
-                  <th>Номер телефона</th>
-                  <th>Email</th>
-                  <th>Стоимость</th>
-                  <th>Количество размещений</th>
-                  <th>Договоренности</th>
-                  <th style="width: 82px;">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let contractor of contractors$ | async | filter: term; let i = index">
-                  <td>
-                    <div class="custom-control custom-checkbox">
-                      <input
-                        type="checkbox"
-                        [checked]="(checkedContractors$ | async).indexOf(contractor) !== -1"
-                        (click)="check(contractor)"
-                        class="custom-control-input"
-                        id="customCheck{{ i }}"
-                      />
-                      <label class="custom-control-label" for="customCheck{{ i }}">&nbsp;</label>
-                    </div>
-                  </td>
-                  <td>
-                    {{ contractor.editorName }}
-                  </td>
-                  <td>
-                    {{ contractor.contactPerson }}
-                  </td>
-                  <td>
-                    {{ contractor.phoneNumber }}
-                  </td>
-                  <td>
-                    {{ contractor.email }}
-                  </td>
-                  <td>
-                    {{ contractor.onePostPrice }}
-                  </td>
-                  <td>
-                    {{ contractor.newsAmount }}
-                  </td>
-                  <td>
-                    {{ contractor.arrangedNews }}
-                  </td>
-
-                  <td>
-                    <a
-                      class="action-icon"
-                      id="openEditModal"
-                      href="javascript: void(0);"
-                      role="button"
-                      (click)="selectContractor(contractor); openModal(editModal)"
-                    >
-                      <i class="mdi mdi-square-edit-outline"></i
-                    ></a>
-                    <a
-                      (click)="delete(contractor)"
-                      id="deleteContractor"
-                      href="javascript: void(0);"
-                      role="button"
-                      class="action-icon"
-                    >
-                      <i class="mdi mdi-delete"></i
-                    ></a>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <ul class="pagination pagination-rounded justify-content-end my-2">
-            <ngb-pagination
-              [collectionSize]="totalSize$ | async"
-              (pageChange)="onPageChange($event)"
-              [page]="page$ | async"
-              [pageSize]="pageSize$ | async"
-            ></ngb-pagination>
-          </ul>
+                    <ul class="pagination pagination-rounded justify-content-end my-2">
+                        <ngb-pagination
+                                [collectionSize]="totalSize$ | async"
+                                (pageChange)="onPageChange($event)"
+                                [page]="page$ | async"
+                                [pageSize]="pageSize$ | async"
+                        ></ngb-pagination>
+                    </ul>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 
 <!-- Create new contractor modal  -->
 <ng-template #createModal role="document" let-modal="close">
-  <div class="modal-header bg-dark">
-    <h4 class="modal-title text-white">Добавить контрагента</h4>
-    <button
-      type="button"
-      class="close text-white"
-      aria-label="Close"
-      id="createContractorModal"
-      (click)="modal('Cross click')"
-    >
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body p-3">
-    <div class="text-left">
-      <form (ngSubmit)="submitCreateForm()" [formGroup]="createForm">
-        <div class="form-group">
-          <label for="editorName">Название редакции</label>
-          <input
-            type="text"
-            formControlName="editorName"
-            class="form-control"
-            [ngClass]="{ 'is-invalid': submitted && cf.editorName.errors }"
-            id="editorName"
-            placeholder="Введите название редакции"
-          />
-
-          <div *ngIf="submitted && cf.editorName.errors" class="invalid-feedback">
-            <div *ngIf="cf.editorName.errors.required">Название редакции обязательно</div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="contactPerson">Контактное лицо</label>
-          <input
-            type="text"
-            formControlName="contactPerson"
-            class="form-control"
-            [ngClass]="{ 'is-invalid': submitted && cf.contactPerson.errors }"
-            id="contactPerson"
-            placeholder="Введите контактное лицо"
-          />
-
-          <div *ngIf="submitted && cf.contactPerson.errors" class="invalid-feedback">
-            <div *ngIf="cf.contactPerson.errors.required">Контактное лицо обязательно</div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="phoneNumber">Номер телефона</label>
-          <input
-            type="text"
-            formControlName="phoneNumber"
-            class="form-control"
-            id="phoneNumber"
-            [ngClass]="{ 'is-invalid': submitted && cf.phoneNumber.errors }"
-          />
-          <span class="font-13 text-muted">e.g "380992314525"</span>
-          <div *ngIf="submitted && cf.phoneNumber.errors" class="invalid-feedback">
-            <div *ngIf="cf.phoneNumber.errors.pattern">Введите корректный номер</div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input
-            class="form-control"
-            id="email"
-            [ngClass]="{ 'is-invalid': submitted && cf.email.errors }"
-            placeholder="Введите email"
-            formControlName="email"
-          />
-          <div *ngIf="submitted && cf.email.errors" class="invalid-feedback">
-            <div *ngIf="cf.email.errors.required">Введите корректный email</div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="onePostPrice">Стоимость за одну публикацию</label>
-          <input
-            type="number"
-            class="form-control"
-            formControlName="onePostPrice"
-            id="onePostPrice"
-            min="0"
-            data-reverse="true"
-            [ngClass]="{ 'is-invalid': submitted && cf.onePostPrice.errors }"
-          />
-          <span class="font-13 text-muted">e.g "100"</span>
-          <div *ngIf="submitted && cf.onePostPrice.errors" class="invalid-feedback">
-            <span *ngIf="cf.onePostPrice.errors.required">Введите корректное значение.</span>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="arrangedNews">Договоренность</label>
-          <input
-            type="number"
-            class="form-control"
-            formControlName="arrangedNews"
-            min="0"
-            id="arrangedNews"
-            data-reverse="true"
-            [ngClass]="{ 'is-invalid': submitted && cf.arrangedNews.errors }"
-          />
-          <span class="font-13 text-muted">e.g "1000"</span>
-          <div *ngIf="submitted && cf.arrangedNews.errors" class="invalid-feedback">
-            <span *ngIf="cf.arrangedNews.errors.required">Введите значение</span>
-          </div>
-        </div>
-
-        <div class="text-right">
-          <button type="submit" class="btn btn-success">Сохранить</button>
-          <button type="button" class="btn btn-danger ml-1" (click)="modal('close click')">Отменить</button>
-        </div>
-      </form>
+    <div class="modal-header bg-dark">
+        <h4 class="modal-title text-white">Добавить контрагента</h4>
+        <button
+                type="button"
+                class="close text-white"
+                aria-label="Close"
+                id="createContractorModal"
+                (click)="modal('Cross click')"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
-  </div>
+    <div class="modal-body p-3">
+        <div class="text-left">
+            <form (ngSubmit)="submitCreateForm()" [formGroup]="createForm">
+                <div class="form-group">
+                    <label for="editorName">Название редакции</label>
+                    <input
+                            type="text"
+                            formControlName="editorName"
+                            class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && cf.editorName.errors }"
+                            id="editorName"
+                            placeholder="Введите название редакции"
+                    />
+
+                    <div *ngIf="submitted && cf.editorName.errors" class="invalid-feedback">
+                        <div *ngIf="cf.editorName.errors.required">Название редакции обязательно</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="contactPerson">Контактное лицо</label>
+                    <input
+                            type="text"
+                            formControlName="contactPerson"
+                            class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && cf.contactPerson.errors }"
+                            id="contactPerson"
+                            placeholder="Введите контактное лицо"
+                    />
+
+                    <div *ngIf="submitted && cf.contactPerson.errors" class="invalid-feedback">
+                        <div *ngIf="cf.contactPerson.errors.required">Контактное лицо обязательно</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="phoneNumber">Номер телефона</label>
+                    <input
+                            type="text"
+                            formControlName="phoneNumber"
+                            class="form-control"
+                            id="phoneNumber"
+                            [ngClass]="{ 'is-invalid': submitted && cf.phoneNumber.errors }"
+                    />
+                    <span class="font-13 text-muted">e.g "380992314525"</span>
+                    <div *ngIf="submitted && cf.phoneNumber.errors" class="invalid-feedback">
+                        <div *ngIf="cf.phoneNumber.errors.pattern">Введите корректный номер</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input
+                            class="form-control"
+                            id="email"
+                            [ngClass]="{ 'is-invalid': submitted && cf.email.errors }"
+                            placeholder="Введите email"
+                            formControlName="email"
+                    />
+                    <div *ngIf="submitted && cf.email.errors" class="invalid-feedback">
+                        <div *ngIf="cf.email.errors.required">Введите корректный email</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="onePostPrice">Стоимость за одну публикацию</label>
+                    <input
+                            type="number"
+                            class="form-control"
+                            formControlName="onePostPrice"
+                            id="onePostPrice"
+                            min="0"
+                            data-reverse="true"
+                            [ngClass]="{ 'is-invalid': submitted && cf.onePostPrice.errors }"
+                    />
+                    <span class="font-13 text-muted">e.g "100"</span>
+                    <div *ngIf="submitted && cf.onePostPrice.errors" class="invalid-feedback">
+                        <span *ngIf="cf.onePostPrice.errors.required">Введите корректное значение.</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="arrangedNews">Договоренность</label>
+                    <input
+                            type="number"
+                            class="form-control"
+                            formControlName="arrangedNews"
+                            min="0"
+                            id="arrangedNews"
+                            data-reverse="true"
+                            [ngClass]="{ 'is-invalid': submitted && cf.arrangedNews.errors }"
+                    />
+                    <span class="font-13 text-muted">e.g "1000"</span>
+                    <div *ngIf="submitted && cf.arrangedNews.errors" class="invalid-feedback">
+                        <span *ngIf="cf.arrangedNews.errors.required">Введите значение</span>
+                    </div>
+                </div>
+
+                <div class="text-right">
+                    <button type="submit" class="btn btn-success">Сохранить</button>
+                    <button type="button" class="btn btn-danger ml-1" (click)="modal('close click')">Отменить</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </ng-template>
 
 <!-- Edit contractor modal  -->
 <ng-template #editModal role="document" let-modal="close">
-  <div class="modal-header bg-dark update-contractor">
-    <h4 class="modal-title text-white">Обновить контрагента</h4>
-    <button
-      type="button"
-      class="close text-white"
-      aria-label="Close"
-      id="editContractorModal"
-      (click)="modal('Cross click')"
-    >
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body p-3">
-    <div class="text-left">
-      <form (ngSubmit)="submitEditForm()" [formGroup]="updateForm">
-        <div class="form-group">
-          <label for="updateEditorName">Название редакции</label>
-          <input
-            type="text"
-            formControlName="updateEditorName"
-            class="form-control"
-            [ngClass]="{ 'is-invalid': submitted && uf.updateEditorName.errors }"
-            id="updateEditorName"
-            placeholder="Введите название редакции"
-          />
-
-          <div *ngIf="submitted && uf.updateEditorName.errors" class="invalid-feedback">
-            <div *ngIf="uf.updateEditorName.errors.required">Название редакции обязательно</div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="updateContactPerson">Контактное лицо</label>
-          <input
-            type="text"
-            formControlName="updateContactPerson"
-            class="form-control"
-            [ngClass]="{ 'is-invalid': submitted && uf.updateContactPerson.errors }"
-            id="updateContactPerson"
-            placeholder="Введите контактное лицо"
-          />
-
-          <div *ngIf="submitted && uf.updateContactPerson.errors" class="invalid-feedback">
-            <div *ngIf="uf.updateContactPerson.errors.required">Контактное лицо обязательно</div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="updatePhoneNumber">Номер телефона</label>
-          <input
-            type="text"
-            formControlName="updatePhoneNumber"
-            class="form-control"
-            id="updatePhoneNumber"
-            [ngClass]="{ 'is-invalid': submitted && uf.updatePhoneNumber.errors }"
-          />
-          <span class="font-13 text-muted">e.g "380992314525"</span>
-          <div *ngIf="submitted && uf.updatePhoneNumber.errors" class="invalid-feedback">
-            <div *ngIf="uf.updatePhoneNumber.errors.pattern">Введите корректный номер</div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="updateEmail">Email</label>
-          <input
-            class="form-control"
-            id="updateEmail"
-            [ngClass]="{ 'is-invalid': submitted && uf.updateEmail.errors }"
-            placeholder="Введите email"
-            formControlName="updateEmail"
-          />
-          <div *ngIf="submitted && uf.updateEmail.errors" class="invalid-feedback">
-            <div *ngIf="uf.updateEmail.errors.required">Введите email</div>
-            <div *ngIf="uf.updateEmail.errors.pattern">Введите корректный email</div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="updateArrangedNews">Договоренность</label>
-          <input
-            type="number"
-            class="form-control"
-            formControlName="updateArrangedNews"
-            id="updateArrangedNews"
-            data-reverse="true"
-            [ngClass]="{ 'is-invalid': submitted && uf.updateArrangedNews.errors }"
-          />
-          <span class="font-13 text-muted">e.g "1000"</span>
-          <div *ngIf="submitted && uf.updateArrangedNews.errors" class="invalid-feedback">
-            <span *ngIf="uf.updateArrangedNews.errors.required">Введите корректный номер</span>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="updateNewsAmount">Количество размещений</label>
-          <input
-            type="number"
-            class="form-control"
-            formControlName="updateNewsAmount"
-            id="updateNewsAmount"
-            data-reverse="true"
-            [ngClass]="{ 'is-invalid': submitted && uf.updateNewsAmount.errors }"
-          />
-          <span class="font-13 text-muted">e.g "1000"</span>
-          <div *ngIf="submitted && uf.updateNewsAmount.errors" class="invalid-feedback">
-            <span *ngIf="uf.updateNewsAmount.errors.required">Введите корректное значение</span>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="updateOnePostPrice">Стоимость за одну публикацию</label>
-          <input
-            type="number"
-            class="form-control"
-            formControlName="updateOnePostPrice"
-            id="updateOnePostPrice"
-            data-reverse="true"
-            [ngClass]="{ 'is-invalid': submitted && uf.updateOnePostPrice.errors }"
-          />
-          <span class="font-13 text-muted">e.g "100"</span>
-          <div *ngIf="submitted && uf.updateOnePostPrice.errors" class="invalid-feedback">
-            <span *ngIf="uf.updateOnePostPrice.errors.required">Введите корректное значение</span>
-          </div>
-        </div>
-
-        <div class="text-right">
-          <button type="submit" *ngIf="!editCheckedMode" class="btn btn-success">Обновить</button>
-          <button type="submit" *ngIf="editCheckedMode" class="btn btn-success">Обновить выбранные</button>
-          <button type="button" class="btn btn-danger ml-1" (click)="modal('close click')">Отменить</button>
-        </div>
-      </form>
+    <div class="modal-header bg-dark update-contractor">
+        <h4 class="modal-title text-white">Обновить контрагента</h4>
+        <button
+                type="button"
+                class="close text-white"
+                aria-label="Close"
+                id="editContractorModal"
+                (click)="modal('Cross click')"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
-  </div>
+    <div class="modal-body p-3">
+        <div class="text-left">
+            <form (ngSubmit)="submitEditForm()" [formGroup]="updateForm">
+                <div class="form-group">
+                    <label for="updateEditorName">Название редакции</label>
+                    <input
+                            type="text"
+                            formControlName="updateEditorName"
+                            class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && uf.updateEditorName.errors }"
+                            id="updateEditorName"
+                            placeholder="Введите название редакции"
+                    />
+
+                    <div *ngIf="submitted && uf.updateEditorName.errors" class="invalid-feedback">
+                        <div *ngIf="uf.updateEditorName.errors.required">Название редакции обязательно</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="updateContactPerson">Контактное лицо</label>
+                    <input
+                            type="text"
+                            formControlName="updateContactPerson"
+                            class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && uf.updateContactPerson.errors }"
+                            id="updateContactPerson"
+                            placeholder="Введите контактное лицо"
+                    />
+
+                    <div *ngIf="submitted && uf.updateContactPerson.errors" class="invalid-feedback">
+                        <div *ngIf="uf.updateContactPerson.errors.required">Контактное лицо обязательно</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="updatePhoneNumber">Номер телефона</label>
+                    <input
+                            type="text"
+                            formControlName="updatePhoneNumber"
+                            class="form-control"
+                            id="updatePhoneNumber"
+                            [ngClass]="{ 'is-invalid': submitted && uf.updatePhoneNumber.errors }"
+                    />
+                    <span class="font-13 text-muted">e.g "380992314525"</span>
+                    <div *ngIf="submitted && uf.updatePhoneNumber.errors" class="invalid-feedback">
+                        <div *ngIf="uf.updatePhoneNumber.errors.pattern">Введите корректный номер</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="updateEmail">Email</label>
+                    <input
+                            class="form-control"
+                            id="updateEmail"
+                            [ngClass]="{ 'is-invalid': submitted && uf.updateEmail.errors }"
+                            placeholder="Введите email"
+                            formControlName="updateEmail"
+                    />
+                    <div *ngIf="submitted && uf.updateEmail.errors" class="invalid-feedback">
+                        <div *ngIf="uf.updateEmail.errors.required">Введите email</div>
+                        <div *ngIf="uf.updateEmail.errors.pattern">Введите корректный email</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="updateArrangedNews">Договоренность</label>
+                    <input
+                            type="number"
+                            class="form-control"
+                            formControlName="updateArrangedNews"
+                            id="updateArrangedNews"
+                            data-reverse="true"
+                            [ngClass]="{ 'is-invalid': submitted && uf.updateArrangedNews.errors }"
+                    />
+                    <span class="font-13 text-muted">e.g "1000"</span>
+                    <div *ngIf="submitted && uf.updateArrangedNews.errors" class="invalid-feedback">
+                        <span *ngIf="uf.updateArrangedNews.errors.required">Введите корректный номер</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="updateNewsAmount">Количество размещений</label>
+                    <input
+                            type="number"
+                            class="form-control"
+                            formControlName="updateNewsAmount"
+                            id="updateNewsAmount"
+                            data-reverse="true"
+                            [ngClass]="{ 'is-invalid': submitted && uf.updateNewsAmount.errors }"
+                    />
+                    <span class="font-13 text-muted">e.g "1000"</span>
+                    <div *ngIf="submitted && uf.updateNewsAmount.errors" class="invalid-feedback">
+                        <span *ngIf="uf.updateNewsAmount.errors.required">Введите корректное значение</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="updateOnePostPrice">Стоимость за одну публикацию</label>
+                    <input
+                            type="number"
+                            class="form-control"
+                            formControlName="updateOnePostPrice"
+                            id="updateOnePostPrice"
+                            data-reverse="true"
+                            [ngClass]="{ 'is-invalid': submitted && uf.updateOnePostPrice.errors }"
+                    />
+                    <span class="font-13 text-muted">e.g "100"</span>
+                    <div *ngIf="submitted && uf.updateOnePostPrice.errors" class="invalid-feedback">
+                        <span *ngIf="uf.updateOnePostPrice.errors.required">Введите корректное значение</span>
+                    </div>
+                </div>
+
+                <div class="text-right">
+                    <button type="submit" *ngIf="!editCheckedMode" class="btn btn-success">Обновить</button>
+                    <button type="submit" *ngIf="editCheckedMode" class="btn btn-success">Обновить выбранные</button>
+                    <button type="button" class="btn btn-danger ml-1" (click)="modal('close click')">Отменить</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </ng-template>

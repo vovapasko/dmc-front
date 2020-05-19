@@ -1,7 +1,7 @@
 export const endpoints = {
   LOGIN: 'login',
   TOKEN_REFRESH: 'token-refresh',
-  CONTRACTOR: 'contractor',
+  CONTRACTOR: 'contractors',
   MANAGE_NEWS_PROJECTS: 'manage-news-projects',
   BURST_NEWS: 'burst-news',
   NEWS_PROJECTS: 'news-projects',
