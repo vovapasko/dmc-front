@@ -3,8 +3,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-
-import { Contractor } from '../../../core/models/instances/contractor';
+import { Contractor, PostFormatListSet } from '../../../core/models/instances/contractor';
 import { ContractorService } from '../../../core/services/contractor.service';
 import { ErrorService } from '../../../core/services/error.service';
 import { LoadingService } from '../../../core/services/loading.service';
@@ -14,7 +13,7 @@ import {
   DeleteContractors,
   GetContractors,
   SelectContractor,
-  UpdateContractors,
+  UpdateContractors
 } from '../../../core/store/actions/contractor.actions';
 import { IAppState } from '../../../core/store/state/app.state';
 import { setValues } from '../../../core/helpers/utility';
@@ -28,6 +27,9 @@ import { CreateContractorPayload } from '../../../core/models/payloads/contracto
 import { UpdateContractorPayload } from '../../../core/models/payloads/contractor/update';
 import { selectContractorList } from '../../../core/store/selectors/contractor.selectors';
 
+import flatMap from 'lodash.flatmap';
+
+
 /**
  * Contractors component: handling the contractors with sidebar and content
  */
@@ -35,7 +37,7 @@ import { selectContractorList } from '../../../core/store/selectors/contractor.s
 @Component({
   selector: 'app-contractors',
   templateUrl: './contractors.component.html',
-  styleUrls: ['./contractors.component.scss'],
+  styleUrls: ['./contractors.component.scss']
 })
 export class ContractorsComponent implements OnInit {
 
@@ -60,6 +62,7 @@ export class ContractorsComponent implements OnInit {
   updateForm: FormGroup;
   controls: FormArray;
 
+  controlPlacement = {};
 
   constructor(
     private modalService: NgbModal,
@@ -70,7 +73,8 @@ export class ContractorsComponent implements OnInit {
     private store: Store<IAppState>,
     private notificationService: NotificationService,
     private titleService: Title
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.initSubscriptions();
@@ -96,8 +100,8 @@ export class ContractorsComponent implements OnInit {
       {
         label: 'Контрагенты',
         path: '/contractors',
-        active: true,
-      },
+        active: true
+      }
     ];
   }
 
@@ -170,7 +174,7 @@ export class ContractorsComponent implements OnInit {
   public openModal(content: string, editMany = false): void {
     const checkedContractors = this.contractorService.checkedContractors;
     if (editMany && checkedContractors.length === 0) {
-      const {type, title, message, timeout} = Warnings.NO_ELEMENTS_SELECTED;
+      const { type, title, message, timeout } = Warnings.NO_ELEMENTS_SELECTED;
       this.notificationService.notify(type, title, message, timeout);
       return;
     }
@@ -182,7 +186,7 @@ export class ContractorsComponent implements OnInit {
    */
   public addContractor(): void {
     const data = this.contractorService.createContractorData(this.cf, [{ news_amount: numbers.zero }]);
-    const payload = {data} as unknown as CreateContractorPayload;
+    const payload = { data } as unknown as CreateContractorPayload;
     this.add(payload);
     this.modalService.dismissAll();
     this.createForm.reset();
@@ -250,7 +254,7 @@ export class ContractorsComponent implements OnInit {
   // tslint:disable-next-line:ban-types
   public processMany(target: Array<Contractor>, payload: object, handler: Function): void {
     const notificationService = this.notificationService;
-    const {type, title, message, timeout} = Infos.PROCESS_HAS_BEEN_STARTED;
+    const { type, title, message, timeout } = Infos.PROCESS_HAS_BEEN_STARTED;
     notificationService.notify(type, title, message, timeout);
     this.handleProcessMany(target, payload, handler, timeout);
   }
@@ -262,7 +266,7 @@ export class ContractorsComponent implements OnInit {
         const item = target.pop();
         handler({ ...payload, id: item.id });
       } else {
-        const {type, title, message, timeout} = Infos.PROCESS_HAS_BEEN_FINISHED;
+        const { type, title, message, timeout } = Infos.PROCESS_HAS_BEEN_FINISHED;
         this.notificationService.notify(type, title, message, timeout);
         window.clearInterval(interval);
       }
@@ -326,39 +330,44 @@ export class ContractorsComponent implements OnInit {
     contractorService.checkedContractors = [];
   }
 
-  public getControl(index: number, field: string): FormControl {
+  public getControl(id: number, field: string): FormControl {
     if (field) {
+      const index = this.controlPlacement[id];
       return this.controls.at(index).get(field) as FormControl;
     }
     return null;
   }
 
-  public updateField(index: number, field: string ): void {
-    const control = this.getControl(index, field);
-    if (control.valid) {
-      const contractors = this.contractorService.contractors;
-      this.contractorService.contractors = contractors.map((e, i) => {
-        if (index === i) {
-          return {
-            ...e,
-            [field]: control.value
-          }
-        }
-        return e;
-      })
-    }
+  public updateField(contractor: Contractor, field: string): void {
+    const postFormatListSet = contractor.postformatlistSet;
+    const formatIds = postFormatListSet.map(el => el.id);
+    formatIds.forEach(formatId => {
+      const control = this.getControl(formatId, field);
+      if (control.valid) {
+        console.log(control.value);
+      }
+    })
   }
 
   public initControls(contractors: Contractor[]): void {
-    const toGroups = contractors.map(contractor => {
-      return new FormGroup({
-        onePostPrice: new FormControl(contractor.onePostPrice, Validators.required),
-        newsAmount: new FormControl(contractor.newsAmount, Validators.required),
-        arrangedNews: new FormControl(contractor.arrangedNews, Validators.required),
+    const postFormatListSet = flatMap(contractors, (contractor) => contractor.postformatlistSet);
+    const toGroups = this.initControlsFormGroup(postFormatListSet);
+    this.controls = new FormArray(toGroups);
+  }
 
+  public initControlsFormGroup(list: PostFormatListSet[]): FormGroup[] {
+    return list.map((entity, i) => {
+      this.initControlPlacement(entity.id, i);
+      return new FormGroup({
+        onePostPrice: new FormControl(entity.onePostPrice, Validators.required),
+        newsAmount: new FormControl(entity.newsAmount, Validators.required),
+        arrangedNews: new FormControl(entity.arrangedNews, Validators.required)
       });
     });
-    this.controls = new FormArray(toGroups);
+  }
+
+  public initControlPlacement(id: number, index: number) {
+    this.controlPlacement[id] = index;
   }
 
   public _fetchData(): void {

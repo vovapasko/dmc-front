@@ -107,26 +107,56 @@
                                     {{ contractor.email }}
                                 </td>
                                 <td>
-                                    <editable (update)="updateField(i, 'onePostPrice')">
-                                        <ng-template viewMode>{{contractor.onePostPrice}}</ng-template>
+                                    <editable (update)="updateField(contractor, 'onePostPrice')">
+                                        <ng-template viewMode>
+                                            <span>
+                                                <i class="mdi mdi-dots-horizontal m-0 text-muted h3"></i>
+                                            </span>
+                                        </ng-template>
                                         <ng-template editMode>
-                                            <input [formControl]="getControl(i, 'onePostPrice')">
+                                            <div *ngFor="let format of contractor.postformatlistSet; let idx = index;">
+                                                <label for="format_one_post_price{{ idx }}">
+                                                    {{format.postFormat}}
+                                                </label>
+                                                <input id="format_one_post_price{{ idx }}"
+                                                       [formControl]="getControl(format.id, 'onePostPrice')">
+                                            </div>
                                         </ng-template>
                                     </editable>
                                 </td>
                                 <td>
-                                    <editable (update)="updateField(i, 'newsAmount')">
-                                        <ng-template viewMode>{{contractor.newsAmount}}</ng-template>
+                                    <editable (update)="updateField(contractor, 'newsAmount')">
+                                        <ng-template viewMode>
+                                            <span>
+                                                <i class="mdi mdi-dots-horizontal m-0 text-muted h3"></i>
+                                            </span>
+                                        </ng-template>
                                         <ng-template editMode>
-                                            <input [formControl]="getControl(i, 'newsAmount')">
+                                            <div *ngFor="let format of contractor.postformatlistSet; let idx = index;">
+                                                <label for="news_format{{ idx }}">
+                                                    {{format.postFormat}}
+                                                </label>
+                                                <input id="news_format{{ idx }}"
+                                                       [formControl]="getControl(format.id, 'newsAmount')">
+                                            </div>
                                         </ng-template>
                                     </editable>
                                 </td>
                                 <td>
-                                    <editable (update)="updateField(i, 'arrangedNews')">
-                                        <ng-template viewMode>{{contractor.arrangedNews}}</ng-template>
+                                    <editable (update)="updateField(contractor, 'arrangedNews')">
+                                        <ng-template viewMode>
+                                            <span>
+                                                <i class="mdi mdi-dots-horizontal m-0 text-muted h3"></i>
+                                            </span>
+                                        </ng-template>
                                         <ng-template editMode>
-                                            <input [formControl]="getControl(i, 'arrangedNews')">
+                                            <div *ngFor="let format of contractor.postformatlistSet; let idx = index;">
+                                                <label for="arranged_news{{ idx }}">
+                                                    {{format.postFormat}}
+                                                </label>
+                                                <input id="arranged_news{{ idx }}"
+                                                       [formControl]="getControl(format.id, 'arrangedNews')">
+                                            </div>
                                         </ng-template>
                                     </editable>
                                 </td>
