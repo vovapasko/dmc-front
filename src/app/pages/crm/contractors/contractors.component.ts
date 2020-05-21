@@ -28,6 +28,8 @@ import { UpdateContractorPayload } from '../../../core/models/payloads/contracto
 import { selectContractorList } from '../../../core/store/selectors/contractor.selectors';
 
 import flatMap from 'lodash.flatmap';
+import { UpdatePostFormatPayload } from '../../../core/models/payloads/news/format/update-post-format';
+import { UpdateFormat } from '../../../core/store/actions/news.actions';
 
 
 /**
@@ -340,13 +342,21 @@ export class ContractorsComponent implements OnInit {
 
   public updateField(contractor: Contractor, field: string): void {
     const postFormatListSet = contractor.postformatlistSet;
-    const formatIds = postFormatListSet.map(el => el.id);
-    formatIds.forEach(formatId => {
-      const control = this.getControl(formatId, field);
+    postFormatListSet.forEach(el => {
+      const control = this.getControl(el.id, field);
       if (control.valid) {
-        console.log(control.value);
+        const data = {
+          id: el.id,
+          postFormat: el.postFormat,
+          contractor: contractor.id,
+          [field]: +control.value
+        }
+        const payload = {data} as UpdatePostFormatPayload;
+        payload.id = el.id;
+        this.store.dispatch(new UpdateFormat(payload));
       }
-    })
+    });
+
   }
 
   public initControls(contractors: Contractor[]): void {
