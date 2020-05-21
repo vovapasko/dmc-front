@@ -14,7 +14,7 @@ import { CreateProjectResponse } from '../models/responses/news/project/create-p
 import { GetProjectResponse } from '../models/responses/news/project/get-project';
 import { GetProjectsResponse } from '../models/responses/news/project/get-projects';
 import { UpdateProjectPayload } from '../models/payloads/news/project/update';
-import { Contractor } from '../models/instances/contractor';
+import { Contractor, PostFormatListSet } from '../models/instances/contractor';
 import { revenueRadialChart } from 'src/app/pages/dashboards/default/data';
 import { NotificationService } from './notification.service';
 import { Project } from '../models/instances/project';
@@ -97,21 +97,21 @@ export class NewsService {
     );
   }
 
-  public getAllPostFormats(): Observable<GetFormatsResponse> {
+  public getAllPostFormats(): Observable<PostFormatListSet[]> {
     return this.requestHandler.request(
       `${api}/${endpoints.POST_FORMATS}/`,
       methods.GET,
       null,
-      (response: GetAllFormatsResponse) => response
+      (response: GetAllFormatsResponse) => response.results
     );
   }
 
-  public getPostFormats(payload: GetPostFormatPayload): Observable<GetFormatsResponse> {
+  public getPostFormats(payload: GetPostFormatPayload): Observable<PostFormatListSet[]> {
     return this.requestHandler.request(
       `${api}/${endpoints.POST_FORMATS}/${payload.id}`,
       methods.GET,
       null,
-      (response: GetFormatsResponse) => response
+      (response: GetFormatsResponse) => response.results
     );
   }
 

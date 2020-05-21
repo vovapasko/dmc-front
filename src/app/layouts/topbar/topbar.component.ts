@@ -15,10 +15,10 @@ import { ErrorService } from '../../core/services/error.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { IAppState } from '../../core/store/state/app.state';
-import { CreateFormat, CreateHashtag } from '../../core/store/actions/news.actions';
+import { CreateFormats, CreateHashtag } from '../../core/store/actions/news.actions';
 import { ServerError } from '../../core/models/responses/server/error';
 import { CreateHashtagPayload } from '../../core/models/payloads/news/hashtag/create';
-import { CreatePostFormatPayload } from '../../core/models/payloads/news/format/create';
+import { CreatePostsFormatPayload } from '../../core/models/payloads/news/format/create';
 
 /**
  * Top bar component - history, profile bar, logout and create new items
@@ -96,7 +96,7 @@ export class TopbarComponent implements OnInit {
     this.submit(this.createHashtagForm, this.createHashtag.bind(this), payload);
   }
 
-  public submit(form: FormGroup, handler, payload: CreateHashtagPayload | CreatePostFormatPayload): void {
+  public submit(form: FormGroup, handler, payload: CreateHashtagPayload | CreatePostsFormatPayload): void {
     if(form) {
       this.submitted = true;
       if (form && form.invalid) {
@@ -117,12 +117,12 @@ export class TopbarComponent implements OnInit {
     const cf = this.cf;
     const postFormat = cf.postFormat.value;
     const data = { postFormat };
-    const payload = {data} as unknown as CreatePostFormatPayload;
+    const payload = {data} as unknown as CreatePostsFormatPayload;
     this.submit(this.createFormatForm, this.createFormat.bind(this), payload);
   }
 
-  public createFormat(payload: CreatePostFormatPayload): void {
-    this.store.dispatch(new CreateFormat(payload));
+  public createFormat(payload: CreatePostsFormatPayload): void {
+    this.store.dispatch(new CreateFormats(payload));
   }
 
   // convenience getter for easy access to form fields

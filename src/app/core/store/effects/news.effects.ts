@@ -5,34 +5,40 @@ import { mergeMap, switchMap } from 'rxjs/operators';
 
 import { NewsService } from '../../services/news.service';
 import {
-  CreateFormat,
+  CreateFormat, CreateFormats, CreateFormatsSuccess,
   CreateFormatSuccess,
   CreateHashtag,
   CreateHashtagSuccess,
   CreateProject,
-  CreateProjectSuccess,
+  CreateProjectSuccess, DeleteFormat, DeleteFormatSuccess,
   ENewsActions,
   GetCharactersSuccess,
   GetContractorsSuccess,
   GetFormatsSuccess,
   GetHashtagsSuccess,
-  GetMethodsSuccess,
+  GetMethodsSuccess, GetPostFormat, GetPostFormats, GetPostFormatsSuccess, GetPostFormatSuccess,
   GetProject,
   GetProjectConfiguration,
   GetProjects,
   GetProjectsSuccess,
-  GetProjectSuccess,
+  GetProjectSuccess, UpdateFormat, UpdateFormatSuccess,
   UpdateProject,
-  UpdateProjectSuccess,
+  UpdateProjectSuccess
 } from '../actions/news.actions';
 import { GetAllResponse } from '../../models/responses/news/project/get-all-response';
 import { Hashtag } from '../../models/instances/hashtag';
 import { Format } from '../../models/instances/format';
 import { Project } from '../../models/instances/project';
 import { CreateHashtagPayload } from '../../models/payloads/news/hashtag/create';
-import { CreatePostFormatPayload } from '../../models/payloads/news/format/create';
 import { CreateProjectPayload } from '../../models/payloads/news/project/create';
 import { UpdateProjectPayload } from '../../models/payloads/news/project/update';
+import { CreatePostsFormatResponse } from '../../models/responses/news/format/create-post-format';
+import { CreatePostsFormatPayload } from '../../models/payloads/news/format/create';
+import { CreatePostFormatPayload } from '../../models/payloads/news/format/create-post-format';
+import { PostFormatListSet } from '../../models/instances/contractor';
+import { UpdatePostFormatPayload } from '../../models/payloads/news/format/update-post-format';
+import { DeletePostFormatPayload } from '../../models/payloads/news/format/delete-post-format';
+import { GetPostFormatPayload } from '../../models/payloads/news/format/get-post-format';
 
 @Injectable({
   providedIn: 'root',
@@ -56,13 +62,6 @@ export class NewsEffects {
     ofType<CreateHashtag>(ENewsActions.CreateHashtag),
     switchMap((action: {payload: CreateHashtagPayload}) => this.newsService.createHashtag(action.payload)),
     switchMap((hashtag: Hashtag) => of(new CreateHashtagSuccess(hashtag)))
-  );
-
-  @Effect()
-  createFormat$ = this.actions$.pipe(
-    ofType<CreateFormat>(ENewsActions.CreateFormat),
-    switchMap((action: {payload: CreatePostFormatPayload}) => this.newsService.createFormat(action.payload)),
-    switchMap((format: Format) => of(new CreateFormatSuccess(format)))
   );
 
   @Effect()
@@ -92,6 +91,49 @@ export class NewsEffects {
     switchMap(() => this.newsService.getProjects()),
     switchMap((projects: Project[]) => of(new GetProjectsSuccess(projects)))
   );
+
+  @Effect()
+  createFormat$ = this.actions$.pipe(
+    ofType<CreateFormat>(ENewsActions.CreateFormat),
+    switchMap((action: {payload: CreatePostFormatPayload}) => this.newsService.createPostFormat(action.payload)),
+    switchMap((format: PostFormatListSet) => of(new CreateFormatSuccess(format)))
+  );
+
+  @Effect()
+  createFormats$ = this.actions$.pipe(
+    ofType<CreateFormats>(ENewsActions.CreateFormats),
+    switchMap((action: {payload: CreatePostsFormatPayload}) => this.newsService.createFormat(action.payload)),
+    switchMap((format: Format) => of(new CreateFormatsSuccess(format)))
+  );
+
+  @Effect()
+  updateFormat$ = this.actions$.pipe(
+    ofType<UpdateFormat>(ENewsActions.UpdateFormat),
+    switchMap((action: {payload: UpdatePostFormatPayload}) => this.newsService.updatePostFormat(action.payload)),
+    switchMap((format: PostFormatListSet) => of(new UpdateFormatSuccess(format)))
+  );
+
+  @Effect()
+  deleteFormat$ = this.actions$.pipe(
+    ofType<DeleteFormat>(ENewsActions.DeleteFormat),
+    switchMap((action: {payload: DeletePostFormatPayload}) => this.newsService.deletePostFormat(action.payload)),
+    switchMap((format: Format) => of(new DeleteFormatSuccess(format)))
+  );
+
+  @Effect()
+  getFormats$ = this.actions$.pipe(
+    ofType<GetPostFormats>(ENewsActions.GetPostFormats),
+    switchMap((action) => this.newsService.getAllPostFormats()),
+    switchMap((formats: PostFormatListSet[]) => of(new GetPostFormatsSuccess(formats)))
+  );
+
+  @Effect()
+  getFormat$ = this.actions$.pipe(
+    ofType<GetPostFormat>(ENewsActions.GetPostFormat),
+    switchMap((action: {payload: GetPostFormatPayload}) => this.newsService.getPostFormats(action.payload)),
+    switchMap((format: PostFormatListSet[]) => of(new GetPostFormatSuccess(format)))
+  );
+
 
   constructor(private newsService: NewsService, private actions$: Actions) {}
 }
