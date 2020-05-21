@@ -25,7 +25,7 @@ import {
   UpdateProject,
   UpdateProjectSuccess,
 } from '../actions/news.actions';
-import { GetAllResponse } from '../../models/responses/news/get-all-response';
+import { GetAllResponse } from '../../models/responses/news/project/get-all-response';
 import { Hashtag } from '../../models/instances/hashtag';
 import { Format } from '../../models/instances/format';
 import { Project } from '../../models/instances/project';

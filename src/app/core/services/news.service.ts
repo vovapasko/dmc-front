@@ -2,21 +2,18 @@ import { environment } from '../../../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { delay } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 
 import { RequestHandler } from '../helpers/request-handler';
-import { GetAllResponse } from '../models/responses/news/get-all-response';
+import { GetAllResponse } from '../models/responses/news/project/get-all-response';
 import { CreateHashtagPayload } from '../models/payloads/news/hashtag/create';
-import { CreateHashtagResponse } from '../models/responses/news/create-hashtag';
-import { CreatePostFormatPayload } from '../models/payloads/news/format/create';
-import { CreatePostFormatResponse } from '../models/responses/news/create-post-format';
+import { CreateHashtagResponse } from '../models/responses/news/hashtag/create-hashtag';
+import { CreatePostsFormatResponse } from '../models/responses/news/format/create-post-format';
 import { CreateProjectPayload } from '../models/payloads/news/project/create';
-import { CreateProjectResponse } from '../models/responses/news/create-project';
-import { GetProjectResponse } from '../models/responses/news/get-project';
-import { GetProjectsResponse } from '../models/responses/news/get-projects';
+import { CreateProjectResponse } from '../models/responses/news/project/create-project';
+import { GetProjectResponse } from '../models/responses/news/project/get-project';
+import { GetProjectsResponse } from '../models/responses/news/project/get-projects';
 import { UpdateProjectPayload } from '../models/payloads/news/project/update';
-import { NotificationType } from '../models/instances/notification';
 import { Contractor } from '../models/instances/contractor';
 import { revenueRadialChart } from 'src/app/pages/dashboards/default/data';
 import { NotificationService } from './notification.service';
@@ -32,6 +29,16 @@ import { Warnings } from '../constants/notifications';
 import { endpoints } from '../constants/endpoints';
 import { methods } from '../constants/methods';
 import { SecurityService } from './security.service';
+import { GetAllFormatsResponse } from '../models/responses/news/format/get-all';
+import { GetFormatsResponse } from '../models/responses/news/format/get';
+import { GetPostFormatPayload } from '../models/payloads/news/format/get-post-format';
+import { CreatePostsFormatPayload } from '../models/payloads/news/format/create';
+import { CreatePostFormatPayload } from '../models/payloads/news/format/create-post-format';
+import { CreatePostFormatResponse } from '../models/responses/news/format/create';
+import { UpdatePostFormatPayload } from '../models/payloads/news/format/update-post-format';
+import { UpdatePostFormatResponse } from '../models/responses/news/format/update-post-format';
+import { DeletePostFormatPayload } from '../models/payloads/news/format/delete-post-format';
+import { DeletePostFormatResponse } from '../models/responses/news/format/delete-post-format';
 
 const api = environment.api;
 
@@ -90,6 +97,51 @@ export class NewsService {
     );
   }
 
+  public getAllPostFormats(): Observable<GetFormatsResponse> {
+    return this.requestHandler.request(
+      `${api}/${endpoints.POST_FORMATS}/`,
+      methods.GET,
+      null,
+      (response: GetAllFormatsResponse) => response
+    );
+  }
+
+  public getPostFormats(payload: GetPostFormatPayload): Observable<GetFormatsResponse> {
+    return this.requestHandler.request(
+      `${api}/${endpoints.POST_FORMATS}/${payload.id}`,
+      methods.GET,
+      null,
+      (response: GetFormatsResponse) => response
+    );
+  }
+
+  public createPostFormat(payload: CreatePostFormatPayload) {
+    return this.requestHandler.request(
+      `${api}/${endpoints.POST_FORMATS}/${payload.id}`,
+      methods.POST,
+      payload,
+      (response: CreatePostFormatResponse) => response
+    );
+  }
+
+  public updatePostFormat(payload: UpdatePostFormatPayload) {
+    return this.requestHandler.request(
+      `${api}/${endpoints.POST_FORMATS}/${payload.id}`,
+      methods.PUT,
+      payload,
+      (response: UpdatePostFormatResponse) => response
+    );
+  }
+
+  public deletePostFormat(payload: DeletePostFormatPayload) {
+    return this.requestHandler.request(
+      `${api}/${endpoints.POST_FORMATS}/${payload.id}`,
+      methods.DELETE,
+      null,
+      (response: DeletePostFormatResponse) => response
+    );
+  }
+
   public createHashtag(payload: CreateHashtagPayload): Observable<Hashtag> {
     return this.requestHandler.request(
       `${api}/${endpoints.HASHTAGS}/`,
@@ -99,12 +151,12 @@ export class NewsService {
     );
   }
 
-  public createFormat(payload: CreatePostFormatPayload): Observable<Format> {
+  public createFormat(payload: CreatePostsFormatPayload): Observable<Format> {
     return this.requestHandler.request(
       `${api}/${endpoints.POST_FORMAT}/`,
       methods.POST,
       payload,
-      (response: CreatePostFormatResponse) => response.postMethod
+      (response: CreatePostsFormatResponse) => response.postMethod
     );
   }
 
@@ -214,7 +266,7 @@ export class NewsService {
   }
 
   public addNewItem(newsList: News[]): News[] {
-    if(newsList) {
+    if (newsList) {
       const list = newsList.slice();
       list.push(new News('', [], { base64: images.defaultImage, file: null }));
       return list;

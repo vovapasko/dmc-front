@@ -13,5 +13,6 @@ export const endpoints = {
   CHANGE_GROUP: 'change-group',
   CHANGE_PASSWORD_CONFIRM: 'change-password-confirm',
   CHANGE_PASS: 'change-pass',
-  PROFILE: 'profile'
+  PROFILE: 'profile',
+  POST_FORMATS: 'postformats'
 };
