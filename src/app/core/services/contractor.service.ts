@@ -188,9 +188,7 @@ export class ContractorService {
         '',
         [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$')]
         // [this.isEmailUnique.bind(this), this.isEmailValid.bind(this)]
-      ],
-      arrangedNews: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
-      onePostPrice: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]]
+      ]
     });
   }
 
@@ -202,10 +200,7 @@ export class ContractorService {
       updateEditorName: ['', [Validators.required, Validators.minLength(1)]],
       updateContactPerson: ['', [Validators.required, Validators.minLength(1)]],
       updatePhoneNumber: ['', [Validators.required, Validators.pattern('^\\+?3?8?(0\\d{9})$')]],
-      updateEmail: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$')]],
-      updateArrangedNews: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
-      updateOnePostPrice: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
-      updateNewsAmount: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]]
+      updateEmail: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$')]]
     });
   }
 

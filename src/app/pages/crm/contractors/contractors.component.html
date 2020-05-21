@@ -276,40 +276,6 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="onePostPrice">Стоимость за одну публикацию</label>
-                    <input
-                            type="number"
-                            class="form-control"
-                            formControlName="onePostPrice"
-                            id="onePostPrice"
-                            min="0"
-                            data-reverse="true"
-                            [ngClass]="{ 'is-invalid': submitted && cf.onePostPrice.errors }"
-                    />
-                    <span class="font-13 text-muted">e.g "100"</span>
-                    <div *ngIf="submitted && cf.onePostPrice.errors" class="invalid-feedback">
-                        <span *ngIf="cf.onePostPrice.errors.required">Введите корректное значение.</span>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="arrangedNews">Договоренность</label>
-                    <input
-                            type="number"
-                            class="form-control"
-                            formControlName="arrangedNews"
-                            min="0"
-                            id="arrangedNews"
-                            data-reverse="true"
-                            [ngClass]="{ 'is-invalid': submitted && cf.arrangedNews.errors }"
-                    />
-                    <span class="font-13 text-muted">e.g "1000"</span>
-                    <div *ngIf="submitted && cf.arrangedNews.errors" class="invalid-feedback">
-                        <span *ngIf="cf.arrangedNews.errors.required">Введите значение</span>
-                    </div>
-                </div>
-
                 <div class="text-right">
                     <button type="submit" class="btn btn-success">Сохранить</button>
                     <button type="button" class="btn btn-danger ml-1" (click)="modal('close click')">Отменить</button>
@@ -395,54 +361,6 @@
                     <div *ngIf="submitted && uf.updateEmail.errors" class="invalid-feedback">
                         <div *ngIf="uf.updateEmail.errors.required">Введите email</div>
                         <div *ngIf="uf.updateEmail.errors.pattern">Введите корректный email</div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="updateArrangedNews">Договоренность</label>
-                    <input
-                            type="number"
-                            class="form-control"
-                            formControlName="updateArrangedNews"
-                            id="updateArrangedNews"
-                            data-reverse="true"
-                            [ngClass]="{ 'is-invalid': submitted && uf.updateArrangedNews.errors }"
-                    />
-                    <span class="font-13 text-muted">e.g "1000"</span>
-                    <div *ngIf="submitted && uf.updateArrangedNews.errors" class="invalid-feedback">
-                        <span *ngIf="uf.updateArrangedNews.errors.required">Введите корректный номер</span>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="updateNewsAmount">Количество размещений</label>
-                    <input
-                            type="number"
-                            class="form-control"
-                            formControlName="updateNewsAmount"
-                            id="updateNewsAmount"
-                            data-reverse="true"
-                            [ngClass]="{ 'is-invalid': submitted && uf.updateNewsAmount.errors }"
-                    />
-                    <span class="font-13 text-muted">e.g "1000"</span>
-                    <div *ngIf="submitted && uf.updateNewsAmount.errors" class="invalid-feedback">
-                        <span *ngIf="uf.updateNewsAmount.errors.required">Введите корректное значение</span>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="updateOnePostPrice">Стоимость за одну публикацию</label>
-                    <input
-                            type="number"
-                            class="form-control"
-                            formControlName="updateOnePostPrice"
-                            id="updateOnePostPrice"
-                            data-reverse="true"
-                            [ngClass]="{ 'is-invalid': submitted && uf.updateOnePostPrice.errors }"
-                    />
-                    <span class="font-13 text-muted">e.g "100"</span>
-                    <div *ngIf="submitted && uf.updateOnePostPrice.errors" class="invalid-feedback">
-                        <span *ngIf="uf.updateOnePostPrice.errors.required">Введите корректное значение</span>
                     </div>
                 </div>
 
