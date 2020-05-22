@@ -61,7 +61,7 @@
                                                 (click)="checkAll()"
                                                 [checked]="
                           (checkedContractors$ | async)?.length !== 0 &&
-                          (checkedContractors$ | async)?.length === (paginatedContractorData$ | async)?.length
+                          (checkedContractors$ | async)?.length === (contractors$ | async)?.length
                         "
                                                 type="checkbox"
                                                 class="custom-control-input"
