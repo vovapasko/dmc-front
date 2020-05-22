@@ -341,22 +341,38 @@ export class ContractorsComponent implements OnInit {
   }
 
   public updateField(contractor: Contractor, field: string): void {
-    const postFormatListSet = contractor.postformatlistSet;
-    postFormatListSet.forEach(el => {
-      const control = this.getControl(el.id, field);
-      if (control.valid) {
-        const data = {
-          id: el.id,
-          postFormat: el.postFormat,
-          contractor: contractor.id,
-          [field]: +control.value
-        }
-        const payload = {data} as UpdatePostFormatPayload;
-        payload.id = el.id;
-        this.store.dispatch(new UpdateFormat(payload));
+    const postFormatListSet = contractor.postformatlistSet.slice();
+    const { timeout } = Infos.PROCESS_HAS_BEEN_FINISHED;
+    const updateFormats = this.updateFormats.bind(this);
+    const interval = window.setInterval(() => {
+      if (postFormatListSet.length) {
+        const el = postFormatListSet.pop();
+        const payload = this.collectFormatPayload(contractor, field, el);
+        updateFormats(payload);
+      } else {
+        window.clearInterval(interval);
       }
-    });
+    }, timeout);
+  }
 
+  public collectFormatPayload(contractor: Contractor, field: string, el: PostFormatListSet): null | UpdatePostFormatPayload {
+    const control = this.getControl(el.id, field);
+    if (control.valid) {
+      const data = {
+        id: el.id,
+        postFormat: el.postFormat,
+        contractor: contractor.id,
+        [field]: +control.value
+      }
+      const payload = {data} as UpdatePostFormatPayload;
+      payload.id = el.id;
+      return payload;
+    }
+    return null;
+  }
+
+  public updateFormats(payload: UpdatePostFormatPayload): void {
+    this.store.dispatch(new UpdateFormat(payload));
   }
 
   public initControls(contractors: Contractor[]): void {
