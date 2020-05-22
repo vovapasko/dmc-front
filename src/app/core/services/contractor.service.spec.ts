@@ -39,7 +39,7 @@ describe('ContractorService', () => {
         expect(contractors.length).toBe(mockContractors.length);
       });
 
-      const req = httpMock.expectOne(`${api}/contractor/?page=1`);
+      const req = httpMock.expectOne(`${api}/contractors/?page=1`);
       expect(req.request.method).toBe('GET');
       req.flush({ results: mockContractors });
     });
@@ -51,7 +51,7 @@ describe('ContractorService', () => {
         expect(contractor).toBeTruthy();
       });
 
-      const req = httpMock.expectOne(`${api}/contractor/`);
+      const req = httpMock.expectOne(`${api}/contractors/`);
       expect(req.request.method).toBe('POST');
       req.flush({ contractor: mockContractor });
     });
@@ -63,7 +63,7 @@ describe('ContractorService', () => {
         expect(contractor).toBeTruthy();
       });
 
-      const req = httpMock.expectOne(`${api}/contractor/${mockUpdate.id}`);
+      const req = httpMock.expectOne(`${api}/contractors/${mockUpdate.id}`);
       expect(req.request.method).toBe('PUT');
       req.flush({ contractor: mockContractor });
     });
@@ -75,7 +75,7 @@ describe('ContractorService', () => {
         expect(response).toBeTruthy();
       });
 
-      const req = httpMock.expectOne(`${api}/contractor/${mockDelete.id}`);
+      const req = httpMock.expectOne(`${api}/contractors/${mockDelete.id}`);
       expect(req.request.method).toBe('DELETE');
       req.flush({ success: true });
     });

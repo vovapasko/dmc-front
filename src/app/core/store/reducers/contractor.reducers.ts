@@ -1,5 +1,5 @@
 import { ContractorActions, EContractorActions } from '../actions/contractor.actions';
-import { initialContractorState, IContractorState } from '../state/contractor.state';
+import { IContractorState, initialContractorState } from '../state/contractor.state';
 
 export const contractorReducers = (state = initialContractorState, action: ContractorActions): IContractorState => {
   console.log(action);
@@ -18,6 +18,11 @@ export const contractorReducers = (state = initialContractorState, action: Contr
       return {
         ...state,
         contractors: state.contractors.filter((el) => el.id !== action.payload.id),
+      };
+    case EContractorActions.GetContractorsSuccess:
+      return {
+        ...state,
+        contractors: action.payload
       };
     case EContractorActions.SelectContractorSuccess:
       return {

@@ -1,4 +1,4 @@
-import { Hashtag } from '../../instances/hashtag';
+import { Hashtag } from '../../../instances/hashtag';
 
 export interface CreateHashtagResponse {
   success: boolean;

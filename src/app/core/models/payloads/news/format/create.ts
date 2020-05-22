@@ -1,4 +1,4 @@
-export interface CreatePostFormatPayload {
+export interface CreatePostsFormatPayload {
   data: {
     postFormat: string;
   };

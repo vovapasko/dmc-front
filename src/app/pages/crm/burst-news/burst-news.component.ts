@@ -329,3 +329,4 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 }
 
+

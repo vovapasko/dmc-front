@@ -2,7 +2,6 @@ import { LoginPayload } from './auth/login';
 import { CreateContractorPayload } from './contractor/create';
 import { DeleteContractorPayload } from './contractor/delete';
 import { UpdateContractorPayload } from './contractor/update';
-import { CreatePostFormatPayload } from './news/format/create';
 import { CreateHashtagPayload } from './news/hashtag/create';
 import { CreateProjectPayload } from './news/project/create';
 import { GetProjectPayload } from './news/project/get';
@@ -13,6 +12,8 @@ import { RegisterPayload } from './user/register';
 import { SignupPayload } from './user/signup';
 import { UpdateProfilePayload } from './user/update-profile';
 import { UpdatePayload } from './user/update';
+import { CreatePostFormatPayload } from './news/format/create-post-format';
+import { CreatePostsFormatPayload } from './news/format/create';
 
 export type Payloads =
   | LoginPayload
@@ -20,6 +21,7 @@ export type Payloads =
   | DeleteContractorPayload
   | UpdateContractorPayload
   | CreatePostFormatPayload
+  | CreatePostsFormatPayload
   | CreateHashtagPayload
   | CreateProjectPayload
   | GetProjectPayload
