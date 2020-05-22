@@ -117,7 +117,7 @@ export class NewsService {
 
   public createPostFormat(payload: CreatePostFormatPayload) {
     return this.requestHandler.request(
-      `${api}/${endpoints.POST_FORMATS}/${payload.id}`,
+      `${api}/${endpoints.POST_FORMATS}/`,
       methods.POST,
       payload,
       (response: CreatePostFormatResponse) => response

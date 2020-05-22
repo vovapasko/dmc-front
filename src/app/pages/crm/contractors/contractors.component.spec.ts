@@ -209,6 +209,8 @@ describe('ContractorsComponent', () => {
 
   it('should cleanAfterUpdate', () => {
     component.initUpdateForm();
+    component.initCreateForm();
+    component.initCreateFormatForm();
     component.cleanAfterUpdate();
     expect(component.editCheckedMode).toBeFalsy();
   });

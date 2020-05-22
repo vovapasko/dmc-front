@@ -192,6 +192,15 @@ export class ContractorService {
     });
   }
 
+  public initializeCreateFormatForm(): FormGroup {
+    return this.formBuilder.group({
+      postFormat: ['', [Validators.required, Validators.minLength(1)]],
+      newsAmount: [null, [Validators.required, Validators.minLength(1)]],
+      arrangedNews: [null, [Validators.required, Validators.minLength(1)]],
+      onePostPrice: [null, [Validators.required, Validators.minLength(1)]],
+    });
+  }
+
   /**
    * Validators for Update Form
    */

@@ -29,7 +29,8 @@ import { selectContractorList } from '../../../core/store/selectors/contractor.s
 
 import flatMap from 'lodash.flatmap';
 import { UpdatePostFormatPayload } from '../../../core/models/payloads/news/format/update-post-format';
-import { UpdateFormat } from '../../../core/store/actions/news.actions';
+import { CreateFormat, UpdateFormat } from '../../../core/store/actions/news.actions';
+import { CreatePostFormatPayload } from '../../../core/models/payloads/news/format/create-post-format';
 
 
 /**
@@ -61,6 +62,7 @@ export class ContractorsComponent implements OnInit {
   editCheckedMode = false;
 
   createForm: FormGroup;
+  createFormatForm: FormGroup;
   updateForm: FormGroup;
   controls: FormArray;
 
@@ -113,6 +115,11 @@ export class ContractorsComponent implements OnInit {
   public initFormGroups(): void {
     this.initCreateForm();
     this.initUpdateForm();
+    this.initCreateFormatForm();
+  }
+
+  public initCreateFormatForm(): void {
+    this.createFormatForm = this.contractorService.initializeCreateFormatForm()
   }
 
   /**
@@ -159,6 +166,10 @@ export class ContractorsComponent implements OnInit {
   // convenience getter for easy access to form fields
   get uf() {
     return this.updateForm.controls;
+  }
+
+  get cff() {
+    return this.createFormatForm.controls;
   }
 
   /**
@@ -246,6 +257,8 @@ export class ContractorsComponent implements OnInit {
   public cleanAfterUpdate(): void {
     this.editCheckedMode = false;
     this.updateForm.reset();
+    this.createFormatForm.reset();
+    this.createForm.reset();
     this.modalService.dismissAll();
     this.contractorService.checkedContractors = [];
   }
@@ -254,25 +267,44 @@ export class ContractorsComponent implements OnInit {
    * Handle processing with many items, delete or update
    */
   // tslint:disable-next-line:ban-types
-  public processMany(target: Array<Contractor>, payload: object, handler: Function): void {
+  public processMany(target: Array<Contractor>, data: object, handler: Function, alias:Array<{key: string, ali: string}> = []): void {
     const notificationService = this.notificationService;
     const { type, title, message, timeout } = Infos.PROCESS_HAS_BEEN_STARTED;
     notificationService.notify(type, title, message, timeout);
-    this.handleProcessMany(target, payload, handler, timeout);
+    this.handleProcessMany(target, data, handler, timeout, alias);
   }
 
   // tslint:disable-next-line:ban-types
-  public handleProcessMany(target: Array<Contractor>, payload: object, handler: Function, time: number): void {
+  public handleProcessMany(target: Array<Contractor>, data: object, handler: Function, time: number, alias: Array<{key: string, ali: string}> = []): void {
     const interval = window.setInterval(() => {
       if (target.length) {
         const item = target.pop();
-        handler({ ...payload, id: item.id });
+        const payload = { ...data, id: item.id };
+        alias.forEach(al => payload[al.key] = item[al.ali])
+        handler(payload);
       } else {
         const { type, title, message, timeout } = Infos.PROCESS_HAS_BEEN_FINISHED;
         this.notificationService.notify(type, title, message, timeout);
         window.clearInterval(interval);
       }
     }, time);
+  }
+
+  public addNewFormats(): void {
+    const checkedContractors = this.contractorService.checkedContractors as unknown as Contractor[];
+    const payload = this.collectAddNewFormatsPayload();
+    const aliases = [{key: 'contractor', ali: 'id'}];
+    this.processMany(checkedContractors.slice(), payload, this.addFormats.bind(this), aliases);
+    this.cleanAfterUpdate();
+  }
+
+  public addFormats(data) {
+    const payload = {data} as unknown as CreatePostFormatPayload;
+    this.store.dispatch(new CreateFormat(payload));
+  }
+
+  public collectAddNewFormatsPayload(): CreatePostFormatPayload {
+    return this.contractorService.createContractorData(this.cff) as unknown as CreatePostFormatPayload;
   }
 
   /**
@@ -348,7 +380,9 @@ export class ContractorsComponent implements OnInit {
       if (postFormatListSet.length) {
         const el = postFormatListSet.pop();
         const payload = this.collectFormatPayload(contractor, field, el);
-        updateFormats(payload);
+        if(payload) {
+          updateFormats(payload);
+        }
       } else {
         window.clearInterval(interval);
       }
@@ -357,7 +391,7 @@ export class ContractorsComponent implements OnInit {
 
   public collectFormatPayload(contractor: Contractor, field: string, el: PostFormatListSet): null | UpdatePostFormatPayload {
     const control = this.getControl(el.id, field);
-    if (control.valid) {
+    if (control.valid && control.dirty) {
       const data = {
         id: el.id,
         postFormat: el.postFormat,

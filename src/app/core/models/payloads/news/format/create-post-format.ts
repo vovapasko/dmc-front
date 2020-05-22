@@ -1,5 +1,5 @@
 export interface CreatePostFormatPayload {
-  id: number;
+  id?: number;
   postFormat: string;
   contractor: number;
   newsAmount?: number;
