@@ -37,7 +37,7 @@ export enum ENewsActions {
   UpdateFormat = '[News] Update format',
   UpdateFormatSuccess = '[News] Update format success',
   GetPostFormats = '[News] Get post formats',
-  GetPostFormatsSuccess = '[News] Get post formats',
+  GetPostFormatsSuccess = '[News] Get post formats success',
   GetPostFormat = '[News] Get post format',
   GetPostFormatSuccess = '[News] Get post format',
   DeleteFormat = '[News] Delete format',

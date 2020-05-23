@@ -18,3 +18,5 @@ export const selectMethods = createSelector(selectNews, (state: INewsState) => s
 export const selectCharacters = createSelector(selectNews, (state: INewsState) => state.characters);
 
 export const selectFormats = createSelector(selectNews, (state: INewsState) => state.formats);
+
+export const selectFormatsList = createSelector(selectNews, (state: INewsState) => state.formatsList);

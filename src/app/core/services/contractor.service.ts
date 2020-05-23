@@ -201,6 +201,12 @@ export class ContractorService {
     });
   }
 
+  public initializeDeleteFormatForm(): FormGroup {
+    return this.formBuilder.group({
+      deletePostFormat: [null, Validators.required]
+    })
+  }
+
   /**
    * Validators for Update Form
    */

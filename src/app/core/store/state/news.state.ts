@@ -4,12 +4,13 @@ import { Character } from '../../models/instances/character';
 import { Method } from '../../models/instances/method';
 import { Project } from '../../models/instances/project';
 import { News } from '../../models/instances/news';
-import { Contractor } from '../../models/instances/contractor';
+import { Contractor, PostFormatListSet } from '../../models/instances/contractor';
 
 export interface INewsState {
   hashtags: Hashtag[];
   contractors: Contractor[];
   formats: Format[];
+  formatsList: PostFormatListSet[];
   characters: Character[];
   methods: Method[];
   projects: Project[];
@@ -25,5 +26,6 @@ export const initialNewsState: INewsState = {
   methods: [],
   projects: [],
   contractors: [],
+  formatsList: [],
   project: null,
 };

@@ -17,42 +17,57 @@
                         </div>
                         <div class="col-md-10">
                             <div class="text-md-right">
-                                <button
-                                        (click)="openModal(createModal)"
-                                        type="button"
-                                        id="add-new-contractor-button"
-                                        class="btn btn-success mb-2 mr-2"
-                                >
-                                    <i class="mdi mdi-basket mr-1"></i>
-                                    Добавить контрагента
-                                </button>
-                                <button
-                                        type="button"
-                                        id="edit-contractor-button"
-                                        (click)="editChecked(); openModal(editModal, true)"
-                                        class="btn btn-warning mb-2 mr-1"
-                                >
-                                    <i class="mdi mdi-settings"></i>
-                                    Изменить выбранные
-                                </button>
-                                <button
-                                        type="button"
-                                        id="delete-contractor-button"
-                                        (click)="deleteChecked()"
-                                        class="btn btn-danger mb-2 mr-1"
-                                >
-                                    <i class="mdi mdi-close"></i>
-                                    Удалить выбранные
-                                </button>
-                                <button
-                                        type="button"
-                                        id="format-contractor-button"
-                                        (click)="editChecked(); openModal(addNewFormatModal, true)"
-                                        class="btn btn-info mb-2 mr-1"
-                                >
-                                    <i class="mdi mdi-plus"></i>
-                                    Добавить формат размещения
-                                </button>
+                                <div class="dropdown float-right" ngbDropdown>
+                                    <a
+                                            href="javascript: void(0);"
+                                            class="dropdown-toggle card-drop arrow-none"
+                                            ngbDropdownToggle
+                                            aria-expanded="false"
+                                    >
+                                        <i class="mdi mdi-dots-horizontal m-0 text-muted h3"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+                                        <!-- item-->
+                                        <a href="javascript:void(0);"
+                                           class="dropdown-item"
+                                           (click)="openModal(createModal)"
+                                        >
+                                            <i class="mdi mdi-basket mr-1"></i>
+                                            Добавить контрагента
+                                        </a>
+                                        <!-- item-->
+                                        <a href="javascript:void(0);"
+                                           class="dropdown-item"
+                                           (click)="editChecked(); openModal(editModal, true)"
+                                        >
+                                            <i class="mdi mdi-settings"></i>
+                                            Изменить выбранные
+                                        </a>
+                                        <!-- item-->
+                                        <a href="javascript:void(0);"
+                                           class="dropdown-item"
+                                           (click)="deleteChecked()"
+                                        >
+                                            <i class="mdi mdi-close"></i>
+                                            Удалить выбранные
+                                        </a>
+                                        <!-- item-->
+                                        <a href="javascript:void(0);"
+                                           (click)="editChecked(); openModal(addNewFormatModal, true)"
+                                           class="dropdown-item"
+                                        >
+                                            <i class="mdi mdi-plus"></i>
+                                            Добавить формат размещения
+                                        </a>
+                                        <!-- item-->
+                                        <a href="javascript:void(0);"
+                                           (click)="editChecked(); openModal(deleteFormatModal, true)"
+                                           class="dropdown-item">
+                                            <i class="mdi mdi-minus"></i>
+                                            Удалить формат размещения
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <!-- end col-->
@@ -382,6 +397,53 @@
                     </div>
                 </div>
 
+
+                <div class="text-right">
+                    <button type="submit" class="btn btn-success">Сохранить</button>
+                    <button type="button" class="btn btn-danger ml-1" (click)="modal('close click')">Отменить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</ng-template>
+
+<!-- Delete format modal  -->
+<ng-template #deleteFormatModal role="document" let-modal="close">
+    <div class="modal-header bg-dark">
+        <h4 class="modal-title text-white">Удалить формат размещения</h4>
+        <button
+                type="button"
+                class="close text-white"
+                aria-label="Close"
+                id="deleteFormatModal"
+                (click)="modal('Cross click')"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body p-3">
+        <div class="text-left">
+            <form (ngSubmit)="deleteFormats()" [formGroup]="deleteFormatForm">
+                <div class="form-group row mb-3">
+                    <label for="deletePostFormat" class="col-md-3 col-form-label"> Форматы </label>
+                    <div class="col-md-9">
+                        <ng-select
+                                id="deletePostFormat"
+                                [items]="formats$ | async"
+                                bindLabel="postFormat"
+                                bindValue="id"
+                                [multiple]="true"
+                                [closeOnSelect]="false"
+                                [hideSelected]="true"
+                                placeholder="Выберите форматы для удаления"
+                                formControlName="deletePostFormat"
+                                [ngClass]="{ 'is-invalid': submitted && dff.deletePostFormat.errors }"
+                        ></ng-select>
+                        <div *ngIf="submitted && dff.deletePostFormat.errors" class="invalid-feedback">
+                            <span *ngIf="dff.deletePostFormat.errors.required"></span>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="text-right">
                     <button type="submit" class="btn btn-success">Сохранить</button>

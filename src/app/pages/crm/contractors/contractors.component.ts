@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { Contractor, PostFormatListSet } from '../../../core/models/instances/contractor';
 import { ContractorService } from '../../../core/services/contractor.service';
 import { ErrorService } from '../../../core/services/error.service';
@@ -29,8 +29,10 @@ import { selectContractorList } from '../../../core/store/selectors/contractor.s
 
 import flatMap from 'lodash.flatmap';
 import { UpdatePostFormatPayload } from '../../../core/models/payloads/news/format/update-post-format';
-import { CreateFormat, UpdateFormat } from '../../../core/store/actions/news.actions';
+import { CreateFormat, DeleteFormat, GetPostFormats, UpdateFormat } from '../../../core/store/actions/news.actions';
 import { CreatePostFormatPayload } from '../../../core/models/payloads/news/format/create-post-format';
+import { selectFormats, selectFormatsList } from '../../../core/store/selectors/news.selectors';
+import { DeletePostFormatPayload } from '../../../core/models/payloads/news/format/delete-post-format';
 
 
 /**
@@ -56,6 +58,8 @@ export class ContractorsComponent implements OnInit {
   page$: BehaviorSubject<number> = new BehaviorSubject(1);
   pageSize$: BehaviorSubject<number> = new BehaviorSubject(10);
 
+  formats$ = this.store.pipe(select(selectFormatsList));
+
   breadCrumbItems: Array<{}>;
   submitted: boolean;
   term = '';
@@ -63,6 +67,7 @@ export class ContractorsComponent implements OnInit {
 
   createForm: FormGroup;
   createFormatForm: FormGroup;
+  deleteFormatForm: FormGroup;
   updateForm: FormGroup;
   controls: FormArray;
 
@@ -116,6 +121,11 @@ export class ContractorsComponent implements OnInit {
     this.initCreateForm();
     this.initUpdateForm();
     this.initCreateFormatForm();
+    this.initDeleteFormatForm();
+  }
+
+  public initDeleteFormatForm(): void {
+    this.deleteFormatForm = this.contractorService.initializeDeleteFormatForm()
   }
 
   public initCreateFormatForm(): void {
@@ -170,6 +180,10 @@ export class ContractorsComponent implements OnInit {
 
   get cff() {
     return this.createFormatForm.controls;
+  }
+
+  get dff() {
+    return this.deleteFormatForm.controls;
   }
 
   /**
@@ -259,6 +273,7 @@ export class ContractorsComponent implements OnInit {
     this.updateForm.reset();
     this.createFormatForm.reset();
     this.createForm.reset();
+    this.deleteFormatForm.reset();
     this.modalService.dismissAll();
     this.contractorService.checkedContractors = [];
   }
@@ -296,6 +311,16 @@ export class ContractorsComponent implements OnInit {
     const aliases = [{key: 'contractor', ali: 'id'}];
     this.processMany(checkedContractors.slice(), payload, this.addFormats.bind(this), aliases);
     this.cleanAfterUpdate();
+  }
+
+  public deleteFormats(): void {
+    const ids = this.deleteFormatForm.value.deletePostFormat.map(id => ({id}));
+    this.processMany(ids, {}, this.deleteFormat.bind(this));
+    this.cleanAfterUpdate();
+  }
+
+  public deleteFormat(payload: DeletePostFormatPayload): void {
+    this.store.dispatch(new DeleteFormat(payload));
   }
 
   public addFormats(data) {
@@ -434,5 +459,6 @@ export class ContractorsComponent implements OnInit {
     const store = this.store;
     store.select(selectContractorList).subscribe(this.initControls.bind(this));
     store.dispatch(new GetContractors());
+    store.dispatch(new GetPostFormats());
   }
 }

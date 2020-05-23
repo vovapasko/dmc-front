@@ -71,6 +71,11 @@ export const newsReducers = (state = initialNewsState, action: NewsActions): INe
         projects: state.projects.map((el) => (el.id === action.payload.id ? action.payload : el)),
       };
     }
+    case ENewsActions.GetPostFormatsSuccess:
+      return {
+        ...state,
+        formatsList: action.payload
+      }
     default:
       return state;
   }
