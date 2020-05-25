@@ -49,18 +49,17 @@
                     <a href="javascript: void(0);" class="text-dark">{{ project?.projectName }}</a>
                 </h4>
                 <p class="text-muted text-uppercase">
-                    <i class="mdi mdi-account-circle"></i> <small>{{ project?.clientName }}</small>
+                    <span>Менеджер проекта </span> <i class="mdi mdi-account-circle"></i> <small>{{ project?.projectManager }}</small>
                 </p>
-                <div
-                        class="badge bg-soft-success text-success mb-3"
-                        [ngClass]="{ 'bg-soft-dark text-dark': project?.isConfirmed }"
-                >
+                <p class="text-muted text-uppercase">
+                    <span>Метод разгона </span> <i class="mdi mdi-account-circle"></i> <small>{{ project?.projectBurstMethod }}</small>
+                </p>
+                <div class="badge bg-soft-success text-success mb-3" [ngClass]="{ 'bg-soft-dark text-dark': project?.isConfirmed }">
                     {{ project?.isConfirmed ? 'подтвержден' : 'на согласовании' }}
                 </div>
                 <!-- Desc-->
                 <p class="text-muted font-13 mb-3 sp-line-2">
-                    {{ project?.projectTitle }}<a href="javascript:void(0);" class="font-weight-bold text-muted">view
-                    more</a>
+                    {{ project?.clientName }}
                 </p>
                 <!-- Task info-->
                 <p class="mb-1">
@@ -73,24 +72,9 @@
             <b> {{ project?.projectContractors?.length }}</b> Контрагенты
           </span>
                 </p>
-                <!-- Team-->
-                <div class="avatar-group mb-3">
-                    <a *ngFor="let news of project?.newsInProject" href="javascript: void(0);"
-                       class="avatar-group-item">
-                        <img
-                                placement="top"
-                                [ngbTooltip]="news?.title"
-                                src="{{ news?.image || noImage }}"
-                                class="rounded-circle avatar-sm"
-                                alt="news"
-                        />
-                    </a>
-                </div>
-                <!-- Progress-->
-                <p class="mb-2 font-weight-bold">
-                    Прогресс: <span class="float-right">{{ project.progress }}</span>
-                </p>
-                <ngb-progressbar [value]="project.progress" [max]="100" height="7px"></ngb-progressbar>
+                <button type="button" class="btn btn-sm btn-blue waves-effect waves-light float-right">
+                    <i class="mdi mdi-eye-circle"></i> Посмотреть
+                </button>
             </div>
             <!-- end card box-->
         </div>
