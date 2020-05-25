@@ -141,7 +141,6 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     this.error$ = this.errorService.error$;
     this.submitForm = false;
     this.revenueRadialChart = revenueRadialChart;
-    this.store.dispatch(new GetProjectConfiguration());
     this.projectId = +this.route.snapshot.queryParamMap.get('id');
   }
 
@@ -322,6 +321,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   public fetchData(): void {
     const id = this.projectId;
     const store = this.store;
+    store.dispatch(new GetProjectConfiguration());
     if (id) {
       store.select(selectProject).subscribe(this.processProject.bind(this));
       store.dispatch(new GetProject({ id }));

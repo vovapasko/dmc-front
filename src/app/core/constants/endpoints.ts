@@ -14,5 +14,6 @@ export const endpoints = {
   CHANGE_PASSWORD_CONFIRM: 'change-password-confirm',
   CHANGE_PASS: 'change-pass',
   PROFILE: 'profile',
-  POST_FORMATS: 'postformats'
+  POST_FORMATS: 'postformats',
+  PROJECTS: 'projects'
 };
