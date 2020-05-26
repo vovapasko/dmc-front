@@ -19,6 +19,8 @@ import { GetUsers } from '../../../core/store/actions/user.actions';
 import { selectContractorList } from '../../../core/store/selectors/contractor.selectors';
 import { GetContractors } from '../../../core/store/actions/contractor.actions';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { selectEmailsList } from '../../../core/store/selectors/project.selectors';
+import { GetEmails } from '../../../core/store/actions/project.actions';
 
 @Component({
   selector: 'app-projects',
@@ -46,6 +48,7 @@ export class ProjectsComponent implements OnInit {
   contractors$ = this.store.pipe(select(selectContractorList));
   projects$ = this.store.pipe(select(selectProjects));
   hashtags$ = this.store.pipe(select(selectHashtags));
+  emails$ = this.store.pipe(select(selectEmailsList));
 
   constructor(
     private store: Store<IAppState>,
@@ -118,6 +121,7 @@ export class ProjectsComponent implements OnInit {
     store.dispatch(new GetProjectConfiguration());
     store.dispatch(new GetUsers());
     store.dispatch(new GetContractors());
+    store.dispatch(new GetEmails());
   }
 
 

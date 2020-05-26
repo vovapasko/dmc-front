@@ -188,18 +188,21 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="projectMail"> Почта </label>
-                    <input
-                            type="email"
-                            formControlName="projectMail"
-                            class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && f.projectName.errors }"
+                    <label for="projectContractors"> Котрагенты </label>
+                    <ng-select
                             id="projectMail"
-                            placeholder="Введите почту"
-                    />
-
+                            [items]="emails$ | async"
+                            bindLabel="email"
+                            [multiple]="true"
+                            [closeOnSelect]="false"
+                            [hideSelected]="true"
+                            placeholder="Выберите контрагентов"
+                            formControlName="projectMail"
+                            [ngClass]="{ 'is-invalid': submitted && f.projectMail.errors }"
+                    >
+                    </ng-select>
                     <div *ngIf="submitted && f.projectMail.errors" class="invalid-feedback">
-                        <div *ngIf="f.projectMail.errors.required">Почта проекта обязательна</div>
+                        <span *ngIf="f.projectMail.errors.required"></span>
                     </div>
                 </div>
 
