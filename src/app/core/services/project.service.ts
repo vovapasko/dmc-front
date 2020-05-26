@@ -128,4 +128,12 @@ export class ProjectService {
     });
   }
 
+  public initializeCreateEmailForm(): FormGroup {
+    return this.formBuilder.group({
+      email: [null, Validators.required],
+      template: null,
+      signature: null,
+    });
+  }
+
 }

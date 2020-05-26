@@ -19,6 +19,9 @@ import { CreateFormats, CreateHashtag } from '../../core/store/actions/news.acti
 import { ServerError } from '../../core/models/responses/server/error';
 import { CreateHashtagPayload } from '../../core/models/payloads/news/hashtag/create';
 import { CreatePostsFormatPayload } from '../../core/models/payloads/news/format/create';
+import { ProjectService } from '../../core/services/project.service';
+import { CreateEmailPayload } from '../../core/models/payloads/project/email/create';
+import { CreateEmail } from '../../core/store/actions/project.actions';
 
 /**
  * Top bar component - history, profile bar, logout and create new items
@@ -40,6 +43,7 @@ export class TopbarComponent implements OnInit {
 
   createHashtagForm: FormGroup;
   createFormatForm: FormGroup;
+  createEmailForm: FormGroup;
 
   @Output() settingsButtonClicked = new EventEmitter();
   @Output() mobileMenuButtonClicked = new EventEmitter();
@@ -54,7 +58,8 @@ export class TopbarComponent implements OnInit {
     private loadingService: LoadingService,
     private errorService: ErrorService,
     private modalService: NgbModal,
-    private store: Store<IAppState>
+    private store: Store<IAppState>,
+    private projectService: ProjectService
   ) {}
 
   ngOnInit() {
@@ -74,6 +79,7 @@ export class TopbarComponent implements OnInit {
   public initFormGroups(): void {
     this.initCreateHashtagForm();
     this.initCreateFormatForm();
+    this.initCreateEmailForm();
   }
 
   public initCreateHashtagForm(): void {
@@ -88,6 +94,10 @@ export class TopbarComponent implements OnInit {
     this.createFormatForm = this.newsService.initializeCreateFormatForm();
   }
 
+  public initCreateEmailForm(): void {
+    this.createEmailForm = this.projectService.initializeCreateEmailForm();
+  }
+
   public submitCreateHashtagForm(): void {
     const ch = this.ch;
     const name = ch.name.value;
@@ -96,7 +106,7 @@ export class TopbarComponent implements OnInit {
     this.submit(this.createHashtagForm, this.createHashtag.bind(this), payload);
   }
 
-  public submit(form: FormGroup, handler, payload: CreateHashtagPayload | CreatePostsFormatPayload): void {
+  public submit(form: FormGroup, handler, payload: CreateHashtagPayload | CreatePostsFormatPayload | CreateEmailPayload): void {
     if(form) {
       this.submitted = true;
       if (form && form.invalid) {
@@ -121,6 +131,19 @@ export class TopbarComponent implements OnInit {
     this.submit(this.createFormatForm, this.createFormat.bind(this), payload);
   }
 
+  public submitCreateEmailForm(): void {
+    const ce = this.ce;
+    const data = ce.value;
+    console.log(data);
+    return;
+    const payload = {data} as unknown as CreateEmailPayload;
+    this.submit(this.createEmailForm, this.createEmail.bind(this), payload);
+  }
+
+  public createEmail(payload: CreateEmailPayload): void {
+    this.store.dispatch(new CreateEmail(payload));
+  }
+
   public createFormat(payload: CreatePostsFormatPayload): void {
     this.store.dispatch(new CreateFormats(payload));
   }
@@ -131,9 +154,16 @@ export class TopbarComponent implements OnInit {
   }
 
   // convenience getter for easy access to form fields
+  get ce(): { [p: string]: AbstractControl } {
+    return this.createEmailForm.controls;
+  }
+
+  // convenience getter for easy access to form fields
   get cf(): { [p: string]: AbstractControl } {
     return this.createFormatForm.controls;
   }
+
+
 
   /**
    * Remove notification from list
