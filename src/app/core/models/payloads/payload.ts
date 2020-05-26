@@ -14,6 +14,9 @@ import { UpdateProfilePayload } from './user/update-profile';
 import { UpdatePayload } from './user/update';
 import { CreatePostFormatPayload } from './news/format/create-post-format';
 import { CreatePostsFormatPayload } from './news/format/create';
+import { CreateEmailPayload } from './project/email/create';
+import { UpdateEmailPayload } from './project/email/update';
+import { DeleteEmailPayload } from './project/email/delete';
 
 export type Payloads =
   | LoginPayload
@@ -31,4 +34,7 @@ export type Payloads =
   | RegisterPayload
   | SignupPayload
   | UpdateProfilePayload
-  | UpdatePayload;
+  | UpdatePayload
+  | CreateEmailPayload
+  | UpdateEmailPayload
+  | DeleteEmailPayload

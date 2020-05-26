@@ -39,6 +39,11 @@ import { UpdatePostFormatPayload } from '../models/payloads/news/format/update-p
 import { UpdatePostFormatResponse } from '../models/responses/news/format/update-post-format';
 import { DeletePostFormatPayload } from '../models/payloads/news/format/delete-post-format';
 import { DeletePostFormatResponse } from '../models/responses/news/format/delete-post-format';
+import { CreateEmailPayload } from '../models/payloads/project/email/create';
+import { UpdateEmailPayload } from '../models/payloads/project/email/update';
+import { Email } from '../models/instances/email';
+import { GetAllEmailsResponse } from '../models/responses/project/email/getAll';
+import { DeleteEmailPayload } from '../models/payloads/project/email/delete';
 
 const api = environment.api;
 
@@ -72,6 +77,42 @@ export class ProjectService {
       methods.GET,
       null,
       (response: any) => response.projects
+    );
+  }
+
+  public createEmail(payload: CreateEmailPayload) {
+    return this.requestHandler.request(
+      `${api}/${endpoints.EMAILS}/`,
+      methods.POST,
+      payload,
+      (response: Email) => response
+    );
+  }
+
+  public updateEmail(payload: UpdateEmailPayload) {
+    return this.requestHandler.request(
+      `${api}/${endpoints.EMAILS}/`,
+      methods.PUT,
+      payload,
+      (response: Email) => response
+    );
+  }
+
+  public getEmails() {
+    return this.requestHandler.request(
+      `${api}/${endpoints.EMAILS}/`,
+      methods.GET,
+      null,
+      (response: GetAllEmailsResponse) => response.results
+    );
+  }
+
+  public deleteEmail(payload: DeleteEmailPayload) {
+    return this.requestHandler.request(
+      `${api}/${endpoints.EMAILS}/${payload.id}`,
+      methods.DELETE,
+      null,
+      (response: null) => payload
     );
   }
 

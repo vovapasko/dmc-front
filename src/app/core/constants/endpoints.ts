@@ -15,5 +15,6 @@ export const endpoints = {
   CHANGE_PASS: 'change-pass',
   PROFILE: 'profile',
   POST_FORMATS: 'postformats',
-  PROJECTS: 'projects'
+  PROJECTS: 'projects',
+  EMAILS: 'emails'
 };
