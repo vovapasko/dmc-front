@@ -132,10 +132,7 @@ export class TopbarComponent implements OnInit {
   }
 
   public submitCreateEmailForm(): void {
-    const ce = this.ce;
-    const data = ce.value;
-    console.log(data);
-    return;
+    const data = this.createEmailForm.value;
     const payload = {data} as unknown as CreateEmailPayload;
     this.submit(this.createEmailForm, this.createEmail.bind(this), payload);
   }

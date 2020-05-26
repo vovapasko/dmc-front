@@ -150,6 +150,12 @@
           <i class="fe-hash mr-1"></i>
           <span>Создать хештег</span>
         </a>
+
+        <!-- item-->
+        <a routerLinkActive="active" (click)="openModal(createEmail)" class="dropdown-item">
+          <i class="fe-mail mr-1"></i>
+          <span>Создать почту</span>
+        </a>
       </div>
     </li>
   </ul>
@@ -251,7 +257,7 @@
   </div>
   <div class="modal-body p-3">
     <div class="text-left">
-      <form (ngSubmit)="submitCreateEmailForm()" [formGroup]="createFormatForm">
+      <form (ngSubmit)="submitCreateEmailForm()" [formGroup]="createEmailForm">
         <app-ui-preloader [display]="loading$ | async"></app-ui-preloader>
         <ngb-alert type="danger" *ngIf="error$ | async" [dismissible]="false">Пожалуйста, повторите попытку</ngb-alert>
 

@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { switchMap } from 'rxjs/operators';
-import { Hashtag } from '../../models/instances/hashtag';
-import { CreateHashtagPayload } from '../../models/payloads/news/hashtag/create';
 import { ProjectService } from '../../services/project.service';
 import {
   CreateEmail, CreateEmailSuccess, DeleteEmail, DeleteEmailSuccess,
@@ -14,7 +12,6 @@ import {
   GetProjectsSuccess, UpdateEmail, UpdateEmailSuccess
 } from '../actions/project.actions';
 import { Project } from '../../models/instances/project';
-import { GetProject } from '../actions/news.actions';
 import { Email } from '../../models/instances/email';
 import { CreateEmailPayload } from '../../models/payloads/project/email/create';
 import { UpdateEmailPayload } from '../../models/payloads/project/email/update';

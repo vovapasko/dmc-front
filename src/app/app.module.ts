@@ -29,6 +29,7 @@ import { reducerProvider, reducerToken } from './core/store/reducers/app.reducer
 
 import { environment } from '../environments/environment';
 import { NewsEffects } from './core/store/effects/news.effects';
+import { ProjectEffects } from './core/store/effects/project.effects';
 
 @NgModule({
   declarations: [AppComponent, Error404Component, Error500Component, NotificationComponent],
@@ -41,7 +42,7 @@ import { NewsEffects } from './core/store/effects/news.effects';
     LayoutsModule,
     AppRoutingModule,
     StoreModule.forRoot(reducerToken),
-    EffectsModule.forRoot([UserEffects, ContractorEffects, NewsEffects]),
+    EffectsModule.forRoot([UserEffects, ContractorEffects, NewsEffects, ProjectEffects]),
     StoreRouterConnectingModule.forRoot({ stateKey: 'router' }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
