@@ -19,8 +19,9 @@ import { GetUsers } from '../../../core/store/actions/user.actions';
 import { selectContractorList } from '../../../core/store/selectors/contractor.selectors';
 import { GetContractors } from '../../../core/store/actions/contractor.actions';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { selectEmailsList } from '../../../core/store/selectors/project.selectors';
-import { GetEmails } from '../../../core/store/actions/project.actions';
+import { selectEmailsList, selectProjectsList } from '../../../core/store/selectors/project.selectors';
+import { CreateNewsProject, GetEmails, GetNewsProjects } from '../../../core/store/actions/project.actions';
+import { CreateNewsProjectPayload } from '../../../core/models/payloads/project/news-project/create';
 
 @Component({
   selector: 'app-projects',
@@ -46,7 +47,7 @@ export class ProjectsComponent implements OnInit {
 
   users$ = this.store.pipe(select(selectUserList));
   contractors$ = this.store.pipe(select(selectContractorList));
-  projects$ = this.store.pipe(select(selectProjects));
+  projects$ = this.store.pipe(select(selectProjectsList));
   hashtags$ = this.store.pipe(select(selectHashtags));
   emails$ = this.store.pipe(select(selectEmailsList));
 
@@ -77,7 +78,19 @@ export class ProjectsComponent implements OnInit {
   }
 
   public addNewProject(): void {
+    const data = this.createProjectForm.value;
+    const payload = {data} as unknown as CreateNewsProjectPayload;
+    this.createNewsProject(payload);
+    this.cleanAfter();
+  }
 
+  public createNewsProject(payload: CreateNewsProjectPayload): void {
+    this.store.dispatch(new CreateNewsProject(payload));
+  }
+
+  public cleanAfter(): void {
+    this.createProjectForm.reset();
+    this.modalService.dismissAll();
   }
 
   public initBreadCrumbItems(): void {
@@ -117,7 +130,7 @@ export class ProjectsComponent implements OnInit {
    */
   public _fetchData(): void {
     const store = this.store;
-    // store.dispatch(new GetProjects());
+    store.dispatch(new GetNewsProjects());
     store.dispatch(new GetProjectConfiguration());
     store.dispatch(new GetUsers());
     store.dispatch(new GetContractors());

@@ -4,31 +4,42 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { switchMap } from 'rxjs/operators';
 import { ProjectService } from '../../services/project.service';
 import {
-  CreateEmail, CreateEmailSuccess, DeleteEmail, DeleteEmailSuccess,
+  CreateEmail,
+  CreateEmailSuccess,
+  CreateNewsProject,
+  CreateNewsProjectSuccess,
+  DeleteEmail,
+  DeleteEmailSuccess,
+  DeleteNewsProject, DeleteNewsProjectSuccess,
   EProjectActions,
   GetEmails,
   GetEmailsSuccess,
+  GetNewsProject,
+  GetNewsProjects,
+  GetNewsProjectsSuccess,
+  GetNewsProjectSuccess,
   GetProjects,
-  GetProjectsSuccess, UpdateEmail, UpdateEmailSuccess
+  GetProjectsSuccess,
+  UpdateEmail,
+  UpdateEmailSuccess,
+  UpdateNewsProject,
+  UpdateNewsProjectSuccess
 } from '../actions/project.actions';
 import { Project } from '../../models/instances/project';
 import { Email } from '../../models/instances/email';
 import { CreateEmailPayload } from '../../models/payloads/project/email/create';
 import { UpdateEmailPayload } from '../../models/payloads/project/email/update';
 import { DeleteEmailPayload } from '../../models/payloads/project/email/delete';
+import { NewsProject } from '../../models/instances/news-project';
+import { CreateNewsProjectPayload } from '../../models/payloads/project/news-project/create';
+import { UpdateNewsProjectPayload } from '../../models/payloads/project/news-project/update';
+import { GetNewsProjectPayload } from '../../models/payloads/project/news-project/get';
+import { DeleteNewsProjectPayload } from '../../models/payloads/project/news-project/delete';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProjectEffects {
-
-  @Effect()
-  getProjects$ = this.actions$.pipe(
-    ofType<GetProjects>(EProjectActions.GetProjects),
-    switchMap((action) => this.projectService.getProjects()),
-    switchMap((projects: Project[]) => of(new GetProjectsSuccess(projects)))
-  );
-
   @Effect()
   getEmails$ = this.actions$.pipe(
     ofType<GetEmails>(EProjectActions.GetEmails),
@@ -56,6 +67,47 @@ export class ProjectEffects {
     switchMap((action: {payload: DeleteEmailPayload}) => this.projectService.deleteEmail(action.payload)),
     switchMap((payload: DeleteEmailPayload) => of(new DeleteEmailSuccess(payload)))
   );
+
+  @Effect()
+  getNewsProjects$ = this.actions$.pipe(
+    ofType<GetNewsProjects>(EProjectActions.GetNewsProjects),
+    switchMap((action) => this.projectService.getNewsProjects()),
+    switchMap((payload: NewsProject[]) => of(new GetNewsProjectsSuccess(payload)))
+  );
+
+
+  @Effect()
+  createNewsProject$ = this.actions$.pipe(
+    ofType<CreateNewsProject>(EProjectActions.CreateNewsProject),
+    switchMap((action: {payload: CreateNewsProjectPayload}) => this.projectService.createNewsProject(action.payload)),
+    switchMap((payload: NewsProject) => of(new CreateNewsProjectSuccess(payload)))
+  );
+
+
+  @Effect()
+  updateNewsProjects$ = this.actions$.pipe(
+    ofType<UpdateNewsProject>(EProjectActions.UpdateNewsProject),
+    switchMap((action: {payload: UpdateNewsProjectPayload}) => this.projectService.updateNewsProject(action.payload)),
+    switchMap((payload: NewsProject) => of(new UpdateNewsProjectSuccess(payload)))
+  );
+
+
+  @Effect()
+  getNewsProject$ = this.actions$.pipe(
+    ofType<GetNewsProject>(EProjectActions.GetNewsProject),
+    switchMap((action: {payload: GetNewsProjectPayload}) => this.projectService.getNewsProject(action.payload)),
+    switchMap((payload: NewsProject) => of(new GetNewsProjectSuccess(payload)))
+  );
+
+
+  @Effect()
+  deleteNewsProject$ = this.actions$.pipe(
+    ofType<DeleteNewsProject>(EProjectActions.DeleteNewsProject),
+    switchMap((action: {payload: DeleteNewsProjectPayload}) => this.projectService.deleteNewsProject(action.payload)),
+    switchMap((payload: DeleteNewsProjectPayload) => of(new DeleteNewsProjectSuccess(payload)))
+  );
+
+
 
   constructor(private projectService: ProjectService, private actions$: Actions) {}
 }

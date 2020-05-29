@@ -4,10 +4,30 @@ import { Email } from '../../models/instances/email';
 import { CreateEmailPayload } from '../../models/payloads/project/email/create';
 import { UpdateEmailPayload } from '../../models/payloads/project/email/update';
 import { DeleteEmailPayload } from '../../models/payloads/project/email/delete';
+import { CreateNewsProjectPayload } from '../../models/payloads/project/news-project/create';
+import { NewsProject } from '../../models/instances/news-project';
+import { UpdateNewsProjectPayload } from '../../models/payloads/project/news-project/update';
+import { GetNewsProjectPayload } from '../../models/payloads/project/news-project/get';
+import { DeleteNewsProjectPayload } from '../../models/payloads/project/news-project/delete';
 
 export enum EProjectActions {
   GetProjects = '[Project] Get projects',
   GetProjectsSuccess = '[Project] Get projects success',
+
+  GetNewsProjects = '[Project] Get news projects',
+  GetNewsProjectsSuccess = '[Project] Get news projects success',
+
+  CreateNewsProject = '[Project] Create news project',
+  CreateNewsProjectSuccess = '[Project] Create news project success',
+
+  UpdateNewsProject = '[Project] Update news project',
+  UpdateNewsProjectSuccess = '[Project] Update news project success',
+
+  DeleteNewsProject = '[Project] Delete news project',
+  DeleteNewsProjectSuccess = '[Project] Delete news project success',
+
+  GetNewsProject = '[Project] Get news project',
+  GetNewsProjectSuccess = '[Project] Get news project success',
 
   GetEmails = '[Project] Get emails',
   GetEmailsSuccess = '[Project] Get emails success',
@@ -32,7 +52,7 @@ export class GetProjects implements Action {
 export class GetProjectsSuccess implements Action {
   public readonly type = EProjectActions.GetProjectsSuccess;
 
-  constructor(public payload: Project[]) {
+  constructor(public payload: NewsProject[]) {
   }
 }
 
@@ -93,6 +113,76 @@ export class DeleteEmailSuccess {
 }
 
 
+export class CreateNewsProject {
+  public readonly type = EProjectActions.CreateNewsProject;
+
+  constructor(public payload: CreateNewsProjectPayload) {
+  }
+}
+
+export class CreateNewsProjectSuccess {
+  public readonly type = EProjectActions.CreateNewsProjectSuccess;
+
+  constructor(public payload: NewsProject) {
+  }
+}
+
+export class UpdateNewsProject {
+  public readonly type = EProjectActions.UpdateNewsProject;
+
+  constructor(public payload: UpdateNewsProjectPayload) {
+  }
+}
+
+export class UpdateNewsProjectSuccess {
+  public readonly type = EProjectActions.UpdateNewsProjectSuccess;
+
+  constructor(public payload: NewsProject) {
+  }
+}
+
+export class GetNewsProject {
+  public readonly type = EProjectActions.GetNewsProject;
+
+  constructor(public payload: GetNewsProjectPayload) {
+  }
+}
+
+export class GetNewsProjectSuccess {
+  public readonly type = EProjectActions.GetNewsProjectSuccess;
+
+  constructor(public payload: NewsProject) {
+  }
+}
+
+export class DeleteNewsProject {
+  public readonly type = EProjectActions.DeleteNewsProject;
+
+  constructor(public payload: DeleteNewsProjectPayload) {
+  }
+}
+
+export class DeleteNewsProjectSuccess {
+  public readonly type = EProjectActions.DeleteNewsProjectSuccess;
+
+  constructor(public payload: DeleteNewsProjectPayload) {
+  }
+}
+
+export class GetNewsProjects {
+  public readonly type = EProjectActions.GetNewsProjects;
+
+  constructor() {
+  }
+}
+
+export class GetNewsProjectsSuccess {
+  public readonly type = EProjectActions.GetNewsProjectsSuccess;
+
+  constructor(public payload: NewsProject[]) {
+  }
+}
+
 export type ProjectActions =
   | GetEmails
   | GetEmailsSuccess
@@ -104,4 +194,13 @@ export type ProjectActions =
   | UpdateEmailSuccess
   | DeleteEmail
   | DeleteEmailSuccess
-  
+  | CreateNewsProject
+  | CreateNewsProjectSuccess
+  | UpdateNewsProject
+  | UpdateNewsProjectSuccess
+  | DeleteNewsProject
+  | DeleteNewsProjectSuccess
+  | GetNewsProject
+  | GetNewsProjectSuccess
+  | GetNewsProjects
+  | GetNewsProjectsSuccess

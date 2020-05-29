@@ -35,6 +35,33 @@ export const projectReducer = (state = initialProjectsState, action: ProjectActi
         emails: state.emails.filter(el => el.id !== action.payload.id)
       };
 
+    case EProjectActions.GetNewsProjectsSuccess:
+      return {
+        ...state,
+        projects: action.payload
+      };
+
+    case EProjectActions.GetNewsProjectSuccess:
+      return {
+        ...state,
+        project: action.payload
+      };
+
+    case EProjectActions.CreateNewsProjectSuccess:
+      return {
+        ...state,
+        projects: [...state.projects, action.payload]
+      };
+    case EProjectActions.UpdateNewsProjectSuccess:
+      return {
+        ...state,
+        projects: state.projects.map(el => el.id === action.payload.id ? action.payload : el)
+      };
+    case EProjectActions.DeleteNewsProjectSuccess:
+      return {
+        ...state,
+        projects: state.projects.filter(el => el.id !== action.payload.id)
+      };
     default:
       return state;
   }

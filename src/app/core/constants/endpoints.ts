@@ -16,5 +16,6 @@ export const endpoints = {
   PROFILE: 'profile',
   POST_FORMATS: 'postformats',
   PROJECTS: 'projects',
-  EMAILS: 'news-emails'
+  EMAILS: 'news-emails',
+  NEWSPROJECTS: 'newsprojects'
 };

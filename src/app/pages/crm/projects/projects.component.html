@@ -28,7 +28,7 @@
     <div class="row">
         <app-ui-preloader [display]="loading$ | async"></app-ui-preloader>
 
-        <div class="col-xl-4" *ngFor="let project of projects$ | async | projectStatus: order; index as index">
+        <div class="col-xl-4" *ngFor="let project of projects$ | async; index as index">
             <div class="card-box project-box">
                 <div class="dropdown float-right" ngbDropdown>
                     <a
@@ -46,35 +46,30 @@
                 </div>
                 <!-- Title-->
                 <h4 class="mt-0">
-                    <a href="javascript: void(0);" class="text-dark">{{ project?.projectName }}</a>
+                    <a href="javascript: void(0);" class="text-dark">{{ project?.name }}</a>
                 </h4>
                 <p class="text-muted text-uppercase">
-                    <span>Менеджер проекта </span> <i class="mdi mdi-account-circle"></i> <small>{{ project?.projectManager }}</small>
+                    <span>Менеджер проекта </span> <i class="mdi mdi-account-circle"></i> <small>{{ project?.manager?.firstName }} {{ project?.manager?.lastName }}</small>
                 </p>
-                <p class="text-muted text-uppercase">
-                    <span>Метод разгона </span> <i class="mdi mdi-account-circle"></i> <small>{{ project?.projectBurstMethod }}</small>
-                </p>
-                <div class="badge bg-soft-success text-success mb-3" [ngClass]="{ 'bg-soft-dark text-dark': project?.isConfirmed }">
-                    {{ project?.isConfirmed ? 'подтвержден' : 'на согласовании' }}
-                </div>
                 <!-- Desc-->
                 <p class="text-muted font-13 mb-3 sp-line-2">
-                    {{ project?.clientName }}
+                    {{ project?.client }}
                 </p>
                 <!-- Task info-->
-                <p class="mb-1">
-          <span class="pr-2 text-nowrap mb-2 d-inline-block">
-            <i class="mdi mdi-format-list-bulleted-type text-muted"></i>
-            <b> {{ project?.projectHashtags?.length }}</b> Хештеги
-          </span>
-                    <span class="text-nowrap mb-2 d-inline-block">
-            <i class="mdi mdi-comment-multiple-outline text-muted"></i>
-            <b> {{ project?.projectContractors?.length }}</b> Контрагенты
-          </span>
-                </p>
+
                 <button type="button" class="btn btn-sm btn-blue waves-effect waves-light float-right">
                     <i class="mdi mdi-eye-circle"></i> Посмотреть
                 </button>
+                <p class="mb-1">
+          <span class="pr-2 text-nowrap mb-2 d-inline-block">
+            <i class="mdi mdi-format-list-bulleted-type text-muted"></i>
+            <b> {{ project?.hashtags?.length }}</b> Хештеги
+          </span>
+                    <span class="text-nowrap mb-2 d-inline-block">
+            <i class="mdi mdi-comment-multiple-outline text-muted"></i>
+            <b> {{ project?.contractors?.length }}</b> Контрагенты
+          </span>
+                </p>
             </div>
             <!-- end card box-->
         </div>
@@ -100,18 +95,18 @@
         <div class="text-left">
             <form (ngSubmit)="addNewProject()" [formGroup]="createProjectForm">
                 <div class="form-group">
-                    <label for="projectName"> Название </label>
+                    <label for="name"> Название </label>
                     <input
                             type="text"
-                            formControlName="projectName"
+                            formControlName="name"
                             class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && f.projectName.errors }"
-                            id="projectName"
+                            [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
+                            id="name"
                             placeholder="Введите название проекта"
                     />
 
-                    <div *ngIf="submitted && f.projectName.errors" class="invalid-feedback">
-                        <div *ngIf="f.projectName.errors.required">Название проекта обязательно</div>
+                    <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                        <div *ngIf="f.name.errors.required">Название проекта обязательно</div>
                     </div>
                 </div>
 
@@ -122,103 +117,103 @@
                             [items]="users$ | async"
                             bindLabel="email"
                             bindValue="id"
-                            [closeOnSelect]="false"
+                            [closeOnSelect]="true"
                             [hideSelected]="true"
                             placeholder="Выберите менеджера проекта"
-                            formControlName="projectManager"
-                            [ngClass]="{ 'is-invalid': submitted && f.projectManager.errors }"
+                            formControlName="managerId"
+                            [ngClass]="{ 'is-invalid': submitted && f.managerId.errors }"
                     ></ng-select>
-                    <div *ngIf="submitted && f.projectManager.errors" class="invalid-feedback">
-                        <span *ngIf="f.projectManager.errors.required"></span>
+                    <div *ngIf="submitted && f.managerId.errors" class="invalid-feedback">
+                        <span *ngIf="f.managerId.errors.required"></span>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="projectHashtags"> Хештеги </label>
+                    <label for="hashtags"> Хештеги </label>
 
                     <ng-select
-                            id="projectHashtags"
+                            id="hashtags"
                             [items]="hashtags$ | async"
                             bindLabel="name"
                             [multiple]="true"
                             [closeOnSelect]="false"
                             [hideSelected]="true"
                             placeholder="Выберите ключевые слова"
-                            formControlName="projectHashtags"
-                            [ngClass]="{ 'is-invalid': submitted && f.projectHashtags.errors }"
+                            formControlName="hashtags"
+                            [ngClass]="{ 'is-invalid': submitted && f.hashtags.errors }"
                     ></ng-select>
-                    <div *ngIf="submitted && f.projectHashtags.errors" class="invalid-feedback">
-                        <span *ngIf="f.projectHashtags.errors.required"></span>
+                    <div *ngIf="submitted && f.hashtags.errors" class="invalid-feedback">
+                        <span *ngIf="f.hashtags.errors.required"></span>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="projectContractors"> Котрагенты </label>
+                    <label for="contractors"> Котрагенты </label>
                     <ng-select
-                            id="projectContractors"
+                            id="contractors"
                             [items]="contractors$ | async"
                             bindLabel="editorName"
                             [multiple]="true"
                             [closeOnSelect]="false"
                             [hideSelected]="true"
                             placeholder="Выберите контрагентов"
-                            formControlName="projectContractors"
-                            [ngClass]="{ 'is-invalid': submitted && f.projectContractors.errors }"
+                            formControlName="contractors"
+                            [ngClass]="{ 'is-invalid': submitted && f.contractors.errors }"
                     >
                     </ng-select>
-                    <div *ngIf="submitted && f.projectContractors.errors" class="invalid-feedback">
-                        <span *ngIf="f.projectContractors.errors.required"></span>
+                    <div *ngIf="submitted && f.contractors.errors" class="invalid-feedback">
+                        <span *ngIf="f.contractors.errors.required"></span>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="projectBudget"> Бюджет разгона </label>
+                    <label for="budget"> Бюджет разгона </label>
 
                     <input
                             type="number"
-                            id="projectBudget"
-                            formControlName="projectBudget"
+                            id="budget"
+                            formControlName="budget"
                             class="form-control"
                             placeholder="Введите бюджет"
-                            [ngClass]="{ 'is-invalid': submitted && f.projectBudget.errors }"
+                            [ngClass]="{ 'is-invalid': submitted && f.budget.errors }"
                     />
-                    <div *ngIf="submitted && f.projectBudget.errors" class="invalid-feedback">
-                        <span *ngIf="f.projectBudget.errors.required"></span>
+                    <div *ngIf="submitted && f.budget.errors" class="invalid-feedback">
+                        <span *ngIf="f.budget.errors.required"></span>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="projectContractors"> Почты </label>
+                    <label for="contractors"> Почты </label>
                     <ng-select
-                            id="projectMail"
+                            id="emails"
                             [items]="emails$ | async"
                             bindLabel="email"
                             [multiple]="true"
                             [closeOnSelect]="false"
                             [hideSelected]="true"
                             placeholder="Выберите почты"
-                            formControlName="projectMail"
-                            [ngClass]="{ 'is-invalid': submitted && f.projectMail.errors }"
+                            formControlName="emails"
+                            [ngClass]="{ 'is-invalid': submitted && f.emails.errors }"
                     >
                     </ng-select>
-                    <div *ngIf="submitted && f.projectMail.errors" class="invalid-feedback">
-                        <span *ngIf="f.projectMail.errors.required"></span>
+                    <div *ngIf="submitted && f.emails.errors" class="invalid-feedback">
+                        <span *ngIf="f.emails.errors.required"></span>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="projectClient"> Клиент </label>
+                    <label for="client"> Клиент </label>
                     <input
                             type="text"
-                            formControlName="projectClient"
+                            formControlName="client"
                             class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && f.projectClient.errors }"
-                            id="projectClient"
+                            [ngClass]="{ 'is-invalid': submitted && f.client.errors }"
+                            id="client"
                             placeholder="Введите клиента"
                     />
 
-                    <div *ngIf="submitted && f.projectClient.errors" class="invalid-feedback">
-                        <div *ngIf="f.projectClient.errors.required">Поле клиент обязательно</div>
+                    <div *ngIf="submitted && f.client.errors" class="invalid-feedback">
+                        <div *ngIf="f.client.errors.required">Поле клиент обязательно</div>
                     </div>
                 </div>
 

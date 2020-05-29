@@ -5,45 +5,19 @@ import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Valida
 import { Observable, of } from 'rxjs';
 
 import { RequestHandler } from '../helpers/request-handler';
-import { GetAllResponse } from '../models/responses/news/project/get-all-response';
-import { CreateHashtagPayload } from '../models/payloads/news/hashtag/create';
-import { CreateHashtagResponse } from '../models/responses/news/hashtag/create-hashtag';
-import { CreatePostsFormatResponse } from '../models/responses/news/format/create-post-format';
-import { CreateProjectPayload } from '../models/payloads/news/project/create';
-import { CreateProjectResponse } from '../models/responses/news/project/create-project';
-import { GetProjectResponse } from '../models/responses/news/project/get-project';
-import { GetProjectsResponse } from '../models/responses/news/project/get-projects';
-import { UpdateProjectPayload } from '../models/payloads/news/project/update';
-import { Contractor, PostFormatListSet } from '../models/instances/contractor';
-import { revenueRadialChart } from 'src/app/pages/dashboards/default/data';
-import { NotificationService } from './notification.service';
-import { Project } from '../models/instances/project';
-import { News, NewsImage } from '../models/instances/news';
-import images from '../constants/images';
-import { Hashtag } from '../models/instances/hashtag';
-import { Format } from '../models/instances/format';
-import { ChartType } from '../../pages/dashboards/default/default.model';
-import { setProjectValues } from '../helpers/utility';
-import { AlifeFile } from '../models/instances/alife-file';
-import { Warnings } from '../constants/notifications';
 import { endpoints } from '../constants/endpoints';
 import { methods } from '../constants/methods';
-import { SecurityService } from './security.service';
-import { GetAllFormatsResponse } from '../models/responses/news/format/get-all';
-import { GetFormatsResponse } from '../models/responses/news/format/get';
-import { GetPostFormatPayload } from '../models/payloads/news/format/get-post-format';
-import { CreatePostsFormatPayload } from '../models/payloads/news/format/create';
-import { CreatePostFormatPayload } from '../models/payloads/news/format/create-post-format';
-import { CreatePostFormatResponse } from '../models/responses/news/format/create';
-import { UpdatePostFormatPayload } from '../models/payloads/news/format/update-post-format';
-import { UpdatePostFormatResponse } from '../models/responses/news/format/update-post-format';
-import { DeletePostFormatPayload } from '../models/payloads/news/format/delete-post-format';
-import { DeletePostFormatResponse } from '../models/responses/news/format/delete-post-format';
 import { CreateEmailPayload } from '../models/payloads/project/email/create';
 import { UpdateEmailPayload } from '../models/payloads/project/email/update';
 import { Email } from '../models/instances/email';
 import { GetAllEmailsResponse } from '../models/responses/project/email/getAll';
 import { DeleteEmailPayload } from '../models/payloads/project/email/delete';
+import { CreateNewsProjectPayload } from '../models/payloads/project/news-project/create';
+import { NewsProject } from '../models/instances/news-project';
+import { UpdateNewsProjectPayload } from '../models/payloads/project/news-project/update';
+import { GetNewsProjectPayload } from '../models/payloads/project/news-project/get';
+import { DeleteNewsProjectPayload } from '../models/payloads/project/news-project/delete';
+import { GetAllNewsProjectsResponse } from '../models/responses/project/news-project/getAll';
 
 const api = environment.api;
 
@@ -56,28 +30,8 @@ export class ProjectService {
   constructor(
     private http: HttpClient,
     private requestHandler: RequestHandler,
-    public formBuilder: FormBuilder,
-    private notificationService: NotificationService,
-    private securityService: SecurityService
+    public formBuilder: FormBuilder
   ) {
-  }
-
-  public createProject(payload: any): Observable<any> {
-    return this.requestHandler.request(
-      `${api}/${endpoints.PROJECTS}/`,
-      methods.POST,
-      payload,
-      (response: any) => response.project
-    );
-  }
-
-  public getProjects(): Observable<any[]> {
-    return this.requestHandler.request(
-      `${api}/${endpoints.PROJECTS}/`,
-      methods.GET,
-      null,
-      (response: any) => response.projects
-    );
   }
 
   public createEmail(payload: CreateEmailPayload) {
@@ -86,6 +40,51 @@ export class ProjectService {
       methods.POST,
       payload,
       (response: Email) => response
+    );
+  }
+
+  public createNewsProject(payload: CreateNewsProjectPayload) {
+    return this.requestHandler.request(
+      `${api}/${endpoints.NEWSPROJECTS}/`,
+      methods.POST,
+      payload,
+      (response: NewsProject) => response
+    );
+  }
+
+  public updateNewsProject(payload: UpdateNewsProjectPayload) {
+    return this.requestHandler.request(
+      `${api}/${endpoints.NEWSPROJECTS}/${payload.id}`,
+      methods.PUT,
+      payload,
+      (response: NewsProject) => response
+    );
+  }
+
+  public getNewsProject(payload: GetNewsProjectPayload) {
+    return this.requestHandler.request(
+      `${api}/${endpoints.NEWSPROJECTS}/${payload.id}`,
+      methods.GET,
+      payload,
+      (response: NewsProject) => response
+    );
+  }
+
+  public getNewsProjects() {
+    return this.requestHandler.request(
+      `${api}/${endpoints.NEWSPROJECTS}/`,
+      methods.GET,
+      null,
+      (response: GetAllNewsProjectsResponse) => response.results
+    );
+  }
+
+  public deleteNewsProject(payload: DeleteNewsProjectPayload) {
+    return this.requestHandler.request(
+      `${api}/${endpoints.NEWSPROJECTS}/${payload.id}`,
+      methods.DELETE,
+      null,
+      (response: null) => payload
     );
   }
 
@@ -118,13 +117,13 @@ export class ProjectService {
 
   public initializeCreateProjectForm(): FormGroup {
     return this.formBuilder.group({
-      projectName: [null, Validators.required],
-      projectManager: [null, Validators.required],
-      projectHashtags: [null, Validators.required],
-      projectBudget: [null, [Validators.required]],
-      projectContractors: [null, [Validators.required]],
-      projectMail: [null, Validators.required],
-      projectClient: [null, Validators.required]
+      name: [null, Validators.required],
+      managerId: [null, Validators.required],
+      hashtags: [null, Validators.required],
+      budget: [null, [Validators.required]],
+      contractors: [null, [Validators.required]],
+      emails: [null, Validators.required],
+      client: [null, Validators.required]
     });
   }
 
