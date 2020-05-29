@@ -84,7 +84,7 @@ export class NewsService {
       `${api}/${endpoints.NEWS_PROJECTS}/`,
       methods.GET,
       null,
-      (response: GetProjectsResponse) => response.projects
+      (response: GetProjectsResponse) => response ? response.projects : []
     );
   }
 
