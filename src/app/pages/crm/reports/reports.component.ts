@@ -9,6 +9,8 @@ import { ErrorService } from '../../../core/services/error.service';
 import { LoadingService } from '../../../core/services/loading.service';
 import { GetProjects } from '../../../core/store/actions/news.actions';
 import { Title } from '@angular/platform-browser';
+import { GetNewsProjects } from '../../../core/store/actions/project.actions';
+import { selectProjectsList } from '../../../core/store/selectors/project.selectors';
 
 @Component({
   selector: 'app-reports',
@@ -20,7 +22,7 @@ export class ReportsComponent implements OnInit {
   // bread crumb items
   title = 'Отчёты';
   breadCrumbItems: Array<{}>;
-  projects$ = this.store.pipe(select(selectProjects));
+  projects$ = this.store.pipe(select(selectProjectsList));
   loading$: Subject<boolean>;
   error$: Subject<ServerError>;
   term = '';
@@ -65,6 +67,6 @@ export class ReportsComponent implements OnInit {
    * fetches project value
    */
   public _fetchData() {
-    this.store.dispatch(new GetProjects());
+    this.store.dispatch(new GetNewsProjects());
   }
 }

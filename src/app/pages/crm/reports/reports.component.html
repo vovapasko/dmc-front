@@ -25,6 +25,7 @@
                             <thead>
                             <tr>
                                 <th>Создан</th>
+                                <th>Менеджер</th>
                                 <th>Клиент</th>
                                 <th>Контрагенты</th>
                                 <th>Бюджет</th>
@@ -38,16 +39,19 @@
                                     {{ project?.dateCreated | date:'medium'}}
                                 </td>
                                 <td>
-                                    {{ project?.clientName }}
+                                    {{project?.manager?.firstName}} {{project?.manager?.lastName}}
                                 </td>
                                 <td>
-                                    {{ project?.projectContractors | contractorsNames }}
+                                    {{ project?.client }}
                                 </td>
                                 <td>
-                                    {{ project?.projectBudget }}
+                                    {{ project?.contractors | contractorsNames }}
                                 </td>
                                 <td>
-                                    {{ project?.projectContractors | contractorsCost }}
+                                    {{ project?.budget }}
+                                </td>
+                                <td>
+                                    {{ project?.contractors | contractorsCost }}
                                 </td>
                                 <td>
                                     <a href="javascript:void(0);" class="action-icon">

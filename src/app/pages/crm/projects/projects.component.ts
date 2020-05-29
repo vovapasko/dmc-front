@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { IAppState } from '../../../core/store/state/app.state';
-import { selectProjects } from '../../../core/store/selectors/news.selectors';
+import { selectContractors, selectHashtags, selectProjects } from '../../../core/store/selectors/news.selectors';
 import { Router } from '@angular/router';
 import { ErrorService } from '../../../core/services/error.service';
 import { LoadingService } from '../../../core/services/loading.service';
@@ -10,8 +10,18 @@ import images from '../../../core/constants/images';
 import { Orders } from '../../../core/constants/orders';
 import { ServerError } from '../../../core/models/responses/server/error';
 import { urls } from '../../../core/constants/urls';
-import { GetProjects } from '../../../core/store/actions/news.actions';
+import { GetProjectConfiguration, GetProjects } from '../../../core/store/actions/news.actions';
 import { Title } from '@angular/platform-browser';
+import { FormGroup } from '@angular/forms';
+import { ProjectService } from '../../../core/services/project.service';
+import { selectUserList } from '../../../core/store/selectors/user.selectors';
+import { GetUsers } from '../../../core/store/actions/user.actions';
+import { selectContractorList } from '../../../core/store/selectors/contractor.selectors';
+import { GetContractors } from '../../../core/store/actions/contractor.actions';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { selectEmailsList, selectProjectsList } from '../../../core/store/selectors/project.selectors';
+import { CreateNewsProject, GetEmails, GetNewsProjects } from '../../../core/store/actions/project.actions';
+import { CreateNewsProjectPayload } from '../../../core/models/payloads/project/news-project/create';
 
 @Component({
   selector: 'app-projects',
@@ -27,26 +37,60 @@ export class ProjectsComponent implements OnInit {
   // bread crumb items
   title = 'Проекты'
   breadCrumbItems: Array<{}>;
-  projects$ = this.store.pipe(select(selectProjects));
   loading$: Subject<boolean>;
   error$: Subject<ServerError>;
   noImage = images.defaultImage;
   orders = Orders;
   order = null;
+  createProjectForm: FormGroup;
+  submitted = false;
+
+  users$ = this.store.pipe(select(selectUserList));
+  contractors$ = this.store.pipe(select(selectContractorList));
+  projects$ = this.store.pipe(select(selectProjectsList));
+  hashtags$ = this.store.pipe(select(selectHashtags));
+  emails$ = this.store.pipe(select(selectEmailsList));
 
   constructor(
     private store: Store<IAppState>,
     private router: Router,
     private errorService: ErrorService,
     private loadingService: LoadingService,
-    private titleService: Title
+    private titleService: Title,
+    private projectService: ProjectService,
+    private modalService: NgbModal,
   ) {}
 
   ngOnInit() {
     this.initBreadCrumbItems();
     this.initSubscriptions();
     this.setTitle(this.title);
+    this.initCreateProjectForm();
     this._fetchData();
+  }
+
+  public initCreateProjectForm(): void {
+    this.createProjectForm = this.projectService.initializeCreateProjectForm();
+  }
+
+  get f () {
+    return this.createProjectForm.controls;
+  }
+
+  public addNewProject(): void {
+    const data = this.createProjectForm.value;
+    const payload = {data} as unknown as CreateNewsProjectPayload;
+    this.createNewsProject(payload);
+    this.cleanAfter();
+  }
+
+  public createNewsProject(payload: CreateNewsProjectPayload): void {
+    this.store.dispatch(new CreateNewsProject(payload));
+  }
+
+  public cleanAfter(): void {
+    this.createProjectForm.reset();
+    this.modalService.dismissAll();
   }
 
   public initBreadCrumbItems(): void {
@@ -77,10 +121,21 @@ export class ProjectsComponent implements OnInit {
     this.titleService.setTitle(title);
   }
 
+  public openModal(content: string): void {
+    this.modalService.open(content, { centered: true });
+  }
+
   /**
    * fetches project value
    */
-  public _fetchData() {
-    this.store.dispatch(new GetProjects());
+  public _fetchData(): void {
+    const store = this.store;
+    store.dispatch(new GetNewsProjects());
+    store.dispatch(new GetProjectConfiguration());
+    store.dispatch(new GetUsers());
+    store.dispatch(new GetContractors());
+    store.dispatch(new GetEmails());
   }
+
+
 }

@@ -84,7 +84,7 @@ export class NewsService {
       `${api}/${endpoints.NEWS_PROJECTS}/`,
       methods.GET,
       null,
-      (response: GetProjectsResponse) => response.projects
+      (response: GetProjectsResponse) => response ? response.projects : []
     );
   }
 
@@ -173,17 +173,17 @@ export class NewsService {
   }
 
   public initializeValidationForm(validator): FormGroup {
-    return this.formBuilder.group({
-      clientName: [null, Validators.required],
-      projectName: [null, Validators.required],
-      newsCharacter: [null, Validators.required],
-      projectTitle: [null, Validators.required],
-      projectHashtags: [null, Validators.required],
-      projectPostFormat: [null, Validators.required],
-      projectBurstMethod: [null, Validators.required],
-      projectBudget: [null, [Validators.required, validator]],
-      projectContractors: [null, [Validators.required, validator]]
-    });
+      return this.formBuilder.group({
+        clientName: [null, Validators.required],
+        projectName: [null, Validators.required],
+        newsCharacter: [null, Validators.required],
+        projectTitle: [null, Validators.required],
+        projectHashtags: [null, Validators.required],
+        projectPostFormat: [null, Validators.required],
+        projectBurstMethod: [null, Validators.required],
+        projectBudget: [null, [Validators.required, validator]],
+        projectContractors: [null, [Validators.required, validator]]
+      });
   }
 
   public initializeEditorForm(): FormGroup {
