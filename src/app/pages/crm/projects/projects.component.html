@@ -40,8 +40,10 @@
                         <i class="mdi mdi-dots-horizontal m-0 text-muted h3"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
-                        <a class="dropdown-item" (click)="onChange(project?.id)"
+                        <a class="dropdown-item" (click)="onChange(project?.id); openModal(editProjectModal);"
                            href="javascript: void(0);">Изменить</a>
+                        <a class="dropdown-item" (click)="onDelete(project?.id)"
+                           href="javascript: void(0);">Удалить</a>
                     </div>
                 </div>
                 <!-- Title-->
@@ -209,6 +211,156 @@
                             class="form-control"
                             [ngClass]="{ 'is-invalid': submitted && f.client.errors }"
                             id="client"
+                            placeholder="Введите клиента"
+                    />
+
+                    <div *ngIf="submitted && f.client.errors" class="invalid-feedback">
+                        <div *ngIf="f.client.errors.required">Поле клиент обязательно</div>
+                    </div>
+                </div>
+
+                <div class="text-right">
+                    <button type="submit" class="btn btn-success">Сохранить</button>
+                    <button type="button" class="btn btn-danger ml-1" (click)="modal('close click')">Отменить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</ng-template>
+
+
+<!-- Edit project modal  -->
+<ng-template #editProjectModal role="document" let-modal="close">
+    <div class="modal-header bg-dark">
+        <h4 class="modal-title text-white">Изменить проект</h4>
+        <button
+                type="button"
+                class="close text-white"
+                aria-label="Close"
+                id="editProjectModal"
+                (click)="modal('Cross click')"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body p-3">
+        <div class="text-left">
+            <form (ngSubmit)="editProject()" [formGroup]="editProjectForm">
+                <div class="form-group">
+                    <label for="editName"> Название </label>
+                    <input
+                            type="text"
+                            formControlName="name"
+                            class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
+                            id="editName"
+                            placeholder="Введите название проекта"
+                    />
+
+                    <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                        <div *ngIf="f.name.errors.required">Название проекта обязательно</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="manager"> Менджер проекта </label>
+                    <ng-select
+                            id="manager"
+                            [items]="users$ | async"
+                            bindLabel="email"
+                            bindValue="id"
+                            [closeOnSelect]="true"
+                            [hideSelected]="true"
+                            placeholder="Выберите менеджера проекта"
+                            formControlName="managerId"
+                            [ngClass]="{ 'is-invalid': submitted && f.managerId.errors }"
+                    ></ng-select>
+                    <div *ngIf="submitted && f.managerId.errors" class="invalid-feedback">
+                        <span *ngIf="f.managerId.errors.required"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="projectHashtags"> Хештеги </label>
+
+                    <ng-select
+                            id="projectHashtags"
+                            [items]="hashtags$ | async"
+                            bindLabel="name"
+                            [multiple]="true"
+                            [closeOnSelect]="false"
+                            [hideSelected]="true"
+                            placeholder="Выберите ключевые слова"
+                            formControlName="hashtags"
+                            [ngClass]="{ 'is-invalid': submitted && f.hashtags.errors }"
+                    ></ng-select>
+                    <div *ngIf="submitted && f.hashtags.errors" class="invalid-feedback">
+                        <span *ngIf="f.hashtags.errors.required"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="projectContractors"> Котрагенты </label>
+                    <ng-select
+                            id="projectContractors"
+                            [items]="contractors$ | async"
+                            bindLabel="editorName"
+                            [multiple]="true"
+                            [closeOnSelect]="false"
+                            [hideSelected]="true"
+                            placeholder="Выберите контрагентов"
+                            formControlName="contractors"
+                            [ngClass]="{ 'is-invalid': submitted && f.contractors.errors }"
+                    >
+                    </ng-select>
+                    <div *ngIf="submitted && f.contractors.errors" class="invalid-feedback">
+                        <span *ngIf="f.contractors.errors.required"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="projectBudget"> Бюджет разгона </label>
+
+                    <input
+                            type="number"
+                            id="projectBudget"
+                            formControlName="budget"
+                            class="form-control"
+                            placeholder="Введите бюджет"
+                            [ngClass]="{ 'is-invalid': submitted && f.budget.errors }"
+                    />
+                    <div *ngIf="submitted && f.budget.errors" class="invalid-feedback">
+                        <span *ngIf="f.budget.errors.required"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="projectEmails"> Почты </label>
+                    <ng-select
+                            id="projectEmails"
+                            [items]="emails$ | async"
+                            bindLabel="email"
+                            [multiple]="true"
+                            [closeOnSelect]="false"
+                            [hideSelected]="true"
+                            placeholder="Выберите почты"
+                            formControlName="emails"
+                            [ngClass]="{ 'is-invalid': submitted && f.emails.errors }"
+                    >
+                    </ng-select>
+                    <div *ngIf="submitted && f.emails.errors" class="invalid-feedback">
+                        <span *ngIf="f.emails.errors.required"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="projectClient"> Клиент </label>
+                    <input
+                            type="text"
+                            formControlName="client"
+                            class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.client.errors }"
+                            id="projectClient"
                             placeholder="Введите клиента"
                     />
 

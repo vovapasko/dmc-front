@@ -18,6 +18,7 @@ import { UpdateNewsProjectPayload } from '../models/payloads/project/news-projec
 import { GetNewsProjectPayload } from '../models/payloads/project/news-project/get';
 import { DeleteNewsProjectPayload } from '../models/payloads/project/news-project/delete';
 import { GetAllNewsProjectsResponse } from '../models/responses/project/news-project/getAll';
+import { News } from '../models/instances/news';
 
 const api = environment.api;
 
@@ -66,7 +67,7 @@ export class ProjectService {
       `${api}/${endpoints.NEWSPROJECTS}/${payload.id}`,
       methods.GET,
       payload,
-      (response: NewsProject) => response
+      (response: GetAllNewsProjectsResponse) => response.results[0]
     );
   }
 
@@ -84,7 +85,7 @@ export class ProjectService {
       `${api}/${endpoints.NEWSPROJECTS}/${payload.id}`,
       methods.DELETE,
       null,
-      (response: null) => payload
+      (response: any) => payload
     );
   }
 
@@ -124,6 +125,18 @@ export class ProjectService {
       contractors: [null, [Validators.required]],
       emails: [null, Validators.required],
       client: [null, Validators.required]
+    });
+  }
+
+  public initializeEditProjectForm(project?: NewsProject): FormGroup {
+    return this.formBuilder.group({
+      name: [project ? project.name : null, Validators.required],
+      managerId: [project ? project.manager.id : null, Validators.required],
+      hashtags: [project ? project.hashtags : null, Validators.required],
+      budget: [project ? project.budget : null, [Validators.required]],
+      contractors: [project ? project.contractors : null, [Validators.required]],
+      emails: [project ? project.emails : null, Validators.required],
+      client: [project ? project.client : null, Validators.required]
     });
   }
 

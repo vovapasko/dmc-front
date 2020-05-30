@@ -19,9 +19,20 @@ import { GetUsers } from '../../../core/store/actions/user.actions';
 import { selectContractorList } from '../../../core/store/selectors/contractor.selectors';
 import { GetContractors } from '../../../core/store/actions/contractor.actions';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { selectEmailsList, selectProjectsList } from '../../../core/store/selectors/project.selectors';
-import { CreateNewsProject, GetEmails, GetNewsProjects } from '../../../core/store/actions/project.actions';
+import {
+  selectEmailsList,
+  selectNewsProject,
+  selectProjectsList
+} from '../../../core/store/selectors/project.selectors';
+import {
+  CreateNewsProject, DeleteNewsProject,
+  GetEmails,
+  GetNewsProject,
+  GetNewsProjects, UpdateNewsProject
+} from '../../../core/store/actions/project.actions';
 import { CreateNewsProjectPayload } from '../../../core/models/payloads/project/news-project/create';
+import { NewsProject } from '../../../core/models/instances/news-project';
+import { UpdateNewsProjectPayload } from '../../../core/models/payloads/project/news-project/update';
 
 @Component({
   selector: 'app-projects',
@@ -43,6 +54,7 @@ export class ProjectsComponent implements OnInit {
   orders = Orders;
   order = null;
   createProjectForm: FormGroup;
+  editProjectForm: FormGroup;
   submitted = false;
 
   users$ = this.store.pipe(select(selectUserList));
@@ -50,6 +62,7 @@ export class ProjectsComponent implements OnInit {
   projects$ = this.store.pipe(select(selectProjectsList));
   hashtags$ = this.store.pipe(select(selectHashtags));
   emails$ = this.store.pipe(select(selectEmailsList));
+  projectId: number;
 
   constructor(
     private store: Store<IAppState>,
@@ -65,12 +78,21 @@ export class ProjectsComponent implements OnInit {
     this.initBreadCrumbItems();
     this.initSubscriptions();
     this.setTitle(this.title);
-    this.initCreateProjectForm();
+    this.initForms();
     this._fetchData();
+  }
+
+  public initForms(): void {
+    this.initCreateProjectForm();
+    this.initEditProjectForm();
   }
 
   public initCreateProjectForm(): void {
     this.createProjectForm = this.projectService.initializeCreateProjectForm();
+  }
+
+  public initEditProjectForm(project?: NewsProject): void {
+    this.editProjectForm = this.projectService.initializeEditProjectForm(project);
   }
 
   get f () {
@@ -90,6 +112,8 @@ export class ProjectsComponent implements OnInit {
 
   public cleanAfter(): void {
     this.createProjectForm.reset();
+    this.editProjectForm.reset();
+    this.projectId = null;
     this.modalService.dismissAll();
   }
 
@@ -110,8 +134,28 @@ export class ProjectsComponent implements OnInit {
     this.router.navigate([urls.CRM, urls.BURST_NEWS]);
   }
 
-  public onChange(id): void {
-    this.router.navigate([urls.CRM, urls.BURST_NEWS], { queryParams: { id } });
+  public onChange(id: number): void {
+    const payload = {id};
+    this.projectId = id;
+    this.store.select(selectNewsProject).subscribe(this.initEditProjectForm.bind(this));
+    this.store.dispatch(new GetNewsProject(payload));
+  }
+
+  public onDelete(id: number): void {
+    const payload = {id};
+    this.store.dispatch(new DeleteNewsProject(payload));
+  }
+
+  public editProject(): void {
+    const data = this.editProjectForm.value;
+    const id = this.projectId;
+    const payload = {id, data} as unknown as UpdateNewsProjectPayload;
+    this.updateProject(payload);
+    this.cleanAfter();
+  }
+
+  public updateProject(payload: UpdateNewsProjectPayload): void {
+    this.store.dispatch(new UpdateNewsProject(payload));
   }
 
   /**

@@ -7,3 +7,5 @@ const selectProjects = (state: IAppState) => state ? state.projects : {};
 export const selectProjectsList = createSelector(selectProjects, (state: IProjectsState) => state ? state.projects : []);
 
 export const selectEmailsList = createSelector(selectProjects, (state: IProjectsState) => state.emails);
+
+export const selectNewsProject = createSelector(selectProjects, (state: IProjectsState) => state.project);

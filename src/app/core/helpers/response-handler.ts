@@ -20,7 +20,7 @@ export class ResponseHandler {
    */
   public handle(response: ServerResponse) {
     // notify about success
-    if (response.success) {
+    if (response && response.success) {
       const message = response.message ? response.message.message : '';
       const title = 'success';
       return this.notificationService.notify(NotificationType.success, title, message);
@@ -28,6 +28,6 @@ export class ResponseHandler {
     // clear any errors
     this.errorService.clear();
     // returns successful
-    return response.success;
+    return response ? response.success : response;
   }
 }
