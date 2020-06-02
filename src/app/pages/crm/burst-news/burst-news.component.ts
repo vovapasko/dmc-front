@@ -45,6 +45,10 @@ import { UpdateProjectPayload } from '../../../core/models/payloads/news/project
 import { ServerError } from '../../../core/models/responses/server/error';
 import numbers from '../../../core/constants/numbers';
 import { Title } from '@angular/platform-browser';
+import { GetNewsProject, GetNewsProjects } from '../../../core/store/actions/project.actions';
+import { selectNewsProject, selectProjectsList } from '../../../core/store/selectors/project.selectors';
+import { NewsProject } from '../../../core/models/instances/news-project';
+import { GetNewsProjectPayload } from '../../../core/models/payloads/project/news-project/get';
 
 /**
  * Form Burst news component - handling the burst news with sidebar and content
@@ -65,6 +69,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   formats$ = this.store.pipe(select(selectFormats));
   characters$ = this.store.pipe(select(selectCharacters));
   methods$ = this.store.pipe(select(selectMethods));
+  newsProjects$ = this.store.pipe(select(selectProjectsList));
   newsSubmit = false;
   noImage = images.defaultImage;
   left = numbers.zero;
@@ -82,6 +87,11 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   submitted = false;
   projectId: number;
   submitForm: boolean;
+  // tslint:disable-next-line:max-line-length
+  pairs = [{ key: 'clientName', value: 'client' }, {
+    key: 'projectBudget',
+    value: 'budget'
+  }, { key: 'projectContractors', value: 'contractors' }, { key: 'projectHashtags', value: 'hashtags' }];
 
   @ViewChild('wizardForm', { static: false }) wizard: BaseWizardComponent;
   @ViewChild('tpl', { static: false }) tpl;
@@ -113,6 +123,21 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
 
   ngAfterViewChecked() {
     this.cdr.detectChanges();
+  }
+
+  public onChangeProject(newsProject: NewsProject): void {
+    const payload = { id: newsProject.id } as GetNewsProjectPayload;
+    const store = this.store;
+    store.pipe(select(selectNewsProject)).subscribe(this.handleNewsProject.bind(this));
+    store.dispatch(new GetNewsProject(payload));
+  }
+
+  public handleNewsProject(newsProject: NewsProject): void {
+    if (newsProject) {
+      const controls = this.validationForm.controls;
+      const pairs = this.pairs;
+      pairs.forEach(pair => controls[pair.key].setValue(newsProject[pair.value]));
+    }
   }
 
   public processProject(project: Project): void {
@@ -322,10 +347,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     const id = this.projectId;
     const store = this.store;
     store.dispatch(new GetProjectConfiguration());
-    if (id) {
-      store.select(selectProject).subscribe(this.processProject.bind(this));
-      store.dispatch(new GetProject({ id }));
-    }
+    store.dispatch(new GetNewsProjects());
   }
 }
 

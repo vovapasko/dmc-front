@@ -76,16 +76,18 @@
                     </div>
 
                     <div class="form-group row mb-3">
-                      <label for="projectName" class="col-md-3 col-form-label"> Название проекта </label>
+                      <label for="projectPostFormat" class="col-md-3 col-form-label"> Проект </label>
                       <div class="col-md-9">
-                        <input
-                          type="text"
-                          id="projectName"
-                          placeholder="Введите название проекта"
-                          formControlName="projectName"
-                          class="form-control"
-                          [ngClass]="{ 'is-invalid': submitted && form.projectName.errors }"
-                        />
+                        <ng-select
+                                id="project"
+                                [items]="newsProjects$ | async"
+                                bindLabel="name"
+                                (change)="onChangeProject($event)"
+                                [closeOnSelect]="true"
+                                placeholder="Выберите проект"
+                                formControlName="projectName"
+                                [ngClass]="{ 'is-invalid': submitted && form.projectName.errors }"
+                        ></ng-select>
                         <div *ngIf="submitted && form.projectName.errors" class="invalid-feedback">
                           <span *ngIf="form.projectName.errors.required"></span>
                         </div>
