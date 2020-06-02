@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { WizardComponent as BaseWizardComponent } from 'angular-archwizard';
 import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
-
+import {multipleRadialBars} from '../../../core/components/charts/data'
 import { Steps } from '../../../core/constants/steps';
 import { ChartType } from '../../dashboards/default/default.model';
 import { revenueRadialChart } from '../../dashboards/default/data';
@@ -81,6 +81,8 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   loading$: Subject<boolean>;
   error$: Subject<ServerError>;
   newsList = [new News('', [], { base64: this.noImage, file: null })];
+  multipleRadialBars: ChartType;
+
   revenueRadialChart: ChartType;
   blured = false;
   focused = false;
@@ -138,6 +140,10 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
       const pairs = this.pairs;
       pairs.forEach(pair => controls[pair.key].setValue(newsProject[pair.value]));
     }
+  }
+
+  public refreshContent(event): void {
+    console.log(event);
   }
 
   public processProject(project: Project): void {
@@ -253,7 +259,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   public calculatePercentage(): void {
-    this.revenueRadialChart = this.newsService.calculatePercentage(this.left, this.budget);
+    this.multipleRadialBars = this.newsService.calculatePercentage(this.left, this.budget);
   }
 
   /**
@@ -348,6 +354,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     const store = this.store;
     store.dispatch(new GetProjectConfiguration());
     store.dispatch(new GetNewsProjects());
+    this.multipleRadialBars = multipleRadialBars;
   }
 }
 
