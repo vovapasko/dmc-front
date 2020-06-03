@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { WizardComponent as BaseWizardComponent } from 'angular-archwizard';
 import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
-import {multipleRadialBars} from '../../../core/components/charts/data'
+import { multipleRadialBars } from '../../../core/components/charts/data';
 import { Steps } from '../../../core/constants/steps';
 import { ChartType } from '../../dashboards/default/default.model';
 import { revenueRadialChart } from '../../dashboards/default/data';
@@ -34,7 +34,7 @@ import {
 } from '../../../core/store/selectors/news.selectors';
 import { Project } from '../../../core/models/instances/project';
 import { ActivatedRoute } from '@angular/router';
-import { Subject } from 'rxjs';
+import { of, Subject } from 'rxjs';
 import { ErrorService } from '../../../core/services/error.service';
 import { LoadingService } from '../../../core/services/loading.service';
 import images from '../../../core/constants/images';
@@ -45,8 +45,12 @@ import { UpdateProjectPayload } from '../../../core/models/payloads/news/project
 import { ServerError } from '../../../core/models/responses/server/error';
 import numbers from '../../../core/constants/numbers';
 import { Title } from '@angular/platform-browser';
-import { GetNewsProject, GetNewsProjects } from '../../../core/store/actions/project.actions';
-import { selectNewsProject, selectProjectsList } from '../../../core/store/selectors/project.selectors';
+import { GetEmails, GetNewsProject, GetNewsProjects } from '../../../core/store/actions/project.actions';
+import {
+  selectEmailsList,
+  selectNewsProject,
+  selectProjectsList
+} from '../../../core/store/selectors/project.selectors';
 import { NewsProject } from '../../../core/models/instances/news-project';
 import { GetNewsProjectPayload } from '../../../core/models/payloads/project/news-project/get';
 import { Methods } from '../../../core/models/instances/method';
@@ -81,21 +85,24 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   controls: FormArray;
   loading$: Subject<boolean>;
   error$: Subject<ServerError>;
-  newsList = [new News('', [], { base64: this.noImage, file: null })];
-  multipleRadialBars: ChartType;
+  newsList = [new News('', '', [], [])];
+  multipleRadialBars: ChartType = multipleRadialBars;
   methods = Methods;
-  steps = {[this.methods.direct]: 2, [this.methods.bayer]: 1, [this.methods.topSecret]: 1};
+  steps = { [this.methods.direct]: 2, [this.methods.bayer]: 1, [this.methods.topSecret]: 1 };
   revenueRadialChart: ChartType;
   blured = false;
   focused = false;
   submitted = false;
   projectId: number;
   submitForm: boolean;
+  emails$ = this.store.pipe(select(selectEmailsList));
+
   // tslint:disable-next-line:max-line-length
   pairs = [{ key: 'clientName', value: 'client' }, {
     key: 'projectBudget',
     value: 'budget'
-  }, { key: 'projectContractors', value: 'contractors' }, { key: 'projectHashtags', value: 'hashtags' }];
+  }, { key: 'projectContractors', value: 'contractors' }, { key: 'projectHashtags', value: 'hashtags' }
+  ];
 
   @ViewChild('wizardForm', { static: false }) wizard: BaseWizardComponent;
   @ViewChild('tpl', { static: false }) tpl;
@@ -141,6 +148,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
       const controls = this.validationForm.controls;
       const pairs = this.pairs;
       pairs.forEach(pair => controls[pair.key].setValue(newsProject[pair.value]));
+      this.emails$ = of(newsProject.emails);
     }
   }
 
@@ -163,8 +171,9 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   public getControl(index: number, field: string): FormControl {
-    if (field) {
-      return this.controls.at(index).get(field) as FormControl;
+    const controls = this.controls;
+    if (field && controls) {
+      return controls.at(index).get(field) as FormControl;
     }
     return null;
   }
@@ -228,6 +237,12 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   get distributeForm() {
     if (this.newsForm) {
       return this.newsForm.controls;
+    }
+  }
+
+  get editForm() {
+    if (this.editorForm) {
+      return this.editorForm.controls;
     }
   }
 
@@ -305,14 +320,6 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     this.blur(!focus);
   }
 
-  public onImageChange(files: AlifeFile[], index: number, onFile?: boolean): void {
-    if (files) {
-      const newsList = this.newsList;
-      const image = this.newsService.onImageChange(files, index, onFile, newsList);
-      this.updateField(index, 'image', image);
-    }
-  }
-
   public onSubmit(): void {
     const projectId = this.projectId;
     const payload = this.newsService.onSubmit(this.validationForm, this.editorForm, this.newsList, !!projectId);
@@ -356,7 +363,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     const store = this.store;
     store.dispatch(new GetProjectConfiguration());
     store.dispatch(new GetNewsProjects());
-    this.multipleRadialBars = multipleRadialBars;
+    store.dispatch(new GetEmails());
   }
 }
 

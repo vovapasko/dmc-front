@@ -357,6 +357,46 @@
                                 </li>
                             </ul>
                             <form (ngSubmit)="profileFormSubmit()" [formGroup]="editorForm">
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label for="emails" class="col-form-label">Email</label>
+                                        <ng-select
+                                                id="emails"
+                                                [items]="emails$ | async"
+                                                bindLabel="email"
+                                                [multiple]="false"
+                                                [closeOnSelect]="true"
+                                                [hideSelected]="true"
+                                                placeholder="Выберите почту"
+                                                formControlName="email"
+                                                [ngClass]="{ 'is-invalid': editForm?.email?.errors }"
+                                        >
+                                        </ng-select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="template" class="col-form-label">Шаблон</label>
+                                        <input placeholder="Шаблон"
+                                               tabindex="0"
+                                               id="template"
+                                               class="form-control"
+                                               type="text"
+                                               readonly="readonly"
+                                               [value]="editForm?.email?.value?.template || null"
+                                        >
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="signature" class="col-form-label">Подпись</label>
+                                        <input placeholder="Подпись"
+                                               id="signature"
+                                               class="form-control"
+                                               tabindex="0"
+                                               type="text"
+                                               readonly="readonly"
+                                               [value]="editForm?.email?.value?.signature || null"
+                                        >
+                                    </div>
+                                </div>
+
                                 <quill-editor
                                         [styles]="{ height: '400px', 'margin-bottom': '15px' }"
                                         (onFocus)="onEvent($event, true)"
@@ -450,30 +490,31 @@
                                         <!-- Simple card -->
 
                                         <div class="card">
-                                            <label for="image">
-                                                <input
-                                                        type="file"
-                                                        id="image"
-                                                        class="sr-only"
-                                                        alife-file-to-base64
-                                                        (onFileChanged)="onImageChange($event, index)"
-                                                        (rawFileModelChange)="onImageChange($event, index, true)"
-                                                />
-                                                <img
-                                                        class="card-img-top img-fluid"
-                                                        src="{{ news?.image?.base64 || noImage }}"
-                                                        alt="Card image cap"
-                                                />
-                                            </label>
 
                                             <div class="card-body">
-                                                <input
-                                                        placeholder="Введите заглавие"
-                                                        [id]="'title' + index"
-                                                        [formControl]="getControl(index, 'title')"
-                                                        style="margin-bottom: 10px;"
-                                                        class="form-control"
-                                                        (change)="updateField(index, 'title')"
+                                                <input type="file"
+                                                       placeholder="Выберите файлы"
+                                                       [id]="'attachments' + index"
+                                                       [formControl]="getControl(index, 'attachments')"
+                                                       style="margin-bottom: 10px;"
+                                                       class="form-control"
+                                                       (change)="updateField(index, 'attachments')"
+                                                />
+                                                <input type="text"
+                                                       placeholder="Введите заглавие"
+                                                       [id]="'title' + index"
+                                                       [formControl]="getControl(index, 'title')"
+                                                       style="margin-bottom: 10px;"
+                                                       class="form-control"
+                                                       (change)="updateField(index, 'title')"
+                                                />
+                                                <input type="text"
+                                                       placeholder="Введите содержание"
+                                                       [id]="'content' + index"
+                                                       [formControl]="getControl(index, 'content')"
+                                                       style="margin-bottom: 10px;"
+                                                       class="form-control"
+                                                       (change)="updateField(index, 'content')"
                                                 />
                                                 <ng-select
                                                         id="news-contractors"

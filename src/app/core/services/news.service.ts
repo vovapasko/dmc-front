@@ -18,7 +18,7 @@ import { Contractor, PostFormatListSet } from '../models/instances/contractor';
 import { revenueRadialChart } from 'src/app/pages/dashboards/default/data';
 import { NotificationService } from './notification.service';
 import { Project } from '../models/instances/project';
-import { News, NewsImage } from '../models/instances/news';
+import { News } from '../models/instances/news';
 import images from '../constants/images';
 import { Hashtag } from '../models/instances/hashtag';
 import { Format } from '../models/instances/format';
@@ -190,7 +190,8 @@ export class NewsService {
 
   public initializeEditorForm(): FormGroup {
     return this.formBuilder.group({
-      text: ['', Validators.required]
+      text: ['', Validators.required],
+      email: [null, Validators.required],
     });
   }
 
@@ -243,11 +244,13 @@ export class NewsService {
 
   public calculatePercentage(left: number, budget: number): ChartType {
     const revenue = Object.assign({}, multipleRadialBars);
-    const monthLeft = left;
-    const weekLeft = left / numbers.month;
-    const dayLeft = left / numbers.days;
-    const hourLeft = left / numbers.hours;
-    revenue.series = [monthLeft, weekLeft, dayLeft, hourLeft].map((el: number) => parseInt(el.toString(), 10));
+    if(left && budget) {
+      const monthLeft = left;
+      const weekLeft = left / numbers.month;
+      const dayLeft = left / numbers.days;
+      const hourLeft = left / numbers.hours;
+      revenue.series = [monthLeft, weekLeft, dayLeft, hourLeft].map((el: number) => parseInt(el.toString(), 10));
+    }
     return revenue;
   }
 
@@ -270,7 +273,7 @@ export class NewsService {
     }
     const common = validationForm.controls;
     const editor = editorForm.controls;
-    const newsList = project.newsInProject.map((el) => new News(el.title, el.contractors, el.image, el.id));
+    const newsList = project.newsInProject.map((el) => new News(el.title, el.content, el.attachments, el.contractors, el.id));
     const controls = this.initControls(newsList);
     setProjectValues(common, editor, project, this.securityService.getSafeHtml.bind(this.securityService));
     return { controls, newsList };
@@ -279,21 +282,11 @@ export class NewsService {
   public addNewItem(newsList: News[]): News[] {
     if (newsList) {
       const list = newsList.slice();
-      list.push(new News('', [], { base64: images.defaultImage, file: null }));
+      const newItem = new News('', '', [], []);
+      list.push(newItem);
       return list;
     }
     return null;
-  }
-
-  public onImageChange(files: AlifeFile[], index: number, onFile: boolean, list: News[]): NewsImage {
-    const image = list[index].image;
-    if (onFile) {
-      // @ts-ignore
-      image.file = files[0];
-    } else {
-      image.base64 = files[0].base64;
-    }
-    return image;
   }
 
   public updateField(index: number, field: string, value: string | number | null | object, control: AbstractControl, list: News[]): News[] {
