@@ -346,6 +346,10 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     store.dispatch(new GetProjectSuccess(null));
   }
 
+  public onChange(files: Array<File>): void {
+    console.log(files);
+  }
+
   public updateField(index: number, field: string, value?: string | number | object): void {
     const control = this.getControl(index, field);
     this.newsList = this.newsService.updateField(index, field, value, control, this.newsList);

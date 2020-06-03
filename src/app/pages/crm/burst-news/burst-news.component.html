@@ -406,6 +406,17 @@
                                         (onEditorCreated)="created($event)"
                                 ></quill-editor>
 
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <file-upload class="dropzone"></file-upload>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
                                 <ul class="list-inline wizard mb-0">
                                     <li class="previous list-inline-item">
                                         <button class="btn btn-secondary"
@@ -492,14 +503,7 @@
                                         <div class="card">
 
                                             <div class="card-body">
-                                                <input type="file"
-                                                       placeholder="Выберите файлы"
-                                                       [id]="'attachments' + index"
-                                                       [formControl]="getControl(index, 'attachments')"
-                                                       style="margin-bottom: 10px;"
-                                                       class="form-control"
-                                                       (change)="updateField(index, 'attachments')"
-                                                />
+                                                <file-upload  class="dropzone"></file-upload>
                                                 <input type="text"
                                                        placeholder="Введите заглавие"
                                                        [id]="'title' + index"
@@ -523,7 +527,7 @@
                                                         [multiple]="true"
                                                         [closeOnSelect]="false"
                                                         [hideSelected]="true"
-                                                        placeholder="Выберите контрагентов для новости"
+                                                        placeholder="Контрагенты"
                                                         (change)="updateField(index, 'contractors')"
                                                         [formControl]="getControl(index, 'contractors')"
                                                         [ngClass]="{ 'is-invalid': submitted && distributeForm.contractors.errors }"
