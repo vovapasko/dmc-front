@@ -49,6 +49,7 @@ import { GetNewsProject, GetNewsProjects } from '../../../core/store/actions/pro
 import { selectNewsProject, selectProjectsList } from '../../../core/store/selectors/project.selectors';
 import { NewsProject } from '../../../core/models/instances/news-project';
 import { GetNewsProjectPayload } from '../../../core/models/payloads/project/news-project/get';
+import { Methods } from '../../../core/models/instances/method';
 
 /**
  * Form Burst news component - handling the burst news with sidebar and content
@@ -82,7 +83,8 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   error$: Subject<ServerError>;
   newsList = [new News('', [], { base64: this.noImage, file: null })];
   multipleRadialBars: ChartType;
-
+  methods = Methods;
+  steps = {[this.methods.direct]: 2, [this.methods.bayer]: 1, [this.methods.topSecret]: 1};
   revenueRadialChart: ChartType;
   blured = false;
   focused = false;
@@ -142,8 +144,8 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     }
   }
 
-  public refreshContent(event): void {
-    console.log(event);
+  public refreshContent(): void {
+
   }
 
   public processProject(project: Project): void {

@@ -40,6 +40,7 @@ import { UpdatePostFormatResponse } from '../models/responses/news/format/update
 import { DeletePostFormatPayload } from '../models/payloads/news/format/delete-post-format';
 import { DeletePostFormatResponse } from '../models/responses/news/format/delete-post-format';
 import {multipleRadialBars} from '../../core/components/charts/data';
+import numbers from '../constants/numbers';
 
 const api = environment.api;
 
@@ -195,18 +196,20 @@ export class NewsService {
 
   public initializeNewsForm(): FormGroup {
     return this.formBuilder.group({
-      title: ['', Validators.required],
-      contractors: [null, Validators.required],
-      image: [null, Validators.required]
+      attachments: [null, Validators.required],
+      title: [null, Validators.required],
+      content: [null, Validators.required],
+      contractors: [null, Validators.required]
     });
   }
 
   public initControls(list: Array<News>): FormArray {
     const toGroups = list.map((entity) => {
       return new FormGroup({
+        attachments: new FormControl(entity.attachments, Validators.required),
         title: new FormControl(entity.title, Validators.required),
-        image: new FormControl(entity.image, Validators.required),
-        contractors: new FormControl(entity.contractors, Validators.required)
+        content: new FormControl(entity.content, Validators.required),
+        contractors: new FormControl(entity.contractors, Validators.required),
       });
     });
     return new FormArray(toGroups);
@@ -225,11 +228,11 @@ export class NewsService {
   public calculateLeft(budget: number, validationForm: FormGroup): number | null {
     if (validationForm) {
       const controls = validationForm.controls;
-      const format = controls.projectPostFormat.value.postFormat;
+      const format = controls.projectPostFormat.value ? controls.projectPostFormat.value.postFormat : '';
       const contractors = (controls.projectContractors.value as unknown) as Contractor[];
       const reducer = (a, c) => {
         const searchCost = c.postformatlistSet.find(el => el.postFormat === format);
-        const cost = searchCost ? searchCost.onePostPrice : 0 
+        const cost = searchCost ? searchCost.onePostPrice : 0;
         return a + cost;
       };
       const total = contractors ? contractors.reduce(reducer, 0) : 0;
@@ -241,10 +244,10 @@ export class NewsService {
   public calculatePercentage(left: number, budget: number): ChartType {
     const revenue = Object.assign({}, multipleRadialBars);
     const monthLeft = left;
-    const weekLeft = left / 4;
-    const dayLeft = left / 28;
-    const hourLeft = left / 1680;
-    revenue.series = [monthLeft, weekLeft, dayLeft, hourLeft];
+    const weekLeft = left / numbers.month;
+    const dayLeft = left / numbers.days;
+    const hourLeft = left / numbers.hours;
+    revenue.series = [monthLeft, weekLeft, dayLeft, hourLeft].map((el: number) => parseInt(el.toString(), 10));
     return revenue;
   }
 
