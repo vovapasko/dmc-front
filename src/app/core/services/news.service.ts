@@ -39,7 +39,7 @@ import { UpdatePostFormatPayload } from '../models/payloads/news/format/update-p
 import { UpdatePostFormatResponse } from '../models/responses/news/format/update-post-format';
 import { DeletePostFormatPayload } from '../models/payloads/news/format/delete-post-format';
 import { DeletePostFormatResponse } from '../models/responses/news/format/delete-post-format';
-import {multipleRadialBars} from '../../core/components/charts/data';
+import { multipleRadialBars } from '../../core/components/charts/data';
 import numbers from '../constants/numbers';
 
 const api = environment.api;
@@ -175,23 +175,30 @@ export class NewsService {
   }
 
   public initializeValidationForm(validator): FormGroup {
-      return this.formBuilder.group({
-        clientName: [null, Validators.required],
-        projectName: [null, Validators.required],
-        newsCharacter: [null, Validators.required],
-        projectTitle: [null, Validators.required],
-        projectHashtags: [null, Validators.required],
-        projectPostFormat: [null, Validators.required],
-        projectBurstMethod: [null, Validators.required],
-        projectBudget: [null, [Validators.required, validator]],
-        projectContractors: [null, [Validators.required, validator]]
-      });
+    return this.formBuilder.group({
+      clientName: [null, Validators.required],
+      projectName: [null, Validators.required],
+      newsCharacter: [null, Validators.required],
+      projectTitle: [null, Validators.required],
+      projectHashtags: [null, Validators.required],
+      projectPostFormat: [null, Validators.required],
+      projectBurstMethod: [null, Validators.required],
+      projectBudget: [null, [Validators.required, validator]],
+      projectContractors: [null, [Validators.required, validator]]
+    });
   }
 
   public initializeEditorForm(): FormGroup {
     return this.formBuilder.group({
       text: ['', Validators.required],
-      email: [null, Validators.required],
+      email: [null, Validators.required]
+    });
+  }
+
+  public initializePreviewForm(): FormGroup {
+    return this.formBuilder.group({
+      previewText: ['', Validators.required],
+      previewEmail: [null, Validators.required]
     });
   }
 
@@ -210,7 +217,7 @@ export class NewsService {
         attachments: new FormControl(entity.attachments, Validators.required),
         title: new FormControl(entity.title, Validators.required),
         content: new FormControl(entity.content, Validators.required),
-        contractors: new FormControl(entity.contractors, Validators.required),
+        contractors: new FormControl(entity.contractors, Validators.required)
       });
     });
     return new FormArray(toGroups);
@@ -244,7 +251,7 @@ export class NewsService {
 
   public calculatePercentage(left: number, budget: number): ChartType {
     const revenue = Object.assign({}, multipleRadialBars);
-    if(left && budget) {
+    if (left && budget) {
       const monthLeft = left;
       const weekLeft = left / numbers.month;
       const dayLeft = left / numbers.days;
@@ -273,7 +280,7 @@ export class NewsService {
     }
     const common = validationForm.controls;
     const editor = editorForm.controls;
-    const newsList = project.newsInProject.map((el) => new News(el.title, el.content, el.attachments, el.contractors, el.id));
+    const newsList = project.newsInProject.map((el) => new News(el.title, el.content, el.attachments, el.contractors, el.content, el.id));
     const controls = this.initControls(newsList);
     setProjectValues(common, editor, project, this.securityService.getSafeHtml.bind(this.securityService));
     return { controls, newsList };
@@ -282,7 +289,7 @@ export class NewsService {
   public addNewItem(newsList: News[]): News[] {
     if (newsList) {
       const list = newsList.slice();
-      const newItem = new News('', '', [], []);
+      const newItem = new News('', '', [], [], '');
       list.push(newItem);
       return list;
     }

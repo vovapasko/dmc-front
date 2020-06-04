@@ -81,11 +81,12 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   step: Steps = numbers.zero;
   validationForm: FormGroup;
   editorForm: FormGroup;
+  previewForm: FormGroup;
   newsForm: FormGroup;
   controls: FormArray;
   loading$: Subject<boolean>;
   error$: Subject<ServerError>;
-  newsList = [new News('', '', [], [])];
+  newsList = [new News('', '', [], [], '')];
   multipleRadialBars: ChartType = multipleRadialBars;
   methods = Methods;
   steps = { [this.methods.direct]: 2, [this.methods.bayer]: 1, [this.methods.topSecret]: 1 };
@@ -191,6 +192,11 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     this.initEditorForm();
     this.initNewsForm();
     this.initControls();
+    this.initPreviewForm();
+  }
+
+  public initPreviewForm(): void {
+    this.previewForm = this.newsService.initializePreviewForm();
   }
 
   private initControls(): void {
@@ -334,6 +340,10 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     } else {
       this.createProject(payload);
     }
+  }
+
+  public previewFormSubmit(): void {
+
   }
 
   public createProject(payload: CreateProjectPayload): void {

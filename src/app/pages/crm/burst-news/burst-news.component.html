@@ -503,7 +503,7 @@
                                         <div class="card">
 
                                             <div class="card-body">
-                                                <file-upload  class="dropzone"></file-upload>
+                                                <file-upload class="dropzone"></file-upload>
                                                 <input type="text"
                                                        placeholder="Введите заглавие"
                                                        [id]="'title' + index"
@@ -627,17 +627,72 @@
                             </ul>
                             <div class="row">
                                 <app-ui-preloader [display]="loading$ | async"></app-ui-preloader>
+                                <form (ngSubmit)="previewFormSubmit()" [formGroup]="previewForm">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label for="emails" class="col-form-label">Email</label>
+                                            <ng-select
+                                                    id="previewEmails"
+                                                    [items]="emails$ | async"
+                                                    bindLabel="email"
+                                                    [multiple]="false"
+                                                    [closeOnSelect]="true"
+                                                    [hideSelected]="true"
+                                                    placeholder="Выберите почту"
+                                                    formControlName="previewEmail"
+                                                    [ngClass]="{ 'is-invalid': editForm?.email?.errors }"
+                                            >
+                                            </ng-select>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="template" class="col-form-label">Шаблон</label>
+                                            <input placeholder="Шаблон"
+                                                   tabindex="0"
+                                                   id="previewTemplate"
+                                                   class="form-control"
+                                                   type="text"
+                                                   readonly="readonly"
+                                                   [value]="editForm?.email?.value?.template || null"
+                                            >
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="previewSignature" class="col-form-label">Подпись</label>
+                                            <input placeholder="Подпись"
+                                                   id="previewSignature"
+                                                   class="form-control"
+                                                   tabindex="0"
+                                                   type="text"
+                                                   readonly="readonly"
+                                                   [value]="editForm?.email?.value?.signature || null"
+                                            >
+                                        </div>
+                                    </div>
+
+                                    <div *ngIf="form?.projectBurstMethod?.value?.method == methods.direct; else elseBlock">
+                                        <quill-editor *ngFor="let news of newsList; let i = index"
+                                                      [styles]="{ height: '400px', 'margin-bottom': '15px' }"
+                                                      (onFocus)="onEvent($event, true)"
+                                                      (onEditorChanged)="changedEditor($event)"
+                                                      (onBlur)="onEvent($event, false)"
+                                                      (change)="updateField(i, 'previewText')"
+                                                      [formControl]="getControl(i, 'previewText')"
+                                                      (onEditorCreated)="created($event)"
+                                        ></quill-editor>
+                                    </div>
+                                    <ng-template #elseBlock>
+                                        <quill-editor
+                                                [styles]="{ height: '400px', 'margin-bottom': '15px' }"
+                                                (onFocus)="onEvent($event, true)"
+                                                (onEditorChanged)="changedEditor($event)"
+                                                (onBlur)="onEvent($event, false)"
+                                                formControlName="previewText"
+                                                (onEditorCreated)="created($event)"
+                                        ></quill-editor>
+                                    </ng-template>
+
+                                </form>
                                 <div class="col-12">
                                     <div class="text-center">
-                                        <h2 class="mt-0"><i class="mdi mdi-check-all"></i></h2>
-                                        <h3 class="mt-0">Thank you !</h3>
-
-                                        <p class="w-75 mb-2 mx-auto">
-                                            Quisque nec turpis at urna dictum luctus. Suspendisse convallis dignissim
-                                            eros at volutpat. In
-                                            egestas mattis dui. Aliquam mattis dictum aliquet.
-                                        </p>
-
                                         <div class="mb-3">
                                             <div class="custom-control custom-checkbox">
                                                 <input type="checkbox" class="custom-control-input" id="customCheck1"/>
