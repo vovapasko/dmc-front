@@ -1,4 +1,3 @@
-import { ChartType } from './apex.model';
 
 const multipleRadialBars = {
     chart: {

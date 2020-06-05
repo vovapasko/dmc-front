@@ -191,7 +191,8 @@ export class NewsService {
   public initializeEditorForm(): FormGroup {
     return this.formBuilder.group({
       text: ['', Validators.required],
-      email: [null, Validators.required]
+      email: [null, Validators.required],
+      attachments: [null, Validators.required]
     });
   }
 
@@ -207,7 +208,8 @@ export class NewsService {
       attachments: [null, Validators.required],
       title: [null, Validators.required],
       content: [null, Validators.required],
-      contractors: [null, Validators.required]
+      contractors: [null, Validators.required],
+      previewText: [null, Validators.required],
     });
   }
 
@@ -217,7 +219,8 @@ export class NewsService {
         attachments: new FormControl(entity.attachments, Validators.required),
         title: new FormControl(entity.title, Validators.required),
         content: new FormControl(entity.content, Validators.required),
-        contractors: new FormControl(entity.contractors, Validators.required)
+        contractors: new FormControl(entity.contractors, Validators.required),
+        previewText: new FormControl(entity.previewText, Validators.required),
       });
     });
     return new FormArray(toGroups);
