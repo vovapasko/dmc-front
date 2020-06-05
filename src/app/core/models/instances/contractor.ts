@@ -4,7 +4,7 @@ export interface Contractor {
   contactPerson: string;
   phoneNumber: string;
   email: string;
-  postformatlistSet: Array<PostFormatListSet>
+  postformatlistSet: Array<PostFormatListSet>;
   dateCreated: Date;
   dateUpdated: Date;
 }

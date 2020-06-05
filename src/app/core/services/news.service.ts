@@ -18,7 +18,7 @@ import { Contractor, PostFormatListSet } from '../models/instances/contractor';
 import { revenueRadialChart } from 'src/app/pages/dashboards/default/data';
 import { NotificationService } from './notification.service';
 import { Project } from '../models/instances/project';
-import { News, NewsImage } from '../models/instances/news';
+import { News } from '../models/instances/news';
 import images from '../constants/images';
 import { Hashtag } from '../models/instances/hashtag';
 import { Format } from '../models/instances/format';
@@ -39,6 +39,8 @@ import { UpdatePostFormatPayload } from '../models/payloads/news/format/update-p
 import { UpdatePostFormatResponse } from '../models/responses/news/format/update-post-format';
 import { DeletePostFormatPayload } from '../models/payloads/news/format/delete-post-format';
 import { DeletePostFormatResponse } from '../models/responses/news/format/delete-post-format';
+import { multipleRadialBars } from '../../core/components/charts/data';
+import numbers from '../constants/numbers';
 
 const api = environment.api;
 
@@ -173,39 +175,52 @@ export class NewsService {
   }
 
   public initializeValidationForm(validator): FormGroup {
-      return this.formBuilder.group({
-        clientName: [null, Validators.required],
-        projectName: [null, Validators.required],
-        newsCharacter: [null, Validators.required],
-        projectTitle: [null, Validators.required],
-        projectHashtags: [null, Validators.required],
-        projectPostFormat: [null, Validators.required],
-        projectBurstMethod: [null, Validators.required],
-        projectBudget: [null, [Validators.required, validator]],
-        projectContractors: [null, [Validators.required, validator]]
-      });
+    return this.formBuilder.group({
+      clientName: [null, Validators.required],
+      projectName: [null, Validators.required],
+      newsCharacter: [null, Validators.required],
+      projectTitle: [null, Validators.required],
+      projectHashtags: [null, Validators.required],
+      projectPostFormat: [null, Validators.required],
+      projectBurstMethod: [null, Validators.required],
+      projectBudget: [null, [Validators.required, validator]],
+      projectContractors: [null, [Validators.required, validator]]
+    });
   }
 
   public initializeEditorForm(): FormGroup {
     return this.formBuilder.group({
-      text: ['', Validators.required]
+      text: ['', Validators.required],
+      email: [null, Validators.required],
+      attachments: [null, Validators.required]
+    });
+  }
+
+  public initializePreviewForm(): FormGroup {
+    return this.formBuilder.group({
+      previewText: ['', Validators.required],
+      previewEmail: [null, Validators.required]
     });
   }
 
   public initializeNewsForm(): FormGroup {
     return this.formBuilder.group({
-      title: ['', Validators.required],
+      attachments: [null, Validators.required],
+      title: [null, Validators.required],
+      content: [null, Validators.required],
       contractors: [null, Validators.required],
-      image: [null, Validators.required]
+      previewText: [null, Validators.required],
     });
   }
 
   public initControls(list: Array<News>): FormArray {
     const toGroups = list.map((entity) => {
       return new FormGroup({
+        attachments: new FormControl(entity.attachments, Validators.required),
         title: new FormControl(entity.title, Validators.required),
-        image: new FormControl(entity.image, Validators.required),
-        contractors: new FormControl(entity.contractors, Validators.required)
+        content: new FormControl(entity.content, Validators.required),
+        contractors: new FormControl(entity.contractors, Validators.required),
+        previewText: new FormControl(entity.previewText, Validators.required),
       });
     });
     return new FormArray(toGroups);
@@ -224,19 +239,28 @@ export class NewsService {
   public calculateLeft(budget: number, validationForm: FormGroup): number | null {
     if (validationForm) {
       const controls = validationForm.controls;
-      const contractorsControl = (controls.projectContractors as unknown) as Contractor[];
-      // @ts-ignore
-      const contractors = contractorsControl ? contractorsControl.value || [] : [];
-      return budget - contractors.reduce((a, c) => a + +c.onePostPrice, 0);
+      const format = controls.projectPostFormat.value ? controls.projectPostFormat.value.postFormat : '';
+      const contractors = (controls.projectContractors.value as unknown) as Contractor[];
+      const reducer = (a, c) => {
+        const searchCost = c.postformatlistSet.find(el => el.postFormat === format);
+        const cost = searchCost ? searchCost.onePostPrice : 0;
+        return a + cost;
+      };
+      const total = contractors ? contractors.reduce(reducer, 0) : 0;
+      return budget - total;
     }
     return null;
   }
 
   public calculatePercentage(left: number, budget: number): ChartType {
-    // tslint:disable-next-line:no-bitwise
-    const percent = ~~((left / budget) * 100);
-    const revenue = Object.assign({}, revenueRadialChart);
-    revenue.series = [percent];
+    const revenue = Object.assign({}, multipleRadialBars);
+    if (left && budget) {
+      const monthLeft = left;
+      const weekLeft = left / numbers.month;
+      const dayLeft = left / numbers.days;
+      const hourLeft = left / numbers.hours;
+      revenue.series = [monthLeft, weekLeft, dayLeft, hourLeft].map((el: number) => parseInt(el.toString(), 10));
+    }
     return revenue;
   }
 
@@ -259,7 +283,7 @@ export class NewsService {
     }
     const common = validationForm.controls;
     const editor = editorForm.controls;
-    const newsList = project.newsInProject.map((el) => new News(el.title, el.contractors, el.image, el.id));
+    const newsList = project.newsInProject.map((el) => new News(el.title, el.content, el.attachments, el.contractors, el.content, el.id));
     const controls = this.initControls(newsList);
     setProjectValues(common, editor, project, this.securityService.getSafeHtml.bind(this.securityService));
     return { controls, newsList };
@@ -268,21 +292,11 @@ export class NewsService {
   public addNewItem(newsList: News[]): News[] {
     if (newsList) {
       const list = newsList.slice();
-      list.push(new News('', [], { base64: images.defaultImage, file: null }));
+      const newItem = new News('', '', [], [], '');
+      list.push(newItem);
       return list;
     }
     return null;
-  }
-
-  public onImageChange(files: AlifeFile[], index: number, onFile: boolean, list: News[]): NewsImage {
-    const image = list[index].image;
-    if (onFile) {
-      // @ts-ignore
-      image.file = files[0];
-    } else {
-      image.base64 = files[0].base64;
-    }
-    return image;
   }
 
   public updateField(index: number, field: string, value: string | number | null | object, control: AbstractControl, list: News[]): News[] {

@@ -1,527 +1,734 @@
 <div class="container-fluid">
-  <app-page-title title="Разгон" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+    <app-page-title title="Разгон" [breadcrumbItems]="breadCrumbItems"></app-page-title>
 
-  <div class="row">
-    <div class="col-md-12">
-      <div class="card">
-        <div class="card-body">
-          <aw-wizard #wizardForm>
-            <aw-wizard-step (stepEnter)="step = 0" [canExit]="validationForm?.valid">
-              <ul class="nav nav-pills bg-light nav-justified form-wizard-header mb-4">
-                <li class="nav-item" [awGoToStep]="{ stepIndex: 0 }">
-                  <a
-                    href="javascript: void(0);"
-                    data-toggle="tab"
-                    [ngClass]="{ active: step == 0 }"
-                    class="nav-link rounded-0 pt-2 pb-2"
-                  >
-                    <i class="mdi mdi-account-circle mr-1"></i>
-                    <span class="d-none d-sm-inline">Общее</span>
-                  </a>
-                </li>
-                <li class="nav-item" [awGoToStep]="{ stepIndex: 1 }">
-                  <a
-                    href="javascript: void(0);"
-                    data-toggle="tab"
-                    [ngClass]="{ active: step == 1 }"
-                    class="nav-link rounded-0 pt-2 pb-2"
-                  >
-                    <i class="mdi mdi-face-profile mr-1"></i>
-                    <span class="d-none d-sm-inline">Содержание</span>
-                  </a>
-                </li>
-                <li class="nav-item" [awGoToStep]="{ stepIndex: 2 }">
-                  <a
-                    href="javascript: void(0);"
-                    data-toggle="tab"
-                    [ngClass]="{ active: step == 2 }"
-                    class="nav-link rounded-0 pt-2 pb-2"
-                  >
-                    <i class="mdi mdi-checkbox-marked-circle-outline mr-1"></i>
-                    <span class="d-none d-sm-inline">Распределение</span>
-                  </a>
-                </li>
-                <li class="nav-item" [awGoToStep]="{ stepIndex: 3 }">
-                  <a
-                    href="javascript: void(0);"
-                    data-toggle="tab"
-                    [ngClass]="{ active: step == 3 }"
-                    class="nav-link rounded-0 pt-2 pb-2"
-                  >
-                    <i class="mdi mdi-checkbox-marked-circle-outline mr-1"></i>
-                    <span class="d-none d-sm-inline">Завершение</span>
-                  </a>
-                </li>
-              </ul>
-              <form (ngSubmit)="formSubmit()" [formGroup]="validationForm">
-                <div class="row">
-                  <app-ui-preloader [display]="loading$ | async"></app-ui-preloader>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <aw-wizard #wizardForm>
+                        <aw-wizard-step (stepEnter)="step = 0" [canExit]="validationForm?.valid">
+                            <ul class="nav nav-pills bg-light nav-justified form-wizard-header mb-4">
+                                <li class="nav-item" [awGoToStep]="{ stepIndex: 0 }">
+                                    <a
+                                            href="javascript: void(0);"
+                                            data-toggle="tab"
+                                            [ngClass]="{ active: step == 0 }"
+                                            class="nav-link rounded-0 pt-2 pb-2"
+                                    >
+                                        <i class="mdi mdi-account-circle mr-1"></i>
+                                        <span class="d-none d-sm-inline">Общее</span>
+                                    </a>
+                                </li>
 
-                  <div class="col-xl-8">
-                    <div class="form-group row mb-3">
-                      <label for="clientName" class="col-md-3 col-form-label"> Клиент </label>
-                      <div class="col-md-9">
-                        <input
-                          type="text"
-                          id="clientName"
-                          placeholder="Введите клиента"
-                          class="form-control"
-                          formControlName="clientName"
-                          [ngClass]="{ 'is-invalid': submitted && form.clientName.errors }"
-                        />
-                        <div *ngIf="submitted && form.clientName.errors" class="invalid-feedback">
-                          <span *ngIf="form.clientName.errors.required"></span>
-                        </div>
-                      </div>
-                    </div>
+                                <li *ngIf="!form?.projectBurstMethod?.value?.method" class="nav-item">
+                                    <a href="javascript: void(0);" class="nav-link rounded-0 pt-2 pb-2">
+                                        <span class="d-none d-sm-inline">...</span>
+                                    </a>
+                                </li>
 
-                    <div class="form-group row mb-3">
-                      <label for="projectName" class="col-md-3 col-form-label"> Название проекта </label>
-                      <div class="col-md-9">
-                        <input
-                          type="text"
-                          id="projectName"
-                          placeholder="Введите название проекта"
-                          formControlName="projectName"
-                          class="form-control"
-                          [ngClass]="{ 'is-invalid': submitted && form.projectName.errors }"
-                        />
-                        <div *ngIf="submitted && form.projectName.errors" class="invalid-feedback">
-                          <span *ngIf="form.projectName.errors.required"></span>
-                        </div>
-                      </div>
-                    </div>
+                                <li *ngIf="form?.projectBurstMethod?.value?.method == methods.bayer || form?.projectBurstMethod?.value?.method == methods.topSecret"
+                                    class="nav-item" [awGoToStep]="{ stepIndex: 1 }"
+                                >
+                                    <a
+                                            href="javascript: void(0);"
+                                            data-toggle="tab"
+                                            [ngClass]="{ active: step == 1 }"
+                                            class="nav-link rounded-0 pt-2 pb-2"
+                                    >
+                                        <i class="mdi mdi-face-profile mr-1"></i>
+                                        <span class="d-none d-sm-inline">Формирование</span>
+                                    </a>
+                                </li>
 
-                    <div class="form-group row mb-3">
-                      <label for="character" class="col-md-3 col-form-label"> Характер новости </label>
-                      <div class="col-md-9">
-                        <ng-select
-                          id="character"
-                          [items]="characters$ | async"
-                          bindLabel="character"
-                          [closeOnSelect]="true"
-                          placeholder="Выберите характер новости"
-                          formControlName="newsCharacter"
-                          [ngClass]="{ 'is-invalid': submitted && form.newsCharacter.errors }"
-                        ></ng-select>
-                        <div *ngIf="submitted && form.newsCharacter.errors" class="invalid-feedback">
-                          <span *ngIf="form.newsCharacter.errors.required"></span>
-                        </div>
-                      </div>
-                    </div>
+                                <li *ngIf="form?.projectBurstMethod?.value?.method == methods.direct" class="nav-item"
+                                    [awGoToStep]="{ stepIndex: 2 }">
+                                    <a
+                                            href="javascript: void(0);"
+                                            data-toggle="tab"
+                                            [ngClass]="{ active: step == 2 }"
+                                            class="nav-link rounded-0 pt-2 pb-2"
+                                    >
+                                        <i class="mdi mdi-face-profile mr-1"></i>
+                                        <span class="d-none d-sm-inline">Распределение</span>
+                                    </a>
+                                </li>
 
-                    <div class="form-group row mb-3">
-                      <label for="projectTitle" class="col-md-3 col-form-label"> Заглавие </label>
-                      <div class="col-md-9">
-                        <input
-                          type="text"
-                          id="projectTitle"
-                          formControlName="projectTitle"
-                          placeholder="Введите заглавие"
-                          class="form-control"
-                          [ngClass]="{ 'is-invalid': submitted && form.projectTitle.errors }"
-                        />
-                        <div *ngIf="submitted && form.projectTitle.errors" class="invalid-feedback">
-                          <span *ngIf="form.projectTitle.errors.required"></span>
-                        </div>
-                      </div>
-                    </div>
+                                <li class="nav-item" [awGoToStep]="{ stepIndex: 3 }">
+                                    <a
+                                            href="javascript: void(0);"
+                                            data-toggle="tab"
+                                            [ngClass]="{ active: step == 3 }"
+                                            class="nav-link rounded-0 pt-2 pb-2"
+                                    >
+                                        <i class="mdi mdi-checkbox-marked-circle-outline mr-1"></i>
+                                        <span class="d-none d-sm-inline">Предпросмотр</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <form (ngSubmit)="formSubmit()" [formGroup]="validationForm">
+                                <div class="row">
+                                    <app-ui-preloader [display]="loading$ | async"></app-ui-preloader>
 
-                    <div class="form-group row mb-3">
-                      <label for="projectHashtags" class="col-md-3 col-form-label"> Хештег </label>
-                      <div class="col-md-9">
-                        <ng-select
-                          id="projectHashtags"
-                          [items]="hashtags$ | async"
-                          bindLabel="name"
-                          [multiple]="true"
-                          [closeOnSelect]="false"
-                          [hideSelected]="true"
-                          placeholder="Выберите ключевые слова"
-                          formControlName="projectHashtags"
-                          [ngClass]="{ 'is-invalid': submitted && form.projectHashtags.errors }"
-                        ></ng-select>
-                        <div *ngIf="submitted && form.projectHashtags.errors" class="invalid-feedback">
-                          <span *ngIf="form.projectHashtags.errors.required"></span>
-                        </div>
-                      </div>
-                    </div>
+                                    <div class="col-xl-8">
+                                        <div class="form-group row mb-3">
+                                            <label for="clientName" class="col-md-3 col-form-label"> Клиент </label>
+                                            <div class="col-md-9">
+                                                <input
+                                                        type="text"
+                                                        id="clientName"
+                                                        placeholder="Введите клиента"
+                                                        class="form-control"
+                                                        formControlName="clientName"
+                                                        [ngClass]="{ 'is-invalid': submitted && form.clientName.errors }"
+                                                />
+                                                <div *ngIf="submitted && form.clientName.errors"
+                                                     class="invalid-feedback">
+                                                    <span *ngIf="form.clientName.errors.required"></span>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                    <div class="form-group row mb-3">
-                      <label for="projectPostFormat" class="col-md-3 col-form-label"> Формат размещения </label>
-                      <div class="col-md-9">
-                        <ng-select
-                          id="projectPostFormat"
-                          [items]="formats$ | async"
-                          bindLabel="postFormat"
-                          [closeOnSelect]="true"
-                          placeholder="Выберите формат"
-                          formControlName="projectPostFormat"
-                          [ngClass]="{ 'is-invalid': submitted && form.projectPostFormat.errors }"
-                        ></ng-select>
-                        <div *ngIf="submitted && form.projectPostFormat.errors" class="invalid-feedback">
-                          <span *ngIf="form.projectPostFormat.errors.required"></span>
-                        </div>
-                      </div>
-                    </div>
+                                        <div class="form-group row mb-3">
+                                            <label for="projectPostFormat" class="col-md-3 col-form-label">
+                                                Проект </label>
+                                            <div class="col-md-9">
+                                                <ng-select
+                                                        id="project"
+                                                        [items]="newsProjects$ | async"
+                                                        bindLabel="name"
+                                                        (change)="onChangeProject($event)"
+                                                        [closeOnSelect]="true"
+                                                        placeholder="Выберите проект"
+                                                        formControlName="projectName"
+                                                        [ngClass]="{ 'is-invalid': submitted && form.projectName.errors }"
+                                                ></ng-select>
+                                                <div *ngIf="submitted && form.projectName.errors"
+                                                     class="invalid-feedback">
+                                                    <span *ngIf="form.projectName.errors.required"></span>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                    <div class="form-group row mb-3">
-                      <label for="projectBurstMethod" class="col-md-3 col-form-label"> Метод разгона </label>
-                      <div class="col-md-9">
-                        <ng-select
-                          id="projectBurstMethod"
-                          [items]="methods$ | async"
-                          bindLabel="method"
-                          [closeOnSelect]="true"
-                          placeholder="Выберите метод"
-                          formControlName="projectBurstMethod"
-                          [ngClass]="{ 'is-invalid': submitted && form.projectBurstMethod.errors }"
-                        ></ng-select>
-                        <div *ngIf="submitted && form.projectBurstMethod.errors" class="invalid-feedback">
-                          <span *ngIf="form.projectBurstMethod.errors.required"></span>
-                        </div>
-                      </div>
-                    </div>
+                                        <div class="form-group row mb-3">
+                                            <label for="character" class="col-md-3 col-form-label"> Характер
+                                                новости </label>
+                                            <div class="col-md-9">
+                                                <ng-select
+                                                        id="character"
+                                                        [items]="characters$ | async"
+                                                        bindLabel="character"
+                                                        [closeOnSelect]="true"
+                                                        placeholder="Выберите характер новости"
+                                                        formControlName="newsCharacter"
+                                                        [ngClass]="{ 'is-invalid': submitted && form.newsCharacter.errors }"
+                                                ></ng-select>
+                                                <div *ngIf="submitted && form.newsCharacter.errors"
+                                                     class="invalid-feedback">
+                                                    <span *ngIf="form.newsCharacter.errors.required"></span>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                    <div class="form-group row mb-3">
-                      <label for="projectBudget" class="col-md-3 col-form-label"> Бюджет разгона </label>
-                      <div class="col-md-9">
-                        <input
-                          type="number"
-                          id="projectBudget"
-                          formControlName="projectBudget"
-                          class="form-control"
-                          placeholder="Введите бюджет"
-                          [ngClass]="{ 'is-invalid': submitted && form.projectBudget.errors }"
-                        />
-                        <div *ngIf="submitted && form.projectBudget.errors" class="invalid-feedback">
-                          <span *ngIf="form.projectBudget.errors.required"></span>
-                        </div>
-                      </div>
-                    </div>
+                                        <div class="form-group row mb-3">
+                                            <label for="projectTitle" class="col-md-3 col-form-label"> Заглавие </label>
+                                            <div class="col-md-9">
+                                                <input
+                                                        type="text"
+                                                        id="projectTitle"
+                                                        formControlName="projectTitle"
+                                                        placeholder="Введите заглавие"
+                                                        class="form-control"
+                                                        [ngClass]="{ 'is-invalid': submitted && form.projectTitle.errors }"
+                                                />
+                                                <div *ngIf="submitted && form.projectTitle.errors"
+                                                     class="invalid-feedback">
+                                                    <span *ngIf="form.projectTitle.errors.required"></span>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                    <div class="form-group row mb-3">
-                      <label for="projectContractors" class="col-md-3 col-form-label"> Котрагенты </label>
-                      <div class="col-md-9">
-                        <ng-select
-                          id="projectContractors"
-                          [items]="contractors$ | async"
-                          bindLabel="editorName"
-                          [multiple]="true"
-                          [closeOnSelect]="false"
-                          [hideSelected]="true"
-                          placeholder="Выберите контрагентов"
-                          formControlName="projectContractors"
-                          [ngClass]="{ 'is-invalid': submitted && form.projectContractors.errors }"
-                        >
-                        </ng-select>
-                        <div *ngIf="submitted && form.projectContractors.errors" class="invalid-feedback">
-                          <span *ngIf="form.projectContractors.errors.required"></span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- end col -->
-                  <div class="col-xl-4">
-                    <div class="card-box">
-                      <div class="widget-chart text-center" dir="ltr">
-                        <apx-chart
-                          [chart]="revenueRadialChart.chart"
-                          [series]="revenueRadialChart.series"
-                          [plotOptions]="revenueRadialChart.plotOptions"
-                          [colors]="revenueRadialChart.colors"
-                          [stroke]="revenueRadialChart.stroke"
-                        ></apx-chart>
+                                        <div class="form-group row mb-3">
+                                            <label for="projectHashtags" class="col-md-3 col-form-label">
+                                                Хештег </label>
+                                            <div class="col-md-9">
+                                                <ng-select
+                                                        id="projectHashtags"
+                                                        [items]="hashtags$ | async"
+                                                        bindLabel="name"
+                                                        [multiple]="true"
+                                                        [closeOnSelect]="false"
+                                                        [hideSelected]="true"
+                                                        placeholder="Выберите ключевые слова"
+                                                        formControlName="projectHashtags"
+                                                        [ngClass]="{ 'is-invalid': submitted && form.projectHashtags.errors }"
+                                                ></ng-select>
+                                                <div *ngIf="submitted && form.projectHashtags.errors"
+                                                     class="invalid-feedback">
+                                                    <span *ngIf="form.projectHashtags.errors.required"></span>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                        <h5 class="text-muted">{{ left > 0 ? 'Осталось' : 'Не хватает' }}</h5>
-                        <h2>${{ left > 0 ? left : left * -1 }}</h2>
-                      </div>
-                    </div>
-                    <!-- end card-box -->
-                  </div>
-                  <!-- end col-->
+                                        <div class="form-group row mb-3">
+                                            <label for="projectPostFormat" class="col-md-3 col-form-label"> Формат
+                                                размещения </label>
+                                            <div class="col-md-9">
+                                                <ng-select
+                                                        id="projectPostFormat"
+                                                        [items]="formats$ | async"
+                                                        bindLabel="postFormat"
+                                                        [closeOnSelect]="true"
+                                                        placeholder="Выберите формат"
+                                                        formControlName="projectPostFormat"
+                                                        [ngClass]="{ 'is-invalid': submitted && form.projectPostFormat.errors }"
+                                                ></ng-select>
+                                                <div *ngIf="submitted && form.projectPostFormat.errors"
+                                                     class="invalid-feedback">
+                                                    <span *ngIf="form.projectPostFormat.errors.required"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row mb-3">
+                                            <label for="projectBurstMethod" class="col-md-3 col-form-label"> Метод
+                                                разгона </label>
+                                            <div class="col-md-9">
+                                                <ng-select
+                                                        id="projectBurstMethod"
+                                                        [items]="methods$ | async"
+                                                        bindLabel="method"
+                                                        [closeOnSelect]="true"
+                                                        placeholder="Выберите метод"
+                                                        formControlName="projectBurstMethod"
+                                                        [ngClass]="{ 'is-invalid': submitted && form.projectBurstMethod.errors }"
+                                                ></ng-select>
+                                                <div *ngIf="submitted && form.projectBurstMethod.errors"
+                                                     class="invalid-feedback">
+                                                    <span *ngIf="form.projectBurstMethod.errors.required"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row mb-3">
+                                            <label for="projectBudget" class="col-md-3 col-form-label"> Бюджет
+                                                разгона </label>
+                                            <div class="col-md-9">
+                                                <input
+                                                        type="number"
+                                                        id="projectBudget"
+                                                        formControlName="projectBudget"
+                                                        class="form-control"
+                                                        placeholder="Введите бюджет"
+                                                        [ngClass]="{ 'is-invalid': submitted && form.projectBudget.errors }"
+                                                />
+                                                <div *ngIf="submitted && form.projectBudget.errors"
+                                                     class="invalid-feedback">
+                                                    <span *ngIf="form.projectBudget.errors.required"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row mb-3">
+                                            <label for="projectContractors" class="col-md-3 col-form-label">
+                                                Котрагенты </label>
+                                            <div class="col-md-9">
+                                                <ng-select
+                                                        id="projectContractors"
+                                                        [items]="contractors$ | async"
+                                                        bindLabel="editorName"
+                                                        [multiple]="true"
+                                                        [closeOnSelect]="false"
+                                                        [hideSelected]="true"
+                                                        placeholder="Выберите контрагентов"
+                                                        formControlName="projectContractors"
+                                                        [ngClass]="{ 'is-invalid': submitted && form.projectContractors.errors }"
+                                                >
+                                                </ng-select>
+                                                <div *ngIf="submitted && form.projectContractors.errors"
+                                                     class="invalid-feedback">
+                                                    <span *ngIf="form.projectContractors.errors.required"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end col -->
+                                    <div class="col-xl-4">
+                                        <div class="card-box">
+                                            <div class="widget-chart text-center" dir="ltr">
+
+                                                <!-- Multiple RadialBars -->
+                                                <app-portlet title="Бюджет"
+                                                             (onContentRefresh)="refreshContent()" color="white"
+                                                             headerClass="header-title title my-1">
+                                                    <apx-chart class="apex-charts"
+                                                               [series]="multipleRadialBars.series"
+                                                               [chart]="multipleRadialBars.chart"
+                                                               [plotOptions]="multipleRadialBars.plotOptions"
+                                                               [labels]="multipleRadialBars.labels"
+                                                               [legend]="multipleRadialBars.legend"
+                                                               [colors]="multipleRadialBars.colors">
+                                                    </apx-chart>
+                                                </app-portlet>
+
+                                                <div *ngFor="let contractor of form?.projectContractors?.value;">
+                                                    <h5 class="text-muted"
+                                                        *ngFor="let format of contractor?.postformatlistSet;">
+                                                        {{ format?.postFormat === form?.projectPostFormat?.value?.postFormat ? '— ' + contractor?.editorName + ' ' + format?.onePostPrice : ''}}
+                                                    </h5>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <!-- end card-box -->
+                                    </div>
+                                    <!-- end col-->
+                                </div>
+                                <!-- end row -->
+                                <ul class="list-inline wizard mb-0">
+                                    <li class="next list-inline-item float-right">
+                                        <button [disabled]="validationForm.status === 'INVALID'"
+                                                class="btn btn-secondary"
+                                                [awGoToStep]="{stepIndex: steps[form?.projectBurstMethod?.value?.method]}"
+                                                type="submit"
+                                        >Дальше
+                                        </button>
+                                    </li>
+                                </ul>
+                            </form>
+                        </aw-wizard-step>
+
+                        <aw-wizard-step (stepEnter)="step = 1" awOptionalStep [canEnter]="validationForm?.valid">
+                            <ul class="nav nav-pills bg-light nav-justified form-wizard-header mb-4">
+                                <li class="nav-item" [awGoToStep]="{ stepIndex: 0 }">
+                                    <a
+                                            href="javascript: void(0);"
+                                            data-toggle="tab"
+                                            [ngClass]="{ active: step == 0 }"
+                                            class="nav-link rounded-0 pt-2 pb-2"
+                                    >
+                                        <i class="mdi mdi-account-circle mr-1"></i>
+                                        <span class="d-none d-sm-inline">Общее</span>
+                                    </a>
+                                </li>
+
+                                <li *ngIf="!form?.projectBurstMethod?.value?.method" class="nav-item">
+                                    <a href="javascript: void(0);" class="nav-link rounded-0 pt-2 pb-2">
+                                        <span class="d-none d-sm-inline">...</span>
+                                    </a>
+                                </li>
+
+                                <li *ngIf="form?.projectBurstMethod?.value?.method == methods.bayer || form?.projectBurstMethod?.value?.method == methods.topSecret"
+                                    class="nav-item" [awGoToStep]="{ stepIndex: 1 }"
+                                >
+                                    <a
+                                            href="javascript: void(0);"
+                                            data-toggle="tab"
+                                            [ngClass]="{ active: step == 1 }"
+                                            class="nav-link rounded-0 pt-2 pb-2"
+                                    >
+                                        <i class="mdi mdi-face-profile mr-1"></i>
+                                        <span class="d-none d-sm-inline">Формирование</span>
+                                    </a>
+                                </li>
+
+                                <li *ngIf="form?.projectBurstMethod?.value?.method == methods.direct" class="nav-item"
+                                    [awGoToStep]="{ stepIndex: 2 }">
+                                    <a
+                                            href="javascript: void(0);"
+                                            data-toggle="tab"
+                                            [ngClass]="{ active: step == 2 }"
+                                            class="nav-link rounded-0 pt-2 pb-2"
+                                    >
+                                        <i class="mdi mdi-face-profile mr-1"></i>
+                                        <span class="d-none d-sm-inline">Распределение</span>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item" [awGoToStep]="{ stepIndex: 3 }">
+                                    <a
+                                            href="javascript: void(0);"
+                                            data-toggle="tab"
+                                            [ngClass]="{ active: step == 3 }"
+                                            class="nav-link rounded-0 pt-2 pb-2"
+                                    >
+                                        <i class="mdi mdi-checkbox-marked-circle-outline mr-1"></i>
+                                        <span class="d-none d-sm-inline">Предпросмотр</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <form (ngSubmit)="profileFormSubmit()" [formGroup]="editorForm">
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label for="emails" class="col-form-label">Email</label>
+                                        <ng-select
+                                                id="emails"
+                                                [items]="emails$ | async"
+                                                bindLabel="email"
+                                                [multiple]="false"
+                                                [closeOnSelect]="true"
+                                                [hideSelected]="true"
+                                                placeholder="Выберите почту"
+                                                formControlName="email"
+                                                [ngClass]="{ 'is-invalid': editForm?.email?.errors }"
+                                        >
+                                        </ng-select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="template" class="col-form-label">Шаблон</label>
+                                        <input placeholder="Шаблон"
+                                               tabindex="0"
+                                               id="template"
+                                               class="form-control"
+                                               type="text"
+                                               readonly="readonly"
+                                               [value]="editForm?.email?.value?.template || null"
+                                        >
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="signature" class="col-form-label">Подпись</label>
+                                        <input placeholder="Подпись"
+                                               id="signature"
+                                               class="form-control"
+                                               tabindex="0"
+                                               type="text"
+                                               readonly="readonly"
+                                               [value]="editForm?.email?.value?.signature || null"
+                                        >
+                                    </div>
+                                </div>
+
+                                <quill-editor
+                                        [styles]="{ height: '400px', 'margin-bottom': '15px' }"
+                                        (onFocus)="onEvent($event, true)"
+                                        (onEditorChanged)="changedEditor($event)"
+                                        (onBlur)="onEvent($event, false)"
+                                        formControlName="text"
+                                        (onEditorCreated)="created($event)"
+                                ></quill-editor>
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <file-upload formControlName="attachments"
+                                                             class="dropzone"
+                                                >
+                                                </file-upload>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <ul class="list-inline wizard mb-0">
+                                    <li class="previous list-inline-item">
+                                        <button class="btn btn-secondary"
+                                                type="button"
+                                                [awGoToStep]="{stepIndex: 0}"
+                                        >Назад
+                                        </button>
+                                    </li>
+                                    <li class="next list-inline-item float-right">
+                                        <button class="btn btn-secondary"
+                                                [awGoToStep]="{stepIndex: 3}"
+                                                type="submit"
+                                        >Дальше
+                                        </button>
+                                    </li>
+                                </ul>
+                            </form>
+                        </aw-wizard-step>
+
+                        <aw-wizard-step (stepEnter)="step = 2" awOptionalStep [canEnter]="validationForm?.valid">
+                            <ul class="nav nav-pills bg-light nav-justified form-wizard-header mb-4">
+                                <li class="nav-item" [awGoToStep]="{ stepIndex: 0 }">
+                                    <a
+                                            href="javascript: void(0);"
+                                            data-toggle="tab"
+                                            [ngClass]="{ active: step == 0 }"
+                                            class="nav-link rounded-0 pt-2 pb-2"
+                                    >
+                                        <i class="mdi mdi-account-circle mr-1"></i>
+                                        <span class="d-none d-sm-inline">Общее</span>
+                                    </a>
+                                </li>
+
+                                <li *ngIf="!form?.projectBurstMethod?.value?.method" class="nav-item">
+                                    <a href="javascript: void(0);" class="nav-link rounded-0 pt-2 pb-2">
+                                        <span class="d-none d-sm-inline">...</span>
+                                    </a>
+                                </li>
+
+                                <li *ngIf="form?.projectBurstMethod?.value?.method == methods.bayer || form?.projectBurstMethod?.value?.method == methods.topSecret"
+                                    class="nav-item" [awGoToStep]="{ stepIndex: 1 }"
+                                >
+                                    <a
+                                            href="javascript: void(0);"
+                                            data-toggle="tab"
+                                            [ngClass]="{ active: step == 1 }"
+                                            class="nav-link rounded-0 pt-2 pb-2"
+                                    >
+                                        <i class="mdi mdi-face-profile mr-1"></i>
+                                        <span class="d-none d-sm-inline">Формирование</span>
+                                    </a>
+                                </li>
+
+                                <li *ngIf="form?.projectBurstMethod?.value?.method == methods.direct" class="nav-item"
+                                    [awGoToStep]="{ stepIndex: 2 }">
+                                    <a
+                                            href="javascript: void(0);"
+                                            data-toggle="tab"
+                                            [ngClass]="{ active: step == 2 }"
+                                            class="nav-link rounded-0 pt-2 pb-2"
+                                    >
+                                        <i class="mdi mdi-face-profile mr-1"></i>
+                                        <span class="d-none d-sm-inline">Распределение</span>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item" [awGoToStep]="{ stepIndex: 3 }">
+                                    <a
+                                            href="javascript: void(0);"
+                                            data-toggle="tab"
+                                            [ngClass]="{ active: step == 3 }"
+                                            class="nav-link rounded-0 pt-2 pb-2"
+                                    >
+                                        <i class="mdi mdi-checkbox-marked-circle-outline mr-1"></i>
+                                        <span class="d-none d-sm-inline">Предпросмотр</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <form (ngSubmit)="newsFormSubmit()" [formGroup]="newsForm">
+                                <div class="row">
+                                    <div class="col-md-6 col-xl-3" *ngFor="let news of newsList; index as index">
+                                        <!-- Simple card -->
+
+                                        <div class="card">
+
+                                            <div class="card-body">
+                                                <file-upload formControlName="attachments"
+                                                             class="dropzone"
+                                                ></file-upload>
+                                                <input type="text"
+                                                       placeholder="Введите заглавие"
+                                                       [id]="'title' + index"
+                                                       [formControl]="getControl(index, 'title')"
+                                                       style="margin-bottom: 10px;"
+                                                       class="form-control"
+                                                       (change)="updateField(index, 'title')"
+                                                />
+                                                <input type="text"
+                                                       placeholder="Введите содержание"
+                                                       [id]="'content' + index"
+                                                       [formControl]="getControl(index, 'content')"
+                                                       style="margin-bottom: 10px;"
+                                                       class="form-control"
+                                                       (change)="updateField(index, 'content')"
+                                                />
+                                                <ng-select
+                                                        id="news-contractors"
+                                                        [items]="form.projectContractors.value || []"
+                                                        bindLabel="editorName"
+                                                        [multiple]="true"
+                                                        [closeOnSelect]="false"
+                                                        [hideSelected]="true"
+                                                        placeholder="Контрагенты"
+                                                        (change)="updateField(index, 'contractors')"
+                                                        [formControl]="getControl(index, 'contractors')"
+                                                        [ngClass]="{ 'is-invalid': submitted && distributeForm.contractors.errors }"
+                                                >
+                                                </ng-select>
+
+                                                <a
+                                                        *ngIf="index === newsList.length - 1"
+                                                        (click)="addNew()"
+                                                        href="javascript: void(0);"
+                                                        class="btn btn-primary btn-block mt-3 waves-effect waves-light"
+                                                >
+                                                    <i class="mdi mdi-plus-circle"></i>
+                                                    Добавить вариант
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <ul class="list-inline wizard mb-0">
+                                <li class="previous list-inline-item">
+                                    <button class="btn btn-secondary"
+                                            type="button"
+                                            [awGoToStep]="{stepIndex: 0}"
+                                    >Назад
+                                    </button>
+                                </li>
+                                <li class="next list-inline-item float-right">
+                                    <button class="btn btn-secondary"
+                                            [awGoToStep]="{stepIndex: 3}"
+                                            type="submit"
+                                    >Дальше
+                                    </button>
+                                </li>
+                            </ul>
+                        </aw-wizard-step>
+
+                        <aw-wizard-step (stepEnter)="step = 3" [canEnter]="validationForm?.valid">
+                            <ul class="nav nav-pills bg-light nav-justified form-wizard-header mb-4">
+                                <li class="nav-item" [awGoToStep]="{ stepIndex: 0 }">
+                                    <a
+                                            href="javascript: void(0);"
+                                            data-toggle="tab"
+                                            [ngClass]="{ active: step == 0 }"
+                                            class="nav-link rounded-0 pt-2 pb-2"
+                                    >
+                                        <i class="mdi mdi-account-circle mr-1"></i>
+                                        <span class="d-none d-sm-inline">Общее</span>
+                                    </a>
+                                </li>
+
+                                <li *ngIf="!form?.projectBurstMethod?.value?.method" class="nav-item">
+                                    <a href="javascript: void(0);" class="nav-link rounded-0 pt-2 pb-2">
+                                        <span class="d-none d-sm-inline">...</span>
+                                    </a>
+                                </li>
+
+                                <li *ngIf="form?.projectBurstMethod?.value?.method == methods.bayer || form?.projectBurstMethod?.value?.method == methods.topSecret"
+                                    class="nav-item" [awGoToStep]="{ stepIndex: 1 }"
+                                >
+                                    <a
+                                            href="javascript: void(0);"
+                                            data-toggle="tab"
+                                            [ngClass]="{ active: step == 1 }"
+                                            class="nav-link rounded-0 pt-2 pb-2"
+                                    >
+                                        <i class="mdi mdi-face-profile mr-1"></i>
+                                        <span class="d-none d-sm-inline">Формирование</span>
+                                    </a>
+                                </li>
+
+                                <li *ngIf="form?.projectBurstMethod?.value?.method == methods.direct" class="nav-item"
+                                    [awGoToStep]="{ stepIndex: 2 }">
+                                    <a
+                                            href="javascript: void(0);"
+                                            data-toggle="tab"
+                                            [ngClass]="{ active: step == 2 }"
+                                            class="nav-link rounded-0 pt-2 pb-2"
+                                    >
+                                        <i class="mdi mdi-face-profile mr-1"></i>
+                                        <span class="d-none d-sm-inline">Распределение</span>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item" [awGoToStep]="{ stepIndex: 3 }">
+                                    <a
+                                            href="javascript: void(0);"
+                                            data-toggle="tab"
+                                            [ngClass]="{ active: step == 3 }"
+                                            class="nav-link rounded-0 pt-2 pb-2"
+                                    >
+                                        <i class="mdi mdi-checkbox-marked-circle-outline mr-1"></i>
+                                        <span class="d-none d-sm-inline">Предпросмотр</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="row">
+                                <app-ui-preloader [display]="loading$ | async"></app-ui-preloader>
+                                <form (ngSubmit)="previewFormSubmit()" [formGroup]="previewForm">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label for="emails" class="col-form-label">Email</label>
+                                            <ng-select
+                                                    id="previewEmails"
+                                                    [items]="emails$ | async"
+                                                    bindLabel="email"
+                                                    [multiple]="false"
+                                                    [closeOnSelect]="true"
+                                                    [hideSelected]="true"
+                                                    placeholder="Выберите почту"
+                                                    formControlName="previewEmail"
+                                                    [ngClass]="{ 'is-invalid': editForm?.email?.errors }"
+                                            >
+                                            </ng-select>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="previewTemplate" class="col-form-label">Шаблон</label>
+                                            <input placeholder="Шаблон"
+                                                   tabindex="0"
+                                                   id="previewTemplate"
+                                                   class="form-control"
+                                                   type="text"
+                                                   readonly="readonly"
+                                                   [value]="editForm?.email?.value?.template || null"
+                                            >
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="previewSignature" class="col-form-label">Подпись</label>
+                                            <input placeholder="Подпись"
+                                                   id="previewSignature"
+                                                   class="form-control"
+                                                   tabindex="0"
+                                                   type="text"
+                                                   readonly="readonly"
+                                                   [value]="editForm?.email?.value?.signature || null"
+                                            >
+                                        </div>
+                                    </div>
+
+                                    <div *ngIf="form?.projectBurstMethod?.value?.method == methods.direct; else elseBlock">
+                                        <quill-editor *ngFor="let news of newsList; let i = index"
+                                                      [styles]="{ height: '400px', 'margin-bottom': '15px' }"
+                                                      (onFocus)="onEvent($event, true)"
+                                                      (onEditorChanged)="changedEditor($event)"
+                                                      (onBlur)="onEvent($event, false)"
+                                                      (change)="updateField(i, 'previewText')"
+                                                      [formControl]="getControl(i, 'previewText')"
+                                                      (onEditorCreated)="created($event)"
+                                        ></quill-editor>
+                                    </div>
+                                    <ng-template #elseBlock>
+                                        <quill-editor
+                                                [styles]="{ height: '400px', 'margin-bottom': '15px' }"
+                                                (onFocus)="onEvent($event, true)"
+                                                (onEditorChanged)="changedEditor($event)"
+                                                (onBlur)="onEvent($event, false)"
+                                                formControlName="previewText"
+                                                (onEditorCreated)="created($event)"
+                                        ></quill-editor>
+                                    </ng-template>
+
+                                </form>
+                                <div class="col-12">
+                                    <div class="text-center">
+                                        <div class="mb-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="customCheck1"/>
+                                                <label class="custom-control-label" for="customCheck1"
+                                                >I agree with the Terms and Conditions</label
+                                                >
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end col -->
+                            </div>
+                            <!-- end row -->
+                            <ul class="list-inline wizard mb-0">
+                                <li class="previous list-inline-item">
+                                    <button class="btn btn-secondary"
+                                            [awGoToStep]="{stepIndex: steps[form?.projectBurstMethod?.value?.method]}"
+                                    >
+                                        Назад
+                                    </button>
+                                </li>
+                                <li class="next list-inline-item float-right">
+                                    <button class="btn btn-secondary" type="submit" (click)="onSubmit()">
+                                        {{ projectId ? 'Согласовать' : 'Отправить' }}
+                                    </button>
+                                </li>
+                            </ul>
+                        </aw-wizard-step>
+                    </aw-wizard>
                 </div>
-                <!-- end row -->
-                <ul class="list-inline wizard mb-0">
-                  <li class="next list-inline-item float-right">
-                    <button class="btn btn-secondary" awNextStep type="submit">Дальше</button>
-                  </li>
-                </ul>
-              </form>
-            </aw-wizard-step>
-
-            <aw-wizard-step (stepEnter)="step = 1" awOptionalStep [canEnter]="validationForm?.valid">
-              <ul class="nav nav-pills bg-light nav-justified form-wizard-header mb-4">
-                <li class="nav-item" [awGoToStep]="{ stepIndex: 0 }">
-                  <a
-                    href="javascript: void(0);"
-                    data-toggle="tab"
-                    [ngClass]="{ active: step == 0 }"
-                    class="nav-link rounded-0 pt-2 pb-2"
-                  >
-                    <i class="mdi mdi-account-circle mr-1"></i>
-                    <span class="d-none d-sm-inline">Общее</span>
-                  </a>
-                </li>
-                <li class="nav-item" [awGoToStep]="{ stepIndex: 1 }">
-                  <a
-                    href="javascript: void(0);"
-                    data-toggle="tab"
-                    [ngClass]="{ active: step == 1 }"
-                    class="nav-link rounded-0 pt-2 pb-2"
-                  >
-                    <i class="mdi mdi-face-profile mr-1"></i>
-                    <span class="d-none d-sm-inline">Содержание</span>
-                  </a>
-                </li>
-                <li class="nav-item" [awGoToStep]="{ stepIndex: 2 }">
-                  <a
-                    href="javascript: void(0);"
-                    data-toggle="tab"
-                    [ngClass]="{ active: step == 2 }"
-                    class="nav-link rounded-0 pt-2 pb-2"
-                  >
-                    <i class="mdi mdi-checkbox-marked-circle-outline mr-1"></i>
-                    <span class="d-none d-sm-inline">Распределение</span>
-                  </a>
-                </li>
-                <li class="nav-item" [awGoToStep]="{ stepIndex: 3 }">
-                  <a
-                    href="javascript: void(0);"
-                    data-toggle="tab"
-                    [ngClass]="{ active: step == 3 }"
-                    class="nav-link rounded-0 pt-2 pb-2"
-                  >
-                    <i class="mdi mdi-checkbox-marked-circle-outline mr-1"></i>
-                    <span class="d-none d-sm-inline">Завершение</span>
-                  </a>
-                </li>
-              </ul>
-              <form (ngSubmit)="profileFormSubmit()" [formGroup]="editorForm">
-                <quill-editor
-                  [styles]="{ height: '400px', 'margin-bottom': '15px' }"
-                  (onFocus)="onEvent($event, true)"
-                  (onEditorChanged)="changedEditor($event)"
-                  (onBlur)="onEvent($event, false)"
-                  formControlName="text"
-                  (onEditorCreated)="created($event)"
-                ></quill-editor>
-
-                <ul class="list-inline wizard mb-0">
-                  <li class="previous list-inline-item">
-                    <button class="btn btn-secondary" type="button" awPreviousStep>Назад</button>
-                  </li>
-                  <li class="next list-inline-item float-right">
-                    <button class="btn btn-secondary" awNextStep type="submit">Дальше</button>
-                  </li>
-                </ul>
-              </form>
-            </aw-wizard-step>
-
-            <aw-wizard-step (stepEnter)="step = 2" awOptionalStep [canEnter]="validationForm?.valid">
-              <ul class="nav nav-pills bg-light nav-justified form-wizard-header mb-4">
-                <li class="nav-item" [awGoToStep]="{ stepIndex: 0 }">
-                  <a
-                    href="javascript: void(0);"
-                    data-toggle="tab"
-                    [ngClass]="{ active: step == 0 }"
-                    class="nav-link rounded-0 pt-2 pb-2"
-                  >
-                    <i class="mdi mdi-account-circle mr-1"></i>
-                    <span class="d-none d-sm-inline">Общее</span>
-                  </a>
-                </li>
-                <li class="nav-item" [awGoToStep]="{ stepIndex: 1 }">
-                  <a
-                    href="javascript: void(0);"
-                    data-toggle="tab"
-                    [ngClass]="{ active: step == 1 }"
-                    class="nav-link rounded-0 pt-2 pb-2"
-                  >
-                    <i class="mdi mdi-face-profile mr-1"></i>
-                    <span class="d-none d-sm-inline">Содержание</span>
-                  </a>
-                </li>
-                <li class="nav-item" [awGoToStep]="{ stepIndex: 2 }">
-                  <a
-                    href="javascript: void(0);"
-                    data-toggle="tab"
-                    [ngClass]="{ active: step == 2 }"
-                    class="nav-link rounded-0 pt-2 pb-2"
-                  >
-                    <i class="mdi mdi-checkbox-marked-circle-outline mr-1"></i>
-                    <span class="d-none d-sm-inline">Распределение</span>
-                  </a>
-                </li>
-                <li class="nav-item" [awGoToStep]="{ stepIndex: 3 }">
-                  <a
-                    href="javascript: void(0);"
-                    data-toggle="tab"
-                    [ngClass]="{ active: step == 3 }"
-                    class="nav-link rounded-0 pt-2 pb-2"
-                  >
-                    <i class="mdi mdi-checkbox-marked-circle-outline mr-1"></i>
-                    <span class="d-none d-sm-inline">Завершение</span>
-                  </a>
-                </li>
-              </ul>
-              <form (ngSubmit)="newsFormSubmit()" [formGroup]="newsForm">
-                <div class="row">
-                  <div class="col-md-6 col-xl-3" *ngFor="let news of newsList; index as index">
-                    <!-- Simple card -->
-
-                    <div class="card">
-                      <label for="image">
-                        <input
-                          type="file"
-                          id="image"
-                          class="sr-only"
-                          alife-file-to-base64
-                          (onFileChanged)="onImageChange($event, index)"
-                          (rawFileModelChange)="onImageChange($event, index, true)"
-                        />
-                        <img
-                          class="card-img-top img-fluid"
-                          src="{{ news?.image?.base64 || noImage }}"
-                          alt="Card image cap"
-                        />
-                      </label>
-
-                      <div class="card-body">
-                        <input
-                          placeholder="Введите заглавие"
-                          [id]="'title' + index"
-                          [formControl]="getControl(index, 'title')"
-                          style="margin-bottom: 10px;"
-                          class="form-control"
-                          (change)="updateField(index, 'title')"
-                        />
-                        <ng-select
-                          id="news-contractors"
-                          [items]="form.projectContractors.value || []"
-                          bindLabel="editorName"
-                          [multiple]="true"
-                          [closeOnSelect]="false"
-                          [hideSelected]="true"
-                          placeholder="Выберите контрагентов для новости"
-                          (change)="updateField(index, 'contractors')"
-                          [formControl]="getControl(index, 'contractors')"
-                          [ngClass]="{ 'is-invalid': submitted && distributeForm.contractors.errors }"
-                        >
-                        </ng-select>
-
-                        <a
-                          *ngIf="index === newsList.length - 1"
-                          (click)="addNew()"
-                          href="javascript: void(0);"
-                          class="btn btn-primary btn-block mt-3 waves-effect waves-light"
-                        >
-                          <i class="mdi mdi-plus-circle"></i>
-                          Добавить вариант
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </form>
-              <ul class="list-inline wizard mb-0">
-                <li class="previous list-inline-item">
-                  <button class="btn btn-secondary" type="button" awPreviousStep>Назад</button>
-                </li>
-                <li class="next list-inline-item float-right">
-                  <button class="btn btn-secondary" awNextStep type="submit">Дальше</button>
-                </li>
-              </ul>
-            </aw-wizard-step>
-
-            <aw-wizard-step (stepEnter)="step = 3" [canEnter]="validationForm?.valid">
-              <ul class="nav nav-pills bg-light nav-justified form-wizard-header mb-4">
-                <li class="nav-item" [awGoToStep]="{ stepIndex: 0 }">
-                  <a
-                    href="javascript: void(0);"
-                    data-toggle="tab"
-                    [ngClass]="{ active: step == 0 }"
-                    class="nav-link rounded-0 pt-2 pb-2"
-                  >
-                    <i class="mdi mdi-account-circle mr-1"></i>
-                    <span class="d-none d-sm-inline">Общее</span>
-                  </a>
-                </li>
-                <li class="nav-item" [awGoToStep]="{ stepIndex: 1 }">
-                  <a
-                    href="javascript: void(0);"
-                    data-toggle="tab"
-                    [ngClass]="{ active: step == 1 }"
-                    class="nav-link rounded-0 pt-2 pb-2"
-                  >
-                    <i class="mdi mdi-face-profile mr-1"></i>
-                    <span class="d-none d-sm-inline">Содержание</span>
-                  </a>
-                </li>
-                <li class="nav-item" [awGoToStep]="{ stepIndex: 2 }">
-                  <a
-                    href="javascript: void(0);"
-                    data-toggle="tab"
-                    [ngClass]="{ active: step == 2 }"
-                    class="nav-link rounded-0 pt-2 pb-2"
-                  >
-                    <i class="mdi mdi-checkbox-marked-circle-outline mr-1"></i>
-                    <span class="d-none d-sm-inline">Распределение</span>
-                  </a>
-                </li>
-                <li class="nav-item" [awGoToStep]="{ stepIndex: 3 }">
-                  <a
-                    href="javascript: void(0);"
-                    data-toggle="tab"
-                    [ngClass]="{ active: step == 3 }"
-                    class="nav-link rounded-0 pt-2 pb-2"
-                  >
-                    <i class="mdi mdi-checkbox-marked-circle-outline mr-1"></i>
-                    <span class="d-none d-sm-inline">Завершение</span>
-                  </a>
-                </li>
-              </ul>
-              <div class="row">
-                <app-ui-preloader [display]="loading$ | async"></app-ui-preloader>
-                <div class="col-12">
-                  <div class="text-center">
-                    <h2 class="mt-0"><i class="mdi mdi-check-all"></i></h2>
-                    <h3 class="mt-0">Thank you !</h3>
-
-                    <p class="w-75 mb-2 mx-auto">
-                      Quisque nec turpis at urna dictum luctus. Suspendisse convallis dignissim eros at volutpat. In
-                      egestas mattis dui. Aliquam mattis dictum aliquet.
-                    </p>
-
-                    <div class="mb-3">
-                      <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="customCheck1" />
-                        <label class="custom-control-label" for="customCheck1"
-                          >I agree with the Terms and Conditions</label
-                        >
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- end col -->
-              </div>
-              <!-- end row -->
-              <ul class="list-inline wizard mb-0">
-                <li class="previous list-inline-item">
-                  <button class="btn btn-secondary" awPreviousStep>
-                    Назад
-                  </button>
-                </li>
-                <li class="next list-inline-item float-right">
-                  <button class="btn btn-secondary" type="submit" (click)="onSubmit()">
-                    {{ projectId ? 'Согласовать' : 'Отправить' }}
-                  </button>
-                </li>
-              </ul>
-            </aw-wizard-step>
-          </aw-wizard>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>

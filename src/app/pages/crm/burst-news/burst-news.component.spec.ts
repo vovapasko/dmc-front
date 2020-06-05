@@ -36,6 +36,7 @@ import { NgxMaskModule } from 'ngx-mask';
 import { NestableModule } from 'ngx-nestable';
 import { SharedModule } from '../../../shared/shared.module';
 import { NewsService } from '../../../core/services/news.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('BurstNewsComponent', () => {
   let component: BurstNewsComponent;
@@ -78,7 +79,8 @@ describe('BurstNewsComponent', () => {
         NgbPopoverModule,
         SharedModule,
         NgbProgressbarModule,
-        NgbTooltipModule
+        NgbTooltipModule,
+        BrowserAnimationsModule
       ],
       providers: [
         HttpClient,
@@ -173,25 +175,25 @@ describe('BurstNewsComponent', () => {
   });
 
   it('should call processProject', () => {
-    spyOn(component, 'processProject')
+    spyOn(component, 'processProject');
     component.processProject(null);
     expect(component.processProject).toHaveBeenCalled();
   });
 
   it('should call setProjectData', () => {
-    spyOn(component, 'setProjectData')
+    spyOn(component, 'setProjectData');
     component.setProjectData(null);
     expect(component.setProjectData).toHaveBeenCalled();
   });
 
   it('should call getControl', () => {
-    spyOn(component, 'getControl')
+    spyOn(component, 'getControl');
     component.getControl(0, null);
     expect(component.getControl).toHaveBeenCalled();
   });
 
   it('should call budgetValidator', () => {
-    spyOn(component, 'budgetValidator')
+    spyOn(component, 'budgetValidator');
     component.budgetValidator(null);
     expect(component.budgetValidator).toHaveBeenCalled();
   });
@@ -204,36 +206,31 @@ describe('BurstNewsComponent', () => {
 
   it('should calculatePercentage', () => {
     component.calculatePercentage();
-    expect(component.revenueRadialChart).toBeTruthy();
-  });
-
-  it('should call onImageChange', () => {
-    spyOn(component, 'onImageChange')
-    component.onImageChange(null, 0);
-    expect(component.onImageChange).toHaveBeenCalled();
+    expect(component.multipleRadialBars).toBeTruthy();
   });
 
   it('should call onSubmit', () => {
-    spyOn(component, 'onSubmit')
+    spyOn(component, 'onSubmit');
     component.onSubmit();
     expect(component.onSubmit).toHaveBeenCalled();
   });
 
   it('should call submit for create', () => {
-    spyOn(component, 'createProject')
+    spyOn(component, 'createProject');
     component.submit(mockProjectPayload, null);
     expect(component.createProject).toHaveBeenCalled();
   });
 
   it('should call submit for update', () => {
-    spyOn(component, 'updateProject')
+    spyOn(component, 'updateProject');
     component.submit(mockProjectPayload, 1);
     expect(component.updateProject).toHaveBeenCalled();
   });
 
   it('should call fetchData', () => {
-    spyOn(component, 'fetchData')
+    spyOn(component, 'fetchData');
     component.fetchData();
     expect(component.fetchData).toHaveBeenCalled();
-  })
+  });
+
 });

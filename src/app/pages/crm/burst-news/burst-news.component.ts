@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { WizardComponent as BaseWizardComponent } from 'angular-archwizard';
 import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
-
+import { multipleRadialBars } from '../../../core/components/charts/data';
 import { Steps } from '../../../core/constants/steps';
 import { ChartType } from '../../dashboards/default/default.model';
 import { revenueRadialChart } from '../../dashboards/default/data';
@@ -34,7 +34,7 @@ import {
 } from '../../../core/store/selectors/news.selectors';
 import { Project } from '../../../core/models/instances/project';
 import { ActivatedRoute } from '@angular/router';
-import { Subject } from 'rxjs';
+import { of, Subject } from 'rxjs';
 import { ErrorService } from '../../../core/services/error.service';
 import { LoadingService } from '../../../core/services/loading.service';
 import images from '../../../core/constants/images';
@@ -45,6 +45,15 @@ import { UpdateProjectPayload } from '../../../core/models/payloads/news/project
 import { ServerError } from '../../../core/models/responses/server/error';
 import numbers from '../../../core/constants/numbers';
 import { Title } from '@angular/platform-browser';
+import { GetEmails, GetNewsProject, GetNewsProjects } from '../../../core/store/actions/project.actions';
+import {
+  selectEmailsList,
+  selectNewsProject,
+  selectProjectsList
+} from '../../../core/store/selectors/project.selectors';
+import { NewsProject } from '../../../core/models/instances/news-project';
+import { GetNewsProjectPayload } from '../../../core/models/payloads/project/news-project/get';
+import { Methods } from '../../../core/models/instances/method';
 
 /**
  * Form Burst news component - handling the burst news with sidebar and content
@@ -65,23 +74,36 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   formats$ = this.store.pipe(select(selectFormats));
   characters$ = this.store.pipe(select(selectCharacters));
   methods$ = this.store.pipe(select(selectMethods));
+  newsProjects$ = this.store.pipe(select(selectProjectsList));
   newsSubmit = false;
   noImage = images.defaultImage;
   left = numbers.zero;
   step: Steps = numbers.zero;
   validationForm: FormGroup;
   editorForm: FormGroup;
+  previewForm: FormGroup;
   newsForm: FormGroup;
   controls: FormArray;
   loading$: Subject<boolean>;
   error$: Subject<ServerError>;
-  newsList = [new News('', [], { base64: this.noImage, file: null })];
+  newsList = [new News('', '', [], [], '')];
+  multipleRadialBars: ChartType = multipleRadialBars;
+  methods = Methods;
+  steps = { [this.methods.direct]: 2, [this.methods.bayer]: 1, [this.methods.topSecret]: 1 };
   revenueRadialChart: ChartType;
   blured = false;
   focused = false;
   submitted = false;
   projectId: number;
   submitForm: boolean;
+  emails$ = this.store.pipe(select(selectEmailsList));
+
+  // tslint:disable-next-line:max-line-length
+  pairs = [{ key: 'clientName', value: 'client' }, {
+    key: 'projectBudget',
+    value: 'budget'
+  }, { key: 'projectContractors', value: 'contractors' }, { key: 'projectHashtags', value: 'hashtags' }
+  ];
 
   @ViewChild('wizardForm', { static: false }) wizard: BaseWizardComponent;
   @ViewChild('tpl', { static: false }) tpl;
@@ -115,6 +137,26 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     this.cdr.detectChanges();
   }
 
+  public onChangeProject(newsProject: NewsProject): void {
+    const payload = { id: newsProject.id } as GetNewsProjectPayload;
+    const store = this.store;
+    store.pipe(select(selectNewsProject)).subscribe(this.handleNewsProject.bind(this));
+    store.dispatch(new GetNewsProject(payload));
+  }
+
+  public handleNewsProject(newsProject: NewsProject): void {
+    if (newsProject) {
+      const controls = this.validationForm.controls;
+      const pairs = this.pairs;
+      pairs.forEach(pair => controls[pair.key].setValue(newsProject[pair.value]));
+      this.emails$ = of(newsProject.emails);
+    }
+  }
+
+  public refreshContent(): void {
+
+  }
+
   public processProject(project: Project): void {
     if (project) {
       const data = this.newsService.processProject(project, this.validationForm, this.editorForm);
@@ -130,8 +172,9 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   public getControl(index: number, field: string): FormControl {
-    if (field) {
-      return this.controls.at(index).get(field) as FormControl;
+    const controls = this.controls;
+    if (field && controls) {
+      return controls.at(index).get(field) as FormControl;
     }
     return null;
   }
@@ -149,6 +192,11 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     this.initEditorForm();
     this.initNewsForm();
     this.initControls();
+    this.initPreviewForm();
+  }
+
+  public initPreviewForm(): void {
+    this.previewForm = this.newsService.initializePreviewForm();
   }
 
   private initControls(): void {
@@ -198,6 +246,12 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     }
   }
 
+  get editForm() {
+    if (this.editorForm) {
+      return this.editorForm.controls;
+    }
+  }
+
   public addNew(): void {
     this.addNewControl();
     this.addNewItem();
@@ -228,7 +282,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   public calculatePercentage(): void {
-    this.revenueRadialChart = this.newsService.calculatePercentage(this.left, this.budget);
+    this.multipleRadialBars = this.newsService.calculatePercentage(this.left, this.budget);
   }
 
   /**
@@ -272,14 +326,6 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     this.blur(!focus);
   }
 
-  public onImageChange(files: AlifeFile[], index: number, onFile?: boolean): void {
-    if (files) {
-      const newsList = this.newsList;
-      const image = this.newsService.onImageChange(files, index, onFile, newsList);
-      this.updateField(index, 'image', image);
-    }
-  }
-
   public onSubmit(): void {
     const projectId = this.projectId;
     const payload = this.newsService.onSubmit(this.validationForm, this.editorForm, this.newsList, !!projectId);
@@ -296,6 +342,10 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     }
   }
 
+  public previewFormSubmit(): void {
+
+  }
+
   public createProject(payload: CreateProjectPayload): void {
     this.store.dispatch(new CreateProject(payload));
   }
@@ -304,6 +354,10 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     const store = this.store;
     store.dispatch(new UpdateProject(payload));
     store.dispatch(new GetProjectSuccess(null));
+  }
+
+  public onChange(files: Array<File>): void {
+    console.log(files);
   }
 
   public updateField(index: number, field: string, value?: string | number | object): void {
@@ -322,10 +376,8 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     const id = this.projectId;
     const store = this.store;
     store.dispatch(new GetProjectConfiguration());
-    if (id) {
-      store.select(selectProject).subscribe(this.processProject.bind(this));
-      store.dispatch(new GetProject({ id }));
-    }
+    store.dispatch(new GetNewsProjects());
+    store.dispatch(new GetEmails());
   }
 }
 

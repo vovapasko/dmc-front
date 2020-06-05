@@ -18,7 +18,6 @@ import { UpdateNewsProjectPayload } from '../models/payloads/project/news-projec
 import { GetNewsProjectPayload } from '../models/payloads/project/news-project/get';
 import { DeleteNewsProjectPayload } from '../models/payloads/project/news-project/delete';
 import { GetAllNewsProjectsResponse } from '../models/responses/project/news-project/getAll';
-import { News } from '../models/instances/news';
 
 const api = environment.api;
 
