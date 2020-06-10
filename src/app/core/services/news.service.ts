@@ -196,7 +196,8 @@ export class NewsService {
   public initializePreviewForm(): FormGroup {
     return this.formBuilder.group({
       previewText: ['', Validators.required],
-      previewEmail: [null, Validators.required]
+      previewEmail: [null, Validators.required],
+      agreed: [null, Validators.required]
     });
   }
 
@@ -260,13 +261,15 @@ export class NewsService {
     }
     return revenue;
   }
-1
+
   public addNewControl(controls: FormArray): FormArray {
     if (controls) {
       const newControls = new FormGroup({
+        attachments: new FormControl(null, Validators.required),
         title: new FormControl(null, Validators.required),
-        image: new FormControl(null, Validators.required),
-        contractors: new FormControl(null, Validators.required)
+        content: new FormControl(null, Validators.required),
+        contractors: new FormControl(null, Validators.required),
+        previewText: new FormControl(null, Validators.required),
       });
       controls.push(newControls);
       return controls;

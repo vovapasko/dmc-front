@@ -54,6 +54,9 @@ import {
 import { NewsProject } from '../../../core/models/instances/news-project';
 import { GetNewsProjectPayload } from '../../../core/models/payloads/project/news-project/get';
 import { Methods } from '../../../core/models/instances/method';
+import { separators } from '../../../core/constants/separators';
+import { newsFields, newsFieldsHandler } from '../../../core/constants/news';
+import { Email } from '../../../core/models/instances/email';
 
 /**
  * Form Burst news component - handling the burst news with sidebar and content
@@ -84,6 +87,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   previewForm: FormGroup;
   newsForm: FormGroup;
   controls: FormArray;
+  previewControls: FormArray;
   loading$: Subject<boolean>;
   error$: Subject<ServerError>;
   newsList = [new News('', '', [], [], '')];
@@ -316,6 +320,10 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   public changedEditor(event): void {
+    if (event.event === 'text-change') {
+      const control = this.previewFormControls.previewText;
+      control.setValue(event.html);
+    }
     // tslint:disable-next-line:no-console
     console.log('editor-change', event);
   }
@@ -370,6 +378,57 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   public updateField(index: number, field: string, value?: string | number | object): void {
     const control = this.getControl(index, field);
     this.newsList = this.newsService.updateField(index, field, value, control, this.newsList);
+    this.updatePreviewText(index, control);
+  }
+
+  public updatePreviewText(index: number, control: FormControl): void {
+    const previewControl = this.getControl(index, 'previewText');
+    const content = this.getContent(index);
+    previewControl.setValue(content);
+  }
+
+  public getContent(index: number): string {
+    const fields = Object.keys(newsFields);
+    const format = this.getProjectFormat();
+    let content = '';
+    fields.forEach(field => {
+      const handler = newsFieldsHandler[field];
+      const processingControl = this.getControl(index, field);
+      const value = processingControl.value;
+      content += handler(value, format) + separators.newLine;
+    });
+    return content;
+  }
+
+  public onChangeEmail(email: Email): void {
+    this.updatePreviewEmail(email);
+    this.updatePreviewEmails(email);
+  }
+
+  public updatePreviewEmails(email: Email): void {
+    this.newsList.forEach((el, index) => {
+      const control = this.getControl(index, 'previewText');
+      const value = email.template + separators.newLine + control.value + separators.newLine + email.signature;
+      control.setValue(value);
+    });
+  }
+
+  public updatePreviewEmail(email: Email): void {
+    const control = this.previewFormControls.previewText;
+    const value = email.template + separators.newLine + control.value + separators.newLine + email.signature;
+    control.setValue(value);
+  }
+
+  public getProjectFormat(): string {
+    const form = this.form;
+    const projectFormat = form ? form.projectPostFormat : { value: {} };
+    const value = projectFormat ? projectFormat.value : {};
+    return value ? value.postFormat : '';
+  }
+
+  public onChangeContent(content: string): void {
+    const control = this.previewFormControls.previewText;
+    control.setValue(content);
   }
 
   /**
@@ -380,7 +439,6 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   public fetchData(): void {
-    const id = this.projectId;
     const store = this.store;
     store.dispatch(new GetProjectConfiguration());
     store.dispatch(new GetNewsProjects());

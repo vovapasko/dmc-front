@@ -357,46 +357,6 @@
                                 </li>
                             </ul>
                             <form (ngSubmit)="profileFormSubmit()" [formGroup]="editorForm">
-                                <div class="form-row">
-                                    <div class="form-group col-md-4">
-                                        <label for="emails" class="col-form-label">Email</label>
-                                        <ng-select
-                                                id="emails"
-                                                [items]="emails$ | async"
-                                                bindLabel="email"
-                                                [multiple]="false"
-                                                [closeOnSelect]="true"
-                                                [hideSelected]="true"
-                                                placeholder="Выберите почту"
-                                                formControlName="email"
-                                                [ngClass]="{ 'is-invalid': editForm?.email?.errors }"
-                                        >
-                                        </ng-select>
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="template" class="col-form-label">Шаблон</label>
-                                        <input placeholder="Шаблон"
-                                               tabindex="0"
-                                               id="template"
-                                               class="form-control"
-                                               type="text"
-                                               readonly="readonly"
-                                               [value]="editForm?.email?.value?.template || null"
-                                        >
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="signature" class="col-form-label">Подпись</label>
-                                        <input placeholder="Подпись"
-                                               id="signature"
-                                               class="form-control"
-                                               tabindex="0"
-                                               type="text"
-                                               readonly="readonly"
-                                               [value]="editForm?.email?.value?.signature || null"
-                                        >
-                                    </div>
-                                </div>
-
                                 <quill-editor
                                         [styles]="{ height: '400px', 'margin-bottom': '15px' }"
                                         (onFocus)="onEvent($event, true)"
@@ -637,7 +597,7 @@
                                 <form (ngSubmit)="previewFormSubmit()" [formGroup]="previewForm">
                                     <div class="form-row">
                                         <div class="form-group col-md-4">
-                                            <label for="emails" class="col-form-label">Email</label>
+                                            <label for="previewEmails" class="col-form-label">Email</label>
                                             <ng-select
                                                     id="previewEmails"
                                                     [items]="emails$ | async"
@@ -645,6 +605,7 @@
                                                     [multiple]="false"
                                                     [closeOnSelect]="true"
                                                     [hideSelected]="true"
+                                                    (change)="onChangeEmail($event)"
                                                     placeholder="Выберите почту"
                                                     formControlName="previewEmail"
                                                     [ngClass]="{ 'is-invalid': previewFormControls?.previewEmail?.errors }"
@@ -702,10 +663,13 @@
                                     <div class="text-center">
                                         <div class="mb-3">
                                             <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck1"/>
-                                                <label class="custom-control-label" for="customCheck1"
-                                                >I agree with the Terms and Conditions</label
-                                                >
+                                                <input type="checkbox"
+                                                       class="custom-control-input"
+                                                       formControlName="agreed"
+                                                       id="customCheck1"/>
+                                                <label class="custom-control-label" for="customCheck1">
+                                                    I agree with the Terms and Conditions
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
@@ -722,7 +686,11 @@
                                     </button>
                                 </li>
                                 <li class="next list-inline-item float-right">
-                                    <button class="btn btn-secondary" type="submit" (click)="onSubmit()">
+                                    <button class="btn btn-secondary"
+                                            type="submit"
+                                            [disabled]="!previewFormControls?.agreed?.value"
+                                            (click)="onSubmit()"
+                                    >
                                         {{ projectId ? 'Согласовать' : 'Отправить' }}
                                     </button>
                                 </li>
