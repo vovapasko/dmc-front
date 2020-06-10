@@ -11,6 +11,7 @@ import { GetProjects } from '../../../core/store/actions/news.actions';
 import { Title } from '@angular/platform-browser';
 import { GetNewsProjects } from '../../../core/store/actions/project.actions';
 import { selectProjectsList } from '../../../core/store/selectors/project.selectors';
+import { NewsProject } from '../../../core/models/instances/news-project';
 
 @Component({
   selector: 'app-reports',
@@ -61,6 +62,27 @@ export class ReportsComponent implements OnInit {
    */
   public setTitle(title: string): void {
     this.titleService.setTitle(title);
+  }
+
+  /**
+   * Handle download
+   */
+  public onDownload(project: NewsProject): void {
+    // TODO
+  }
+
+  /**
+   * Handle upload
+   */
+  public onUpload(project: NewsProject): void {
+    // TODO
+  }
+
+  /**
+   * Handle download
+   */
+  public onDelete(project: NewsProject): void {
+    // TODO
   }
 
   /**

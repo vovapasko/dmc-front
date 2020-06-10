@@ -25,6 +25,7 @@
                             <thead>
                             <tr>
                                 <th>Создан</th>
+                                <th>Название проекта</th>
                                 <th>Менеджер</th>
                                 <th>Клиент</th>
                                 <th>Контрагенты</th>
@@ -37,6 +38,9 @@
                             <tr *ngFor="let project of projects$ | async | filter: term; index as index">
                                 <td class="table-user">
                                     {{ project?.dateCreated | date:'medium'}}
+                                </td>
+                                <td>
+                                    {{project?.name}}
                                 </td>
                                 <td>
                                     {{project?.manager?.firstName}} {{project?.manager?.lastName}}
@@ -54,13 +58,22 @@
                                     {{ project?.contractors | contractorsCost }}
                                 </td>
                                 <td>
-                                    <a href="javascript:void(0);" class="action-icon">
+                                    <a (click)="onDownload(project)"
+                                       href="javascript:void(0);"
+                                       class="action-icon"
+                                    >
                                         <i class="fe-eye"></i>
                                     </a>
-                                    <a href="javascript:void(0);" class="action-icon">
+                                    <a (click)="onUpload(project)"
+                                       href="javascript:void(0);"
+                                       class="action-icon"
+                                    >
                                         <i class="fe-upload"></i>
                                     </a>
-                                    <a href="javascript:void(0);" class="action-icon">
+                                    <a (click)="onDelete(project)"
+                                       href="javascript:void(0);"
+                                       class="action-icon"
+                                    >
                                         <i class="fe-trash"></i>
                                     </a>
                                 </td>
