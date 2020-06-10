@@ -252,6 +252,13 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     }
   }
 
+  get previewFormControls() {
+    if (!this.previewForm) {
+      return null;
+    }
+    return this.previewForm.controls;
+  }
+
   public addNew(): void {
     this.addNewControl();
     this.addNewItem();

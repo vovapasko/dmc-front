@@ -2,7 +2,7 @@ import { environment } from '../../../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { RequestHandler } from '../helpers/request-handler';
 import { GetAllResponse } from '../models/responses/news/project/get-all-response';
@@ -15,16 +15,13 @@ import { GetProjectResponse } from '../models/responses/news/project/get-project
 import { GetProjectsResponse } from '../models/responses/news/project/get-projects';
 import { UpdateProjectPayload } from '../models/payloads/news/project/update';
 import { Contractor, PostFormatListSet } from '../models/instances/contractor';
-import { revenueRadialChart } from 'src/app/pages/dashboards/default/data';
 import { NotificationService } from './notification.service';
 import { Project } from '../models/instances/project';
 import { News } from '../models/instances/news';
-import images from '../constants/images';
 import { Hashtag } from '../models/instances/hashtag';
 import { Format } from '../models/instances/format';
 import { ChartType } from '../../pages/dashboards/default/default.model';
 import { setProjectValues } from '../helpers/utility';
-import { AlifeFile } from '../models/instances/alife-file';
 import { Warnings } from '../constants/notifications';
 import { endpoints } from '../constants/endpoints';
 import { methods } from '../constants/methods';
@@ -258,12 +255,12 @@ export class NewsService {
       const monthLeft = left;
       const weekLeft = left / numbers.month;
       const dayLeft = left / numbers.days;
-      const hourLeft = left / numbers.hours;
-      revenue.series = [monthLeft, weekLeft, dayLeft, hourLeft].map((el: number) => parseInt(el.toString(), 10));
+      const hourLeft = left / (numbers.days * numbers.hours);
+      revenue.series = [monthLeft, weekLeft, dayLeft, hourLeft].map((el: number) => +parseFloat(el.toString()).toFixed(2));
     }
     return revenue;
   }
-
+1
   public addNewControl(controls: FormArray): FormArray {
     if (controls) {
       const newControls = new FormGroup({

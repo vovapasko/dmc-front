@@ -1,4 +1,3 @@
-
 const multipleRadialBars = {
     chart: {
         height: 350,
@@ -12,18 +11,17 @@ const multipleRadialBars = {
                 },
                 value: {
                     fontSize: '16px',
+                    formatter(val) {
+                        return val + '$';
+                    }
                 },
                 total: {
-                    show: true,
-                    label: 'Всего',
-                    formatter(w) {
-                        return 0;
-                    }
+                    show: false
                 }
             }
         }
     },
-    colors: ['#56c2d6', '#e36498', '#23b397', '#4a81d4'],
+    colors: ['#56c2d6', '#e36498', '#23b397', '#23b397'],
     series: [0, 0, 0, 0],
     labels: ['Месяц', 'Неделю', 'День', 'Час'],
 };

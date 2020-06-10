@@ -506,7 +506,9 @@
                                         <div class="card">
 
                                             <div class="card-body">
-                                                <file-upload formControlName="attachments"
+                                                <file-upload [formControl]="getControl(index, 'attachments')"
+                                                             (change)="updateField(index, 'attachments')"
+                                                             style="margin-bottom: 10px;"
                                                              class="dropzone"
                                                 ></file-upload>
                                                 <input type="text"
@@ -645,7 +647,7 @@
                                                     [hideSelected]="true"
                                                     placeholder="Выберите почту"
                                                     formControlName="previewEmail"
-                                                    [ngClass]="{ 'is-invalid': editForm?.email?.errors }"
+                                                    [ngClass]="{ 'is-invalid': previewFormControls?.previewEmail?.errors }"
                                             >
                                             </ng-select>
                                         </div>
@@ -657,7 +659,7 @@
                                                    class="form-control"
                                                    type="text"
                                                    readonly="readonly"
-                                                   [value]="editForm?.email?.value?.template || null"
+                                                   [value]="previewFormControls?.previewEmail?.value?.template || null"
                                             >
                                         </div>
                                         <div class="form-group col-md-4">
@@ -668,7 +670,7 @@
                                                    tabindex="0"
                                                    type="text"
                                                    readonly="readonly"
-                                                   [value]="editForm?.email?.value?.signature || null"
+                                                   [value]="previewFormControls?.previewEmail?.value?.signature || null"
                                             >
                                         </div>
                                     </div>
