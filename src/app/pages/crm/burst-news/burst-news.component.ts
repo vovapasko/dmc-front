@@ -436,7 +436,9 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     if (newsWave) {
       const { newsService, validationForm, editorForm, newsForm, previewForm } = this;
       this.onChangeProject(newsWave.project);
-      this.controls = newsService.setNewsWaveData(newsWave, validationForm, editorForm, newsForm, previewForm);
+      const { newsList, controls } = newsService.setNewsWaveData(newsWave, validationForm, editorForm, newsForm, previewForm);
+      this.newsList = newsList;
+      this.controls = controls;
     }
   }
 

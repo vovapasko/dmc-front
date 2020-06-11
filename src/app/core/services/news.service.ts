@@ -378,6 +378,7 @@ export class NewsService {
     const hashtags = validationForm.controls.projectHashtags.value;
     const title = validationForm.controls.projectTitle.value;
     const budget = validationForm.controls.projectBudget.value;
+    // const format = validationForm.controls.projectPostFormat.value;
     const isConfirmed = !!newsWaveId;
     const createdBy = this.userService.user;
     const waveFormation = {
@@ -404,7 +405,8 @@ export class NewsService {
       createdBy,
       waveFormation,
       newsInProject,
-      project
+      project,
+      // format
     };
 
     if (newsWaveId) {
@@ -420,17 +422,19 @@ export class NewsService {
     editorForm: FormGroup,
     newsForm: FormGroup,
     previewForm: FormGroup,
-  ): FormArray {
+  ): {newsList: News[], controls: FormArray} {
     validationForm.controls.newsCharacter.setValue(newsWave.newsCharacter);
     validationForm.controls.projectBurstMethod.setValue(newsWave.burstMethod);
     validationForm.controls.projectContractors.setValue(newsWave.contractors);
+    // validationForm.controls.projectPostFormat.setValue(newsWave.format);
+    validationForm.controls.projectName.setValue(newsWave.project);
     validationForm.controls.projectHashtags.setValue(newsWave.hashtags);
     validationForm.controls.projectTitle.setValue(newsWave.title);
     validationForm.controls.projectBudget.setValue(newsWave.budget);
     previewForm.controls.previewEmail.setValue(newsWave.waveFormation.email);
     previewForm.controls.previewText.setValue(newsWave.waveFormation.content);
     const newsList = newsWave.newsInProject.map(el => new News(el.title, el.content, el.attachments, el.contractors, el.content, el.id));
-    return this.initControls(newsList);
+    return {newsList, controls: this.initControls(newsList)};
   }
 
   private prepareUpdateNewsWavePayload(data: object, newsWaveId: number): UpdateNewsWavesPayload {

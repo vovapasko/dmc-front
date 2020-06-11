@@ -6,10 +6,12 @@ import { Hashtag } from './hashtag';
 import { WaveFormation } from './wave-formation';
 import { News } from './news';
 import { User } from './user.models';
+import { Format } from './format';
 
 export interface NewsWaves {
   id: number;
   newsCharacter: Character;
+  format: Format;
   burstMethod: Method;
   project: NewsProject;
   contractors: Contractor[];
