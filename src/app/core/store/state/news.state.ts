@@ -5,6 +5,7 @@ import { Method } from '../../models/instances/method';
 import { Project } from '../../models/instances/project';
 import { News } from '../../models/instances/news';
 import { Contractor, PostFormatListSet } from '../../models/instances/contractor';
+import { NewsWaves } from '../../models/instances/news-waves';
 
 export interface INewsState {
   hashtags: Hashtag[];
@@ -16,10 +17,13 @@ export interface INewsState {
   projects: Project[];
   news: News[];
   project: Project;
+  newsWaves: NewsWaves[];
+  newsWave: NewsWaves;
 }
 
 export const initialNewsState: INewsState = {
   hashtags: [],
+  newsWaves: [],
   news: [],
   formats: [],
   characters: [],
@@ -28,4 +32,5 @@ export const initialNewsState: INewsState = {
   contractors: [],
   formatsList: [],
   project: null,
+  newsWave: null
 };

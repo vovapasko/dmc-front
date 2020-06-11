@@ -11,6 +11,11 @@ import { DeletePostFormatPayload } from '../../models/payloads/news/format/delet
 import { DeletePostFormatResponse } from '../../models/responses/news/format/delete-post-format';
 import { CreatePostsFormatPayload } from '../../models/payloads/news/format/create';
 import { CreatePostFormatPayload } from '../../models/payloads/news/format/create-post-format';
+import { NewsWaves } from '../../models/instances/news-waves';
+import { GetNewsWavesPayload } from '../../models/payloads/news/news-waves/get';
+import { CreateNewsWavesPayload } from '../../models/payloads/news/news-waves/create';
+import { UpdateNewsWavesPayload } from '../../models/payloads/news/news-waves/update';
+import { DeleteNewsWavesPayload } from '../../models/payloads/news/news-waves/delete';
 
 export enum ENewsActions {
   GetProjectConfiguration = '[News] Get project configuration',
@@ -42,6 +47,17 @@ export enum ENewsActions {
   GetPostFormatSuccess = '[News] Get post format',
   DeleteFormat = '[News] Delete format',
   DeleteFormatSuccess = '[News] Delete format success',
+
+  GetNewsWaves = '[News] Get news waves',
+  GetNewsWavesSuccess = '[News] Get news waves success',
+  GetNewsWave = '[News] Get news wave',
+  GetNewsWaveSuccess = '[News] Get news wave success',
+  CreateNewsWave = '[News] Create news wave',
+  CreateNewsWaveSuccess = '[News] Create news wave success',
+  UpdateNewsWave = '[News] Update news wave',
+  UpdateNewsWaveSuccess = '[News] Update news wave success',
+  DeleteNewsWave = '[News] Delete news wave',
+  DeleteNewsWaveSuccess = '[News] Delete news wave success',
 
 }
 
@@ -243,6 +259,76 @@ export class DeleteFormatSuccess implements Action {
   }
 }
 
+export class GetNewsWaves implements Action {
+  public readonly type = ENewsActions.GetNewsWaves;
+
+  constructor() {
+  }
+}
+
+export class GetNewsWavesSuccess implements Action {
+  public readonly type = ENewsActions.GetNewsWavesSuccess;
+
+  constructor(public payload: NewsWaves[]) {
+  }
+}
+
+export class GetNewsWave implements Action {
+  public readonly type = ENewsActions.GetNewsWave;
+
+  constructor(public payload: GetNewsWavesPayload) {
+  }
+}
+
+export class GetNewsWaveSuccess implements Action {
+  public readonly type = ENewsActions.GetNewsWaveSuccess;
+
+  constructor(public payload: NewsWaves) {
+  }
+}
+
+
+export class CreateNewsWave implements Action {
+  public readonly type = ENewsActions.CreateNewsWave;
+
+  constructor(public payload: CreateNewsWavesPayload) {
+  }
+}
+
+export class CreateNewsWaveSuccess implements Action {
+  public readonly type = ENewsActions.CreateNewsWaveSuccess;
+
+  constructor(public payload: NewsWaves) {
+  }
+}
+
+export class UpdateNewsWave implements Action {
+  public readonly type = ENewsActions.UpdateNewsWave;
+
+  constructor(public payload: UpdateNewsWavesPayload) {
+  }
+}
+
+export class UpdateNewsWaveSuccess implements Action {
+  public readonly type = ENewsActions.UpdateNewsWaveSuccess;
+
+  constructor(public payload: NewsWaves) {
+  }
+}
+
+export class DeleteNewsWave implements Action {
+  public readonly type = ENewsActions.DeleteNewsWave;
+
+  constructor(public payload: DeleteNewsWavesPayload) {
+  }
+}
+
+export class DeleteNewsWaveSuccess implements Action {
+  public readonly type = ENewsActions.DeleteNewsWaveSuccess;
+
+  constructor(public payload: DeleteNewsWavesPayload) {
+  }
+}
 
 export type NewsActions =
   | CreateFormats
@@ -274,3 +360,14 @@ export type NewsActions =
   | GetPostFormatSuccess
   | DeleteFormat
   | DeleteFormatSuccess
+
+  | GetNewsWaves
+  | GetNewsWavesSuccess
+  | GetNewsWave
+  | GetNewsWaveSuccess
+  | CreateNewsWave
+  | CreateNewsWaveSuccess
+  | UpdateNewsWave
+  | UpdateNewsWaveSuccess
+  | DeleteNewsWave
+  | DeleteNewsWaveSuccess;

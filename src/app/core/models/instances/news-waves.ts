@@ -8,6 +8,7 @@ import { News } from './news';
 import { User } from './user.models';
 
 export interface NewsWaves {
+  id: number;
   newsCharacter: Character;
   burstMethod: Method;
   project: NewsProject;
