@@ -38,6 +38,13 @@ import { DeletePostFormatPayload } from '../models/payloads/news/format/delete-p
 import { DeletePostFormatResponse } from '../models/responses/news/format/delete-post-format';
 import { multipleRadialBars } from '../components/charts/data';
 import numbers from '../constants/numbers';
+import { GetNewsWavesPayload } from '../models/payloads/news/news-waves/get';
+import { NewsWaves } from '../models/instances/news-waves';
+import { CreateNewsWavesPayload } from '../models/payloads/news/news-waves/create';
+import { UpdateNewsWavesPayload } from '../models/payloads/news/news-waves/update';
+import { DeleteNewsWavesPayload } from '../models/payloads/news/news-waves/delete';
+import { GetNewsWavesResponse } from '../models/responses/news/news-waves/get';
+import { GetAllNewsWavesResponse } from '../models/responses/news/news-waves/getAll';
 
 const api = environment.api;
 
@@ -164,38 +171,38 @@ export class NewsService {
       `${api}/${endpoints.NEWS_WAVES}/`,
       methods.GET,
       null,
-      (response: any) => response.results
+      (response: GetAllNewsWavesResponse) => response.results
     );
   }
 
-  public getNewsWave(payload: any): Observable<any> {
+  public getNewsWave(payload: GetNewsWavesPayload): Observable<NewsWaves> {
     return this.requestHandler.request(
       `${api}/${endpoints.NEWS_WAVES}/?wave=${payload.id}`,
       methods.GET,
       payload,
-      (response: any) => response.results
+      (response: GetNewsWavesResponse) => response.results[0]
     );
   }
 
-  public createNewsWave(payload: any): Observable<any> {
+  public createNewsWave(payload: CreateNewsWavesPayload): Observable<NewsWaves> {
     return this.requestHandler.request(
       `${api}/${endpoints.NEWS_WAVES}/`,
       methods.POST,
       payload,
-      (response: any) => response
+      (response: NewsWaves) => response
     );
   }
 
-  public updateNewsWave(payload: any): Observable<any> {
+  public updateNewsWave(payload: UpdateNewsWavesPayload): Observable<NewsWaves> {
     return this.requestHandler.request(
       `${api}/${endpoints.NEWS_WAVES}/${payload.id}`,
       methods.PUT,
       payload,
-      (response: any) => response
+      (response: NewsWaves) => response
     );
   }
 
-  public deleteNewsWave(payload: any): Observable<any> {
+  public deleteNewsWave(payload: DeleteNewsWavesPayload): Observable<DeleteNewsWavesPayload> {
     return this.requestHandler.request(
       `${api}/${endpoints.NEWS_WAVES}/${payload.id}`,
       methods.DELETE,
