@@ -36,7 +36,7 @@ import { UpdatePostFormatPayload } from '../models/payloads/news/format/update-p
 import { UpdatePostFormatResponse } from '../models/responses/news/format/update-post-format';
 import { DeletePostFormatPayload } from '../models/payloads/news/format/delete-post-format';
 import { DeletePostFormatResponse } from '../models/responses/news/format/delete-post-format';
-import { multipleRadialBars } from '../../core/components/charts/data';
+import { multipleRadialBars } from '../components/charts/data';
 import numbers from '../constants/numbers';
 
 const api = environment.api;
@@ -156,6 +156,51 @@ export class NewsService {
       methods.POST,
       payload,
       (response: CreatePostsFormatResponse) => response.postMethod
+    );
+  }
+
+  public getAllNewsWaves(): Observable<any> {
+    return this.requestHandler.request(
+      `${api}/${endpoints.NEWS_WAVES}/`,
+      methods.GET,
+      null,
+      (response: any) => response.results
+    );
+  }
+
+  public getNewsWave(payload: any): Observable<any> {
+    return this.requestHandler.request(
+      `${api}/${endpoints.NEWS_WAVES}/?wave=${payload.id}`,
+      methods.GET,
+      payload,
+      (response: any) => response.results
+    );
+  }
+
+  public createNewsWave(payload: any): Observable<any> {
+    return this.requestHandler.request(
+      `${api}/${endpoints.NEWS_WAVES}/`,
+      methods.POST,
+      payload,
+      (response: any) => response
+    );
+  }
+
+  public updateNewsWave(payload: any): Observable<any> {
+    return this.requestHandler.request(
+      `${api}/${endpoints.NEWS_WAVES}/${payload.id}`,
+      methods.PUT,
+      payload,
+      (response: any) => response
+    );
+  }
+
+  public deleteNewsWave(payload: any): Observable<any> {
+    return this.requestHandler.request(
+      `${api}/${endpoints.NEWS_WAVES}/${payload.id}`,
+      methods.DELETE,
+      null,
+      (response: null) => payload
     );
   }
 
