@@ -106,15 +106,6 @@ describe('BurstNewsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should initSubscriptions', () => {
-    component.initSubscriptions();
-    expect(component.loading$).toBeTruthy();
-    expect(component.error$).toBeTruthy();
-    expect(component.submitForm).toBeFalsy();
-    expect(component.revenueRadialChart).toBeTruthy();
-    expect(component.projectId).toBeGreaterThanOrEqual(0);
-  });
-
 
   it('should initFormGroups', () => {
     component.initFormGroups();
@@ -213,18 +204,6 @@ describe('BurstNewsComponent', () => {
     spyOn(component, 'onSubmit');
     component.onSubmit();
     expect(component.onSubmit).toHaveBeenCalled();
-  });
-
-  it('should call submit for create', () => {
-    spyOn(component, 'createProject');
-    component.submit(mockProjectPayload, null);
-    expect(component.createProject).toHaveBeenCalled();
-  });
-
-  it('should call submit for update', () => {
-    spyOn(component, 'updateProject');
-    component.submit(mockProjectPayload, 1);
-    expect(component.updateProject).toHaveBeenCalled();
   });
 
   it('should call fetchData', () => {

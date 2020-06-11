@@ -66,10 +66,34 @@ export class NewsService {
   ) {
   }
 
+  /**
+   * Get common configuration for create news-wave:
+   * contractors: Contractor[];
+   * hashtags: Hashtag[];
+   * formats: Format[];
+   * characters: Character[];
+   * burstMethods: Method[];
+   */
   public getProjectConfiguration(): Observable<GetAllResponse> {
-    return this.requestHandler.request(`${api}/${endpoints.BURST_NEWS}/`, methods.GET, null, (response: GetAllResponse) => response);
+    return this.requestHandler.request(
+      `${api}/${endpoints.BURST_NEWS}/`,
+      methods.GET,
+      null,
+      (response: GetAllResponse) => response);
   }
 
+  /**
+   * Create news-project, project contain:
+   * manager: User;
+   * hashtags: Hashtag[];
+   * contractors: Contractor[];
+   * emails: Email[];
+   * name: string;
+   * budget: number;
+   * client: string;
+   * dateCreated: Date;
+   * dateUpdated: Date;
+   */
   public createProject(payload: CreateProjectPayload): Observable<Project> {
     return this.requestHandler.request(
       `${api}/${endpoints.MANAGE_NEWS_PROJECTS}/`,
@@ -79,6 +103,18 @@ export class NewsService {
     );
   }
 
+  /**
+   * Get news-project, for watch, update or smth else, project contain:
+   * manager: User;
+   * hashtags: Hashtag[];
+   * contractors: Contractor[];
+   * emails: Email[];
+   * name: string;
+   * budget: number;
+   * client: string;
+   * dateCreated: Date;
+   * dateUpdated: Date;
+   */
   public getProject(payload: Project): Observable<Project> {
     return this.requestHandler.request(
       `${api}/${endpoints.MANAGE_NEWS_PROJECTS}/${payload.id}`,
@@ -88,6 +124,10 @@ export class NewsService {
     );
   }
 
+  /**
+   * Get news-project list, list contain:
+   * results: NewsProject[]
+   */
   public getProjects(): Observable<Project[]> {
     return this.requestHandler.request(
       `${api}/${endpoints.NEWS_PROJECTS}/`,
@@ -97,6 +137,11 @@ export class NewsService {
     );
   }
 
+  /**
+   * Update news-project, payload contain:
+   * data: Project;
+   * id: number (project id)
+   */
   public updateProject(payload: UpdateProjectPayload): Observable<Project> {
     return this.requestHandler.request(
       `${api}/${endpoints.MANAGE_NEWS_PROJECTS}/${payload.id}`,
@@ -106,6 +151,9 @@ export class NewsService {
     );
   }
 
+  /**
+   * Get all available post formats for creating news-wave
+   */
   public getAllPostFormats(): Observable<PostFormatListSet[]> {
     return this.requestHandler.request(
       `${api}/${endpoints.POST_FORMATS}/`,
@@ -115,6 +163,10 @@ export class NewsService {
     );
   }
 
+
+  /**
+   * Get post format by id
+   */
   public getPostFormats(payload: GetPostFormatPayload): Observable<PostFormatListSet[]> {
     return this.requestHandler.request(
       `${api}/${endpoints.POST_FORMATS}/${payload.id}`,
@@ -124,6 +176,15 @@ export class NewsService {
     );
   }
 
+
+  /**
+   * Create new post format, payload:
+   * postFormat: string; (name)
+   * contractor: number; (id contractor)
+   * newsAmount?: number; (count)
+   * arrangedNews?: number; (count)
+   * onePostPrice?: number; (count)
+   */
   public createPostFormat(payload: CreatePostFormatPayload) {
     return this.requestHandler.request(
       `${api}/${endpoints.POST_FORMATS}/`,
@@ -133,6 +194,15 @@ export class NewsService {
     );
   }
 
+  /**
+   * Update post format, payload:
+   * id: number; (format id)
+   * postFormat: string; (name)
+   * contractor: number; (id contractor)
+   * newsAmount?: number; (count)
+   * arrangedNews?: number; (count)
+   * onePostPrice?: number; (count)
+   */
   public updatePostFormat(payload: UpdatePostFormatPayload) {
     return this.requestHandler.request(
       `${api}/${endpoints.POST_FORMATS}/${payload.id}`,
@@ -142,6 +212,10 @@ export class NewsService {
     );
   }
 
+  /**
+   * Delete post format, payload:
+   * id: number; (format id)
+   */
   public deletePostFormat(payload: DeletePostFormatPayload) {
     return this.requestHandler.request(
       `${api}/${endpoints.POST_FORMATS}/${payload.id}`,
@@ -151,6 +225,11 @@ export class NewsService {
     );
   }
 
+
+  /**
+   * Create hashtag:
+   * data: name: string (new hashtag name)
+   */
   public createHashtag(payload: CreateHashtagPayload): Observable<Hashtag> {
     return this.requestHandler.request(
       `${api}/${endpoints.HASHTAGS}/`,
@@ -160,6 +239,11 @@ export class NewsService {
     );
   }
 
+
+  /**
+   * Create format:
+   * data: name: string (new format name)
+   */
   public createFormat(payload: CreatePostsFormatPayload): Observable<Format> {
     return this.requestHandler.request(
       `${api}/${endpoints.POST_FORMAT}/`,
@@ -169,6 +253,11 @@ export class NewsService {
     );
   }
 
+
+  /**
+   * Get all news waves
+   * results: NewsWaves[]
+   */
   public getAllNewsWaves(): Observable<any> {
     return this.requestHandler.request(
       `${api}/${endpoints.NEWS_WAVES}/`,
@@ -178,6 +267,11 @@ export class NewsService {
     );
   }
 
+
+  /**
+   * Get news waves by id
+   * results: NewsWaves[], its not an error, getNewsWave returns {results: [{...}]}
+   */
   public getNewsWave(payload: GetNewsWavesPayload): Observable<NewsWaves> {
     return this.requestHandler.request(
       `${api}/${endpoints.NEWS_WAVES}/?wave=${payload.id}`,
@@ -187,6 +281,10 @@ export class NewsService {
     );
   }
 
+  /**
+   * Create news wave
+   * returns single NewsWaves item
+   */
   public createNewsWave(payload: CreateNewsWavesPayload): Observable<NewsWaves> {
     return this.requestHandler.request(
       `${api}/${endpoints.NEWS_WAVES}/`,
@@ -196,6 +294,12 @@ export class NewsService {
     );
   }
 
+
+  /**
+   * Update news wave
+   * id: number (news wave id)
+   * data: NewsWaves
+   */
   public updateNewsWave(payload: UpdateNewsWavesPayload): Observable<NewsWaves> {
     return this.requestHandler.request(
       `${api}/${endpoints.NEWS_WAVES}/${payload.id}`,
@@ -205,6 +309,10 @@ export class NewsService {
     );
   }
 
+  /**
+   * Delete news wave
+   * id: number (news wave id)
+   */
   public deleteNewsWave(payload: DeleteNewsWavesPayload): Observable<DeleteNewsWavesPayload> {
     return this.requestHandler.request(
       `${api}/${endpoints.NEWS_WAVES}/${payload.id}`,
@@ -214,18 +322,27 @@ export class NewsService {
     );
   }
 
+  /**
+   * Returns form group for Create Hashtag Modal
+   */
   public initializeCreateHashtagForm(): FormGroup {
     return this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(20)]]
     });
   }
 
+  /**
+   * Returns form group for Create Format Modal
+   */
   public initializeCreateFormatForm(): FormGroup {
     return this.formBuilder.group({
       postFormat: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(20)]]
     });
   }
 
+  /**
+   * Returns form group for common step in burst-news page
+   */
   public initializeValidationForm(validator): FormGroup {
     return this.formBuilder.group({
       clientName: [null, Validators.required],
@@ -240,6 +357,9 @@ export class NewsService {
     });
   }
 
+  /**
+   * Returns form group for formation step in burst-news page
+   */
   public initializeEditorForm(): FormGroup {
     return this.formBuilder.group({
       text: ['', Validators.required],
@@ -248,6 +368,9 @@ export class NewsService {
     });
   }
 
+  /**
+   * Returns form group for preview step in burst-news page
+   */
   public initializePreviewForm(): FormGroup {
     return this.formBuilder.group({
       previewText: ['', Validators.required],
@@ -256,6 +379,9 @@ export class NewsService {
     });
   }
 
+  /**
+   * Returns form group for distribution step in burst-news page
+   */
   public initializeNewsForm(): FormGroup {
     return this.formBuilder.group({
       attachments: [null, Validators.required],
@@ -266,6 +392,9 @@ export class NewsService {
     });
   }
 
+  /**
+   * Returns form array (fill values) for distribution step in burst-news page
+   */
   public initControls(list: Array<News>): FormArray {
     const toGroups = list.map((entity) => {
       return new FormGroup({
@@ -279,6 +408,10 @@ export class NewsService {
     return new FormArray(toGroups);
   }
 
+  /**
+   * Validates budget and notify user if wrong budget value
+   * returns error object or null
+   */
   public budgetValidate(left: number): { [key: string]: boolean } | null {
     if (left < 0) {
       const { type, title, timeout } = Warnings.NO_LEFT;
@@ -289,6 +422,10 @@ export class NewsService {
     return null;
   }
 
+  /**
+   * Validates budget and notify user if wrong budget value
+   * returns error object or null
+   */
   public calculateLeft(budget: number, validationForm: FormGroup): number | null {
     if (validationForm) {
       const controls = validationForm.controls;
@@ -305,6 +442,10 @@ export class NewsService {
     return null;
   }
 
+  /**
+   * Calculate and set percentages in pie chart,
+   * returns new chart
+   */
   public calculatePercentage(left: number, budget: number): ChartType {
     const revenue = Object.assign({}, multipleRadialBars);
     if (left && budget) {
@@ -317,6 +458,10 @@ export class NewsService {
     return revenue;
   }
 
+  /**
+   * Add new control in distribution step in burst-news page
+   * returns new control
+   */
   public addNewControl(controls: FormArray): FormArray {
     if (controls) {
       const newControls = new FormGroup({
@@ -332,6 +477,10 @@ export class NewsService {
     return null;
   }
 
+  /**
+   * Set values in forms from project
+   * returns controls, newsList for distribution step in burst-news page
+   */
   public processProject(project: Project, validationForm: FormGroup, editorForm: FormGroup): { controls: FormArray, newsList: News[] } {
     if (!project || !validationForm || !editorForm) {
       return;
@@ -344,6 +493,15 @@ export class NewsService {
     return { controls, newsList };
   }
 
+  /**
+   * Add new empty item in distribution step in burst-news page
+   * returns news list:
+   * title: string (news title);
+   * content: string (news content);
+   * contractors: string (news contractors);
+   * attachments: string (news attachments);
+   * previewText: string (news previewText);
+   */
   public addNewItem(newsList: News[]): News[] {
     if (newsList) {
       const list = newsList.slice();
@@ -354,6 +512,16 @@ export class NewsService {
     return null;
   }
 
+  /**
+   * When input changes control calls updateField, updateField updates newsList
+   * for distribution or preview (if direct method)
+   * can update fields in news list:
+   * title: string (news title);
+   * content: string (news content);
+   * contractors: string (news contractors);
+   * attachments: string (news attachments);
+   * previewText: string (news previewText);
+   */
   public updateField(index: number, field: string, value: string | number | null | object, control: AbstractControl, list: News[]): News[] {
     if (control.valid) {
       const element = list[index];
@@ -363,6 +531,21 @@ export class NewsService {
     return null;
   }
 
+  /**
+   * Collect all data from forms in burst-news page, returns payload for create or update
+   * news-wave:
+   * newsCharacter: Character;
+   * format: Format;
+   * burstMethod: Method;
+   * project: NewsProject;
+   * contractors: Contractor[];
+   * waveFormation: WaveFormation;
+   * hashtags: Hashtag[];
+   * newsInProject: News[];
+   * createdBy: User;
+   * title: string;
+   * budget: number;isConfirmed?: boolean;
+   */
   public processNewsWavePayload(
     project: NewsProject,
     validationForm: FormGroup,
@@ -416,6 +599,23 @@ export class NewsService {
     }
   }
 
+
+  /**
+   * Set values from news-wave in forms in burst-news page and returns controls, newsList for
+   * distribution step
+   * news-wave:
+   * newsCharacter: Character;
+   * format: Format;
+   * burstMethod: Method;
+   * project: NewsProject;
+   * contractors: Contractor[];
+   * waveFormation: WaveFormation;
+   * hashtags: Hashtag[];
+   * newsInProject: News[];
+   * createdBy: User;
+   * title: string;
+   * budget: number;isConfirmed?: boolean;
+   */
   public setNewsWaveData(
     newsWave: NewsWaves,
     validationForm: FormGroup,
@@ -437,10 +637,16 @@ export class NewsService {
     return {newsList, controls: this.initControls(newsList)};
   }
 
+  /**
+   * Add id in payload for update news-wave
+   */
   private prepareUpdateNewsWavePayload(data: object, newsWaveId: number): UpdateNewsWavesPayload {
     return { id: newsWaveId, data } as unknown as UpdateNewsWavesPayload;
   }
 
+  /**
+   * Return payload for create news-wave
+   */
   private prepareCreateNewsWavePayload(data: object): CreateNewsWavesPayload {
     return { data } as unknown as CreateNewsWavesPayload;
   }

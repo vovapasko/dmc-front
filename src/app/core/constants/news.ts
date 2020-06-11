@@ -23,3 +23,5 @@ export const newsFieldsHandler = {
     return contractors.map(contractor => `— ${contractor.editorName} ${contractor.postformatlistSet.find(el => el.postFormat === format).onePostPrice}`);
   }
 };
+
+export const burstSteps = { [this.methods.direct]: 2, [this.methods.bayer]: 1, [this.methods.topSecret]: 1 }
