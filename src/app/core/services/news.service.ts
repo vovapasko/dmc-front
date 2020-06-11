@@ -45,6 +45,9 @@ import { UpdateNewsWavesPayload } from '../models/payloads/news/news-waves/updat
 import { DeleteNewsWavesPayload } from '../models/payloads/news/news-waves/delete';
 import { GetNewsWavesResponse } from '../models/responses/news/news-waves/get';
 import { GetAllNewsWavesResponse } from '../models/responses/news/news-waves/getAll';
+import { NewsProject } from '../models/instances/news-project';
+import { UserService } from './user.service';
+import { UpdateNewsWave } from '../store/actions/news.actions';
 
 const api = environment.api;
 
@@ -59,7 +62,8 @@ export class NewsService {
     private requestHandler: RequestHandler,
     public formBuilder: FormBuilder,
     private notificationService: NotificationService,
-    private securityService: SecurityService
+    private securityService: SecurityService,
+    private userService: UserService
   ) {
   }
 
@@ -259,7 +263,7 @@ export class NewsService {
       title: [null, Validators.required],
       content: [null, Validators.required],
       contractors: [null, Validators.required],
-      previewText: [null, Validators.required],
+      previewText: [null, Validators.required]
     });
   }
 
@@ -270,7 +274,7 @@ export class NewsService {
         title: new FormControl(entity.title, Validators.required),
         content: new FormControl(entity.content, Validators.required),
         contractors: new FormControl(entity.contractors, Validators.required),
-        previewText: new FormControl(entity.previewText, Validators.required),
+        previewText: new FormControl(entity.previewText, Validators.required)
       });
     });
     return new FormArray(toGroups);
@@ -321,7 +325,7 @@ export class NewsService {
         title: new FormControl(null, Validators.required),
         content: new FormControl(null, Validators.required),
         contractors: new FormControl(null, Validators.required),
-        previewText: new FormControl(null, Validators.required),
+        previewText: new FormControl(null, Validators.required)
       });
       controls.push(newControls);
       return controls;
@@ -360,26 +364,61 @@ export class NewsService {
     return null;
   }
 
-  public onSubmit(
+  public processNewsWavePayload(
+    project: NewsProject,
     validationForm: FormGroup,
     editorForm: FormGroup,
-    list: News[],
-    forUpdate: boolean
-  ): CreateProjectPayload | UpdateProjectPayload {
-    const common = validationForm.value;
-    const editor = editorForm.value;
-    const newsInProject = list;
-    // @ts-ignore
-    const text = this.securityService.getSafeHtml(editor.text).changingThisBreaksApplicationSecurity;
-    const data = {
-      ...common,
-      content: { text },
-      isConfirmed: false,
-      newsInProject
+    newsForm: FormGroup,
+    previewForm: FormGroup,
+    newsList: News[],
+    newsWaveId: number
+  ): UpdateNewsWavesPayload | CreateNewsWavesPayload {
+    const newsCharacter = validationForm.controls.newsCharacter.value;
+    const burstMethod = validationForm.controls.projectBurstMethod.value;
+    const contractors = validationForm.controls.projectContractors.value;
+    const hashtags = validationForm.controls.projectHashtags.value;
+    const title = validationForm.controls.projectTitle.value;
+    const budget = validationForm.controls.projectBudget.value;
+    const isConfirmed = !!newsWaveId;
+    const createdBy = this.userService.user;
+    const waveFormation = {
+      email: previewForm.controls.previewEmail.value,
+      content: previewForm.controls.previewText.value
     };
-    if (forUpdate) {
-      data.isConfirmed = true;
+    const newsInProject = newsList.map(news => ({
+      contractors: news.contractors,
+      email: previewForm.controls.previewEmail.value,
+      title: news.title,
+      content: news.content
+    }));
+
+    const data = {
+      newsCharacter,
+      burstMethod,
+      contractors,
+      hashtags,
+      title,
+      budget,
+      isConfirmed,
+      createdBy,
+      waveFormation,
+      newsInProject,
+      project
+    };
+
+    if (newsWaveId) {
+      return this.prepareUpdateNewsWavePayload(data, newsWaveId);
+    } else {
+      return this.prepareCreateNewsWavePayload(data);
     }
-    return { data };
   }
+
+  private prepareUpdateNewsWavePayload(data: object, newsWaveId: number): UpdateNewsWavesPayload {
+    return {id: newsWaveId, data} as unknown as UpdateNewsWavesPayload;
+  }
+
+  private prepareCreateNewsWavePayload(data: object): CreateNewsWavesPayload {
+    return {data} as unknown as CreateNewsWavesPayload;
+  }
+
 }
