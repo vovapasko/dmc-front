@@ -47,7 +47,6 @@ import { GetNewsWavesResponse } from '../models/responses/news/news-waves/get';
 import { GetAllNewsWavesResponse } from '../models/responses/news/news-waves/getAll';
 import { NewsProject } from '../models/instances/news-project';
 import { UserService } from './user.service';
-import { UpdateNewsWave } from '../store/actions/news.actions';
 
 const api = environment.api;
 
@@ -384,12 +383,14 @@ export class NewsService {
     const waveFormation = {
       email: previewForm.controls.previewEmail.value,
       content: previewForm.controls.previewText.value
+      // attachments: editorForm.controls.attachments.value
     };
     const newsInProject = newsList.map(news => ({
       contractors: news.contractors,
       email: previewForm.controls.previewEmail.value,
       title: news.title,
       content: news.content
+      // attachments: news.attachments
     }));
 
     const data = {
@@ -413,12 +414,31 @@ export class NewsService {
     }
   }
 
+  public setNewsWaveData(
+    newsWave: NewsWaves,
+    validationForm: FormGroup,
+    editorForm: FormGroup,
+    newsForm: FormGroup,
+    previewForm: FormGroup,
+  ): FormArray {
+    validationForm.controls.newsCharacter.setValue(newsWave.newsCharacter);
+    validationForm.controls.projectBurstMethod.setValue(newsWave.burstMethod);
+    validationForm.controls.projectContractors.setValue(newsWave.contractors);
+    validationForm.controls.projectHashtags.setValue(newsWave.hashtags);
+    validationForm.controls.projectTitle.setValue(newsWave.title);
+    validationForm.controls.projectBudget.setValue(newsWave.budget);
+    previewForm.controls.previewEmail.setValue(newsWave.waveFormation.email);
+    previewForm.controls.previewText.setValue(newsWave.waveFormation.content);
+    const newsList = newsWave.newsInProject.map(el => new News(el.title, el.content, el.attachments, el.contractors, el.content, el.id));
+    return this.initControls(newsList);
+  }
+
   private prepareUpdateNewsWavePayload(data: object, newsWaveId: number): UpdateNewsWavesPayload {
-    return {id: newsWaveId, data} as unknown as UpdateNewsWavesPayload;
+    return { id: newsWaveId, data } as unknown as UpdateNewsWavesPayload;
   }
 
   private prepareCreateNewsWavePayload(data: object): CreateNewsWavesPayload {
-    return {data} as unknown as CreateNewsWavesPayload;
+    return { data } as unknown as CreateNewsWavesPayload;
   }
 
 }
