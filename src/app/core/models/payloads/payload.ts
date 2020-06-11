@@ -17,6 +17,7 @@ import { CreatePostsFormatPayload } from './news/format/create';
 import { CreateEmailPayload } from './project/email/create';
 import { UpdateEmailPayload } from './project/email/update';
 import { DeleteEmailPayload } from './project/email/delete';
+import { CreateNewsWavesPayload } from './news/news-waves/create';
 
 export type Payloads =
   | LoginPayload
@@ -38,3 +39,4 @@ export type Payloads =
   | CreateEmailPayload
   | UpdateEmailPayload
   | DeleteEmailPayload
+  | CreateNewsWavesPayload;

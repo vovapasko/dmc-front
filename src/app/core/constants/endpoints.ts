@@ -17,5 +17,6 @@ export const endpoints = {
   POST_FORMATS: 'postformats',
   PROJECTS: 'projects',
   EMAILS: 'news-emails',
-  NEWSPROJECTS: 'newsprojects'
+  NEWSPROJECTS: 'newsprojects',
+  NEWS_WAVES: 'news-waves'
 };

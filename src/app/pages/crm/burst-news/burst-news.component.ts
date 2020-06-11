@@ -17,10 +17,11 @@ import { revenueRadialChart } from '../../dashboards/default/data';
 import { select, Store } from '@ngrx/store';
 import { IAppState } from '../../../core/store/state/app.state';
 import {
-  CreateProject,
+  CreateNewsWave,
+  CreateProject, GetNewsWave,
   GetProject,
   GetProjectConfiguration,
-  GetProjectSuccess,
+  GetProjectSuccess, UpdateNewsWave,
   UpdateProject
 } from '../../../core/store/actions/news.actions';
 import { NewsService } from '../../../core/services/news.service';
@@ -29,7 +30,7 @@ import {
   selectContractors,
   selectFormats,
   selectHashtags,
-  selectMethods,
+  selectMethods, selectNewsWave,
   selectProject
 } from '../../../core/store/selectors/news.selectors';
 import { Project } from '../../../core/models/instances/project';
@@ -57,6 +58,9 @@ import { Methods } from '../../../core/models/instances/method';
 import { separators } from '../../../core/constants/separators';
 import { newsFields, newsFieldsHandler } from '../../../core/constants/news';
 import { Email } from '../../../core/models/instances/email';
+import { UpdateNewsWavesPayload } from '../../../core/models/payloads/news/news-waves/update';
+import { CreateNewsWavesPayload } from '../../../core/models/payloads/news/news-waves/create';
+import { NewsWaves } from '../../../core/models/instances/news-waves';
 
 /**
  * Form Burst news component - handling the burst news with sidebar and content
@@ -80,6 +84,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   newsProjects$ = this.store.pipe(select(selectProjectsList));
   newsSubmit = false;
   noImage = images.defaultImage;
+  newsProject: NewsProject;
   left = numbers.zero;
   step: Steps = numbers.zero;
   validationForm: FormGroup;
@@ -98,7 +103,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   blured = false;
   focused = false;
   submitted = false;
-  projectId: number;
+  newsWaveId: number;
   submitForm: boolean;
   emails$ = this.store.pipe(select(selectEmailsList));
 
@@ -154,6 +159,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
       const pairs = this.pairs;
       pairs.forEach(pair => controls[pair.key].setValue(newsProject[pair.value]));
       this.emails$ = of(newsProject.emails);
+      this.newsProject = newsProject;
     }
   }
 
@@ -188,7 +194,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     this.error$ = this.errorService.error$;
     this.submitForm = false;
     this.revenueRadialChart = revenueRadialChart;
-    this.projectId = +this.route.snapshot.queryParamMap.get('id');
+    this.newsWaveId = +this.route.snapshot.queryParamMap.get('id');
   }
 
   public initFormGroups(): void {
@@ -342,18 +348,17 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   public onSubmit(): void {
-    const projectId = this.projectId;
-    const payload = this.newsService.onSubmit(this.validationForm, this.editorForm, this.newsList, !!projectId);
-    this.submit(payload, projectId);
+    const { newsService, newsProject, validationForm, editorForm, newsForm, previewForm, newsList, newsWaveId } = this;
+    // tslint:disable-next-line:max-line-length
+    const payload = newsService.processNewsWavePayload(newsProject, validationForm, editorForm, newsForm, previewForm, newsList as unknown as News[], newsWaveId);
+    this.submit(payload, newsWaveId);
   }
 
-  public submit(payload: CreateProjectPayload | UpdateProjectPayload, projectId): void {
-    if (projectId) {
-      payload.id = projectId;
-      // @ts-ignore
-      this.updateProject(payload);
+  public submit(payload: UpdateNewsWavesPayload | CreateNewsWavesPayload, newsWaveId?: number): void {
+    if (newsWaveId) {
+      this.updateNewsWave(payload as unknown as UpdateNewsWavesPayload);
     } else {
-      this.createProject(payload);
+      this.createNewsWave(payload as unknown as CreateNewsWavesPayload);
     }
   }
 
@@ -361,18 +366,12 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
 
   }
 
-  public createProject(payload: CreateProjectPayload): void {
-    this.store.dispatch(new CreateProject(payload));
+  public updateNewsWave(payload: UpdateNewsWavesPayload): void {
+    this.store.dispatch(new UpdateNewsWave(payload));
   }
 
-  public updateProject(payload: UpdateProjectPayload): void {
-    const store = this.store;
-    store.dispatch(new UpdateProject(payload));
-    store.dispatch(new GetProjectSuccess(null));
-  }
-
-  public onChange(files: Array<File>): void {
-    console.log(files);
+  public createNewsWave(payload: CreateNewsWavesPayload): void {
+    this.store.dispatch(new CreateNewsWave(payload));
   }
 
   public updateField(index: number, field: string, value?: string | number | object): void {
@@ -426,11 +425,6 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     return value ? value.postFormat : '';
   }
 
-  public onChangeContent(content: string): void {
-    const control = this.previewFormControls.previewText;
-    control.setValue(content);
-  }
-
   /**
    * Set page title
    */
@@ -438,11 +432,30 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     this.titleService.setTitle(title);
   }
 
+  public handleNewsWave(newsWave: NewsWaves): void {
+    if (newsWave) {
+      const { newsService, validationForm, editorForm, newsForm, previewForm } = this;
+      this.onChangeProject(newsWave.project);
+      const { newsList, controls } = newsService.setNewsWaveData(newsWave, validationForm, editorForm, newsForm, previewForm);
+      this.newsList = newsList;
+      this.controls = controls;
+    }
+  }
+
   public fetchData(): void {
     const store = this.store;
     store.dispatch(new GetProjectConfiguration());
     store.dispatch(new GetNewsProjects());
     store.dispatch(new GetEmails());
+    this.processNewsWave();
+  }
+
+  public processNewsWave() {
+    const { store, newsWaveId } = this;
+    if (newsWaveId) {
+      store.pipe(select(selectNewsWave)).subscribe(this.handleNewsWave.bind(this));
+      store.dispatch(new GetNewsWave({ id: newsWaveId }));
+    }
   }
 }
 

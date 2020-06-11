@@ -20,3 +20,7 @@ export const selectCharacters = createSelector(selectNews, (state: INewsState) =
 export const selectFormats = createSelector(selectNews, (state: INewsState) => state.formats);
 
 export const selectFormatsList = createSelector(selectNews, (state: INewsState) => state.formatsList);
+
+export const selectNewsWavesList = createSelector(selectNews, (state: INewsState) => state.newsWaves);
+
+export const selectNewsWave = createSelector(selectNews, (state: INewsState) => state.newsWave);

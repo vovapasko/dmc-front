@@ -658,23 +658,24 @@
                                         ></quill-editor>
                                     </ng-template>
 
-                                </form>
-                                <div class="col-12">
-                                    <div class="text-center">
-                                        <div class="mb-3">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox"
-                                                       class="custom-control-input"
-                                                       formControlName="agreed"
-                                                       id="customCheck1"/>
-                                                <label class="custom-control-label" for="customCheck1">
-                                                    I agree with the Terms and Conditions
-                                                </label>
+                                    <div class="col-12">
+                                        <div class="text-center">
+                                            <div class="mb-3">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox"
+                                                           class="custom-control-input"
+                                                           formControlName="agreed"
+                                                           id="customCheck1"/>
+                                                    <label class="custom-control-label" for="customCheck1">
+                                                        I agree with the Terms and Conditions
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <!-- end col -->
+                                    <!-- end col -->
+                                </form>
+
                             </div>
                             <!-- end row -->
                             <ul class="list-inline wizard mb-0">
@@ -688,10 +689,10 @@
                                 <li class="next list-inline-item float-right">
                                     <button class="btn btn-secondary"
                                             type="submit"
-                                            [disabled]="!previewFormControls?.agreed?.value"
+                                            [disabled]="!previewForm?.controls?.agreed?.value"
                                             (click)="onSubmit()"
                                     >
-                                        {{ projectId ? 'Согласовать' : 'Отправить' }}
+                                        {{ newsWaveId ? 'Согласовать' : 'Отправить' }}
                                     </button>
                                 </li>
                             </ul>
