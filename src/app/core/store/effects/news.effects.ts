@@ -10,7 +10,9 @@ import {
   CreateFormatsSuccess,
   CreateFormatSuccess,
   CreateHashtag,
-  CreateHashtagSuccess, CreateNewsWave, CreateNewsWaveSuccess,
+  CreateHashtagSuccess,
+  CreateNewsWave,
+  CreateNewsWaveSuccess,
   CreateProject,
   CreateProjectSuccess,
   DeleteFormat,
@@ -20,9 +22,11 @@ import {
   GetContractorsSuccess,
   GetFormatsSuccess,
   GetHashtagsSuccess,
-  GetMethodsSuccess, GetNewsWave,
+  GetMethodsSuccess,
+  GetNewsWave,
   GetNewsWaves,
-  GetNewsWavesSuccess, GetNewsWaveSuccess,
+  GetNewsWavesSuccess,
+  GetNewsWaveSuccess,
   GetPostFormat,
   GetPostFormats,
   GetPostFormatsSuccess,
@@ -33,10 +37,17 @@ import {
   GetProjectsSuccess,
   GetProjectSuccess,
   UpdateFormat,
-  UpdateFormatSuccess, UpdateNewsWave, UpdateNewsWaveSuccess,
+  UpdateFormatSuccess,
+  UpdateNewsWave,
+  UpdateNewsWaveSuccess,
   UpdateProject,
   UpdateProjectSuccess,
-  DeleteNewsWave, DeleteNewsWaveSuccess
+  DeleteNewsWave,
+  DeleteNewsWaveSuccess,
+  DeleteNewsFile,
+  DeleteNewsFileSuccess,
+  DeleteFormationFile,
+  DeleteFormationFileSuccess, UploadNewsFile, UploadNewsFileSuccess, UploadFormationFile, UploadFormationFileSuccess
 } from '../actions/news.actions';
 import { GetAllResponse } from '../../models/responses/news/project/get-all-response';
 import { Hashtag } from '../../models/instances/hashtag';
@@ -57,6 +68,8 @@ import { GetNewsWavesPayload } from '../../models/payloads/news/news-waves/get';
 import { CreateNewsWavesPayload } from '../../models/payloads/news/news-waves/create';
 import { UpdateNewsWavesPayload } from '../../models/payloads/news/news-waves/update';
 import { DeleteNewsWavesPayload } from '../../models/payloads/news/news-waves/delete';
+import { DeleteNewsFilePayload } from '@models/payloads/news/news-waves/delete-file';
+import { UploadNewsFilePayload } from '@models/payloads/news/news-waves/upload-file';
 
 @Injectable({
   providedIn: 'root'
@@ -187,6 +200,34 @@ export class NewsEffects {
     ofType<DeleteNewsWave>(ENewsActions.DeleteNewsWave),
     switchMap((action: { payload: DeleteNewsWavesPayload }) => this.newsService.deleteNewsWave(action.payload)),
     switchMap((payload: DeleteNewsWavesPayload) => of(new DeleteNewsWaveSuccess(payload)))
+  );
+
+  @Effect()
+  deleteNewsFile$ = this.actions$.pipe(
+    ofType<DeleteNewsFile>(ENewsActions.DeleteNewsFile),
+    switchMap((action: { payload: DeleteNewsFilePayload }) => this.newsService.deleteNewsFile(action.payload)),
+    switchMap((payload: null) => of(new DeleteNewsFileSuccess()))
+  );
+
+  @Effect()
+  deleteFormationFile$ = this.actions$.pipe(
+    ofType<DeleteFormationFile>(ENewsActions.DeleteFormationFile),
+    switchMap((action: { payload: DeleteNewsFilePayload }) => this.newsService.deleteFormationFile(action.payload)),
+    switchMap((payload: null) => of(new DeleteFormationFileSuccess()))
+  );
+
+  @Effect()
+  uploadNewsFile$ = this.actions$.pipe(
+    ofType<UploadNewsFile>(ENewsActions.UploadNewsFile),
+    switchMap((action: { payload: UploadNewsFilePayload }) => this.newsService.uploadNewsFile(action.payload)),
+    switchMap((payload: null) => of(new UploadNewsFileSuccess()))
+  );
+
+  @Effect()
+  uploadFormationFile$ = this.actions$.pipe(
+    ofType<UploadFormationFile>(ENewsActions.UploadFormationFile),
+    switchMap((action: { payload: UploadNewsFilePayload }) => this.newsService.uploadFormationFile(action.payload)),
+    switchMap((payload: null) => of(new UploadFormationFileSuccess()))
   );
 
   constructor(private newsService: NewsService, private actions$: Actions) {

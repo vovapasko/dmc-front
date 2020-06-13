@@ -1,21 +1,23 @@
 import { Action } from '@ngrx/store';
-import { Hashtag } from '../../models/instances/hashtag';
-import { Character } from '../../models/instances/character';
-import { Method } from '../../models/instances/method';
-import { Format } from '../../models/instances/format';
-import { Contractor, PostFormatListSet } from '../../models/instances/contractor';
-import { Project } from '../../models/instances/project';
-import { UpdatePostFormatPayload } from '../../models/payloads/news/format/update-post-format';
-import { GetPostFormatPayload } from '../../models/payloads/news/format/get-post-format';
-import { DeletePostFormatPayload } from '../../models/payloads/news/format/delete-post-format';
-import { DeletePostFormatResponse } from '../../models/responses/news/format/delete-post-format';
-import { CreatePostsFormatPayload } from '../../models/payloads/news/format/create';
-import { CreatePostFormatPayload } from '../../models/payloads/news/format/create-post-format';
-import { NewsWaves } from '../../models/instances/news-waves';
-import { GetNewsWavesPayload } from '../../models/payloads/news/news-waves/get';
-import { CreateNewsWavesPayload } from '../../models/payloads/news/news-waves/create';
-import { UpdateNewsWavesPayload } from '../../models/payloads/news/news-waves/update';
-import { DeleteNewsWavesPayload } from '../../models/payloads/news/news-waves/delete';
+import { Hashtag } from '@models/instances/hashtag';
+import { Character } from '@models/instances/character';
+import { Method } from '@models/instances/method';
+import { Format } from '@models/instances/format';
+import { Contractor, PostFormatListSet } from '@models/instances/contractor';
+import { Project } from '@models/instances/project';
+import { UpdatePostFormatPayload } from '@models/payloads/news/format/update-post-format';
+import { GetPostFormatPayload } from '@models/payloads/news/format/get-post-format';
+import { DeletePostFormatPayload } from '@models/payloads/news/format/delete-post-format';
+import { DeletePostFormatResponse } from '@models/responses/news/format/delete-post-format';
+import { CreatePostsFormatPayload } from '@models/payloads/news/format/create';
+import { CreatePostFormatPayload } from '@models/payloads/news/format/create-post-format';
+import { NewsWaves } from '@models/instances/news-waves';
+import { GetNewsWavesPayload } from '@models/payloads/news/news-waves/get';
+import { CreateNewsWavesPayload } from '@models/payloads/news/news-waves/create';
+import { UpdateNewsWavesPayload } from '@models/payloads/news/news-waves/update';
+import { DeleteNewsWavesPayload } from '@models/payloads/news/news-waves/delete';
+import { UploadNewsFilePayload } from '@models/payloads/news/news-waves/upload-file';
+import { DeleteNewsFilePayload } from '@models/payloads/news/news-waves/delete-file';
 
 export enum ENewsActions {
   GetProjectConfiguration = '[News] Get project configuration',
@@ -59,6 +61,14 @@ export enum ENewsActions {
   DeleteNewsWave = '[News] Delete news wave',
   DeleteNewsWaveSuccess = '[News] Delete news wave success',
 
+  UploadNewsFile = '[News] Upload news file',
+  UploadNewsFileSuccess = '[News] Upload news file success',
+  UploadFormationFile = '[News] Upload formation file',
+  UploadFormationFileSuccess = '[News] Upload formation file success',
+  DeleteNewsFile = '[News] Delete news file',
+  DeleteNewsFileSuccess = '[News] Delete file success',
+  DeleteFormationFile = '[News] Delete news file',
+  DeleteFormationFileSuccess = '[News] Delete file success',
 }
 
 export class GetProject implements Action {
@@ -329,6 +339,59 @@ export class DeleteNewsWaveSuccess implements Action {
   constructor(public payload: DeleteNewsWavesPayload) {
   }
 }
+export class UploadFormationFile implements Action {
+  public readonly type = ENewsActions.UploadFormationFile;
+
+  constructor(public payload: UploadNewsFilePayload) {
+  }
+}
+
+export class UploadFormationFileSuccess implements Action {
+  public readonly type = ENewsActions.UploadFormationFileSuccess;
+
+  constructor() {
+  }
+}
+export class UploadNewsFile implements Action {
+  public readonly type = ENewsActions.UploadNewsFile;
+
+  constructor(public payload: UploadNewsFilePayload) {
+  }
+}
+
+export class UploadNewsFileSuccess implements Action {
+  public readonly type = ENewsActions.UploadNewsFileSuccess;
+
+  constructor() {
+  }
+}
+export class DeleteNewsFile implements Action {
+  public readonly type = ENewsActions.DeleteNewsFile;
+
+  constructor(public payload: DeleteNewsFilePayload) {
+  }
+}
+
+export class DeleteNewsFileSuccess implements Action {
+  public readonly type = ENewsActions.DeleteNewsFileSuccess;
+
+  constructor() {
+  }
+}
+
+export class DeleteFormationFile implements Action {
+  public readonly type = ENewsActions.DeleteFormationFile;
+
+  constructor(public payload: DeleteNewsFilePayload) {
+  }
+}
+
+export class DeleteFormationFileSuccess implements Action {
+  public readonly type = ENewsActions.DeleteFormationFileSuccess;
+
+  constructor() {
+  }
+}
 
 export type NewsActions =
   | CreateFormats
@@ -370,4 +433,12 @@ export type NewsActions =
   | UpdateNewsWave
   | UpdateNewsWaveSuccess
   | DeleteNewsWave
-  | DeleteNewsWaveSuccess;
+  | DeleteNewsWaveSuccess
+| UploadNewsFile
+| UploadFormationFileSuccess
+| UploadNewsFileSuccess
+| UploadFormationFile
+| DeleteNewsFile
+| DeleteNewsFileSuccess
+| DeleteFormationFile
+| DeleteFormationFileSuccess;

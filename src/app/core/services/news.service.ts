@@ -47,6 +47,8 @@ import { GetNewsWavesResponse } from '../models/responses/news/news-waves/get';
 import { GetAllNewsWavesResponse } from '../models/responses/news/news-waves/getAll';
 import { NewsProject } from '../models/instances/news-project';
 import { UserService } from './user.service';
+import { UploadNewsFilePayload } from '@models/payloads/news/news-waves/upload-file';
+import { DeleteNewsFilePayload } from '@models/payloads/news/news-waves/delete-file';
 
 const api = environment.api;
 
@@ -318,6 +320,54 @@ export class NewsService {
       `${api}/${endpoints.NEWS_WAVES}/${payload.id}`,
       methods.DELETE,
       null,
+      (response: null) => payload
+    );
+  }
+
+  /**
+   * Upload news file
+   */
+  public uploadNewsFile(payload: UploadNewsFilePayload): Observable<null> {
+    return this.requestHandler.request(
+      `${api}/${endpoints.NEWS_FILE_UPLOAD}/`,
+      methods.PUT,
+      payload,
+      (response: null) => payload
+    );
+  }
+
+  /**
+   * Upload formation file
+   */
+  public uploadFormationFile(payload: UploadNewsFilePayload): Observable<null> {
+    return this.requestHandler.request(
+      `${api}/${endpoints.FORMATION_FILE_UPLOAD}/`,
+      methods.PUT,
+      payload,
+      (response: null) => payload
+    );
+  }
+
+  /**
+   * Delete news file
+   */
+  public deleteNewsFile(payload: DeleteNewsFilePayload): Observable<null> {
+    return this.requestHandler.request(
+      `${api}/${endpoints.NEWS_FILE_UPLOAD}/${payload.id}`,
+      methods.DELETE,
+      payload,
+      (response: null) => payload
+    );
+  }
+
+  /**
+   * Delete file from formation
+   */
+  public deleteFormationFile(payload: DeleteNewsFilePayload): Observable<null> {
+    return this.requestHandler.request(
+      `${api}/${endpoints.FORMATION_FILE_UPLOAD}/${payload.id}`,
+      methods.DELETE,
+      payload,
       (response: null) => payload
     );
   }
