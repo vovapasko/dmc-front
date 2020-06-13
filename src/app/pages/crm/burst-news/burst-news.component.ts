@@ -149,7 +149,6 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     this.pairs.forEach(pair => controls[pair.key].setValue(newsProject[pair.value]));
     this.emails$ = of(newsProject.emails);
     this.newsProject = newsProject;
-
   }
 
 
@@ -461,6 +460,17 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     const control = this.getControl(index, field);
     this.newsList = this.newsService.updateField(index, field, value, control, this.newsList);
     this.updatePreviewText(index, control);
+    if (field === 'attachments') {
+      this.onChangeDistributionFiles(control);
+    }
+  }
+
+  public onChangeDistributionFiles(control: FormControl) {
+    console.log(control);
+  }
+
+  public onChangeFormationFiles(event): void {
+    console.log(event);
   }
 
   /**

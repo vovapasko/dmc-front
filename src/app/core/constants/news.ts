@@ -9,20 +9,20 @@ export const newsFields = {
 
 export const newsFieldsHandler = {
   attachments(files) {
-    return files.map((file, index) => `Файл ${index + 1} - <b>${file.name}</b> \n`);
+    return files.map((file, index) => `\n Файл ${index + 1} - <b>${file.name}</b> \n`);
   },
   title(value) {
-    return `<h1>${value}</h1>`;
+    return `\n<h1>${value}</h1>\n`;
   },
   content(value) {
-    return `<p>${value}</p>`;
+    return `\n<p>${value}</p>\n`;
   },
   contractors(contractors, format) {
     if (!contractors) {
       return '';
     }
     // tslint:disable-next-line:max-line-length
-    return contractors.map(contractor => `— ${contractor.editorName} ${contractor.postformatlistSet.find(el => el.postFormat === format).onePostPrice}`);
+    return contractors.map(contractor => `\n— ${contractor.editorName} ${contractor.postformatlistSet.find(el => el.postFormat === format).onePostPrice}\n`);
   }
 };
 

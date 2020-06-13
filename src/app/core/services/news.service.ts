@@ -297,6 +297,9 @@ export class NewsService {
     );
   }
 
+  /**
+   * TODO Refactor this method (extract method)
+   */
   public handleFilesUpload(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
     const formationFormData = new FormData();
     const newsFormData = payload.data.newsInProject.map(news => {
@@ -304,13 +307,17 @@ export class NewsService {
       // @ts-ignore
       formData.append('news_id', newsWave.id);
       // @ts-ignore
-      news.attachments.forEach(file => formData.append('file', file, file.name));
+      news.attachments
+        .filter(file => file instanceof File)
+        .forEach(file => formData.append('file', file, file.name));
       return formData;
     });
     // @ts-ignore
     formationFormData.append('news_id', newsWave.id);
     // @ts-ignore
-    formationFormData.append('file', payload.data.waveFormation.attachments);
+    payload.data.waveFormation.attachments
+      .filter(file => file instanceof File)
+      .forEach(file => formationFormData.append('file', file, file.name));
     return {newsWave, formationFormData, newsFormData};
   }
 
