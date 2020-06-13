@@ -49,6 +49,7 @@ import { NewsProject } from '../models/instances/news-project';
 import { UserService } from './user.service';
 import { UploadNewsFilePayload } from '@models/payloads/news/news-waves/upload-file';
 import { DeleteNewsFilePayload } from '@models/payloads/news/news-waves/delete-file';
+import { UpdateNewsWaveSuccess, UploadFormationFile, UploadNewsFile } from '@store/actions/news.actions';
 
 const api = environment.api;
 
@@ -287,27 +288,43 @@ export class NewsService {
    * Create news wave
    * returns single NewsWaves item
    */
-  public createNewsWave(payload: CreateNewsWavesPayload): Observable<NewsWaves> {
+  public createNewsWave(payload: CreateNewsWavesPayload): Observable<any> {
     return this.requestHandler.request(
       `${api}/${endpoints.NEWS_WAVES}/`,
       methods.POST,
       payload,
-      (response: NewsWaves) => response
+      (response: NewsWaves) => this.handleFilesUpload(response, payload)
     );
   }
 
+  public handleFilesUpload(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
+    const formationFormData = new FormData();
+    const newsFormData = payload.data.newsInProject.map(news => {
+      const formData = new FormData();
+      // @ts-ignore
+      formData.append('news_id', newsWave.id);
+      // @ts-ignore
+      news.attachments.forEach(file => formData.append('file', file, file.name));
+      return formData;
+    });
+    // @ts-ignore
+    formationFormData.append('news_id', newsWave.id);
+    // @ts-ignore
+    formationFormData.append('file', payload.data.waveFormation.attachments);
+    return {newsWave, formationFormData, newsFormData};
+  }
 
   /**
    * Update news wave
    * id: number (news wave id)
    * data: NewsWaves
    */
-  public updateNewsWave(payload: UpdateNewsWavesPayload): Observable<NewsWaves> {
+  public updateNewsWave(payload: UpdateNewsWavesPayload): Observable<any> {
     return this.requestHandler.request(
       `${api}/${endpoints.NEWS_WAVES}/${payload.id}`,
       methods.PUT,
       payload,
-      (response: NewsWaves) => response
+      (response: NewsWaves) => this.handleFilesUpload(response, payload)
     );
   }
 
@@ -611,20 +628,20 @@ export class NewsService {
     const hashtags = validationForm.controls.projectHashtags.value;
     const title = validationForm.controls.projectTitle.value;
     const budget = validationForm.controls.projectBudget.value;
-    // const format = validationForm.controls.projectPostFormat.value;
+    const postFormat = validationForm.controls.projectPostFormat.value.postFormat;
     const isConfirmed = !!newsWaveId;
     const createdBy = this.userService.user;
     const waveFormation = {
       email: previewForm.controls.previewEmail.value,
-      content: previewForm.controls.previewText.value
-      // attachments: editorForm.controls.attachments.value
+      content: previewForm.controls.previewText.value,
+      attachments: editorForm.controls.attachments.value
     };
     const newsInProject = newsList.map(news => ({
       contractors: news.contractors,
       email: previewForm.controls.previewEmail.value,
       title: news.title,
-      content: news.content
-      // attachments: news.attachments
+      content: news.content,
+      attachments: news.attachments
     }));
 
     const data = {
@@ -639,7 +656,7 @@ export class NewsService {
       waveFormation,
       newsInProject,
       project,
-      // format
+      postFormat
     };
 
     if (newsWaveId) {
@@ -676,11 +693,12 @@ export class NewsService {
     validationForm.controls.newsCharacter.setValue(newsWave.newsCharacter);
     validationForm.controls.projectBurstMethod.setValue(newsWave.burstMethod);
     validationForm.controls.projectContractors.setValue(newsWave.contractors);
-    // validationForm.controls.projectPostFormat.setValue(newsWave.format);
+    validationForm.controls.projectPostFormat.setValue(newsWave.postFormat);
     validationForm.controls.projectName.setValue(newsWave.project);
     validationForm.controls.projectHashtags.setValue(newsWave.hashtags);
     validationForm.controls.projectTitle.setValue(newsWave.title);
     validationForm.controls.projectBudget.setValue(newsWave.budget);
+    editorForm.controls.attachments.setValue(newsWave.waveFormation.attachments);
     previewForm.controls.previewEmail.setValue(newsWave.waveFormation.email);
     previewForm.controls.previewText.setValue(newsWave.waveFormation.content);
     const newsList = newsWave.newsInProject.map(el => new News(el.title, el.content, el.attachments, el.contractors, el.content, el.id));

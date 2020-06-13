@@ -9,6 +9,7 @@ import { User } from './user.models';
 import { Format } from './format';
 
 export interface NewsWaves {
+  postFormat?: string;
   id: number;
   newsCharacter: Character;
   format: Format;

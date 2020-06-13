@@ -1,3 +1,5 @@
+import { Methods } from '@models/instances/method';
+
 export const newsFields = {
   attachments: 'attachments',
   title: 'title',
@@ -24,4 +26,4 @@ export const newsFieldsHandler = {
   }
 };
 
-export const burstSteps = { [this.methods.direct]: 2, [this.methods.bayer]: 1, [this.methods.topSecret]: 1 }
+export const burstSteps = { [Methods.direct]: 2, [Methods.bayer]: 1, [Methods.topSecret]: 1 }
