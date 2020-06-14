@@ -298,11 +298,51 @@ export class NewsService {
   }
 
   /**
-   * TODO Refactor this method (extract method)
+   * Handle delete and update files from formation or news
    */
   public handleFilesUpload(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
+    const formationFormData = this.collectUploadFormationFiles(payload);
+    const newsFormData = this.collectUploadNewsFiles(newsWave, payload);
+    const deleteNewsData = this.collectDeleteNewsFiles(newsWave, payload);
+    const deleteFormationData = this.collectDeleteFormationFiles(newsWave, payload);
+    return { newsWave, formationFormData, newsFormData, deleteNewsData, deleteFormationData };
+  }
+
+  /**
+   * Collects delete news files
+   */
+  public collectDeleteNewsFiles(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
+    return payload.data.newsInProject
+      .map(
+        (news: News, index: number) => [...news.attachments
+          .filter(attachment => newsWave.newsInProject[index].attachments.indexOf(attachment) === -1)
+        ]
+          // @ts-ignore
+          .map(el => ({ id: el.id }))
+      );
+  }
+
+  /**
+   * Collects upload formation files
+   */
+  public collectUploadFormationFiles(payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
     const formationFormData = new FormData();
-    const newsFormData = payload.data.newsInProject.map(news => {
+    // @ts-ignore
+    formationFormData.append('news_id', newsWave.id);
+    // @ts-ignore
+    if (payload.data.waveFormation.attachments) {
+      payload.data.waveFormation.attachments
+        .filter(file => file instanceof File)
+        .forEach(file => formationFormData.append('file', file, file.name));
+    }
+    return formationFormData;
+  }
+
+  /**
+   * Collects upload news files
+   */
+  public collectUploadNewsFiles(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
+    return payload.data.newsInProject.map(news => {
       const formData = new FormData();
       // @ts-ignore
       formData.append('news_id', newsWave.id);
@@ -312,13 +352,13 @@ export class NewsService {
         .forEach(file => formData.append('file', file, file.name));
       return formData;
     });
-    // @ts-ignore
-    formationFormData.append('news_id', newsWave.id);
-    // @ts-ignore
-    payload.data.waveFormation.attachments
-      .filter(file => file instanceof File)
-      .forEach(file => formationFormData.append('file', file, file.name));
-    return {newsWave, formationFormData, newsFormData};
+  }
+
+  public collectDeleteFormationFiles(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
+    return newsWave.waveFormation.attachments
+      .filter(attachment => !(attachment instanceof File) && payload.data.waveFormation.attachments.find(attachment))
+      // @ts-ignore
+      .map(attachment => ({ id: attachment.id }));
   }
 
   /**
@@ -695,8 +735,8 @@ export class NewsService {
     validationForm: FormGroup,
     editorForm: FormGroup,
     newsForm: FormGroup,
-    previewForm: FormGroup,
-  ): {newsList: News[], controls: FormArray} {
+    previewForm: FormGroup
+  ): { newsList: News[], controls: FormArray } {
     validationForm.controls.newsCharacter.setValue(newsWave.newsCharacter);
     validationForm.controls.projectBurstMethod.setValue(newsWave.burstMethod);
     validationForm.controls.projectContractors.setValue(newsWave.contractors);
@@ -709,7 +749,7 @@ export class NewsService {
     previewForm.controls.previewEmail.setValue(newsWave.waveFormation.email);
     previewForm.controls.previewText.setValue(newsWave.waveFormation.content);
     const newsList = newsWave.newsInProject.map(el => new News(el.title, el.content, el.attachments, el.contractors, el.content, el.id));
-    return {newsList, controls: this.initControls(newsList)};
+    return { newsList, controls: this.initControls(newsList) };
   }
 
   /**

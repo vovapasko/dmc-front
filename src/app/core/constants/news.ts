@@ -3,13 +3,15 @@ import { Methods } from '@models/instances/method';
 export const newsFields = {
   attachments: 'attachments',
   title: 'title',
-  contractors: '',
-  content: ''
+  contractors: 'contractors',
+  content: 'content'
 };
 
 export const newsFieldsHandler = {
-  attachments(files) {
-    return files.map((file, index) => `\n Файл ${index + 1} - <b>${file.name}</b> \n`);
+  attachments(attachments) {
+    const links = attachments.filter(attachment => !(attachment instanceof File)).map((attachment, index) => `\n Файл ${index + 1} - <p><a href="${attachment.file}"/></p>\n`);
+    const files = attachments.filter(attachment => attachment instanceof File).map((attachment, index) => `\n Файл ${index + 1} - <p>${attachment.name}</p> \n`);
+    return [...links, ...files];
   },
   title(value) {
     return `\n<h1>${value}</h1>\n`;

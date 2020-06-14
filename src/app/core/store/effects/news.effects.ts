@@ -199,15 +199,16 @@ export class NewsEffects {
       new UpdateNewsWaveSuccess(uploadData.newsWave),
       new UploadFormationFile({data: uploadData.formationFormData}),
       ...uploadData.newsFormData.map(formData => new UploadNewsFile({data: formData})),
+      ...uploadData.deleteFormationData.map(payload => new DeleteFormationFile(payload)),
+      ...uploadData.deleteNewsData.map(payload => new DeleteNewsFile(payload)),
     ])
-    // switchMap((newsWave: NewsWaves) => of(new UpdateNewsWaveSuccess(newsWave)))
   );
 
 
   @Effect()
   deleteNewsWave$ = this.actions$.pipe(
     ofType<DeleteNewsWave>(ENewsActions.DeleteNewsWave),
-    switchMap((action: { payload: DeleteNewsWavesPayload }) => this.newsService.deleteNewsWave(action.payload)),
+    switchMap((action: { payload: DeleteNewsWavesPayload }) => this.newsService.deleteNewsFile(action.payload)),
     switchMap((payload: DeleteNewsWavesPayload) => of(new DeleteNewsWaveSuccess(payload)))
   );
 
