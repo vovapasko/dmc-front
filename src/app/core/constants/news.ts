@@ -1,27 +1,31 @@
+import { Methods } from '@models/instances/method';
+
 export const newsFields = {
   attachments: 'attachments',
   title: 'title',
-  contractors: '',
-  content: ''
+  contractors: 'contractors',
+  content: 'content'
 };
 
 export const newsFieldsHandler = {
-  attachments(files) {
-    return files.map((file, index) => `Файл ${index + 1} - <b>${file.name}</b> \n`);
+  attachments(attachments) {
+    const links = attachments.filter(attachment => !(attachment instanceof File)).map((attachment, index) => `\n Файл ${index + 1} - <p><a href="${attachment.file}"/></p>\n`);
+    const files = attachments.filter(attachment => attachment instanceof File).map((attachment, index) => `\n Файл ${index + 1} - <p>${attachment.name}</p> \n`);
+    return [...links, ...files];
   },
   title(value) {
-    return `<h1>${value}</h1>`;
+    return `\n<h1>${value}</h1>\n`;
   },
   content(value) {
-    return `<p>${value}</p>`;
+    return `\n<p>${value}</p>\n`;
   },
   contractors(contractors, format) {
     if (!contractors) {
       return '';
     }
     // tslint:disable-next-line:max-line-length
-    return contractors.map(contractor => `— ${contractor.editorName} ${contractor.postformatlistSet.find(el => el.postFormat === format).onePostPrice}`);
+    return contractors.map(contractor => `\n— ${contractor.editorName} ${contractor.postformatlistSet.find(el => el.postFormat === format).onePostPrice}\n`);
   }
 };
 
-export const burstSteps = { [this.methods.direct]: 2, [this.methods.bayer]: 1, [this.methods.topSecret]: 1 }
+export const burstSteps = { [Methods.direct]: 2, [Methods.bayer]: 1, [Methods.topSecret]: 1 }

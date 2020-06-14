@@ -149,7 +149,6 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     this.pairs.forEach(pair => controls[pair.key].setValue(newsProject[pair.value]));
     this.emails$ = of(newsProject.emails);
     this.newsProject = newsProject;
-
   }
 
 
@@ -461,6 +460,17 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     const control = this.getControl(index, field);
     this.newsList = this.newsService.updateField(index, field, value, control, this.newsList);
     this.updatePreviewText(index, control);
+    if (field === 'attachments') {
+      this.onChangeDistributionFiles(control);
+    }
+  }
+
+  public onChangeDistributionFiles(control: FormControl) {
+    console.log(control);
+  }
+
+  public onChangeFormationFiles(event): void {
+    console.log(event);
   }
 
   /**
@@ -502,8 +512,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   public updatePreviewEmails(email: Email): void {
     this.newsList.forEach((el, index) => {
       const control = this.getControl(index, 'previewText');
-      const value = email.template + separators.newLine + control.value + separators.newLine + email.signature;
-      control.setValue(value);
+      this.setEmailValue(control, email);
     });
   }
 
@@ -512,7 +521,14 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
    */
   public updatePreviewEmail(email: Email): void {
     const control = this.previewFormControls.previewText;
-    const value = email.template + separators.newLine + control.value + separators.newLine + email.signature;
+    this.setEmailValue(control, email);
+  }
+
+  /**
+   * Set value in field
+   */
+  public setEmailValue(control: FormControl | AbstractControl, email: Email) {
+    const value = `<p>${email.template}</p>` + control.value + `<p>${email.signature}</p>`;
     control.setValue(value);
   }
 
@@ -545,6 +561,12 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     const { newsList, controls } = newsService.setNewsWaveData(newsWave, validationForm, editorForm, newsForm, previewForm);
     this.newsList = newsList;
     this.controls = controls;
+    // newsList
+    //   .forEach((news: News, index: number) => Object.keys(newsFields)
+    //     .forEach(field => {
+    //       const control = this.getControl(index, field);
+    //       this.updatePreviewText(index, control);
+    //     }));
   }
 
   /**

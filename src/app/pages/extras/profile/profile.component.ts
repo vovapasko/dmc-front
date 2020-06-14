@@ -4,17 +4,17 @@ import { Title } from '@angular/platform-browser';
 import { Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 
-import { User } from '../../../core/models/instances/user.models';
-import { AuthenticationService } from '../../../core/services/auth.service';
-import { UserService } from '../../../core/services/user.service';
-import { LoadingService } from '../../../core/services/loading.service';
-import { ErrorService } from '../../../core/services/error.service';
-import { ResetPassword, UpdateProfile } from '../../../core/store/actions/user.actions';
-import { IAppState } from '../../../core/store/state/app.state';
-import { NotificationService } from '../../../core/services/notification.service';
-import { ServerError } from '../../../core/models/responses/server/error';
-import { Infos } from '../../../core/constants/notifications';
-import { UpdateProfilePayload } from '../../../core/models/payloads/user/update-profile';
+import { User } from '@models/instances/user.models';
+import { AuthenticationService } from '@services/auth.service';
+import { UserService } from '@services/user.service';
+import { LoadingService } from '@services/loading.service';
+import { ErrorService } from '@services/error.service';
+import { ResetPassword, UpdateProfile } from '@store/actions/user.actions';
+import { IAppState } from '@store/state/app.state';
+import { NotificationService } from '@services/notification.service';
+import { ServerError } from '@models/responses/server/error';
+import { Infos } from '@constants/notifications';
+import { UpdateProfilePayload } from '@models/payloads/user/update-profile';
 
 /**
  * Profile component - handling the profile with sidebar and content
@@ -123,7 +123,7 @@ export class ProfileComponent implements OnInit {
    * Upload new image to cropper
    */
   onFileChanges(files) {
-    if(files && files.length){
+    if(files && files.length) {
       this.avatarBase64 = files[0].base64;
       const {type, title, message} = Infos.IMAGE_HAS_BEEN_LOADED;
       this.notificationService.notify(type, title, message);

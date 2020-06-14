@@ -18,5 +18,7 @@ export const endpoints = {
   PROJECTS: 'projects',
   EMAILS: 'news-emails',
   NEWSPROJECTS: 'newsprojects',
-  NEWS_WAVES: 'news-waves'
+  NEWS_WAVES: 'news-waves',
+  NEWS_FILE_UPLOAD: 'news-fileupload',
+  FORMATION_FILE_UPLOAD: 'wave-formation-fileupload'
 };

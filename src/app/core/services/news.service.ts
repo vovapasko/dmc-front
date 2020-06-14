@@ -47,6 +47,9 @@ import { GetNewsWavesResponse } from '../models/responses/news/news-waves/get';
 import { GetAllNewsWavesResponse } from '../models/responses/news/news-waves/getAll';
 import { NewsProject } from '../models/instances/news-project';
 import { UserService } from './user.service';
+import { UploadNewsFilePayload } from '@models/payloads/news/news-waves/upload-file';
+import { DeleteNewsFilePayload } from '@models/payloads/news/news-waves/delete-file';
+import { UpdateNewsWaveSuccess, UploadFormationFile, UploadNewsFile } from '@store/actions/news.actions';
 
 const api = environment.api;
 
@@ -285,27 +288,90 @@ export class NewsService {
    * Create news wave
    * returns single NewsWaves item
    */
-  public createNewsWave(payload: CreateNewsWavesPayload): Observable<NewsWaves> {
+  public createNewsWave(payload: CreateNewsWavesPayload): Observable<any> {
     return this.requestHandler.request(
       `${api}/${endpoints.NEWS_WAVES}/`,
       methods.POST,
       payload,
-      (response: NewsWaves) => response
+      (response: NewsWaves) => this.handleFilesUpload(response, payload)
     );
   }
 
+  /**
+   * Handle delete and update files from formation or news
+   */
+  public handleFilesUpload(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
+    const formationFormData = this.collectUploadFormationFiles(payload);
+    const newsFormData = this.collectUploadNewsFiles(newsWave, payload);
+    const deleteNewsData = this.collectDeleteNewsFiles(newsWave, payload);
+    const deleteFormationData = this.collectDeleteFormationFiles(newsWave, payload);
+    return { newsWave, formationFormData, newsFormData, deleteNewsData, deleteFormationData };
+  }
+
+  /**
+   * Collects delete news files
+   */
+  public collectDeleteNewsFiles(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
+    return payload.data.newsInProject
+      .map(
+        (news: News, index: number) => [...news.attachments
+          .filter(attachment => newsWave.newsInProject[index].attachments.indexOf(attachment) === -1)
+        ]
+          // @ts-ignore
+          .map(el => ({ id: el.id }))
+      );
+  }
+
+  /**
+   * Collects upload formation files
+   */
+  public collectUploadFormationFiles(payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
+    const formationFormData = new FormData();
+    // @ts-ignore
+    formationFormData.append('news_id', newsWave.id);
+    // @ts-ignore
+    if (payload.data.waveFormation.attachments) {
+      payload.data.waveFormation.attachments
+        .filter(file => file instanceof File)
+        .forEach(file => formationFormData.append('file', file, file.name));
+    }
+    return formationFormData;
+  }
+
+  /**
+   * Collects upload news files
+   */
+  public collectUploadNewsFiles(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
+    return payload.data.newsInProject.map(news => {
+      const formData = new FormData();
+      // @ts-ignore
+      formData.append('news_id', newsWave.id);
+      // @ts-ignore
+      news.attachments
+        .filter(file => file instanceof File)
+        .forEach(file => formData.append('file', file, file.name));
+      return formData;
+    });
+  }
+
+  public collectDeleteFormationFiles(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
+    return newsWave.waveFormation.attachments
+      .filter(attachment => !(attachment instanceof File) && payload.data.waveFormation.attachments.find(attachment))
+      // @ts-ignore
+      .map(attachment => ({ id: attachment.id }));
+  }
 
   /**
    * Update news wave
    * id: number (news wave id)
    * data: NewsWaves
    */
-  public updateNewsWave(payload: UpdateNewsWavesPayload): Observable<NewsWaves> {
+  public updateNewsWave(payload: UpdateNewsWavesPayload): Observable<any> {
     return this.requestHandler.request(
       `${api}/${endpoints.NEWS_WAVES}/${payload.id}`,
       methods.PUT,
       payload,
-      (response: NewsWaves) => response
+      (response: NewsWaves) => this.handleFilesUpload(response, payload)
     );
   }
 
@@ -318,6 +384,54 @@ export class NewsService {
       `${api}/${endpoints.NEWS_WAVES}/${payload.id}`,
       methods.DELETE,
       null,
+      (response: null) => payload
+    );
+  }
+
+  /**
+   * Upload news file
+   */
+  public uploadNewsFile(payload: UploadNewsFilePayload): Observable<null> {
+    return this.requestHandler.request(
+      `${api}/${endpoints.NEWS_FILE_UPLOAD}/`,
+      methods.PUT,
+      payload,
+      (response: null) => payload
+    );
+  }
+
+  /**
+   * Upload formation file
+   */
+  public uploadFormationFile(payload: UploadNewsFilePayload): Observable<null> {
+    return this.requestHandler.request(
+      `${api}/${endpoints.FORMATION_FILE_UPLOAD}/`,
+      methods.PUT,
+      payload,
+      (response: null) => payload
+    );
+  }
+
+  /**
+   * Delete news file
+   */
+  public deleteNewsFile(payload: DeleteNewsFilePayload): Observable<null> {
+    return this.requestHandler.request(
+      `${api}/${endpoints.NEWS_FILE_UPLOAD}/${payload.id}`,
+      methods.DELETE,
+      payload,
+      (response: null) => payload
+    );
+  }
+
+  /**
+   * Delete file from formation
+   */
+  public deleteFormationFile(payload: DeleteNewsFilePayload): Observable<null> {
+    return this.requestHandler.request(
+      `${api}/${endpoints.FORMATION_FILE_UPLOAD}/${payload.id}`,
+      methods.DELETE,
+      payload,
       (response: null) => payload
     );
   }
@@ -561,20 +675,20 @@ export class NewsService {
     const hashtags = validationForm.controls.projectHashtags.value;
     const title = validationForm.controls.projectTitle.value;
     const budget = validationForm.controls.projectBudget.value;
-    // const format = validationForm.controls.projectPostFormat.value;
+    const postFormat = validationForm.controls.projectPostFormat.value.postFormat;
     const isConfirmed = !!newsWaveId;
     const createdBy = this.userService.user;
     const waveFormation = {
       email: previewForm.controls.previewEmail.value,
-      content: previewForm.controls.previewText.value
-      // attachments: editorForm.controls.attachments.value
+      content: previewForm.controls.previewText.value,
+      attachments: editorForm.controls.attachments.value
     };
     const newsInProject = newsList.map(news => ({
       contractors: news.contractors,
       email: previewForm.controls.previewEmail.value,
       title: news.title,
-      content: news.content
-      // attachments: news.attachments
+      content: news.content,
+      attachments: news.attachments
     }));
 
     const data = {
@@ -589,7 +703,7 @@ export class NewsService {
       waveFormation,
       newsInProject,
       project,
-      // format
+      postFormat
     };
 
     if (newsWaveId) {
@@ -621,20 +735,21 @@ export class NewsService {
     validationForm: FormGroup,
     editorForm: FormGroup,
     newsForm: FormGroup,
-    previewForm: FormGroup,
-  ): {newsList: News[], controls: FormArray} {
+    previewForm: FormGroup
+  ): { newsList: News[], controls: FormArray } {
     validationForm.controls.newsCharacter.setValue(newsWave.newsCharacter);
     validationForm.controls.projectBurstMethod.setValue(newsWave.burstMethod);
     validationForm.controls.projectContractors.setValue(newsWave.contractors);
-    // validationForm.controls.projectPostFormat.setValue(newsWave.format);
+    validationForm.controls.projectPostFormat.setValue(newsWave.postFormat);
     validationForm.controls.projectName.setValue(newsWave.project);
     validationForm.controls.projectHashtags.setValue(newsWave.hashtags);
     validationForm.controls.projectTitle.setValue(newsWave.title);
     validationForm.controls.projectBudget.setValue(newsWave.budget);
+    editorForm.controls.attachments.setValue(newsWave.waveFormation.attachments);
     previewForm.controls.previewEmail.setValue(newsWave.waveFormation.email);
     previewForm.controls.previewText.setValue(newsWave.waveFormation.content);
     const newsList = newsWave.newsInProject.map(el => new News(el.title, el.content, el.attachments, el.contractors, el.content, el.id));
-    return {newsList, controls: this.initControls(newsList)};
+    return { newsList, controls: this.initControls(newsList) };
   }
 
   /**
