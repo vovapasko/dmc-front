@@ -325,7 +325,7 @@ export class NewsService {
   /**
    * Collects upload formation files
    */
-  public collectUploadFormationFiles(payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
+  public collectUploadFormationFiles(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
     const formationFormData = new FormData();
     // @ts-ignore
     formationFormData.append('news_id', newsWave.id);
