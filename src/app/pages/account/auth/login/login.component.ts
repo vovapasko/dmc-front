@@ -4,14 +4,14 @@ import { Title } from '@angular/platform-browser';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 
-import { AuthenticationService } from '../../../core/services/auth.service';
-import { IAppState } from '../../../core/store/state/app.state';
-import { Login } from '../../../core/store/actions/user.actions';
-import { ErrorService } from '../../../core/services/error.service';
-import { LoadingService } from '../../../core/services/loading.service';
-import { setAuthClasses } from '../../../core/helpers/utility';
-import { LoginPayload } from '../../../core/models/payloads/auth/login';
-import { ServerError } from '../../../core/models/responses/server/error';
+import { AuthenticationService } from '@services/auth.service';
+import { IAppState } from '@store/state/app.state';
+import { Login } from '@store/actions/user.actions';
+import { ErrorService } from '@services/error.service';
+import { LoadingService } from '@services/loading.service';
+import { setAuthClasses } from '../../../../core/helpers/utility';
+import { LoginPayload } from '@models/payloads/auth/login';
+import { ServerError } from '@models/responses/server/error';
 
 /**
  * This component for login user in crm

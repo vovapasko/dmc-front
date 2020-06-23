@@ -1,31 +1,26 @@
-import { SignupComponent } from './signup.component';
+import { LoginComponent } from './login.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CommonModule } from '@angular/common';
-import { SignupPayload } from '../../../core/models/payloads/user/signup';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { LoginPayload } from '@models/payloads/auth/login';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule, Title } from '@angular/platform-browser';
 import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
-import { UIModule } from '../../../shared/ui/ui.module';
+import { UIModule } from '../../../../shared/ui/ui.module';
+import { AuthRoutingModule } from '../auth-routing';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { HttpClient, HttpHandler } from '@angular/common/http';
+import { AuthenticationService } from '@services/auth.service';
+import { ErrorService } from '@services/error.service';
+import { LoadingService } from '@services/loading.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Store, StoreModule } from '@ngrx/store';
-import { HttpClient, HttpHandler } from '@angular/common/http';
-import { AuthenticationService } from '../../../core/services/auth.service';
-import { Title } from '@angular/platform-browser';
-import { ErrorService } from '../../../core/services/error.service';
-import { LoadingService } from '../../../core/services/loading.service';
 
-describe('SignupComponent', () => {
-  let component: SignupComponent;
+describe('LoginComponent', () => {
+  let component: LoginComponent;
   let element: HTMLElement;
-  let fixture: ComponentFixture<SignupComponent>;
-  const signupPayload = {
-    invite: 'invite',
-    data: {
-      firstName: 'firstName',
-      lastName: 'lastName',
-      password: 'password',
-      passwordConfirm: 'passwordConfirm'
-    }
-  } as SignupPayload;
+  let fixture: ComponentFixture<LoginComponent>;
+  const loginPayload = { data: { email: 'login', password: 'password' } } as LoginPayload;
+
   // * We use beforeEach so our tests are run in isolation
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -35,12 +30,14 @@ describe('SignupComponent', () => {
         CommonModule, ReactiveFormsModule, NgbAlertModule, UIModule, RouterTestingModule, StoreModule.forRoot({})
       ],
       providers: [HttpClient, HttpHandler, FormBuilder, AuthenticationService, Title, ErrorService, LoadingService, Store],
-      declarations: [SignupComponent],
+      declarations: [LoginComponent]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SignupComponent);
+    fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance; // The component instantiation
     element = fixture.nativeElement; // The HTML reference
+
+    spyOn(component, 'submit');
   });
 
   it('should create', () => {
@@ -51,12 +48,11 @@ describe('SignupComponent', () => {
     component.initSubscriptions();
     expect(component.loading$).toBeTruthy();
     expect(component.error$).toBeTruthy();
-    expect(component.inviteSubscription).toBeTruthy();
   });
 
   it('should initForm and return controls', () => {
     component.initForm();
-    expect(component.signupForm).toBeTruthy();
+    expect(component.loginForm).toBeTruthy();
     expect(component.f).toBeTruthy();
   });
 
@@ -66,16 +62,8 @@ describe('SignupComponent', () => {
   });
 
   it('should submit', () => {
-    spyOn(component, 'submit');
-    component.submit(signupPayload);
+    component.submit(loginPayload);
     expect(component.submit).toHaveBeenCalled();
-  });
-
-  it('should processSubmit', () => {
-    spyOn(component, 'processSubmit');
-    component.initForm();
-    component.processSubmit();
-    expect(component.processSubmit).toHaveBeenCalled();
   });
 
   it('should setTitle', () => {

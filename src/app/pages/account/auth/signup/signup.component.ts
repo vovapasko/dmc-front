@@ -5,16 +5,16 @@ import { Title } from '@angular/platform-browser';
 import { Subject, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 
-import { MustMatch } from '../../../pages/form/validation/validation.mustmatch';
-import { Signup } from '../../../core/store/actions/user.actions';
-import { IAppState } from '../../../core/store/state/app.state';
-import { ErrorService } from '../../../core/services/error.service';
-import { LoadingService } from '../../../core/services/loading.service';
-import { setAuthClasses } from '../../../core/helpers/utility';
-import { NotificationService } from '../../../core/services/notification.service';
-import { SignupPayload } from '../../../core/models/payloads/user/signup';
-import { Warnings } from '../../../core/constants/notifications';
-import { ServerError } from '../../../core/models/responses/server/error';
+import { MustMatch } from '../../../form/validation/validation.mustmatch';
+import { Signup } from '@store/actions/user.actions';
+import { IAppState } from '@store/state/app.state';
+import { ErrorService } from '@services/error.service';
+import { LoadingService } from '@services/loading.service';
+import { setAuthClasses } from '../../../../core/helpers/utility';
+import { NotificationService } from '@services/notification.service';
+import { SignupPayload } from '@models/payloads/user/signup';
+import { Warnings } from '@constants/notifications';
+import { ServerError } from '@models/responses/server/error';
 
 /**
  * This component for sign up new user

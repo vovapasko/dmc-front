@@ -5,7 +5,7 @@ import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { ConfirmComponent } from './confirm/confirm.component';
 import { PasswordResetComponent } from './passwordreset/password-reset.component';
-import { urls } from '../../core/constants/urls';
+import { urls } from '@constants/urls';
 
 const routes: Routes = [
   {
