@@ -47,7 +47,7 @@
                     class="form-control"
                     [ngClass]="{ 'is-invalid': submitted && f.password.errors }"
                     id="password"
-                    placeholder="Password"
+                    placeholder="Введите пароль"
                   />
                   <div class="input-group-append">
                     <a (click)="visible = !visible">
@@ -73,9 +73,9 @@
 
         <div class="row mt-3">
           <div class="col-12 text-center">
-            <p>
-              <a routerLink="/account/reset-password" class="text-white-50 ml-1">Забыли пароль?</a>
-            </p>
+<!--            <p>-->
+<!--              <a routerLink="/account/reset-password" class="text-white-50 ml-1">Забыли пароль?</a>-->
+<!--            </p>-->
             <p class="text-white-50">
               Нет аккаунта?
               <a [routerLink]="['/account', 'signup', '']" class="text-white ml-1"><b>Регистрация</b></a>
