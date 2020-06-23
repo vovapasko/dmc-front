@@ -9,7 +9,7 @@
               <a routerLink="/">
                 <img src="assets/images/logo-dark.png" alt="" height="22" />
               </a>
-              <p class="text-muted mb-4 mt-3">Enter your email address and password to access admin panel.</p>
+              <p class="text-muted mb-4 mt-3">Введите вашу почту и пароль для входа в CRM.</p>
             </div>
 
             <form class="needs-validation" name="loginForm" [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
@@ -20,7 +20,7 @@
               >
 
               <div class="form-group mb-3">
-                <label for="email">Email</label>
+                <label for="email">Почта</label>
 
                 <input
                   type="email"
@@ -28,17 +28,17 @@
                   class="form-control"
                   [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
                   id="email"
-                  placeholder="Email"
+                  placeholder="Введите почту"
                 />
 
                 <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
-                  <div *ngIf="f.email.errors.required">Email is required</div>
-                  <div *ngIf="f.email.errors.email">Email must be a valid email address</div>
+                  <div *ngIf="f.email.errors.required">Почта обязательна</div>
+                  <div *ngIf="f.email.errors.email">Почта должна быть валидна</div>
                 </div>
               </div>
 
               <div class="form-group mb-3">
-                <label for="password">Password</label>
+                <label for="password">Пароль</label>
 
                 <div class="input-group" data-placement="top" data-align="top">
                   <input
@@ -58,12 +58,12 @@
                 </div>
 
                 <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                  <div *ngIf="f.password.errors.required">Password is required</div>
+                  <div *ngIf="f.password.errors.required">Пароль обязателен</div>
                 </div>
               </div>
 
               <div class="form-group mb-0 text-center">
-                <button class="btn btn-primary btn-block" type="submit">Log In</button>
+                <button class="btn btn-primary btn-block" type="submit">Вход</button>
               </div>
             </form>
           </div>
@@ -74,11 +74,11 @@
         <div class="row mt-3">
           <div class="col-12 text-center">
             <p>
-              <a routerLink="/account/reset-password" class="text-white-50 ml-1">Forgot your password?</a>
+              <a routerLink="/account/reset-password" class="text-white-50 ml-1">Забыли пароль?</a>
             </p>
             <p class="text-white-50">
-              Don't have an account?
-              <a [routerLink]="['/account', 'signup', '']" class="text-white ml-1"><b>Sign Up</b></a>
+              Нет аккаунта?
+              <a [routerLink]="['/account', 'signup', '']" class="text-white ml-1"><b>Регистрация</b></a>
             </p>
           </div>
           <!-- end col -->
@@ -94,5 +94,5 @@
 <!-- end page -->
 
 <footer class="footer footer-alt">
-  2015 - 2019 &copy; UBold theme by <a href="" class="text-white-50">Coderthemes</a>
+  2015 - 2020 &copy; UBold theme by <a href="" class="text-white-50">Coderthemes</a>
 </footer>
