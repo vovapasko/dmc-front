@@ -6,17 +6,36 @@
           <div class="card-body p-4">
             <!-- Logo -->
             <div class="text-center w-75 m-auto">
-              <a routerLink="/account/login">
-                <img src="assets/images/logo-dark.png" alt="" height="22" />
+              <a routerLink="/">
+                <img src="../../../../../assets/images/logo-dark.png" alt="" height="22" />
               </a>
-              <p class="text-muted mb-4 mt-3">Введите новый пароль</p>
+              <p class="text-muted mb-4 mt-3">Введите вашу почту и пароль для входа в CRM.</p>
             </div>
 
-            <form class="needs-validation" name="resetForm" [formGroup]="resetForm" (ngSubmit)="onSubmit()">
+            <form class="needs-validation" name="loginForm" [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
               <app-ui-preloader [display]="loading$ | async"></app-ui-preloader>
+
               <ngb-alert type="danger" *ngIf="error$ | async" [dismissible]="false"
                 >Пожалуйста, повторите попытку</ngb-alert
               >
+
+              <div class="form-group mb-3">
+                <label for="email">Почта</label>
+
+                <input
+                  type="email"
+                  formControlName="email"
+                  class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
+                  id="email"
+                  placeholder="Введите почту"
+                />
+
+                <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                  <div *ngIf="f.email.errors.required">Почта обязательна</div>
+                  <div *ngIf="f.email.errors.email">Почта должна быть валидна</div>
+                </div>
+              </div>
 
               <div class="form-group mb-3">
                 <label for="password">Пароль</label>
@@ -28,7 +47,7 @@
                     class="form-control"
                     [ngClass]="{ 'is-invalid': submitted && f.password.errors }"
                     id="password"
-                    placeholder="Password"
+                    placeholder="Введите пароль"
                   />
                   <div class="input-group-append">
                     <a (click)="visible = !visible">
@@ -37,42 +56,29 @@
                     </a>
                   </div>
                 </div>
+
                 <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
                   <div *ngIf="f.password.errors.required">Пароль обязателен</div>
-                  <div *ngIf="f.password.errors.minlength">Минимальная длина пароля 6 символов</div>
                 </div>
               </div>
 
-              <div class="form-group mb-3">
-                <label for="confirm-password">Введите пароль ешё раз</label>
-
-                <input
-                  type="password"
-                  formControlName="confirmPassword"
-                  class="form-control"
-                  [ngClass]="{ 'is-invalid': submitted && f.confirmPassword.errors }"
-                  id="confirm-password"
-                  placeholder="Введите пароль"
-                />
-
-                <div *ngIf="submitted && f.confirmPassword.errors" class="invalid-feedback">
-                  <div *ngIf="f.confirmPassword.errors.mustMatch">Пароли должны совпадать</div>
-                </div>
-              </div>
-
-              <div class="form-group mb-0 text-center" *ngIf="!success">
-                <button class="btn btn-primary btn-block" type="submit">Сохранить</button>
+              <div class="form-group mb-0 text-center">
+                <button class="btn btn-primary btn-block" type="submit">Вход</button>
               </div>
             </form>
           </div>
-          <!-- end card-body-->
+          <!-- end card-body -->
         </div>
         <!-- end card -->
 
         <div class="row mt-3">
           <div class="col-12 text-center">
+<!--            <p>-->
+<!--              <a routerLink="/account/reset-password" class="text-white-50 ml-1">Забыли пароль?</a>-->
+<!--            </p>-->
             <p class="text-white-50">
-              Back to <a routerLink="/account/login" class="text-white ml-1"><b>Log In</b></a>
+              Нет аккаунта?
+              <a [routerLink]="['/account', 'signup', '']" class="text-white ml-1"><b>Регистрация</b></a>
             </p>
           </div>
           <!-- end col -->
@@ -88,5 +94,5 @@
 <!-- end page -->
 
 <footer class="footer footer-alt">
-  2015 - 2019 &copy; UBold theme by <a href="" class="text-white-50">Coderthemes</a>
+  2015 - 2020 &copy; UBold theme by <a href="" class="text-white-50">Coderthemes</a>
 </footer>

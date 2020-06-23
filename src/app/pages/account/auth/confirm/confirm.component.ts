@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { setAuthClasses } from '../../../core/helpers/utility';
+import { setAuthClasses } from '../../../../core/helpers/utility';
 
 /**
  * This component informs a user that him password was changed

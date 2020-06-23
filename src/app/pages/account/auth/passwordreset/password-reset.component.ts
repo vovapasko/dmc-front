@@ -5,15 +5,15 @@ import { Title } from '@angular/platform-browser';
 import { Store } from '@ngrx/store';
 import { Subject, Subscription } from 'rxjs';
 
-import { MustMatch } from '../../../pages/form/validation/validation.mustmatch';
-import { UserService } from '../../../core/services/user.service';
-import { PasswordResetConfirm } from '../../../core/store/actions/user.actions';
-import { IAppState } from '../../../core/store/state/app.state';
-import { ErrorService } from '../../../core/services/error.service';
-import { LoadingService } from '../../../core/services/loading.service';
-import { setAuthClasses } from '../../../core/helpers/utility';
-import { ConfirmResetPasswordPayload } from '../../../core/models/payloads/user/confirm-reset-password';
-import { ServerError } from '../../../core/models/responses/server/error';
+import { MustMatch } from '../../../form/validation/validation.mustmatch';
+import { UserService } from '@services/user.service';
+import { PasswordResetConfirm } from '@store/actions/user.actions';
+import { IAppState } from '@store/state/app.state';
+import { ErrorService } from '@services/error.service';
+import { LoadingService } from '@services/loading.service';
+import { setAuthClasses } from '../../../../core/helpers/utility';
+import { ConfirmResetPasswordPayload } from '@models/payloads/user/confirm-reset-password';
+import { ServerError } from '@models/responses/server/error';
 
 /**
  * This component for change user password

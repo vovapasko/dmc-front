@@ -1,25 +1,23 @@
-import { LoginComponent } from './login.component';
+import { PasswordResetComponent } from './password-reset.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CommonModule } from '@angular/common';
-import { LoginPayload } from '../../../core/models/payloads/auth/login';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule, Title } from '@angular/platform-browser';
+import { ConfirmResetPasswordPayload } from '@models/payloads/user/confirm-reset-password';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
-import { UIModule } from '../../../shared/ui/ui.module';
-import { AuthRoutingModule } from '../auth-routing';
-import { ActivatedRoute, RouterModule } from '@angular/router';
-import { HttpClient, HttpHandler } from '@angular/common/http';
-import { AuthenticationService } from '../../../core/services/auth.service';
-import { ErrorService } from '../../../core/services/error.service';
-import { LoadingService } from '../../../core/services/loading.service';
+import { UIModule } from '../../../../shared/ui/ui.module';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Store, StoreModule } from '@ngrx/store';
+import { HttpClient, HttpHandler } from '@angular/common/http';
+import { AuthenticationService } from '@services/auth.service';
+import { Title } from '@angular/platform-browser';
+import { ErrorService } from '@services/error.service';
+import { LoadingService } from '@services/loading.service';
 
-describe('LoginComponent', () => {
-  let component: LoginComponent;
+describe('PasswordResetComponent', () => {
+  let component: PasswordResetComponent;
   let element: HTMLElement;
-  let fixture: ComponentFixture<LoginComponent>;
-  const loginPayload = { data: { email: 'login', password: 'password' } } as LoginPayload;
+  let fixture: ComponentFixture<PasswordResetComponent>;
+  const passwordResetPayload = {confirm: 'confirm', data: {password: 'password'}} as ConfirmResetPasswordPayload;
 
   // * We use beforeEach so our tests are run in isolation
   beforeEach(() => {
@@ -30,13 +28,12 @@ describe('LoginComponent', () => {
         CommonModule, ReactiveFormsModule, NgbAlertModule, UIModule, RouterTestingModule, StoreModule.forRoot({})
       ],
       providers: [HttpClient, HttpHandler, FormBuilder, AuthenticationService, Title, ErrorService, LoadingService, Store],
-      declarations: [LoginComponent]
+      declarations: [PasswordResetComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(LoginComponent);
+    fixture = TestBed.createComponent(PasswordResetComponent);
     component = fixture.componentInstance; // The component instantiation
     element = fixture.nativeElement; // The HTML reference
-
     spyOn(component, 'submit');
   });
 
@@ -48,21 +45,23 @@ describe('LoginComponent', () => {
     component.initSubscriptions();
     expect(component.loading$).toBeTruthy();
     expect(component.error$).toBeTruthy();
+    expect(component.routeSubscription).toBeTruthy();
   });
 
   it('should initForm and return controls', () => {
     component.initForm();
-    expect(component.loginForm).toBeTruthy();
+    expect(component.resetForm).toBeTruthy();
     expect(component.f).toBeTruthy();
   });
 
   it('should handle onSubmit', () => {
     component.onSubmit();
     expect(component.submitted).toBeTruthy();
+    expect(component.success).toBeFalsy();
   });
 
   it('should submit', () => {
-    component.submit(loginPayload);
+    component.submit(passwordResetPayload);
     expect(component.submit).toHaveBeenCalled();
   });
 
