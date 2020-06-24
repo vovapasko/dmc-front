@@ -313,13 +313,15 @@ export class NewsService {
   public collectDeleteNewsFiles(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
     return payload.data.newsInProject
       .map(
-        (news: News, index: number) => [...news.attachments
+        (news: News) => news.attachments
           // @ts-ignore
-          .filter(attachment => !(attachment instanceof File) && attachment.id && newsWave.newsInProject[index].attachments.indexOf(attachment) === -1)
-        ]
-          // @ts-ignore
-          .map(el => ({ id: el.id }))
-      );
+          .filter(attachment => !(attachment instanceof File) && attachment.id && newsWave.newsInProject
+            // @ts-ignore
+            .find(el => el.id === news.id).attachments
+              // @ts-ignore
+              .find(newsAttachment => newsAttachment.id !== attachment.id).id)
+        // @ts-ignore
+      ).flat();
   }
 
   /**
@@ -689,7 +691,7 @@ export class NewsService {
       email: previewForm.controls.previewEmail.value,
       title: news.title,
       content: controls.at(i).get('previewText').value,
-      attachments: news.attachments,
+      attachments: controls.at(i).get('attachments').value,
       id: news.id
     }));
 

@@ -206,10 +206,10 @@ export class NewsEffects {
 
 
   @Effect()
-  deleteNewsWave$ = this.actions$.pipe(
-    ofType<DeleteNewsWave>(ENewsActions.DeleteNewsWave),
-    switchMap((action: { payload: DeleteNewsWavesPayload }) => this.newsService.deleteNewsFile(action.payload)),
-    switchMap((payload: DeleteNewsWavesPayload) => of(new DeleteNewsWaveSuccess(payload)))
+  deleteNewsFile$ = this.actions$.pipe(
+    ofType<DeleteNewsWave>(ENewsActions.DeleteNewsFile),
+    switchMap((action: { payload: DeleteNewsFilePayload }) => this.newsService.deleteNewsFile(action.payload)),
+    switchMap((payload: null) => of(new DeleteNewsFileSuccess()))
   );
 
   @Effect()
