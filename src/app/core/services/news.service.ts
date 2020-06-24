@@ -689,7 +689,8 @@ export class NewsService {
       email: previewForm.controls.previewEmail.value,
       title: news.title,
       content: controls.at(i).get('previewText').value,
-      attachments: news.attachments
+      attachments: news.attachments,
+      id: news.id
     }));
 
     const data = {
