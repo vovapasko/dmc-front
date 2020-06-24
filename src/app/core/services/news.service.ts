@@ -314,7 +314,8 @@ export class NewsService {
     return payload.data.newsInProject
       .map(
         (news: News, index: number) => [...news.attachments
-          .filter(attachment => newsWave.newsInProject[index].attachments.indexOf(attachment) === -1)
+          // @ts-ignore
+          .filter(attachment => !(attachment instanceof File) && attachment.id && newsWave.newsInProject[index].attachments.indexOf(attachment) === -1)
         ]
           // @ts-ignore
           .map(el => ({ id: el.id }))

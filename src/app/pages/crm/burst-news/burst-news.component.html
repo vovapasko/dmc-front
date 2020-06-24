@@ -593,91 +593,93 @@
                                     </a>
                                 </li>
                             </ul>
-                            <div class="row">
-                                <app-ui-preloader [display]="loading$ | async"></app-ui-preloader>
-                                <form (ngSubmit)="previewFormSubmit()" [formGroup]="previewForm">
-                                    <div class="form-row">
-                                        <div class="form-group col-md-4">
-                                            <label for="previewEmails" class="col-form-label">Email</label>
-                                            <ng-select
-                                                    id="previewEmails"
-                                                    [items]="emails$ | async"
-                                                    bindLabel="email"
-                                                    [multiple]="false"
-                                                    [closeOnSelect]="true"
-                                                    [hideSelected]="true"
-                                                    (change)="onChangeEmail($event)"
-                                                    placeholder="Выберите почту"
-                                                    formControlName="previewEmail"
-                                                    [ngClass]="{ 'is-invalid': previewFormControls?.previewEmail?.errors }"
-                                            >
-                                            </ng-select>
+                            <form (ngSubmit)="previewFormSubmit()" [formGroup]="previewForm">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <app-ui-preloader [display]="loading$ | async"></app-ui-preloader>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <label for="previewEmails" class="col-form-label">Почта</label>
+                                                <ng-select
+                                                        id="previewEmails"
+                                                        [items]="emails$ | async"
+                                                        bindLabel="email"
+                                                        [multiple]="false"
+                                                        [closeOnSelect]="true"
+                                                        [hideSelected]="true"
+                                                        (change)="onChangeEmail($event)"
+                                                        placeholder="Выберите почту"
+                                                        formControlName="previewEmail"
+                                                        [ngClass]="{ 'is-invalid': previewFormControls?.previewEmail?.errors }"
+                                                >
+                                                </ng-select>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="previewTemplate" class="col-form-label">Шаблон</label>
+                                                <input placeholder="Шаблон"
+                                                       tabindex="0"
+                                                       id="previewTemplate"
+                                                       class="form-control"
+                                                       type="text"
+                                                       readonly="readonly"
+                                                       [value]="previewFormControls?.previewEmail?.value?.template || null"
+                                                >
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="previewSignature" class="col-form-label">Подпись</label>
+                                                <input placeholder="Подпись"
+                                                       id="previewSignature"
+                                                       class="form-control"
+                                                       tabindex="0"
+                                                       type="text"
+                                                       readonly="readonly"
+                                                       [value]="previewFormControls?.previewEmail?.value?.signature || null"
+                                                >
+                                            </div>
                                         </div>
-                                        <div class="form-group col-md-4">
-                                            <label for="previewTemplate" class="col-form-label">Шаблон</label>
-                                            <input placeholder="Шаблон"
-                                                   tabindex="0"
-                                                   id="previewTemplate"
-                                                   class="form-control"
-                                                   type="text"
-                                                   readonly="readonly"
-                                                   [value]="previewFormControls?.previewEmail?.value?.template || null"
-                                            >
-                                        </div>
-                                        <div class="form-group col-md-4">
-                                            <label for="previewSignature" class="col-form-label">Подпись</label>
-                                            <input placeholder="Подпись"
-                                                   id="previewSignature"
-                                                   class="form-control"
-                                                   tabindex="0"
-                                                   type="text"
-                                                   readonly="readonly"
-                                                   [value]="previewFormControls?.previewEmail?.value?.signature || null"
-                                            >
-                                        </div>
-                                    </div>
 
-                                    <div *ngIf="form?.projectBurstMethod?.value?.method == methods.direct; else elseBlock">
-                                        <quill-editor *ngFor="let news of newsList; let i = index"
-                                                      [styles]="{ height: '400px', 'margin-bottom': '15px' }"
-                                                      (onFocus)="onEvent($event, true)"
-                                                      (onEditorChanged)="changedEditor($event)"
-                                                      (onBlur)="onEvent($event, false)"
-                                                      (change)="updateField(i, 'previewText')"
-                                                      [formControl]="getControl(i, 'previewText')"
-                                                      (onEditorCreated)="created($event)"
-                                        ></quill-editor>
-                                    </div>
-                                    <ng-template #elseBlock>
-                                        <quill-editor
-                                                [styles]="{ height: '400px', 'margin-bottom': '15px' }"
-                                                (onFocus)="onEvent($event, true)"
-                                                (onEditorChanged)="changedEditor($event)"
-                                                (onBlur)="onEvent($event, false)"
-                                                formControlName="previewText"
-                                                (onEditorCreated)="created($event)"
-                                        ></quill-editor>
-                                    </ng-template>
+                                        <div *ngIf="form?.projectBurstMethod?.value?.method == methods.direct; else elseBlock">
+                                            <quill-editor *ngFor="let news of newsList; let i = index"
+                                                          [styles]="{ height: '400px', 'margin-bottom': '15px' }"
+                                                          (onFocus)="onEvent($event, true)"
+                                                          (onEditorChanged)="changedEditor($event)"
+                                                          (onBlur)="onEvent($event, false)"
+                                                          (change)="updateField(i, 'previewText')"
+                                                          [formControl]="getControl(i, 'previewText')"
+                                                          (onEditorCreated)="created($event)"
+                                            ></quill-editor>
+                                        </div>
+                                        <ng-template #elseBlock>
+                                            <quill-editor
+                                                    [styles]="{ height: '400px', 'margin-bottom': '15px' }"
+                                                    (onFocus)="onEvent($event, true)"
+                                                    (onEditorChanged)="changedEditor($event)"
+                                                    (onBlur)="onEvent($event, false)"
+                                                    formControlName="previewText"
+                                                    (onEditorCreated)="created($event)"
+                                            ></quill-editor>
+                                        </ng-template>
 
-                                    <div class="col-12">
-                                        <div class="text-center">
-                                            <div class="mb-3">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox"
-                                                           class="custom-control-input"
-                                                           formControlName="agreed"
-                                                           id="customCheck1"/>
-                                                    <label class="custom-control-label" for="customCheck1">
-                                                        I agree with the Terms and Conditions
-                                                    </label>
+                                        <div class="col-12">
+                                            <div class="text-center">
+                                                <div class="mb-3">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox"
+                                                               class="custom-control-input"
+                                                               formControlName="agreed"
+                                                               id="customCheck1"/>
+                                                        <label class="custom-control-label" for="customCheck1">
+                                                            Я согласен
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        <!-- end col -->
                                     </div>
-                                    <!-- end col -->
-                                </form>
+                                </div>
+                            </form>
 
-                            </div>
                             <!-- end row -->
                             <ul class="list-inline wizard mb-0">
                                 <li class="previous list-inline-item">
