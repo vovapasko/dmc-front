@@ -415,9 +415,9 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
    * Submit or confirm button has been pressed
    */
   public onSubmit(): void {
-    const { newsService, newsProject, validationForm, editorForm, newsForm, previewForm, newsList, newsWaveId } = this;
+    const { newsService, newsProject, validationForm, editorForm, newsForm, previewForm, newsList, newsWaveId, controls } = this;
     // tslint:disable-next-line:max-line-length
-    const payload = newsService.processNewsWavePayload(newsProject, validationForm, editorForm, newsForm, previewForm, newsList as unknown as News[], newsWaveId);
+    const payload = newsService.processNewsWavePayload(newsProject, validationForm, editorForm, newsForm, previewForm, newsList as unknown as News[], newsWaveId, controls);
     this.submit(payload, newsWaveId);
   }
 

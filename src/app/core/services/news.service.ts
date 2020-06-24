@@ -667,7 +667,8 @@ export class NewsService {
     newsForm: FormGroup,
     previewForm: FormGroup,
     newsList: News[],
-    newsWaveId: number
+    newsWaveId: number,
+    controls: FormArray
   ): UpdateNewsWavesPayload | CreateNewsWavesPayload {
     const newsCharacter = validationForm.controls.newsCharacter.value;
     const burstMethod = validationForm.controls.projectBurstMethod.value;
@@ -683,11 +684,11 @@ export class NewsService {
       content: previewForm.controls.previewText.value,
       attachments: editorForm.controls.attachments.value
     };
-    const newsInProject = newsList.map(news => ({
+    const newsInProject = newsList.map((news: News, i: number) => ({
       contractors: news.contractors,
       email: previewForm.controls.previewEmail.value,
       title: news.title,
-      content: news.content,
+      content: controls.at(i).get('previewText').value,
       attachments: news.attachments
     }));
 
