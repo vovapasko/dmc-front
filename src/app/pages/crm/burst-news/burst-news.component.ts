@@ -382,11 +382,11 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
    * Quill editor has been updated (process only text change)
    */
   public changedEditor(event): void {
-    if (event.event !== 'text-change') {
-      return;
-    }
-    const control = this.previewFormControls.previewText;
-    control.setValue(event.html);
+    // if (event.event !== 'text-change') {
+    //   return;
+    // }
+    // const control = this.previewFormControls.previewText;
+    // control.setValue(event.html);
   }
 
 

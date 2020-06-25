@@ -195,7 +195,7 @@ export class NewsEffects {
   updateNewsWave$ = this.actions$.pipe(
     ofType<UpdateNewsWave>(ENewsActions.UpdateNewsWave),
     switchMap((action: { payload: UpdateNewsWavesPayload }) => this.newsService.updateNewsWave(action.payload)),
-    switchMap((uploadData: any) => [
+    mergeMap((uploadData: any) => [
       new UpdateNewsWaveSuccess(uploadData.newsWave),
       new UploadFormationFile({data: uploadData.formationFormData}),
       ...uploadData.newsFormData.map(formData => new UploadNewsFile({data: formData})),
