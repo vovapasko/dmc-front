@@ -339,7 +339,8 @@ export class NewsService {
     formationFormData.append('wave_formation_id', newsWave.waveFormation.id);
     // @ts-ignore
     payload.data.waveFormation.attachments
-      .filter(file => file instanceof File)
+      // @ts-ignore
+      .filter(file => file instanceof File && !file.id)
       .forEach(file => formationFormData.append('file', file, file.name));
     return formationFormData;
   }
@@ -351,10 +352,11 @@ export class NewsService {
     return payload.data.newsInProject.map(news => {
       const formData = new FormData();
       // @ts-ignore
-      formData.append('news_id', newsWave.id);
+      formData.append('news_id', news.id);
       // @ts-ignore
       news.attachments
-        .filter(file => file instanceof File)
+        // @ts-ignore
+        .filter(file => file instanceof File && !file.id)
         .forEach(file => formData.append('file', file, file.name));
       return formData;
     });
@@ -767,8 +769,13 @@ export class NewsService {
   }
 
   public handleFiles(attachments: File[]) {
-    // @ts-ignore
-    return attachments.map(attachment => new File([""], attachment.file, {type: "text/plain"}))
+    return attachments.map(attachment => {
+      // @ts-ignore
+      const file = new File([""], attachment.file, {type: "text/plain"});
+      // @ts-ignore
+      file.id = attachment.id;
+      return file;
+    })
   }
 
   /**
