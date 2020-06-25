@@ -49,6 +49,7 @@ import { NewsProject } from '@models/instances/news-project';
 import { UserService } from './user.service';
 import { UploadNewsFilePayload } from '@models/payloads/news/news-waves/upload-file';
 import { DeleteNewsFilePayload } from '@models/payloads/news/news-waves/delete-file';
+import { newsFieldsHandler } from '@constants/news';
 
 const api = environment.api;
 
@@ -758,6 +759,7 @@ export class NewsService {
     validationForm.controls.projectTitle.setValue(newsWave.title);
     validationForm.controls.projectBudget.setValue(newsWave.budget);
     editorForm.controls.attachments.setValue(this.handleFiles(newsWave.waveFormation.attachments));
+    editorForm.controls.text.setValue(newsFieldsHandler.attachments(newsWave.waveFormation.attachments).join());
     previewForm.controls.previewEmail.setValue(newsWave.waveFormation.email);
     previewForm.controls.previewText.setValue(newsWave.waveFormation.content);
     const newsList = newsWave.newsInProject.map(el => new News(el.title, el.content, this.handleFiles(el.attachments), el.contractors, el.content, el.id));
