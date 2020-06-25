@@ -4,4 +4,5 @@ export interface WaveFormation {
   email: Email;
   content: string;
   attachments?: File[];
+  id: number;
 }

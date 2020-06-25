@@ -319,9 +319,15 @@ export class NewsService {
             // @ts-ignore
             .find(el => el.id === news.id).attachments
               // @ts-ignore
-              .find(newsAttachment => newsAttachment.id !== attachment.id).id)
+              .find(newsAttachment => newsAttachment.id !== attachment.id))
         // @ts-ignore
-      ).flat();
+      )
+      // @ts-ignore
+      .filter(el => el && el.id)
+      // @ts-ignore
+      .map(el => ({id: el.id}))
+      // @ts-ignore
+      .flat();
   }
 
   /**
@@ -330,7 +336,7 @@ export class NewsService {
   public collectUploadFormationFiles(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
     const formationFormData = new FormData();
     // @ts-ignore
-    formationFormData.append('news_id', newsWave.id);
+    formationFormData.append('wave_formation_id', newsWave.waveFormation.id);
     // @ts-ignore
     if (payload.data.waveFormation.attachments) {
       payload.data.waveFormation.attachments
@@ -358,9 +364,12 @@ export class NewsService {
 
   public collectDeleteFormationFiles(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
     return newsWave.waveFormation.attachments
-      .filter(attachment => !(attachment instanceof File) && payload.data.waveFormation.attachments.find(attachment))
       // @ts-ignore
-      .map(attachment => ({ id: attachment.id }));
+      .filter(attachment => !(attachment instanceof File) && attachment.id && payload.data.waveFormation.attachments
+        // @ts-ignore
+        .find(formationAttachment => formationAttachment.id !== attachment.id))
+      // @ts-ignore
+      .map(el => ({ id: el.id }));
   }
 
   /**
@@ -670,7 +679,8 @@ export class NewsService {
     previewForm: FormGroup,
     newsList: News[],
     newsWaveId: number,
-    controls: FormArray
+    controls: FormArray,
+    newsWave: NewsWaves
   ): UpdateNewsWavesPayload | CreateNewsWavesPayload {
     const newsCharacter = validationForm.controls.newsCharacter.value;
     const burstMethod = validationForm.controls.projectBurstMethod.value;
@@ -684,12 +694,13 @@ export class NewsService {
     const waveFormation = {
       email: previewForm.controls.previewEmail.value,
       content: previewForm.controls.previewText.value,
-      attachments: editorForm.controls.attachments.value
+      attachments: editorForm.controls.attachments.value,
+      id: newsWave ? newsWave.waveFormation.id : null
     };
     const newsInProject = newsList.map((news: News, i: number) => ({
       contractors: news.contractors,
       email: previewForm.controls.previewEmail.value,
-      title: news.title,
+      title: news.title || title,
       content: controls.at(i).get('previewText').value,
       attachments: controls.at(i).get('attachments').value,
       id: news.id

@@ -90,6 +90,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   focused = false;
   submitted = false;
   newsWaveId: number;
+  newsWave: NewsWaves;
   submitForm: boolean;
   emails$ = this.store.pipe(select(selectEmailsList));
   pairs = pairs;
@@ -415,9 +416,9 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
    * Submit or confirm button has been pressed
    */
   public onSubmit(): void {
-    const { newsService, newsProject, validationForm, editorForm, newsForm, previewForm, newsList, newsWaveId, controls } = this;
+    const { newsService, newsProject, validationForm, editorForm, newsForm, previewForm, newsList, newsWaveId, controls, newsWave } = this;
     // tslint:disable-next-line:max-line-length
-    const payload = newsService.processNewsWavePayload(newsProject, validationForm, editorForm, newsForm, previewForm, newsList as unknown as News[], newsWaveId, controls);
+    const payload = newsService.processNewsWavePayload(newsProject, validationForm, editorForm, newsForm, previewForm, newsList as unknown as News[], newsWaveId, controls, newsWave);
     this.submit(payload, newsWaveId);
   }
 
@@ -561,12 +562,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     const { newsList, controls } = newsService.setNewsWaveData(newsWave, validationForm, editorForm, newsForm, previewForm);
     this.newsList = newsList;
     this.controls = controls;
-    // newsList
-    //   .forEach((news: News, index: number) => Object.keys(newsFields)
-    //     .forEach(field => {
-    //       const control = this.getControl(index, field);
-    //       this.updatePreviewText(index, control);
-    //     }));
+    this.newsWave = newsWave;
   }
 
   /**
