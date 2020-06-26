@@ -4,6 +4,7 @@
 ### Angular ###
 ## Angular ##
 # compiled output
+.github
 dist/
 tmp/
 app/**/*.js
