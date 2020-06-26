@@ -550,6 +550,14 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     this.titleService.setTitle(title);
   }
 
+
+  /**
+   * Handle delete news
+   */
+  public onDeleteNews(index: number): void {
+    this.newsList.splice(index, 1);
+  }
+
   /**
    * Process news wave loaded from api, and set values from news wave to controls and form
    */

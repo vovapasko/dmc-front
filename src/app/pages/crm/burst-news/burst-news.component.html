@@ -466,11 +466,19 @@
                                         <div class="card">
 
                                             <div class="card-body">
-                                                <file-upload [formControl]="getControl(index, 'attachments')"
-                                                             (change)="updateField(index, 'attachments')"
-                                                             style="margin-bottom: 10px;"
-                                                             class="dropzone"
-                                                ></file-upload>
+                                                <div class="card-widgets">
+                                                    <a href="javascript:void(0);" (click)="onDeleteNews(index)">
+                                                        <i class="mdi mdi-close"></i>
+                                                    </a>
+                                                </div>
+                                                <div>
+                                                    <file-upload [formControl]="getControl(index, 'attachments')"
+                                                                 (change)="updateField(index, 'attachments')"
+                                                                 style="margin-bottom: 10px;"
+                                                                 class="dropzone"
+                                                    ></file-upload>
+                                                </div>
+
                                                 <input type="text"
                                                        placeholder="Введите заглавие"
                                                        [id]="'title' + index"
