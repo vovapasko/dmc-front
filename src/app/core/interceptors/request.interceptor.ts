@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
+  HttpClient,
   HttpErrorResponse,
   HttpEvent,
   HttpEventType,
@@ -7,7 +8,7 @@ import {
   HttpInterceptor,
   HttpRequest
 } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
 
 /**
@@ -16,9 +17,13 @@ import { catchError, finalize, tap } from 'rxjs/operators';
 @Injectable()
 export class RequestInterceptor implements HttpInterceptor {
 
+  constructor(private http: HttpClient) {
+  }
+
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let lastResponse: HttpEvent<any>;
     let error: HttpErrorResponse;
+
 
     return next.handle(request)
       .pipe(
@@ -31,13 +36,13 @@ export class RequestInterceptor implements HttpInterceptor {
         catchError((err: any) => {
           error = err;
           console.log('error response', err);
-          // TODO: error handling if required
           return throwError(err);
         }),
         finalize(() => {
           if (lastResponse.type === HttpEventType.Sent && !error) {
             // last response type was 0, and we haven't received an error
             console.log('aborted request');
+            return next.handle(request.clone());
           }
         })
       );
