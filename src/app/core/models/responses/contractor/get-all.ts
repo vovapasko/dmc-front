@@ -5,5 +5,6 @@ export interface GetAllContractorsResponse {
   message?: {
     message: string;
   };
-  data?: Contractor[];
+  results?: Contractor[];
+  count: number;
 }

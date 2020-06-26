@@ -11,10 +11,16 @@ export const selectContractors = createSelector(selectNews, (state: INewsState) 
 
 export const selectProject = createSelector(selectNews, (state: INewsState) => state.project);
 
-export const selectProjects = createSelector(selectNews, (state: INewsState) => state.projects);
+export const selectProjects = createSelector(selectNews, (state: INewsState) => state ?  state.projects : []);
 
 export const selectMethods = createSelector(selectNews, (state: INewsState) => state.methods);
 
 export const selectCharacters = createSelector(selectNews, (state: INewsState) => state.characters);
 
 export const selectFormats = createSelector(selectNews, (state: INewsState) => state.formats);
+
+export const selectFormatsList = createSelector(selectNews, (state: INewsState) => state.formatsList);
+
+export const selectNewsWavesList = createSelector(selectNews, (state: INewsState) => state.newsWaves);
+
+export const selectNewsWave = createSelector(selectNews, (state: INewsState) => state.newsWave);

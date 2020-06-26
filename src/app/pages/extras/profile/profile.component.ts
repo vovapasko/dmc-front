@@ -4,16 +4,17 @@ import { Title } from '@angular/platform-browser';
 import { Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 
-import { User } from '../../../core/models/instances/user.models';
-import { AuthenticationService } from '../../../core/services/auth.service';
-import { UserService } from '../../../core/services/user.service';
-import { LoadingService } from '../../../core/services/loading.service';
-import { ErrorService } from '../../../core/services/error.service';
-import { ResetPassword, UpdateProfile } from '../../../core/store/actions/user.actions';
-import { IAppState } from '../../../core/store/state/app.state';
-import { NotificationService } from '../../../core/services/notification.service';
-import { ServerError } from '../../../core/models/responses/server/error';
-import { Infos } from '../../../core/constants/notifications';
+import { User } from '@models/instances/user.models';
+import { AuthenticationService } from '@services/auth.service';
+import { UserService } from '@services/user.service';
+import { LoadingService } from '@services/loading.service';
+import { ErrorService } from '@services/error.service';
+import { ResetPassword, UpdateProfile } from '@store/actions/user.actions';
+import { IAppState } from '@store/state/app.state';
+import { NotificationService } from '@services/notification.service';
+import { ServerError } from '@models/responses/server/error';
+import { Infos } from '@constants/notifications';
+import { UpdateProfilePayload } from '@models/payloads/user/update-profile';
 
 /**
  * Profile component - handling the profile with sidebar and content
@@ -51,7 +52,7 @@ export class ProfileComponent implements OnInit {
   ngOnInit() {
     this.initSubscriptions();
     this.initForm();
-    this.initBreadCrumbs();
+    this.initBreadCrumbItems();
     this.setTitle(this.title);
   }
 
@@ -82,7 +83,7 @@ export class ProfileComponent implements OnInit {
     return this.profileForm.controls;
   }
 
-  initBreadCrumbs() {
+  initBreadCrumbItems() {
     this.breadCrumbItems = [
       { label: 'Главная', path: '/' },
       {
@@ -97,11 +98,11 @@ export class ProfileComponent implements OnInit {
    * Collects data and calls update method
    */
   onSubmit() {
-    this.submitted = true;
-    // stop here if form is invalid
-    if (this.profileForm.invalid) {
+    const profileForm = this.profileForm;
+    if (!profileForm || (profileForm && profileForm.invalid)) {
       return;
     }
+    this.submitted = true;
     this.submit();
   }
 
@@ -114,23 +115,26 @@ export class ProfileComponent implements OnInit {
     }
     formData.append('first_name', firstName);
     formData.append('last_name', lastName);
-    this.update(formData);
+    const payload = {data: formData} as unknown as UpdateProfilePayload;
+    this.update(payload);
   }
 
   /**
    * Upload new image to cropper
    */
   onFileChanges(files) {
-    this.avatarBase64 = files[0].base64;
-    const {type, title, message} = Infos.IMAGE_HAS_BEEN_LOADED;
-    this.notificationService.notify(type, title, message);
+    if(files && files.length) {
+      this.avatarBase64 = files[0].base64;
+      const {type, title, message} = Infos.IMAGE_HAS_BEEN_LOADED;
+      this.notificationService.notify(type, title, message);
+    }
   }
 
   /**
    * Update profile and set new values
    */
-  update(data) {
-    this.store.dispatch(new UpdateProfile({ data }));
+  update(payload: UpdateProfilePayload) {
+    this.store.dispatch(new UpdateProfile(payload));
   }
 
   /**

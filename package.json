@@ -1,6 +1,6 @@
 {
   "name": "dmc-front",
-  "version": "0.9.2-beta",
+  "version": "1.0.0-stable",
   "scripts": {
     "ng": "ng",
     "clean": "rimraf ./dist",
@@ -58,6 +58,7 @@
     "express": "^4.17.1",
     "lodash.camelcase": "^4.3.0",
     "lodash.clonedeep": "^4.5.0",
+    "lodash.flatmap": "^4.5.0",
     "lodash.mapkeys": "^4.6.0",
     "lodash.snakecase": "^4.1.1",
     "map-keys-deep-lodash": "^1.2.2",

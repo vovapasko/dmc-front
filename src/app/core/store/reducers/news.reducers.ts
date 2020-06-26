@@ -7,70 +7,101 @@ export const newsReducers = (state = initialNewsState, action: NewsActions): INe
     case ENewsActions.GetCharactersSuccess: {
       return {
         ...state,
-        characters: action.payload,
+        characters: action.payload
       };
     }
     case ENewsActions.GetFormatsSuccess: {
       return {
         ...state,
-        formats: action.payload,
+        formats: action.payload
       };
     }
     case ENewsActions.GetContractorsSuccess: {
       return {
         ...state,
-        contractors: action.payload,
+        contractors: action.payload
       };
     }
 
     case ENewsActions.GetHashtagsSuccess: {
       return {
         ...state,
-        hashtags: action.payload,
+        hashtags: action.payload
       };
     }
     case ENewsActions.GetMethodsSuccess: {
       return {
         ...state,
-        methods: action.payload,
+        methods: action.payload
       };
     }
     case ENewsActions.CreateFormatSuccess: {
       return {
         ...state,
-        formats: [...state.formats, action.payload],
+        formats: [...state.formats, action.payload]
       };
     }
     case ENewsActions.CreateHashtagSuccess: {
       return {
         ...state,
-        hashtags: [...state.hashtags, action.payload],
+        hashtags: [...state.hashtags, action.payload]
       };
     }
     case ENewsActions.CreateProjectSuccess: {
       return {
         ...state,
-        projects: [...state.projects, action.payload],
+        projects: [...state.projects, action.payload]
       };
     }
     case ENewsActions.GetProjectSuccess: {
       return {
         ...state,
-        project: action.payload,
+        project: action.payload
       };
     }
     case ENewsActions.GetProjectsSuccess: {
       return {
         ...state,
-        projects: action.payload,
+        projects: action.payload
       };
     }
     case ENewsActions.UpdateProjectSuccess: {
       return {
         ...state,
-        projects: state.projects.map((el) => (el.id === action.payload.id ? action.payload : el)),
+        projects: state.projects.map((el) => (el.id === action.payload.id ? action.payload : el))
       };
     }
+    case ENewsActions.GetPostFormatsSuccess:
+      return {
+        ...state,
+        formatsList: action.payload
+      };
+
+    case ENewsActions.GetNewsWavesSuccess:
+      return {
+        ...state,
+        newsWaves: action.payload
+      };
+    case ENewsActions.GetNewsWaveSuccess:
+      return {
+        ...state,
+        newsWave: action.payload
+      };
+    case ENewsActions.CreateNewsWaveSuccess:
+      return {
+        ...state,
+        newsWaves: [...state.newsWaves, action.payload]
+      };
+    case ENewsActions.UpdateNewsWaveSuccess:
+      return {
+        ...state,
+        newsWaves: state.newsWaves.map(el => el.id === action.payload.id ? action.payload : el)
+      };
+    case ENewsActions.DeleteNewsWaveSuccess:
+      return {
+        ...state,
+        newsWaves: state.newsWaves.filter(el => el.id !== action.payload.id)
+      };
     default:
       return state;
   }

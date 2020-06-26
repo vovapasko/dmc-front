@@ -26,7 +26,7 @@ const api = environment.api;
  */
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class ContractorService {
   selectedContractor$: BehaviorSubject<Contractor> = new BehaviorSubject(null);
@@ -39,7 +39,8 @@ export class ContractorService {
     private requestHandler: RequestHandler,
     public formBuilder: FormBuilder,
     private paginationService: PaginationService
-  ) {}
+  ) {
+  }
 
   get selectedContractor() {
     return this.selectedContractor$.getValue();
@@ -72,15 +73,20 @@ export class ContractorService {
   /**
    *  Get all users, api returns array of users
    */
-  public getAll(): Observable<Contractor[]> {
-    return this.requestHandler.request(`${api}/${endpoints.CONTRACTOR}/`, methods.GET, null, (response: GetAllContractorsResponse) => {
-      if (response && response.data) {
-        const contractors = response.data;
-        this.contractors = contractors;
-        this.applyPagination();
-        return contractors;
-      }
-    });
+  public getAll(page = 1): Observable<Contractor[]> {
+    return this.requestHandler.request(
+      `${api}/${endpoints.CONTRACTOR}/?page=${page}`,
+      methods.GET,
+      null,
+      (response: GetAllContractorsResponse) => {
+        if (response && response.results) {
+          const contractors = response.results;
+          this.contractors = contractors;
+          this.paginationService.totalSize = response.count;
+          this.paginationService.page = page;
+          return contractors;
+        }
+      });
   }
 
   /**
@@ -92,7 +98,6 @@ export class ContractorService {
         const contractors = this.contractors;
         const contractor = response.contractor;
         this.contractors = [...contractors, contractor];
-        this.applyPagination();
         return contractor;
       }
     });
@@ -110,7 +115,6 @@ export class ContractorService {
         if (response && response.contractor) {
           const contractor = response.contractor;
           this.contractors = this.contractors.map((el) => (+el.id === +contractor.id ? contractor : el));
-          this.applyPagination();
           return contractor;
         }
       }
@@ -129,7 +133,6 @@ export class ContractorService {
         if (response) {
           const contractors = this.contractors;
           this.contractors = contractors.filter((el) => +el.id !== +payload.id);
-          this.applyPagination();
           return payload;
         }
       }
@@ -183,12 +186,25 @@ export class ContractorService {
       phoneNumber: ['', [Validators.required, Validators.pattern('^\\+?3?8?(0\\d{9})$')]],
       email: [
         '',
-        [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$')],
+        [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$')]
         // [this.isEmailUnique.bind(this), this.isEmailValid.bind(this)]
-      ],
-      arrangedNews: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
-      onePostPrice: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
+      ]
     });
+  }
+
+  public initializeCreateFormatForm(): FormGroup {
+    return this.formBuilder.group({
+      postFormat: ['', [Validators.required, Validators.minLength(1)]],
+      newsAmount: [null, [Validators.required, Validators.minLength(1)]],
+      arrangedNews: [null, [Validators.required, Validators.minLength(1)]],
+      onePostPrice: [null, [Validators.required, Validators.minLength(1)]],
+    });
+  }
+
+  public initializeDeleteFormatForm(): FormGroup {
+    return this.formBuilder.group({
+      deletePostFormat: [null, Validators.required]
+    })
   }
 
   /**
@@ -199,10 +215,7 @@ export class ContractorService {
       updateEditorName: ['', [Validators.required, Validators.minLength(1)]],
       updateContactPerson: ['', [Validators.required, Validators.minLength(1)]],
       updatePhoneNumber: ['', [Validators.required, Validators.pattern('^\\+?3?8?(0\\d{9})$')]],
-      updateEmail: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$')]],
-      updateArrangedNews: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
-      updateOnePostPrice: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
-      updateNewsAmount: [0, [Validators.required, Validators.minLength(1), Validators.maxLength(numbers.million)]],
+      updateEmail: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$')]]
     });
   }
 
@@ -214,18 +227,7 @@ export class ContractorService {
     return of(contractor);
   }
 
-  public applyPagination(): void {
-    const { paginationService, contractors } = this;
-    paginationService.totalRecords = contractors;
-    paginationService.applyPagination();
-    // @ts-ignore
-    this.paginatedContractorData = paginationService.paginatedData;
-  }
-
   public onPageChange(page: number): void {
-    const { paginationService } = this;
-    paginationService.onPageChange(page);
-    // @ts-ignore
-    this.paginatedContractorData = paginationService.paginatedData;
+    this.getAll(page);
   }
 }

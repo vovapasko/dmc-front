@@ -83,42 +83,4 @@ export class PaginationService {
   set paginatedData(value: PaginationType[]) {
     this.paginatedData$.next(value);
   }
-
-  /**
-   * Pagination onpage change
-   * @param page show the page
-   */
-  public onPageChange(page: number): void {
-    const { pageSize, totalRecords } = this;
-    const startIndex = (page - 1) * pageSize;
-    const endIndex = startIndex + pageSize;
-    const paginatedData = totalRecords ? totalRecords.slice(startIndex, endIndex) : [];
-    this.changePage(page, startIndex, endIndex, paginatedData);
-  }
-
-  private changePage(page: number, startIndex: number, endIndex: number, paginatedData: PaginationType[]) {
-    this.page = page;
-    this.startIndex = startIndex;
-    this.endIndex = endIndex;
-    this.paginatedData = paginatedData;
-  }
-
-  /**
-   * Apply pagination
-   */
-  public applyPagination() {
-    const { pageSize, totalRecords } = this;
-    const startIndex = 0;
-    const endIndex = this.pageSize;
-    const totalSize = totalRecords ? totalRecords.length : numbers.pageSize;
-    const paginatedData = totalRecords ? totalRecords.slice(startIndex, endIndex) : [];
-    this.paginate(startIndex, endIndex, totalSize, paginatedData);
-  }
-
-  private paginate(startIndex, endIndex, totalSize, paginatedData) {
-    this.startIndex = startIndex;
-    this.endIndex = endIndex;
-    this.totalSize = totalSize;
-    this.paginatedData = paginatedData;
-  }
 }

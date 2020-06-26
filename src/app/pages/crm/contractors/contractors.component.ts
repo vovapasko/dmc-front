@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { FormGroup } from '@angular/forms';
-import { Store } from '@ngrx/store';
-
-import { Contractor } from '../../../core/models/instances/contractor';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { select, Store } from '@ngrx/store';
+import { Contractor, PostFormatListSet } from '../../../core/models/instances/contractor';
 import { ContractorService } from '../../../core/services/contractor.service';
 import { ErrorService } from '../../../core/services/error.service';
 import { LoadingService } from '../../../core/services/loading.service';
@@ -14,15 +13,27 @@ import {
   DeleteContractors,
   GetContractors,
   SelectContractor,
-  UpdateContractors,
+  UpdateContractors
 } from '../../../core/store/actions/contractor.actions';
 import { IAppState } from '../../../core/store/state/app.state';
 import { setValues } from '../../../core/helpers/utility';
 import { NotificationService } from '../../../core/services/notification.service';
 import { Infos, Warnings } from '../../../core/constants/notifications';
 import { ServerError } from '../../../core/models/responses/server/error';
-import { PaginationType } from '../../../core/constants/pagination';
+import { paginationTotalSize, PaginationType } from '../../../core/constants/pagination';
 import numbers from '../../../core/constants/numbers';
+import { Title } from '@angular/platform-browser';
+import { CreateContractorPayload } from '../../../core/models/payloads/contractor/create';
+import { UpdateContractorPayload } from '../../../core/models/payloads/contractor/update';
+import { selectContractorList } from '../../../core/store/selectors/contractor.selectors';
+
+import flatMap from 'lodash.flatmap';
+import { UpdatePostFormatPayload } from '../../../core/models/payloads/news/format/update-post-format';
+import { CreateFormat, DeleteFormat, GetPostFormats, UpdateFormat } from '../../../core/store/actions/news.actions';
+import { CreatePostFormatPayload } from '../../../core/models/payloads/news/format/create-post-format';
+import { selectFormats, selectFormatsList } from '../../../core/store/selectors/news.selectors';
+import { DeletePostFormatPayload } from '../../../core/models/payloads/news/format/delete-post-format';
+
 
 /**
  * Contractors component: handling the contractors with sidebar and content
@@ -31,19 +42,23 @@ import numbers from '../../../core/constants/numbers';
 @Component({
   selector: 'app-contractors',
   templateUrl: './contractors.component.html',
-  styleUrls: ['./contractors.component.scss'],
+  styleUrls: ['./contractors.component.scss']
 })
 export class ContractorsComponent implements OnInit {
+
+  title = 'Контрагенты';
   loading$: Subject<boolean>;
   error$: Subject<ServerError>;
 
   selectedContractor$: BehaviorSubject<Contractor> = new BehaviorSubject(null);
   checkedContractors$: BehaviorSubject<Array<Contractor>> = new BehaviorSubject([]);
-  paginatedContractorData$: BehaviorSubject<Array<Contractor>> = new BehaviorSubject([]);
 
-  totalRecords$: BehaviorSubject<Array<PaginationType>> = new BehaviorSubject<Array<PaginationType>>([]);
+  contractors$ = this.store.select(selectContractorList);
+  totalSize$: BehaviorSubject<number> = new BehaviorSubject<number>(paginationTotalSize);
   page$: BehaviorSubject<number> = new BehaviorSubject(1);
   pageSize$: BehaviorSubject<number> = new BehaviorSubject(10);
+
+  formats$ = this.store.pipe(select(selectFormatsList));
 
   breadCrumbItems: Array<{}>;
   submitted: boolean;
@@ -51,7 +66,12 @@ export class ContractorsComponent implements OnInit {
   editCheckedMode = false;
 
   createForm: FormGroup;
+  createFormatForm: FormGroup;
+  deleteFormatForm: FormGroup;
   updateForm: FormGroup;
+  controls: FormArray;
+
+  controlPlacement = {};
 
   constructor(
     private modalService: NgbModal,
@@ -60,47 +80,56 @@ export class ContractorsComponent implements OnInit {
     private loadingService: LoadingService,
     private paginationService: PaginationService,
     private store: Store<IAppState>,
-    private notificationService: NotificationService
-  ) {}
+    private notificationService: NotificationService,
+    private titleService: Title
+  ) {
+  }
 
   ngOnInit() {
     this.initSubscriptions();
     this.initBreadCrumbItems();
     this.initFormGroups();
+    this.setTitle(this.title);
+    this._fetchData();
   }
 
-  private initSubscriptions(): void {
+  public initSubscriptions(): void {
     this.loading$ = this.loadingService.loading$;
     this.error$ = this.errorService.error$;
-
     this.selectedContractor$ = this.contractorService.selectedContractor$;
     this.checkedContractors$ = this.contractorService.checkedContractors$;
-    this.paginatedContractorData$ = this.contractorService.paginatedContractorData$;
-
-    this.totalRecords$ = this.paginationService.totalRecords$;
+    this.totalSize$ = this.paginationService.totalSize$;
     this.page$ = this.paginationService.page$;
     this.pageSize$ = this.paginationService.pageSize$;
-
-    this.store.dispatch(new GetContractors());
   }
 
-  private initBreadCrumbItems(): void {
+  public initBreadCrumbItems(): void {
     this.breadCrumbItems = [
       { label: 'Главная', path: '/' },
       {
         label: 'Контрагенты',
         path: '/contractors',
-        active: true,
-      },
+        active: true
+      }
     ];
   }
 
   /**
    * Start init forms
    */
-  private initFormGroups(): void {
+  public initFormGroups(): void {
     this.initCreateForm();
     this.initUpdateForm();
+    this.initCreateFormatForm();
+    this.initDeleteFormatForm();
+  }
+
+  public initDeleteFormatForm(): void {
+    this.deleteFormatForm = this.contractorService.initializeDeleteFormatForm()
+  }
+
+  public initCreateFormatForm(): void {
+    this.createFormatForm = this.contractorService.initializeCreateFormatForm()
   }
 
   /**
@@ -114,7 +143,7 @@ export class ContractorsComponent implements OnInit {
   /**
    * Get validators from contractor service
    */
-  private initCreateForm(): void {
+  public initCreateForm(): void {
     this.createForm = this.contractorService.initializeCreateForm();
   }
 
@@ -135,7 +164,7 @@ export class ContractorsComponent implements OnInit {
   /**
    * Validators for Update Form
    */
-  private initUpdateForm(): void {
+  public initUpdateForm(): void {
     this.updateForm = this.contractorService.initializeUpdateForm();
   }
 
@@ -147,6 +176,14 @@ export class ContractorsComponent implements OnInit {
   // convenience getter for easy access to form fields
   get uf() {
     return this.updateForm.controls;
+  }
+
+  get cff() {
+    return this.createFormatForm.controls;
+  }
+
+  get dff() {
+    return this.deleteFormatForm.controls;
   }
 
   /**
@@ -164,7 +201,7 @@ export class ContractorsComponent implements OnInit {
   public openModal(content: string, editMany = false): void {
     const checkedContractors = this.contractorService.checkedContractors;
     if (editMany && checkedContractors.length === 0) {
-      const {type, title, message, timeout} = Warnings.NO_ELEMENTS_SELECTED;
+      const { type, title, message, timeout } = Warnings.NO_ELEMENTS_SELECTED;
       this.notificationService.notify(type, title, message, timeout);
       return;
     }
@@ -176,7 +213,8 @@ export class ContractorsComponent implements OnInit {
    */
   public addContractor(): void {
     const data = this.contractorService.createContractorData(this.cf, [{ news_amount: numbers.zero }]);
-    this.add(data);
+    const payload = { data } as unknown as CreateContractorPayload;
+    this.add(payload);
     this.modalService.dismissAll();
     this.createForm.reset();
   }
@@ -184,8 +222,8 @@ export class ContractorsComponent implements OnInit {
   /**
    * submit data
    */
-  public add(data): void {
-    this.store.dispatch(new CreateContractors({ data }));
+  public add(payload: CreateContractorPayload): void {
+    this.store.dispatch(new CreateContractors(payload));
   }
 
   /**
@@ -198,7 +236,7 @@ export class ContractorsComponent implements OnInit {
   /**
    * Update method, calls api
    */
-  public update(payload): void {
+  public update(payload: UpdateContractorPayload): void {
     this.store.dispatch(new UpdateContractors(payload));
   }
 
@@ -209,7 +247,7 @@ export class ContractorsComponent implements OnInit {
     const contractorService = this.contractorService;
     const data = contractorService.createContractorData(this.uf);
     const id = contractorService.selectedContractor.id;
-    const payload = { data, id };
+    const payload = { data, id } as unknown as UpdateContractorPayload;
     this.update(payload);
     this.modalService.dismissAll();
   }
@@ -230,9 +268,12 @@ export class ContractorsComponent implements OnInit {
   /**
    * Reset to init state
    */
-  private cleanAfterUpdate(): void {
+  public cleanAfterUpdate(): void {
     this.editCheckedMode = false;
     this.updateForm.reset();
+    this.createFormatForm.reset();
+    this.createForm.reset();
+    this.deleteFormatForm.reset();
     this.modalService.dismissAll();
     this.contractorService.checkedContractors = [];
   }
@@ -241,25 +282,54 @@ export class ContractorsComponent implements OnInit {
    * Handle processing with many items, delete or update
    */
   // tslint:disable-next-line:ban-types
-  private processMany(target: Array<Contractor>, payload: object, handler: Function): void {
+  public processMany(target: Array<Contractor>, data: object, handler: Function, alias:Array<{key: string, ali: string}> = []): void {
     const notificationService = this.notificationService;
-    const {type, title, message, timeout} = Infos.PROCESS_HAS_BEEN_STARTED;
+    const { type, title, message, timeout } = Infos.PROCESS_HAS_BEEN_STARTED;
     notificationService.notify(type, title, message, timeout);
-    this.handleProcessMany(target, payload, handler, timeout);
+    this.handleProcessMany(target, data, handler, timeout, alias);
   }
 
   // tslint:disable-next-line:ban-types
-  private handleProcessMany(target: Array<Contractor>, payload: object, handler: Function, time: number): void {
+  public handleProcessMany(target: Array<Contractor>, data: object, handler: Function, time: number, alias: Array<{key: string, ali: string}> = []): void {
     const interval = window.setInterval(() => {
       if (target.length) {
         const item = target.pop();
-        handler({ ...payload, id: item.id });
+        const payload = { ...data, id: item.id };
+        alias.forEach(al => payload[al.key] = item[al.ali])
+        handler(payload);
       } else {
-        const {type, title, message, timeout} = Infos.PROCESS_HAS_BEEN_FINISHED;
+        const { type, title, message, timeout } = Infos.PROCESS_HAS_BEEN_FINISHED;
         this.notificationService.notify(type, title, message, timeout);
         window.clearInterval(interval);
       }
     }, time);
+  }
+
+  public addNewFormats(): void {
+    const checkedContractors = this.contractorService.checkedContractors as unknown as Contractor[];
+    const payload = this.collectAddNewFormatsPayload();
+    const aliases = [{key: 'contractor', ali: 'id'}];
+    this.processMany(checkedContractors.slice(), payload, this.addFormats.bind(this), aliases);
+    this.cleanAfterUpdate();
+  }
+
+  public deleteFormats(): void {
+    const ids = this.deleteFormatForm.value.deletePostFormat.map(id => ({id}));
+    this.processMany(ids, {}, this.deleteFormat.bind(this));
+    this.cleanAfterUpdate();
+  }
+
+  public deleteFormat(payload: DeletePostFormatPayload): void {
+    this.store.dispatch(new DeleteFormat(payload));
+  }
+
+  public addFormats(data) {
+    const payload = {data} as unknown as CreatePostFormatPayload;
+    this.store.dispatch(new CreateFormat(payload));
+  }
+
+  public collectAddNewFormatsPayload(): CreatePostFormatPayload {
+    return this.contractorService.createContractorData(this.cff) as unknown as CreatePostFormatPayload;
   }
 
   /**
@@ -303,6 +373,13 @@ export class ContractorsComponent implements OnInit {
   }
 
   /**
+   * Set page title
+   */
+  public setTitle(title: string): void {
+    this.titleService.setTitle(title);
+  }
+
+  /**
    * Performs deleting all selected contractors
    */
   public deleteChecked(): void {
@@ -310,5 +387,78 @@ export class ContractorsComponent implements OnInit {
     const checkedContractors = contractorService.checkedContractors;
     this.processMany(checkedContractors.slice(), {}, this.delete.bind(this));
     contractorService.checkedContractors = [];
+  }
+
+  public getControl(id: number, field: string): FormControl {
+    if (field) {
+      const index = this.controlPlacement[id];
+      return this.controls.at(index).get(field) as FormControl;
+    }
+    return null;
+  }
+
+  public updateField(contractor: Contractor, field: string): void {
+    const postFormatListSet = contractor.postformatlistSet.slice();
+    const { timeout } = Infos.PROCESS_HAS_BEEN_FINISHED;
+    const updateFormats = this.updateFormats.bind(this);
+    const interval = window.setInterval(() => {
+      if (postFormatListSet.length) {
+        const el = postFormatListSet.pop();
+        const payload = this.collectFormatPayload(contractor, field, el);
+        if(payload) {
+          updateFormats(payload);
+        }
+      } else {
+        window.clearInterval(interval);
+      }
+    }, timeout);
+  }
+
+  public collectFormatPayload(contractor: Contractor, field: string, el: PostFormatListSet): null | UpdatePostFormatPayload {
+    const control = this.getControl(el.id, field);
+    if (control.valid && control.dirty) {
+      const data = {
+        id: el.id,
+        postFormat: el.postFormat,
+        contractor: contractor.id,
+        [field]: +control.value
+      }
+      const payload = {data} as UpdatePostFormatPayload;
+      payload.id = el.id;
+      return payload;
+    }
+    return null;
+  }
+
+  public updateFormats(payload: UpdatePostFormatPayload): void {
+    this.store.dispatch(new UpdateFormat(payload));
+  }
+
+  public initControls(contractors: Contractor[]): void {
+    const postFormatListSet = flatMap(contractors, (contractor) => contractor.postformatlistSet);
+    const toGroups = this.initControlsFormGroup(postFormatListSet);
+    this.controls = new FormArray(toGroups);
+  }
+
+  public initControlsFormGroup(list: PostFormatListSet[]): FormGroup[] {
+    return list.map((entity, i) => {
+      this.initControlPlacement(entity.id, i);
+      return new FormGroup({
+        onePostPrice: new FormControl(entity.onePostPrice, Validators.required),
+        newsAmount: new FormControl(entity.newsAmount, Validators.required),
+        arrangedNews: new FormControl(entity.arrangedNews, Validators.required)
+      });
+    });
+  }
+
+  public initControlPlacement(id: number, index: number) {
+    this.controlPlacement[id] = index;
+  }
+
+  public _fetchData(): void {
+    const store = this.store;
+    store.select(selectContractorList).subscribe(this.initControls.bind(this));
+    store.dispatch(new GetContractors());
+    store.dispatch(new GetPostFormats());
   }
 }

@@ -24,4 +24,5 @@ export interface Project {
   projectHashtags: Hashtag[];
   dateCreated?: Date;
   dateUpdated?: Date;
+  projectManager?: string;
 }

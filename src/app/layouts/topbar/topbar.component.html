@@ -150,6 +150,12 @@
           <i class="fe-hash mr-1"></i>
           <span>Создать хештег</span>
         </a>
+
+        <!-- item-->
+        <a routerLinkActive="active" (click)="openModal(createEmail)" class="dropdown-item">
+          <i class="fe-mail mr-1"></i>
+          <span>Создать почту</span>
+        </a>
       </div>
     </li>
   </ul>
@@ -224,6 +230,70 @@
             [ngClass]="{ 'is-invalid': submitted && cf.postFormat.errors }"
             id="post-format"
             placeholder="Введите название формата размещения"
+          />
+        </div>
+
+        <div class="text-right">
+          <button type="submit" class="btn btn-success">Сохранить</button>
+          <button type="button" class="btn btn-danger ml-1" (click)="modal('close click')">Отменить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #createEmail role="document" let-modal="close">
+  <div class="modal-header bg-dark">
+    <h4 class="modal-title text-white">Добавить почту</h4>
+    <button
+            type="button"
+            class="close text-white"
+            aria-label="Close"
+            id="createEmailModal"
+            (click)="modal('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body p-3">
+    <div class="text-left">
+      <form (ngSubmit)="submitCreateEmailForm()" [formGroup]="createEmailForm">
+        <app-ui-preloader [display]="loading$ | async"></app-ui-preloader>
+        <ngb-alert type="danger" *ngIf="error$ | async" [dismissible]="false">Пожалуйста, повторите попытку</ngb-alert>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+                  type="email"
+                  formControlName="email"
+                  class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && ce.email.errors }"
+                  id="email"
+                  placeholder="Введите почту"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="template">Шаблон</label>
+          <input
+                  type="text"
+                  formControlName="template"
+                  class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && ce.template.errors }"
+                  id="template"
+                  placeholder="Введите шаблон"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="signature">Подпись</label>
+          <input
+                  type="text"
+                  formControlName="signature"
+                  class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && ce.signature.errors }"
+                  id="signature"
+                  placeholder="Введите подпись"
           />
         </div>
 

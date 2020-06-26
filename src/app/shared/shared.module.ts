@@ -2,24 +2,28 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { UIModule } from './ui/ui.module';
-import { EditableComponent } from './editable/editable.component';
-import { EditModeDirective } from './directives/edit-mode.directive';
-import { EditableOnEnterDirective } from './directives/editable-on-enter.directive';
-import { ViewModeDirective } from './directives/view-mode.directive';
 import { AlifeFileToBase64Module } from 'alife-file-to-base64';
 import { ProjectStatusPipe } from './pipes/project-status.pipe';
+import { ContractorsCostPipe } from './pipes/contractors-cost.pipe';
+import { ContractorsNamesPipe } from './pipes/contractors-names.pipe';
+import { EditModeDirective } from './directives/edit-mode.directive';
+import { ViewModeDirective } from './directives/view-mode.directive';
+import { EditableOnEnterDirective } from './directives/editable-on-enter.directive';
+import { EditableComponent } from '../core/components/editable/editable.component';
 
 @NgModule({
-  declarations: [ProjectStatusPipe, EditableComponent, EditModeDirective, EditableOnEnterDirective, ViewModeDirective],
+  declarations: [ProjectStatusPipe, ContractorsCostPipe, ContractorsNamesPipe, EditModeDirective, ViewModeDirective, EditableOnEnterDirective, EditableComponent],
   imports: [CommonModule, UIModule, AlifeFileToBase64Module],
   exports: [
     UIModule,
     ProjectStatusPipe,
-    AlifeFileToBase64Module,
-    EditableComponent,
+    ContractorsCostPipe,
+    ContractorsNamesPipe,
     EditModeDirective,
-    EditableOnEnterDirective,
     ViewModeDirective,
+    EditableOnEnterDirective,
+    EditableComponent,
+    AlifeFileToBase64Module,
   ],
 })
 export class SharedModule {}

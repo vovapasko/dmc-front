@@ -44,7 +44,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let user of paginatedUserData$ | async | filter: term">
+                <tr *ngFor="let user of users$ | async | filter: term">
                   <td class="table-user">
                     <img [src]="user?.avatar" alt="table-user" class="mr-2 rounded-circle" />
                     <a href="javascript:void(0);" class="text-body font-weight-semibold" (click)="selectUser(user)">
@@ -118,7 +118,7 @@
               (pageChange)="onPageChange($event)"
               [pageSize]="pageSize$ | async"
               [page]="page$ | async"
-              [collectionSize]="(totalRecords$ | async)?.length"
+              [collectionSize]="totalSize$ | async"
             ></ngb-pagination>
           </ul>
         </div>

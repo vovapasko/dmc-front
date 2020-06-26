@@ -29,6 +29,8 @@ import { reducerProvider, reducerToken } from './core/store/reducers/app.reducer
 
 import { environment } from '../environments/environment';
 import { NewsEffects } from './core/store/effects/news.effects';
+import { ProjectEffects } from './core/store/effects/project.effects';
+import { RequestInterceptor } from './core/interceptors/request.interceptor';
 
 @NgModule({
   declarations: [AppComponent, Error404Component, Error500Component, NotificationComponent],
@@ -41,13 +43,14 @@ import { NewsEffects } from './core/store/effects/news.effects';
     LayoutsModule,
     AppRoutingModule,
     StoreModule.forRoot(reducerToken),
-    EffectsModule.forRoot([UserEffects, ContractorEffects, NewsEffects]),
+    EffectsModule.forRoot([UserEffects, ContractorEffects, NewsEffects, ProjectEffects]),
     StoreRouterConnectingModule.forRoot({ stateKey: 'router' }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   providers: [
     reducerProvider,
+    { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
