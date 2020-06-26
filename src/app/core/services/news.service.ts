@@ -348,11 +348,11 @@ export class NewsService {
   /**
    * Collects upload news files
    */
-  public collectUploadNewsFiles(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
-    return payload.data.newsInProject.map(news => {
+  public collectUploadNewsFiles(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload): FormData[] {
+    return payload.data.newsInProject.map((news: any, index: number) => {
       const formData = new FormData();
       // @ts-ignore
-      formData.append('news_id', news.id);
+      formData.append('news_id', news.id | newsWave.newsInProject[index].id);
       // @ts-ignore
       news.attachments
         // @ts-ignore
