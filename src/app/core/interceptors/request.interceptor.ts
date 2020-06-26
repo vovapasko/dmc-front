@@ -10,6 +10,7 @@ import {
 } from '@angular/common/http';
 import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
+import { LoadingService } from '@services/loading.service';
 
 /**
  * This interceptor for process requests from server in rxjs way
@@ -17,7 +18,7 @@ import { catchError, finalize, tap } from 'rxjs/operators';
 @Injectable()
 export class RequestInterceptor implements HttpInterceptor {
 
-  constructor(private http: HttpClient) {
+  constructor(private loadingScreenService: LoadingService) {
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -42,6 +43,7 @@ export class RequestInterceptor implements HttpInterceptor {
           if (lastResponse.type === HttpEventType.Sent && !error) {
             // last response type was 0, and we haven't received an error
             console.log('aborted request');
+            this.loadingScreenService.stopLoading();
             return next.handle(request.clone());
           }
         })
