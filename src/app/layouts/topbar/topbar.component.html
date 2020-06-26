@@ -64,7 +64,7 @@
         aria-haspopup="false"
         aria-expanded="false"
       >
-        <img [src]="(user$ | async).avatar" alt="user-image" class="rounded-circle" />
+        <img [src]="(user$ | async)?.avatar" alt="user-image" class="rounded-circle" />
         <span class="pro-user-name ml-1">
           {{ (user$ | async).firstName }}
           <i class="mdi mdi-chevron-down"></i>

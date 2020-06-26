@@ -14,40 +14,40 @@
           />
 
           <img
-            [src]="avatarBase64 || (user$ | async).avatar"
+            [src]="avatarBase64 || (user$ | async)?.avatar"
             class="rounded-circle avatar-xl img-thumbnail"
             alt="profile-image"
           />
         </label>
 
-        <h4 class="mb-0">{{ (user$ | async).firstName }} {{ (user$ | async).lastName }}</h4>
-        <p *ngIf="(user$ | async).isSuperuser" class="text-muted">@Superuser</p>
+        <h4 class="mb-0">{{ (user$ | async)?.firstName }} {{ (user$ | async)?.lastName }}</h4>
+        <p *ngIf="(user$ | async)?.isSuperuser" class="text-muted">@Superuser</p>
 
         <div class="text-left mt-3">
           <h4 class="font-13 text-uppercase">Обо мнe :</h4>
           <p class="text-muted mb-2 font-13">
             <strong>Полное имя :</strong>
-            <span class="ml-2">{{ (user$ | async).firstName }} {{ (user$ | async).lastName }}</span>
+            <span class="ml-2">{{ (user$ | async)?.firstName }} {{ (user$ | async)?.lastName }}</span>
           </p>
 
           <p class="text-muted mb-2 font-13">
             <strong>Дата регистрации :</strong
             ><span class="ml-2">
-              {{ (user$ | async).dateJoined | date: 'medium' }}
+              {{ (user$ | async)?.dateJoined | date: 'medium' }}
             </span>
           </p>
 
           <p class="text-muted mb-2 font-13">
             <strong>Последние обновления :</strong
             ><span class="ml-2">
-              {{ (user$ | async).dateUpdated | date: 'medium' }}
+              {{ (user$ | async)?.dateUpdated | date: 'medium' }}
             </span>
           </p>
 
           <p class="text-muted mb-2 font-13">
             <strong>Email :</strong>
             <span class="ml-2">
-              {{ (user$ | async).email }}
+              {{ (user$ | async)?.email }}
             </span>
           </p>
         </div>
@@ -75,13 +75,13 @@
                 type="text"
                 formControlName="firstName"
                 class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }"
+                [ngClass]="{ 'is-invalid': submitted && f?.firstName.errors }"
                 id="first-name"
                 placeholder="Введите ваше имя"
               />
 
-              <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
-                <div *ngIf="f.firstName.errors.required">Имя обязательно</div>
+              <div *ngIf="submitted && f?.firstName.errors" class="invalid-feedback">
+                <div *ngIf="f?.firstName.errors.required">Имя обязательно</div>
               </div>
             </div>
 
@@ -92,13 +92,13 @@
                 type="text"
                 formControlName="lastName"
                 class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }"
+                [ngClass]="{ 'is-invalid': submitted && f?.lastName.errors }"
                 id="last-name"
                 placeholder="Введите вашу фамилию"
               />
 
-              <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
-                <div *ngIf="f.lastName.errors.required">Фамилия обязательна</div>
+              <div *ngIf="submitted && f?.lastName.errors" class="invalid-feedback">
+                <div *ngIf="f?.lastName.errors.required">Фамилия обязательна</div>
               </div>
             </div>
 
