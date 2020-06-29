@@ -228,6 +228,9 @@ export class UserService {
   }
 
   public belongToManage(user: User): boolean {
+    if (!user) {
+      return;
+    }
     return !!user.groups.find((group) => ManageGroups.indexOf(group.name) !== -1);
   }
 

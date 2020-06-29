@@ -121,11 +121,6 @@ describe('UsersComponent', () => {
     expect(component.belongToManage(user)).toBeFalsy();
   });
 
-  it('should initSelectOptions', () => {
-    component.initSelectOptions()
-    expect(component.selectValue).toBeTruthy();
-  });
-
   it('should initForm', () => {
     component.initForm();
     expect(component.validationform).toBeTruthy();

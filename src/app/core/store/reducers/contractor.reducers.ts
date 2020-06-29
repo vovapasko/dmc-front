@@ -2,7 +2,7 @@ import { ContractorActions, EContractorActions } from '../actions/contractor.act
 import { IContractorState, initialContractorState } from '../state/contractor.state';
 
 export const contractorReducers = (state = initialContractorState, action: ContractorActions): IContractorState => {
-  console.log(action);
+  // console.log(action);
   switch (action.type) {
     case EContractorActions.CreateContractorsSuccess:
       return {

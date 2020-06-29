@@ -23,7 +23,7 @@ export class ResponseHandler {
     if (response && response.success) {
       const message = response.message ? response.message.message : '';
       const title = 'success';
-      return this.notificationService.notify(NotificationType.success, title, message);
+      // return this.notificationService.notify(NotificationType.success, title, message);
     }
     // clear any errors
     this.errorService.clear();

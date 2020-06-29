@@ -19,8 +19,8 @@ export class LoadingInterceptor {
   constructor(private loadingScreenService: LoadingService) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log('loading...');
-    console.log(dmc);
+    // console.log('loading...');
+    // console.log(dmc);
 
     if (this.activeRequests === 0) {
       this.loadingScreenService.startLoading();

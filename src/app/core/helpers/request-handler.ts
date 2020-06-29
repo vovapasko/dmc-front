@@ -42,7 +42,7 @@ export class RequestHandler {
           return mapHandler(convertedCaseResponse);
         },
         (error) => {
-          console.log(error);
+          // console.log(error);
         }
       )
     );
