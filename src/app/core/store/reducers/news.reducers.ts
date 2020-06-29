@@ -2,7 +2,6 @@ import { INewsState, initialNewsState } from '../state/news.state';
 import { ENewsActions, NewsActions } from '../actions/news.actions';
 
 export const newsReducers = (state = initialNewsState, action: NewsActions): INewsState => {
-  console.log(action);
   switch (action.type) {
     case ENewsActions.GetCharactersSuccess: {
       return {

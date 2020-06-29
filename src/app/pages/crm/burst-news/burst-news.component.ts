@@ -375,7 +375,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
    */
   public created(event): void {
     // tslint:disable-next-line:no-console
-    console.log('editor-created', event);
+    // console.log('editor-created', event);
   }
 
   /**
@@ -467,11 +467,11 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   public onChangeDistributionFiles(control: FormControl) {
-    console.log(control);
+    // console.log(control);
   }
 
   public onChangeFormationFiles(event): void {
-    console.log(event);
+    // console.log(event);
   }
 
   /**

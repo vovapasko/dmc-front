@@ -3,7 +3,7 @@ import { UserActions } from '../actions/user.actions';
 import { initialUserState, IUserState } from '../state/user.state';
 
 export const userReducers = (state = initialUserState, action: UserActions): IUserState => {
-  console.log(action);
+  // console.log(action);
   switch (action.type) {
     case EUserActions.GetUsersSuccess: {
       return {
