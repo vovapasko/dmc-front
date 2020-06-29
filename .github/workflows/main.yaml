@@ -3,7 +3,7 @@ name: Publish on Docker Hub and Deploy
 on:
   push:
     branches:
-      - develop
+      - master
 
 jobs:
   run_tests:
