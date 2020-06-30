@@ -24,7 +24,7 @@
                                             ngbDropdownToggle
                                             aria-expanded="false"
                                     >
-                                        <i class="mdi mdi-dots-horizontal m-0 text-muted h3"></i>
+                                        <i class="mdi mdi-dots-vertical m-0 text-muted h3"></i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
                                         <!-- item-->
@@ -288,6 +288,7 @@
                     />
                     <span class="font-13 text-muted">e.g "380992314525"</span>
                     <div *ngIf="submitted && cf.phoneNumber.errors" class="invalid-feedback">
+                        <div *ngIf="cf.phoneNumber.errors.required">Введите номер</div>
                         <div *ngIf="cf.phoneNumber.errors.pattern">Введите корректный номер</div>
                     </div>
                 </div>

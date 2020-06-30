@@ -4,26 +4,26 @@ import { select, Store } from '@ngrx/store';
 import { FormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { AuthenticationService } from '../../../core/services/auth.service';
-import { UserService } from '../../../core/services/user.service';
-import { User } from '../../../core/models/instances/user.models';
-import { IAppState } from '../../../core/store/state/app.state';
-import { CreateUser, DeleteUser, GetUsers, SelectUser, UpdateUser } from '../../../core/store/actions/user.actions';
-import { PaginationService } from '../../../core/services/pagination.service';
-import { LoadingService } from '../../../core/services/loading.service';
-import { ErrorService } from '../../../core/services/error.service';
-import { Groups } from '../../../core/models/instances/groups';
-import { RegisterPayload } from '../../../core/models/payloads/user/register';
-import { ServerError } from '../../../core/models/responses/server/error';
+import { AuthenticationService } from '@services/auth.service';
+import { UserService } from '@services/user.service';
+import { User } from '@models/instances/user.models';
+import { IAppState } from '@store/state/app.state';
+import { CreateUser, DeleteUser, GetUsers, SelectUser, UpdateUser } from '@store/actions/user.actions';
+import { PaginationService } from '@services/pagination.service';
+import { LoadingService } from '@services/loading.service';
+import { ErrorService } from '@services/error.service';
+import { Groups } from '@models/instances/groups';
+import { RegisterPayload } from '@models/payloads/user/register';
+import { ServerError } from '@models/responses/server/error';
 import {
   paginationPage,
   paginationPageSize,
   paginationTotalSize,
   PaginationType
-} from '../../../core/constants/pagination';
+} from '@constants/pagination';
 import { Title } from '@angular/platform-browser';
-import { selectProjects } from '../../../core/store/selectors/news.selectors';
-import { selectUserList } from '../../../core/store/selectors/user.selectors';
+import { selectUserList } from '@store/selectors/user.selectors';
+import { breadCrumbs } from '@constants/bread-crumbs';
 
 /**
  * Users component - handling the users with sidebar and content
@@ -32,11 +32,11 @@ import { selectUserList } from '../../../core/store/selectors/user.selectors';
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
-  styleUrls: ['./users.component.scss'],
+  styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit {
-  
-  title = 'Пользователи'
+
+  title = 'Пользователи';
   breadCrumbItems: Array<{}>;
   manage = false;
   loading$: Subject<boolean>;
@@ -65,7 +65,8 @@ export class UsersComponent implements OnInit {
     private loadingService: LoadingService,
     private errorService: ErrorService,
     private titleService: Title
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.initBreadCrumbItems();
@@ -92,14 +93,7 @@ export class UsersComponent implements OnInit {
   }
 
   public initBreadCrumbItems(): void {
-    this.breadCrumbItems = [
-      { label: 'Главная', path: '/' },
-      {
-        label: 'Пользователи',
-        path: '/contractors',
-        active: true,
-      },
-    ];
+    this.breadCrumbItems = breadCrumbs.users;
   }
 
   /**
@@ -144,14 +138,18 @@ export class UsersComponent implements OnInit {
    */
   public registerNewUser(): void {
     this.submitted = true;
-    if(this.validationform) {
-      const email = this.validationform.get('email').value as string;
-      const group = (this.selectedRole as unknown) as Groups;
-      const data = { email, group };
 
-      this.register({ data });
-      this.modalService.dismissAll();
+    if (!this.validationform || (this.validationform && this.validationform.invalid) || !this.selectedRole) {
+      return;
     }
+
+    const email = this.validationform.get('email').value as string;
+    const group = (this.selectedRole as unknown) as Groups;
+    const data = { email, group };
+
+    this.register({ data });
+    this.modalService.dismissAll();
+    this.submitted = false;
   }
 
   public register(payload: RegisterPayload): void {
