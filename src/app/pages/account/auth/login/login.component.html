@@ -55,10 +55,9 @@
                       <span *ngIf="visible" class="input-group-text"><i class="mdi mdi-eye-off"></i></span>
                     </a>
                   </div>
-                </div>
-
-                <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                  <div *ngIf="f.password.errors.required">Пароль обязателен</div>
+                  <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                    <div *ngIf="f.password.errors.required">Пароль обязателен</div>
+                  </div>
                 </div>
               </div>
 
