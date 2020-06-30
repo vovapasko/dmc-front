@@ -3,36 +3,36 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
-import { Contractor, PostFormatListSet } from '../../../core/models/instances/contractor';
-import { ContractorService } from '../../../core/services/contractor.service';
-import { ErrorService } from '../../../core/services/error.service';
-import { LoadingService } from '../../../core/services/loading.service';
-import { PaginationService } from '../../../core/services/pagination.service';
+import { Contractor, PostFormatListSet } from '@models/instances/contractor';
+import { ContractorService } from '@services/contractor.service';
+import { ErrorService } from '@services/error.service';
+import { LoadingService } from '@services/loading.service';
+import { PaginationService } from '@services/pagination.service';
 import {
   CreateContractors,
   DeleteContractors,
   GetContractors,
   SelectContractor,
   UpdateContractors
-} from '../../../core/store/actions/contractor.actions';
-import { IAppState } from '../../../core/store/state/app.state';
+} from '@store/actions/contractor.actions';
+import { IAppState } from '@store/state/app.state';
 import { setValues } from '../../../core/helpers/utility';
-import { NotificationService } from '../../../core/services/notification.service';
-import { Infos, Warnings } from '../../../core/constants/notifications';
-import { ServerError } from '../../../core/models/responses/server/error';
-import { paginationTotalSize, PaginationType } from '../../../core/constants/pagination';
+import { NotificationService } from '@services/notification.service';
+import { Infos, Warnings } from '@constants/notifications';
+import { ServerError } from '@models/responses/server/error';
+import { paginationTotalSize, PaginationType } from '@constants/pagination';
 import numbers from '../../../core/constants/numbers';
 import { Title } from '@angular/platform-browser';
-import { CreateContractorPayload } from '../../../core/models/payloads/contractor/create';
-import { UpdateContractorPayload } from '../../../core/models/payloads/contractor/update';
-import { selectContractorList } from '../../../core/store/selectors/contractor.selectors';
-
+import { CreateContractorPayload } from '@models/payloads/contractor/create';
+import { UpdateContractorPayload } from '@models/payloads/contractor/update';
+import { selectContractorList } from '@store/selectors/contractor.selectors';
 import flatMap from 'lodash.flatmap';
-import { UpdatePostFormatPayload } from '../../../core/models/payloads/news/format/update-post-format';
-import { CreateFormat, DeleteFormat, GetPostFormats, UpdateFormat } from '../../../core/store/actions/news.actions';
-import { CreatePostFormatPayload } from '../../../core/models/payloads/news/format/create-post-format';
-import { selectFormats, selectFormatsList } from '../../../core/store/selectors/news.selectors';
-import { DeletePostFormatPayload } from '../../../core/models/payloads/news/format/delete-post-format';
+import { UpdatePostFormatPayload } from '@models/payloads/news/format/update-post-format';
+import { CreateFormat, DeleteFormat, GetPostFormats, UpdateFormat } from '@store/actions/news.actions';
+import { CreatePostFormatPayload } from '@models/payloads/news/format/create-post-format';
+import { selectFormats, selectFormatsList } from '@store/selectors/news.selectors';
+import { DeletePostFormatPayload } from '@models/payloads/news/format/delete-post-format';
+import { breadCrumbs } from '@constants/bread-crumbs';
 
 
 /**
@@ -104,14 +104,7 @@ export class ContractorsComponent implements OnInit {
   }
 
   public initBreadCrumbItems(): void {
-    this.breadCrumbItems = [
-      { label: 'Главная', path: '/' },
-      {
-        label: 'Контрагенты',
-        path: '/contractors',
-        active: true
-      }
-    ];
+    this.breadCrumbItems = breadCrumbs.contractors;
   }
 
   /**
@@ -276,6 +269,7 @@ export class ContractorsComponent implements OnInit {
     this.deleteFormatForm.reset();
     this.modalService.dismissAll();
     this.contractorService.checkedContractors = [];
+    this.submitted = false;
   }
 
   /**

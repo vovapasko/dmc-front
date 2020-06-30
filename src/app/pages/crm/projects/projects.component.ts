@@ -1,43 +1,46 @@
 import { Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { IAppState } from '../../../core/store/state/app.state';
-import { selectContractors, selectHashtags, selectProjects } from '../../../core/store/selectors/news.selectors';
+import { IAppState } from '@store/state/app.state';
+import { selectHashtags } from '@store/selectors/news.selectors';
 import { Router } from '@angular/router';
-import { ErrorService } from '../../../core/services/error.service';
-import { LoadingService } from '../../../core/services/loading.service';
+import { ErrorService } from '@services/error.service';
+import { LoadingService } from '@services/loading.service';
 import { Subject } from 'rxjs';
 import images from '../../../core/constants/images';
-import { Orders } from '../../../core/constants/orders';
-import { ServerError } from '../../../core/models/responses/server/error';
-import { urls } from '../../../core/constants/urls';
-import { GetProjectConfiguration, GetProjects } from '../../../core/store/actions/news.actions';
+import { Orders } from '@constants/orders';
+import { ServerError } from '@models/responses/server/error';
+import { urls } from '@constants/urls';
+import { GetProjectConfiguration } from '@store/actions/news.actions';
 import { Title } from '@angular/platform-browser';
 import { FormGroup } from '@angular/forms';
-import { ProjectService } from '../../../core/services/project.service';
-import { selectUserList } from '../../../core/store/selectors/user.selectors';
-import { GetUsers } from '../../../core/store/actions/user.actions';
-import { selectContractorList } from '../../../core/store/selectors/contractor.selectors';
-import { GetContractors } from '../../../core/store/actions/contractor.actions';
+import { ProjectService } from '@services/project.service';
+import { selectUserList } from '@store/selectors/user.selectors';
+import { GetUsers } from '@store/actions/user.actions';
+import { selectContractorList } from '@store/selectors/contractor.selectors';
+import { GetContractors } from '@store/actions/contractor.actions';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
   selectEmailsList,
   selectNewsProject,
   selectProjectsList
-} from '../../../core/store/selectors/project.selectors';
+} from '@store/selectors/project.selectors';
 import {
-  CreateNewsProject, DeleteNewsProject,
+  CreateNewsProject,
+  DeleteNewsProject,
   GetEmails,
   GetNewsProject,
-  GetNewsProjects, UpdateNewsProject
-} from '../../../core/store/actions/project.actions';
-import { CreateNewsProjectPayload } from '../../../core/models/payloads/project/news-project/create';
-import { NewsProject } from '../../../core/models/instances/news-project';
-import { UpdateNewsProjectPayload } from '../../../core/models/payloads/project/news-project/update';
+  GetNewsProjects,
+  UpdateNewsProject
+} from '@store/actions/project.actions';
+import { CreateNewsProjectPayload } from '@models/payloads/project/news-project/create';
+import { NewsProject } from '@models/instances/news-project';
+import { UpdateNewsProjectPayload } from '@models/payloads/project/news-project/update';
+import { breadCrumbs } from '@constants/bread-crumbs';
 
 @Component({
   selector: 'app-projects',
   templateUrl: './projects.component.html',
-  styleUrls: ['./projects.component.scss'],
+  styleUrls: ['./projects.component.scss']
 })
 
 /**
@@ -46,11 +49,10 @@ import { UpdateNewsProjectPayload } from '../../../core/models/payloads/project/
 export class ProjectsComponent implements OnInit {
 
   // bread crumb items
-  title = 'Проекты'
+  title = 'Проекты';
   breadCrumbItems: Array<{}>;
   loading$: Subject<boolean>;
   error$: Subject<ServerError>;
-  noImage = images.defaultImage;
   orders = Orders;
   order = null;
   createProjectForm: FormGroup;
@@ -71,8 +73,9 @@ export class ProjectsComponent implements OnInit {
     private loadingService: LoadingService,
     private titleService: Title,
     private projectService: ProjectService,
-    private modalService: NgbModal,
-  ) {}
+    private modalService: NgbModal
+  ) {
+  }
 
   ngOnInit() {
     this.initBreadCrumbItems();
@@ -95,13 +98,22 @@ export class ProjectsComponent implements OnInit {
     this.editProjectForm = this.projectService.initializeEditProjectForm(project);
   }
 
-  get f () {
+  get f() {
     return this.createProjectForm.controls;
   }
 
+  get fe() {
+    return this.editProjectForm.controls;
+  }
+
   public addNewProject(): void {
+    this.submitted = true;
+
+    if (this.createProjectForm.invalid) {
+      return;
+    }
     const data = this.createProjectForm.value;
-    const payload = {data} as unknown as CreateNewsProjectPayload;
+    const payload = { data } as unknown as CreateNewsProjectPayload;
     this.createNewsProject(payload);
     this.cleanAfter();
   }
@@ -115,14 +127,12 @@ export class ProjectsComponent implements OnInit {
     this.editProjectForm.reset();
     this.projectId = null;
     this.modalService.dismissAll();
+    this.submitted = false;
   }
 
   public initBreadCrumbItems(): void {
     // tslint:disable-next-line: max-line-length
-    this.breadCrumbItems = [
-      { label: 'Главная', path: '/' },
-      { label: 'Проекты', path: '/crm/projects' },
-    ];
+    this.breadCrumbItems = breadCrumbs.projects;
   }
 
   public initSubscriptions(): void {
@@ -135,21 +145,27 @@ export class ProjectsComponent implements OnInit {
   }
 
   public onChange(id: number): void {
-    const payload = {id};
+    const payload = { id };
     this.projectId = id;
     this.store.select(selectNewsProject).subscribe(this.initEditProjectForm.bind(this));
     this.store.dispatch(new GetNewsProject(payload));
   }
 
   public onDelete(id: number): void {
-    const payload = {id};
+    const payload = { id };
     this.store.dispatch(new DeleteNewsProject(payload));
   }
 
   public editProject(): void {
+    this.submitted = true;
+
+    if (this.editProjectForm.invalid) {
+      return;
+    }
+
     const data = this.editProjectForm.value;
     const id = this.projectId;
-    const payload = {id, data} as unknown as UpdateNewsProjectPayload;
+    const payload = { id, data } as unknown as UpdateNewsProjectPayload;
     this.updateProject(payload);
     this.cleanAfter();
   }
