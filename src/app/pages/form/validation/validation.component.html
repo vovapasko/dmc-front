@@ -20,10 +20,10 @@
                 formControlName="firstName"
                 placeholder="First name"
                 value="Mark"
-                [ngClass]="{ 'is-valid': submit && form.firstName.errors }"
+                [ngClass]="{ 'is-valid': submit && form?.firstName.errors }"
               />
-              <div *ngIf="submit && form.firstName.errors" class="valid-feedback">
-                <span *ngIf="form.firstName.errors.required">Looks good!</span>
+              <div *ngIf="submit && form?.firstName.errors" class="valid-feedback">
+                <span *ngIf="form?.firstName.errors.required">Looks good!</span>
               </div>
             </div>
             <div class="form-group position-relative mb-3">
@@ -127,10 +127,10 @@
                 formControlName="firstName"
                 placeholder="First name"
                 value="Mark"
-                [ngClass]="{ 'is-valid': formsubmit && formData.firstName.errors }"
+                [ngClass]="{ 'is-valid': formsubmit && formData?.firstName.errors }"
               />
-              <div *ngIf="formsubmit && formData.firstName.errors" class="valid-tooltip">
-                <span *ngIf="formData.firstName.errors.required">Looks good!</span>
+              <div *ngIf="formsubmit && formData?.firstName.errors" class="valid-tooltip">
+                <span *ngIf="formData?.firstName.errors.required">Looks good!</span>
               </div>
             </div>
             <div class="form-group position-relative mb-3">

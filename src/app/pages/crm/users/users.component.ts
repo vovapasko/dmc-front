@@ -32,11 +32,11 @@ import { selectUserList } from '../../../core/store/selectors/user.selectors';
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
-  styleUrls: ['./users.component.scss'],
+  styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit {
-  
-  title = 'Пользователи'
+
+  title = 'Пользователи';
   breadCrumbItems: Array<{}>;
   manage = false;
   loading$: Subject<boolean>;
@@ -65,7 +65,8 @@ export class UsersComponent implements OnInit {
     private loadingService: LoadingService,
     private errorService: ErrorService,
     private titleService: Title
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.initBreadCrumbItems();
@@ -97,8 +98,8 @@ export class UsersComponent implements OnInit {
       {
         label: 'Пользователи',
         path: '/contractors',
-        active: true,
-      },
+        active: true
+      }
     ];
   }
 
@@ -144,14 +145,18 @@ export class UsersComponent implements OnInit {
    */
   public registerNewUser(): void {
     this.submitted = true;
-    if(this.validationform) {
-      const email = this.validationform.get('email').value as string;
-      const group = (this.selectedRole as unknown) as Groups;
-      const data = { email, group };
 
-      this.register({ data });
-      this.modalService.dismissAll();
+    if (!this.validationform || (this.validationform && this.validationform.invalid) || !this.selectedRole) {
+      return;
     }
+
+    const email = this.validationform.get('email').value as string;
+    const group = (this.selectedRole as unknown) as Groups;
+    const data = { email, group };
+
+    this.register({ data });
+    this.modalService.dismissAll();
+
   }
 
   public register(payload: RegisterPayload): void {
