@@ -30,7 +30,7 @@ import { CreateEmail } from '../../core/store/actions/project.actions';
 @Component({
   selector: 'app-topbar',
   templateUrl: './topbar.component.html',
-  styleUrls: ['./topbar.component.scss'],
+  styleUrls: ['./topbar.component.scss']
 })
 export class TopbarComponent implements OnInit {
   notificationHistory$ = new BehaviorSubject<unknown>([]);
@@ -60,7 +60,8 @@ export class TopbarComponent implements OnInit {
     private modalService: NgbModal,
     private store: Store<IAppState>,
     private projectService: ProjectService
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.initFormGroups();
@@ -107,16 +108,17 @@ export class TopbarComponent implements OnInit {
   }
 
   public submit(form: FormGroup, handler, payload: CreateHashtagPayload | CreatePostsFormatPayload | CreateEmailPayload): void {
-    if(form) {
-      this.submitted = true;
-      if (form && form.invalid) {
-        return;
-      }
-      handler(payload);
-      this.submitted = false;
-      form.reset();
-      this.modalService.dismissAll();
+    this.submitted = true;
+
+    if (form && form.invalid) {
+      return;
     }
+
+    handler(payload);
+    this.submitted = false;
+    form.reset();
+    this.modalService.dismissAll();
+    this.submitted = false;
   }
 
   public createHashtag(payload: CreateHashtagPayload): void {
@@ -127,13 +129,13 @@ export class TopbarComponent implements OnInit {
     const cf = this.cf;
     const postFormat = cf.postFormat.value;
     const data = { postFormat };
-    const payload = {data} as unknown as CreatePostsFormatPayload;
+    const payload = { data } as unknown as CreatePostsFormatPayload;
     this.submit(this.createFormatForm, this.createFormat.bind(this), payload);
   }
 
   public submitCreateEmailForm(): void {
     const data = this.createEmailForm.value;
-    const payload = {data} as unknown as CreateEmailPayload;
+    const payload = { data } as unknown as CreateEmailPayload;
     this.submit(this.createEmailForm, this.createEmail.bind(this), payload);
   }
 
@@ -159,7 +161,6 @@ export class TopbarComponent implements OnInit {
   get cf(): { [p: string]: AbstractControl } {
     return this.createFormatForm.controls;
   }
-
 
 
   /**
