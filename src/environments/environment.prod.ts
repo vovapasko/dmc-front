@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  api: 'https://dmc-backend.herokuapp.com',
+  api: 'http://dmc-env.eba-zhevtpdu.eu-west-2.elasticbeanstalk.com',
 };
