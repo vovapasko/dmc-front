@@ -23,7 +23,7 @@ import { UpdateProfilePayload } from '@models/payloads/user/update-profile';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss'],
+  styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
   breadCrumbItems: Array<{}>;
@@ -47,7 +47,8 @@ export class ProfileComponent implements OnInit {
     private errorService: ErrorService,
     private store: Store<IAppState>,
     private notificationService: NotificationService
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.initSubscriptions();
@@ -89,8 +90,8 @@ export class ProfileComponent implements OnInit {
       {
         label: 'Профиль',
         path: '/profile',
-        active: true,
-      },
+        active: true
+      }
     ];
   }
 
@@ -108,6 +109,7 @@ export class ProfileComponent implements OnInit {
 
   submit() {
     const { firstName, lastName } = this.profileForm.value;
+    const currentUser = this.userService.loadCurrentUser();
     const avatar = this.avatar;
     const formData = new FormData();
     if (avatar) {
@@ -115,7 +117,7 @@ export class ProfileComponent implements OnInit {
     }
     formData.append('first_name', firstName);
     formData.append('last_name', lastName);
-    const payload = {data: formData} as unknown as UpdateProfilePayload;
+    const payload = { data: formData, id: currentUser.id} as unknown as UpdateProfilePayload;
     this.update(payload);
   }
 
@@ -123,9 +125,9 @@ export class ProfileComponent implements OnInit {
    * Upload new image to cropper
    */
   onFileChanges(files) {
-    if(files && files.length) {
+    if (files && files.length) {
       this.avatarBase64 = files[0].base64;
-      const {type, title, message} = Infos.IMAGE_HAS_BEEN_LOADED;
+      const { type, title, message } = Infos.IMAGE_HAS_BEEN_LOADED;
       this.notificationService.notify(type, title, message);
     }
   }

@@ -5,28 +5,28 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { environment } from '../../../environments/environment';
-import { User } from '../models/instances/user.models';
-import { SignupResponse } from '../models/responses/user/signup';
-import { RegisterResponse } from '../models/responses/user/register';
-import { ResetPassword } from '../models/responses/user/reset-password';
-import { ConfirmResetPasswordResponse } from '../models/responses/user/confirm-reset-password';
-import { UpdateProfileResponse } from '../models/responses/user/update-profile';
-import { GetAllResponse } from '../models/responses/user/get-all';
+import { User } from '@models/instances/user.models';
+import { SignupResponse } from '@models/responses/user/signup';
+import { RegisterResponse } from '@models/responses/user/register';
+import { ResetPassword } from '@models/responses/user/reset-password';
+import { ConfirmResetPasswordResponse } from '@models/responses/user/confirm-reset-password';
+import { UpdateProfileResponse } from '@models/responses/user/update-profile';
+import { GetAllResponse } from '@models/responses/user/get-all';
 import { RequestHandler } from '../helpers/request-handler';
 import { CookieService } from '../providers/cookie.service';
-import { CURRENT_USER } from '../constants/user';
+import { CURRENT_USER } from '@constants/user';
 import { PaginationService } from './pagination.service';
-import { SignupPayload } from '../models/payloads/user/signup';
-import { DeleteResponse } from '../models/responses/user/delete';
-import { UpdateResponse } from '../models/responses/user/update';
-import { RegisterPayload } from '../models/payloads/user/register';
-import { DeleteUserPayload } from '../models/payloads/user/delete';
-import { UpdatePayload } from '../models/payloads/user/update';
-import { UpdateProfilePayload } from '../models/payloads/user/update-profile';
-import { ConfirmResetPasswordPayload } from '../models/payloads/user/confirm-reset-password';
-import { ManageGroups } from '../models/instances/groups';
-import { endpoints } from '../constants/endpoints';
-import { methods } from '../constants/methods';
+import { SignupPayload } from '@models/payloads/user/signup';
+import { DeleteResponse } from '@models/responses/user/delete';
+import { UpdateResponse } from '@models/responses/user/update';
+import { RegisterPayload } from '@models/payloads/user/register';
+import { DeleteUserPayload } from '@models/payloads/user/delete';
+import { UpdatePayload } from '@models/payloads/user/update';
+import { UpdateProfilePayload } from '@models/payloads/user/update-profile';
+import { ConfirmResetPasswordPayload } from '@models/payloads/user/confirm-reset-password';
+import { ManageGroups } from '@models/instances/groups';
+import { endpoints } from '@constants/endpoints';
+import { methods } from '@constants/methods';
 
 const api = environment.api;
 
@@ -197,15 +197,18 @@ export class UserService {
    *  Update profile (current user)
    */
   public updateProfile(payload: UpdateProfilePayload): Observable<User> {
-    return this.requestHandler.request(`${api}/${endpoints.PROFILE}/`, methods.PUT, payload, (response: UpdateProfileResponse) => {
-      if (response && response.user) {
-        const currentUser = this.loadCurrentUser();
-        const newUser = response.user;
-        const user = { ...currentUser, ...newUser };
-        this.user = user;
-        return user;
-      }
-    });
+    return this.requestHandler.request(
+      `${api}/${endpoints.PROFILE}/${payload.id}`,
+      methods.PUT,
+      payload,
+      (response: UpdateProfileResponse) => {
+        if (response) {
+          const currentUser = this.loadCurrentUser();
+          const user = { ...currentUser, ...response };
+          this.user = user;
+          return user;
+        }
+      });
   }
 
   public initializeInviteUserForm(): FormGroup {
