@@ -187,14 +187,13 @@
 
                 <div class="form-group">
                     <label for="hashtag-name">Название хештега</label>
-                    <input
-                            type="text"
-                            formControlName="name"
-                            class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && ch.name.errors }"
-                            id="hashtag-name"
-                            required
-                            placeholder="Введите название хештега"
+                    <input type="text"
+                           formControlName="name"
+                           class="form-control"
+                           [ngClass]="{ 'is-invalid': submitted && ch.name.errors }"
+                           id="hashtag-name"
+                           required
+                           placeholder="Введите название хештега"
                     />
                     <div *ngIf="submitted && ch.name.errors" class="invalid-feedback">
                         <div *ngIf="ch.name.errors.required">Почта обязательна</div>
@@ -233,14 +232,13 @@
 
                 <div class="form-group">
                     <label for="post-format">Название формата размещения</label>
-                    <input
-                            type="text"
-                            formControlName="postFormat"
-                            class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && cf.postFormat.errors }"
-                            id="post-format"
-                            required
-                            placeholder="Введите название формата размещения"
+                    <input type="text"
+                           formControlName="postFormat"
+                           class="form-control"
+                           [ngClass]="{ 'is-invalid': submitted && cf.postFormat.errors }"
+                           id="post-format"
+                           required
+                           placeholder="Введите название формата размещения"
                     />
                     <div *ngIf="submitted && cf.postFormat.errors" class="invalid-feedback">
                         <div *ngIf="cf.postFormat.errors.required">Поле обязательно</div>

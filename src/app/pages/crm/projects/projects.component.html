@@ -99,13 +99,12 @@
             <form (ngSubmit)="addNewProject()" [formGroup]="createProjectForm">
                 <div class="form-group">
                     <label for="name"> Название </label>
-                    <input
-                            type="text"
-                            formControlName="name"
-                            class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
-                            id="name"
-                            placeholder="Введите название проекта"
+                    <input type="text"
+                           formControlName="name"
+                           class="form-control"
+                           [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
+                           id="name"
+                           placeholder="Введите название проекта"
                     />
 
                     <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
@@ -178,6 +177,7 @@
                     <label for="budget"> Бюджет разгона </label>
                     <input type="number"
                            id="budget"
+                           min="0"
                            formControlName="budget"
                            required
                            class="form-control"
@@ -253,13 +253,12 @@
             <form (ngSubmit)="editProject()" [formGroup]="editProjectForm">
                 <div class="form-group">
                     <label for="editName"> Название </label>
-                    <input
-                            type="text"
-                            formControlName="name"
-                            class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && fe.name.errors }"
-                            id="editName"
-                            placeholder="Введите название проекта"
+                    <input type="text"
+                           formControlName="name"
+                           class="form-control"
+                           [ngClass]="{ 'is-invalid': submitted && fe.name.errors }"
+                           id="editName"
+                           placeholder="Введите название проекта"
                     />
 
                     <div *ngIf="submitted && fe.name.errors" class="invalid-feedback">
@@ -326,13 +325,13 @@
                 <div class="form-group">
                     <label for="projectBudget"> Бюджет разгона </label>
 
-                    <input
-                            type="number"
-                            id="projectBudget"
-                            formControlName="budget"
-                            class="form-control"
-                            placeholder="Введите бюджет"
-                            [ngClass]="{ 'is-invalid': submitted && fe.budget.errors }"
+                    <input type="number"
+                           min="0"
+                           id="projectBudget"
+                           formControlName="budget"
+                           class="form-control"
+                           placeholder="Введите бюджет"
+                           [ngClass]="{ 'is-invalid': submitted && fe.budget.errors }"
                     />
                     <div *ngIf="submitted && fe.budget.errors" class="invalid-feedback">
                         <span *ngIf="fe.budget.errors.required"></span>
@@ -360,13 +359,12 @@
 
                 <div class="form-group">
                     <label for="projectClient"> Клиент </label>
-                    <input
-                            type="text"
-                            formControlName="client"
-                            class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && fe.client.errors }"
-                            id="projectClient"
-                            placeholder="Введите клиента"
+                    <input type="text"
+                           formControlName="client"
+                           class="form-control"
+                           [ngClass]="{ 'is-invalid': submitted && fe.client.errors }"
+                           id="projectClient"
+                           placeholder="Введите клиента"
                     />
 
                     <div *ngIf="submitted && fe.client.errors" class="invalid-feedback">
