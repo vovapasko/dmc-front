@@ -148,16 +148,4 @@ describe('UserService', () => {
       req.flush({ success: true });
     });
   });
-
-  describe('#updateProfile', () => {
-    it('should return an Observable<User[]>', () => {
-      service.updateProfile(mockUpdateProfile).subscribe((user) => {
-        expect(user).toBeTruthy();
-      });
-
-      const req = httpMock.expectOne(`${api}/profile/`);
-      expect(req.request.method).toBe('PUT');
-      req.flush({ user: mockUser });
-    });
-  });
 });

@@ -105,12 +105,6 @@ describe('ProfileComponent', () => {
     expect(component.onFileChanges).toHaveBeenCalled();
   });
 
-  it('should call update', () => {
-    spyOn(component, 'update');
-    component.update(updateProfilePayload);
-    expect(component.update).toHaveBeenCalled();
-  });
-
   it('should call changePassword', () => {
     spyOn(component, 'changePassword');
     component.changePassword();
