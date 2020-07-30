@@ -41,7 +41,7 @@
                                 <th>Роль</th>
                                 <th>Подтвержден</th>
                                 <th>Статус</th>
-                                <th>Действия</th>
+                                <th *ngIf="currentUser?.groupsCascadeDown?.length">Действия</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -82,7 +82,6 @@
                                     <span *ngIf="!user?.isActive"
                                           class="badge bg-soft-warning text-error">Оффлайн</span>
                                 </td>
-                                <td></td>
                                 <td>
                                     <div
                                             *ngIf="currentUser?.groupsCascadeDown?.length"
