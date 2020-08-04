@@ -20,8 +20,8 @@ import { CoreModule } from './core/core.module';
 import { AppComponent } from './app.component';
 import { NotificationComponent } from './core/components/notification/notification.component';
 import { NotificationService } from './core/services/notification.service';
-import { Error404Component } from './pages/errors/error404/error404.component';
-import { Error500Component } from './pages/errors/error500/error500.component';
+import { Error404Component } from './core/components/errors/error404/error404.component';
+import { Error500Component } from './core/components/errors/error500/error500.component';
 
 import { UserEffects } from './core/store/effects/user.effects';
 import { ContractorEffects } from './core/store/effects/contractor.effects';

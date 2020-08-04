@@ -20,7 +20,6 @@ import { Project } from '@models/instances/project';
 import { News } from '@models/instances/news';
 import { Hashtag } from '@models/instances/hashtag';
 import { Format } from '@models/instances/format';
-import { ChartType } from '@pages/dashboards/default/default.model';
 import { setProjectValues } from '../helpers/utility';
 import { Warnings } from '@constants/notifications';
 import { endpoints } from '@constants/endpoints';
@@ -36,7 +35,7 @@ import { UpdatePostFormatPayload } from '@models/payloads/news/format/update-pos
 import { UpdatePostFormatResponse } from '@models/responses/news/format/update-post-format';
 import { DeletePostFormatPayload } from '@models/payloads/news/format/delete-post-format';
 import { DeletePostFormatResponse } from '@models/responses/news/format/delete-post-format';
-import { multipleRadialBars } from '@components/charts/data';
+import { ChartType, multipleRadialBars } from '@components/charts/data';
 import numbers from '../constants/numbers';
 import { GetNewsWavesPayload } from '@models/payloads/news/news-waves/get';
 import { NewsWaves } from '@models/instances/news-waves';
@@ -352,6 +351,7 @@ export class NewsService {
     return payload.data.newsInProject.map((news: any, index: number) => {
       const formData = new FormData();
       // @ts-ignore
+      // tslint:disable-next-line:no-bitwise
       formData.append('news_id', news.id | newsWave.newsInProject[index].id);
       // @ts-ignore
       news.attachments
@@ -764,6 +764,7 @@ export class NewsService {
     editorForm.controls.text.setValue(newsFieldsHandler.attachments(newsWave.waveFormation.attachments).join());
     previewForm.controls.previewEmail.setValue(newsWave.waveFormation.email);
     previewForm.controls.previewText.setValue(newsWave.waveFormation.content);
+    // tslint:disable-next-line:max-line-length
     const newsList = newsWave.newsInProject.map(el => new News(el.title, el.content, this.handleFiles(el.attachments), el.contractors, el.content, el.id));
     return { newsList, controls: this.initControls(newsList) };
   }
@@ -771,11 +772,11 @@ export class NewsService {
   public handleFiles(attachments: File[]) {
     return attachments.map(attachment => {
       // @ts-ignore
-      const file = new File([""], attachment.file, {type: "text/plain"});
+      const file = new File([''], attachment.file, { type: 'text/plain' });
       // @ts-ignore
       file.id = attachment.id;
       return file;
-    })
+    });
   }
 
   /**
