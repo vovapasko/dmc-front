@@ -10,10 +10,8 @@ import {
 } from '@angular/core';
 import { WizardComponent as BaseWizardComponent } from 'angular-archwizard';
 import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
-import { multipleRadialBars } from '@components/charts/data';
+import { ChartType, multipleRadialBars } from '@components/charts/data';
 import { Steps } from '@constants/steps';
-import { ChartType } from '../../dashboards/default/default.model';
-import { revenueRadialChart } from '../../dashboards/default/data';
 import { select, Store } from '@ngrx/store';
 import { IAppState } from '@store/state/app.state';
 import { CreateNewsWave, GetNewsWave, GetProjectConfiguration, UpdateNewsWave } from '@store/actions/news.actions';
@@ -49,6 +47,7 @@ import { NewsWaves } from '@models/instances/news-waves';
 import { pairs } from '@constants/burst-news-pairs';
 import { emptyNewsItem } from '@constants/empty-news-item';
 import { breadCrumbs } from '@constants/bread-crumbs';
+import {revenueRadialChart} from '@components/charts/data';
 
 /**
  * Form Burst news component - handling the burst news with sidebar and content
