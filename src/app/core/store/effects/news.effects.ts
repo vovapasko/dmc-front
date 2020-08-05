@@ -184,6 +184,7 @@ export class NewsEffects {
     ofType<CreateNewsWave>(ENewsActions.CreateNewsWave),
     switchMap((action: { payload: CreateNewsWavesPayload }) => this.newsService.createNewsWave(action.payload)),
     switchMap((uploadData: any) => [
+      // TODO REFACTOR THIS PIECE OF CODE
       new CreateNewsWaveSuccess(uploadData.newsWave),
       new UploadFormationFile({data: uploadData.formationFormData}),
       ...uploadData.newsFormData.map(formData => new UploadNewsFile({data: formData})),
@@ -196,6 +197,7 @@ export class NewsEffects {
     ofType<UpdateNewsWave>(ENewsActions.UpdateNewsWave),
     switchMap((action: { payload: UpdateNewsWavesPayload }) => this.newsService.updateNewsWave(action.payload)),
     mergeMap((uploadData: any) => [
+      // TODO REFACTOR THIS PIECE OF CODE
       new UpdateNewsWaveSuccess(uploadData.newsWave),
       new UploadFormationFile({data: uploadData.formationFormData}),
       ...uploadData.newsFormData.map(formData => new UploadNewsFile({data: formData})),

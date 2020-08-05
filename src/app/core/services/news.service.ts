@@ -300,6 +300,7 @@ export class NewsService {
    * Handle delete and update files from formation or news
    */
   public handleFilesUpload(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
+    // TODO REFACTOR THIS PIECE OF CODE
     const formationFormData = this.collectUploadFormationFiles(newsWave, payload);
     const newsFormData = this.collectUploadNewsFiles(newsWave, payload);
     const deleteNewsData = this.collectDeleteNewsFiles(newsWave, payload);
@@ -311,6 +312,7 @@ export class NewsService {
    * Collects delete news files
    */
   public collectDeleteNewsFiles(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
+    // TODO REFACTOR THIS PIECE OF CODE
     return newsWave.newsInProject
       .map(
         (news: News) => news.attachments
@@ -330,6 +332,7 @@ export class NewsService {
    * Collects upload formation files
    */
   public collectUploadFormationFiles(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
+    // TODO REFACTOR THIS PIECE OF CODE
     if (!payload.data.waveFormation.attachments) {
       return [];
     }
@@ -348,6 +351,7 @@ export class NewsService {
    * Collects upload news files
    */
   public collectUploadNewsFiles(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload): FormData[] {
+    // TODO REFACTOR THIS PIECE OF CODE
     return payload.data.newsInProject.map((news: any, index: number) => {
       const formData = new FormData();
       // @ts-ignore
@@ -363,6 +367,7 @@ export class NewsService {
   }
 
   public collectDeleteFormationFiles(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
+    // TODO REFACTOR THIS PIECE OF CODE
     return newsWave.waveFormation.attachments
       // @ts-ignore
       .filter(attachment => !(attachment instanceof File) && attachment.id && !payload.data.waveFormation.attachments
@@ -682,6 +687,7 @@ export class NewsService {
     controls: FormArray,
     newsWave: NewsWaves
   ): UpdateNewsWavesPayload | CreateNewsWavesPayload {
+    // TODO REFACTOR THIS PIECE OF CODE
     const newsCharacter = validationForm.controls.newsCharacter.value;
     const burstMethod = validationForm.controls.projectBurstMethod.value;
     const contractors = validationForm.controls.projectContractors.value;
@@ -752,6 +758,7 @@ export class NewsService {
     newsForm: FormGroup,
     previewForm: FormGroup
   ): { newsList: News[], controls: FormArray } {
+    // TODO REFACTOR THIS PIECE OF CODE
     validationForm.controls.newsCharacter.setValue(newsWave.newsCharacter);
     validationForm.controls.projectBurstMethod.setValue(newsWave.burstMethod);
     validationForm.controls.projectContractors.setValue(newsWave.contractors);
