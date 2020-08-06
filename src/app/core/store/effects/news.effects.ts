@@ -3,7 +3,7 @@ import { of } from 'rxjs';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { mergeMap, switchMap } from 'rxjs/operators';
 
-import { NewsService } from '../../services/news.service';
+import { NewsService } from '@services/news.service';
 import {
   CreateFormat,
   CreateFormats,
@@ -49,25 +49,23 @@ import {
   DeleteFormationFile,
   DeleteFormationFileSuccess, UploadNewsFile, UploadNewsFileSuccess, UploadFormationFile, UploadFormationFileSuccess
 } from '../actions/news.actions';
-import { GetAllResponse } from '../../models/responses/news/project/get-all-response';
-import { Hashtag } from '../../models/instances/hashtag';
-import { Format } from '../../models/instances/format';
-import { Project } from '../../models/instances/project';
-import { CreateHashtagPayload } from '../../models/payloads/news/hashtag/create';
-import { CreateProjectPayload } from '../../models/payloads/news/project/create';
-import { UpdateProjectPayload } from '../../models/payloads/news/project/update';
-import { CreatePostsFormatResponse } from '../../models/responses/news/format/create-post-format';
-import { CreatePostsFormatPayload } from '../../models/payloads/news/format/create';
-import { CreatePostFormatPayload } from '../../models/payloads/news/format/create-post-format';
-import { PostFormatListSet } from '../../models/instances/contractor';
-import { UpdatePostFormatPayload } from '../../models/payloads/news/format/update-post-format';
-import { DeletePostFormatPayload } from '../../models/payloads/news/format/delete-post-format';
-import { GetPostFormatPayload } from '../../models/payloads/news/format/get-post-format';
-import { NewsWaves } from '../../models/instances/news-waves';
-import { GetNewsWavesPayload } from '../../models/payloads/news/news-waves/get';
-import { CreateNewsWavesPayload } from '../../models/payloads/news/news-waves/create';
-import { UpdateNewsWavesPayload } from '../../models/payloads/news/news-waves/update';
-import { DeleteNewsWavesPayload } from '../../models/payloads/news/news-waves/delete';
+import { GetAllResponse } from '@models/responses/news/project/get-all-response';
+import { Hashtag } from '@models/instances/hashtag';
+import { Format } from '@models/instances/format';
+import { Project } from '@models/instances/project';
+import { CreateHashtagPayload } from '@models/payloads/news/hashtag/create';
+import { CreateProjectPayload } from '@models/payloads/news/project/create';
+import { UpdateProjectPayload } from '@models/payloads/news/project/update';
+import { CreatePostsFormatPayload } from '@models/payloads/news/format/create';
+import { CreatePostFormatPayload } from '@models/payloads/news/format/create-post-format';
+import { PostFormatListSet } from '@models/instances/contractor';
+import { UpdatePostFormatPayload } from '@models/payloads/news/format/update-post-format';
+import { DeletePostFormatPayload } from '@models/payloads/news/format/delete-post-format';
+import { GetPostFormatPayload } from '@models/payloads/news/format/get-post-format';
+import { NewsWaves } from '@models/instances/news-waves';
+import { GetNewsWavesPayload } from '@models/payloads/news/news-waves/get';
+import { CreateNewsWavesPayload } from '@models/payloads/news/news-waves/create';
+import { UpdateNewsWavesPayload } from '@models/payloads/news/news-waves/update';
 import { DeleteNewsFilePayload } from '@models/payloads/news/news-waves/delete-file';
 import { UploadNewsFilePayload } from '@models/payloads/news/news-waves/upload-file';
 

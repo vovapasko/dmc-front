@@ -1,14 +1,13 @@
 import { Action } from '@ngrx/store';
-import { Project } from '../../models/instances/project';
-import { Email } from '../../models/instances/email';
-import { CreateEmailPayload } from '../../models/payloads/project/email/create';
-import { UpdateEmailPayload } from '../../models/payloads/project/email/update';
-import { DeleteEmailPayload } from '../../models/payloads/project/email/delete';
-import { CreateNewsProjectPayload } from '../../models/payloads/project/news-project/create';
-import { NewsProject } from '../../models/instances/news-project';
-import { UpdateNewsProjectPayload } from '../../models/payloads/project/news-project/update';
-import { GetNewsProjectPayload } from '../../models/payloads/project/news-project/get';
-import { DeleteNewsProjectPayload } from '../../models/payloads/project/news-project/delete';
+import { Email } from '@models/instances/email';
+import { CreateEmailPayload } from '@models/payloads/project/email/create';
+import { UpdateEmailPayload } from '@models/payloads/project/email/update';
+import { DeleteEmailPayload } from '@models/payloads/project/email/delete';
+import { CreateNewsProjectPayload } from '@models/payloads/project/news-project/create';
+import { NewsProject } from '@models/instances/news-project';
+import { UpdateNewsProjectPayload } from '@models/payloads/project/news-project/update';
+import { GetNewsProjectPayload } from '@models/payloads/project/news-project/get';
+import { DeleteNewsProjectPayload } from '@models/payloads/project/news-project/delete';
 
 export enum EProjectActions {
   GetProjects = '[Project] Get projects',

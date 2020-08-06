@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-import { NotificationService } from '../../services/notification.service';
-import { Notification, NotificationType } from '../../models/instances/notification';
+import { NotificationService } from '@services/notification.service';
+import { Notification, NotificationType } from '@models/instances/notification';
 
 /**
  * This component for notify user

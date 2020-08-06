@@ -19,7 +19,6 @@ import {
   paginationPage,
   paginationPageSize,
   paginationTotalSize,
-  PaginationType
 } from '@constants/pagination';
 import { Title } from '@angular/platform-browser';
 import { selectUserList } from '@store/selectors/user.selectors';

@@ -8,7 +8,9 @@
       "@store/*": ["app/core/store/*"],
       "@models/*": ["app/core/models/*"],
       "@components/*": ["app/core/components/*"],
-      "@constants/*": ["app/core/constants/*"]
+      "@constants/*": ["app/core/constants/*"],
+      "@shared/*": ["app/shared/*"],
+      "@helpers/*": ["app/core/helpers/*"]
     },
     "outDir": "./dist/out-tsc",
     "sourceMap": true,

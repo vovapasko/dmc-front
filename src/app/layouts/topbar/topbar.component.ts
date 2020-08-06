@@ -3,25 +3,25 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
-import { AuthenticationService } from '../../core/services/auth.service';
-import { User } from '../../core/models/instances/user.models';
-import { Notification } from '../../core/models/instances/notification';
-import { NotificationService } from '../../core/services/notification.service';
-import { UserService } from '../../core/services/user.service';
+import { AuthenticationService } from '@services/auth.service';
+import { User } from '@models/instances/user.models';
+import { Notification } from '@models/instances/notification';
+import { NotificationService } from '@services/notification.service';
+import { UserService } from '@services/user.service';
 import { AbstractControl, FormGroup } from '@angular/forms';
-import { NewsService } from '../../core/services/news.service';
-import { LoadingService } from '../../core/services/loading.service';
-import { ErrorService } from '../../core/services/error.service';
+import { NewsService } from '@services/news.service';
+import { LoadingService } from '@services/loading.service';
+import { ErrorService } from '@services/error.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
-import { IAppState } from '../../core/store/state/app.state';
-import { CreateFormats, CreateHashtag } from '../../core/store/actions/news.actions';
-import { ServerError } from '../../core/models/responses/server/error';
-import { CreateHashtagPayload } from '../../core/models/payloads/news/hashtag/create';
-import { CreatePostsFormatPayload } from '../../core/models/payloads/news/format/create';
-import { ProjectService } from '../../core/services/project.service';
-import { CreateEmailPayload } from '../../core/models/payloads/project/email/create';
-import { CreateEmail } from '../../core/store/actions/project.actions';
+import { IAppState } from '@store/state/app.state';
+import { CreateFormats, CreateHashtag } from '@store/actions/news.actions';
+import { ServerError } from '@models/responses/server/error';
+import { CreateHashtagPayload } from '@models/payloads/news/hashtag/create';
+import { CreatePostsFormatPayload } from '@models/payloads/news/format/create';
+import { ProjectService } from '@services/project.service';
+import { CreateEmailPayload } from '@models/payloads/project/email/create';
+import { CreateEmail } from '@store/actions/project.actions';
 
 /**
  * Top bar component - history, profile bar, logout and create new items

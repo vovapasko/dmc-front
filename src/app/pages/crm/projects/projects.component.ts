@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 import { ErrorService } from '@services/error.service';
 import { LoadingService } from '@services/loading.service';
 import { Subject } from 'rxjs';
-import images from '../../../core/constants/images';
 import { Orders } from '@constants/orders';
 import { ServerError } from '@models/responses/server/error';
 import { urls } from '@constants/urls';

@@ -4,20 +4,19 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { environment } from '../../../environments/environment';
-import { Contractor } from '../models/instances/contractor';
-import { DeleteContractorResponse } from '../models/responses/contractor/delete';
-import { UpdateContractorResponse } from '../models/responses/contractor/update';
-import { CreateContractorResponse } from '../models/responses/contractor/create';
-import { GetAllContractorsResponse } from '../models/responses/contractor/get-all';
+import { Contractor } from '@models/instances/contractor';
+import { DeleteContractorResponse } from '@models/responses/contractor/delete';
+import { UpdateContractorResponse } from '@models/responses/contractor/update';
+import { CreateContractorResponse } from '@models/responses/contractor/create';
+import { GetAllContractorsResponse } from '@models/responses/contractor/get-all';
 import { RequestHandler } from '../helpers/request-handler';
-import numbers from '../constants/numbers';
 import { PaginationService } from './pagination.service';
-import { CreateContractorPayload } from '../models/payloads/contractor/create';
-import { UpdateContractorPayload } from '../models/payloads/contractor/update';
-import { DeleteContractorPayload } from '../models/payloads/contractor/delete';
+import { CreateContractorPayload } from '@models/payloads/contractor/create';
+import { UpdateContractorPayload } from '@models/payloads/contractor/update';
+import { DeleteContractorPayload } from '@models/payloads/contractor/delete';
 import { collectDataFromForm } from '../helpers/utility';
-import { endpoints } from '../constants/endpoints';
-import { methods } from '../constants/methods';
+import { endpoints } from '@constants/endpoints';
+import { methods } from '@constants/methods';
 
 const api = environment.api;
 

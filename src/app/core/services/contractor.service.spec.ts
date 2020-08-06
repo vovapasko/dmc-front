@@ -10,7 +10,6 @@ import { PaginationService } from './pagination.service';
 import { ContractorService } from './contractor.service';
 import { RequestHandler } from '../helpers/request-handler';
 import { mockContractor, mockContractors, mockCreate, mockDelete, mockUpdate } from '../mocks/contractor.mock';
-import { Contractor } from '../models/instances/contractor';
 
 describe('ContractorService', () => {
   let injector: TestBed;

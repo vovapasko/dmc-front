@@ -26,15 +26,15 @@ import {
   DeleteUserSuccess,
   DeleteUser,
 } from '../actions/user.actions';
-import { UserService } from '../../services/user.service';
-import { User } from '../../models/instances/user.models';
-import { AuthenticationService } from '../../services/auth.service';
-import { DeleteUserPayload } from '../../models/payloads/user/delete';
-import { RegisterPayload } from '../../models/payloads/user/register';
-import { UpdatePayload } from '../../models/payloads/user/update';
-import { LoginPayload } from '../../models/payloads/auth/login';
-import { SignupPayload } from '../../models/payloads/user/signup';
-import { ConfirmResetPasswordPayload } from '../../models/payloads/user/confirm-reset-password';
+import { UserService } from '@services/user.service';
+import { User } from '@models/instances/user.models';
+import { AuthenticationService } from '@services/auth.service';
+import { DeleteUserPayload } from '@models/payloads/user/delete';
+import { RegisterPayload } from '@models/payloads/user/register';
+import { UpdatePayload } from '@models/payloads/user/update';
+import { LoginPayload } from '@models/payloads/auth/login';
+import { SignupPayload } from '@models/payloads/user/signup';
+import { ConfirmResetPasswordPayload } from '@models/payloads/user/confirm-reset-password';
 
 @Injectable({
   providedIn: 'root',

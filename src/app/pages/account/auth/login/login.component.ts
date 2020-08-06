@@ -9,7 +9,7 @@ import { IAppState } from '@store/state/app.state';
 import { Login } from '@store/actions/user.actions';
 import { ErrorService } from '@services/error.service';
 import { LoadingService } from '@services/loading.service';
-import { setAuthClasses } from '../../../../core/helpers/utility';
+import { setAuthClasses } from '@helpers/utility';
 import { LoginPayload } from '@models/payloads/auth/login';
 import { ServerError } from '@models/responses/server/error';
 

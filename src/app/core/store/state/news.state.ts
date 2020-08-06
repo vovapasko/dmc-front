@@ -1,11 +1,11 @@
-import { Hashtag } from '../../models/instances/hashtag';
-import { Format } from '../../models/instances/format';
-import { Character } from '../../models/instances/character';
-import { Method } from '../../models/instances/method';
-import { Project } from '../../models/instances/project';
-import { News } from '../../models/instances/news';
-import { Contractor, PostFormatListSet } from '../../models/instances/contractor';
-import { NewsWaves } from '../../models/instances/news-waves';
+import { Hashtag } from '@models/instances/hashtag';
+import { Format } from '@models/instances/format';
+import { Character } from '@models/instances/character';
+import { Method } from '@models/instances/method';
+import { Project } from '@models/instances/project';
+import { News } from '@models/instances/news';
+import { Contractor, PostFormatListSet } from '@models/instances/contractor';
+import { NewsWaves } from '@models/instances/news-waves';
 
 export interface INewsState {
   hashtags: Hashtag[];

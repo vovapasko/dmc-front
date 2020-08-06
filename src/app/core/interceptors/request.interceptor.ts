@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import {
-  HttpClient,
   HttpErrorResponse,
   HttpEvent,
   HttpEventType,
@@ -8,7 +7,7 @@ import {
   HttpInterceptor,
   HttpRequest
 } from '@angular/common/http';
-import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
 import { LoadingService } from '@services/loading.service';
 

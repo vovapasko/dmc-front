@@ -12,11 +12,9 @@ import {
   mockRegister,
   mockSignUp,
   mockUpdate,
-  mockUpdateProfile,
   mockUser,
   mockUsers,
 } from '../mocks/user.mock';
-import { User } from '../models/instances/user.models';
 import { PaginationService } from './pagination.service';
 import { CookieService } from '../providers/cookie.service';
 import { ActivatedRoute, Router } from '@angular/router';

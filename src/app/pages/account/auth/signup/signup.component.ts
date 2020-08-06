@@ -5,12 +5,12 @@ import { Title } from '@angular/platform-browser';
 import { Subject, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 
-import { MustMatch } from '../../../form/validation/validation.mustmatch';
+import { MustMatch } from '@pages/form/validation/validation.mustmatch';
 import { Signup } from '@store/actions/user.actions';
 import { IAppState } from '@store/state/app.state';
 import { ErrorService } from '@services/error.service';
 import { LoadingService } from '@services/loading.service';
-import { setAuthClasses } from '../../../../core/helpers/utility';
+import { setAuthClasses } from '@helpers/utility';
 import { NotificationService } from '@services/notification.service';
 import { SignupPayload } from '@models/payloads/user/signup';
 import { Warnings } from '@constants/notifications';

@@ -1,6 +1,6 @@
 import { PaginationService } from './pagination.service';
 import { data } from '../mocks/pagination.mock';
-import { PaginationType } from '../constants/pagination';
+import { PaginationType } from '@constants/pagination';
 
 describe('PaginationService', () => {
   let service: PaginationService;

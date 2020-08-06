@@ -1,9 +1,8 @@
 import { Component, ContentChild, ElementRef, EventEmitter, OnInit, Output } from '@angular/core';
-import { ViewModeDirective } from '../../../shared/directives/view-mode.directive';
-import { EditModeDirective } from '../../../shared/directives/edit-mode.directive';
+import { ViewModeDirective } from '@shared/directives/view-mode.directive';
+import { EditModeDirective } from '@shared/directives/edit-mode.directive';
 import { fromEvent, Subject } from 'rxjs';
 import { filter, switchMapTo, take } from 'rxjs/operators';
-import { untilDestroyed } from '@ngneat/until-destroy';
 
 @Component({
   selector: 'editable',

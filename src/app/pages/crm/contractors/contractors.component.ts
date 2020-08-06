@@ -16,7 +16,7 @@ import {
   UpdateContractors
 } from '@store/actions/contractor.actions';
 import { IAppState } from '@store/state/app.state';
-import { setValues } from '../../../core/helpers/utility';
+import { setValues } from '@helpers/utility';
 import { NotificationService } from '@services/notification.service';
 import { Infos, Warnings } from '@constants/notifications';
 import { ServerError } from '@models/responses/server/error';

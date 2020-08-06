@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-import { Notification, NotificationType } from '../models/instances/notification';
+import { Notification, NotificationType } from '@models/instances/notification';
 
 /**
  * This service for store and handle notifications
