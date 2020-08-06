@@ -67,6 +67,9 @@ export class PasswordResetComponent implements OnInit, AfterViewInit, OnDestroy 
     this.error$ = this.errorService.error$;
   }
 
+  /**
+   * Set controls to reset form
+   */
   public initForm(): void {
     this.resetForm = this.formBuilder.group(
       {
