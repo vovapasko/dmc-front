@@ -27,14 +27,14 @@
                                 <input type="email"
                                        formControlName="email"
                                        class="form-control"
-                                       [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
+                                       [ngClass]="{ 'is-invalid': submitted && loginFormControls.email.errors }"
                                        id="email"
                                        placeholder="Введите почту"
                                 />
 
-                                <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
-                                    <div *ngIf="f.email.errors.required">Почта обязательна</div>
-                                    <div *ngIf="f.email.errors.email">Почта должна быть валидна</div>
+                                <div *ngIf="submitted && loginFormControls.email.errors" class="invalid-feedback">
+                                    <div *ngIf="loginFormControls.email.errors.required">Почта обязательна</div>
+                                    <div *ngIf="loginFormControls.email.errors.email">Почта должна быть валидна</div>
                                 </div>
                             </div>
 
@@ -45,7 +45,7 @@
                                     <input [type]="visible ? 'text' : 'password'"
                                            formControlName="password"
                                            class="form-control"
-                                           [ngClass]="{ 'is-invalid': submitted && f.password.errors }"
+                                           [ngClass]="{ 'is-invalid': submitted && loginFormControls.password.errors }"
                                            id="password"
                                            placeholder="Введите пароль"
                                     />
@@ -56,8 +56,8 @@
                                                     class="mdi mdi-eye-off"></i></span>
                                         </a>
                                     </div>
-                                    <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                                        <div *ngIf="f.password.errors.required">Пароль обязателен</div>
+                                    <div *ngIf="submitted && loginFormControls.password.errors" class="invalid-feedback">
+                                        <div *ngIf="loginFormControls.password.errors.required">Пароль обязателен</div>
                                     </div>
                                 </div>
                             </div>

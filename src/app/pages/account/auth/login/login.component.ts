@@ -80,7 +80,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   // convenience getter for easy access to form fields
-  get f(): { [p: string]: AbstractControl } {
+  get loginFormControls(): { [p: string]: AbstractControl } {
     return this.loginForm.controls;
   }
 
@@ -91,7 +91,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     this.submitted = true;
     const loginForm = this.loginForm;
     if (loginForm && loginForm.valid) {
-      const { email, password } = this.f;
+      const { email, password } = this.loginFormControls;
       const data = { email: email.value, password: password.value };
       this.submit({ data });
     }
