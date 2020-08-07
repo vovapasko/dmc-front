@@ -20,13 +20,13 @@
                                     </a>
                                 </li>
 
-                                <li *ngIf="!form?.projectBurstMethod?.value?.method" class="nav-item">
+                                <li *ngIf="!commonFormControls?.projectBurstMethod?.value?.method" class="nav-item">
                                     <a href="javascript: void(0);" class="nav-link rounded-0 pt-2 pb-2">
                                         <span class="d-none d-sm-inline">...</span>
                                     </a>
                                 </li>
 
-                                <li *ngIf="form?.projectBurstMethod?.value?.method == methods.bayer || form?.projectBurstMethod?.value?.method == methods.topSecret"
+                                <li *ngIf="commonFormControls?.projectBurstMethod?.value?.method == methods.bayer || commonFormControls?.projectBurstMethod?.value?.method == methods.topSecret"
                                     class="nav-item" [awGoToStep]="{ stepIndex: 1 }"
                                 >
                                     <a
@@ -40,7 +40,7 @@
                                     </a>
                                 </li>
 
-                                <li *ngIf="form?.projectBurstMethod?.value?.method == methods.direct" class="nav-item"
+                                <li *ngIf="commonFormControls?.projectBurstMethod?.value?.method == methods.direct" class="nav-item"
                                     [awGoToStep]="{ stepIndex: 2 }">
                                     <a
                                             href="javascript: void(0);"
@@ -78,11 +78,11 @@
                                                        placeholder="Введите клиента"
                                                        class="form-control"
                                                        formControlName="clientName"
-                                                       [ngClass]="{ 'is-invalid': submitted && form.clientName.errors }"
+                                                       [ngClass]="{ 'is-invalid': submitted && commonFormControls.clientName.errors }"
                                                 />
-                                                <div *ngIf="submitted && form.clientName.errors"
+                                                <div *ngIf="submitted && commonFormControls.clientName.errors"
                                                      class="invalid-feedback">
-                                                    <span *ngIf="form.clientName.errors.required"></span>
+                                                    <span *ngIf="commonFormControls.clientName.errors.required"></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -99,11 +99,11 @@
                                                         [closeOnSelect]="true"
                                                         placeholder="Выберите проект"
                                                         formControlName="projectName"
-                                                        [ngClass]="{ 'is-invalid': submitted && form.projectName.errors }"
+                                                        [ngClass]="{ 'is-invalid': submitted && commonFormControls.projectName.errors }"
                                                 ></ng-select>
-                                                <div *ngIf="submitted && form.projectName.errors"
+                                                <div *ngIf="submitted && commonFormControls.projectName.errors"
                                                      class="invalid-feedback">
-                                                    <span *ngIf="form.projectName.errors.required"></span>
+                                                    <span *ngIf="commonFormControls.projectName.errors.required"></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -119,11 +119,11 @@
                                                         [closeOnSelect]="true"
                                                         placeholder="Выберите характер новости"
                                                         formControlName="newsCharacter"
-                                                        [ngClass]="{ 'is-invalid': submitted && form.newsCharacter.errors }"
+                                                        [ngClass]="{ 'is-invalid': submitted && commonFormControls.newsCharacter.errors }"
                                                 ></ng-select>
-                                                <div *ngIf="submitted && form.newsCharacter.errors"
+                                                <div *ngIf="submitted && commonFormControls.newsCharacter.errors"
                                                      class="invalid-feedback">
-                                                    <span *ngIf="form.newsCharacter.errors.required"></span>
+                                                    <span *ngIf="commonFormControls.newsCharacter.errors.required"></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -136,11 +136,11 @@
                                                        formControlName="projectTitle"
                                                        placeholder="Введите заглавие"
                                                        class="form-control"
-                                                       [ngClass]="{ 'is-invalid': submitted && form.projectTitle.errors }"
+                                                       [ngClass]="{ 'is-invalid': submitted && commonFormControls.projectTitle.errors }"
                                                 />
-                                                <div *ngIf="submitted && form.projectTitle.errors"
+                                                <div *ngIf="submitted && commonFormControls.projectTitle.errors"
                                                      class="invalid-feedback">
-                                                    <span *ngIf="form.projectTitle.errors.required"></span>
+                                                    <span *ngIf="commonFormControls.projectTitle.errors.required"></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -158,11 +158,11 @@
                                                         [hideSelected]="true"
                                                         placeholder="Выберите ключевые слова"
                                                         formControlName="projectHashtags"
-                                                        [ngClass]="{ 'is-invalid': submitted && form.projectHashtags.errors }"
+                                                        [ngClass]="{ 'is-invalid': submitted && commonFormControls.projectHashtags.errors }"
                                                 ></ng-select>
-                                                <div *ngIf="submitted && form.projectHashtags.errors"
+                                                <div *ngIf="submitted && commonFormControls.projectHashtags.errors"
                                                      class="invalid-feedback">
-                                                    <span *ngIf="form.projectHashtags.errors.required"></span>
+                                                    <span *ngIf="commonFormControls.projectHashtags.errors.required"></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -178,11 +178,11 @@
                                                         [closeOnSelect]="true"
                                                         placeholder="Выберите формат"
                                                         formControlName="projectPostFormat"
-                                                        [ngClass]="{ 'is-invalid': submitted && form.projectPostFormat.errors }"
+                                                        [ngClass]="{ 'is-invalid': submitted && commonFormControls.projectPostFormat.errors }"
                                                 ></ng-select>
-                                                <div *ngIf="submitted && form.projectPostFormat.errors"
+                                                <div *ngIf="submitted && commonFormControls.projectPostFormat.errors"
                                                      class="invalid-feedback">
-                                                    <span *ngIf="form.projectPostFormat.errors.required"></span>
+                                                    <span *ngIf="commonFormControls.projectPostFormat.errors.required"></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -198,11 +198,11 @@
                                                         [closeOnSelect]="true"
                                                         placeholder="Выберите метод"
                                                         formControlName="projectBurstMethod"
-                                                        [ngClass]="{ 'is-invalid': submitted && form.projectBurstMethod.errors }"
+                                                        [ngClass]="{ 'is-invalid': submitted && commonFormControls.projectBurstMethod.errors }"
                                                 ></ng-select>
-                                                <div *ngIf="submitted && form.projectBurstMethod.errors"
+                                                <div *ngIf="submitted && commonFormControls.projectBurstMethod.errors"
                                                      class="invalid-feedback">
-                                                    <span *ngIf="form.projectBurstMethod.errors.required"></span>
+                                                    <span *ngIf="commonFormControls.projectBurstMethod.errors.required"></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -217,11 +217,11 @@
                                                        formControlName="projectBudget"
                                                        class="form-control"
                                                        placeholder="Введите бюджет"
-                                                       [ngClass]="{ 'is-invalid': submitted && form.projectBudget.errors }"
+                                                       [ngClass]="{ 'is-invalid': submitted && commonFormControls.projectBudget.errors }"
                                                 />
-                                                <div *ngIf="submitted && form.projectBudget.errors"
+                                                <div *ngIf="submitted && commonFormControls.projectBudget.errors"
                                                      class="invalid-feedback">
-                                                    <span *ngIf="form.projectBudget.errors.required"></span>
+                                                    <span *ngIf="commonFormControls.projectBudget.errors.required"></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -239,12 +239,12 @@
                                                         [hideSelected]="true"
                                                         placeholder="Выберите контрагентов"
                                                         formControlName="projectContractors"
-                                                        [ngClass]="{ 'is-invalid': submitted && form.projectContractors.errors }"
+                                                        [ngClass]="{ 'is-invalid': submitted && commonFormControls.projectContractors.errors }"
                                                 >
                                                 </ng-select>
-                                                <div *ngIf="submitted && form.projectContractors.errors"
+                                                <div *ngIf="submitted && commonFormControls.projectContractors.errors"
                                                      class="invalid-feedback">
-                                                    <span *ngIf="form.projectContractors.errors.required"></span>
+                                                    <span *ngIf="commonFormControls.projectContractors.errors.required"></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -268,10 +268,10 @@
                                                     </apx-chart>
                                                 </app-portlet>
 
-                                                <div *ngFor="let contractor of form?.projectContractors?.value;">
+                                                <div *ngFor="let contractor of commonFormControls?.projectContractors?.value;">
                                                     <h5 class="text-muted"
                                                         *ngFor="let format of contractor?.postformatlistSet;">
-                                                        {{ format?.postFormat === form?.projectPostFormat?.value?.postFormat ? '— ' + contractor?.editorName + ' ' + format?.onePostPrice : ''}}
+                                                        {{ format?.postFormat === commonFormControls?.projectPostFormat?.value?.postFormat ? '— ' + contractor?.editorName + ' ' + format?.onePostPrice : ''}}
                                                     </h5>
                                                 </div>
 
@@ -286,7 +286,7 @@
                                     <li class="next list-inline-item float-right">
                                         <button [disabled]="validationForm.status === 'INVALID'"
                                                 class="btn btn-secondary"
-                                                [awGoToStep]="{stepIndex: steps[form?.projectBurstMethod?.value?.method]}"
+                                                [awGoToStep]="{stepIndex: steps[commonFormControls?.projectBurstMethod?.value?.method]}"
                                                 type="submit"
                                         >Дальше
                                         </button>
@@ -309,13 +309,13 @@
                                     </a>
                                 </li>
 
-                                <li *ngIf="!form?.projectBurstMethod?.value?.method" class="nav-item">
+                                <li *ngIf="!commonFormControls?.projectBurstMethod?.value?.method" class="nav-item">
                                     <a href="javascript: void(0);" class="nav-link rounded-0 pt-2 pb-2">
                                         <span class="d-none d-sm-inline">...</span>
                                     </a>
                                 </li>
 
-                                <li *ngIf="form?.projectBurstMethod?.value?.method == methods.bayer || form?.projectBurstMethod?.value?.method == methods.topSecret"
+                                <li *ngIf="commonFormControls?.projectBurstMethod?.value?.method == methods.bayer || commonFormControls?.projectBurstMethod?.value?.method == methods.topSecret"
                                     class="nav-item" [awGoToStep]="{ stepIndex: 1 }"
                                 >
                                     <a
@@ -329,7 +329,7 @@
                                     </a>
                                 </li>
 
-                                <li *ngIf="form?.projectBurstMethod?.value?.method == methods.direct" class="nav-item"
+                                <li *ngIf="commonFormControls?.projectBurstMethod?.value?.method == methods.direct" class="nav-item"
                                     [awGoToStep]="{ stepIndex: 2 }">
                                     <a
                                             href="javascript: void(0);"
@@ -411,13 +411,13 @@
                                     </a>
                                 </li>
 
-                                <li *ngIf="!form?.projectBurstMethod?.value?.method" class="nav-item">
+                                <li *ngIf="!commonFormControls?.projectBurstMethod?.value?.method" class="nav-item">
                                     <a href="javascript: void(0);" class="nav-link rounded-0 pt-2 pb-2">
                                         <span class="d-none d-sm-inline">...</span>
                                     </a>
                                 </li>
 
-                                <li *ngIf="form?.projectBurstMethod?.value?.method == methods.bayer || form?.projectBurstMethod?.value?.method == methods.topSecret"
+                                <li *ngIf="commonFormControls?.projectBurstMethod?.value?.method == methods.bayer || form?.projectBurstMethod?.value?.method == methods.topSecret"
                                     class="nav-item" [awGoToStep]="{ stepIndex: 1 }"
                                 >
                                     <a
@@ -431,7 +431,7 @@
                                     </a>
                                 </li>
 
-                                <li *ngIf="form?.projectBurstMethod?.value?.method == methods.direct" class="nav-item"
+                                <li *ngIf="commonFormControls?.projectBurstMethod?.value?.method == methods.direct" class="nav-item"
                                     [awGoToStep]="{ stepIndex: 2 }">
                                     <a
                                             href="javascript: void(0);"
@@ -495,7 +495,7 @@
                                                 />
                                                 <ng-select
                                                         id="news-contractors"
-                                                        [items]="form.projectContractors.value || []"
+                                                        [items]="commonFormControls.projectContractors.value || []"
                                                         bindLabel="editorName"
                                                         [multiple]="true"
                                                         [closeOnSelect]="false"
@@ -503,7 +503,7 @@
                                                         placeholder="Контрагенты"
                                                         (change)="updateField(index, 'contractors')"
                                                         [formControl]="getControl(index, 'contractors')"
-                                                        [ngClass]="{ 'is-invalid': submitted && distributeForm.contractors.errors }"
+                                                        [ngClass]="{ 'is-invalid': submitted && distributeFormControls.contractors.errors }"
                                                 >
                                                 </ng-select>
 
@@ -553,13 +553,13 @@
                                     </a>
                                 </li>
 
-                                <li *ngIf="!form?.projectBurstMethod?.value?.method" class="nav-item">
+                                <li *ngIf="!commonFormControls?.projectBurstMethod?.value?.method" class="nav-item">
                                     <a href="javascript: void(0);" class="nav-link rounded-0 pt-2 pb-2">
                                         <span class="d-none d-sm-inline">...</span>
                                     </a>
                                 </li>
 
-                                <li *ngIf="form?.projectBurstMethod?.value?.method == methods.bayer || form?.projectBurstMethod?.value?.method == methods.topSecret"
+                                <li *ngIf="commonFormControls?.projectBurstMethod?.value?.method == methods.bayer || form?.projectBurstMethod?.value?.method == methods.topSecret"
                                     class="nav-item" [awGoToStep]="{ stepIndex: 1 }"
                                 >
                                     <a
@@ -573,7 +573,7 @@
                                     </a>
                                 </li>
 
-                                <li *ngIf="form?.projectBurstMethod?.value?.method == methods.direct" class="nav-item"
+                                <li *ngIf="commonFormControls?.projectBurstMethod?.value?.method == methods.direct" class="nav-item"
                                     [awGoToStep]="{ stepIndex: 2 }">
                                     <a
                                             href="javascript: void(0);"
@@ -643,7 +643,7 @@
                                             </div>
                                         </div>
 
-                                        <div *ngIf="form?.projectBurstMethod?.value?.method == methods.direct; else elseBlock">
+                                        <div *ngIf="commonFormControls?.projectBurstMethod?.value?.method == methods.direct; else elseBlock">
                                             <quill-editor *ngFor="let news of newsList; let i = index"
                                                           [styles]="{ height: '400px', 'margin-bottom': '15px' }"
                                                           (onFocus)="onEvent($event, true)"
@@ -689,7 +689,7 @@
                             <ul class="list-inline wizard mb-0">
                                 <li class="previous list-inline-item">
                                     <button class="btn btn-secondary"
-                                            [awGoToStep]="{stepIndex: steps[form?.projectBurstMethod?.value?.method]}"
+                                            [awGoToStep]="{stepIndex: steps[commonFormControls?.projectBurstMethod?.value?.method]}"
                                     >
                                         Назад
                                     </button>

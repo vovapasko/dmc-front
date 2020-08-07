@@ -270,7 +270,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   /**
    * Returns controls for validation form in common step
    */
-  get form() {
+  get commonFormControls() {
     if (!this.validationForm) {
       return;
     }
@@ -280,7 +280,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   /**
    * Returns controls for news form in distribution step
    */
-  get distributeForm() {
+  get distributeFormControls() {
     if (!this.newsForm) {
       return;
     }
@@ -334,10 +334,10 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
    * Returns available (minus contractors cost) project budget
    */
   get budget() {
-    if (!this.form) {
+    if (!this.commonFormControls) {
       return 0;
     }
-    const budgetControl = this.form.projectBudget;
+    const budgetControl = this.commonFormControls.projectBudget;
     return budgetControl ? budgetControl.value || 0 : 0;
   }
 
@@ -536,7 +536,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
    * Get project format from validation form control
    */
   public getProjectFormat(): string {
-    const form = this.form;
+    const form = this.commonFormControls;
     const projectFormat = form ? form.projectPostFormat : { value: {} };
     const value = projectFormat ? projectFormat.value : {};
     return value ? value.postFormat : '';
