@@ -251,13 +251,13 @@
                     <input type="text"
                            formControlName="editorName"
                            class="form-control"
-                           [ngClass]="{ 'is-invalid': submitted && cf.editorName.errors }"
+                           [ngClass]="{ 'is-invalid': submitted && createContractorFormControls.editorName.errors }"
                            id="editorName"
                            placeholder="Введите название редакции"
                     />
 
-                    <div *ngIf="submitted && cf.editorName.errors" class="invalid-feedback">
-                        <div *ngIf="cf.editorName.errors.required">Название редакции обязательно</div>
+                    <div *ngIf="submitted && createContractorFormControls.editorName.errors" class="invalid-feedback">
+                        <div *ngIf="createContractorFormControls.editorName.errors.required">Название редакции обязательно</div>
                     </div>
                 </div>
 
@@ -266,13 +266,13 @@
                     <input type="text"
                            formControlName="contactPerson"
                            class="form-control"
-                           [ngClass]="{ 'is-invalid': submitted && cf.contactPerson.errors }"
+                           [ngClass]="{ 'is-invalid': submitted && createContractorFormControls.contactPerson.errors }"
                            id="contactPerson"
                            placeholder="Введите контактное лицо"
                     />
 
-                    <div *ngIf="submitted && cf.contactPerson.errors" class="invalid-feedback">
-                        <div *ngIf="cf.contactPerson.errors.required">Контактное лицо обязательно</div>
+                    <div *ngIf="submitted && createContractorFormControls.contactPerson.errors" class="invalid-feedback">
+                        <div *ngIf="createContractorFormControls.contactPerson.errors.required">Контактное лицо обязательно</div>
                     </div>
                 </div>
 
@@ -282,12 +282,12 @@
                            formControlName="phoneNumber"
                            class="form-control"
                            id="phoneNumber"
-                           [ngClass]="{ 'is-invalid': submitted && cf.phoneNumber.errors }"
+                           [ngClass]="{ 'is-invalid': submitted && createContractorFormControls.phoneNumber.errors }"
                     />
                     <span class="font-13 text-muted">e.g "380992314525"</span>
-                    <div *ngIf="submitted && cf.phoneNumber.errors" class="invalid-feedback">
-                        <div *ngIf="cf.phoneNumber.errors.required">Введите номер</div>
-                        <div *ngIf="cf.phoneNumber.errors.pattern">Введите корректный номер</div>
+                    <div *ngIf="submitted && createContractorFormControls.phoneNumber.errors" class="invalid-feedback">
+                        <div *ngIf="createContractorFormControls.phoneNumber.errors.required">Введите номер</div>
+                        <div *ngIf="createContractorFormControls.phoneNumber.errors.pattern">Введите корректный номер</div>
                     </div>
                 </div>
 
@@ -295,12 +295,12 @@
                     <label for="email">Email</label>
                     <input class="form-control"
                            id="email"
-                           [ngClass]="{ 'is-invalid': submitted && cf.email.errors }"
+                           [ngClass]="{ 'is-invalid': submitted && createContractorFormControls.email.errors }"
                            placeholder="Введите email"
                            formControlName="email"
                     />
-                    <div *ngIf="submitted && cf.email.errors" class="invalid-feedback">
-                        <div *ngIf="cf.email.errors.required">Введите корректный email</div>
+                    <div *ngIf="submitted && createContractorFormControls.email.errors" class="invalid-feedback">
+                        <div *ngIf="createContractorFormControls.email.errors.required">Введите корректный email</div>
                     </div>
                 </div>
 
@@ -335,13 +335,13 @@
                     <input type="text"
                            formControlName="postFormat"
                            class="form-control"
-                           [ngClass]="{ 'is-invalid': submitted && cff.postFormat.errors }"
+                           [ngClass]="{ 'is-invalid': submitted && createFormatFormControls.postFormat.errors }"
                            id="postFormat"
                            placeholder="Введите название формата"
                     />
 
-                    <div *ngIf="submitted && cff.postFormat.errors" class="invalid-feedback">
-                        <div *ngIf="cff.postFormat.errors.required">Название формата обязательно</div>
+                    <div *ngIf="submitted && createFormatFormControls.postFormat.errors" class="invalid-feedback">
+                        <div *ngIf="createFormatFormControls.postFormat.errors.required">Название формата обязательно</div>
                     </div>
                 </div>
 
@@ -350,13 +350,13 @@
                     <input type="number"
                            formControlName="onePostPrice"
                            class="form-control"
-                           [ngClass]="{ 'is-invalid': submitted && cff.onePostPrice.errors }"
+                           [ngClass]="{ 'is-invalid': submitted && createFormatFormControls.onePostPrice.errors }"
                            id="onePostPrice"
                            placeholder="Введите стоимость одного размещения"
                     />
 
-                    <div *ngIf="submitted && cff.onePostPrice.errors" class="invalid-feedback">
-                        <div *ngIf="cff.onePostPrice.errors.required">Это поле обязательно для заполнения</div>
+                    <div *ngIf="submitted && createFormatFormControls.onePostPrice.errors" class="invalid-feedback">
+                        <div *ngIf="createFormatFormControls.onePostPrice.errors.required">Это поле обязательно для заполнения</div>
                     </div>
                 </div>
 
@@ -366,13 +366,13 @@
                     <input type="number"
                            formControlName="newsAmount"
                            class="form-control"
-                           [ngClass]="{ 'is-invalid': submitted && cff.newsAmount.errors }"
+                           [ngClass]="{ 'is-invalid': submitted && createFormatFormControls.newsAmount.errors }"
                            id="newsAmount"
                            placeholder="Введите количество размещений"
                     />
 
-                    <div *ngIf="submitted && cff.newsAmount.errors" class="invalid-feedback">
-                        <div *ngIf="cff.newsAmount.errors.required">Это поле обязательно для заполнения</div>
+                    <div *ngIf="submitted && createFormatFormControls.newsAmount.errors" class="invalid-feedback">
+                        <div *ngIf="createFormatFormControls.newsAmount.errors.required">Это поле обязательно для заполнения</div>
                     </div>
                 </div>
 
@@ -381,13 +381,13 @@
                     <input type="number"
                            formControlName="arrangedNews"
                            class="form-control"
-                           [ngClass]="{ 'is-invalid': submitted && cff.arrangedNews.errors }"
+                           [ngClass]="{ 'is-invalid': submitted && createFormatFormControls.arrangedNews.errors }"
                            id="arrangedNews"
                            placeholder="Введите количество необходимых размещений"
                     />
 
-                    <div *ngIf="submitted && cff.arrangedNews.errors" class="invalid-feedback">
-                        <div *ngIf="cff.arrangedNews.errors.required">Это поле обязательно для заполнения</div>
+                    <div *ngIf="submitted && createFormatFormControls.arrangedNews.errors" class="invalid-feedback">
+                        <div *ngIf="createFormatFormControls.arrangedNews.errors.required">Это поле обязательно для заполнения</div>
                     </div>
                 </div>
 
@@ -431,10 +431,10 @@
                                 [hideSelected]="true"
                                 placeholder="Выберите форматы для удаления"
                                 formControlName="deletePostFormat"
-                                [ngClass]="{ 'is-invalid': submitted && dff.deletePostFormat.errors }"
+                                [ngClass]="{ 'is-invalid': submitted && deleteFormatFormControls.deletePostFormat.errors }"
                         ></ng-select>
-                        <div *ngIf="submitted && dff.deletePostFormat.errors" class="invalid-feedback">
-                            <span *ngIf="dff.deletePostFormat.errors.required"></span>
+                        <div *ngIf="submitted && deleteFormatFormControls.deletePostFormat.errors" class="invalid-feedback">
+                            <span *ngIf="deleteFormatFormControls.deletePostFormat.errors.required"></span>
                         </div>
                     </div>
                 </div>
@@ -470,13 +470,13 @@
                     <input type="text"
                            formControlName="updateEditorName"
                            class="form-control"
-                           [ngClass]="{ 'is-invalid': submitted && uf.updateEditorName.errors }"
+                           [ngClass]="{ 'is-invalid': submitted && updateContractorFormControls.updateEditorName.errors }"
                            id="updateEditorName"
                            placeholder="Введите название редакции"
                     />
 
-                    <div *ngIf="submitted && uf.updateEditorName.errors" class="invalid-feedback">
-                        <div *ngIf="uf.updateEditorName.errors.required">Название редакции обязательно</div>
+                    <div *ngIf="submitted && updateContractorFormControls.updateEditorName.errors" class="invalid-feedback">
+                        <div *ngIf="updateContractorFormControls.updateEditorName.errors.required">Название редакции обязательно</div>
                     </div>
                 </div>
 
@@ -485,13 +485,13 @@
                     <input type="text"
                            formControlName="updateContactPerson"
                            class="form-control"
-                           [ngClass]="{ 'is-invalid': submitted && uf.updateContactPerson.errors }"
+                           [ngClass]="{ 'is-invalid': submitted && updateContractorFormControls.updateContactPerson.errors }"
                            id="updateContactPerson"
                            placeholder="Введите контактное лицо"
                     />
 
-                    <div *ngIf="submitted && uf.updateContactPerson.errors" class="invalid-feedback">
-                        <div *ngIf="uf.updateContactPerson.errors.required">Контактное лицо обязательно</div>
+                    <div *ngIf="submitted && updateContractorFormControls.updateContactPerson.errors" class="invalid-feedback">
+                        <div *ngIf="updateContractorFormControls.updateContactPerson.errors.required">Контактное лицо обязательно</div>
                     </div>
                 </div>
 
@@ -501,11 +501,11 @@
                            formControlName="updatePhoneNumber"
                            class="form-control"
                            id="updatePhoneNumber"
-                           [ngClass]="{ 'is-invalid': submitted && uf.updatePhoneNumber.errors }"
+                           [ngClass]="{ 'is-invalid': submitted && updateContractorFormControls.updatePhoneNumber.errors }"
                     />
                     <span class="font-13 text-muted">e.g "380992314525"</span>
-                    <div *ngIf="submitted && uf.updatePhoneNumber.errors" class="invalid-feedback">
-                        <div *ngIf="uf.updatePhoneNumber.errors.pattern">Введите корректный номер</div>
+                    <div *ngIf="submitted && updateContractorFormControls.updatePhoneNumber.errors" class="invalid-feedback">
+                        <div *ngIf="updateContractorFormControls.updatePhoneNumber.errors.pattern">Введите корректный номер</div>
                     </div>
                 </div>
 
@@ -513,13 +513,13 @@
                     <label for="updateEmail">Email</label>
                     <input class="form-control"
                            id="updateEmail"
-                           [ngClass]="{ 'is-invalid': submitted && uf.updateEmail.errors }"
+                           [ngClass]="{ 'is-invalid': submitted && updateContractorFormControls.updateEmail.errors }"
                            placeholder="Введите email"
                            formControlName="updateEmail"
                     />
-                    <div *ngIf="submitted && uf.updateEmail.errors" class="invalid-feedback">
-                        <div *ngIf="uf.updateEmail.errors.required">Введите email</div>
-                        <div *ngIf="uf.updateEmail.errors.pattern">Введите корректный email</div>
+                    <div *ngIf="submitted && updateContractorFormControls.updateEmail.errors" class="invalid-feedback">
+                        <div *ngIf="updateContractorFormControls.updateEmail.errors.required">Введите email</div>
+                        <div *ngIf="updateContractorFormControls.updateEmail.errors.pattern">Введите корректный email</div>
                     </div>
                 </div>
 
