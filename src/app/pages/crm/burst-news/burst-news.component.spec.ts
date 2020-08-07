@@ -113,8 +113,8 @@ describe('BurstNewsComponent', () => {
     expect(component.editorForm).toBeTruthy();
     expect(component.newsForm).toBeTruthy();
     expect(component.controls).toBeTruthy();
-    expect(component.form).toBeTruthy();
-    expect(component.distributeForm).toBeTruthy();
+    expect(component.commonFormControls).toBeTruthy();
+    expect(component.distributeFormControls).toBeTruthy();
   });
 
   it('should initBreadCrumbs', () => {

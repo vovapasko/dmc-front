@@ -132,13 +132,13 @@ describe('ContractorsComponent', () => {
   it('should initCreateForm', () => {
     component.initCreateForm();
     expect(component.createForm).toBeTruthy();
-    expect(component.cf).toBeTruthy();
+    expect(component.createContractorFormControls).toBeTruthy();
   });
 
   it('should initUpdateForm', () => {
     component.initUpdateForm();
     expect(component.updateForm).toBeTruthy();
-    expect(component.uf).toBeTruthy();
+    expect(component.updateContractorFormControls).toBeTruthy();
   });
 
   it('should call selectContractor', () => {
