@@ -18,7 +18,7 @@ import { ServerError } from '@models/responses/server/error';
 import {
   paginationPage,
   paginationPageSize,
-  paginationTotalSize,
+  paginationTotalSize
 } from '@constants/pagination';
 import { Title } from '@angular/platform-browser';
 import { selectUserList } from '@store/selectors/user.selectors';
@@ -76,6 +76,9 @@ export class UsersComponent implements OnInit {
     this._fetchData();
   }
 
+  /**
+   * Subscribe to subjects
+   */
   public initSubscriptions(): void {
     this.loading$ = this.loadingService.loading$;
     this.error$ = this.errorService.error$;
@@ -87,10 +90,16 @@ export class UsersComponent implements OnInit {
     this.manage = this.belongToManage(this.currentUser);
   }
 
+  /**
+   * Returns true or false depends of belong user to manager
+   */
   public belongToManage(user: User): boolean {
     return this.userService.belongToManage(user);
   }
 
+  /**
+   * Set bread crumbs
+   */
   public initBreadCrumbItems(): void {
     this.breadCrumbItems = breadCrumbs.users;
   }
@@ -137,32 +146,41 @@ export class UsersComponent implements OnInit {
    */
   public registerNewUser(): void {
     this.submitted = true;
-
     if (!this.validationform || (this.validationform && this.validationform.invalid) || !this.selectedRole) {
       return;
     }
-
     const email = this.validationform.get('email').value as string;
     const group = (this.selectedRole as unknown) as Groups;
     const data = { email, group };
-
     this.register({ data });
     this.modalService.dismissAll();
     this.submitted = false;
   }
 
+  /**
+   * Dispatch add new user
+   */
   public register(payload: RegisterPayload): void {
     this.store.dispatch(new CreateUser(payload));
   }
 
+  /**
+   * Paginate page
+   */
   public onPageChange(page: number): void {
     this.userService.onPageChange(page);
   }
 
+  /**
+   * Dispatch delete user
+   */
   public delete(user: User) {
     this.store.dispatch(new DeleteUser(user));
   }
 
+  /**
+   * Dispatch update group
+   */
   public updateGroup(user: User, group: Groups): void {
     const data = { group };
     this.store.dispatch(new UpdateUser({ id: user.id, data }));
@@ -175,6 +193,9 @@ export class UsersComponent implements OnInit {
     this.titleService.setTitle(title);
   }
 
+  /**
+   * Dispatch getting users
+   */
   public _fetchData(): void {
     this.store.dispatch(new GetUsers());
   }
