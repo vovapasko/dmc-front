@@ -97,7 +97,7 @@ export class PasswordResetComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   // convenience getter for easy access to form fields
-  get f(): { [p: string]: AbstractControl } {
+  get resetFormControls(): { [p: string]: AbstractControl } {
     return this.resetForm.controls;
   }
 
