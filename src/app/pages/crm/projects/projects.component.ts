@@ -84,30 +84,41 @@ export class ProjectsComponent implements OnInit {
     this._fetchData();
   }
 
+  /**
+   * Init forms, set form value
+   */
   public initForms(): void {
     this.initCreateProjectForm();
     this.initEditProjectForm();
   }
 
+  /**
+   * Set create project form
+   */
   public initCreateProjectForm(): void {
     this.createProjectForm = this.projectService.initializeCreateProjectForm();
   }
 
+  /**
+   * Set edit project form
+   */
   public initEditProjectForm(project?: NewsProject): void {
     this.editProjectForm = this.projectService.initializeEditProjectForm(project);
   }
 
-  get f() {
+  get createProjectFormControls() {
     return this.createProjectForm.controls;
   }
 
-  get fe() {
+  get editProjectFormControls() {
     return this.editProjectForm.controls;
   }
 
+  /**
+   * Handle creating new project
+   */
   public addNewProject(): void {
     this.submitted = true;
-
     if (this.createProjectForm.invalid) {
       return;
     }
@@ -117,10 +128,16 @@ export class ProjectsComponent implements OnInit {
     this.cleanAfter();
   }
 
+  /**
+   * Dispatch new project
+   */
   public createNewsProject(payload: CreateNewsProjectPayload): void {
     this.store.dispatch(new CreateNewsProject(payload));
   }
 
+  /**
+   * Clean forms
+   */
   public cleanAfter(): void {
     this.createProjectForm.reset();
     this.editProjectForm.reset();
@@ -129,20 +146,32 @@ export class ProjectsComponent implements OnInit {
     this.submitted = false;
   }
 
+  /**
+   * Set bread crumbs
+   */
   public initBreadCrumbItems(): void {
     // tslint:disable-next-line: max-line-length
     this.breadCrumbItems = breadCrumbs.projects;
   }
 
+  /**
+   * Subscribe to subject
+   */
   public initSubscriptions(): void {
     this.loading$ = this.loadingService.loading$;
     this.error$ = this.errorService.error$;
   }
 
+  /**
+   * Navigate to burst news page
+   */
   public onCreateProject(): void {
     this.router.navigate([urls.CRM, urls.BURST_NEWS]);
   }
 
+  /**
+   * Fill edit project modal
+   */
   public onChange(id: number): void {
     const payload = { id };
     this.projectId = id;
@@ -150,18 +179,22 @@ export class ProjectsComponent implements OnInit {
     this.store.dispatch(new GetNewsProject(payload));
   }
 
+  /**
+   * Dispatch delete project
+   */
   public onDelete(id: number): void {
     const payload = { id };
     this.store.dispatch(new DeleteNewsProject(payload));
   }
 
+  /**
+   * Handle editing project
+   */
   public editProject(): void {
     this.submitted = true;
-
     if (this.editProjectForm.invalid) {
       return;
     }
-
     const data = this.editProjectForm.value;
     const id = this.projectId;
     const payload = { id, data } as unknown as UpdateNewsProjectPayload;
@@ -169,6 +202,9 @@ export class ProjectsComponent implements OnInit {
     this.cleanAfter();
   }
 
+  /**
+   * Dispatch update project
+   */
   public updateProject(payload: UpdateNewsProjectPayload): void {
     this.store.dispatch(new UpdateNewsProject(payload));
   }
@@ -180,6 +216,9 @@ export class ProjectsComponent implements OnInit {
     this.titleService.setTitle(title);
   }
 
+  /**
+   * Open "create new project" modal
+   */
   public openModal(content: string): void {
     this.modalService.open(content, { centered: true });
   }
