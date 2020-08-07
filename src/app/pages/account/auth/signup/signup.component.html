@@ -34,13 +34,13 @@
                                 <input type="text"
                                        formControlName="firstName"
                                        class="form-control"
-                                       [ngClass]="{ 'is-invalid': submitted && f?.firstName.errors }"
+                                       [ngClass]="{ 'is-invalid': submitted && signupFormControls?.firstName.errors }"
                                        id="first-name"
                                        placeholder="Введите ваше имя"
                                 />
 
-                                <div *ngIf="submitted && f?.firstName.errors" class="invalid-feedback">
-                                    <div *ngIf="f?.firstName.errors.required">Имя обязательно</div>
+                                <div *ngIf="submitted && signupFormControls?.firstName.errors" class="invalid-feedback">
+                                    <div *ngIf="signupFormControls?.firstName.errors.required">Имя обязательно</div>
                                 </div>
                             </div>
 
@@ -50,13 +50,13 @@
                                 <input type="text"
                                        formControlName="lastName"
                                        class="form-control"
-                                       [ngClass]="{ 'is-invalid': submitted && f?.lastName.errors }"
+                                       [ngClass]="{ 'is-invalid': submitted && signupFormControls?.lastName.errors }"
                                        id="last-name"
                                        placeholder="Введите вашу фамилию"
                                 />
 
-                                <div *ngIf="submitted && f?.lastName.errors" class="invalid-feedback">
-                                    <div *ngIf="f?.lastName.errors.required">Фамилия обязательна</div>
+                                <div *ngIf="submitted && signupFormControls?.lastName.errors" class="invalid-feedback">
+                                    <div *ngIf="signupFormControls?.lastName.errors.required">Фамилия обязательна</div>
                                 </div>
                             </div>
 
@@ -67,7 +67,7 @@
                                     <input [type]="visible ? 'text' : 'password'"
                                            formControlName="password"
                                            class="form-control"
-                                           [ngClass]="{ 'is-invalid': submitted && f.password.errors }"
+                                           [ngClass]="{ 'is-invalid': submitted && signupFormControls.password.errors }"
                                            id="password"
                                            placeholder="Введите пароль"
                                     />
@@ -78,9 +78,9 @@
                                                     class="mdi mdi-eye-off"></i></span>
                                         </a>
                                     </div>
-                                    <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                                        <div *ngIf="f.password.errors.required">Пароль обязателен</div>
-                                        <div *ngIf="f.password.errors.minlength">Минимальная длина пароля 6 символов
+                                    <div *ngIf="submitted && signupFormControls.password.errors" class="invalid-feedback">
+                                        <div *ngIf="signupFormControls.password.errors.required">Пароль обязателен</div>
+                                        <div *ngIf="signupFormControls.password.errors.minlength">Минимальная длина пароля 6 символов
                                         </div>
                                     </div>
                                 </div>
@@ -93,14 +93,14 @@
                                 <input type="password"
                                        formControlName="passwordConfirm"
                                        class="form-control"
-                                       [ngClass]="{ 'is-invalid': submitted && f.passwordConfirm.errors }"
+                                       [ngClass]="{ 'is-invalid': submitted && signupFormControls.passwordConfirm.errors }"
                                        id="confirm-password"
                                        placeholder="Введите пароль ещё раз"
                                 />
 
-                                <div *ngIf="submitted && f.passwordConfirm.errors" class="invalid-feedback">
-                                    <div *ngIf="f.passwordConfirm.errors.required">Подтвердите пароль</div>
-                                    <div *ngIf="f.passwordConfirm.errors.mustMatch">Пароли должны совпадать</div>
+                                <div *ngIf="submitted && signupFormControls.passwordConfirm.errors" class="invalid-feedback">
+                                    <div *ngIf="signupFormControls.passwordConfirm.errors.required">Подтвердите пароль</div>
+                                    <div *ngIf="signupFormControls.passwordConfirm.errors.mustMatch">Пароли должны совпадать</div>
                                 </div>
                             </div>
 

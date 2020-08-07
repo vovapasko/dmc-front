@@ -96,7 +96,7 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   // convenience getter for easy access to form fields
-  get f(): { [p: string]: AbstractControl } {
+  get signupFormControls(): { [p: string]: AbstractControl } {
     return this.signupForm.controls;
   }
 
@@ -113,6 +113,9 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  /**
+   * Collect data and pass to submit
+   */
   public processSubmit(): void {
     const { firstName, lastName, password, passwordConfirm } = this.signupForm.value;
     const data = { firstName, lastName, password, passwordConfirm };
