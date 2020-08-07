@@ -417,7 +417,7 @@
                                     </a>
                                 </li>
 
-                                <li *ngIf="commonFormControls?.projectBurstMethod?.value?.method == methods.bayer || form?.projectBurstMethod?.value?.method == methods.topSecret"
+                                <li *ngIf="commonFormControls?.projectBurstMethod?.value?.method == methods.bayer || commonFormControls?.projectBurstMethod?.value?.method == methods.topSecret"
                                     class="nav-item" [awGoToStep]="{ stepIndex: 1 }"
                                 >
                                     <a
