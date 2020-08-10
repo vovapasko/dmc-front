@@ -143,6 +143,7 @@ export class ProjectService {
       email: [null, Validators.required],
       template: null,
       signature: null,
+      codeword: null
     });
   }
 
