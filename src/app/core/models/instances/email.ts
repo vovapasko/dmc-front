@@ -5,4 +5,5 @@ export interface Email {
   email: string;
   template: string;
   signature: string;
+  codeword: string;
 }

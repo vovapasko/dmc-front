@@ -21,7 +21,7 @@ import { News } from '@models/instances/news';
 import { Hashtag } from '@models/instances/hashtag';
 import { Format } from '@models/instances/format';
 import { setProjectValues } from '../helpers/utility';
-import { Warnings } from '@constants/notifications';
+import { Infos, Warnings } from '@constants/notifications';
 import { endpoints } from '@constants/endpoints';
 import { methods } from '@constants/methods';
 import { SecurityService } from './security.service';
