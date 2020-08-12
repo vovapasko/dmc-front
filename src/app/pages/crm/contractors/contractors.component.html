@@ -423,8 +423,8 @@
                     <div class="col-md-9">
                         <ng-select
                                 id="deletePostFormat"
-                                [items]="formats$ | async"
-                                bindLabel="postFormat"
+                                [items]="checkedContractors$ | async | contractorsFormats"
+                                bindLabel="label"
                                 bindValue="id"
                                 [multiple]="true"
                                 [closeOnSelect]="false"

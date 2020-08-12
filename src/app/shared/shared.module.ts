@@ -9,21 +9,24 @@ import { ContractorsNamesPipe } from './pipes/contractors-names.pipe';
 import { EditModeDirective } from './directives/edit-mode.directive';
 import { ViewModeDirective } from './directives/view-mode.directive';
 import { EditableOnEnterDirective } from './directives/editable-on-enter.directive';
-import { EditableComponent } from '../core/components/editable/editable.component';
+import { EditableComponent } from '@components/editable/editable.component';
+import { ContractorsFormatsPipe } from './pipes/contractors-formats.pipe';
 
 @NgModule({
-  declarations: [ProjectStatusPipe, ContractorsCostPipe, ContractorsNamesPipe, EditModeDirective, ViewModeDirective, EditableOnEnterDirective, EditableComponent],
+  declarations: [ProjectStatusPipe, ContractorsCostPipe, ContractorsNamesPipe, EditModeDirective, ViewModeDirective, EditableOnEnterDirective, EditableComponent, ContractorsFormatsPipe],
   imports: [CommonModule, UIModule, AlifeFileToBase64Module],
   exports: [
     UIModule,
     ProjectStatusPipe,
     ContractorsCostPipe,
     ContractorsNamesPipe,
+    ContractorsFormatsPipe,
     EditModeDirective,
     ViewModeDirective,
     EditableOnEnterDirective,
     EditableComponent,
-    AlifeFileToBase64Module,
-  ],
+    AlifeFileToBase64Module
+  ]
 })
-export class SharedModule {}
+export class SharedModule {
+}
