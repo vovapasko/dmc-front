@@ -31,7 +31,7 @@ export const Infos = {
   PROCESS_HAS_BEEN_FINISHED: {
     type: NotificationType.info,
     title: 'Процесс завершен',
-    message: 'Операция завершена, спасибо',
+    message: 'Операция завершена, обновите, пожалуйста страницу, спасибо',
     timeout: 1500
   },
   IMAGE_HAS_BEEN_LOADED: {
