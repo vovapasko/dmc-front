@@ -130,13 +130,13 @@ describe('ContractorsComponent', () => {
   });
 
   it('should initCreateForm', () => {
-    component.initCreateForm();
+    component.initCreateContractorForm();
     expect(component.createForm).toBeTruthy();
     expect(component.createContractorFormControls).toBeTruthy();
   });
 
   it('should initUpdateForm', () => {
-    component.initUpdateForm();
+    component.initUpdateContractorForm();
     expect(component.updateForm).toBeTruthy();
     expect(component.updateContractorFormControls).toBeTruthy();
   });
@@ -208,8 +208,8 @@ describe('ContractorsComponent', () => {
   });
 
   it('should cleanAfterUpdate', () => {
-    component.initUpdateForm();
-    component.initCreateForm();
+    component.initUpdateContractorForm();
+    component.initCreateContractorForm();
     component.initCreateFormatForm();
     component.initDeleteFormatForm();
     component.cleanAfterUpdate();
@@ -235,13 +235,13 @@ describe('ContractorsComponent', () => {
   });
 
   it('should submitCreateForm', () => {
-    component.initCreateForm();
+    component.initCreateContractorForm();
     component.submitCreateForm();
     expect(component.submitted).toBeTruthy();
   });
 
   it('should submitEditForm', () => {
-    component.initUpdateForm();
+    component.initUpdateContractorForm();
     component.submitEditForm();
     expect(component.submitted).toBeTruthy();
   });

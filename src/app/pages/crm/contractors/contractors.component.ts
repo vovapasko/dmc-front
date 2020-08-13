@@ -117,8 +117,8 @@ export class ContractorsComponent implements OnInit {
    * Start init forms
    */
   public initFormGroups(): void {
-    this.initCreateForm();
-    this.initUpdateForm();
+    this.initCreateContractorForm();
+    this.initUpdateContractorForm();
     this.initCreateFormatForm();
     this.initDeleteFormatForm();
   }
@@ -148,8 +148,8 @@ export class ContractorsComponent implements OnInit {
   /**
    * Get validators from contractor service
    */
-  public initCreateForm(): void {
-    this.createForm = this.contractorService.initializeCreateForm();
+  public initCreateContractorForm(): void {
+    this.createForm = this.contractorService.initializeCreateContractorForm();
   }
 
   /**
@@ -169,8 +169,8 @@ export class ContractorsComponent implements OnInit {
   /**
    * Validators for Update Form
    */
-  public initUpdateForm(): void {
-    this.updateForm = this.contractorService.initializeUpdateForm();
+  public initUpdateContractorForm(): void {
+    this.updateForm = this.contractorService.initializeUpdateContractorForm();
   }
 
   // convenience getter for easy access to form fields
