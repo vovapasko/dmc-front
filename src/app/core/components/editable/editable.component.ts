@@ -1,8 +1,9 @@
-import { Component, ContentChild, ElementRef, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, ContentChild, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ViewModeDirective } from '@shared/directives/view-mode.directive';
 import { EditModeDirective } from '@shared/directives/edit-mode.directive';
 import { fromEvent, Subject } from 'rxjs';
 import { filter, switchMapTo, take } from 'rxjs/operators';
+import { ContractorService } from '@services/contractor.service';
 
 @Component({
   selector: 'editable',
@@ -10,6 +11,9 @@ import { filter, switchMapTo, take } from 'rxjs/operators';
       <ng-container *ngTemplateOutlet="currentView"></ng-container> `
 })
 export class EditableComponent implements OnInit {
+  @Input() checked: boolean;
+  @Input() editing: boolean;
+  @Output() edit = new EventEmitter();
   @Output() update = new EventEmitter();
   @ContentChild(ViewModeDirective, { static: false }) viewModeTpl: ViewModeDirective;
   @ContentChild(EditModeDirective, { static: false }) editModeTpl: EditModeDirective;
@@ -19,11 +23,17 @@ export class EditableComponent implements OnInit {
 
   mode: 'view' | 'edit' = 'view';
 
-  constructor(private host: ElementRef) {
+  constructor(
+    private host: ElementRef,
+    private contractorService: ContractorService
+  ) {
   }
 
   get currentView() {
-    return this.mode === 'view' ? this.viewModeTpl.tpl : this.editModeTpl.tpl;
+    return this.mode === 'edit' || (this.editing && this.checked) ?
+      this.editModeTpl.tpl
+      :
+      this.viewModeTpl.tpl;
   }
 
   ngOnInit() {
@@ -38,6 +48,7 @@ export class EditableComponent implements OnInit {
   private viewModeHandler() {
     fromEvent(this.element, 'dblclick')
       .subscribe(() => {
+        this.edit.next(true);
         this.mode = 'edit';
         this.editMode.next(true);
       });
@@ -52,6 +63,7 @@ export class EditableComponent implements OnInit {
     this.editMode$
       .pipe(switchMapTo(clickOutside$))
       .subscribe((event) => {
+        this.edit.next();
         this.update.next();
         this.mode = 'view';
       });
