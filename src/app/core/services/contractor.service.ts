@@ -110,12 +110,9 @@ export class ContractorService {
       `${api}/${endpoints.CONTRACTOR}/${payload.id}`,
       methods.PUT,
       payload,
-      (response: UpdateContractorResponse) => {
-        if (response && response.contractor) {
-          const contractor = response.contractor;
-          this.contractors = this.contractors.map((el) => (+el.id === +contractor.id ? contractor : el));
-          return contractor;
-        }
+      (response: Contractor) => {
+        this.contractors = this.contractors.map((el) => (+el.id === +response.id ? response : el));
+        return response;
       }
     );
   }
@@ -178,7 +175,7 @@ export class ContractorService {
   /**
    * Validators for Create Form
    */
-  public initializeCreateForm(): FormGroup {
+  public initializeCreateContractorForm(): FormGroup {
     return this.formBuilder.group({
       editorName: ['', [Validators.required, Validators.minLength(1)]],
       contactPerson: ['', [Validators.required, Validators.minLength(1)]],
@@ -196,25 +193,25 @@ export class ContractorService {
       postFormat: ['', [Validators.required, Validators.minLength(1)]],
       newsAmount: [null, [Validators.required, Validators.minLength(1)]],
       arrangedNews: [null, [Validators.required, Validators.minLength(1)]],
-      onePostPrice: [null, [Validators.required, Validators.minLength(1)]],
+      onePostPrice: [null, [Validators.required, Validators.minLength(1)]]
     });
   }
 
   public initializeDeleteFormatForm(): FormGroup {
     return this.formBuilder.group({
       deletePostFormat: [null, Validators.required]
-    })
+    });
   }
 
   /**
    * Validators for Update Form
    */
-  public initializeUpdateForm(): FormGroup {
+  public initializeUpdateContractorForm(): FormGroup {
     return this.formBuilder.group({
-      updateEditorName: ['', [Validators.required, Validators.minLength(1)]],
-      updateContactPerson: ['', [Validators.required, Validators.minLength(1)]],
-      updatePhoneNumber: ['', [Validators.required, Validators.pattern('^\\+?3?8?(0\\d{9})$')]],
-      updateEmail: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$')]]
+      editorName: ['', [Validators.required, Validators.minLength(1)]],
+      contactPerson: ['', [Validators.required, Validators.minLength(1)]],
+      phoneNumber: ['', [Validators.required, Validators.pattern('^\\+?3?8?(0\\d{9})$')]],
+      email: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$')]]
     });
   }
 

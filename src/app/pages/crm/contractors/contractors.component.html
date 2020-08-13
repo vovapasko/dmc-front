@@ -468,44 +468,44 @@
                 <div class="form-group">
                     <label for="updateEditorName">Название редакции</label>
                     <input type="text"
-                           formControlName="updateEditorName"
+                           formControlName="editorName"
                            class="form-control"
-                           [ngClass]="{ 'is-invalid': submitted && updateContractorFormControls.updateEditorName.errors }"
+                           [ngClass]="{ 'is-invalid': submitted && updateContractorFormControls.editorName.errors }"
                            id="updateEditorName"
                            placeholder="Введите название редакции"
                     />
 
-                    <div *ngIf="submitted && updateContractorFormControls.updateEditorName.errors" class="invalid-feedback">
-                        <div *ngIf="updateContractorFormControls.updateEditorName.errors.required">Название редакции обязательно</div>
+                    <div *ngIf="submitted && updateContractorFormControls.editorName.errors" class="invalid-feedback">
+                        <div *ngIf="updateContractorFormControls.editorName.errors.required">Название редакции обязательно</div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="updateContactPerson">Контактное лицо</label>
                     <input type="text"
-                           formControlName="updateContactPerson"
+                           formControlName="contactPerson"
                            class="form-control"
-                           [ngClass]="{ 'is-invalid': submitted && updateContractorFormControls.updateContactPerson.errors }"
+                           [ngClass]="{ 'is-invalid': submitted && updateContractorFormControls.contactPerson.errors }"
                            id="updateContactPerson"
                            placeholder="Введите контактное лицо"
                     />
 
-                    <div *ngIf="submitted && updateContractorFormControls.updateContactPerson.errors" class="invalid-feedback">
-                        <div *ngIf="updateContractorFormControls.updateContactPerson.errors.required">Контактное лицо обязательно</div>
+                    <div *ngIf="submitted && updateContractorFormControls.contactPerson.errors" class="invalid-feedback">
+                        <div *ngIf="updateContractorFormControls.contactPerson.errors.required">Контактное лицо обязательно</div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="updatePhoneNumber">Номер телефона</label>
                     <input type="text"
-                           formControlName="updatePhoneNumber"
+                           formControlName="phoneNumber"
                            class="form-control"
                            id="updatePhoneNumber"
-                           [ngClass]="{ 'is-invalid': submitted && updateContractorFormControls.updatePhoneNumber.errors }"
+                           [ngClass]="{ 'is-invalid': submitted && updateContractorFormControls.phoneNumber.errors }"
                     />
                     <span class="font-13 text-muted">e.g "380992314525"</span>
-                    <div *ngIf="submitted && updateContractorFormControls.updatePhoneNumber.errors" class="invalid-feedback">
-                        <div *ngIf="updateContractorFormControls.updatePhoneNumber.errors.pattern">Введите корректный номер</div>
+                    <div *ngIf="submitted && updateContractorFormControls.phoneNumber.errors" class="invalid-feedback">
+                        <div *ngIf="updateContractorFormControls.phoneNumber.errors.pattern">Введите корректный номер</div>
                     </div>
                 </div>
 
@@ -513,13 +513,13 @@
                     <label for="updateEmail">Email</label>
                     <input class="form-control"
                            id="updateEmail"
-                           [ngClass]="{ 'is-invalid': submitted && updateContractorFormControls.updateEmail.errors }"
+                           [ngClass]="{ 'is-invalid': submitted && updateContractorFormControls.email.errors }"
                            placeholder="Введите email"
-                           formControlName="updateEmail"
+                           formControlName="email"
                     />
-                    <div *ngIf="submitted && updateContractorFormControls.updateEmail.errors" class="invalid-feedback">
-                        <div *ngIf="updateContractorFormControls.updateEmail.errors.required">Введите email</div>
-                        <div *ngIf="updateContractorFormControls.updateEmail.errors.pattern">Введите корректный email</div>
+                    <div *ngIf="submitted && updateContractorFormControls.email.errors" class="invalid-feedback">
+                        <div *ngIf="updateContractorFormControls.email.errors.required">Введите email</div>
+                        <div *ngIf="updateContractorFormControls.email.errors.pattern">Введите корректный email</div>
                     </div>
                 </div>
 
