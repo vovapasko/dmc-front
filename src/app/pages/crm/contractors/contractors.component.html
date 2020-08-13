@@ -129,7 +129,11 @@
                                     {{ contractor.email }}
                                 </td>
                                 <td>
-                                    <editable (update)="updateField(contractor, 'onePostPrice')">
+                                    <editable [checked]="(checkedContractors$ | async).indexOf(contractor) !== -1"
+                                              [editing]="editing"
+                                              (edit)="editFields($event)"
+                                              (update)="updateField(contractor, 'onePostPrice')"
+                                    >
                                         <ng-template viewMode>
                                             <span>
                                                 <i class="mdi mdi-dots-horizontal m-0 text-muted h3"></i>
@@ -150,7 +154,11 @@
                                     </editable>
                                 </td>
                                 <td>
-                                    <editable (update)="updateField(contractor, 'newsAmount')">
+                                    <editable [checked]="(checkedContractors$ | async).indexOf(contractor) !== -1"
+                                              [editing]="editing"
+                                              (edit)="editFields($event)"
+                                              (update)="updateField(contractor, 'newsAmount')"
+                                    >
                                         <ng-template viewMode>
                                             <span>
                                                 <i class="mdi mdi-dots-horizontal m-0 text-muted h3"></i>
@@ -171,7 +179,11 @@
                                     </editable>
                                 </td>
                                 <td>
-                                    <editable (update)="updateField(contractor, 'arrangedNews')">
+                                    <editable [checked]="(checkedContractors$ | async).indexOf(contractor) !== -1"
+                                              [editing]="editing"
+                                              (edit)="editFields($event)"
+                                              (update)="updateField(contractor, 'arrangedNews')"
+                                    >
                                         <ng-template viewMode>
                                             <span>
                                                 <i class="mdi mdi-dots-horizontal m-0 text-muted h3"></i>

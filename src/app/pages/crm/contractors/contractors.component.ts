@@ -62,6 +62,7 @@ export class ContractorsComponent implements OnInit {
 
   breadCrumbItems: Array<{}>;
   submitted: boolean;
+  editing: boolean;
   term = '';
   editCheckedMode = false;
 
@@ -164,6 +165,13 @@ export class ContractorsComponent implements OnInit {
    */
   public check(contractor: Contractor): void {
     this.contractorService.check(contractor);
+  }
+
+  /**
+   * Pass boolean value, editing fields in column
+   */
+  public editFields(value: boolean): void {
+    this.editing = value;
   }
 
   /**
