@@ -31,12 +31,13 @@ import { FileUploadModule } from '@iplab/ngx-file-upload';
 import { ArchwizardModule } from 'angular-archwizard';
 import { NgxMaskModule } from 'ngx-mask';
 import { NestableModule } from 'ngx-nestable';
-import { SharedModule } from '../../shared/shared.module';
+import { SharedModule } from '@shared/shared.module';
 import { ProjectsComponent } from './projects/projects.component';
 import { ReportsComponent } from './reports/reports.component';
+import { ClientsComponent } from '@pages/crm/clients/clients.component';
 
 @NgModule({
-  declarations: [ContractorsComponent, UsersComponent, BurstNewsComponent, ProjectsComponent, ReportsComponent],
+  declarations: [ContractorsComponent, UsersComponent, BurstNewsComponent, ProjectsComponent, ClientsComponent, ReportsComponent],
   imports: [
     FormsModule,
     UIModule,

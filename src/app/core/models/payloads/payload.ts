@@ -19,6 +19,9 @@ import { UpdateEmailPayload } from './project/email/update';
 import { DeleteEmailPayload } from './project/email/delete';
 import { CreateNewsWavesPayload } from './news/news-waves/create';
 import { UploadNewsFilePayload } from '@models/payloads/news/news-waves/upload-file';
+import { CreateClientPayload } from '@models/payloads/client/create';
+import { DeleteClientPayload } from '@models/payloads/client/delete';
+import { UpdateClientPayload } from '@models/payloads/client/update';
 
 export type Payloads =
   | LoginPayload
@@ -41,4 +44,7 @@ export type Payloads =
   | UpdateEmailPayload
   | DeleteEmailPayload
   | CreateNewsWavesPayload
-|UploadNewsFilePayload;
+  | UploadNewsFilePayload
+  | CreateClientPayload
+  | UpdateClientPayload
+  | DeleteClientPayload;
