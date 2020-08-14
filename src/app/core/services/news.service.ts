@@ -92,7 +92,7 @@ export class NewsService {
    * emails: Email[];
    * name: string;
    * budget: number;
-   * client: string;
+   * clients: string;
    * dateCreated: Date;
    * dateUpdated: Date;
    */
@@ -113,7 +113,7 @@ export class NewsService {
    * emails: Email[];
    * name: string;
    * budget: number;
-   * client: string;
+   * clients: string;
    * dateCreated: Date;
    * dateUpdated: Date;
    */
