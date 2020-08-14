@@ -1,9 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProxyComponent } from './clients.component';
 import { CommonModule } from '@angular/common';
-import { BotFarmRoutingModule } from '@pages/bot-farm/bot-farm-routing.module';
-import { SharedModule } from '../../../shared/shared.module';
+import { SharedModule } from '@shared/shared.module';
 import {
   NgbAlertModule,
   NgbDatepickerModule,
@@ -11,7 +9,7 @@ import {
   NgbModalModule, NgbPaginationModule,
   NgbPopoverModule, NgbProgressbarModule, NgbTooltipModule, NgbTypeaheadModule
 } from '@ng-bootstrap/ng-bootstrap';
-import { UIModule } from '../../../shared/ui/ui.module';
+import { UIModule } from '@shared/ui/ui.module';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DndModule } from 'ngx-drag-drop';
 import { NgApexchartsModule } from 'ng-apexcharts';
@@ -36,14 +34,15 @@ import { RouterModule } from '@angular/router';
 import { TicketService } from '@services/ticket.service';
 import { ClientService } from '@services/client.service';
 import { IAppState } from '@store/state/app.state';
+import { ClientsComponent } from '@pages/crm/clients/clients.component';
 
 describe('ProxyComponent', () => {
-  let component: ProxyComponent;
-  let fixture: ComponentFixture<ProxyComponent>;
+  let component: ClientsComponent;
+  let fixture: ComponentFixture<ClientsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ProxyComponent],
+      declarations: [ClientsComponent],
       imports: [
         StoreModule.forRoot({}),
         RouterModule.forRoot([]),
@@ -95,7 +94,7 @@ describe('ProxyComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProxyComponent);
+    fixture = TestBed.createComponent(ClientsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -105,7 +104,7 @@ describe('ProxyComponent', () => {
   });
 
   it('should initForm', () => {
-    expect(component.createProxyForm).toBeTruthy();
+    expect(component.createClientForm).toBeTruthy();
   });
 
   it('should init bread crumb items', () => {
@@ -113,7 +112,7 @@ describe('ProxyComponent', () => {
   });
 
   it('should init create clients form', () => {
-    expect(component.createProxyForm).toBeTruthy();
+    expect(component.createClientForm).toBeTruthy();
   });
 
 });

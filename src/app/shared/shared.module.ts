@@ -11,9 +11,10 @@ import { ViewModeDirective } from './directives/view-mode.directive';
 import { EditableOnEnterDirective } from './directives/editable-on-enter.directive';
 import { EditableComponent } from '@components/editable/editable.component';
 import { ContractorsFormatsPipe } from './pipes/contractors-formats.pipe';
+import { TicketsSortableDirective } from '@shared/directives/tickets-sortable.directive';
 
 @NgModule({
-  declarations: [ProjectStatusPipe, ContractorsCostPipe, ContractorsNamesPipe, EditModeDirective, ViewModeDirective, EditableOnEnterDirective, EditableComponent, ContractorsFormatsPipe],
+  declarations: [ProjectStatusPipe, ContractorsCostPipe, ContractorsNamesPipe, EditModeDirective, ViewModeDirective, EditableOnEnterDirective, TicketsSortableDirective, EditableComponent, ContractorsFormatsPipe],
   imports: [CommonModule, UIModule, AlifeFileToBase64Module],
   exports: [
     UIModule,
@@ -24,6 +25,7 @@ import { ContractorsFormatsPipe } from './pipes/contractors-formats.pipe';
     EditModeDirective,
     ViewModeDirective,
     EditableOnEnterDirective,
+    TicketsSortableDirective,
     EditableComponent,
     AlifeFileToBase64Module
   ]
