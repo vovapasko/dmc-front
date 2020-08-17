@@ -9,7 +9,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { IAppState } from '@store/state/app.state';
 import { select, Store } from '@ngrx/store';
 import { selectClientList } from '@store/selectors/client.selectors';
-import { CreateClient, GetClients, SelectClient, UpdateClient } from '@store/actions/client.actions';
+import { CreateClient, DeleteClient, GetClients, SelectClient, UpdateClient } from '@store/actions/client.actions';
 import { CreateClientPayload } from '@models/payloads/client/create';
 import { breadCrumbs } from '@constants/bread-crumbs';
 import { selectHashtags } from '@store/selectors/news.selectors';
@@ -110,6 +110,11 @@ export class ClientsComponent implements OnInit {
    */
   public openModal(content: string): void {
     this.modalService.open(content, { centered: true });
+  }
+
+
+  public delete(client: Client): void {
+    this.store.dispatch(new DeleteClient({ id: client.id }));
   }
 
   /**
