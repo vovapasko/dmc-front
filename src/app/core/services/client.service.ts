@@ -51,15 +51,25 @@ export class ClientService {
 
   public initializeCreateClientForm(): FormGroup {
     return this.formBuilder.group({
-      onePostPrice: [null, [Validators.required]],
-      arrangedNews: [null, [Validators.required]],
-      email: [null, [Validators.email]],
-      phone: [null, [Validators.required]],
-      client: [null, [Validators.required]],
-      hashtags: [null, [Validators.required]],
+      price: [null, [Validators.required]],
+      amountPublications: [null, [Validators.required]],
+      emails: [null, [Validators.required]],
+      numbers: [null, [Validators.required]],
+      name: [null, [Validators.required]],
+      hashtags: [null, [Validators.required]]
     });
   }
 
+  public initializeUpdateClientForm(): FormGroup {
+    return this.formBuilder.group({
+      price: [null, [Validators.required]],
+      amountPublications: [null, [Validators.required]],
+      emails: [null, [Validators.required]],
+      numbers: [null, [Validators.required]],
+      name: [null, [Validators.required]],
+      hashtags: [null, [Validators.required]]
+    });
+  }
 
   /**
    *  Get all clients, api returns array of clients
@@ -94,7 +104,7 @@ export class ClientService {
    *  Update clients
    */
   public update(payload: UpdateClientPayload): Observable<Client> {
-    return this.requestHandler.request(`${api}/${endpoints.CLIENT}/`,
+    return this.requestHandler.request(`${api}/${endpoints.CLIENT}/${payload.id}`,
       methods.PUT,
       payload,
       (response: Client) => {

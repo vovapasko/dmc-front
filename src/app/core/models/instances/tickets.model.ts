@@ -9,11 +9,11 @@ export interface CardData {
 // Table Data
 export interface TableData {
   id: number;
-  onePostPrice: string;
-  arrangedNews: number;
-  email: string;
-  phone: string;
-  client: string;
+  price: string;
+  amountPublications: number;
+  emails: string;
+  numbers: string;
+  name: string;
 }
 
 // Search Data

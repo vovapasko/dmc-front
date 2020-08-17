@@ -9,13 +9,17 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { IAppState } from '@store/state/app.state';
 import { select, Store } from '@ngrx/store';
 import { selectClientList } from '@store/selectors/client.selectors';
-import { CreateClient, GetClients } from '@store/actions/client.actions';
+import { CreateClient, GetClients, SelectClient, UpdateClient } from '@store/actions/client.actions';
 import { CreateClientPayload } from '@models/payloads/client/create';
 import { breadCrumbs } from '@constants/bread-crumbs';
 import { selectHashtags } from '@store/selectors/news.selectors';
 import { selectEmailsList } from '@store/selectors/project.selectors';
 import { GetEmails } from '@store/actions/project.actions';
 import { GetProjectConfiguration } from '@store/actions/news.actions';
+import { UpdateClientPayload } from '@models/payloads/client/update';
+import { Client } from '@models/instances/client';
+import { SelectContractor } from '@store/actions/contractor.actions';
+import { setValues } from '@helpers/utility';
 
 @Component({
   selector: 'app-client',
@@ -27,6 +31,7 @@ export class ClientsComponent implements OnInit {
   submitted = false;
   cardData: CardData[];
   createClientForm: FormGroup;
+  updateClientForm: FormGroup;
   tickets$: Observable<TableData[]>;
   hashtags$ = this.store.pipe(select(selectHashtags));
   emails$ = this.store.pipe(select(selectEmailsList));
@@ -36,18 +41,18 @@ export class ClientsComponent implements OnInit {
 
   constructor(
     public service: TicketService,
-    private proxyService: ClientService,
+    private clientService: ClientService,
     private modalService: NgbModal,
     private store: Store<IAppState>
   ) {
-    this.service.records$ = this.proxyService.clients$;
+    this.service.records$ = this.clientService.clients$;
     this.tickets$ = service.tickets$;
     this.total$ = service.total$;
   }
 
   ngOnInit() {
     this.breadCrumbItems = breadCrumbs.proxies;
-    this.initForm();
+    this.initForms();
     this._fetchData();
   }
 
@@ -60,7 +65,27 @@ export class ClientsComponent implements OnInit {
       return;
     }
     const data = this.createClientForm.value;
-    this.add({ data: [data] });
+    this.add({ data });
+    this.modalService.dismissAll();
+    this.submitted = false;
+  }
+
+  public selectClient(client: Client): void {
+    this.store.dispatch(new SelectClient(client));
+    setValues(this.updateClientForm.controls, client);
+  }
+
+  /**
+   * Set controllers to create clients form
+   */
+  public updateClient(): void {
+    this.submitted = true;
+    if (this.updateClientForm.invalid) {
+      return;
+    }
+    const id = this.clientService.selectedClient.id;
+    const data = this.updateClientForm.value;
+    this.update({ data, id });
     this.modalService.dismissAll();
     this.submitted = false;
   }
@@ -70,6 +95,13 @@ export class ClientsComponent implements OnInit {
    */
   public add(payload: CreateClientPayload): void {
     this.store.dispatch(new CreateClient(payload));
+  }
+
+  /**
+   * Dispatch update client
+   */
+  public update(payload: UpdateClientPayload): void {
+    this.store.dispatch(new UpdateClient(payload));
   }
 
   /**
@@ -90,8 +122,23 @@ export class ClientsComponent implements OnInit {
   /**
    * Set controllers to create clients form
    */
-  public initForm(): void {
-    this.createClientForm = this.proxyService.initializeCreateClientForm();
+  public initCreateClientForm(): void {
+    this.createClientForm = this.clientService.initializeCreateClientForm();
+  }
+
+  /**
+   * Set controllers to update clients form
+   */
+  public initUpdateClientForm(): void {
+    this.updateClientForm = this.clientService.initializeUpdateClientForm();
+  }
+
+  /**
+   * Set controllers to forms
+   */
+  public initForms(): void {
+    this.initCreateClientForm();
+    this.initUpdateClientForm();
   }
 
   /**
