@@ -72,33 +72,33 @@ describe('ClientService', () => {
 
       const req = httpMock.expectOne(`${api}/${endpoints.CLIENT}/`);
       expect(req.request.method).toBe('GET');
-      req.flush({ data: MockClients });
+      req.flush({ results: MockClients });
     });
   });
 
   describe('should create clients', () => {
     it('should return an Observable<Client>', () => {
-      const payload = [MockClient] as unknown as CreateClientPayload;
+      const payload = {data: MockClient} as unknown as CreateClientPayload;
       service.create(payload).subscribe((proxy) => {
         expect(proxy).toBeTruthy();
       });
 
       const req = httpMock.expectOne(`${api}/${endpoints.CLIENT}/`);
       expect(req.request.method).toBe('POST');
-      req.flush({ object: [MockClient] });
+      req.flush(MockClient);
     });
   });
 
   describe('should update clients', () => {
     it('should return an Observable<Client>', () => {
-      const payload = [MockClient] as unknown as UpdateClientPayload;
+      const payload = {id: MockClient.id, data: MockClient} as unknown as UpdateClientPayload;
       service.update(payload).subscribe((group) => {
         expect(group).toBeTruthy();
       });
 
-      const req = httpMock.expectOne(`${api}/${endpoints.CLIENT}/`);
+      const req = httpMock.expectOne(`${api}/${endpoints.CLIENT}/${MockClient.id}`);
       expect(req.request.method).toBe('PUT');
-      req.flush({ object: [MockClient] });
+      req.flush(MockClient);
     });
   });
 

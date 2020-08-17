@@ -4,10 +4,9 @@ import { TableData } from '@models/instances/tickets.model';
 
 import { debounceTime, delay, switchMap, tap } from 'rxjs/operators';
 
-import { SortDirection } from '../../shared/directives/tickets-sortable.directive';
+import { SortDirection } from '@shared/directives/tickets-sortable.directive';
 
 import { SearchResult } from '@models/instances/tickets.model';
-import { clients } from '@pages/crm/clients/data';
 
 interface State {
   page: number;
@@ -49,11 +48,11 @@ function sort(tickets: TableData[], column: string, direction: string): TableDat
  * @param term Search the value
  */
 function proxyMatches(ticket: TableData, term: string) {
-  return ticket.onePostPrice.toLowerCase().includes(term)
-    || ticket.email.toLowerCase().includes(term)
-    || ticket.phone.toLowerCase().includes(term)
-    || ticket.arrangedNews === +term
-    || ticket.client.toLowerCase().includes(term)
+  return ticket.price.toString().toLowerCase().includes(term)
+    || ticket.emails.toLowerCase().includes(term)
+    || ticket.numbers.toLowerCase().includes(term)
+    || ticket.amountPublications === +term
+    || ticket.name.toLowerCase().includes(term)
     || ticket.id === +term;
 }
 
@@ -196,8 +195,7 @@ export class TicketService {
   private _search(): Observable<SearchResult> {
 
     const { sortColumn, sortDirection, pageSize, page, searchTerm } = this._state;
-    // const records = this.records$.getValue();
-    const records = clients;
+    const records = this.records$.getValue();
 
     // 1. sort
     let tickets = sort(records, sortColumn, sortDirection);
