@@ -4,10 +4,9 @@ import { TableData } from '@models/instances/tickets.model';
 
 import { debounceTime, delay, switchMap, tap } from 'rxjs/operators';
 
-import { SortDirection } from '../../shared/directives/tickets-sortable.directive';
+import { SortDirection } from '@shared/directives/tickets-sortable.directive';
 
 import { SearchResult } from '@models/instances/tickets.model';
-import { clients } from '@pages/crm/clients/data';
 
 interface State {
   page: number;
