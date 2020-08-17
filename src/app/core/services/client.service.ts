@@ -68,8 +68,8 @@ export class ClientService {
     return this.requestHandler.request(`${api}/${endpoints.CLIENT}/`,
       methods.GET,
       null,
-      (response: { data: Array<Client> }) => {
-        const clients = response.data;
+      (response: { results: Array<Client> }) => {
+        const clients = response.results;
         this.clients = clients;
         return clients;
       }
@@ -83,10 +83,9 @@ export class ClientService {
     return this.requestHandler.request(`${api}/${endpoints.CLIENT}/`,
       methods.POST,
       payload,
-      (response: { object: Array<Client>, taskId: number }) => {
-        const proxy = { ...response.object[0], id: response.taskId };
-        this.clients = [...this.clients, proxy];
-        return proxy;
+      (response: Client) => {
+        this.clients = [...this.clients, response];
+        return response;
       }
     );
   }
@@ -98,10 +97,9 @@ export class ClientService {
     return this.requestHandler.request(`${api}/${endpoints.CLIENT}/`,
       methods.PUT,
       payload,
-      (response: { object: Array<Client>, taskId: number }) => {
-        const proxy = response.object[0];
-        this.clients = this.clients.map(el => el.id === proxy.id ? proxy : el);
-        return proxy;
+      (response: Client) => {
+        this.clients = this.clients.map(el => el.id === response.id ? response : el);
+        return response;
       }
     );
   }
