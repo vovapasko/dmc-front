@@ -73,13 +73,18 @@
                                         <div class="form-group row mb-3">
                                             <label for="clientName" class="col-md-3 col-form-label"> Клиент </label>
                                             <div class="col-md-9">
-                                                <input type="text"
-                                                       id="clientName"
-                                                       placeholder="Введите клиента"
-                                                       class="form-control"
-                                                       formControlName="clientName"
-                                                       [ngClass]="{ 'is-invalid': submitted && commonFormControls.clientName.errors }"
-                                                />
+                                                <ng-select
+                                                        id="clientName"
+                                                        [items]="clients$ | async"
+                                                        bindLabel="name"
+                                                        [multiple]="false"
+                                                        [closeOnSelect]="true"
+                                                        [hideSelected]="true"
+                                                        placeholder="Выберите клиента"
+                                                        formControlName="clientName"
+                                                        [ngClass]="{ 'is-invalid': submitted && commonFormControls.clientName.errors }"
+                                                >
+                                                </ng-select>
                                                 <div *ngIf="submitted && commonFormControls.clientName.errors"
                                                      class="invalid-feedback">
                                                     <span *ngIf="commonFormControls.clientName.errors.required"></span>

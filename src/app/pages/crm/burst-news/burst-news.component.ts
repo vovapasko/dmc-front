@@ -48,6 +48,8 @@ import { pairs } from '@constants/burst-news-pairs';
 import { emptyNewsItem } from '@constants/empty-news-item';
 import { breadCrumbs } from '@constants/bread-crumbs';
 import {revenueRadialChart} from '@components/charts/data';
+import { selectClientList } from '@store/selectors/client.selectors';
+import { GetClients } from '@store/actions/client.actions';
 
 /**
  * Form Burst news component - handling the burst news with sidebar and content
@@ -64,6 +66,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   title = 'Разгон';
   breadCrumbItems: Array<{}>;
   contractors$ = this.store.pipe(select(selectContractors));
+  clients$ = this.store.pipe(select(selectClientList));
   hashtags$ = this.store.pipe(select(selectHashtags));
   formats$ = this.store.pipe(select(selectFormats));
   characters$ = this.store.pipe(select(selectCharacters));
@@ -577,6 +580,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
    */
   public fetchData(): void {
     const store = this.store;
+    store.dispatch(new GetClients());
     store.dispatch(new GetProjectConfiguration());
     store.dispatch(new GetNewsProjects());
     store.dispatch(new GetEmails());

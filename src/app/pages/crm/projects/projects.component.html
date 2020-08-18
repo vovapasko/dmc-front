@@ -56,7 +56,7 @@
                 </p>
                 <!-- Desc-->
                 <p class="text-muted font-13 mb-3 sp-line-2">
-                    {{ project?.client }}
+                    {{ project?.client?.name }}
                 </p>
                 <!-- Task info-->
 
@@ -211,14 +211,17 @@
 
                 <div class="form-group">
                     <label for="client"> Клиент </label>
-                    <input type="text"
-                           formControlName="client"
-                           class="form-control"
-                           [ngClass]="{ 'is-invalid': submitted && createProjectFormControls.client.errors }"
-                           id="client"
-                           required
-                           placeholder="Введите клиента"
-                    />
+                    <ng-select
+                            id="client"
+                            [items]="clients$ | async"
+                            bindLabel="name"
+                            [multiple]="false"
+                            [closeOnSelect]="true"
+                            [hideSelected]="true"
+                            placeholder="Выберите клиента"
+                            formControlName="client"
+                            [ngClass]="{ 'is-invalid': submitted && editProjectFormControls.client.errors }"
+                    ></ng-select>
                     <div *ngIf="submitted && createProjectFormControls.client.errors" class="invalid-feedback">
                         <div *ngIf="createProjectFormControls.client.errors.required">Поле клиент обязательно</div>
                     </div>
@@ -359,14 +362,18 @@
 
                 <div class="form-group">
                     <label for="projectClient"> Клиент </label>
-                    <input type="text"
-                           formControlName="client"
-                           class="form-control"
-                           [ngClass]="{ 'is-invalid': submitted && editProjectFormControls.client.errors }"
-                           id="projectClient"
-                           placeholder="Введите клиента"
-                    />
-
+                    <ng-select
+                            id="projectClient"
+                            [items]="clients$ | async"
+                            bindLabel="name"
+                            [multiple]="false"
+                            [closeOnSelect]="true"
+                            [hideSelected]="true"
+                            placeholder="Выберите клиента"
+                            formControlName="client"
+                            [ngClass]="{ 'is-invalid': submitted && editProjectFormControls.client.errors }"
+                    >
+                    </ng-select>
                     <div *ngIf="submitted && editProjectFormControls.client.errors" class="invalid-feedback">
                         <div *ngIf="editProjectFormControls.client.errors.required">Поле клиент обязательно</div>
                     </div>

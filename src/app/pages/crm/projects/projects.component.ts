@@ -35,6 +35,8 @@ import { CreateNewsProjectPayload } from '@models/payloads/project/news-project/
 import { NewsProject } from '@models/instances/news-project';
 import { UpdateNewsProjectPayload } from '@models/payloads/project/news-project/update';
 import { breadCrumbs } from '@constants/bread-crumbs';
+import { GetClients } from '@store/actions/client.actions';
+import { selectClientList } from '@store/selectors/client.selectors';
 
 @Component({
   selector: 'app-projects',
@@ -58,6 +60,7 @@ export class ProjectsComponent implements OnInit {
   editProjectForm: FormGroup;
   submitted = false;
 
+  clients$ = this.store.pipe(select(selectClientList));
   users$ = this.store.pipe(select(selectUserList));
   contractors$ = this.store.pipe(select(selectContractorList));
   projects$ = this.store.pipe(select(selectProjectsList));
@@ -229,6 +232,7 @@ export class ProjectsComponent implements OnInit {
   public _fetchData(): void {
     const store = this.store;
     store.dispatch(new GetNewsProjects());
+    store.dispatch(new GetClients());
     store.dispatch(new GetProjectConfiguration());
     store.dispatch(new GetUsers());
     store.dispatch(new GetContractors());
