@@ -62,7 +62,7 @@ export class ProjectService {
 
   public getNewsProject(payload: GetNewsProjectPayload) {
     return this.requestHandler.request(
-      `${api}/${endpoints.NEWSPROJECTS}/?id=${payload.id}`,
+      `${api}/${endpoints.NEWSPROJECTS}/?project=${payload.id}`,
       methods.GET,
       payload,
       (response: GetAllNewsProjectsResponse) => response.results[0]
