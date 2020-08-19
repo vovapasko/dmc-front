@@ -473,9 +473,9 @@ export class NewsService {
   /**
    * Returns form group for common step in burst-news page
    */
-  public initializeValidationForm(validator): FormGroup {
+  public initializeValidationForm(validator, disabled: boolean): FormGroup {
     return this.formBuilder.group({
-      clientName: [null, Validators.required],
+      clientName: [{value: null, disabled}, Validators.required],
       projectName: [null, Validators.required],
       newsCharacter: [null, Validators.required],
       projectTitle: [null, Validators.required],

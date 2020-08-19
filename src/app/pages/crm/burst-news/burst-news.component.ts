@@ -238,7 +238,8 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
    * Accepts controls from service with custom validator for budget
    */
   private initValidateForm(): void {
-    this.validationForm = this.newsService.initializeValidationForm(this.budgetValidator.bind(this));
+    // @ts-ignore
+    this.validationForm = this.newsService.initializeValidationForm(this.budgetValidator.bind(this), !!this.route.queryParams._value.id);
   }
 
   /**
