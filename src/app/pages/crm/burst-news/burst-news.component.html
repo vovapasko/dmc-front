@@ -259,20 +259,6 @@
                                         <div class="card-box">
                                             <div class="widget-chart text-center" dir="ltr">
 
-                                                <!-- Multiple RadialBars -->
-                                                <app-portlet title="Бюджет"
-                                                             (onContentRefresh)="refreshContent()" color="white"
-                                                             headerClass="header-title title my-1">
-                                                    <apx-chart class="apex-charts"
-                                                               [series]="multipleRadialBars.series"
-                                                               [chart]="multipleRadialBars.chart"
-                                                               [plotOptions]="multipleRadialBars.plotOptions"
-                                                               [labels]="multipleRadialBars.labels"
-                                                               [legend]="multipleRadialBars.legend"
-                                                               [colors]="multipleRadialBars.colors">
-                                                    </apx-chart>
-                                                </app-portlet>
-
                                                 <div *ngFor="let contractor of commonFormControls?.projectContractors?.value;">
                                                     <h5 class="text-muted"
                                                         *ngFor="let format of contractor?.postformatlistSet;">
