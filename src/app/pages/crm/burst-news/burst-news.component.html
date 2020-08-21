@@ -40,7 +40,8 @@
                                     </a>
                                 </li>
 
-                                <li *ngIf="commonFormControls?.projectBurstMethod?.value?.method == methods.direct" class="nav-item"
+                                <li *ngIf="commonFormControls?.projectBurstMethod?.value?.method == methods.direct"
+                                    class="nav-item"
                                     [awGoToStep]="{ stepIndex: 2 }">
                                     <a
                                             href="javascript: void(0);"
@@ -257,15 +258,26 @@
                                     <!-- end col -->
                                     <div class="col-xl-4">
                                         <div class="card-box">
-                                            <div class="widget-chart text-center" dir="ltr">
+                                            <div *ngIf="commonFormControls?.projectContractors?.value"
+                                                 class="widget-chart text-center" dir="ltr">
 
                                                 <div *ngFor="let contractor of commonFormControls?.projectContractors?.value;">
-                                                    <h5 class="text-muted"
+                                                    <h5 [ngStyle]="{'color': getColorByPercentage(commonFormControls?.projectContractors?.value | contractorsCost : commonFormControls?.projectPostFormat?.value?.postFormat, commonFormControls?.projectBudget?.value || 0)}"
                                                         *ngFor="let format of contractor?.postformatlistSet;">
                                                         {{ format?.postFormat === commonFormControls?.projectPostFormat?.value?.postFormat ? '— ' + contractor?.editorName + ' ' + format?.onePostPrice : ''}}
                                                     </h5>
                                                 </div>
 
+                                                <p>
+                                                    Кол-во размещений: сделано
+                                                    0/{{commonFormControls?.projectContractors?.value | contractorsArrangement : commonFormControls?.projectPostFormat?.value?.postFormat}}
+                                                </p>
+
+                                                <p>
+                                                    Бюджет: <span [ngStyle]="{'color': getColorByPercentage(commonFormControls?.projectContractors?.value | contractorsCost : commonFormControls?.projectPostFormat?.value?.postFormat, commonFormControls?.projectBudget?.value || 0)}">
+                                                    {{commonFormControls?.projectContractors?.value | contractorsCost : commonFormControls?.projectPostFormat?.value?.postFormat}}
+                                                </span>/{{commonFormControls?.projectBudget?.value || 0}}
+                                                </p>
                                             </div>
                                         </div>
                                         <!-- end card-box -->
@@ -320,7 +332,8 @@
                                     </a>
                                 </li>
 
-                                <li *ngIf="commonFormControls?.projectBurstMethod?.value?.method == methods.direct" class="nav-item"
+                                <li *ngIf="commonFormControls?.projectBurstMethod?.value?.method == methods.direct"
+                                    class="nav-item"
                                     [awGoToStep]="{ stepIndex: 2 }">
                                     <a
                                             href="javascript: void(0);"
@@ -422,7 +435,8 @@
                                     </a>
                                 </li>
 
-                                <li *ngIf="commonFormControls?.projectBurstMethod?.value?.method == methods.direct" class="nav-item"
+                                <li *ngIf="commonFormControls?.projectBurstMethod?.value?.method == methods.direct"
+                                    class="nav-item"
                                     [awGoToStep]="{ stepIndex: 2 }">
                                     <a
                                             href="javascript: void(0);"
@@ -564,7 +578,8 @@
                                     </a>
                                 </li>
 
-                                <li *ngIf="commonFormControls?.projectBurstMethod?.value?.method == methods.direct" class="nav-item"
+                                <li *ngIf="commonFormControls?.projectBurstMethod?.value?.method == methods.direct"
+                                    class="nav-item"
                                     [awGoToStep]="{ stepIndex: 2 }">
                                     <a
                                             href="javascript: void(0);"
@@ -614,7 +629,8 @@
                                                         </ng-select>
                                                     </div>
                                                     <div class="form-group col-md-4">
-                                                        <label for="previewTemplate" class="col-form-label">Шаблон</label>
+                                                        <label for="previewTemplate"
+                                                               class="col-form-label">Шаблон</label>
                                                         <input placeholder="Шаблон"
                                                                tabindex="0"
                                                                id="previewTemplate"
@@ -625,7 +641,8 @@
                                                         >
                                                     </div>
                                                     <div class="form-group col-md-4">
-                                                        <label for="previewSignature" class="col-form-label">Подпись</label>
+                                                        <label for="previewSignature"
+                                                               class="col-form-label">Подпись</label>
                                                         <input placeholder="Подпись"
                                                                id="previewSignature"
                                                                class="form-control"
@@ -666,7 +683,8 @@
                                                     </ng-select>
                                                 </div>
                                                 <div class="form-group col-md-4">
-                                                    <label for="previewTemplateWave" class="col-form-label">Шаблон</label>
+                                                    <label for="previewTemplateWave"
+                                                           class="col-form-label">Шаблон</label>
                                                     <input placeholder="Шаблон"
                                                            tabindex="0"
                                                            id="previewTemplateWave"
@@ -677,7 +695,8 @@
                                                     >
                                                 </div>
                                                 <div class="form-group col-md-4">
-                                                    <label for="previewSignatureWave" class="col-form-label">Подпись</label>
+                                                    <label for="previewSignatureWave"
+                                                           class="col-form-label">Подпись</label>
                                                     <input placeholder="Подпись"
                                                            id="previewSignatureWave"
                                                            class="form-control"

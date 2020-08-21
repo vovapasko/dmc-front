@@ -12,9 +12,21 @@ import { EditableOnEnterDirective } from './directives/editable-on-enter.directi
 import { EditableComponent } from '@components/editable/editable.component';
 import { ContractorsFormatsPipe } from './pipes/contractors-formats.pipe';
 import { TicketsSortableDirective } from '@shared/directives/tickets-sortable.directive';
+import { ContractorsArrangementPipe } from './pipes/contractors-arrangement.pipe';
 
 @NgModule({
-  declarations: [ProjectStatusPipe, ContractorsCostPipe, ContractorsNamesPipe, EditModeDirective, ViewModeDirective, EditableOnEnterDirective, TicketsSortableDirective, EditableComponent, ContractorsFormatsPipe],
+  declarations: [
+    ProjectStatusPipe,
+    ContractorsCostPipe,
+    ContractorsNamesPipe,
+    EditModeDirective,
+    ViewModeDirective,
+    EditableOnEnterDirective,
+    TicketsSortableDirective,
+    EditableComponent,
+    ContractorsFormatsPipe,
+    ContractorsArrangementPipe,
+  ],
   imports: [CommonModule, UIModule, AlifeFileToBase64Module],
   exports: [
     UIModule,
@@ -27,7 +39,8 @@ import { TicketsSortableDirective } from '@shared/directives/tickets-sortable.di
     EditableOnEnterDirective,
     TicketsSortableDirective,
     EditableComponent,
-    AlifeFileToBase64Module
+    AlifeFileToBase64Module,
+    ContractorsArrangementPipe,
   ]
 })
 export class SharedModule {

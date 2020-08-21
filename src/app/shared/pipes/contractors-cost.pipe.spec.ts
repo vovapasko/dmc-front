@@ -13,8 +13,8 @@ describe('ContractorsCostPipe', () => {
     const pipe = new ContractorsCostPipe();
     // * act
     const data = [mockContractor, mockContractor] as unknown as Contractor[];
-    const result = pipe.transform(data);
+    const result = pipe.transform(data, 'article');
     // * asser
-    expect(result).toBeTruthy();
+    expect(result).toBe(0);
   });
 });

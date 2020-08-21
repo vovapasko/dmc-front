@@ -59,3 +59,18 @@ export const collectDataFromForm = (f, defaultFields) => {
   return values.reduce((a, n) => ({ ...a, ...n }), {});
 };
 
+export const getColorByPercentage = (value, arg) => {
+  const percentage = ((value / arg) * 100).toFixed(3);
+  const colors = { red: '#B80F0A', yellow: '#DAA520', blue: '#00B4AB', green: '#7CFC00' };
+  if (+percentage > 0 && +percentage < 51) {
+    return colors.green;
+  } else if (+percentage > 51 && +percentage < 71) {
+    return colors.blue;
+  } else if (+percentage > 71 && +percentage < 89) {
+    return colors.yellow;
+  } else if (+percentage > 90 && +percentage < 100) {
+    return colors.red;
+  } else {
+    return '';
+  }
+}

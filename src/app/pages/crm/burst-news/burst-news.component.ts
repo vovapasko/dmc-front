@@ -47,9 +47,10 @@ import { NewsWaves } from '@models/instances/news-waves';
 import { pairs } from '@constants/burst-news-pairs';
 import { emptyNewsItem } from '@constants/empty-news-item';
 import { breadCrumbs } from '@constants/bread-crumbs';
-import {revenueRadialChart} from '@components/charts/data';
+import { revenueRadialChart } from '@components/charts/data';
 import { selectClientList } from '@store/selectors/client.selectors';
 import { GetClients } from '@store/actions/client.actions';
+import { getColorByPercentage } from '@helpers/utility';
 
 /**
  * Form Burst news component - handling the burst news with sidebar and content
@@ -96,6 +97,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   submitForm: boolean;
   emails$ = this.store.pipe(select(selectEmailsList));
   pairs = pairs;
+  getColorByPercentage = getColorByPercentage;
 
   @ViewChild('wizardForm', { static: false }) wizard: BaseWizardComponent;
   @ViewChild('tpl', { static: false }) tpl;
