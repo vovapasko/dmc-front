@@ -176,11 +176,12 @@
                                         <div class="form-group row mb-3">
                                             <label for="projectPostFormat" class="col-md-3 col-form-label"> Формат
                                                 размещения </label>
-                                            <div class="col-md-9">
+                                            <div class="col-md-8">
                                                 <ng-select
                                                         id="projectPostFormat"
                                                         [items]="formats$ | async"
                                                         bindLabel="postFormat"
+                                                        (change)="initPriceControls()"
                                                         [closeOnSelect]="true"
                                                         placeholder="Выберите формат"
                                                         formControlName="projectPostFormat"
@@ -190,6 +191,9 @@
                                                      class="invalid-feedback">
                                                     <span *ngIf="commonFormControls.projectPostFormat.errors.required"></span>
                                                 </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <a (click)="openModal(editPrice)" href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
                                             </div>
                                         </div>
 
@@ -243,6 +247,7 @@
                                                         [multiple]="true"
                                                         [closeOnSelect]="false"
                                                         [hideSelected]="true"
+                                                        (change)="initPriceControls()"
                                                         placeholder="Выберите контрагентов"
                                                         formControlName="projectContractors"
                                                         [ngClass]="{ 'is-invalid': submitted && commonFormControls.projectContractors.errors }"
@@ -726,7 +731,7 @@
                                                                formControlName="agreed"
                                                                id="customCheck1"/>
                                                         <label class="custom-control-label" for="customCheck1">
-                                                            Я согласен
+                                                            Я проверил(а) выше сделанное. Отправить
                                                         </label>
                                                     </div>
                                                 </div>
@@ -752,7 +757,7 @@
                                             [disabled]="!previewForm?.controls?.agreed?.value"
                                             (click)="onSubmit()"
                                     >
-                                        {{ newsWaveId ? 'Согласовать' : 'Отправить' }}
+                                        Отправить
                                     </button>
                                 </li>
                             </ul>
@@ -763,3 +768,50 @@
         </div>
     </div>
 </div>
+
+
+
+<ng-template #editPrice role="document" let-modal="close">
+    <div class="modal-header bg-dark" id="edit-client-modal">
+        <h4 class="modal-title text-white">Редактирование цен</h4>
+        <button
+                type="button"
+                class="close text-white"
+                aria-label="Close"
+                id="closeEditPrice"
+                (click)="modal('Cross click')"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body p-3">
+        <div class="text-left">
+            <form (ngSubmit)="setPrices()" [formGroup]="priceForm">
+
+                <div *ngFor="let contractor of commonFormControls?.projectContractors?.value; let idx = index" class="form-group mb-3">
+                    <label [for]="'title' + idx">Цена для {{contractor.editorName}}</label>
+                    <input type="text"
+                           placeholder="Введите цену"
+                           [id]="'title' + idx"
+                           [formControl]="getPriceControl(idx, 'price')"
+                           style="margin-bottom: 10px;"
+                           class="form-control"
+                           (change)="updatePriceField(idx, 'price')"
+                    />
+                    <div *ngIf="submitted && getPriceControl(idx, 'price').errors" style="display: block" class="invalid-feedback">
+                        <div *ngIf="getPriceControl(idx, 'price').errors.required">Цена обязательна</div>
+                    </div>
+                </div>
+
+
+
+                <div class="text-right">
+                    <button type="button" id="cancel-new-user-button" class="btn btn-danger ml-1"
+                            (click)="modal('close click')">
+                        Отменить
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</ng-template>

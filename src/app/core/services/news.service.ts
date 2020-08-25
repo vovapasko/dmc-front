@@ -528,7 +528,7 @@ export class NewsService {
    * Returns form array (fill values) for distribution step in burst-news page
    */
   public initControls(list: Array<News>): FormArray {
-    const toGroups = list.map((entity) => {
+    const toGroups = list.map((entity: News) => {
       return new FormGroup({
         attachments: new FormControl(entity.attachments, Validators.required),
         title: new FormControl(entity.title, Validators.required),
@@ -536,6 +536,22 @@ export class NewsService {
         contractors: new FormControl(entity.contractors, Validators.required),
         previewText: new FormControl(entity.previewText, Validators.required),
         previewEmail: new FormControl(entity.previewEmail, Validators.required)
+      });
+    });
+    return new FormArray(toGroups);
+  }
+
+  public initPriceControls(contractors: Contractor[], format: Format): FormArray {
+    if (!contractors || !format) {
+      return new FormArray([new FormGroup({
+        price: new FormControl(null, Validators.required),
+        contractor: new FormControl(null, Validators.required)
+      })]);
+    }
+    const toGroups = contractors.map((entity: Contractor) => {
+      return new FormGroup({
+        price: new FormControl(entity.postformatlistSet.find(el => el.postFormat === format.postFormat).onePostPrice, Validators.required),
+        contractor: new FormControl(entity, Validators.required)
       });
     });
     return new FormArray(toGroups);
@@ -662,6 +678,15 @@ export class NewsService {
       const element = list[index];
       list[index] = { ...element, [field]: value || control.value };
       return list;
+    }
+    return null;
+  }
+
+  public updatePriceField(index: number, field: string, value: string | number, control: AbstractControl, priceList: Array<any>): Array<any> {
+    if (control.valid) {
+      const element = priceList[index];
+      priceList[index] = { ...element, [field]: value || control.value };
+      return priceList;
     }
     return null;
   }
