@@ -9,7 +9,7 @@ import {
   ViewContainerRef
 } from '@angular/core';
 import { WizardComponent as BaseWizardComponent } from 'angular-archwizard';
-import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ChartType, multipleRadialBars } from '@components/charts/data';
 import { Steps } from '@constants/steps';
 import { select, Store } from '@ngrx/store';
@@ -51,6 +51,7 @@ import { revenueRadialChart } from '@components/charts/data';
 import { selectClientList } from '@store/selectors/client.selectors';
 import { GetClients } from '@store/actions/client.actions';
 import { getColorByPercentage } from '@helpers/utility';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 /**
  * Form Burst news component - handling the burst news with sidebar and content
@@ -81,10 +82,13 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   editorForm: FormGroup;
   previewForm: FormGroup;
   newsForm: FormGroup;
+  priceForm: FormGroup;
   controls: FormArray;
+  priceControls: FormArray;
   loading$: Subject<boolean>;
   error$: Subject<ServerError>;
   newsList = [emptyNewsItem];
+  priceList = [];
   multipleRadialBars: ChartType = multipleRadialBars;
   methods = Methods;
   steps = burstSteps;
@@ -110,7 +114,8 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     private newsService: NewsService,
     private errorService: ErrorService,
     private loadingService: LoadingService,
-    private titleService: Title
+    private titleService: Title,
+    private modalService: NgbModal,
   ) {
   }
 
@@ -198,6 +203,14 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     return null;
   }
 
+  public getPriceControl(index: number, field: string): FormControl {
+    const controls = this.priceControls;
+    if (field && controls) {
+      return controls.at(index).get(field) as FormControl;
+    }
+    return null;
+  }
+
   /**
    * Subscribe to updates in loading, error
    * set pie chart for interactive counter
@@ -219,7 +232,15 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     this.initEditorForm();
     this.initNewsForm();
     this.initControls();
+    this.initPriceControls();
     this.initPreviewForm();
+    this.initPriceForm();
+  }
+
+  public initPriceForm(): void {
+    this.priceForm = new FormGroup({
+      price: new FormControl(null, Validators.required)
+    });
   }
 
   /**
@@ -234,6 +255,15 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
    */
   private initControls(): void {
     this.controls = this.newsService.initControls(this.newsList);
+  }
+
+  /**
+   * Pass data for fill and accepts price controls (editing price)
+   */
+  public initPriceControls(): void {
+    const contractors = this.commonFormControls.projectContractors.value;
+    const format = this.commonFormControls.projectPostFormat.value;
+    this.priceControls = this.newsService.initPriceControls(contractors, format);
   }
 
   /**
@@ -309,6 +339,14 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   public addNew(): void {
     this.addNewControl();
     this.addNewItem();
+  }
+
+  /**
+   * Modal Open
+   * @param content modal content
+   */
+  public openModal(content: string): void {
+    this.modalService.open(content, { centered: true });
   }
 
   /**
@@ -471,6 +509,11 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     }
   }
 
+  public updatePriceField(index: number, field: string, value?: string | number): void {
+    const control = this.getPriceControl(index, field);
+    this.priceList = this.newsService.updatePriceField(index, field, value, control, this.priceList);
+  }
+
   public onChangeDistributionFiles(control: FormControl) {
     // console.log(control);
   }
@@ -546,6 +589,13 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     const projectFormat = form ? form.projectPostFormat : { value: {} };
     const value = projectFormat ? projectFormat.value : {};
     return value ? value.postFormat : '';
+  }
+
+  /**
+   * Set page title
+   */
+  public setPrices(): void {
+    // TODO
   }
 
   /**
