@@ -1,9 +1,11 @@
-import { ReportsComponent } from './reports.component';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { PublicationsComponent } from './publications.component';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import {
-  NgbAlertModule, NgbDatepickerModule,
+  NgbAlertModule,
+  NgbDatepickerModule,
   NgbDropdownModule,
   NgbModalModule,
   NgbPaginationModule, NgbPopoverModule, NgbProgressbarModule, NgbTooltipModule,
@@ -25,6 +27,7 @@ import { FileUploadModule } from '@iplab/ngx-file-upload';
 import { ArchwizardModule } from 'angular-archwizard';
 import { NgxMaskModule } from 'ngx-mask';
 import { NestableModule } from 'ngx-nestable';
+import { SharedModule } from '@shared/shared.module';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { AuthenticationService } from '@services/auth.service';
 import { Title } from '@angular/platform-browser';
@@ -32,18 +35,13 @@ import { ErrorService } from '@services/error.service';
 import { LoadingService } from '@services/loading.service';
 import { NotificationService } from '@services/notification.service';
 import { NewsService } from '@services/news.service';
-import { SharedModule } from '@shared/shared.module';
 
-describe('ReportsComponent', () => {
-  let component: ReportsComponent;
-  let element: HTMLElement;
-  let fixture: ComponentFixture<ReportsComponent>;
+describe('OrdersComponent', () => {
+  let component: PublicationsComponent;
+  let fixture: ComponentFixture<PublicationsComponent>;
 
-  // * We use beforeEach so our tests are run in isolation
-  beforeEach(() => {
+  beforeEach(async(() => {
     TestBed.configureTestingModule({
-      // * here we configure our testing module with all the declarations,
-      // * imports, and providers necessary to this component
       imports: [
         CommonModule,
         RouterModule,
@@ -88,38 +86,18 @@ describe('ReportsComponent', () => {
         NotificationService,
         NewsService
       ],
-      declarations: [ReportsComponent],
-    }).compileComponents();
+      declarations: [ PublicationsComponent ]
+    })
+    .compileComponents();
+  }));
 
-    fixture = TestBed.createComponent(ReportsComponent);
-    component = fixture.componentInstance; // The component instantiation
-    element = fixture.nativeElement; // The HTML reference
+  beforeEach(() => {
+    fixture = TestBed.createComponent(PublicationsComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should initBreadCrumbItems', () => {
-    component.initBreadCrumbItems();
-    expect(component.breadCrumbItems.length).toBeTruthy();
-  });
-
-  it('should initSubscriptions', () => {
-    component.initSubscriptions();
-    expect(component.loading$).toBeTruthy();
-    expect(component.error$).toBeTruthy();
-  });
-
-  it('should call _fetchData', () => {
-    spyOn(component, '_fetchData');
-    component._fetchData();
-    expect(component._fetchData).toHaveBeenCalled();
-  });
-
-  it('should setTitle', () => {
-    component.setTitle(component.title);
-    fixture.detectChanges();
-    expect(document.title).toContain(component.title);
   });
 });

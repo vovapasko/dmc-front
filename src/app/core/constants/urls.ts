@@ -9,5 +9,6 @@ export const urls = {
   SIGNUP: 'signup',
   CONFIRM: 'confirm',
   CHANGE_PASSWORD: 'change-password',
-  CLIENTS: 'clients'
+  CLIENTS: 'clients',
+  PUBLICATIONS: 'publications'
 };

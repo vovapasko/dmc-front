@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { QuillModule } from 'ngx-quill';
 
-import { UIModule } from '../../shared/ui/ui.module';
+import { UIModule } from '@shared/ui/ui.module';
 import {
   NgbAlertModule,
   NgbDatepickerModule,
@@ -35,9 +35,18 @@ import { SharedModule } from '@shared/shared.module';
 import { ProjectsComponent } from './projects/projects.component';
 import { ReportsComponent } from './reports/reports.component';
 import { ClientsComponent } from '@pages/crm/clients/clients.component';
+import { PublicationsComponent } from '@pages/crm/publications/publications.component';
 
 @NgModule({
-  declarations: [ContractorsComponent, UsersComponent, BurstNewsComponent, ProjectsComponent, ClientsComponent, ReportsComponent],
+  declarations: [
+    ContractorsComponent,
+    UsersComponent,
+    BurstNewsComponent,
+    ProjectsComponent,
+    ClientsComponent,
+    ReportsComponent,
+    PublicationsComponent
+  ],
   imports: [
     FormsModule,
     UIModule,

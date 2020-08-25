@@ -1,0 +1,256 @@
+<div class="container-fluid">
+    <app-page-title title="Orders" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <div class="col-lg-8">
+                            <form class="form-inline">
+                                <div class="form-group mb-2">
+                                    <label class="sr-only">Search</label>
+                                    <input type="search" class="form-control" name="search" placeholder="Search..."
+                                           [(ngModel)]="term">
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-centered mb-0">
+                            <thead class="thead-light">
+                            <tr>
+                                <th>Контрагент</th>
+                                <th>Публикует</th>
+                                <th>Не публикует</th>
+                                <th>Примечания</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let order of ordersData | filter:term | slice:0:10; let i = index;">
+                                <td>
+                                    {{order.payment}}
+                                </td>
+                                <td>
+                                    <a (click)="openModal(publication)" href="javascript: void(0);"
+                                       class="nav-link rounded-0 pt-2 pb-2">
+                                        <span class="d-none d-sm-inline">Открыть список</span>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a (click)="openModal(preventPublication)" href="javascript: void(0);"
+                                       class="nav-link rounded-0 pt-2 pb-2">
+                                        <span class="d-none d-sm-inline">Открыть список</span>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a (click)="openModal(notes)" href="javascript: void(0);" class="nav-link rounded-0 pt-2 pb-2">
+                                        <span class="d-none d-sm-inline">Примечания</span>
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <ul class="pagination pagination-rounded justify-content-end my-2">
+                        <ngb-pagination [collectionSize]="totalRecords" (pageChange)="onPageChange($event)"
+                                        [(page)]="page" [pageSize]="pageSize">
+                        </ngb-pagination>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #publication role="document" let-modal="close">
+    <div class="modal-header bg-dark" id="edit-client-modal">
+        <h4 class="modal-title text-white">Публикует</h4>
+        <button
+                type="button"
+                class="close text-white"
+                aria-label="Close"
+                id="closePublication"
+                (click)="modal('Cross click')"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body p-3">
+        <div class="text-left">
+            <form (ngSubmit)="publish()" [formGroup]="publicationForm">
+
+                <div class="form-group mb-3">
+                    <input type="text"
+                           placeholder="Введите ссылку"
+                           style="margin-bottom: 10px;"
+                           class="form-control"
+                           value="https://balsamiq.cloud/s60z8da/pq6mio5/rBF7A"
+                    />
+                </div>
+                <div class="form-group mb-3">
+                    <input type="text"
+                           placeholder="Введите ссылку"
+                           style="margin-bottom: 10px;"
+                           class="form-control"
+                           value="https://balsamiq.cloud/s60z8da/pq6mio5/rBF7A"
+                    />
+                </div>
+                <div class="form-group mb-3">
+                    <input type="text"
+                           placeholder="Введите ссылку"
+                           style="margin-bottom: 10px;"
+                           class="form-control"
+                           value="https://balsamiq.cloud/s60z8da/pq6mio5/rBF7A"
+                    />
+                </div>
+
+                <a href="javascript: void(0);"
+                   class="btn btn-primary btn-block mt-3 waves-effect waves-light"
+                   style="margin-bottom: 10px"
+                >
+                    <i class="mdi mdi-plus-circle"></i>
+                    Добавить ссылку
+                </a>
+
+                <div class="text-right">
+                    <button type="submit" class="btn btn-success">Сохранить</button>
+                    <button type="button" id="cancel-new-user-button" class="btn btn-danger ml-1"
+                            (click)="modal('close click')">
+                        Отменить
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</ng-template>
+
+
+<ng-template #preventPublication role="document" let-modal="close">
+    <div class="modal-header bg-dark" id="not-publication-modal">
+        <h4 class="modal-title text-white">Не публикует</h4>
+        <button
+                type="button"
+                class="close text-white"
+                aria-label="Close"
+                id="closeEditPrice"
+                (click)="modal('Cross click')"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body p-3">
+        <div class="text-left">
+            <form (ngSubmit)="preventPublish()" [formGroup]="preventPublicationForm">
+
+
+                <div class="form-group mb-3">
+                    <input type="text"
+                           placeholder="Введите ссылку"
+                           style="margin-bottom: 10px;"
+                           class="form-control"
+                           value="https://balsamiq.cloud/s60z8da/pq6mio5/rBF7A"
+                    />
+                </div>
+                <div class="form-group mb-3">
+                    <input type="text"
+                           placeholder="Введите ссылку"
+                           style="margin-bottom: 10px;"
+                           class="form-control"
+                           value="https://balsamiq.cloud/s60z8da/pq6mio5/rBF7A"
+                    />
+                </div>
+                <div class="form-group mb-3">
+                    <input type="text"
+                           placeholder="Введите ссылку"
+                           style="margin-bottom: 10px;"
+                           class="form-control"
+                           value="https://balsamiq.cloud/s60z8da/pq6mio5/rBF7A"
+                    />
+                </div>
+
+                <a href="javascript: void(0);"
+                   class="btn btn-primary btn-block mt-3 waves-effect waves-light"
+                   style="margin-bottom: 10px"
+                >
+                    <i class="mdi mdi-plus-circle"></i>
+                    Добавить ссылку
+                </a>
+
+                <div class="text-right">
+                    <button type="submit" class="btn btn-success">Сохранить</button>
+                    <button type="button" id="prevent-publication-button" class="btn btn-danger ml-1"
+                            (click)="modal('close click')">
+                        Отменить
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #notes role="document" let-modal="close">
+    <div class="modal-header bg-dark" id="notes-modal">
+        <h4 class="modal-title text-white">Примечания</h4>
+        <button
+                type="button"
+                class="close text-white"
+                aria-label="Close"
+                id="closeNotePrice"
+                (click)="modal('Cross click')"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body p-3">
+        <div class="text-left">
+            <form (ngSubmit)="preventPublish()" [formGroup]="preventPublicationForm">
+
+
+                <div class="form-group mb-3">
+                    <input type="text"
+                           placeholder="Введите ссылку"
+                           style="margin-bottom: 10px;"
+                           class="form-control"
+                           value="примечание"
+                    />
+                </div>
+                <div class="form-group mb-3">
+                    <input type="text"
+                           placeholder="Введите ссылку"
+                           style="margin-bottom: 10px;"
+                           class="form-control"
+                           value="примечание"
+                    />
+                </div>
+                <div class="form-group mb-3">
+                    <input type="text"
+                           placeholder="Введите ссылку"
+                           style="margin-bottom: 10px;"
+                           class="form-control"
+                           value="примечание"
+                    />
+                </div>
+
+                <a href="javascript: void(0);"
+                   class="btn btn-primary btn-block mt-3 waves-effect waves-light"
+                   style="margin-bottom: 10px"
+                >
+                    <i class="mdi mdi-plus-circle"></i>
+                    Добавить примечание
+                </a>
+
+                <div class="text-right">
+                    <button type="submit" class="btn btn-success">Сохранить</button>
+                    <button type="button" id="close-notes-button" class="btn btn-danger ml-1"
+                            (click)="modal('close click')">
+                        Отменить
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</ng-template>
