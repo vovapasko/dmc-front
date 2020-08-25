@@ -726,7 +726,7 @@
                                                                formControlName="agreed"
                                                                id="customCheck1"/>
                                                         <label class="custom-control-label" for="customCheck1">
-                                                            Я согласен
+                                                            Я проверил(а) выше сделанное. Отправить
                                                         </label>
                                                     </div>
                                                 </div>
@@ -752,7 +752,7 @@
                                             [disabled]="!previewForm?.controls?.agreed?.value"
                                             (click)="onSubmit()"
                                     >
-                                        {{ newsWaveId ? 'Согласовать' : 'Отправить' }}
+                                        Отправить
                                     </button>
                                 </li>
                             </ul>
