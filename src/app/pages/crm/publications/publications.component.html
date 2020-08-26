@@ -34,20 +34,18 @@
                                     {{order.payment}}
                                 </td>
                                 <td>
-                                    <a (click)="openModal(publication)" href="javascript: void(0);"
-                                       class="nav-link rounded-0 pt-2 pb-2">
-                                        <span class="d-none d-sm-inline">Открыть список</span>
+                                    <a (click)="openModal(publication)" href="javascript: void(0);">
+                                        Открыть список
                                     </a>
                                 </td>
                                 <td>
-                                    <a (click)="openModal(preventPublication)" href="javascript: void(0);"
-                                       class="nav-link rounded-0 pt-2 pb-2">
-                                        <span class="d-none d-sm-inline">Открыть список</span>
+                                    <a (click)="openModal(preventPublication)" href="javascript: void(0);">
+                                        Открыть список
                                     </a>
                                 </td>
                                 <td>
-                                    <a (click)="openModal(notes)" href="javascript: void(0);" class="nav-link rounded-0 pt-2 pb-2">
-                                        <span class="d-none d-sm-inline">Примечания</span>
+                                    <a (click)="openModal(notes)" href="javascript: void(0);">
+                                        Открыть список
                                     </a>
                                 </td>
                             </tr>
@@ -83,29 +81,53 @@
         <div class="text-left">
             <form (ngSubmit)="publish()" [formGroup]="publicationForm">
 
-                <div class="form-group mb-3">
-                    <input type="text"
-                           placeholder="Введите ссылку"
-                           style="margin-bottom: 10px;"
-                           class="form-control"
-                           value="https://balsamiq.cloud/s60z8da/pq6mio5/rBF7A"
-                    />
+                <div class="form-group row mb-3">
+                    <div class="col-md-11">
+                        <input type="text"
+                               placeholder="Введите ссылку"
+                               style="margin-bottom: 10px;"
+                               class="form-control"
+                               value="https://balsamiq.cloud/s60z8da/pq6mio5/rBF7A"
+                        />
+
+                    </div>
+                    <div class="col-md-1 card-widgets">
+                        <a href="javascript:void(0);">
+                            <i class="mdi mdi-close"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="form-group mb-3">
-                    <input type="text"
-                           placeholder="Введите ссылку"
-                           style="margin-bottom: 10px;"
-                           class="form-control"
-                           value="https://balsamiq.cloud/s60z8da/pq6mio5/rBF7A"
-                    />
+                <div class="form-group row mb-3">
+                    <div class="col-md-11">
+                        <input type="text"
+                               placeholder="Введите ссылку"
+                               style="margin-bottom: 10px;"
+                               class="form-control"
+                               value="https://balsamiq.cloud/s60z8da/pq6mio5/rBF7A"
+                        />
+
+                    </div>
+                    <div class="col-md-1 card-widgets">
+                        <a href="javascript:void(0);">
+                            <i class="mdi mdi-close"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="form-group mb-3">
-                    <input type="text"
-                           placeholder="Введите ссылку"
-                           style="margin-bottom: 10px;"
-                           class="form-control"
-                           value="https://balsamiq.cloud/s60z8da/pq6mio5/rBF7A"
-                    />
+                <div class="form-group row mb-3">
+                    <div class="col-md-11">
+                        <input type="text"
+                               placeholder="Введите ссылку"
+                               style="margin-bottom: 10px;"
+                               class="form-control"
+                               value="https://balsamiq.cloud/s60z8da/pq6mio5/rBF7A"
+                        />
+
+                    </div>
+                    <div class="col-md-1 card-widgets">
+                        <a href="javascript:void(0);">
+                            <i class="mdi mdi-close"></i>
+                        </a>
+                    </div>
                 </div>
 
                 <a href="javascript: void(0);"
@@ -113,7 +135,7 @@
                    style="margin-bottom: 10px"
                 >
                     <i class="mdi mdi-plus-circle"></i>
-                    Добавить ссылку
+                    Добавить
                 </a>
 
                 <div class="text-right">
@@ -147,29 +169,54 @@
             <form (ngSubmit)="preventPublish()" [formGroup]="preventPublicationForm">
 
 
-                <div class="form-group mb-3">
-                    <input type="text"
-                           placeholder="Введите ссылку"
-                           style="margin-bottom: 10px;"
-                           class="form-control"
-                           value="https://balsamiq.cloud/s60z8da/pq6mio5/rBF7A"
-                    />
+                <div class="form-group row mb-3">
+                    <div class="col-md-11">
+                        <input type="text"
+                               placeholder="Введите ссылку"
+                               style="margin-bottom: 10px;"
+                               class="form-control"
+                               value="https://balsamiq.cloud/s60z8da/pq6mio5/rBF7A"
+                        />
+
+                    </div>
+                    <div class="col-md-1 card-widgets">
+                        <a href="javascript:void(0);">
+                            <i class="mdi mdi-close"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="form-group mb-3">
-                    <input type="text"
-                           placeholder="Введите ссылку"
-                           style="margin-bottom: 10px;"
-                           class="form-control"
-                           value="https://balsamiq.cloud/s60z8da/pq6mio5/rBF7A"
-                    />
+
+                <div class="form-group row mb-3">
+                    <div class="col-md-11">
+                        <input type="text"
+                               placeholder="Введите ссылку"
+                               style="margin-bottom: 10px;"
+                               class="form-control"
+                               value="https://balsamiq.cloud/s60z8da/pq6mio5/rBF7A"
+                        />
+
+                    </div>
+                    <div class="col-md-1 card-widgets">
+                        <a href="javascript:void(0);">
+                            <i class="mdi mdi-close"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="form-group mb-3">
-                    <input type="text"
-                           placeholder="Введите ссылку"
-                           style="margin-bottom: 10px;"
-                           class="form-control"
-                           value="https://balsamiq.cloud/s60z8da/pq6mio5/rBF7A"
-                    />
+                <div class="form-group row mb-3">
+                    <div class="col-md-11">
+                        <input type="text"
+                               placeholder="Введите ссылку"
+                               style="margin-bottom: 10px;"
+                               class="form-control"
+                               value="https://balsamiq.cloud/s60z8da/pq6mio5/rBF7A"
+                        />
+
+                    </div>
+                    <div class="col-md-1 card-widgets">
+                        <a href="javascript:void(0);">
+                            <i class="mdi mdi-close"></i>
+                        </a>
+                    </div>
                 </div>
 
                 <a href="javascript: void(0);"
@@ -177,7 +224,7 @@
                    style="margin-bottom: 10px"
                 >
                     <i class="mdi mdi-plus-circle"></i>
-                    Добавить ссылку
+                    Добавить
                 </a>
 
                 <div class="text-right">
@@ -210,29 +257,53 @@
             <form (ngSubmit)="preventPublish()" [formGroup]="preventPublicationForm">
 
 
-                <div class="form-group mb-3">
-                    <input type="text"
-                           placeholder="Введите ссылку"
-                           style="margin-bottom: 10px;"
-                           class="form-control"
-                           value="примечание"
-                    />
+                <div class="form-group row mb-3">
+                    <div class="col-md-11">
+                        <input type="text"
+                               placeholder="Введите ссылку"
+                               style="margin-bottom: 10px;"
+                               class="form-control"
+                               value="примечание"
+                        />
+
+                    </div>
+                    <div class="col-md-1 card-widgets">
+                        <a href="javascript:void(0);">
+                            <i class="mdi mdi-close"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="form-group mb-3">
-                    <input type="text"
-                           placeholder="Введите ссылку"
-                           style="margin-bottom: 10px;"
-                           class="form-control"
-                           value="примечание"
-                    />
+                <div class="form-group row mb-3">
+                    <div class="col-md-11">
+                        <input type="text"
+                               placeholder="Введите ссылку"
+                               style="margin-bottom: 10px;"
+                               class="form-control"
+                               value="примечание"
+                        />
+
+                    </div>
+                    <div class="col-md-1 card-widgets">
+                        <a href="javascript:void(0);">
+                            <i class="mdi mdi-close"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="form-group mb-3">
-                    <input type="text"
-                           placeholder="Введите ссылку"
-                           style="margin-bottom: 10px;"
-                           class="form-control"
-                           value="примечание"
-                    />
+                <div class="form-group row mb-3">
+                    <div class="col-md-11">
+                        <input type="text"
+                               placeholder="Введите ссылку"
+                               style="margin-bottom: 10px;"
+                               class="form-control"
+                               value="примечание"
+                        />
+
+                    </div>
+                    <div class="col-md-1 card-widgets">
+                        <a href="javascript:void(0);">
+                            <i class="mdi mdi-close"></i>
+                        </a>
+                    </div>
                 </div>
 
                 <a href="javascript: void(0);"
@@ -240,7 +311,7 @@
                    style="margin-bottom: 10px"
                 >
                     <i class="mdi mdi-plus-circle"></i>
-                    Добавить примечание
+                    Добавить
                 </a>
 
                 <div class="text-right">
