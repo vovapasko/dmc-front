@@ -50,6 +50,7 @@ import { UploadNewsFilePayload } from '@models/payloads/news/news-waves/upload-f
 import { DeleteNewsFilePayload } from '@models/payloads/news/news-waves/delete-file';
 import { newsFieldsHandler } from '@constants/news';
 import { Email } from '@models/instances/email';
+import { NewsWavePrice } from '@models/instances/newsWavePrice';
 
 const api = environment.api;
 
@@ -682,11 +683,13 @@ export class NewsService {
     return null;
   }
 
-  public updatePriceField(index: number, field: string, value: string | number, control: AbstractControl, priceList: Array<any>): Array<any> {
+  // tslint:disable-next-line:max-line-length
+  public updatePriceField(index: number, field: string, value: string | number, control: AbstractControl, priceList: Array<any>, contractorControl: AbstractControl): Array<any> {
     if (control.valid) {
       const element = priceList[index];
-      priceList[index] = { ...element, [field]: value || control.value };
-      return priceList;
+      const result = priceList.slice();
+      result[index] = { ...element, [field]: value || control.value, contractor: contractorControl.value };
+      return result;
     }
     return null;
   }
@@ -715,7 +718,9 @@ export class NewsService {
     newsList: News[],
     newsWaveId: number,
     controls: FormArray,
-    newsWave: NewsWaves
+    newsWave: NewsWaves,
+    // tslint:disable-next-line:variable-name
+    newswavepricelist_set: NewsWavePrice[]
   ): UpdateNewsWavesPayload | CreateNewsWavesPayload {
     // TODO REFACTOR THIS PIECE OF CODE
     const newsCharacter = validationForm.controls.newsCharacter.value;
@@ -755,7 +760,8 @@ export class NewsService {
       waveFormation,
       newsInProject,
       project,
-      postFormat
+      postFormat,
+      newswavepricelist_set
     };
 
     if (newsWaveId) {
@@ -787,7 +793,7 @@ export class NewsService {
     editorForm: FormGroup,
     newsForm: FormGroup,
     previewForm: FormGroup
-  ): { newsList: News[], controls: FormArray } {
+  ): { newsList: News[], priceList: NewsWavePrice[], controls: FormArray, priceControls: FormArray } {
     // TODO REFACTOR THIS PIECE OF CODE
     validationForm.controls.newsCharacter.setValue(newsWave.newsCharacter);
     validationForm.controls.projectBurstMethod.setValue(newsWave.burstMethod);
@@ -804,7 +810,18 @@ export class NewsService {
     // @ts-ignore
     // tslint:disable-next-line:max-line-length
     const newsList = newsWave.newsInProject.map((el: News) => new News(el.title, el.content, this.handleFiles(el.attachments), el.contractors, el.content, el.email, el.id));
-    return { newsList, controls: this.initControls(newsList) };
+    const priceList = newsWave.newswavepricelistSet;
+    return { newsList, priceList, controls: this.initControls(newsList), priceControls: this.fillPriceControls(priceList) };
+  }
+
+  public fillPriceControls(priceList: NewsWavePrice[]): FormArray {
+    const toGroups = priceList.map((entity: NewsWavePrice) => {
+      return new FormGroup({
+        price: new FormControl(entity.price, Validators.required),
+        contractor: new FormControl(entity.contractor, Validators.required)
+      });
+    });
+    return new FormArray(toGroups);
   }
 
   public handleFiles(attachments: File[]) {

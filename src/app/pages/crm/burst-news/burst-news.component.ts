@@ -115,7 +115,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     private errorService: ErrorService,
     private loadingService: LoadingService,
     private titleService: Title,
-    private modalService: NgbModal,
+    private modalService: NgbModal
   ) {
   }
 
@@ -459,9 +459,10 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
    * Submit or confirm button has been pressed
    */
   public onSubmit(): void {
-    const { newsService, newsProject, validationForm, editorForm, newsForm, previewForm, newsList, newsWaveId, controls, newsWave } = this;
     // tslint:disable-next-line:max-line-length
-    const payload = newsService.processNewsWavePayload(newsProject, validationForm, editorForm, newsForm, previewForm, newsList as unknown as News[], newsWaveId, controls, newsWave);
+    const { newsService, newsProject, validationForm, editorForm, newsForm, previewForm, newsList, newsWaveId, controls, newsWave, priceList } = this;
+    // tslint:disable-next-line:max-line-length
+    const payload = newsService.processNewsWavePayload(newsProject, validationForm, editorForm, newsForm, previewForm, newsList as unknown as News[], newsWaveId, controls, newsWave, priceList);
     this.submit(payload, newsWaveId);
   }
 
@@ -511,7 +512,8 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
 
   public updatePriceField(index: number, field: string, value?: string | number): void {
     const control = this.getPriceControl(index, field);
-    this.priceList = this.newsService.updatePriceField(index, field, value, control, this.priceList);
+    const contractorControl = this.getPriceControl(index, 'contractor');
+    this.priceList = this.newsService.updatePriceField(index, field, value, control, this.priceList, contractorControl);
   }
 
   public onChangeDistributionFiles(control: FormControl) {
@@ -622,9 +624,12 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     }
     const { newsService, validationForm, editorForm, newsForm, previewForm } = this;
     this.onChangeProject(newsWave.project);
-    const { newsList, controls } = newsService.setNewsWaveData(newsWave, validationForm, editorForm, newsForm, previewForm);
+    // tslint:disable-next-line:max-line-length
+    const { newsList, controls, priceList, priceControls } = newsService.setNewsWaveData(newsWave, validationForm, editorForm, newsForm, previewForm);
     this.newsList = newsList;
     this.controls = controls;
+    this.priceList = priceList;
+    this.priceControls = priceControls;
     this.newsWave = newsWave;
   }
 

@@ -13,6 +13,7 @@ import { EditableComponent } from '@components/editable/editable.component';
 import { ContractorsFormatsPipe } from './pipes/contractors-formats.pipe';
 import { TicketsSortableDirective } from '@shared/directives/tickets-sortable.directive';
 import { ContractorsArrangementPipe } from './pipes/contractors-arrangement.pipe';
+import { ContractorsNewsAmountPipe } from './pipes/contractors-news-amount.pipe';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { ContractorsArrangementPipe } from './pipes/contractors-arrangement.pipe
     EditableComponent,
     ContractorsFormatsPipe,
     ContractorsArrangementPipe,
+    ContractorsNewsAmountPipe,
   ],
   imports: [CommonModule, UIModule, AlifeFileToBase64Module],
   exports: [
@@ -41,6 +43,7 @@ import { ContractorsArrangementPipe } from './pipes/contractors-arrangement.pipe
     EditableComponent,
     AlifeFileToBase64Module,
     ContractorsArrangementPipe,
+    ContractorsNewsAmountPipe
   ]
 })
 export class SharedModule {
