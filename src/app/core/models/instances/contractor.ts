@@ -1,3 +1,7 @@
+import { Comment } from '@models/instances/comment';
+import { PublicationBlackList } from '@models/instances/publication-black-list';
+import { Publication } from '@models/instances/publication';
+
 export interface Contractor {
   id: number;
   editorName: string;
@@ -5,6 +9,9 @@ export interface Contractor {
   phoneNumber: string;
   email: string;
   postformatlistSet: Array<PostFormatListSet>;
+  contractorcommentlistSet: Array<Comment>;
+  contractorpublicationsblacklistSet: Array<PublicationBlackList>;
+  contractorpublicationslistSet: Array<Publication>;
   dateCreated: Date;
   dateUpdated: Date;
 }

@@ -29,22 +29,22 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr *ngFor="let order of ordersData | filter:term | slice:0:10; let i = index;">
+                            <tr *ngFor="let contractor of contractors$ | async | filter:term | slice:0:10; let i = index;">
                                 <td>
-                                    {{order.payment}}
+                                    {{contractor.editorName}}
                                 </td>
                                 <td>
-                                    <a (click)="openModal(publication)" href="javascript: void(0);">
+                                    <a (click)="loadPublications(contractor);openModal(publication)" href="javascript: void(0);">
                                         Открыть список
                                     </a>
                                 </td>
                                 <td>
-                                    <a (click)="openModal(preventPublication)" href="javascript: void(0);">
+                                    <a (click)="loadPublicationBlackList(contractor);openModal(preventPublication)" href="javascript: void(0);">
                                         Открыть список
                                     </a>
                                 </td>
                                 <td>
-                                    <a (click)="openModal(notes)" href="javascript: void(0);">
+                                    <a (click)="loadComments(contractor);openModal(notes)" href="javascript: void(0);">
                                         Открыть список
                                     </a>
                                 </td>
@@ -79,67 +79,44 @@
     </div>
     <div class="modal-body p-3">
         <div class="text-left">
-            <form (ngSubmit)="publish()" [formGroup]="publicationForm">
+            <form (ngSubmit)="addPublication()" [formGroup]="publicationForm">
 
-                <div class="form-group row mb-3">
+                <div *ngFor="let publication of publications$ | async;let i = index" class="form-group row mb-3">
                     <div class="col-md-11">
                         <input type="text"
                                placeholder="Введите ссылку"
-                               style="margin-bottom: 10px;"
                                class="form-control"
-                               value="https://balsamiq.cloud/s60z8da/pq6mio5/rBF7A"
+                               [formControl]="getControl(i, 'publish', 'publication')"
+                               (change)="updateField(i, 'publish', 'publication', publication)"
                         />
 
                     </div>
                     <div class="col-md-1 card-widgets">
-                        <a href="javascript:void(0);">
-                            <i class="mdi mdi-close"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="form-group row mb-3">
-                    <div class="col-md-11">
-                        <input type="text"
-                               placeholder="Введите ссылку"
-                               style="margin-bottom: 10px;"
-                               class="form-control"
-                               value="https://balsamiq.cloud/s60z8da/pq6mio5/rBF7A"
-                        />
-
-                    </div>
-                    <div class="col-md-1 card-widgets">
-                        <a href="javascript:void(0);">
-                            <i class="mdi mdi-close"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="form-group row mb-3">
-                    <div class="col-md-11">
-                        <input type="text"
-                               placeholder="Введите ссылку"
-                               style="margin-bottom: 10px;"
-                               class="form-control"
-                               value="https://balsamiq.cloud/s60z8da/pq6mio5/rBF7A"
-                        />
-
-                    </div>
-                    <div class="col-md-1 card-widgets">
-                        <a href="javascript:void(0);">
+                        <a (click)="onDeletePublication(publication)"
+                           href="javascript:void(0);">
                             <i class="mdi mdi-close"></i>
                         </a>
                     </div>
                 </div>
 
-                <a href="javascript: void(0);"
-                   class="btn btn-primary btn-block mt-3 waves-effect waves-light"
-                   style="margin-bottom: 10px"
-                >
+                <div class="form-group row mb-3">
+                    <div class="col-md-11">
+                        <input type="text"
+                               placeholder="Введите ссылку"
+                               class="form-control"
+                               formControlName="publish"
+                        />
+
+                    </div>
+                </div>
+
+                <a (click)="addPublication()"
+                        href="javascript: void(0);" style="margin-bottom: 10px">
                     <i class="mdi mdi-plus-circle"></i>
                     Добавить
                 </a>
 
                 <div class="text-right">
-                    <button type="submit" class="btn btn-success">Сохранить</button>
                     <button type="button" id="cancel-new-user-button" class="btn btn-danger ml-1"
                             (click)="modal('close click')">
                         Отменить
@@ -166,21 +143,21 @@
     </div>
     <div class="modal-body p-3">
         <div class="text-left">
-            <form (ngSubmit)="preventPublish()" [formGroup]="preventPublicationForm">
+            <form (ngSubmit)="addNotPublication()" [formGroup]="preventPublicationForm">
 
-
-                <div class="form-group row mb-3">
+                <div *ngFor="let publication of publicationsBlackList$ | async;let i = index" class="form-group row mb-3">
                     <div class="col-md-11">
                         <input type="text"
                                placeholder="Введите ссылку"
-                               style="margin-bottom: 10px;"
                                class="form-control"
-                               value="https://balsamiq.cloud/s60z8da/pq6mio5/rBF7A"
+                               [formControl]="getControl(i, 'notPublish', 'preventPublication')"
+                               (change)="updateField(i, 'notPublish', 'preventPublication', publication)"
                         />
 
                     </div>
                     <div class="col-md-1 card-widgets">
-                        <a href="javascript:void(0);">
+                        <a (click)="onDeleteNotPublication(publication)"
+                           href="javascript:void(0);">
                             <i class="mdi mdi-close"></i>
                         </a>
                     </div>
@@ -190,46 +167,21 @@
                     <div class="col-md-11">
                         <input type="text"
                                placeholder="Введите ссылку"
-                               style="margin-bottom: 10px;"
                                class="form-control"
-                               value="https://balsamiq.cloud/s60z8da/pq6mio5/rBF7A"
+                               formControlName="notPublish"
                         />
 
                     </div>
-                    <div class="col-md-1 card-widgets">
-                        <a href="javascript:void(0);">
-                            <i class="mdi mdi-close"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="form-group row mb-3">
-                    <div class="col-md-11">
-                        <input type="text"
-                               placeholder="Введите ссылку"
-                               style="margin-bottom: 10px;"
-                               class="form-control"
-                               value="https://balsamiq.cloud/s60z8da/pq6mio5/rBF7A"
-                        />
-
-                    </div>
-                    <div class="col-md-1 card-widgets">
-                        <a href="javascript:void(0);">
-                            <i class="mdi mdi-close"></i>
-                        </a>
-                    </div>
                 </div>
 
-                <a href="javascript: void(0);"
-                   class="btn btn-primary btn-block mt-3 waves-effect waves-light"
-                   style="margin-bottom: 10px"
-                >
+                <a (click)="addNotPublication()"
+                   href="javascript: void(0);" style="margin-bottom: 10px">
                     <i class="mdi mdi-plus-circle"></i>
                     Добавить
                 </a>
 
                 <div class="text-right">
-                    <button type="submit" class="btn btn-success">Сохранить</button>
-                    <button type="button" id="prevent-publication-button" class="btn btn-danger ml-1"
+                    <button type="button" id="cancel-button" class="btn btn-danger ml-1"
                             (click)="modal('close click')">
                         Отменить
                     </button>
@@ -254,69 +206,45 @@
     </div>
     <div class="modal-body p-3">
         <div class="text-left">
-            <form (ngSubmit)="preventPublish()" [formGroup]="preventPublicationForm">
+            <form (ngSubmit)="addNote()" [formGroup]="notesForm">
 
-
-                <div class="form-group row mb-3">
+                <div *ngFor="let note of comments$ | async;let i = index" class="form-group row mb-3">
                     <div class="col-md-11">
                         <input type="text"
-                               placeholder="Введите ссылку"
-                               style="margin-bottom: 10px;"
+                               placeholder="Введите примечание"
                                class="form-control"
-                               value="примечание"
+                               [formControl]="getControl(i, 'comment', 'note')"
+                               (change)="updateField(i, 'comment', 'note', publication)"
                         />
 
                     </div>
                     <div class="col-md-1 card-widgets">
-                        <a href="javascript:void(0);">
-                            <i class="mdi mdi-close"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="form-group row mb-3">
-                    <div class="col-md-11">
-                        <input type="text"
-                               placeholder="Введите ссылку"
-                               style="margin-bottom: 10px;"
-                               class="form-control"
-                               value="примечание"
-                        />
-
-                    </div>
-                    <div class="col-md-1 card-widgets">
-                        <a href="javascript:void(0);">
-                            <i class="mdi mdi-close"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="form-group row mb-3">
-                    <div class="col-md-11">
-                        <input type="text"
-                               placeholder="Введите ссылку"
-                               style="margin-bottom: 10px;"
-                               class="form-control"
-                               value="примечание"
-                        />
-
-                    </div>
-                    <div class="col-md-1 card-widgets">
-                        <a href="javascript:void(0);">
+                        <a (click)="onDeleteNote(note)"
+                           href="javascript:void(0);">
                             <i class="mdi mdi-close"></i>
                         </a>
                     </div>
                 </div>
 
-                <a href="javascript: void(0);"
-                   class="btn btn-primary btn-block mt-3 waves-effect waves-light"
-                   style="margin-bottom: 10px"
-                >
+                <div class="form-group row mb-3">
+                    <div class="col-md-11">
+                        <input type="text"
+                               placeholder="Введите примечание"
+                               class="form-control"
+                               formControlName="comment"
+                        />
+
+                    </div>
+                </div>
+
+                <a (click)="addNote()"
+                   href="javascript: void(0);" style="margin-bottom: 10px">
                     <i class="mdi mdi-plus-circle"></i>
                     Добавить
                 </a>
 
                 <div class="text-right">
-                    <button type="submit" class="btn btn-success">Сохранить</button>
-                    <button type="button" id="close-notes-button" class="btn btn-danger ml-1"
+                    <button type="button" id="cancel-user-button" class="btn btn-danger ml-1"
                             (click)="modal('close click')">
                         Отменить
                     </button>
