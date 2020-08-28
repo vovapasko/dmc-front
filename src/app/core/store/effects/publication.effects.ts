@@ -39,6 +39,7 @@ import { DeleteNotPublishPayload } from '@models/payloads/publication/notPublish
 import { CreateCommentPayload } from '@models/payloads/publication/comment/create';
 import { UpdateCommentPayload } from '@models/payloads/publication/comment/update';
 import { DeleteCommentPayload } from '@models/payloads/publication/comment/delete';
+import { Comment } from '@models/instances/comment';
 
 @Injectable({
   providedIn: 'root'

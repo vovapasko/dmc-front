@@ -10,6 +10,7 @@ import { CreateNotPublishPayload } from '@models/payloads/publication/notPublish
 import { DeleteNotPublishPayload } from '@models/payloads/publication/notPublish/delete';
 import { UpdateNotPublishPayload } from '@models/payloads/publication/notPublish/update';
 import { UpdateCommentPayload } from '@models/payloads/publication/comment/update';
+import { Comment } from '@models/instances/comment';
 
 export enum EPublicationActions {
   GetPublications = '[Publication] Get publications',
@@ -41,7 +42,7 @@ export enum EPublicationActions {
   GetCommentsSuccess = '[Publication] Get comments success',
 
   CreateComment = '[Publication] Create comment',
-  CreateCommentSuccess = '[Publication] Create comment',
+  CreateCommentSuccess = '[Publication] Create comment success',
 
   UpdateComment = '[Publication] Update comment',
   UpdateCommentSuccess = '[Publication] Update comment success',

@@ -16,6 +16,7 @@ import { DeleteNotPublishPayload } from '@models/payloads/publication/notPublish
 import { UpdateCommentPayload } from '@models/payloads/publication/comment/update';
 import { DeleteCommentPayload } from '@models/payloads/publication/comment/delete';
 import { CreateCommentPayload } from '@models/payloads/publication/comment/create';
+import { Comment } from '@models/instances/comment';
 
 const api = environment.api;
 
@@ -110,7 +111,7 @@ export class PublicationService {
       `${api}/${endpoints.COMMENTS}/`,
       methods.GET,
       null,
-      (response: any) => response
+      (response: Comment) => response
     );
   }
 
@@ -119,7 +120,7 @@ export class PublicationService {
       `${api}/${endpoints.COMMENTS}`,
       methods.POST,
       payload,
-      (response: any) => response
+      (response: Comment) => response
     );
   }
 
@@ -128,7 +129,7 @@ export class PublicationService {
       `${api}/${endpoints.COMMENTS}/${payload.id}`,
       methods.PUT,
       payload,
-      (response: any) => response
+      (response: Comment) => response
     );
   }
 
@@ -137,7 +138,7 @@ export class PublicationService {
       `${api}/${endpoints.COMMENTS}/${payload.id}`,
       methods.DELETE,
       null,
-      (response: any) => payload
+      (response: null) => payload
     );
   }
 
