@@ -44,7 +44,7 @@ import { Comment } from '@models/instances/comment';
 @Injectable({
   providedIn: 'root'
 })
-export class ProjectEffects {
+export class PublicationEffects {
   @Effect()
   getPublications$ = this.actions$.pipe(
     ofType<GetPublications>(EPublicationActions.GetPublications),
