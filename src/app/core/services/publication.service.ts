@@ -17,6 +17,9 @@ import { UpdateCommentPayload } from '@models/payloads/publication/comment/updat
 import { DeleteCommentPayload } from '@models/payloads/publication/comment/delete';
 import { CreateCommentPayload } from '@models/payloads/publication/comment/create';
 import { Comment } from '@models/instances/comment';
+import { GetPublicationPayload } from '@models/payloads/publication/publish/get';
+import { GetPublicationBlackListPayload } from '@models/payloads/publication/notPublish/get';
+import { GetCommentPayload } from '@models/payloads/publication/comment/get';
 
 const api = environment.api;
 
@@ -32,18 +35,18 @@ export class PublicationService {
   ) {
   }
 
-  public getPublications() {
+  public getPublications(payload: GetPublicationPayload) {
     return this.requestHandler.request(
-      `${api}/${endpoints.PUBLICATIONS}/`,
+      `${api}/${endpoints.PUBLICATIONS}/?contractor=${payload.contractor}`,
       methods.GET,
       null,
-      (response: Publication[]) => response
+      (response: {results: Publication[]}) => response.results
     );
   }
 
   public createPublication(payload: CreatePublishPayload) {
     return this.requestHandler.request(
-      `${api}/${endpoints.PUBLICATIONS}`,
+      `${api}/${endpoints.PUBLICATIONS}/`,
       methods.POST,
       payload,
       (response: Publication) => response
@@ -69,18 +72,18 @@ export class PublicationService {
   }
 
 
-  public getPublicationsBlackList() {
+  public getPublicationsBlackList(payload: GetPublicationBlackListPayload) {
     return this.requestHandler.request(
-      `${api}/${endpoints.PUBLICATIONS_BLACKLIST}/`,
+      `${api}/${endpoints.PUBLICATIONS_BLACKLIST}/?contractor=${payload.contractor}`,
       methods.GET,
       null,
-      (response: PublicationBlackList[]) => response
+      (response: {results: PublicationBlackList[]}) => response.results
     );
   }
 
   public createPublicationBlackList(payload: CreateNotPublishPayload) {
     return this.requestHandler.request(
-      `${api}/${endpoints.PUBLICATIONS_BLACKLIST}`,
+      `${api}/${endpoints.PUBLICATIONS_BLACKLIST}/`,
       methods.POST,
       payload,
       (response: PublicationBlackList) => response
@@ -106,18 +109,18 @@ export class PublicationService {
   }
 
 
-  public getComments() {
+  public getComments(payload: GetCommentPayload) {
     return this.requestHandler.request(
-      `${api}/${endpoints.COMMENTS}/`,
+      `${api}/${endpoints.COMMENTS}/?contractor=${payload.contractor}`,
       methods.GET,
       null,
-      (response: Comment) => response
+      (response: {results: Comment[]}) => response.results
     );
   }
 
   public createComment(payload: CreateCommentPayload) {
     return this.requestHandler.request(
-      `${api}/${endpoints.COMMENTS}`,
+      `${api}/${endpoints.COMMENTS}/`,
       methods.POST,
       payload,
       (response: Comment) => response

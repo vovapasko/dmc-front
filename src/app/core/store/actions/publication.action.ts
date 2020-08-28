@@ -11,6 +11,9 @@ import { DeleteNotPublishPayload } from '@models/payloads/publication/notPublish
 import { UpdateNotPublishPayload } from '@models/payloads/publication/notPublish/update';
 import { UpdateCommentPayload } from '@models/payloads/publication/comment/update';
 import { Comment } from '@models/instances/comment';
+import { GetPublicationPayload } from '@models/payloads/publication/publish/get';
+import { GetPublicationBlackListPayload } from '@models/payloads/publication/notPublish/get';
+import { GetCommentPayload } from '@models/payloads/publication/comment/get';
 
 export enum EPublicationActions {
   GetPublications = '[Publication] Get publications',
@@ -54,7 +57,7 @@ export enum EPublicationActions {
 export class GetPublications implements Action {
   public readonly type = EPublicationActions.GetPublications;
 
-  constructor() {
+  constructor(public payload: GetPublicationPayload) {
   }
 }
 
@@ -113,7 +116,7 @@ export class DeletePublicationSuccess implements Action {
 export class GetPublicationBlackList implements Action {
   public readonly type = EPublicationActions.GetPublicationBlackList;
 
-  constructor() {
+  constructor(public payload: GetPublicationBlackListPayload) {
   }
 }
 
@@ -172,7 +175,7 @@ export class DeleteNotPublicationSuccess implements Action {
 export class GetComments implements Action {
   public readonly type = EPublicationActions.GetComments;
 
-  constructor() {
+  constructor(public payload: GetCommentPayload) {
   }
 }
 

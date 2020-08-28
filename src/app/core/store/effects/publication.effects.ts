@@ -40,6 +40,9 @@ import { CreateCommentPayload } from '@models/payloads/publication/comment/creat
 import { UpdateCommentPayload } from '@models/payloads/publication/comment/update';
 import { DeleteCommentPayload } from '@models/payloads/publication/comment/delete';
 import { Comment } from '@models/instances/comment';
+import { GetPublicationPayload } from '@models/payloads/publication/publish/get';
+import { GetPublicationBlackListPayload } from '@models/payloads/publication/notPublish/get';
+import { GetCommentPayload } from '@models/payloads/publication/comment/get';
 
 @Injectable({
   providedIn: 'root'
@@ -48,7 +51,7 @@ export class PublicationEffects {
   @Effect()
   getPublications$ = this.actions$.pipe(
     ofType<GetPublications>(EPublicationActions.GetPublications),
-    switchMap((action) => this.publicationService.getPublications()),
+    switchMap((action: { payload: GetPublicationPayload }) => this.publicationService.getPublications(action.payload)),
     switchMap((publications: Publication[]) => of(new GetPublicationsSuccess(publications)))
   );
 
@@ -73,10 +76,13 @@ export class PublicationEffects {
     switchMap((payload: DeletePublishPayload) => of(new DeletePublicationSuccess(payload)))
   );
 
+
+
+
   @Effect()
   getPublicationBlackList$ = this.actions$.pipe(
     ofType<GetPublicationBlackList>(EPublicationActions.GetPublicationBlackList),
-    switchMap((action) => this.publicationService.getPublicationsBlackList()),
+    switchMap((action: { payload: GetPublicationBlackListPayload }) => this.publicationService.getPublicationsBlackList(action.payload)),
     switchMap((publications: PublicationBlackList[]) => of(new GetPublicationBlackListSuccess(publications)))
   );
 
@@ -89,7 +95,7 @@ export class PublicationEffects {
 
   @Effect()
   updateNotPublication$ = this.actions$.pipe(
-    ofType<UpdateNotPublication>(EPublicationActions.UpdateNotPublicationSuccess),
+    ofType<UpdateNotPublication>(EPublicationActions.UpdateNotPublication),
     switchMap((action: { payload: UpdateNotPublishPayload }) => this.publicationService.updatePublicationBlackList(action.payload)),
     switchMap((publication: PublicationBlackList) => of(new UpdateNotPublicationSuccess(publication)))
   );
@@ -101,10 +107,13 @@ export class PublicationEffects {
     switchMap((payload: DeleteNotPublishPayload) => of(new DeleteNotPublicationSuccess(payload)))
   );
 
+
+
+
   @Effect()
   getComments$ = this.actions$.pipe(
     ofType<GetComments>(EPublicationActions.GetComments),
-    switchMap((action) => this.publicationService.getComments()),
+    switchMap((action: {payload: GetCommentPayload}) => this.publicationService.getComments(action.payload)),
     switchMap((comments: Comment[]) => of(new GetCommentsSuccess(comments)))
   );
 
