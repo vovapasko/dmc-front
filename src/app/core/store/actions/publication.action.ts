@@ -9,6 +9,7 @@ import { PublicationBlackList } from '@models/instances/publication-black-list';
 import { CreateNotPublishPayload } from '@models/payloads/publication/notPublish/create';
 import { DeleteNotPublishPayload } from '@models/payloads/publication/notPublish/delete';
 import { UpdateNotPublishPayload } from '@models/payloads/publication/notPublish/update';
+import { UpdateCommentPayload } from '@models/payloads/publication/comment/update';
 
 export enum EPublicationActions {
   GetPublications = '[Publication] Get publications',
@@ -199,7 +200,7 @@ export class CreateCommentSuccess implements Action {
 export class UpdateComment implements Action {
   public readonly type = EPublicationActions.UpdateComment;
 
-  constructor(public payload: UpdatePublishPayload) {
+  constructor(public payload: UpdateCommentPayload) {
   }
 }
 

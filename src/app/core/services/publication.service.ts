@@ -13,6 +13,9 @@ import { PublicationBlackList } from '@models/instances/publication-black-list';
 import { CreateNotPublishPayload } from '@models/payloads/publication/notPublish/create';
 import { UpdateNotPublishPayload } from '@models/payloads/publication/notPublish/update';
 import { DeleteNotPublishPayload } from '@models/payloads/publication/notPublish/delete';
+import { UpdateCommentPayload } from '@models/payloads/publication/comment/update';
+import { DeleteCommentPayload } from '@models/payloads/publication/comment/delete';
+import { CreateCommentPayload } from '@models/payloads/publication/comment/create';
 
 const api = environment.api;
 
@@ -102,7 +105,7 @@ export class PublicationService {
   }
 
 
-  public getComments(payload: any) {
+  public getComments() {
     return this.requestHandler.request(
       `${api}/${endpoints.COMMENTS}/`,
       methods.GET,
@@ -111,7 +114,7 @@ export class PublicationService {
     );
   }
 
-  public createComment(payload: any) {
+  public createComment(payload: CreateCommentPayload) {
     return this.requestHandler.request(
       `${api}/${endpoints.COMMENTS}`,
       methods.POST,
@@ -120,7 +123,7 @@ export class PublicationService {
     );
   }
 
-  public updateComment(payload: any) {
+  public updateComment(payload: UpdateCommentPayload) {
     return this.requestHandler.request(
       `${api}/${endpoints.COMMENTS}/${payload.id}`,
       methods.PUT,
@@ -129,7 +132,7 @@ export class PublicationService {
     );
   }
 
-  public deleteComment(payload: any) {
+  public deleteComment(payload: DeleteCommentPayload) {
     return this.requestHandler.request(
       `${api}/${endpoints.COMMENTS}/${payload.id}`,
       methods.DELETE,
