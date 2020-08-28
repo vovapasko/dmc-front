@@ -9,7 +9,7 @@ import { DeleteContractorResponse } from '@models/responses/contractor/delete';
 import { UpdateContractorResponse } from '@models/responses/contractor/update';
 import { CreateContractorResponse } from '@models/responses/contractor/create';
 import { GetAllContractorsResponse } from '@models/responses/contractor/get-all';
-import { RequestHandler } from '../helpers/request-handler';
+import { RequestHandler } from '@helpers/request-handler';
 import { PaginationService } from './pagination.service';
 import { CreateContractorPayload } from '@models/payloads/contractor/create';
 import { UpdateContractorPayload } from '@models/payloads/contractor/update';
