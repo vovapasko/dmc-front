@@ -22,6 +22,10 @@ import { UploadNewsFilePayload } from '@models/payloads/news/news-waves/upload-f
 import { CreateClientPayload } from '@models/payloads/client/create';
 import { DeleteClientPayload } from '@models/payloads/client/delete';
 import { UpdateClientPayload } from '@models/payloads/client/update';
+import { CreatePublishPayload } from '@models/payloads/publication/publish/create';
+import { CreateNotPublishPayload } from '@models/payloads/publication/notPublish/create';
+import { UpdatePublishPayload } from '@models/payloads/publication/publish/update';
+import { UpdateNotPublishPayload } from '@models/payloads/publication/notPublish/update';
 
 export type Payloads =
   | LoginPayload
@@ -47,4 +51,9 @@ export type Payloads =
   | UploadNewsFilePayload
   | CreateClientPayload
   | UpdateClientPayload
-  | DeleteClientPayload;
+  | DeleteClientPayload
+  | CreatePublishPayload
+  | CreateNotPublishPayload
+  | UpdatePublishPayload
+  | UpdateNotPublishPayload
+
