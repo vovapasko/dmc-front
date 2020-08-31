@@ -661,9 +661,7 @@
 
                                                 <quill-editor [styles]="{ height: '400px', 'margin-bottom': '15px' }"
                                                               (onFocus)="onEvent($event, true)"
-                                                              (onEditorChanged)="changedEditor($event)"
                                                               (onBlur)="onEvent($event, false)"
-                                                              (change)="updateField(i, 'previewText')"
                                                               [formControl]="getControl(i, 'previewText')"
                                                               (onEditorCreated)="created($event)"
                                                 ></quill-editor>
@@ -715,10 +713,8 @@
                                             <quill-editor
                                                     [styles]="{ height: '400px', 'margin-bottom': '15px' }"
                                                     (onFocus)="onEvent($event, true)"
-                                                    (onEditorChanged)="changedEditor($event)"
                                                     (onBlur)="onEvent($event, false)"
                                                     formControlName="previewText"
-                                                    (onEditorCreated)="created($event)"
                                             ></quill-editor>
                                         </ng-template>
 

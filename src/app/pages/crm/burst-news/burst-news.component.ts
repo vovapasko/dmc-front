@@ -424,10 +424,13 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   /**
    * Quill editor has been updated (process only text change)
    */
-  public changedEditor(event): void {
-    // if (event.event !== 'text-change') {
-    //   return;
-    // }
+  public changedEditor(event, i): void {
+    if (event.event !== 'text-change') {
+      return;
+    }
+    // this.updateField(i, 'previewText');
+
+    console.log(event);
     // const control = this.previewFormControls.previewText;
     // control.setValue(event.html);
   }
@@ -528,15 +531,20 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
    * Process update preview text in last step
    */
   public updatePreviewText(index: number, control: FormControl): void {
-    const previewControl = this.getControl(index, 'previewText');
-    const content = this.getContent(index);
-    previewControl.setValue(content);
+    this.setContent(index);
   }
 
   /**
    * Collect all data in one content string value
    */
-  public getContent(index: number): string {
+  public setContent(index: number): void {
+    const control = this.getControl(index, 'attachments');
+    const previewControl = this.getControl(index, 'previewText');
+    this.setInfoContent(control, previewControl, index);
+    this.setImageContent(control, previewControl);
+  }
+
+  public setInfoContent(control: AbstractControl, previewControl: AbstractControl, index: number): void {
     const fields = Object.keys(newsFields);
     const format = this.getProjectFormat();
     let content = '';
@@ -544,9 +552,39 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
       const handler = newsFieldsHandler[field];
       const processingControl = this.getControl(index, field);
       const value = processingControl.value;
-      content += handler(value, format) + separators.newLine;
+      const text = handler(value, format) + separators.newLine;
+      if (previewControl.value.indexOf(text) === -1) {
+        content += text;
+      }
     });
-    return content;
+    if (previewControl.value.includes(content)) {
+      return;
+    }
+    previewControl.setValue(previewControl.value + content);
+  }
+
+  public setImageContent(control: AbstractControl, previewControl: AbstractControl): void {
+    const images = control.value.filter((file: File) => file.type.includes('image'));
+    images.forEach((image: File) => this.handleImage(image, previewControl));
+  }
+
+  public handleImage(image: File, control: AbstractControl) {
+    const reader = new FileReader();
+    reader.readAsDataURL(image);
+    reader.onload = () => {
+      if (control.value.includes(reader.result)) {
+        return;
+      }
+      control.setValue(control.value + newsFieldsHandler.image(reader.result));
+      console.log(reader.result);
+    };
+    reader.onerror = (error) => {
+      console.log('Error: ', error);
+    };
+  }
+
+  public onContentChanged(event: any): void {
+    console.log(event);
   }
 
   /**
@@ -579,7 +617,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
    * Set value in field
    */
   public setEmailValue(control: FormControl | AbstractControl, email: Email) {
-    const value = `<p>${email.template}</p>` + control.value + `<p>${email.signature}</p>`;
+    const value = `<p>${email.template}</p>` + control.value + `<br>` + `<p>${email.signature}</p>`;
     control.setValue(value);
   }
 

@@ -145,7 +145,7 @@ describe('BurstNewsComponent', () => {
 
   it('should call changedEditor', () => {
     spyOn(component, 'changedEditor');
-    component.changedEditor(null);
+    component.changedEditor(null, null);
     expect(component.changedEditor).toHaveBeenCalled();
   });
 
