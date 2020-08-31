@@ -1,26 +1,42 @@
 export const breadCrumbs = {
   burstNews: [
-    { label: 'Главная', path: '/' },
+    {
+      label: 'Главная',
+      path: '/'
+    },
     {
       label: 'Разгон',
       path: '/burst-news',
       active: true
     }
   ],
-  proxies: [
-    { label: 'Главная', path: '/' },
+  clients: [
     {
-      label: 'Разгон',
-      path: '/burst-news',
+      label: 'Главная',
+      path: '/'
+    },
+    {
+      label: 'Клиенты',
+      path: '/clients',
       active: true
     }
   ],
   reports: [
-    { label: 'Главная', path: '/' },
-    { label: 'Отчёты', path: '/crm/reports' }
+    {
+      label: 'Главная',
+      path: '/'
+    },
+    {
+      label: 'Отчёты',
+      path: '/crm/reports',
+      active: true
+    }
   ],
   contractors: [
-    { label: 'Главная', path: '/' },
+    {
+      label: 'Главная',
+      path: '/'
+    },
     {
       label: 'Контрагенты',
       path: '/contractors',
@@ -28,15 +44,47 @@ export const breadCrumbs = {
     }
   ],
   projects: [
-    { label: 'Главная', path: '/' },
-    { label: 'Проекты', path: '/crm/projects' }
+    {
+      label: 'Главная',
+      path: '/'
+    },
+    {
+      label: 'Проекты',
+      path: '/crm/projects',
+      active: true
+    }
   ],
   users: [
-    { label: 'Главная', path: '/' },
+    {
+      label: 'Главная',
+      path: '/'
+    },
     {
       label: 'Пользователи',
       path: '/contractors',
       active: true
     }
+  ],
+  publications: [
+    {
+      label: 'Главная',
+      path: '/'
+    },
+    {
+      label: 'Публикации',
+      path: '/publications',
+      active: true
+    }
+  ],
+  emails: [
+    {
+      label: 'Главная',
+      path: '/'
+    },
+    {
+      label: 'Почта',
+      path: '/email',
+      active: true
+    }
   ]
-}
+};

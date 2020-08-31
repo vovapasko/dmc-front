@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { Email } from './inbox.model';
 import { emailData } from './data';
+import { breadCrumbs } from '@constants/bread-crumbs';
 
 @Component({
   selector: 'app-inbox',
@@ -35,8 +36,7 @@ export class InboxComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.breadCrumbItems = [{ label: 'UBold', path: '/' }, { label: 'Email', path: '/' }, { label: 'Inbox', path: '/', active: true }];
-
+    this.breadCrumbItems = breadCrumbs.emails;
     // gets the data
     this._fetchData();
   }

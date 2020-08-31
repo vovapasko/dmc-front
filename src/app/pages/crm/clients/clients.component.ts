@@ -51,7 +51,7 @@ export class ClientsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.breadCrumbItems = breadCrumbs.proxies;
+    this.breadCrumbItems = breadCrumbs.clients;
     this.initForms();
     this._fetchData();
   }

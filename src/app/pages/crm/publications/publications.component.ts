@@ -43,6 +43,7 @@ import { DeleteNotPublishPayload } from '@models/payloads/publication/notPublish
 import { DeleteCommentPayload } from '@models/payloads/publication/comment/delete';
 import { CreateNewsProjectPayload } from '@models/payloads/project/news-project/create';
 import { selectCommentList, selectPublicationBlackList, selectPublicationList } from '@store/selectors/publication.selectors';
+import { breadCrumbs } from '@constants/bread-crumbs';
 
 @Component({
   selector: 'app-orders',
@@ -103,7 +104,7 @@ export class PublicationsComponent implements OnInit {
 
   ngOnInit() {
     // tslint:disable-next-line: max-line-length
-    this.breadCrumbItems = [{ label: 'UBold', path: '/' }, { label: 'eCommerce', path: '/' }, { label: 'Orders', path: '/', active: true }];
+    this.breadCrumbItems = breadCrumbs.publications;
     this._fetchData();
     this.initForms();
   }

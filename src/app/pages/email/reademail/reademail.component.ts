@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { breadCrumbs } from '@constants/bread-crumbs';
 
 @Component({
   selector: 'app-reademail',
@@ -17,7 +18,7 @@ export class ReademailComponent implements OnInit {
 
   ngOnInit() {
     // tslint:disable-next-line: max-line-length
-    this.breadCrumbItems = [{ label: 'UBold', path: '/' }, { label: 'Email', path: '/' }, { label: 'Email Read', path: '/', active: true }];
+    this.breadCrumbItems = breadCrumbs.emails;
 
   }
 
