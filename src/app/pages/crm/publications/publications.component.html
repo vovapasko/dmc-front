@@ -84,7 +84,7 @@
                 <div *ngFor="let publication of publications$ | async;let i = index" class="form-group row mb-3">
                     <div class="col-md-11">
                         <input type="text"
-                               placeholder="Введите ссылку"
+                               placeholder="Введите строку"
                                class="form-control"
                                [formControl]="getControl(i, 'publish', 'publication')"
                                (change)="updateField(i, 'publish', 'publication', publication)"
@@ -102,7 +102,7 @@
                 <div class="form-group row mb-3">
                     <div class="col-md-11">
                         <input type="text"
-                               placeholder="Введите ссылку"
+                               placeholder="Введите строку"
                                class="form-control"
                                formControlName="publish"
                         />
@@ -148,7 +148,7 @@
                 <div *ngFor="let publication of publicationsBlackList$ | async;let i = index" class="form-group row mb-3">
                     <div class="col-md-11">
                         <input type="text"
-                               placeholder="Введите ссылку"
+                               placeholder="Введите строку"
                                class="form-control"
                                [formControl]="getControl(i, 'notPublish', 'preventPublication')"
                                (change)="updateField(i, 'notPublish', 'preventPublication', publication)"
@@ -166,7 +166,7 @@
                 <div class="form-group row mb-3">
                     <div class="col-md-11">
                         <input type="text"
-                               placeholder="Введите ссылку"
+                               placeholder="Введите строку"
                                class="form-control"
                                formControlName="notPublish"
                         />
