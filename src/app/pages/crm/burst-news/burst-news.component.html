@@ -267,7 +267,7 @@
                                                  class="widget-chart text-center" dir="ltr">
 
                                                 <div *ngFor="let contractor of commonFormControls?.projectContractors?.value;">
-                                                    <h5 [ngStyle]="{'color': getColorByPercentage(commonFormControls?.projectContractors?.value | contractorsCost : commonFormControls?.projectPostFormat?.value?.postFormat, commonFormControls?.projectBudget?.value || 0)}"
+                                                    <h5 [ngStyle]="{'color': getColorByPercentage(commonFormControls?.projectContractors?.value | contractorsCost : priceList : commonFormControls?.projectPostFormat?.value?.postFormat, commonFormControls?.projectBudget?.value || 0)}"
                                                         *ngFor="let format of contractor?.postformatlistSet;">
                                                         {{ format?.postFormat === commonFormControls?.projectPostFormat?.value?.postFormat ? '— ' + contractor?.editorName + ' ' + format?.onePostPrice : ''}}
                                                     </h5>
@@ -279,8 +279,8 @@
                                                 </p>
 
                                                 <p>
-                                                    Бюджет: <span [ngStyle]="{'color': getColorByPercentage(commonFormControls?.projectContractors?.value | contractorsCost : commonFormControls?.projectPostFormat?.value?.postFormat, commonFormControls?.projectBudget?.value || 0)}">
-                                                    {{commonFormControls?.projectContractors?.value | contractorsCost : commonFormControls?.projectPostFormat?.value?.postFormat}}
+                                                    Бюджет: <span [ngStyle]="{'color': getColorByPercentage(commonFormControls?.projectContractors?.value | contractorsCost : priceList : commonFormControls?.projectPostFormat?.value?.postFormat, commonFormControls?.projectBudget?.value || 0)}">
+                                                    {{commonFormControls?.projectContractors?.value | contractorsCost : priceList : commonFormControls?.projectPostFormat?.value?.postFormat}}
                                                 </span>/{{commonFormControls?.projectBudget?.value || 0}}
                                                 </p>
                                             </div>
