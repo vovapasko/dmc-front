@@ -193,7 +193,8 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-1">
-                                                <a (click)="openModal(editPrice)" href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
+                                                <a (click)="openModal(editPrice)" href="javascript:void(0);"
+                                                   class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
                                             </div>
                                         </div>
 
@@ -269,17 +270,19 @@
                                                 <div *ngFor="let contractor of commonFormControls?.projectContractors?.value;">
                                                     <h5 [ngStyle]="{'color': getColorByPercentage(commonFormControls?.projectContractors?.value | contractorsCost : priceList : commonFormControls?.projectPostFormat?.value?.postFormat, commonFormControls?.projectBudget?.value || 0)}"
                                                         *ngFor="let format of contractor?.postformatlistSet;">
-                                                        {{ format?.postFormat === commonFormControls?.projectPostFormat?.value?.postFormat ? '— ' + contractor?.editorName + ' ' + format?.onePostPrice : ''}}
+                                                        {{ format?.postFormat === commonFormControls?.projectPostFormat?.value?.postFormat ? '— ' + contractor?.editorName + ' ' + getContractorPrice(contractor, format) : ''}}
                                                     </h5>
                                                 </div>
 
                                                 <p>
                                                     Кол-во размещений: сделано
-                                                    {{commonFormControls?.projectContractors?.value | contractorsNewsAmount : commonFormControls?.projectPostFormat?.value?.postFormat}}/{{commonFormControls?.projectContractors?.value | contractorsArrangement : commonFormControls?.projectPostFormat?.value?.postFormat}}
+                                                    {{commonFormControls?.projectContractors?.value | contractorsNewsAmount : commonFormControls?.projectPostFormat?.value?.postFormat}}
+                                                    /{{commonFormControls?.projectContractors?.value | contractorsArrangement : commonFormControls?.projectPostFormat?.value?.postFormat}}
                                                 </p>
 
                                                 <p>
-                                                    Бюджет: <span [ngStyle]="{'color': getColorByPercentage(commonFormControls?.projectContractors?.value | contractorsCost : priceList : commonFormControls?.projectPostFormat?.value?.postFormat, commonFormControls?.projectBudget?.value || 0)}">
+                                                    Бюджет: <span
+                                                        [ngStyle]="{'color': getColorByPercentage(commonFormControls?.projectContractors?.value | contractorsCost : priceList : commonFormControls?.projectPostFormat?.value?.postFormat, commonFormControls?.projectBudget?.value || 0)}">
                                                     {{commonFormControls?.projectContractors?.value | contractorsCost : priceList : commonFormControls?.projectPostFormat?.value?.postFormat}}
                                                 </span>/{{commonFormControls?.projectBudget?.value || 0}}
                                                 </p>
@@ -766,7 +769,6 @@
 </div>
 
 
-
 <ng-template #editPrice role="document" let-modal="close">
     <div class="modal-header bg-dark" id="edit-client-modal">
         <h4 class="modal-title text-white">Редактирование цен</h4>
@@ -784,7 +786,8 @@
         <div class="text-left">
             <form (ngSubmit)="setPrices()" [formGroup]="priceForm">
 
-                <div *ngFor="let contractor of commonFormControls?.projectContractors?.value; let idx = index" class="form-group mb-3">
+                <div *ngFor="let contractor of commonFormControls?.projectContractors?.value; let idx = index"
+                     class="form-group mb-3">
                     <label [for]="'title' + idx">Цена для {{contractor.editorName}}</label>
                     <input type="text"
                            placeholder="Введите цену"
@@ -794,11 +797,11 @@
                            class="form-control"
                            (change)="updatePriceField(idx, 'price')"
                     />
-                    <div *ngIf="submitted && getPriceControl(idx, 'price').errors" style="display: block" class="invalid-feedback">
+                    <div *ngIf="submitted && getPriceControl(idx, 'price').errors" style="display: block"
+                         class="invalid-feedback">
                         <div *ngIf="getPriceControl(idx, 'price').errors.required">Цена обязательна</div>
                     </div>
                 </div>
-
 
 
                 <div class="text-right">

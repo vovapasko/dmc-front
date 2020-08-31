@@ -542,7 +542,12 @@ export class NewsService {
     return new FormArray(toGroups);
   }
 
-  public initPriceControls(contractors: Contractor[], format: Format): FormArray {
+  public getContractorPrice(contractor: Contractor, format: PostFormatListSet, priceList: NewsWavePrice[]): string | number {
+    const changedContractor = priceList.find((el: NewsWavePrice) => el.contractor.id === contractor.id);
+    return changedContractor ? changedContractor.price : format.onePostPrice;
+  }
+
+  public initPriceControls(contractors: Contractor[], format: Format, priceList: NewsWavePrice[]): FormArray {
     if (!contractors || !format) {
       return new FormArray([new FormGroup({
         price: new FormControl(null, Validators.required),
@@ -551,11 +556,17 @@ export class NewsService {
     }
     const toGroups = contractors.map((entity: Contractor) => {
       return new FormGroup({
-        price: new FormControl(entity.postformatlistSet.find(el => el.postFormat === format.postFormat).onePostPrice, Validators.required),
+        // tslint:disable-next-line:max-line-length
+        price: new FormControl(this.getContractorPrice(entity, entity.postformatlistSet.find(el => el.postFormat === format.postFormat), priceList), Validators.required),
         contractor: new FormControl(entity, Validators.required)
       });
     });
     return new FormArray(toGroups);
+  }
+
+  public filterPriceList(priceList: NewsWavePrice[], contractors: Contractor[]): NewsWavePrice[] {
+    const result = priceList.slice();
+    return result.filter((el: NewsWavePrice) => contractors.find((contractor: Contractor) => contractor.id === el.contractor.id));
   }
 
   /**

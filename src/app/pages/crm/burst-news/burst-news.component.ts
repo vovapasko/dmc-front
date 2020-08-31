@@ -52,6 +52,9 @@ import { selectClientList } from '@store/selectors/client.selectors';
 import { GetClients } from '@store/actions/client.actions';
 import { getColorByPercentage } from '@helpers/utility';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Contractor, PostFormatListSet } from '@models/instances/contractor';
+import { NewsWavePrice } from '@models/instances/newsWavePrice';
+import { Format } from '@models/instances/format';
 
 /**
  * Form Burst news component - handling the burst news with sidebar and content
@@ -88,7 +91,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   loading$: Subject<boolean>;
   error$: Subject<ServerError>;
   newsList = [emptyNewsItem];
-  priceList = [];
+  priceList: NewsWavePrice[] = [];
   multipleRadialBars: ChartType = multipleRadialBars;
   methods = Methods;
   steps = burstSteps;
@@ -263,7 +266,8 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   public initPriceControls(): void {
     const contractors = this.commonFormControls.projectContractors.value;
     const format = this.commonFormControls.projectPostFormat.value;
-    this.priceControls = this.newsService.initPriceControls(contractors, format);
+    this.priceList = this.newsService.filterPriceList(this.priceList, contractors);
+    this.priceControls = this.newsService.initPriceControls(contractors, format, this.priceList);
   }
 
   /**
@@ -561,6 +565,11 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
       return;
     }
     previewControl.setValue(previewControl.value + content);
+  }
+
+  public getContractorPrice(contractor: Contractor, format: PostFormatListSet): string | number {
+    const changedContractor = this.priceList.find((el: NewsWavePrice) => el.contractor.id === contractor.id);
+    return changedContractor ? changedContractor.price : format.onePostPrice;
   }
 
   public setImageContent(control: AbstractControl, previewControl: AbstractControl): void {
