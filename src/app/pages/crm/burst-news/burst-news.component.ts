@@ -159,7 +159,11 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
       return;
     }
     const controls = this.validationForm.controls;
-    this.pairs.forEach(pair => controls[pair.key].setValue(newsProject[pair.value]));
+    let projectPairs = this.pairs;
+    if (this.newsWaveId) {
+      projectPairs = pairs.filter(el => el.key !== 'projectBudget');
+    }
+    projectPairs.forEach(pair => controls[pair.key].setValue(newsProject[pair.value]));
     this.emails$ = of(newsProject.emails);
     this.newsProject = newsProject;
   }
