@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { map, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 
-import { ServerResponse } from '../models/responses/server/response';
+import { ServerResponse } from '@models/responses/server/response';
 import { ResponseHandler } from './response-handler';
 import { ErrorHandler } from './error-handler';
 import { ConvertCase } from './convert-case';
-import { Payloads } from '../models/payloads/payload';
+import { Payloads } from '@models/payloads/payload';
 
 /**
- * This service handle request from client, process and send to server
+ * This service handle request from clients, process and send to server
  */
 
 @Injectable({

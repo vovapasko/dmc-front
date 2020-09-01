@@ -3,7 +3,7 @@ import { Effect, ofType, Actions } from '@ngrx/effects';
 import { switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
-import { ContractorService } from '../../services/contractor.service';
+import { ContractorService } from '@services/contractor.service';
 import {
   CreateContractors,
   CreateContractorsSuccess,
@@ -17,11 +17,10 @@ import {
   UpdateContractors,
   UpdateContractorsSuccess,
 } from '../actions/contractor.actions';
-import { Contractor } from '../../models/instances/contractor';
-import { DeleteContractorPayload } from '../../models/payloads/contractor/delete';
-import { Payloads } from '../../models/payloads/payload';
-import { UpdateContractorPayload } from '../../models/payloads/contractor/update';
-import { CreateContractorPayload } from '../../models/payloads/contractor/create';
+import { Contractor } from '@models/instances/contractor';
+import { DeleteContractorPayload } from '@models/payloads/contractor/delete';
+import { UpdateContractorPayload } from '@models/payloads/contractor/update';
+import { CreateContractorPayload } from '@models/payloads/contractor/create';
 
 @Injectable({
   providedIn: 'root',

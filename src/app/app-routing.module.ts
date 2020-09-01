@@ -3,8 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AuthGuard } from './core/guards/auth.guard';
 import { LayoutComponent } from './layouts/layout.component';
-import { Error404Component } from './pages/errors/error404/error404.component';
-import { Error500Component } from './pages/errors/error500/error500.component';
+import { Error404Component } from './core/components/errors/error404/error404.component';
+import { Error500Component } from './core/components/errors/error500/error500.component';
 
 const routes: Routes = [
   { path: 'account', loadChildren: () => import('./pages/account/account.module').then((m) => m.AccountModule) },

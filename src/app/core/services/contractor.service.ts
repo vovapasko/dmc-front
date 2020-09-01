@@ -4,20 +4,19 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { environment } from '../../../environments/environment';
-import { Contractor } from '../models/instances/contractor';
-import { DeleteContractorResponse } from '../models/responses/contractor/delete';
-import { UpdateContractorResponse } from '../models/responses/contractor/update';
-import { CreateContractorResponse } from '../models/responses/contractor/create';
-import { GetAllContractorsResponse } from '../models/responses/contractor/get-all';
-import { RequestHandler } from '../helpers/request-handler';
-import numbers from '../constants/numbers';
+import { Contractor } from '@models/instances/contractor';
+import { DeleteContractorResponse } from '@models/responses/contractor/delete';
+import { UpdateContractorResponse } from '@models/responses/contractor/update';
+import { CreateContractorResponse } from '@models/responses/contractor/create';
+import { GetAllContractorsResponse } from '@models/responses/contractor/get-all';
+import { RequestHandler } from '@helpers/request-handler';
 import { PaginationService } from './pagination.service';
-import { CreateContractorPayload } from '../models/payloads/contractor/create';
-import { UpdateContractorPayload } from '../models/payloads/contractor/update';
-import { DeleteContractorPayload } from '../models/payloads/contractor/delete';
+import { CreateContractorPayload } from '@models/payloads/contractor/create';
+import { UpdateContractorPayload } from '@models/payloads/contractor/update';
+import { DeleteContractorPayload } from '@models/payloads/contractor/delete';
 import { collectDataFromForm } from '../helpers/utility';
-import { endpoints } from '../constants/endpoints';
-import { methods } from '../constants/methods';
+import { endpoints } from '@constants/endpoints';
+import { methods } from '@constants/methods';
 
 const api = environment.api;
 
@@ -111,12 +110,9 @@ export class ContractorService {
       `${api}/${endpoints.CONTRACTOR}/${payload.id}`,
       methods.PUT,
       payload,
-      (response: UpdateContractorResponse) => {
-        if (response && response.contractor) {
-          const contractor = response.contractor;
-          this.contractors = this.contractors.map((el) => (+el.id === +contractor.id ? contractor : el));
-          return contractor;
-        }
+      (response: Contractor) => {
+        this.contractors = this.contractors.map((el) => (+el.id === +response.id ? response : el));
+        return response;
       }
     );
   }
@@ -179,7 +175,7 @@ export class ContractorService {
   /**
    * Validators for Create Form
    */
-  public initializeCreateForm(): FormGroup {
+  public initializeCreateContractorForm(): FormGroup {
     return this.formBuilder.group({
       editorName: ['', [Validators.required, Validators.minLength(1)]],
       contactPerson: ['', [Validators.required, Validators.minLength(1)]],
@@ -197,25 +193,25 @@ export class ContractorService {
       postFormat: ['', [Validators.required, Validators.minLength(1)]],
       newsAmount: [null, [Validators.required, Validators.minLength(1)]],
       arrangedNews: [null, [Validators.required, Validators.minLength(1)]],
-      onePostPrice: [null, [Validators.required, Validators.minLength(1)]],
+      onePostPrice: [null, [Validators.required, Validators.minLength(1)]]
     });
   }
 
   public initializeDeleteFormatForm(): FormGroup {
     return this.formBuilder.group({
       deletePostFormat: [null, Validators.required]
-    })
+    });
   }
 
   /**
    * Validators for Update Form
    */
-  public initializeUpdateForm(): FormGroup {
+  public initializeUpdateContractorForm(): FormGroup {
     return this.formBuilder.group({
-      updateEditorName: ['', [Validators.required, Validators.minLength(1)]],
-      updateContactPerson: ['', [Validators.required, Validators.minLength(1)]],
-      updatePhoneNumber: ['', [Validators.required, Validators.pattern('^\\+?3?8?(0\\d{9})$')]],
-      updateEmail: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$')]]
+      editorName: ['', [Validators.required, Validators.minLength(1)]],
+      contactPerson: ['', [Validators.required, Validators.minLength(1)]],
+      phoneNumber: ['', [Validators.required, Validators.pattern('^\\+?3?8?(0\\d{9})$')]],
+      email: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$')]]
     });
   }
 

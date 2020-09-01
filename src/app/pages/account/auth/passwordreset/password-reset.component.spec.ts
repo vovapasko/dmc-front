@@ -51,7 +51,7 @@ describe('PasswordResetComponent', () => {
   it('should initForm and return controls', () => {
     component.initForm();
     expect(component.resetForm).toBeTruthy();
-    expect(component.f).toBeTruthy();
+    expect(component.resetFormControls).toBeTruthy();
   });
 
   it('should handle onSubmit', () => {

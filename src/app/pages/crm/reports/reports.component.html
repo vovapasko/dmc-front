@@ -30,7 +30,7 @@
                                 <th>Клиент</th>
                                 <th>Контрагенты</th>
                                 <th>Бюджет</th>
-                                <th>Осталось</th>
+<!--                                <th>Осталось</th>-->
                                 <th>Отчёт</th>
                             </tr>
                             </thead>
@@ -46,7 +46,7 @@
                                     {{project?.manager?.firstName}} {{project?.manager?.lastName}}
                                 </td>
                                 <td>
-                                    {{ project?.client }}
+                                    {{ project?.client?.name }}
                                 </td>
                                 <td>
                                     {{ project?.contractors | contractorsNames }}
@@ -54,9 +54,9 @@
                                 <td>
                                     {{ project?.budget }}
                                 </td>
-                                <td>
-                                    {{ project?.contractors | contractorsCost }}
-                                </td>
+<!--                                <td>-->
+<!--                                    {{ project?.contractors | contractorsCost }}-->
+<!--                                </td>-->
                                 <td>
                                     <a (click)="onDownload(project)"
                                        href="javascript:void(0);"

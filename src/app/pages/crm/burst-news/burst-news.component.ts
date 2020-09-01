@@ -9,11 +9,9 @@ import {
   ViewContainerRef
 } from '@angular/core';
 import { WizardComponent as BaseWizardComponent } from 'angular-archwizard';
-import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
-import { multipleRadialBars } from '@components/charts/data';
+import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ChartType, multipleRadialBars } from '@components/charts/data';
 import { Steps } from '@constants/steps';
-import { ChartType } from '../../dashboards/default/default.model';
-import { revenueRadialChart } from '../../dashboards/default/data';
 import { select, Store } from '@ngrx/store';
 import { IAppState } from '@store/state/app.state';
 import { CreateNewsWave, GetNewsWave, GetProjectConfiguration, UpdateNewsWave } from '@store/actions/news.actions';
@@ -49,6 +47,14 @@ import { NewsWaves } from '@models/instances/news-waves';
 import { pairs } from '@constants/burst-news-pairs';
 import { emptyNewsItem } from '@constants/empty-news-item';
 import { breadCrumbs } from '@constants/bread-crumbs';
+import { revenueRadialChart } from '@components/charts/data';
+import { selectClientList } from '@store/selectors/client.selectors';
+import { GetClients } from '@store/actions/client.actions';
+import { getColorByPercentage } from '@helpers/utility';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Contractor, PostFormatListSet } from '@models/instances/contractor';
+import { NewsWavePrice } from '@models/instances/newsWavePrice';
+import { Format } from '@models/instances/format';
 
 /**
  * Form Burst news component - handling the burst news with sidebar and content
@@ -65,6 +71,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   title = 'Разгон';
   breadCrumbItems: Array<{}>;
   contractors$ = this.store.pipe(select(selectContractors));
+  clients$ = this.store.pipe(select(selectClientList));
   hashtags$ = this.store.pipe(select(selectHashtags));
   formats$ = this.store.pipe(select(selectFormats));
   characters$ = this.store.pipe(select(selectCharacters));
@@ -78,10 +85,13 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   editorForm: FormGroup;
   previewForm: FormGroup;
   newsForm: FormGroup;
+  priceForm: FormGroup;
   controls: FormArray;
+  priceControls: FormArray;
   loading$: Subject<boolean>;
   error$: Subject<ServerError>;
   newsList = [emptyNewsItem];
+  priceList: NewsWavePrice[] = [];
   multipleRadialBars: ChartType = multipleRadialBars;
   methods = Methods;
   steps = burstSteps;
@@ -94,6 +104,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   submitForm: boolean;
   emails$ = this.store.pipe(select(selectEmailsList));
   pairs = pairs;
+  getColorByPercentage = getColorByPercentage;
 
   @ViewChild('wizardForm', { static: false }) wizard: BaseWizardComponent;
   @ViewChild('tpl', { static: false }) tpl;
@@ -106,7 +117,8 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     private newsService: NewsService,
     private errorService: ErrorService,
     private loadingService: LoadingService,
-    private titleService: Title
+    private titleService: Title,
+    private modalService: NgbModal
   ) {
   }
 
@@ -194,6 +206,14 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     return null;
   }
 
+  public getPriceControl(index: number, field: string): FormControl {
+    const controls = this.priceControls;
+    if (field && controls) {
+      return controls.at(index).get(field) as FormControl;
+    }
+    return null;
+  }
+
   /**
    * Subscribe to updates in loading, error
    * set pie chart for interactive counter
@@ -215,7 +235,15 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     this.initEditorForm();
     this.initNewsForm();
     this.initControls();
+    this.initPriceControls();
     this.initPreviewForm();
+    this.initPriceForm();
+  }
+
+  public initPriceForm(): void {
+    this.priceForm = new FormGroup({
+      price: new FormControl(null, Validators.required)
+    });
   }
 
   /**
@@ -233,10 +261,21 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   /**
+   * Pass data for fill and accepts price controls (editing price)
+   */
+  public initPriceControls(): void {
+    const contractors = this.commonFormControls.projectContractors.value;
+    const format = this.commonFormControls.projectPostFormat.value;
+    this.priceList = this.newsService.filterPriceList(this.priceList, contractors);
+    this.priceControls = this.newsService.initPriceControls(contractors, format, this.priceList);
+  }
+
+  /**
    * Accepts controls from service with custom validator for budget
    */
   private initValidateForm(): void {
-    this.validationForm = this.newsService.initializeValidationForm(this.budgetValidator.bind(this));
+    // @ts-ignore
+    this.validationForm = this.newsService.initializeValidationForm(this.budgetValidator.bind(this), !!this.route.queryParams._value.id);
   }
 
   /**
@@ -271,7 +310,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   /**
    * Returns controls for validation form in common step
    */
-  get form() {
+  get commonFormControls() {
     if (!this.validationForm) {
       return;
     }
@@ -281,7 +320,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   /**
    * Returns controls for news form in distribution step
    */
-  get distributeForm() {
+  get distributeFormControls() {
     if (!this.newsForm) {
       return;
     }
@@ -304,6 +343,14 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   public addNew(): void {
     this.addNewControl();
     this.addNewItem();
+  }
+
+  /**
+   * Modal Open
+   * @param content modal content
+   */
+  public openModal(content: string): void {
+    this.modalService.open(content, { centered: true });
   }
 
   /**
@@ -335,10 +382,10 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
    * Returns available (minus contractors cost) project budget
    */
   get budget() {
-    if (!this.form) {
+    if (!this.commonFormControls) {
       return 0;
     }
-    const budgetControl = this.form.projectBudget;
+    const budgetControl = this.commonFormControls.projectBudget;
     return budgetControl ? budgetControl.value || 0 : 0;
   }
 
@@ -381,10 +428,13 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   /**
    * Quill editor has been updated (process only text change)
    */
-  public changedEditor(event): void {
-    // if (event.event !== 'text-change') {
-    //   return;
-    // }
+  public changedEditor(event, i): void {
+    if (event.event !== 'text-change') {
+      return;
+    }
+    // this.updateField(i, 'previewText');
+
+    console.log(event);
     // const control = this.previewFormControls.previewText;
     // control.setValue(event.html);
   }
@@ -416,9 +466,10 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
    * Submit or confirm button has been pressed
    */
   public onSubmit(): void {
-    const { newsService, newsProject, validationForm, editorForm, newsForm, previewForm, newsList, newsWaveId, controls, newsWave } = this;
     // tslint:disable-next-line:max-line-length
-    const payload = newsService.processNewsWavePayload(newsProject, validationForm, editorForm, newsForm, previewForm, newsList as unknown as News[], newsWaveId, controls, newsWave);
+    const { newsService, newsProject, validationForm, editorForm, newsForm, previewForm, newsList, newsWaveId, controls, newsWave, priceList } = this;
+    // tslint:disable-next-line:max-line-length
+    const payload = newsService.processNewsWavePayload(newsProject, validationForm, editorForm, newsForm, previewForm, newsList as unknown as News[], newsWaveId, controls, newsWave, priceList);
     this.submit(payload, newsWaveId);
   }
 
@@ -466,6 +517,12 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     }
   }
 
+  public updatePriceField(index: number, field: string, value?: string | number): void {
+    const control = this.getPriceControl(index, field);
+    const contractorControl = this.getPriceControl(index, 'contractor');
+    this.priceList = this.newsService.updatePriceField(index, field, value, control, this.priceList, contractorControl);
+  }
+
   public onChangeDistributionFiles(control: FormControl) {
     // console.log(control);
   }
@@ -478,15 +535,20 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
    * Process update preview text in last step
    */
   public updatePreviewText(index: number, control: FormControl): void {
-    const previewControl = this.getControl(index, 'previewText');
-    const content = this.getContent(index);
-    previewControl.setValue(content);
+    this.setContent(index);
   }
 
   /**
    * Collect all data in one content string value
    */
-  public getContent(index: number): string {
+  public setContent(index: number): void {
+    const control = this.getControl(index, 'attachments');
+    const previewControl = this.getControl(index, 'previewText');
+    this.setInfoContent(control, previewControl, index);
+    this.setImageContent(control, previewControl);
+  }
+
+  public setInfoContent(control: AbstractControl, previewControl: AbstractControl, index: number): void {
     const fields = Object.keys(newsFields);
     const format = this.getProjectFormat();
     let content = '';
@@ -494,9 +556,44 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
       const handler = newsFieldsHandler[field];
       const processingControl = this.getControl(index, field);
       const value = processingControl.value;
-      content += handler(value, format) + separators.newLine;
+      const text = handler(value, format) + separators.newLine;
+      if (previewControl.value.indexOf(text) === -1) {
+        content += text;
+      }
     });
-    return content;
+    if (previewControl.value.includes(content)) {
+      return;
+    }
+    previewControl.setValue(previewControl.value + content);
+  }
+
+  public getContractorPrice(contractor: Contractor, format: PostFormatListSet): string | number {
+    const changedContractor = this.priceList.find((el: NewsWavePrice) => el.contractor.id === contractor.id);
+    return changedContractor ? changedContractor.price : format.onePostPrice;
+  }
+
+  public setImageContent(control: AbstractControl, previewControl: AbstractControl): void {
+    const images = control.value.filter((file: File) => file.type.includes('image'));
+    images.forEach((image: File) => this.handleImage(image, previewControl));
+  }
+
+  public handleImage(image: File, control: AbstractControl) {
+    const reader = new FileReader();
+    reader.readAsDataURL(image);
+    reader.onload = () => {
+      if (control.value.includes(reader.result)) {
+        return;
+      }
+      control.setValue(control.value + newsFieldsHandler.image(reader.result));
+      console.log(reader.result);
+    };
+    reader.onerror = (error) => {
+      console.log('Error: ', error);
+    };
+  }
+
+  public onContentChanged(event: any): void {
+    console.log(event);
   }
 
   /**
@@ -529,7 +626,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
    * Set value in field
    */
   public setEmailValue(control: FormControl | AbstractControl, email: Email) {
-    const value = `<p>${email.template}</p>` + control.value + `<p>${email.signature}</p>`;
+    const value = `<p>${email.template}</p>` + control.value + `<br>` + `<p>${email.signature}</p>`;
     control.setValue(value);
   }
 
@@ -537,10 +634,17 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
    * Get project format from validation form control
    */
   public getProjectFormat(): string {
-    const form = this.form;
+    const form = this.commonFormControls;
     const projectFormat = form ? form.projectPostFormat : { value: {} };
     const value = projectFormat ? projectFormat.value : {};
     return value ? value.postFormat : '';
+  }
+
+  /**
+   * Set page title
+   */
+  public setPrices(): void {
+    // TODO
   }
 
   /**
@@ -567,9 +671,12 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     }
     const { newsService, validationForm, editorForm, newsForm, previewForm } = this;
     this.onChangeProject(newsWave.project);
-    const { newsList, controls } = newsService.setNewsWaveData(newsWave, validationForm, editorForm, newsForm, previewForm);
+    // tslint:disable-next-line:max-line-length
+    const { newsList, controls, priceList, priceControls } = newsService.setNewsWaveData(newsWave, validationForm, editorForm, newsForm, previewForm);
     this.newsList = newsList;
     this.controls = controls;
+    this.priceList = priceList;
+    this.priceControls = priceControls;
     this.newsWave = newsWave;
   }
 
@@ -578,6 +685,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
    */
   public fetchData(): void {
     const store = this.store;
+    store.dispatch(new GetClients());
     store.dispatch(new GetProjectConfiguration());
     store.dispatch(new GetNewsProjects());
     store.dispatch(new GetEmails());

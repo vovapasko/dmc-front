@@ -12,11 +12,9 @@ import {
   mockRegister,
   mockSignUp,
   mockUpdate,
-  mockUpdateProfile,
   mockUser,
   mockUsers,
 } from '../mocks/user.mock';
-import { User } from '../models/instances/user.models';
 import { PaginationService } from './pagination.service';
 import { CookieService } from '../providers/cookie.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -146,18 +144,6 @@ describe('UserService', () => {
       const req = httpMock.expectOne(`${api}/change-pass/${mockConfirmResetPassword.confirm}`);
       expect(req.request.method).toBe('POST');
       req.flush({ success: true });
-    });
-  });
-
-  describe('#updateProfile', () => {
-    it('should return an Observable<User[]>', () => {
-      service.updateProfile(mockUpdateProfile).subscribe((user) => {
-        expect(user).toBeTruthy();
-      });
-
-      const req = httpMock.expectOne(`${api}/profile/`);
-      expect(req.request.method).toBe('PUT');
-      req.flush({ user: mockUser });
     });
   });
 });

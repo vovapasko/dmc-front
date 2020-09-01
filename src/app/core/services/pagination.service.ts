@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import numbers from '../constants/numbers';
 import {
   paginationEndIndex,
   paginationPage,
   paginationPageSize,
   paginationStartIndex,
   paginationTotalSize, PaginationType
-} from '../constants/pagination';
+} from '@constants/pagination';
 
 /**
  * This service for pagination any data

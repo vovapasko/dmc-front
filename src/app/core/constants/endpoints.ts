@@ -20,5 +20,9 @@ export const endpoints = {
   NEWSPROJECTS: 'newsprojects',
   NEWS_WAVES: 'news-waves',
   NEWS_FILE_UPLOAD: 'news-fileupload',
-  FORMATION_FILE_UPLOAD: 'wave-formation-fileupload'
+  FORMATION_FILE_UPLOAD: 'wave-formation-fileupload',
+  CLIENT: 'clients',
+  PUBLICATIONS: 'publications',
+  PUBLICATIONS_BLACKLIST: 'publications-blacklist',
+  COMMENTS: 'comments'
 };

@@ -1,0 +1,255 @@
+<div class="container-fluid">
+    <app-page-title title="Публикации" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <div class="col-lg-8">
+                            <form class="form-inline">
+                                <div class="form-group mb-2">
+                                    <label class="sr-only">Search</label>
+                                    <input type="search" class="form-control" name="search" placeholder="Search..."
+                                           [(ngModel)]="term">
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-centered mb-0">
+                            <thead class="thead-light">
+                            <tr>
+                                <th>Контрагент</th>
+                                <th>Публикует</th>
+                                <th>Не публикует</th>
+                                <th>Примечания</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let contractor of contractors$ | async | filter:term | slice:0:10; let i = index;">
+                                <td>
+                                    {{contractor.editorName}}
+                                </td>
+                                <td>
+                                    <a (click)="loadPublications(contractor);openModal(publication)" href="javascript: void(0);">
+                                        Открыть список
+                                    </a>
+                                </td>
+                                <td>
+                                    <a (click)="loadPublicationBlackList(contractor);openModal(preventPublication)" href="javascript: void(0);">
+                                        Открыть список
+                                    </a>
+                                </td>
+                                <td>
+                                    <a (click)="loadComments(contractor);openModal(notes)" href="javascript: void(0);">
+                                        Открыть список
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <ul class="pagination pagination-rounded justify-content-end my-2">
+                        <ngb-pagination [collectionSize]="totalRecords" (pageChange)="onPageChange($event)"
+                                        [(page)]="page" [pageSize]="pageSize">
+                        </ngb-pagination>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #publication role="document" let-modal="close">
+    <div class="modal-header bg-dark" id="edit-client-modal">
+        <h4 class="modal-title text-white">Публикует</h4>
+        <button
+                type="button"
+                class="close text-white"
+                aria-label="Close"
+                id="closePublication"
+                (click)="modal('Cross click')"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body p-3">
+        <div class="text-left">
+            <form (ngSubmit)="addPublication()" [formGroup]="publicationForm">
+
+                <div *ngFor="let publication of publications$ | async;let i = index" class="form-group row mb-3">
+                    <div class="col-md-11">
+                        <input type="text"
+                               placeholder="Введите строку"
+                               class="form-control"
+                               [formControl]="getControl(i, 'publish', 'publication')"
+                               (change)="updateField(i, 'publish', 'publication', publication)"
+                        />
+
+                    </div>
+                    <div class="col-md-1 card-widgets">
+                        <a (click)="onDeletePublication(publication)"
+                           href="javascript:void(0);">
+                            <i class="mdi mdi-close"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <div class="col-md-11">
+                        <input type="text"
+                               placeholder="Введите строку"
+                               class="form-control"
+                               formControlName="publish"
+                        />
+
+                    </div>
+                </div>
+
+                <a (click)="addPublication()"
+                        href="javascript: void(0);" style="margin-bottom: 10px">
+                    <i class="mdi mdi-plus-circle"></i>
+                    Добавить
+                </a>
+
+                <div class="text-right">
+                    <button type="button" id="cancel-new-user-button" class="btn btn-danger ml-1"
+                            (click)="modal('close click')">
+                        Отменить
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</ng-template>
+
+
+<ng-template #preventPublication role="document" let-modal="close">
+    <div class="modal-header bg-dark" id="not-publication-modal">
+        <h4 class="modal-title text-white">Не публикует</h4>
+        <button
+                type="button"
+                class="close text-white"
+                aria-label="Close"
+                id="closeEditPrice"
+                (click)="modal('Cross click')"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body p-3">
+        <div class="text-left">
+            <form (ngSubmit)="addNotPublication()" [formGroup]="preventPublicationForm">
+
+                <div *ngFor="let publication of publicationsBlackList$ | async;let i = index" class="form-group row mb-3">
+                    <div class="col-md-11">
+                        <input type="text"
+                               placeholder="Введите строку"
+                               class="form-control"
+                               [formControl]="getControl(i, 'notPublish', 'preventPublication')"
+                               (change)="updateField(i, 'notPublish', 'preventPublication', publication)"
+                        />
+
+                    </div>
+                    <div class="col-md-1 card-widgets">
+                        <a (click)="onDeleteNotPublication(publication)"
+                           href="javascript:void(0);">
+                            <i class="mdi mdi-close"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <div class="col-md-11">
+                        <input type="text"
+                               placeholder="Введите строку"
+                               class="form-control"
+                               formControlName="notPublish"
+                        />
+
+                    </div>
+                </div>
+
+                <a (click)="addNotPublication()"
+                   href="javascript: void(0);" style="margin-bottom: 10px">
+                    <i class="mdi mdi-plus-circle"></i>
+                    Добавить
+                </a>
+
+                <div class="text-right">
+                    <button type="button" id="cancel-button" class="btn btn-danger ml-1"
+                            (click)="modal('close click')">
+                        Отменить
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #notes role="document" let-modal="close">
+    <div class="modal-header bg-dark" id="notes-modal">
+        <h4 class="modal-title text-white">Примечания</h4>
+        <button
+                type="button"
+                class="close text-white"
+                aria-label="Close"
+                id="closeNotePrice"
+                (click)="modal('Cross click')"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body p-3">
+        <div class="text-left">
+            <form (ngSubmit)="addNote()" [formGroup]="notesForm">
+
+                <div *ngFor="let note of comments$ | async;let i = index" class="form-group row mb-3">
+                    <div class="col-md-11">
+                        <input type="text"
+                               placeholder="Введите примечание"
+                               class="form-control"
+                               [formControl]="getControl(i, 'comment', 'note')"
+                               (change)="updateField(i, 'comment', 'note', note)"
+                        />
+
+                    </div>
+                    <div class="col-md-1 card-widgets">
+                        <a (click)="onDeleteNote(note)"
+                           href="javascript:void(0);">
+                            <i class="mdi mdi-close"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <div class="col-md-11">
+                        <input type="text"
+                               placeholder="Введите примечание"
+                               class="form-control"
+                               formControlName="comment"
+                        />
+
+                    </div>
+                </div>
+
+                <a (click)="addNote()"
+                   href="javascript: void(0);" style="margin-bottom: 10px">
+                    <i class="mdi mdi-plus-circle"></i>
+                    Добавить
+                </a>
+
+                <div class="text-right">
+                    <button type="button" id="cancel-user-button" class="btn btn-danger ml-1"
+                            (click)="modal('close click')">
+                        Отменить
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</ng-template>

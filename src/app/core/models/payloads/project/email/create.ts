@@ -3,5 +3,6 @@ export interface CreateEmailPayload {
     email: string;
     template?: string;
     signature?: string;
+    codeword: string;
   };
 }

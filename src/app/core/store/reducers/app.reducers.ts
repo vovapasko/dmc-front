@@ -7,6 +7,8 @@ import { contractorReducers } from './contractor.reducers';
 import { InjectionToken } from '@angular/core';
 import { newsReducers } from './news.reducers';
 import { projectReducer } from './project.reducers';
+import { clientReducers } from '@store/reducers/client.reducers';
+import { publicationReducer } from '@store/reducers/publication.reducers';
 
 export const reducerToken: InjectionToken<ActionReducerMap<IAppState>> = new InjectionToken<
   ActionReducerMap<IAppState>
@@ -18,7 +20,9 @@ export function appReducers(): ActionReducerMap<IAppState, any> {
     users: userReducers,
     contractors: contractorReducers,
     news: newsReducers,
-    projects: projectReducer
+    projects: projectReducer,
+    clients: clientReducers,
+    publications: publicationReducer
   };
 }
 

@@ -20,9 +20,8 @@ import { Project } from '@models/instances/project';
 import { News } from '@models/instances/news';
 import { Hashtag } from '@models/instances/hashtag';
 import { Format } from '@models/instances/format';
-import { ChartType } from '@pages/dashboards/default/default.model';
 import { setProjectValues } from '../helpers/utility';
-import { Warnings } from '@constants/notifications';
+import { Infos, Warnings } from '@constants/notifications';
 import { endpoints } from '@constants/endpoints';
 import { methods } from '@constants/methods';
 import { SecurityService } from './security.service';
@@ -36,7 +35,7 @@ import { UpdatePostFormatPayload } from '@models/payloads/news/format/update-pos
 import { UpdatePostFormatResponse } from '@models/responses/news/format/update-post-format';
 import { DeletePostFormatPayload } from '@models/payloads/news/format/delete-post-format';
 import { DeletePostFormatResponse } from '@models/responses/news/format/delete-post-format';
-import { multipleRadialBars } from '@components/charts/data';
+import { ChartType, multipleRadialBars } from '@components/charts/data';
 import numbers from '../constants/numbers';
 import { GetNewsWavesPayload } from '@models/payloads/news/news-waves/get';
 import { NewsWaves } from '@models/instances/news-waves';
@@ -50,6 +49,8 @@ import { UserService } from './user.service';
 import { UploadNewsFilePayload } from '@models/payloads/news/news-waves/upload-file';
 import { DeleteNewsFilePayload } from '@models/payloads/news/news-waves/delete-file';
 import { newsFieldsHandler } from '@constants/news';
+import { Email } from '@models/instances/email';
+import { NewsWavePrice } from '@models/instances/newsWavePrice';
 
 const api = environment.api;
 
@@ -93,7 +94,7 @@ export class NewsService {
    * emails: Email[];
    * name: string;
    * budget: number;
-   * client: string;
+   * clients: string;
    * dateCreated: Date;
    * dateUpdated: Date;
    */
@@ -114,7 +115,7 @@ export class NewsService {
    * emails: Email[];
    * name: string;
    * budget: number;
-   * client: string;
+   * clients: string;
    * dateCreated: Date;
    * dateUpdated: Date;
    */
@@ -301,6 +302,7 @@ export class NewsService {
    * Handle delete and update files from formation or news
    */
   public handleFilesUpload(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
+    // TODO REFACTOR THIS PIECE OF CODE
     const formationFormData = this.collectUploadFormationFiles(newsWave, payload);
     const newsFormData = this.collectUploadNewsFiles(newsWave, payload);
     const deleteNewsData = this.collectDeleteNewsFiles(newsWave, payload);
@@ -312,6 +314,7 @@ export class NewsService {
    * Collects delete news files
    */
   public collectDeleteNewsFiles(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
+    // TODO REFACTOR THIS PIECE OF CODE
     return newsWave.newsInProject
       .map(
         (news: News) => news.attachments
@@ -331,6 +334,7 @@ export class NewsService {
    * Collects upload formation files
    */
   public collectUploadFormationFiles(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
+    // TODO REFACTOR THIS PIECE OF CODE
     if (!payload.data.waveFormation.attachments) {
       return [];
     }
@@ -349,9 +353,11 @@ export class NewsService {
    * Collects upload news files
    */
   public collectUploadNewsFiles(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload): FormData[] {
+    // TODO REFACTOR THIS PIECE OF CODE
     return payload.data.newsInProject.map((news: any, index: number) => {
       const formData = new FormData();
       // @ts-ignore
+      // tslint:disable-next-line:no-bitwise
       formData.append('news_id', news.id | newsWave.newsInProject[index].id);
       // @ts-ignore
       news.attachments
@@ -363,6 +369,7 @@ export class NewsService {
   }
 
   public collectDeleteFormationFiles(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
+    // TODO REFACTOR THIS PIECE OF CODE
     return newsWave.waveFormation.attachments
       // @ts-ignore
       .filter(attachment => !(attachment instanceof File) && attachment.id && !payload.data.waveFormation.attachments
@@ -468,9 +475,9 @@ export class NewsService {
   /**
    * Returns form group for common step in burst-news page
    */
-  public initializeValidationForm(validator): FormGroup {
+  public initializeValidationForm(validator, disabled: boolean): FormGroup {
     return this.formBuilder.group({
-      clientName: [null, Validators.required],
+      clientName: [{ value: null, disabled }, Validators.required],
       projectName: [null, Validators.required],
       newsCharacter: [null, Validators.required],
       projectTitle: [null, Validators.required],
@@ -513,7 +520,8 @@ export class NewsService {
       title: [null, Validators.required],
       content: [null, Validators.required],
       contractors: [null, Validators.required],
-      previewText: [null, Validators.required]
+      previewText: [null, Validators.required],
+      previewEmail: [null, Validators.required]
     });
   }
 
@@ -521,16 +529,44 @@ export class NewsService {
    * Returns form array (fill values) for distribution step in burst-news page
    */
   public initControls(list: Array<News>): FormArray {
-    const toGroups = list.map((entity) => {
+    const toGroups = list.map((entity: News) => {
       return new FormGroup({
         attachments: new FormControl(entity.attachments, Validators.required),
         title: new FormControl(entity.title, Validators.required),
         content: new FormControl(entity.content, Validators.required),
         contractors: new FormControl(entity.contractors, Validators.required),
-        previewText: new FormControl(entity.previewText, Validators.required)
+        previewText: new FormControl(entity.previewText, Validators.required),
+        previewEmail: new FormControl(entity.previewEmail, Validators.required)
       });
     });
     return new FormArray(toGroups);
+  }
+
+  public getContractorPrice(contractor: Contractor, format: PostFormatListSet, priceList: NewsWavePrice[]): string | number {
+    const changedContractor = priceList.find((el: NewsWavePrice) => el.contractor.id === contractor.id);
+    return changedContractor ? changedContractor.price : format.onePostPrice;
+  }
+
+  public initPriceControls(contractors: Contractor[], format: Format, priceList: NewsWavePrice[]): FormArray {
+    if (!contractors || !format) {
+      return new FormArray([new FormGroup({
+        price: new FormControl(null, Validators.required),
+        contractor: new FormControl(null, Validators.required)
+      })]);
+    }
+    const toGroups = contractors.map((entity: Contractor) => {
+      return new FormGroup({
+        // tslint:disable-next-line:max-line-length
+        price: new FormControl(this.getContractorPrice(entity, entity.postformatlistSet.find(el => el.postFormat === format.postFormat), priceList), Validators.required),
+        contractor: new FormControl(entity, Validators.required)
+      });
+    });
+    return new FormArray(toGroups);
+  }
+
+  public filterPriceList(priceList: NewsWavePrice[], contractors: Contractor[]): NewsWavePrice[] {
+    const result = priceList.slice();
+    return result.filter((el: NewsWavePrice) => contractors.find((contractor: Contractor) => contractor.id === el.contractor.id));
   }
 
   /**
@@ -594,6 +630,7 @@ export class NewsService {
         title: new FormControl(null, Validators.required),
         content: new FormControl(null, Validators.required),
         contractors: new FormControl(null, Validators.required),
+        previewEmail: new FormControl(null, Validators.required),
         previewText: new FormControl(null, Validators.required)
       });
       controls.push(newControls);
@@ -612,7 +649,8 @@ export class NewsService {
     }
     const common = validationForm.controls;
     const editor = editorForm.controls;
-    const newsList = project.newsInProject.map((el) => new News(el.title, el.content, el.attachments, el.contractors, el.content, el.id));
+    // tslint:disable-next-line:max-line-length
+    const newsList = project.newsInProject.map((el) => new News(el.title, el.content, el.attachments, el.contractors, el.content, el.previewEmail, el.id));
     const controls = this.initControls(newsList);
     setProjectValues(common, editor, project, this.securityService.getSafeHtml.bind(this.securityService));
     return { controls, newsList };
@@ -630,7 +668,7 @@ export class NewsService {
   public addNewItem(newsList: News[]): News[] {
     if (newsList) {
       const list = newsList.slice();
-      const newItem = new News('', '', [], [], '');
+      const newItem = new News('', '', [], [], '', null);
       list.push(newItem);
       return list;
     }
@@ -652,6 +690,17 @@ export class NewsService {
       const element = list[index];
       list[index] = { ...element, [field]: value || control.value };
       return list;
+    }
+    return null;
+  }
+
+  // tslint:disable-next-line:max-line-length
+  public updatePriceField(index: number, field: string, value: string | number, control: AbstractControl, priceList: Array<any>, contractorControl: AbstractControl): Array<any> {
+    if (control.valid) {
+      const element = priceList[index];
+      const result = priceList.slice();
+      result[index] = { ...element, [field]: value || control.value, contractor: contractorControl.value };
+      return result;
     }
     return null;
   }
@@ -680,8 +729,11 @@ export class NewsService {
     newsList: News[],
     newsWaveId: number,
     controls: FormArray,
-    newsWave: NewsWaves
+    newsWave: NewsWaves,
+    // tslint:disable-next-line:variable-name
+    newswavepricelist_set: NewsWavePrice[]
   ): UpdateNewsWavesPayload | CreateNewsWavesPayload {
+    // TODO REFACTOR THIS PIECE OF CODE
     const newsCharacter = validationForm.controls.newsCharacter.value;
     const burstMethod = validationForm.controls.projectBurstMethod.value;
     const contractors = validationForm.controls.projectContractors.value;
@@ -692,19 +744,20 @@ export class NewsService {
     const isConfirmed = !!newsWaveId;
     const createdBy = this.userService.user;
     const waveFormation = {
-      email: previewForm.controls.previewEmail.value,
+      email: previewForm.controls.previewEmail.value || controls.at(0).get('previewEmail').value,
       content: previewForm.controls.previewText.value,
       attachments: editorForm.controls.attachments.value,
       id: newsWave ? newsWave.waveFormation.id : null
     };
     const newsInProject = newsList.map((news: News, i: number) => ({
       contractors: news.contractors,
-      email: previewForm.controls.previewEmail.value,
+      email: controls.at(i).get('previewEmail').value,
       title: news.title || title,
       content: controls.at(i).get('previewText').value,
       attachments: controls.at(i).get('attachments').value,
       id: news.id
     }));
+
 
     const data = {
       newsCharacter,
@@ -718,7 +771,8 @@ export class NewsService {
       waveFormation,
       newsInProject,
       project,
-      postFormat
+      postFormat,
+      newswavepricelist_set
     };
 
     if (newsWaveId) {
@@ -727,7 +781,6 @@ export class NewsService {
       return this.prepareCreateNewsWavePayload(data);
     }
   }
-
 
   /**
    * Set values from news-wave in forms in burst-news page and returns controls, newsList for
@@ -751,7 +804,8 @@ export class NewsService {
     editorForm: FormGroup,
     newsForm: FormGroup,
     previewForm: FormGroup
-  ): { newsList: News[], controls: FormArray } {
+  ): { newsList: News[], priceList: NewsWavePrice[], controls: FormArray, priceControls: FormArray } {
+    // TODO REFACTOR THIS PIECE OF CODE
     validationForm.controls.newsCharacter.setValue(newsWave.newsCharacter);
     validationForm.controls.projectBurstMethod.setValue(newsWave.burstMethod);
     validationForm.controls.projectContractors.setValue(newsWave.contractors);
@@ -764,18 +818,31 @@ export class NewsService {
     editorForm.controls.text.setValue(newsFieldsHandler.attachments(newsWave.waveFormation.attachments).join());
     previewForm.controls.previewEmail.setValue(newsWave.waveFormation.email);
     previewForm.controls.previewText.setValue(newsWave.waveFormation.content);
-    const newsList = newsWave.newsInProject.map(el => new News(el.title, el.content, this.handleFiles(el.attachments), el.contractors, el.content, el.id));
-    return { newsList, controls: this.initControls(newsList) };
+    // @ts-ignore
+    // tslint:disable-next-line:max-line-length
+    const newsList = newsWave.newsInProject.map((el: News) => new News(el.title, el.content, this.handleFiles(el.attachments), el.contractors, el.content, el.email, el.id));
+    const priceList = newsWave.newswavepricelistSet;
+    return { newsList, priceList, controls: this.initControls(newsList), priceControls: this.fillPriceControls(priceList) };
+  }
+
+  public fillPriceControls(priceList: NewsWavePrice[]): FormArray {
+    const toGroups = priceList.map((entity: NewsWavePrice) => {
+      return new FormGroup({
+        price: new FormControl(entity.price, Validators.required),
+        contractor: new FormControl(entity.contractor, Validators.required)
+      });
+    });
+    return new FormArray(toGroups);
   }
 
   public handleFiles(attachments: File[]) {
     return attachments.map(attachment => {
       // @ts-ignore
-      const file = new File([""], attachment.file, {type: "text/plain"});
+      const file = new File([''], attachment.file, { type: 'text/plain' });
       // @ts-ignore
       file.id = attachment.id;
       return file;
-    })
+    });
   }
 
   /**

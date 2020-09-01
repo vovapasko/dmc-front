@@ -7,6 +7,7 @@ import { WaveFormation } from './wave-formation';
 import { News } from './news';
 import { User } from './user.models';
 import { Format } from './format';
+import { NewsWavePrice } from '@models/instances/newsWavePrice';
 
 export interface NewsWaves {
   postFormat?: string;
@@ -23,4 +24,5 @@ export interface NewsWaves {
   title: string;
   budget: number;
   isConfirmed?: boolean;
+  newswavepricelistSet: NewsWavePrice[];
 }

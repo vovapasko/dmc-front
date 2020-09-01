@@ -24,7 +24,7 @@
                                             ngbDropdownToggle
                                             aria-expanded="false"
                                     >
-                                        <i class="mdi mdi-dots-horizontal m-0 text-muted h3"></i>
+                                        <i class="mdi mdi-dots-vertical m-0 text-muted h3"></i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
                                         <!-- item-->
@@ -81,15 +81,14 @@
                             <tr>
                                 <th style="width: 20px;">
                                     <div class="custom-control custom-checkbox">
-                                        <input
-                                                (click)="checkAll()"
-                                                [checked]="
+                                        <input (click)="checkAll()"
+                                               [checked]="
                           (checkedContractors$ | async)?.length !== 0 &&
                           (checkedContractors$ | async)?.length === (contractors$ | async)?.length
                         "
-                                                type="checkbox"
-                                                class="custom-control-input"
-                                                id="customCheck"
+                                               type="checkbox"
+                                               class="custom-control-input"
+                                               id="customCheck"
                                         />
                                         <label class="custom-control-label" for="customCheck">&nbsp;</label>
                                     </div>
@@ -108,12 +107,11 @@
                             <tr *ngFor="let contractor of contractors$ | async | filter: term; let i = index">
                                 <td>
                                     <div class="custom-control custom-checkbox">
-                                        <input
-                                                type="checkbox"
-                                                [checked]="(checkedContractors$ | async).indexOf(contractor) !== -1"
-                                                (click)="check(contractor)"
-                                                class="custom-control-input"
-                                                id="customCheck{{ i }}"
+                                        <input type="checkbox"
+                                               [checked]="(checkedContractors$ | async).indexOf(contractor) !== -1"
+                                               (click)="check(contractor)"
+                                               class="custom-control-input"
+                                               id="customCheck{{ i }}"
                                         />
                                         <label class="custom-control-label" for="customCheck{{ i }}">&nbsp;</label>
                                     </div>
@@ -131,7 +129,11 @@
                                     {{ contractor.email }}
                                 </td>
                                 <td>
-                                    <editable (update)="updateField(contractor, 'onePostPrice')">
+                                    <editable [checked]="(checkedContractors$ | async).indexOf(contractor) !== -1"
+                                              [editing]="editing"
+                                              (edit)="editFields($event)"
+                                              (update)="updateField(contractor, 'onePostPrice')"
+                                    >
                                         <ng-template viewMode>
                                             <span>
                                                 <i class="mdi mdi-dots-horizontal m-0 text-muted h3"></i>
@@ -144,6 +146,7 @@
                                                 </label>
                                                 <input id="format_one_post_price{{ idx }}"
                                                        type="number"
+                                                       min="0"
                                                        class="form-control"
                                                        [formControl]="getControl(format.id, 'onePostPrice')">
                                             </div>
@@ -151,7 +154,11 @@
                                     </editable>
                                 </td>
                                 <td>
-                                    <editable (update)="updateField(contractor, 'newsAmount')">
+                                    <editable [checked]="(checkedContractors$ | async).indexOf(contractor) !== -1"
+                                              [editing]="editing"
+                                              (edit)="editFields($event)"
+                                              (update)="updateField(contractor, 'newsAmount')"
+                                    >
                                         <ng-template viewMode>
                                             <span>
                                                 <i class="mdi mdi-dots-horizontal m-0 text-muted h3"></i>
@@ -164,6 +171,7 @@
                                                 </label>
                                                 <input id="news_format{{ idx }}"
                                                        type="number"
+                                                       min="0"
                                                        class="form-control"
                                                        [formControl]="getControl(format.id, 'newsAmount')">
                                             </div>
@@ -171,7 +179,11 @@
                                     </editable>
                                 </td>
                                 <td>
-                                    <editable (update)="updateField(contractor, 'arrangedNews')">
+                                    <editable [checked]="(checkedContractors$ | async).indexOf(contractor) !== -1"
+                                              [editing]="editing"
+                                              (edit)="editFields($event)"
+                                              (update)="updateField(contractor, 'arrangedNews')"
+                                    >
                                         <ng-template viewMode>
                                             <span>
                                                 <i class="mdi mdi-dots-horizontal m-0 text-muted h3"></i>
@@ -184,6 +196,7 @@
                                                 </label>
                                                 <input id="arranged_news{{ idx }}"
                                                        type="number"
+                                                       min="0"
                                                        class="form-control"
                                                        [formControl]="getControl(format.id, 'arrangedNews')">
                                             </div>
@@ -247,62 +260,59 @@
             <form (ngSubmit)="submitCreateForm()" [formGroup]="createForm">
                 <div class="form-group">
                     <label for="editorName">Название редакции</label>
-                    <input
-                            type="text"
-                            formControlName="editorName"
-                            class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && cf.editorName.errors }"
-                            id="editorName"
-                            placeholder="Введите название редакции"
+                    <input type="text"
+                           formControlName="editorName"
+                           class="form-control"
+                           [ngClass]="{ 'is-invalid': submitted && createContractorFormControls.editorName.errors }"
+                           id="editorName"
+                           placeholder="Введите название редакции"
                     />
 
-                    <div *ngIf="submitted && cf.editorName.errors" class="invalid-feedback">
-                        <div *ngIf="cf.editorName.errors.required">Название редакции обязательно</div>
+                    <div *ngIf="submitted && createContractorFormControls.editorName.errors" class="invalid-feedback">
+                        <div *ngIf="createContractorFormControls.editorName.errors.required">Название редакции обязательно</div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="contactPerson">Контактное лицо</label>
-                    <input
-                            type="text"
-                            formControlName="contactPerson"
-                            class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && cf.contactPerson.errors }"
-                            id="contactPerson"
-                            placeholder="Введите контактное лицо"
+                    <input type="text"
+                           formControlName="contactPerson"
+                           class="form-control"
+                           [ngClass]="{ 'is-invalid': submitted && createContractorFormControls.contactPerson.errors }"
+                           id="contactPerson"
+                           placeholder="Введите контактное лицо"
                     />
 
-                    <div *ngIf="submitted && cf.contactPerson.errors" class="invalid-feedback">
-                        <div *ngIf="cf.contactPerson.errors.required">Контактное лицо обязательно</div>
+                    <div *ngIf="submitted && createContractorFormControls.contactPerson.errors" class="invalid-feedback">
+                        <div *ngIf="createContractorFormControls.contactPerson.errors.required">Контактное лицо обязательно</div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="phoneNumber">Номер телефона</label>
-                    <input
-                            type="text"
-                            formControlName="phoneNumber"
-                            class="form-control"
-                            id="phoneNumber"
-                            [ngClass]="{ 'is-invalid': submitted && cf.phoneNumber.errors }"
+                    <input type="text"
+                           formControlName="phoneNumber"
+                           class="form-control"
+                           id="phoneNumber"
+                           [ngClass]="{ 'is-invalid': submitted && createContractorFormControls.phoneNumber.errors }"
                     />
                     <span class="font-13 text-muted">e.g "380992314525"</span>
-                    <div *ngIf="submitted && cf.phoneNumber.errors" class="invalid-feedback">
-                        <div *ngIf="cf.phoneNumber.errors.pattern">Введите корректный номер</div>
+                    <div *ngIf="submitted && createContractorFormControls.phoneNumber.errors" class="invalid-feedback">
+                        <div *ngIf="createContractorFormControls.phoneNumber.errors.required">Введите номер</div>
+                        <div *ngIf="createContractorFormControls.phoneNumber.errors.pattern">Введите корректный номер</div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input
-                            class="form-control"
-                            id="email"
-                            [ngClass]="{ 'is-invalid': submitted && cf.email.errors }"
-                            placeholder="Введите email"
-                            formControlName="email"
+                    <input class="form-control"
+                           id="email"
+                           [ngClass]="{ 'is-invalid': submitted && createContractorFormControls.email.errors }"
+                           placeholder="Введите email"
+                           formControlName="email"
                     />
-                    <div *ngIf="submitted && cf.email.errors" class="invalid-feedback">
-                        <div *ngIf="cf.email.errors.required">Введите корректный email</div>
+                    <div *ngIf="submitted && createContractorFormControls.email.errors" class="invalid-feedback">
+                        <div *ngIf="createContractorFormControls.email.errors.required">Введите корректный email</div>
                     </div>
                 </div>
 
@@ -334,66 +344,62 @@
             <form (ngSubmit)="addNewFormats()" [formGroup]="createFormatForm">
                 <div class="form-group">
                     <label for="postFormat">Название формата</label>
-                    <input
-                            type="text"
-                            formControlName="postFormat"
-                            class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && cff.postFormat.errors }"
-                            id="postFormat"
-                            placeholder="Введите название формата"
+                    <input type="text"
+                           formControlName="postFormat"
+                           class="form-control"
+                           [ngClass]="{ 'is-invalid': submitted && createFormatFormControls.postFormat.errors }"
+                           id="postFormat"
+                           placeholder="Введите название формата"
                     />
 
-                    <div *ngIf="submitted && cff.postFormat.errors" class="invalid-feedback">
-                        <div *ngIf="cff.postFormat.errors.required">Название формата обязательно</div>
+                    <div *ngIf="submitted && createFormatFormControls.postFormat.errors" class="invalid-feedback">
+                        <div *ngIf="createFormatFormControls.postFormat.errors.required">Название формата обязательно</div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="onePostPrice"> Стоимость </label>
-                    <input
-                            type="number"
-                            formControlName="onePostPrice"
-                            class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && cff.onePostPrice.errors }"
-                            id="onePostPrice"
-                            placeholder="Введите стоимость одного размещения"
+                    <input type="number"
+                           formControlName="onePostPrice"
+                           class="form-control"
+                           [ngClass]="{ 'is-invalid': submitted && createFormatFormControls.onePostPrice.errors }"
+                           id="onePostPrice"
+                           placeholder="Введите стоимость одного размещения"
                     />
 
-                    <div *ngIf="submitted && cff.onePostPrice.errors" class="invalid-feedback">
-                        <div *ngIf="cff.onePostPrice.errors.required">Это поле обязательно для заполнения</div>
+                    <div *ngIf="submitted && createFormatFormControls.onePostPrice.errors" class="invalid-feedback">
+                        <div *ngIf="createFormatFormControls.onePostPrice.errors.required">Это поле обязательно для заполнения</div>
                     </div>
                 </div>
 
 
                 <div class="form-group">
                     <label for="newsAmount"> Количество </label>
-                    <input
-                            type="number"
-                            formControlName="newsAmount"
-                            class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && cff.newsAmount.errors }"
-                            id="newsAmount"
-                            placeholder="Введите количество размещений"
+                    <input type="number"
+                           formControlName="newsAmount"
+                           class="form-control"
+                           [ngClass]="{ 'is-invalid': submitted && createFormatFormControls.newsAmount.errors }"
+                           id="newsAmount"
+                           placeholder="Введите количество размещений"
                     />
 
-                    <div *ngIf="submitted && cff.newsAmount.errors" class="invalid-feedback">
-                        <div *ngIf="cff.newsAmount.errors.required">Это поле обязательно для заполнения</div>
+                    <div *ngIf="submitted && createFormatFormControls.newsAmount.errors" class="invalid-feedback">
+                        <div *ngIf="createFormatFormControls.newsAmount.errors.required">Это поле обязательно для заполнения</div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="arrangedNews"> Договоренность </label>
-                    <input
-                            type="number"
-                            formControlName="arrangedNews"
-                            class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && cff.arrangedNews.errors }"
-                            id="arrangedNews"
-                            placeholder="Введите количество необходимых размещений"
+                    <input type="number"
+                           formControlName="arrangedNews"
+                           class="form-control"
+                           [ngClass]="{ 'is-invalid': submitted && createFormatFormControls.arrangedNews.errors }"
+                           id="arrangedNews"
+                           placeholder="Введите количество необходимых размещений"
                     />
 
-                    <div *ngIf="submitted && cff.arrangedNews.errors" class="invalid-feedback">
-                        <div *ngIf="cff.arrangedNews.errors.required">Это поле обязательно для заполнения</div>
+                    <div *ngIf="submitted && createFormatFormControls.arrangedNews.errors" class="invalid-feedback">
+                        <div *ngIf="createFormatFormControls.arrangedNews.errors.required">Это поле обязательно для заполнения</div>
                     </div>
                 </div>
 
@@ -429,18 +435,18 @@
                     <div class="col-md-9">
                         <ng-select
                                 id="deletePostFormat"
-                                [items]="formats$ | async"
-                                bindLabel="postFormat"
+                                [items]="checkedContractors$ | async | contractorsFormats"
+                                bindLabel="label"
                                 bindValue="id"
                                 [multiple]="true"
                                 [closeOnSelect]="false"
                                 [hideSelected]="true"
                                 placeholder="Выберите форматы для удаления"
                                 formControlName="deletePostFormat"
-                                [ngClass]="{ 'is-invalid': submitted && dff.deletePostFormat.errors }"
+                                [ngClass]="{ 'is-invalid': submitted && deleteFormatFormControls.deletePostFormat.errors }"
                         ></ng-select>
-                        <div *ngIf="submitted && dff.deletePostFormat.errors" class="invalid-feedback">
-                            <span *ngIf="dff.deletePostFormat.errors.required"></span>
+                        <div *ngIf="submitted && deleteFormatFormControls.deletePostFormat.errors" class="invalid-feedback">
+                            <span *ngIf="deleteFormatFormControls.deletePostFormat.errors.required"></span>
                         </div>
                     </div>
                 </div>
@@ -473,63 +479,59 @@
             <form (ngSubmit)="submitEditForm()" [formGroup]="updateForm">
                 <div class="form-group">
                     <label for="updateEditorName">Название редакции</label>
-                    <input
-                            type="text"
-                            formControlName="updateEditorName"
-                            class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && uf.updateEditorName.errors }"
-                            id="updateEditorName"
-                            placeholder="Введите название редакции"
+                    <input type="text"
+                           formControlName="editorName"
+                           class="form-control"
+                           [ngClass]="{ 'is-invalid': submitted && updateContractorFormControls.editorName.errors }"
+                           id="updateEditorName"
+                           placeholder="Введите название редакции"
                     />
 
-                    <div *ngIf="submitted && uf.updateEditorName.errors" class="invalid-feedback">
-                        <div *ngIf="uf.updateEditorName.errors.required">Название редакции обязательно</div>
+                    <div *ngIf="submitted && updateContractorFormControls.editorName.errors" class="invalid-feedback">
+                        <div *ngIf="updateContractorFormControls.editorName.errors.required">Название редакции обязательно</div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="updateContactPerson">Контактное лицо</label>
-                    <input
-                            type="text"
-                            formControlName="updateContactPerson"
-                            class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && uf.updateContactPerson.errors }"
-                            id="updateContactPerson"
-                            placeholder="Введите контактное лицо"
+                    <input type="text"
+                           formControlName="contactPerson"
+                           class="form-control"
+                           [ngClass]="{ 'is-invalid': submitted && updateContractorFormControls.contactPerson.errors }"
+                           id="updateContactPerson"
+                           placeholder="Введите контактное лицо"
                     />
 
-                    <div *ngIf="submitted && uf.updateContactPerson.errors" class="invalid-feedback">
-                        <div *ngIf="uf.updateContactPerson.errors.required">Контактное лицо обязательно</div>
+                    <div *ngIf="submitted && updateContractorFormControls.contactPerson.errors" class="invalid-feedback">
+                        <div *ngIf="updateContractorFormControls.contactPerson.errors.required">Контактное лицо обязательно</div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="updatePhoneNumber">Номер телефона</label>
-                    <input
-                            type="text"
-                            formControlName="updatePhoneNumber"
-                            class="form-control"
-                            id="updatePhoneNumber"
-                            [ngClass]="{ 'is-invalid': submitted && uf.updatePhoneNumber.errors }"
+                    <input type="text"
+                           formControlName="phoneNumber"
+                           class="form-control"
+                           id="updatePhoneNumber"
+                           [ngClass]="{ 'is-invalid': submitted && updateContractorFormControls.phoneNumber.errors }"
                     />
                     <span class="font-13 text-muted">e.g "380992314525"</span>
-                    <div *ngIf="submitted && uf.updatePhoneNumber.errors" class="invalid-feedback">
-                        <div *ngIf="uf.updatePhoneNumber.errors.pattern">Введите корректный номер</div>
+                    <div *ngIf="submitted && updateContractorFormControls.phoneNumber.errors" class="invalid-feedback">
+                        <div *ngIf="updateContractorFormControls.phoneNumber.errors.pattern">Введите корректный номер</div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="updateEmail">Email</label>
-                    <input
-                            class="form-control"
-                            id="updateEmail"
-                            [ngClass]="{ 'is-invalid': submitted && uf.updateEmail.errors }"
-                            placeholder="Введите email"
-                            formControlName="updateEmail"
+                    <input class="form-control"
+                           id="updateEmail"
+                           [ngClass]="{ 'is-invalid': submitted && updateContractorFormControls.email.errors }"
+                           placeholder="Введите email"
+                           formControlName="email"
                     />
-                    <div *ngIf="submitted && uf.updateEmail.errors" class="invalid-feedback">
-                        <div *ngIf="uf.updateEmail.errors.required">Введите email</div>
-                        <div *ngIf="uf.updateEmail.errors.pattern">Введите корректный email</div>
+                    <div *ngIf="submitted && updateContractorFormControls.email.errors" class="invalid-feedback">
+                        <div *ngIf="updateContractorFormControls.email.errors.required">Введите email</div>
+                        <div *ngIf="updateContractorFormControls.email.errors.pattern">Введите корректный email</div>
                     </div>
                 </div>
 

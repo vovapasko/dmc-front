@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { switchMap } from 'rxjs/operators';
-import { ProjectService } from '../../services/project.service';
+import { ProjectService } from '@services/project.service';
 import {
   CreateEmail,
   CreateEmailSuccess,
@@ -18,23 +18,20 @@ import {
   GetNewsProjects,
   GetNewsProjectsSuccess,
   GetNewsProjectSuccess,
-  GetProjects,
-  GetProjectsSuccess,
   UpdateEmail,
   UpdateEmailSuccess,
   UpdateNewsProject,
   UpdateNewsProjectSuccess
 } from '../actions/project.actions';
-import { Project } from '../../models/instances/project';
-import { Email } from '../../models/instances/email';
-import { CreateEmailPayload } from '../../models/payloads/project/email/create';
-import { UpdateEmailPayload } from '../../models/payloads/project/email/update';
-import { DeleteEmailPayload } from '../../models/payloads/project/email/delete';
-import { NewsProject } from '../../models/instances/news-project';
-import { CreateNewsProjectPayload } from '../../models/payloads/project/news-project/create';
-import { UpdateNewsProjectPayload } from '../../models/payloads/project/news-project/update';
-import { GetNewsProjectPayload } from '../../models/payloads/project/news-project/get';
-import { DeleteNewsProjectPayload } from '../../models/payloads/project/news-project/delete';
+import { Email } from '@models/instances/email';
+import { CreateEmailPayload } from '@models/payloads/project/email/create';
+import { UpdateEmailPayload } from '@models/payloads/project/email/update';
+import { DeleteEmailPayload } from '@models/payloads/project/email/delete';
+import { NewsProject } from '@models/instances/news-project';
+import { CreateNewsProjectPayload } from '@models/payloads/project/news-project/create';
+import { UpdateNewsProjectPayload } from '@models/payloads/project/news-project/update';
+import { GetNewsProjectPayload } from '@models/payloads/project/news-project/get';
+import { DeleteNewsProjectPayload } from '@models/payloads/project/news-project/delete';
 
 @Injectable({
   providedIn: 'root',

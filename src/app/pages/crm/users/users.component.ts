@@ -4,26 +4,25 @@ import { select, Store } from '@ngrx/store';
 import { FormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { AuthenticationService } from '../../../core/services/auth.service';
-import { UserService } from '../../../core/services/user.service';
-import { User } from '../../../core/models/instances/user.models';
-import { IAppState } from '../../../core/store/state/app.state';
-import { CreateUser, DeleteUser, GetUsers, SelectUser, UpdateUser } from '../../../core/store/actions/user.actions';
-import { PaginationService } from '../../../core/services/pagination.service';
-import { LoadingService } from '../../../core/services/loading.service';
-import { ErrorService } from '../../../core/services/error.service';
-import { Groups } from '../../../core/models/instances/groups';
-import { RegisterPayload } from '../../../core/models/payloads/user/register';
-import { ServerError } from '../../../core/models/responses/server/error';
+import { AuthenticationService } from '@services/auth.service';
+import { UserService } from '@services/user.service';
+import { User } from '@models/instances/user.models';
+import { IAppState } from '@store/state/app.state';
+import { CreateUser, DeleteUser, GetUsers, SelectUser, UpdateUser } from '@store/actions/user.actions';
+import { PaginationService } from '@services/pagination.service';
+import { LoadingService } from '@services/loading.service';
+import { ErrorService } from '@services/error.service';
+import { Groups } from '@models/instances/groups';
+import { RegisterPayload } from '@models/payloads/user/register';
+import { ServerError } from '@models/responses/server/error';
 import {
   paginationPage,
   paginationPageSize,
-  paginationTotalSize,
-  PaginationType
-} from '../../../core/constants/pagination';
+  paginationTotalSize
+} from '@constants/pagination';
 import { Title } from '@angular/platform-browser';
-import { selectProjects } from '../../../core/store/selectors/news.selectors';
-import { selectUserList } from '../../../core/store/selectors/user.selectors';
+import { selectUserList } from '@store/selectors/user.selectors';
+import { breadCrumbs } from '@constants/bread-crumbs';
 
 /**
  * Users component - handling the users with sidebar and content
@@ -32,11 +31,11 @@ import { selectUserList } from '../../../core/store/selectors/user.selectors';
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
-  styleUrls: ['./users.component.scss'],
+  styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit {
-  
-  title = 'Пользователи'
+
+  title = 'Пользователи';
   breadCrumbItems: Array<{}>;
   manage = false;
   loading$: Subject<boolean>;
@@ -65,7 +64,8 @@ export class UsersComponent implements OnInit {
     private loadingService: LoadingService,
     private errorService: ErrorService,
     private titleService: Title
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.initBreadCrumbItems();
@@ -76,6 +76,9 @@ export class UsersComponent implements OnInit {
     this._fetchData();
   }
 
+  /**
+   * Subscribe to subjects
+   */
   public initSubscriptions(): void {
     this.loading$ = this.loadingService.loading$;
     this.error$ = this.errorService.error$;
@@ -87,19 +90,18 @@ export class UsersComponent implements OnInit {
     this.manage = this.belongToManage(this.currentUser);
   }
 
+  /**
+   * Returns true or false depends of belong user to manager
+   */
   public belongToManage(user: User): boolean {
     return this.userService.belongToManage(user);
   }
 
+  /**
+   * Set bread crumbs
+   */
   public initBreadCrumbItems(): void {
-    this.breadCrumbItems = [
-      { label: 'Главная', path: '/' },
-      {
-        label: 'Пользователи',
-        path: '/contractors',
-        active: true,
-      },
-    ];
+    this.breadCrumbItems = breadCrumbs.users;
   }
 
   /**
@@ -144,28 +146,41 @@ export class UsersComponent implements OnInit {
    */
   public registerNewUser(): void {
     this.submitted = true;
-    if(this.validationform) {
-      const email = this.validationform.get('email').value as string;
-      const group = (this.selectedRole as unknown) as Groups;
-      const data = { email, group };
-
-      this.register({ data });
-      this.modalService.dismissAll();
+    if (!this.validationform || (this.validationform && this.validationform.invalid) || !this.selectedRole) {
+      return;
     }
+    const email = this.validationform.get('email').value as string;
+    const group = (this.selectedRole as unknown) as Groups;
+    const data = { email, group };
+    this.register({ data });
+    this.modalService.dismissAll();
+    this.submitted = false;
   }
 
+  /**
+   * Dispatch add new user
+   */
   public register(payload: RegisterPayload): void {
     this.store.dispatch(new CreateUser(payload));
   }
 
+  /**
+   * Paginate page
+   */
   public onPageChange(page: number): void {
     this.userService.onPageChange(page);
   }
 
+  /**
+   * Dispatch delete user
+   */
   public delete(user: User) {
     this.store.dispatch(new DeleteUser(user));
   }
 
+  /**
+   * Dispatch update group
+   */
   public updateGroup(user: User, group: Groups): void {
     const data = { group };
     this.store.dispatch(new UpdateUser({ id: user.id, data }));
@@ -178,6 +193,9 @@ export class UsersComponent implements OnInit {
     this.titleService.setTitle(title);
   }
 
+  /**
+   * Dispatch getting users
+   */
   public _fetchData(): void {
     this.store.dispatch(new GetUsers());
   }

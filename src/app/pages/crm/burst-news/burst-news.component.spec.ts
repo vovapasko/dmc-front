@@ -113,8 +113,8 @@ describe('BurstNewsComponent', () => {
     expect(component.editorForm).toBeTruthy();
     expect(component.newsForm).toBeTruthy();
     expect(component.controls).toBeTruthy();
-    expect(component.form).toBeTruthy();
-    expect(component.distributeForm).toBeTruthy();
+    expect(component.commonFormControls).toBeTruthy();
+    expect(component.distributeFormControls).toBeTruthy();
   });
 
   it('should initBreadCrumbs', () => {
@@ -145,7 +145,7 @@ describe('BurstNewsComponent', () => {
 
   it('should call changedEditor', () => {
     spyOn(component, 'changedEditor');
-    component.changedEditor(null);
+    component.changedEditor(null, null);
     expect(component.changedEditor).toHaveBeenCalled();
   });
 

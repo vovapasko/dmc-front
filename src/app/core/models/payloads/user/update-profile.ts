@@ -4,4 +4,5 @@ export interface UpdateProfilePayload {
     lastName: string;
     avatar: File | null;
   };
+  id: number;
 }

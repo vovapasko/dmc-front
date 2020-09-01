@@ -1,135 +1,136 @@
 <div class="account-pages mt-5 mb-5">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-md-8 col-lg-6 col-xl-5">
-        <div class="card">
-          <div class="card-body p-4">
-            <!-- Logo-->
-            <div class="text-center w-75 m-auto">
-              <a routerLink="/account/login">
-                <img src="../../../../../assets/images/logo-dark.png" alt="" height="22" />
-              </a>
-              <p *ngIf="!invite" class="text-muted mb-4 mt-3">
-                Если вы видите этот текст, вам нужно получить приглашение для дальнейшей регистрации в этом приложении
-              </p>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6 col-xl-5">
+                <div class="card">
+                    <div class="card-body p-4">
+                        <!-- Logo-->
+                        <div class="text-center w-75 m-auto">
+                            <a routerLink="/account/login">
+                                <img src="../../../../../assets/images/logo-dark.png" alt="" height="22"/>
+                            </a>
+                            <p *ngIf="!invite" class="text-muted mb-4 mt-3">
+                                Если вы видите этот текст, вам нужно получить приглашение для дальнейшей регистрации в
+                                этом приложении
+                            </p>
+                        </div>
+
+                        <form
+                                class="needs-validation"
+                                name="signupForm"
+                                [formGroup]="signupForm"
+                                (ngSubmit)="onSubmit()"
+                                novalidate
+                        >
+                            <app-ui-preloader [display]="loading$ | async"></app-ui-preloader>
+
+                            <ngb-alert type="danger" *ngIf="error$ | async" [dismissible]="false"
+                            >Пожалуйста, повторите попытку
+                            </ngb-alert>
+
+                            <div class="form-group mb-3">
+                                <label for="first-name">Ваше имя</label>
+
+                                <input type="text"
+                                       formControlName="firstName"
+                                       class="form-control"
+                                       [ngClass]="{ 'is-invalid': submitted && signupFormControls?.firstName.errors }"
+                                       id="first-name"
+                                       placeholder="Введите ваше имя"
+                                />
+
+                                <div *ngIf="submitted && signupFormControls?.firstName.errors" class="invalid-feedback">
+                                    <div *ngIf="signupFormControls?.firstName.errors.required">Имя обязательно</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="last-name">Ваша фамилия</label>
+
+                                <input type="text"
+                                       formControlName="lastName"
+                                       class="form-control"
+                                       [ngClass]="{ 'is-invalid': submitted && signupFormControls?.lastName.errors }"
+                                       id="last-name"
+                                       placeholder="Введите вашу фамилию"
+                                />
+
+                                <div *ngIf="submitted && signupFormControls?.lastName.errors" class="invalid-feedback">
+                                    <div *ngIf="signupFormControls?.lastName.errors.required">Фамилия обязательна</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="password">Пароль</label>
+
+                                <div class="input-group" data-placement="top" data-align="top">
+                                    <input [type]="visible ? 'text' : 'password'"
+                                           formControlName="password"
+                                           class="form-control"
+                                           [ngClass]="{ 'is-invalid': submitted && signupFormControls.password.errors }"
+                                           id="password"
+                                           placeholder="Введите пароль"
+                                    />
+                                    <div class="input-group-append">
+                                        <a (click)="visible = !visible">
+                                            <span *ngIf="!visible" class="input-group-text"><i class="mdi mdi-eye"></i></span>
+                                            <span *ngIf="visible" class="input-group-text"><i
+                                                    class="mdi mdi-eye-off"></i></span>
+                                        </a>
+                                    </div>
+                                    <div *ngIf="submitted && signupFormControls.password.errors" class="invalid-feedback">
+                                        <div *ngIf="signupFormControls.password.errors.required">Пароль обязателен</div>
+                                        <div *ngIf="signupFormControls.password.errors.minlength">Минимальная длина пароля 6 символов
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="confirm-password">Пароль ещё раз</label>
+
+                                <input type="password"
+                                       formControlName="passwordConfirm"
+                                       class="form-control"
+                                       [ngClass]="{ 'is-invalid': submitted && signupFormControls.passwordConfirm.errors }"
+                                       id="confirm-password"
+                                       placeholder="Введите пароль ещё раз"
+                                />
+
+                                <div *ngIf="submitted && signupFormControls.passwordConfirm.errors" class="invalid-feedback">
+                                    <div *ngIf="signupFormControls.passwordConfirm.errors.required">Подтвердите пароль</div>
+                                    <div *ngIf="signupFormControls.passwordConfirm.errors.mustMatch">Пароли должны совпадать</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group mb-0 text-center">
+                                <button class="btn btn-success btn-block" type="submit">Подтвердить</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- end card-body -->
+                </div>
+                <!-- end card -->
+
+                <div class="row mt-3">
+                    <div class="col-12 text-center">
+                        <p class="text-white-50">
+                            Уже есть аккаунт? <a routerLink="/account/login" class="text-white ml-1"><b>Вход</b></a>
+                        </p>
+                    </div>
+                    <!-- end col-->
+                </div>
+                <!-- end row -->
             </div>
-
-            <form
-              class="needs-validation"
-              name="signupForm"
-              [formGroup]="signupForm"
-              (ngSubmit)="onSubmit()"
-              novalidate
-            >
-              <app-ui-preloader [display]="loading$ | async"></app-ui-preloader>
-
-              <ngb-alert type="danger" *ngIf="error$ | async" [dismissible]="false"
-                >Пожалуйста, повторите попытку
-              </ngb-alert>
-
-              <div class="form-group mb-3">
-                <label for="first-name">Ваше имя</label>
-
-                <input
-                  type="text"
-                  formControlName="firstName"
-                  class="form-control"
-                  [ngClass]="{ 'is-invalid': submitted && f?.firstName.errors }"
-                  id="first-name"
-                  placeholder="Введите ваше имя"
-                />
-
-                <div *ngIf="submitted && f?.firstName.errors" class="invalid-feedback">
-                  <div *ngIf="f?.firstName.errors.required">Имя обязательно</div>
-                </div>
-              </div>
-
-              <div class="form-group mb-3">
-                <label for="last-name">Ваша фамилия</label>
-
-                <input
-                  type="text"
-                  formControlName="lastName"
-                  class="form-control"
-                  [ngClass]="{ 'is-invalid': submitted && f?.lastName.errors }"
-                  id="last-name"
-                  placeholder="Введите вашу фамилию"
-                />
-
-                <div *ngIf="submitted && f?.lastName.errors" class="invalid-feedback">
-                  <div *ngIf="f?.lastName.errors.required">Фамилия обязательна</div>
-                </div>
-              </div>
-
-              <div class="form-group mb-3">
-                <label for="password">Пароль</label>
-
-                <div class="input-group" data-placement="top" data-align="top">
-                  <input
-                    [type]="visible ? 'text' : 'password'"
-                    formControlName="password"
-                    class="form-control"
-                    [ngClass]="{ 'is-invalid': submitted && f.password.errors }"
-                    id="password"
-                    placeholder="Введите пароль"
-                  />
-                  <div class="input-group-append">
-                    <a (click)="visible = !visible">
-                      <span *ngIf="!visible" class="input-group-text"><i class="mdi mdi-eye"></i></span>
-                      <span *ngIf="visible" class="input-group-text"><i class="mdi mdi-eye-off"></i></span>
-                    </a>
-                  </div>
-                </div>
-                <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                  <div *ngIf="f.password.errors.required">Пароль обязателен</div>
-                  <div *ngIf="f.password.errors.minlength">Минимальная длина пароля 6 символов</div>
-                </div>
-              </div>
-
-              <div class="form-group mb-3">
-                <label for="confirm-password">Пароль ещё раз</label>
-
-                <input
-                  type="password"
-                  formControlName="passwordConfirm"
-                  class="form-control"
-                  [ngClass]="{ 'is-invalid': submitted && f.passwordConfirm.errors }"
-                  id="confirm-password"
-                  placeholder="Введите пароль ещё раз"
-                />
-
-                <div *ngIf="submitted && f.passwordConfirm.errors" class="invalid-feedback">
-                  <div *ngIf="f.passwordConfirm.errors.mustMatch">Пароли должны совпадать</div>
-                </div>
-              </div>
-
-              <div class="form-group mb-0 text-center">
-                <button class="btn btn-success btn-block" type="submit">Подтвердить</button>
-              </div>
-            </form>
-          </div>
-          <!-- end card-body -->
-        </div>
-        <!-- end card -->
-
-        <div class="row mt-3">
-          <div class="col-12 text-center">
-            <p class="text-white-50">
-              Уже есть аккаунт? <a routerLink="/account/login" class="text-white ml-1"><b>Вход</b></a>
-            </p>
-          </div>
-          <!-- end col-->
+            <!-- end col -->
         </div>
         <!-- end row -->
-      </div>
-      <!-- end col -->
     </div>
-    <!-- end row -->
-  </div>
-  <!-- end container -->
+    <!-- end container -->
 </div>
 <!-- end page -->
 
 <footer class="footer footer-alt">
-  2015 - 2020 &copy; UBold theme by <a href="" class="text-white-50">Coderthemes</a>
+    2015 - 2020 &copy; UBold theme by <a href="" class="text-white-50">Coderthemes</a>
 </footer>

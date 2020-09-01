@@ -9,7 +9,7 @@ import { IAppState } from '@store/state/app.state';
 import { Login } from '@store/actions/user.actions';
 import { ErrorService } from '@services/error.service';
 import { LoadingService } from '@services/loading.service';
-import { setAuthClasses } from '../../../../core/helpers/utility';
+import { setAuthClasses } from '@helpers/utility';
 import { LoginPayload } from '@models/payloads/auth/login';
 import { ServerError } from '@models/responses/server/error';
 
@@ -80,7 +80,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   // convenience getter for easy access to form fields
-  get f(): { [p: string]: AbstractControl } {
+  get loginFormControls(): { [p: string]: AbstractControl } {
     return this.loginForm.controls;
   }
 
@@ -91,7 +91,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     this.submitted = true;
     const loginForm = this.loginForm;
     if (loginForm && loginForm.valid) {
-      const { email, password } = this.f;
+      const { email, password } = this.loginFormControls;
       const data = { email: email.value, password: password.value };
       this.submit({ data });
     }

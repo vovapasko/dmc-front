@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
-import { AuthenticationService } from '../services/auth.service';
+import { AuthenticationService } from '@services/auth.service';
 import { Observable, BehaviorSubject, Subject, throwError } from 'rxjs';
 import { switchMap, take, filter, catchError } from 'rxjs/operators';
-import { Token } from '../models/instances/token.model';
+import { Token } from '@models/instances/token.model';
 
 /**
  * This interceptor for inject JWT to every, almost, request and refresh token if its needed

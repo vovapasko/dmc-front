@@ -3,25 +3,25 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
-import { AuthenticationService } from '../../core/services/auth.service';
-import { User } from '../../core/models/instances/user.models';
-import { Notification } from '../../core/models/instances/notification';
-import { NotificationService } from '../../core/services/notification.service';
-import { UserService } from '../../core/services/user.service';
+import { AuthenticationService } from '@services/auth.service';
+import { User } from '@models/instances/user.models';
+import { Notification } from '@models/instances/notification';
+import { NotificationService } from '@services/notification.service';
+import { UserService } from '@services/user.service';
 import { AbstractControl, FormGroup } from '@angular/forms';
-import { NewsService } from '../../core/services/news.service';
-import { LoadingService } from '../../core/services/loading.service';
-import { ErrorService } from '../../core/services/error.service';
+import { NewsService } from '@services/news.service';
+import { LoadingService } from '@services/loading.service';
+import { ErrorService } from '@services/error.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
-import { IAppState } from '../../core/store/state/app.state';
-import { CreateFormats, CreateHashtag } from '../../core/store/actions/news.actions';
-import { ServerError } from '../../core/models/responses/server/error';
-import { CreateHashtagPayload } from '../../core/models/payloads/news/hashtag/create';
-import { CreatePostsFormatPayload } from '../../core/models/payloads/news/format/create';
-import { ProjectService } from '../../core/services/project.service';
-import { CreateEmailPayload } from '../../core/models/payloads/project/email/create';
-import { CreateEmail } from '../../core/store/actions/project.actions';
+import { IAppState } from '@store/state/app.state';
+import { CreateFormats, CreateHashtag } from '@store/actions/news.actions';
+import { ServerError } from '@models/responses/server/error';
+import { CreateHashtagPayload } from '@models/payloads/news/hashtag/create';
+import { CreatePostsFormatPayload } from '@models/payloads/news/format/create';
+import { ProjectService } from '@services/project.service';
+import { CreateEmailPayload } from '@models/payloads/project/email/create';
+import { CreateEmail } from '@store/actions/project.actions';
 
 /**
  * Top bar component - history, profile bar, logout and create new items
@@ -30,7 +30,7 @@ import { CreateEmail } from '../../core/store/actions/project.actions';
 @Component({
   selector: 'app-topbar',
   templateUrl: './topbar.component.html',
-  styleUrls: ['./topbar.component.scss'],
+  styleUrls: ['./topbar.component.scss']
 })
 export class TopbarComponent implements OnInit {
   notificationHistory$ = new BehaviorSubject<unknown>([]);
@@ -60,7 +60,8 @@ export class TopbarComponent implements OnInit {
     private modalService: NgbModal,
     private store: Store<IAppState>,
     private projectService: ProjectService
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.initFormGroups();
@@ -107,16 +108,17 @@ export class TopbarComponent implements OnInit {
   }
 
   public submit(form: FormGroup, handler, payload: CreateHashtagPayload | CreatePostsFormatPayload | CreateEmailPayload): void {
-    if(form) {
-      this.submitted = true;
-      if (form && form.invalid) {
-        return;
-      }
-      handler(payload);
-      this.submitted = false;
-      form.reset();
-      this.modalService.dismissAll();
+    this.submitted = true;
+
+    if (form && form.invalid) {
+      return;
     }
+
+    handler(payload);
+    this.submitted = false;
+    form.reset();
+    this.modalService.dismissAll();
+    this.submitted = false;
   }
 
   public createHashtag(payload: CreateHashtagPayload): void {
@@ -127,13 +129,13 @@ export class TopbarComponent implements OnInit {
     const cf = this.cf;
     const postFormat = cf.postFormat.value;
     const data = { postFormat };
-    const payload = {data} as unknown as CreatePostsFormatPayload;
+    const payload = { data } as unknown as CreatePostsFormatPayload;
     this.submit(this.createFormatForm, this.createFormat.bind(this), payload);
   }
 
   public submitCreateEmailForm(): void {
     const data = this.createEmailForm.value;
-    const payload = {data} as unknown as CreateEmailPayload;
+    const payload = { data } as unknown as CreateEmailPayload;
     this.submit(this.createEmailForm, this.createEmail.bind(this), payload);
   }
 
@@ -159,7 +161,6 @@ export class TopbarComponent implements OnInit {
   get cf(): { [p: string]: AbstractControl } {
     return this.createFormatForm.controls;
   }
-
 
 
   /**

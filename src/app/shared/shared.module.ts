@@ -9,21 +9,42 @@ import { ContractorsNamesPipe } from './pipes/contractors-names.pipe';
 import { EditModeDirective } from './directives/edit-mode.directive';
 import { ViewModeDirective } from './directives/view-mode.directive';
 import { EditableOnEnterDirective } from './directives/editable-on-enter.directive';
-import { EditableComponent } from '../core/components/editable/editable.component';
+import { EditableComponent } from '@components/editable/editable.component';
+import { ContractorsFormatsPipe } from './pipes/contractors-formats.pipe';
+import { TicketsSortableDirective } from '@shared/directives/tickets-sortable.directive';
+import { ContractorsArrangementPipe } from './pipes/contractors-arrangement.pipe';
+import { ContractorsNewsAmountPipe } from './pipes/contractors-news-amount.pipe';
 
 @NgModule({
-  declarations: [ProjectStatusPipe, ContractorsCostPipe, ContractorsNamesPipe, EditModeDirective, ViewModeDirective, EditableOnEnterDirective, EditableComponent],
-  imports: [CommonModule, UIModule, AlifeFileToBase64Module],
-  exports: [
-    UIModule,
+  declarations: [
     ProjectStatusPipe,
     ContractorsCostPipe,
     ContractorsNamesPipe,
     EditModeDirective,
     ViewModeDirective,
     EditableOnEnterDirective,
+    TicketsSortableDirective,
+    EditableComponent,
+    ContractorsFormatsPipe,
+    ContractorsArrangementPipe,
+    ContractorsNewsAmountPipe,
+  ],
+  imports: [CommonModule, UIModule, AlifeFileToBase64Module],
+  exports: [
+    UIModule,
+    ProjectStatusPipe,
+    ContractorsCostPipe,
+    ContractorsNamesPipe,
+    ContractorsFormatsPipe,
+    EditModeDirective,
+    ViewModeDirective,
+    EditableOnEnterDirective,
+    TicketsSortableDirective,
     EditableComponent,
     AlifeFileToBase64Module,
-  ],
+    ContractorsArrangementPipe,
+    ContractorsNewsAmountPipe
+  ]
 })
-export class SharedModule {}
+export class SharedModule {
+}

@@ -1,5 +1,5 @@
 import { NotificationService } from './notification.service';
-import { Notification, NotificationType } from '../models/instances/notification';
+import { Notification, NotificationType } from '@models/instances/notification';
 
 describe('NotificationService', () => {
   let service: NotificationService;

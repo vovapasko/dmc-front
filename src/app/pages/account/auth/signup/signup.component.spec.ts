@@ -57,7 +57,7 @@ describe('SignupComponent', () => {
   it('should initForm and return controls', () => {
     component.initForm();
     expect(component.signupForm).toBeTruthy();
-    expect(component.f).toBeTruthy();
+    expect(component.signupFormControls).toBeTruthy();
   });
 
   it('should handle onSubmit', () => {

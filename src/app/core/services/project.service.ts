@@ -1,23 +1,22 @@
 import { environment } from '../../../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable, of } from 'rxjs';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { RequestHandler } from '../helpers/request-handler';
-import { endpoints } from '../constants/endpoints';
-import { methods } from '../constants/methods';
-import { CreateEmailPayload } from '../models/payloads/project/email/create';
-import { UpdateEmailPayload } from '../models/payloads/project/email/update';
-import { Email } from '../models/instances/email';
-import { GetAllEmailsResponse } from '../models/responses/project/email/getAll';
-import { DeleteEmailPayload } from '../models/payloads/project/email/delete';
-import { CreateNewsProjectPayload } from '../models/payloads/project/news-project/create';
-import { NewsProject } from '../models/instances/news-project';
-import { UpdateNewsProjectPayload } from '../models/payloads/project/news-project/update';
-import { GetNewsProjectPayload } from '../models/payloads/project/news-project/get';
-import { DeleteNewsProjectPayload } from '../models/payloads/project/news-project/delete';
-import { GetAllNewsProjectsResponse } from '../models/responses/project/news-project/getAll';
+import { endpoints } from '@constants/endpoints';
+import { methods } from '@constants/methods';
+import { CreateEmailPayload } from '@models/payloads/project/email/create';
+import { UpdateEmailPayload } from '@models/payloads/project/email/update';
+import { Email } from '@models/instances/email';
+import { GetAllEmailsResponse } from '@models/responses/project/email/getAll';
+import { DeleteEmailPayload } from '@models/payloads/project/email/delete';
+import { CreateNewsProjectPayload } from '@models/payloads/project/news-project/create';
+import { NewsProject } from '@models/instances/news-project';
+import { UpdateNewsProjectPayload } from '@models/payloads/project/news-project/update';
+import { GetNewsProjectPayload } from '@models/payloads/project/news-project/get';
+import { DeleteNewsProjectPayload } from '@models/payloads/project/news-project/delete';
+import { GetAllNewsProjectsResponse } from '@models/responses/project/news-project/getAll';
 
 const api = environment.api;
 
@@ -63,7 +62,7 @@ export class ProjectService {
 
   public getNewsProject(payload: GetNewsProjectPayload) {
     return this.requestHandler.request(
-      `${api}/${endpoints.NEWSPROJECTS}/${payload.id}`,
+      `${api}/${endpoints.NEWSPROJECTS}/?project=${payload.id}`,
       methods.GET,
       payload,
       (response: GetAllNewsProjectsResponse) => response.results[0]
@@ -144,6 +143,7 @@ export class ProjectService {
       email: [null, Validators.required],
       template: null,
       signature: null,
+      codeword: null
     });
   }
 

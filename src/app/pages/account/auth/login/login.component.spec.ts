@@ -2,12 +2,10 @@ import { LoginComponent } from './login.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CommonModule } from '@angular/common';
 import { LoginPayload } from '@models/payloads/auth/login';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule, Title } from '@angular/platform-browser';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
-import { UIModule } from '../../../../shared/ui/ui.module';
-import { AuthRoutingModule } from '../auth-routing';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { UIModule } from '@shared/ui/ui.module';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { AuthenticationService } from '@services/auth.service';
 import { ErrorService } from '@services/error.service';
@@ -53,7 +51,7 @@ describe('LoginComponent', () => {
   it('should initForm and return controls', () => {
     component.initForm();
     expect(component.loginForm).toBeTruthy();
-    expect(component.f).toBeTruthy();
+    expect(component.loginFormControls).toBeTruthy();
   });
 
   it('should handle onSubmit', () => {
