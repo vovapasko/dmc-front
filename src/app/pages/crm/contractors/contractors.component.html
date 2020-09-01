@@ -355,6 +355,10 @@
                     <div *ngIf="submitted && createFormatFormControls.postFormat.errors" class="invalid-feedback">
                         <div *ngIf="createFormatFormControls.postFormat.errors.required">Название формата обязательно</div>
                     </div>
+
+                    <div *ngIf="submitted && createFormatFormControls.postFormat.errors" class="invalid-feedback">
+                        <div *ngIf="createFormatFormControls.postFormat.errors.maxlength">Название формата не должно превышать 50 символов</div>
+                    </div>
                 </div>
 
                 <div class="form-group">
