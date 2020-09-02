@@ -374,6 +374,12 @@
                     <div *ngIf="submitted && createFormatFormControls.onePostPrice.errors" class="invalid-feedback">
                         <div *ngIf="createFormatFormControls.onePostPrice.errors.required">Это поле обязательно для заполнения</div>
                     </div>
+
+                    <div *ngIf="submitted && createFormatFormControls.onePostPrice.errors" class="invalid-feedback">
+                        <div *ngIf="createFormatFormControls.onePostPrice.errors.min">Значение не может быть меньше 0</div>
+                    </div>
+
+
                 </div>
 
 
@@ -390,6 +396,10 @@
                     <div *ngIf="submitted && createFormatFormControls.newsAmount.errors" class="invalid-feedback">
                         <div *ngIf="createFormatFormControls.newsAmount.errors.required">Это поле обязательно для заполнения</div>
                     </div>
+
+                    <div *ngIf="submitted && createFormatFormControls.newsAmount.errors" class="invalid-feedback">
+                        <div *ngIf="createFormatFormControls.newsAmount.errors.min">Значение не может быть меньше 0</div>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -404,6 +414,10 @@
 
                     <div *ngIf="submitted && createFormatFormControls.arrangedNews.errors" class="invalid-feedback">
                         <div *ngIf="createFormatFormControls.arrangedNews.errors.required">Это поле обязательно для заполнения</div>
+                    </div>
+
+                    <div *ngIf="submitted && createFormatFormControls.arrangedNews.errors" class="invalid-feedback">
+                        <div *ngIf="createFormatFormControls.arrangedNews.errors.min">Значение не может быть меньше 0</div>
                     </div>
                 </div>
 
