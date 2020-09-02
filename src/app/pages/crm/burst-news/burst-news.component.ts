@@ -39,7 +39,7 @@ import { NewsProject } from '@models/instances/news-project';
 import { GetNewsProjectPayload } from '@models/payloads/project/news-project/get';
 import { Methods } from '@models/instances/method';
 import { separators } from '@constants/separators';
-import { burstSteps, newsFields, newsFieldsHandler } from '@constants/news';
+import { burstSteps, h1, newsFieldReplacer, newsFields, newsFieldsHandler, p, template } from '@constants/news';
 import { Email } from '@models/instances/email';
 import { UpdateNewsWavesPayload } from '@models/payloads/news/news-waves/update';
 import { CreateNewsWavesPayload } from '@models/payloads/news/news-waves/create';
@@ -555,20 +555,30 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   public setInfoContent(control: AbstractControl, previewControl: AbstractControl, index: number): void {
     const fields = Object.keys(newsFields);
     const format = this.getProjectFormat();
-    let content = '';
-    fields.forEach(field => {
-      const handler = newsFieldsHandler[field];
-      const processingControl = this.getControl(index, field);
-      const value = processingControl.value;
-      const text = handler(value, format) + separators.newLine;
-      if (previewControl.value.indexOf(text) === -1) {
-        content += text;
-      }
-    });
-    if (previewControl.value.includes(content)) {
+    fields.forEach(field => this.processContent(field, index, previewControl, format));
+  }
+
+  public processContent(field, index, previewControl, format): void {
+    const handler = newsFieldsHandler[field];
+    const replacer = newsFieldReplacer[field];
+    const processingControl = this.getControl(index, field);
+    const value = processingControl.value;
+    if (!value) {
       return;
     }
-    previewControl.setValue(previewControl.value + content);
+    const text = handler(value, format) + separators.newLine;
+    const content = this.handlePreviewContent(previewControl.value);
+    previewControl.setValue(replacer(content, text));
+  }
+
+  public handlePreviewContent(value: string): string {
+    if (!value) {
+      return template;
+    }
+    if (value && (value.indexOf(h1) === -1 || value.indexOf(p) === -1)) {
+      return template + value;
+    }
+    return value;
   }
 
   public getContractorPrice(contractor: Contractor, format: PostFormatListSet): string | number {
