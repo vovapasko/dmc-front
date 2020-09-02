@@ -191,9 +191,9 @@ export class ContractorService {
   public initializeCreateFormatForm(): FormGroup {
     return this.formBuilder.group({
       postFormat: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
-      newsAmount: [null, [Validators.required, Validators.minLength(1)]],
-      arrangedNews: [null, [Validators.required, Validators.minLength(1)]],
-      onePostPrice: [null, [Validators.required, Validators.minLength(1)]]
+      newsAmount: [null, [Validators.required, Validators.minLength(1), Validators.min(0)]],
+      arrangedNews: [null, [Validators.required, Validators.minLength(1), Validators.min(0)]],
+      onePostPrice: [null, [Validators.required, Validators.minLength(1), Validators.min(0)]]
     });
   }
 
