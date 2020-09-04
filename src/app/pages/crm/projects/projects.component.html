@@ -40,9 +40,9 @@
                         <i class="mdi mdi-dots-vertical m-0 text-muted h3"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
-                        <a class="dropdown-item" (click)="onChange(project?.id); openModal(editProjectModal);"
+                        <a class="dropdown-item" (click)="onChange(project); openModal(editProjectModal);"
                            href="javascript: void(0);">Изменить</a>
-                        <a class="dropdown-item" (click)="onDelete(project?.id)"
+                        <a class="dropdown-item" (click)="onDelete(project)"
                            href="javascript: void(0);">Удалить</a>
                     </div>
                 </div>
@@ -60,7 +60,8 @@
                 </p>
                 <!-- Task info-->
 
-                <button type="button" class="btn btn-sm btn-blue waves-effect waves-light float-right">
+                <button (click)="openModal(viewProjectModal, {size: 'xl'});selectProject(project)" type="button"
+                        class="btn btn-sm btn-blue waves-effect waves-light float-right">
                     <i class="mdi mdi-eye-circle"></i> Посмотреть
                 </button>
                 <p class="mb-1">
@@ -127,7 +128,8 @@
                                 formControlName="managerId"
                                 [ngClass]="{ 'is-invalid': submitted && createProjectFormControls.managerId.errors }"
                         ></ng-select>
-                        <div *ngIf="submitted && createProjectFormControls.managerId.errors" style="display: block" class="invalid-feedback">
+                        <div *ngIf="submitted && createProjectFormControls.managerId.errors" style="display: block"
+                             class="invalid-feedback">
                             <span *ngIf="createProjectFormControls.managerId.errors.required">Менеджер проекта обязателен</span>
                         </div>
                     </fieldset>
@@ -148,7 +150,8 @@
                             formControlName="hashtags"
                             [ngClass]="{ 'is-invalid': submitted && createProjectFormControls.hashtags.errors }"
                     ></ng-select>
-                    <div *ngIf="submitted && createProjectFormControls.hashtags.errors" style="display: block" class="invalid-feedback">
+                    <div *ngIf="submitted && createProjectFormControls.hashtags.errors" style="display: block"
+                         class="invalid-feedback">
                         <span *ngIf="createProjectFormControls.hashtags.errors.required">Хештеги обязательны</span>
                     </div>
                 </div>
@@ -168,7 +171,8 @@
                             [ngClass]="{ 'is-invalid': submitted && createProjectFormControls.contractors.errors }"
                     >
                     </ng-select>
-                    <div *ngIf="submitted && createProjectFormControls.contractors.errors" style="display: block" class="invalid-feedback">
+                    <div *ngIf="submitted && createProjectFormControls.contractors.errors" style="display: block"
+                         class="invalid-feedback">
                         <span *ngIf="createProjectFormControls.contractors.errors.required">Контрагенты обязательны</span>
                     </div>
                 </div>
@@ -204,7 +208,8 @@
                             [ngClass]="{ 'is-invalid': submitted && createProjectFormControls.emails.errors }"
                     >
                     </ng-select>
-                    <div *ngIf="submitted && createProjectFormControls.emails.errors" style="display: block" class="invalid-feedback">
+                    <div *ngIf="submitted && createProjectFormControls.emails.errors" style="display: block"
+                         class="invalid-feedback">
                         <span *ngIf="createProjectFormControls.emails.errors.required">Почты обязательны</span>
                     </div>
                 </div>
@@ -282,7 +287,8 @@
                             formControlName="managerId"
                             [ngClass]="{ 'is-invalid': submitted && editProjectFormControls.managerId.errors }"
                     ></ng-select>
-                    <div *ngIf="submitted && editProjectFormControls.managerId.errors" style="display: block" class="invalid-feedback">
+                    <div *ngIf="submitted && editProjectFormControls.managerId.errors" style="display: block"
+                         class="invalid-feedback">
                         <span *ngIf="editProjectFormControls.managerId.errors.required">Менеджер проекта обязателен</span>
                     </div>
                 </div>
@@ -301,7 +307,8 @@
                             formControlName="hashtags"
                             [ngClass]="{ 'is-invalid': submitted && editProjectFormControls.hashtags.errors }"
                     ></ng-select>
-                    <div *ngIf="submitted && editProjectFormControls.hashtags.errors" style="display: block" class="invalid-feedback">
+                    <div *ngIf="submitted && editProjectFormControls.hashtags.errors" style="display: block"
+                         class="invalid-feedback">
                         <span *ngIf="editProjectFormControls.hashtags.errors.required">Хештеги обязательны</span>
                     </div>
                 </div>
@@ -320,7 +327,8 @@
                             [ngClass]="{ 'is-invalid': submitted && editProjectFormControls.contractors.errors }"
                     >
                     </ng-select>
-                    <div *ngIf="submitted && editProjectFormControls.contractors.errors" style="display: block" class="invalid-feedback">
+                    <div *ngIf="submitted && editProjectFormControls.contractors.errors" style="display: block"
+                         class="invalid-feedback">
                         <span *ngIf="editProjectFormControls.contractors.errors.required">Контрагенты обязательны</span>
                     </div>
                 </div>
@@ -355,7 +363,8 @@
                             [ngClass]="{ 'is-invalid': submitted && editProjectFormControls.emails.errors }"
                     >
                     </ng-select>
-                    <div *ngIf="submitted && editProjectFormControls.emails.errors" style="display: block" class="invalid-feedback">
+                    <div *ngIf="submitted && editProjectFormControls.emails.errors" style="display: block"
+                         class="invalid-feedback">
                         <span *ngIf="editProjectFormControls.emails.errors.required">Почты обязательны</span>
                     </div>
                 </div>
@@ -386,4 +395,97 @@
             </form>
         </div>
     </div>
+</ng-template>
+
+
+<!-- View project modal  -->
+<ng-template #viewProjectModal role="document" let-modal="close">
+    <div class="modal-header bg-dark">
+        <h4 class="modal-title text-white">Новостные волны</h4>
+        <button
+                type="button"
+                class="close text-white"
+                aria-label="Close"
+                id="viewProjectModal"
+                (click)="modal('Cross click')"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body p-3">
+        <div class="container-fluid">
+
+            <div class="row">
+
+                <div class="col-lg-12">
+                    <div class="card-box">
+                        <h4 class="header-title mb-4">Project name</h4>
+
+                        <ngb-tabset class="nav-bordered" type="tabs" justify="justified">
+                            <ngb-tab title="Home" class="nav-item d-none d-sm-inline-block">
+                                <ng-template ngbTabContent>
+                                    <ng-template [ngTemplateOutlet]="TabContent"></ng-template>
+                                </ng-template>
+                            </ngb-tab>
+                            <ngb-tab title="profile" class="nav-item">
+                                <ng-template ngbTabContent>
+                                    <ng-template [ngTemplateOutlet]="TabContent1"></ng-template>
+                                </ng-template>
+                            </ngb-tab>
+                            <ngb-tab title="Messages" class="nav-item">
+                                <ng-template ngbTabContent>
+                                    <ng-template [ngTemplateOutlet]="TabContent"></ng-template>
+                                </ng-template>
+                            </ngb-tab>
+                        </ngb-tabset>
+                    </div>
+                </div><!-- End justified bordered tabs -->
+            </div>
+
+        </div>
+    </div>
+</ng-template>
+
+
+
+
+
+
+
+<!-- Tab Content -->
+<ng-template #TabContent>
+    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean
+        massa.
+        Cum
+        sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis,
+        ultricies
+        nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.</p>
+    <p class="mb-0">Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo,
+        rhoncus
+        ut,
+        imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer
+        tincidunt.Cras
+        dapibus.
+        Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu,
+        consequat
+        vitae, eleifend ac, enim.</p>
+</ng-template>
+
+<!-- Tab Content -->
+<ng-template #TabContent1>
+    <p>Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut,
+        imperdiet
+        a,
+        venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.Cras dapibus.
+        Vivamus
+        elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat
+        vitae,
+        eleifend ac, enim.</p>
+    <p class="mb-0">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget
+        dolor.
+        Aenean
+        massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec
+        quam
+        felis,
+        ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.</p>
 </ng-template>

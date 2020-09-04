@@ -10,7 +10,12 @@ export const projectReducer = (state = initialProjectsState, action: ProjectActi
         emails: action.payload
       };
     }
-
+    case EProjectActions.GetNewsWavesSuccess: {
+      return {
+        ...state,
+        news: action.payload
+      };
+    }
     case EProjectActions.GetProjectsSuccess: {
       return {
         ...state,

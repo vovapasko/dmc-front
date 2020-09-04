@@ -8,6 +8,8 @@ import { NewsProject } from '@models/instances/news-project';
 import { UpdateNewsProjectPayload } from '@models/payloads/project/news-project/update';
 import { GetNewsProjectPayload } from '@models/payloads/project/news-project/get';
 import { DeleteNewsProjectPayload } from '@models/payloads/project/news-project/delete';
+import { GetNewsWavesPayload } from '@models/payloads/project/news/get';
+import { NewsWaves } from '@models/instances/news-waves';
 
 export enum EProjectActions {
   GetProjects = '[Project] Get projects',
@@ -27,6 +29,9 @@ export enum EProjectActions {
 
   GetNewsProject = '[Project] Get news project',
   GetNewsProjectSuccess = '[Project] Get news project success',
+
+  GetNewsWaves = '[Project] Get news waves',
+  GetNewsWavesSuccess = '[Project] Get news waves success',
 
   GetEmails = '[Project] Get emails',
   GetEmailsSuccess = '[Project] Get emails success',
@@ -182,6 +187,20 @@ export class GetNewsProjectsSuccess {
   }
 }
 
+export class GetNewsWaves {
+  public readonly type = EProjectActions.GetNewsWaves;
+
+  constructor(public payload: GetNewsWavesPayload) {
+  }
+}
+
+export class GetNewsWavesSuccess {
+  public readonly type = EProjectActions.GetNewsWavesSuccess;
+
+  constructor(public payload: NewsWaves[]) {
+  }
+}
+
 export type ProjectActions =
   | GetEmails
   | GetEmailsSuccess
@@ -203,3 +222,5 @@ export type ProjectActions =
   | GetNewsProjectSuccess
   | GetNewsProjects
   | GetNewsProjectsSuccess
+  | GetNewsWaves
+  | GetNewsWavesSuccess;

@@ -20,7 +20,7 @@ import { GetContractors } from '@store/actions/contractor.actions';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
   selectEmailsList,
-  selectNewsProject,
+  selectNewsProject, selectProjectNews,
   selectProjectsList
 } from '@store/selectors/project.selectors';
 import {
@@ -28,7 +28,7 @@ import {
   DeleteNewsProject,
   GetEmails,
   GetNewsProject,
-  GetNewsProjects,
+  GetNewsProjects, GetNewsWaves,
   UpdateNewsProject
 } from '@store/actions/project.actions';
 import { CreateNewsProjectPayload } from '@models/payloads/project/news-project/create';
@@ -37,6 +37,7 @@ import { UpdateNewsProjectPayload } from '@models/payloads/project/news-project/
 import { breadCrumbs } from '@constants/bread-crumbs';
 import { GetClients } from '@store/actions/client.actions';
 import { selectClientList } from '@store/selectors/client.selectors';
+import { Project } from '@models/instances/project';
 
 @Component({
   selector: 'app-projects',
@@ -59,13 +60,14 @@ export class ProjectsComponent implements OnInit {
   createProjectForm: FormGroup;
   editProjectForm: FormGroup;
   submitted = false;
-
+  isCollapsed = false;
   clients$ = this.store.pipe(select(selectClientList));
   users$ = this.store.pipe(select(selectUserList));
   contractors$ = this.store.pipe(select(selectContractorList));
   projects$ = this.store.pipe(select(selectProjectsList));
   hashtags$ = this.store.pipe(select(selectHashtags));
   emails$ = this.store.pipe(select(selectEmailsList));
+  news$ = this.store.pipe(select(selectProjectNews));
   projectId: number;
 
   constructor(
@@ -138,6 +140,10 @@ export class ProjectsComponent implements OnInit {
     this.store.dispatch(new CreateNewsProject(payload));
   }
 
+  public selectProject(project: NewsProject): void {
+    this.store.dispatch(new GetNewsWaves({project: project.id}));
+  }
+
   /**
    * Clean forms
    */
@@ -175,9 +181,9 @@ export class ProjectsComponent implements OnInit {
   /**
    * Fill edit project modal
    */
-  public onChange(id: number): void {
-    const payload = { id };
-    this.projectId = id;
+  public onChange(project: NewsProject): void {
+    const payload = { id: project.id };
+    this.projectId = project.id;
     this.store.select(selectNewsProject).subscribe(this.initEditProjectForm.bind(this));
     this.store.dispatch(new GetNewsProject(payload));
   }
@@ -185,8 +191,8 @@ export class ProjectsComponent implements OnInit {
   /**
    * Dispatch delete project
    */
-  public onDelete(id: number): void {
-    const payload = { id };
+  public onDelete(project: NewsProject): void {
+    const payload = { id: project.id };
     this.store.dispatch(new DeleteNewsProject(payload));
   }
 
@@ -222,8 +228,8 @@ export class ProjectsComponent implements OnInit {
   /**
    * Open "create new project" modal
    */
-  public openModal(content: string): void {
-    this.modalService.open(content, { centered: true });
+  public openModal(content: string, options: object = {}): void {
+    this.modalService.open(content, { centered: true, ...options });
   }
 
   /**
