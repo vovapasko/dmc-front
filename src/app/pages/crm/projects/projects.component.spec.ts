@@ -3,10 +3,11 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import {
-  NgbAlertModule, NgbDatepickerModule,
+  NgbAccordionModule,
+  NgbAlertModule, NgbCollapseModule, NgbDatepickerModule,
   NgbDropdownModule,
   NgbModalModule,
-  NgbPaginationModule, NgbPopoverModule, NgbProgressbarModule, NgbTooltipModule,
+  NgbPaginationModule, NgbPopoverModule, NgbProgressbarModule, NgbTabsetModule, NgbTooltipModule,
   NgbTypeaheadModule
 } from '@ng-bootstrap/ng-bootstrap';
 import { ClickOutsideModule } from 'ng-click-outside';
@@ -34,6 +35,7 @@ import { NotificationService } from '../../../core/services/notification.service
 import { NewsService } from '../../../core/services/news.service';
 import { ProjectStatusPipe } from '../../../shared/pipes/project-status.pipe';
 import { SharedModule } from '../../../shared/shared.module';
+import { mockProject } from '../../../core/mocks/project.mock';
 
 describe('ProjectsComponent', () => {
   let component: ProjectsComponent;
@@ -49,6 +51,9 @@ describe('ProjectsComponent', () => {
         CommonModule,
         RouterModule,
         NgbDropdownModule,
+        NgbAccordionModule,
+        NgbCollapseModule,
+        NgbTabsetModule,
         ClickOutsideModule,
         UIModule,
         NgbAlertModule,
@@ -126,7 +131,8 @@ describe('ProjectsComponent', () => {
 
   it('should call onChange', () => {
     spyOn(component, 'onChange');
-    component.onChange(1);
+    // @ts-ignore
+    component.onChange(mockProject);
     expect(component.onChange).toHaveBeenCalled();
   });
 
