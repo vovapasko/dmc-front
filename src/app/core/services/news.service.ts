@@ -745,7 +745,7 @@ export class NewsService {
     const createdBy = this.userService.user;
     const waveFormation = {
       email: previewForm.controls.previewEmail.value || controls.at(0).get('previewEmail').value,
-      content: previewForm.controls.previewText.value,
+      content: previewForm.controls.previewText.value || controls.at(0).get('previewText').value,
       attachments: editorForm.controls.attachments.value,
       id: newsWave ? newsWave.waveFormation.id : null
     };

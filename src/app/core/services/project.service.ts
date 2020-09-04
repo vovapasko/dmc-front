@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { RequestHandler } from '../helpers/request-handler';
+import { RequestHandler } from '@helpers/request-handler';
 import { endpoints } from '@constants/endpoints';
 import { methods } from '@constants/methods';
 import { CreateEmailPayload } from '@models/payloads/project/email/create';
@@ -17,6 +17,9 @@ import { UpdateNewsProjectPayload } from '@models/payloads/project/news-project/
 import { GetNewsProjectPayload } from '@models/payloads/project/news-project/get';
 import { DeleteNewsProjectPayload } from '@models/payloads/project/news-project/delete';
 import { GetAllNewsProjectsResponse } from '@models/responses/project/news-project/getAll';
+import { GetNewsWavesPayload } from '@models/payloads/project/news/get';
+import { NewsWaves } from '@models/instances/news-waves';
+import { Observable } from 'rxjs';
 
 const api = environment.api;
 
@@ -75,6 +78,15 @@ export class ProjectService {
       methods.GET,
       null,
       (response: GetAllNewsProjectsResponse) => response.results
+    );
+  }
+
+  public getNewsWaves(payload: GetNewsWavesPayload): Observable<NewsWaves[]> {
+    return this.requestHandler.request(
+      `${api}/${endpoints.NEWS_WAVES}/?project=${payload.project}`,
+      methods.GET,
+      null,
+      (response: {results: NewsWaves[]}) => response.results
     );
   }
 

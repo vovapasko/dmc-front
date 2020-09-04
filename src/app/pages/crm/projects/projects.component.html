@@ -40,9 +40,9 @@
                         <i class="mdi mdi-dots-vertical m-0 text-muted h3"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
-                        <a class="dropdown-item" (click)="onChange(project?.id); openModal(editProjectModal);"
+                        <a class="dropdown-item" (click)="onChange(project); openModal(editProjectModal);"
                            href="javascript: void(0);">Изменить</a>
-                        <a class="dropdown-item" (click)="onDelete(project?.id)"
+                        <a class="dropdown-item" (click)="onDelete(project)"
                            href="javascript: void(0);">Удалить</a>
                     </div>
                 </div>
@@ -60,7 +60,9 @@
                 </p>
                 <!-- Task info-->
 
-                <button type="button" class="btn btn-sm btn-blue waves-effect waves-light float-right">
+                <button (click)="openModal(viewProjectModal, {size: 'xl'});loadNewsWaves(project);selectProject(project)"
+                        type="button"
+                        class="btn btn-sm btn-blue waves-effect waves-light float-right">
                     <i class="mdi mdi-eye-circle"></i> Посмотреть
                 </button>
                 <p class="mb-1">
@@ -127,7 +129,8 @@
                                 formControlName="managerId"
                                 [ngClass]="{ 'is-invalid': submitted && createProjectFormControls.managerId.errors }"
                         ></ng-select>
-                        <div *ngIf="submitted && createProjectFormControls.managerId.errors" style="display: block" class="invalid-feedback">
+                        <div *ngIf="submitted && createProjectFormControls.managerId.errors" style="display: block"
+                             class="invalid-feedback">
                             <span *ngIf="createProjectFormControls.managerId.errors.required">Менеджер проекта обязателен</span>
                         </div>
                     </fieldset>
@@ -148,7 +151,8 @@
                             formControlName="hashtags"
                             [ngClass]="{ 'is-invalid': submitted && createProjectFormControls.hashtags.errors }"
                     ></ng-select>
-                    <div *ngIf="submitted && createProjectFormControls.hashtags.errors" style="display: block" class="invalid-feedback">
+                    <div *ngIf="submitted && createProjectFormControls.hashtags.errors" style="display: block"
+                         class="invalid-feedback">
                         <span *ngIf="createProjectFormControls.hashtags.errors.required">Хештеги обязательны</span>
                     </div>
                 </div>
@@ -168,7 +172,8 @@
                             [ngClass]="{ 'is-invalid': submitted && createProjectFormControls.contractors.errors }"
                     >
                     </ng-select>
-                    <div *ngIf="submitted && createProjectFormControls.contractors.errors" style="display: block" class="invalid-feedback">
+                    <div *ngIf="submitted && createProjectFormControls.contractors.errors" style="display: block"
+                         class="invalid-feedback">
                         <span *ngIf="createProjectFormControls.contractors.errors.required">Контрагенты обязательны</span>
                     </div>
                 </div>
@@ -204,7 +209,8 @@
                             [ngClass]="{ 'is-invalid': submitted && createProjectFormControls.emails.errors }"
                     >
                     </ng-select>
-                    <div *ngIf="submitted && createProjectFormControls.emails.errors" style="display: block" class="invalid-feedback">
+                    <div *ngIf="submitted && createProjectFormControls.emails.errors" style="display: block"
+                         class="invalid-feedback">
                         <span *ngIf="createProjectFormControls.emails.errors.required">Почты обязательны</span>
                     </div>
                 </div>
@@ -282,7 +288,8 @@
                             formControlName="managerId"
                             [ngClass]="{ 'is-invalid': submitted && editProjectFormControls.managerId.errors }"
                     ></ng-select>
-                    <div *ngIf="submitted && editProjectFormControls.managerId.errors" style="display: block" class="invalid-feedback">
+                    <div *ngIf="submitted && editProjectFormControls.managerId.errors" style="display: block"
+                         class="invalid-feedback">
                         <span *ngIf="editProjectFormControls.managerId.errors.required">Менеджер проекта обязателен</span>
                     </div>
                 </div>
@@ -301,7 +308,8 @@
                             formControlName="hashtags"
                             [ngClass]="{ 'is-invalid': submitted && editProjectFormControls.hashtags.errors }"
                     ></ng-select>
-                    <div *ngIf="submitted && editProjectFormControls.hashtags.errors" style="display: block" class="invalid-feedback">
+                    <div *ngIf="submitted && editProjectFormControls.hashtags.errors" style="display: block"
+                         class="invalid-feedback">
                         <span *ngIf="editProjectFormControls.hashtags.errors.required">Хештеги обязательны</span>
                     </div>
                 </div>
@@ -320,7 +328,8 @@
                             [ngClass]="{ 'is-invalid': submitted && editProjectFormControls.contractors.errors }"
                     >
                     </ng-select>
-                    <div *ngIf="submitted && editProjectFormControls.contractors.errors" style="display: block" class="invalid-feedback">
+                    <div *ngIf="submitted && editProjectFormControls.contractors.errors" style="display: block"
+                         class="invalid-feedback">
                         <span *ngIf="editProjectFormControls.contractors.errors.required">Контрагенты обязательны</span>
                     </div>
                 </div>
@@ -355,7 +364,8 @@
                             [ngClass]="{ 'is-invalid': submitted && editProjectFormControls.emails.errors }"
                     >
                     </ng-select>
-                    <div *ngIf="submitted && editProjectFormControls.emails.errors" style="display: block" class="invalid-feedback">
+                    <div *ngIf="submitted && editProjectFormControls.emails.errors" style="display: block"
+                         class="invalid-feedback">
                         <span *ngIf="editProjectFormControls.emails.errors.required">Почты обязательны</span>
                     </div>
                 </div>
@@ -386,4 +396,131 @@
             </form>
         </div>
     </div>
+</ng-template>
+
+
+<!-- View project modal  -->
+<ng-template #viewProjectModal role="document" let-modal="close">
+    <div class="modal-header bg-dark">
+        <h4 class="modal-title text-white">Новостные волны</h4>
+        <button
+                type="button"
+                class="close text-white"
+                aria-label="Close"
+                id="viewProjectModal"
+                (click)="modal('Cross click')"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body p-3">
+        <div class="container-fluid">
+
+            <div class="row">
+
+                <div class="col-lg-12">
+                    <div class="card-box">
+                        <h4 class="header-title mb-4">{{(project$ | async)?.name}}</h4>
+
+                        <ngb-tabset class="nav-bordered" type="tabs" justify="justified">
+                            <ngb-tab *ngFor="let news of news$ | async; let i = index"
+                                     [title]="news.title"
+                                     class="nav-item d-none d-sm-inline-block">
+                                <ng-template ngbTabContent>
+                                    <ng-template [ngTemplateOutlet]="TabContent"
+                                                 [ngTemplateOutletContext]="{news:news}"
+                                    >
+                                    </ng-template>
+                                </ng-template>
+                            </ngb-tab>
+                        </ngb-tabset>
+                    </div>
+                </div><!-- End justified bordered tabs -->
+            </div>
+
+        </div>
+    </div>
+</ng-template>
+
+
+<!-- Tab Content -->
+<ng-template #TabContent let-news='news'>
+    <div class="row mb-2">
+        <div class="col-sm-4">
+            <h4>Дата волны</h4>
+            <p class="text-muted">
+                {{news.dateCreated}}
+            </p>
+            <div class="clearfix"></div>
+        </div>
+        <div class="col-sm-4">
+            <h4>Кем создана волна</h4>
+            <p class="text-muted">
+                {{news.createdBy.firstName}}
+            </p>
+            <div class="clearfix"></div>
+        </div>
+        <div class="col-sm-4">
+            <h4>Каков был бюджет</h4>
+            <p class="text-muted">
+                {{news.budget}}$
+            </p>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-sm-4">
+            <h4>С каких почт были совершены отправления</h4>
+            <p *ngFor="let newsInProject of news.newsInProject" class="text-muted">
+                <span *ngFor="let contractor of newsInProject.contractors">
+                    {{contractor.editorName}} - {{contractor.email}}
+                </span>
+            </p>
+            <div class="clearfix"></div>
+        </div>
+        <div class="col-sm-4">
+            <h4>Сколько было потрачено</h4>
+            <p *ngFor="let newsInProject of news.newsInProject" class="text-muted">
+                <span *ngFor="let contractor of newsInProject.contractors">
+                    {{contractor.editorName}} - {{getContractorPrice(contractor, news.postFormat, news.newswavepricelistSet)}}
+                </span>
+            </p>
+            <div class="clearfix"></div>
+        </div>
+        <div class="col-sm-4">
+            <h4>Формат размещения</h4>
+            <p class="text-muted">
+                {{news.postFormat}}
+            </p>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-lg-12 mb-3">
+            <ngb-accordion #acc="ngbAccordion" activeIds="static-1" [closeOthers]="true">
+                <ngb-panel *ngFor="let newsInProject of news.newsInProject; let i = index" [id]="'static' + i">
+                    <ng-template ngbPanelTitle>
+                        <i class="mdi mdi-help-circle mr-1 text-primary"></i>
+                        {{newsInProject.title}}
+                    </ng-template>
+                    <ng-template ngbPanelContent>
+                        <ng-template [ngTemplateOutlet]="TabContentNewsInProject"
+                                     [ngTemplateOutletContext]="{newsInProject:newsInProject}"
+                        ></ng-template>
+                    </ng-template>
+                </ngb-panel>
+
+            </ngb-accordion>
+        </div><!-- End Accordion -->
+
+    </div>
+</ng-template>
+
+
+
+<ng-template #TabContentNewsInProject let-newsInProject='newsInProject'>
+    <div [innerHTML]="newsInProject.content"></div>
 </ng-template>
