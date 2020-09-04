@@ -2,7 +2,7 @@ import { initialProjectsState, IProjectsState } from '../state/project.state';
 import { EProjectActions, ProjectActions } from '../actions/project.actions';
 
 export const projectReducer = (state = initialProjectsState, action: ProjectActions): IProjectsState => {
-  // console.log(action);
+  console.log(action);
   switch (action.type) {
     case EProjectActions.GetEmailsSuccess: {
       return {

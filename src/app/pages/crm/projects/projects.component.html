@@ -60,7 +60,8 @@
                 </p>
                 <!-- Task info-->
 
-                <button (click)="openModal(viewProjectModal, {size: 'xl'});selectProject(project)" type="button"
+                <button (click)="openModal(viewProjectModal, {size: 'xl'});loadNewsWaves(project);selectProject(project)"
+                        type="button"
                         class="btn btn-sm btn-blue waves-effect waves-light float-right">
                     <i class="mdi mdi-eye-circle"></i> Посмотреть
                 </button>
@@ -419,22 +420,17 @@
 
                 <div class="col-lg-12">
                     <div class="card-box">
-                        <h4 class="header-title mb-4">Project name</h4>
+                        <h4 class="header-title mb-4">{{(project$ | async)?.name}}</h4>
 
                         <ngb-tabset class="nav-bordered" type="tabs" justify="justified">
-                            <ngb-tab title="Home" class="nav-item d-none d-sm-inline-block">
+                            <ngb-tab *ngFor="let news of news$ | async; let i = index"
+                                     [title]="news.title"
+                                     class="nav-item d-none d-sm-inline-block">
                                 <ng-template ngbTabContent>
-                                    <ng-template [ngTemplateOutlet]="TabContent"></ng-template>
-                                </ng-template>
-                            </ngb-tab>
-                            <ngb-tab title="profile" class="nav-item">
-                                <ng-template ngbTabContent>
-                                    <ng-template [ngTemplateOutlet]="TabContent1"></ng-template>
-                                </ng-template>
-                            </ngb-tab>
-                            <ngb-tab title="Messages" class="nav-item">
-                                <ng-template ngbTabContent>
-                                    <ng-template [ngTemplateOutlet]="TabContent"></ng-template>
+                                    <ng-template [ngTemplateOutlet]="TabContent"
+                                                 [ngTemplateOutletContext]="{news:news}"
+                                    >
+                                    </ng-template>
                                 </ng-template>
                             </ngb-tab>
                         </ngb-tabset>
@@ -447,45 +443,84 @@
 </ng-template>
 
 
-
-
-
-
-
 <!-- Tab Content -->
-<ng-template #TabContent>
-    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean
-        massa.
-        Cum
-        sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis,
-        ultricies
-        nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.</p>
-    <p class="mb-0">Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo,
-        rhoncus
-        ut,
-        imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer
-        tincidunt.Cras
-        dapibus.
-        Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu,
-        consequat
-        vitae, eleifend ac, enim.</p>
+<ng-template #TabContent let-news='news'>
+    <div class="row mb-2">
+        <div class="col-sm-4">
+            <h4>Дата волны</h4>
+            <p class="text-muted">
+                {{news.dateCreated}}
+            </p>
+            <div class="clearfix"></div>
+        </div>
+        <div class="col-sm-4">
+            <h4>Кем создана волна</h4>
+            <p class="text-muted">
+                {{news.createdBy.firstName}}
+            </p>
+            <div class="clearfix"></div>
+        </div>
+        <div class="col-sm-4">
+            <h4>Каков был бюджет</h4>
+            <p class="text-muted">
+                {{news.budget}}$
+            </p>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-sm-4">
+            <h4>С каких почт были совершены отправления</h4>
+            <p *ngFor="let newsInProject of news.newsInProject" class="text-muted">
+                <span *ngFor="let contractor of newsInProject.contractors">
+                    {{contractor.editorName}} - {{contractor.email}}
+                </span>
+            </p>
+            <div class="clearfix"></div>
+        </div>
+        <div class="col-sm-4">
+            <h4>Сколько было потрачено</h4>
+            <p *ngFor="let newsInProject of news.newsInProject" class="text-muted">
+                <span *ngFor="let contractor of newsInProject.contractors">
+                    {{contractor.editorName}} - {{getContractorPrice(contractor, news.postFormat, news.newswavepricelistSet)}}
+                </span>
+            </p>
+            <div class="clearfix"></div>
+        </div>
+        <div class="col-sm-4">
+            <h4>Формат размещения</h4>
+            <p class="text-muted">
+                {{news.postFormat}}
+            </p>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-lg-12 mb-3">
+            <ngb-accordion #acc="ngbAccordion" activeIds="static-1" [closeOthers]="true">
+                <ngb-panel *ngFor="let newsInProject of news.newsInProject; let i = index" [id]="'static' + i">
+                    <ng-template ngbPanelTitle>
+                        <i class="mdi mdi-help-circle mr-1 text-primary"></i>
+                        {{newsInProject.title}}
+                    </ng-template>
+                    <ng-template ngbPanelContent>
+                        <ng-template [ngTemplateOutlet]="TabContentNewsInProject"
+                                     [ngTemplateOutletContext]="{newsInProject:newsInProject}"
+                        ></ng-template>
+                    </ng-template>
+                </ngb-panel>
+
+            </ngb-accordion>
+        </div><!-- End Accordion -->
+
+    </div>
 </ng-template>
 
-<!-- Tab Content -->
-<ng-template #TabContent1>
-    <p>Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut,
-        imperdiet
-        a,
-        venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.Cras dapibus.
-        Vivamus
-        elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat
-        vitae,
-        eleifend ac, enim.</p>
-    <p class="mb-0">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget
-        dolor.
-        Aenean
-        massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec
-        quam
-        felis,
-        ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.</p>
+
+
+<ng-template #TabContentNewsInProject let-newsInProject='newsInProject'>
+    <div [innerHTML]="newsInProject.content"></div>
 </ng-template>

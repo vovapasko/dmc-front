@@ -17,7 +17,7 @@ import {
   GetNewsProject,
   GetNewsProjects,
   GetNewsProjectsSuccess,
-  GetNewsProjectSuccess, GetNewsWaves,
+  GetNewsProjectSuccess, GetNewsWaves, GetNewsWavesSuccess,
   UpdateEmail,
   UpdateEmailSuccess,
   UpdateNewsProject,
@@ -32,7 +32,6 @@ import { CreateNewsProjectPayload } from '@models/payloads/project/news-project/
 import { UpdateNewsProjectPayload } from '@models/payloads/project/news-project/update';
 import { GetNewsProjectPayload } from '@models/payloads/project/news-project/get';
 import { DeleteNewsProjectPayload } from '@models/payloads/project/news-project/delete';
-import { GetNewsWavesSuccess } from '@store/actions/news.actions';
 import { NewsWaves } from '@models/instances/news-waves';
 import { GetNewsWavesPayload } from '@models/payloads/project/news/get';
 

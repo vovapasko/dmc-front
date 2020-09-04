@@ -38,6 +38,8 @@ import { breadCrumbs } from '@constants/bread-crumbs';
 import { GetClients } from '@store/actions/client.actions';
 import { selectClientList } from '@store/selectors/client.selectors';
 import { Project } from '@models/instances/project';
+import { Contractor, PostFormatListSet } from '@models/instances/contractor';
+import { NewsWavePrice } from '@models/instances/newsWavePrice';
 
 @Component({
   selector: 'app-projects',
@@ -68,6 +70,7 @@ export class ProjectsComponent implements OnInit {
   hashtags$ = this.store.pipe(select(selectHashtags));
   emails$ = this.store.pipe(select(selectEmailsList));
   news$ = this.store.pipe(select(selectProjectNews));
+  project$ = this.store.pipe(select(selectNewsProject));
   projectId: number;
 
   constructor(
@@ -140,8 +143,8 @@ export class ProjectsComponent implements OnInit {
     this.store.dispatch(new CreateNewsProject(payload));
   }
 
-  public selectProject(project: NewsProject): void {
-    this.store.dispatch(new GetNewsWaves({project: project.id}));
+  public loadNewsWaves(project: NewsProject): void {
+    this.store.dispatch(new GetNewsWaves({ project: project.id }));
   }
 
   /**
@@ -178,14 +181,23 @@ export class ProjectsComponent implements OnInit {
     this.router.navigate([urls.CRM, urls.BURST_NEWS]);
   }
 
+  public selectProject(project: NewsProject): void {
+    const payload = { id: project.id };
+    this.projectId = project.id;
+    this.store.dispatch(new GetNewsProject(payload));
+  }
+
   /**
    * Fill edit project modal
    */
   public onChange(project: NewsProject): void {
-    const payload = { id: project.id };
-    this.projectId = project.id;
     this.store.select(selectNewsProject).subscribe(this.initEditProjectForm.bind(this));
-    this.store.dispatch(new GetNewsProject(payload));
+    this.selectProject(project);
+  }
+
+  public getContractorPrice(contractor: Contractor, format: string, priceList: NewsWavePrice[]): string | number {
+    const changedContractor = priceList.find((el: NewsWavePrice) => el.contractor.id === contractor.id);
+    return changedContractor ? changedContractor.price : contractor.postformatlistSet.find(el => el.postFormat === format).onePostPrice;
   }
 
   /**
