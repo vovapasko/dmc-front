@@ -18,11 +18,9 @@ export class ErrorHandler {
   /**
    * Handle error.
    */
-  public handle(error: ServerError): ServerError {
-    const errors = error.errors;
-    const errorsTitles = Object.keys(errors);
-    errorsTitles.forEach((title) => this.notificationService.notify(NotificationType.error, title, errors[title]));
-    this.errorService.error = error;
-    return error;
+  public handle(serverError: ServerError): ServerError {
+    this.notificationService.notify(NotificationType.error, 'Error', serverError.error.message);
+    this.errorService.error = serverError;
+    return serverError;
   }
 }

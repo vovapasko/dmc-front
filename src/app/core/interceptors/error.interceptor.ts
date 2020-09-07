@@ -20,9 +20,9 @@ export class ErrorInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
       catchError((err) => {
-        const errors = err.error.errors;
+        const message = err.error.message;
         const status = err.status;
-        return this.error(errors, status);
+        return this.error(message, status);
       })
     );
   }
@@ -30,14 +30,9 @@ export class ErrorInterceptor implements HttpInterceptor {
   /**
    * Handling errors
    */
-  error(errors, status): Observable<never> {
-    let errorEntity: ServerError = { status, error: { message: 'Something went wrong' } };
-    if (errors) {
-      const errorsTitles = Object.keys(errors);
-      errorEntity = { status, error: { message: errorsTitles.toString() }, errors };
-      this.errorHandler.handle(errorEntity);
-      return throwError(errorEntity);
-    }
+  error(message: string | null, status: number): Observable<never> {
+    const errorEntity: ServerError = { status, error: { message } };
+    this.errorHandler.handle(errorEntity);
     return throwError(errorEntity);
   }
 }
