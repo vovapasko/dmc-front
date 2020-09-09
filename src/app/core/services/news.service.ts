@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 
-import { RequestHandler } from '../helpers/request-handler';
+import { RequestHandler } from '@helpers/request-handler';
 import { GetAllResponse } from '@models/responses/news/project/get-all-response';
 import { CreateHashtagPayload } from '@models/payloads/news/hashtag/create';
 import { CreateHashtagResponse } from '@models/responses/news/hashtag/create-hashtag';

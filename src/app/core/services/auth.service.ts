@@ -11,7 +11,7 @@ import { environment } from '../../../environments/environment';
 import { RequestAccessTokenResponse } from '@models/responses/auth/request-access-token-response';
 import { LoginResponse } from '@models/responses/auth/login-response';
 import { LoginPayload } from '@models/payloads/auth/login';
-import { RequestHandler } from '../helpers/request-handler';
+import { RequestHandler } from '@helpers/request-handler';
 import { UserService } from './user.service';
 import { CURRENT_USER } from '@constants/user';
 import { methods } from '@constants/methods';

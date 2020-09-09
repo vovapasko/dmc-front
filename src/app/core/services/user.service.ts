@@ -12,7 +12,7 @@ import { ResetPassword } from '@models/responses/user/reset-password';
 import { ConfirmResetPasswordResponse } from '@models/responses/user/confirm-reset-password';
 import { UpdateProfileResponse } from '@models/responses/user/update-profile';
 import { GetAllResponse } from '@models/responses/user/get-all';
-import { RequestHandler } from '../helpers/request-handler';
+import { RequestHandler } from '@helpers/request-handler';
 import { CookieService } from '../providers/cookie.service';
 import { CURRENT_USER } from '@constants/user';
 import { PaginationService } from './pagination.service';
