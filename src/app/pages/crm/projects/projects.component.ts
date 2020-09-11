@@ -40,6 +40,7 @@ import { selectClientList } from '@store/selectors/client.selectors';
 import { Project } from '@models/instances/project';
 import { Contractor, PostFormatListSet } from '@models/instances/contractor';
 import { NewsWavePrice } from '@models/instances/newsWavePrice';
+import { NewsWaves } from '@models/instances/news-waves';
 
 @Component({
   selector: 'app-projects',
@@ -179,6 +180,11 @@ export class ProjectsComponent implements OnInit {
    */
   public onCreateProject(): void {
     this.router.navigate([urls.CRM, urls.BURST_NEWS]);
+  }
+
+  public burstNews(news: NewsWaves): void {
+    this.modalService.dismissAll();
+    this.router.navigate(['/crm/burst-news'], { queryParams: { id: news.id } });
   }
 
   public selectProject(project: NewsProject): void {
