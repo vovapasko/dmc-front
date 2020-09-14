@@ -37,8 +37,7 @@
             "scripts": [
               "./node_modules/apexcharts/dist/apexcharts.min.js",
               "./node_modules/quill/dist/quill.js"
-            ],
-            "es5BrowserSupport": true
+            ]
           },
           "configurations": {
             "production": {

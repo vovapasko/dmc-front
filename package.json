@@ -50,6 +50,7 @@
     "@ngrx/store-devtools": "^9.0.0",
     "alife-file-to-base64": "0.0.4",
     "angular-archwizard": "^4.0.0",
+    "angularx-social-login": "^2.1.1",
     "animate.css": "^3.7.2",
     "apexcharts": "^3.8.3",
     "bootstrap": "^4.3.1",
