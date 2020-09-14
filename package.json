@@ -33,7 +33,7 @@
     "@angular/platform-browser-dynamic": "~9.1.12",
     "@angular/router": "~9.1.12",
     "@angular/service-worker": "^9.1.12",
-    "@fullcalendar/angular": "^4.2.1",
+    "@fullcalendar/angular": "^5.3.1",
     "@fullcalendar/bootstrap": "^4.2.0",
     "@fullcalendar/core": "^4.2.0",
     "@fullcalendar/daygrid": "^4.2.0",
