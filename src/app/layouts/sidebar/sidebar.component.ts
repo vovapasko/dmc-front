@@ -11,7 +11,7 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnChanges {
 
   menu;
 
-  @ViewChild('sideMenu', { static: false }) sideMenu: ElementRef;
+  @ViewChild('sideMenu') sideMenu: ElementRef;
 
   constructor() {}
 

@@ -106,8 +106,8 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   pairs = pairs;
   getColorByPercentage = getColorByPercentage;
 
-  @ViewChild('wizardForm', { static: false }) wizard: BaseWizardComponent;
-  @ViewChild('tpl', { static: false }) tpl;
+  @ViewChild('wizardForm') wizard: BaseWizardComponent;
+  @ViewChild('tpl') tpl;
 
   constructor(
     private vcr: ViewContainerRef,

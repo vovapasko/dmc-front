@@ -6,6 +6,8 @@ export const environment = {
   production: false,
   // api: 'https://dmc-backend.herokuapp.com'
   api: 'http://127.0.0.1:8000',
+  googleClientId: '771213956898-19og2o3apecof5onhpp763vhifho2248.apps.googleusercontent.com',
+  fbAppId: '324105298693909'
 };
 
 /*

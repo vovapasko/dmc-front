@@ -25,7 +25,7 @@ describe('SidebarComponent', () => {
       declarations: [SidebarComponent],
       imports: [RouterTestingModule.withRoutes(routes)],
     }).compileComponents();
-    router = TestBed.get(Router);
+    router = TestBed.inject(Router);
   }));
 
   beforeEach(() => {

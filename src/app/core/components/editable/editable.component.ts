@@ -15,8 +15,8 @@ export class EditableComponent implements OnInit {
   @Input() editing: boolean;
   @Output() edit = new EventEmitter();
   @Output() update = new EventEmitter();
-  @ContentChild(ViewModeDirective, { static: false }) viewModeTpl: ViewModeDirective;
-  @ContentChild(EditModeDirective, { static: false }) editModeTpl: EditModeDirective;
+  @ContentChild(ViewModeDirective) viewModeTpl: ViewModeDirective;
+  @ContentChild(EditModeDirective) editModeTpl: EditModeDirective;
 
   editMode = new Subject();
   editMode$ = this.editMode.asObservable();

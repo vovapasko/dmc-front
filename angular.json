@@ -17,6 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "aot": true,
             "outputPath": "dist/angular",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -37,8 +38,7 @@
             "scripts": [
               "./node_modules/apexcharts/dist/apexcharts.min.js",
               "./node_modules/quill/dist/quill.js"
-            ],
-            "es5BrowserSupport": true
+            ]
           },
           "configurations": {
             "production": {
@@ -62,6 +62,10 @@
                   "type": "initial",
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
                 }
               ],
               "serviceWorker": true,
@@ -150,5 +154,8 @@
       }
     }
   },
-  "defaultProject": "angular"
+  "defaultProject": "angular",
+  "cli": {
+    "analytics": "20584ca8-cd68-4308-bbf8-b4f94e86866f"
+  }
 }
