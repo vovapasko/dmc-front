@@ -33,40 +33,12 @@ import { ProjectEffects } from '@store/effects/project.effects';
 import { RequestInterceptor } from './core/interceptors/request.interceptor';
 import { ClientEffects } from '@store/effects/client.effects';
 import { PublicationEffects } from '@store/effects/publication.effects';
-//
-// import {
-//   GoogleLoginProvider,
-//   FacebookLoginProvider, AuthServiceConfig, LoginOpt
-// } from 'angularx-social-login';
-//
-// // const fbLoginOptions = {
-// //   scope: 'pages_messaging,pages_messaging_subscriptions,email,pages_show_list,manage_pages',
-// //   return_scopes: true,
-// //   enable_profile_selector: true
-// // }; // https://developers.facebook.com/docs/reference/javascript/FB.login/v2.11
-// //
-// // const googleLoginOptions: LoginOpt = {
-// //   scope: 'profile email'
-// // }; // https://developers.google.com/api-client-library/javascript/reference/referencedocs#gapiauth2clientconfig
-// //
-// // const config = new AuthServiceConfig([
-// //   {
-// //     id: GoogleLoginProvider.PROVIDER_ID,
-// //     provider: new GoogleLoginProvider(environment.googleClientId, googleLoginOptions)
-// //   },
-// //   {
-// //     id: FacebookLoginProvider.PROVIDER_ID,
-// //     provider: new FacebookLoginProvider(environment.fbAppId, fbLoginOptions)
-// //   }
-// // ]);
-// //
-// // export function provideConfig() {
-// //   return config;
-// // }
+import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
 
 @NgModule({
   declarations: [AppComponent, Error404Component, Error500Component, NotificationComponent],
   imports: [
+    SocialLoginModule,
     SharedModule,
     CoreModule,
     BrowserAnimationsModule,
@@ -87,10 +59,22 @@ import { PublicationEffects } from '@store/effects/publication.effects';
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     NotificationService,
-    // {
-    //   provide: AuthServiceConfig,
-    //   useFactory: provideConfig
-    // }
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(environment.googleClientId),
+          },
+          {
+            id: FacebookLoginProvider.PROVIDER_ID,
+            provider: new FacebookLoginProvider(environment.fbAppId),
+          },
+        ],
+      } as SocialAuthServiceConfig,
+    }
   ],
   bootstrap: [AppComponent]
 })

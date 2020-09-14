@@ -12,7 +12,8 @@ import { LoadingService } from '@services/loading.service';
 import { setAuthClasses } from '@helpers/utility';
 import { LoginPayload } from '@models/payloads/auth/login';
 import { ServerError } from '@models/responses/server/error';
-// import { FacebookLoginProvider, GoogleLoginProvider, AuthService } from 'angularx-social-login';
+import { FacebookLoginProvider, GoogleLoginProvider } from 'angularx-social-login';
+import { SocialAuthService } from 'angularx-social-login';
 
 /**
  * This component for login user in crm
@@ -34,7 +35,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   constructor(
     private formBuilder: FormBuilder,
     private authenticationService: AuthenticationService,
-    // private authService: AuthService,
+    private authService: SocialAuthService,
     private titleService: Title,
     private store: Store<IAppState>,
     private errorService: ErrorService,
@@ -99,13 +100,13 @@ export class LoginComponent implements OnInit, AfterViewInit {
     }
   }
 
-  // signInWithGoogle(): void {
-  //   this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
-  // }
-  //
-  // signInWithFB(): void {
-  //   this.authService.signIn(FacebookLoginProvider.PROVIDER_ID);
-  // }
+  signInWithGoogle(): void {
+    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
+  }
+
+  signInWithFB(): void {
+    this.authService.signIn(FacebookLoginProvider.PROVIDER_ID);
+  }
 
   /**
    * Dispatch data
