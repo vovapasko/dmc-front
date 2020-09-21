@@ -30,7 +30,7 @@ export const newsFieldsHandler = {
     const files = attachments.filter(attachment => attachment instanceof File).map((attachment, index) => `\n Файл ${index + 1} - <p>${attachment.name}</p> \n`);
     return [...links, ...files];
   },
-  image(image: string): string {
+  image(image: string | ArrayBuffer): string {
     return `<img src=${image}>`;
   },
   title(value: string): string {

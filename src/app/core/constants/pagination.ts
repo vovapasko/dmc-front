@@ -1,6 +1,5 @@
-import { Contractor } from '../models/instances/contractor';
-import { User } from '../models/instances/user.models';
-import { BehaviorSubject } from 'rxjs';
+import { Contractor } from '@models/instances/contractor';
+import { User } from '@models/instances/user.models';
 
 export const paginationPageSize = 10;
 export const paginationStartIndex = 1;

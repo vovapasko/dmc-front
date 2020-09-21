@@ -8,8 +8,13 @@ export const urls = {
   LOGIN: 'login',
   SIGNUP: 'signup',
   CONFIRM: 'confirm',
+  CONFIRM_USER: 'confirm-user',
   CHANGE_PASSWORD: 'change-password',
   CLIENTS: 'clients',
   PUBLICATIONS: 'publications',
-  CRM_LOGIN: '/account/login'
+  CRM_LOGIN: '/account/login',
+  TOKEN_REFRESH: 'token-refresh'
 };
+
+export const tokenFreeUrls = [urls.LOGIN, urls.CONFIRM_USER, urls.TOKEN_REFRESH];
+

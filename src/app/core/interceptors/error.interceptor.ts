@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { ServerError } from '@models/responses/server/error';
-import { ErrorHandler } from '../helpers/error-handler';
+import { ErrorHandler } from '@helpers/error-handler';
 
 /**
  * This interceptor for process errors from server in rxjs way
