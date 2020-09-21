@@ -29,19 +29,14 @@ export class RequestInterceptor implements HttpInterceptor {
       .pipe(
         tap((response: HttpEvent<any>) => {
           lastResponse = response;
-          if (response.type === HttpEventType.Response) {
-            // console.log('success response', response);
-          }
         }),
         catchError((err: any) => {
           error = err;
-          // console.log('error response', err);
           return throwError(err);
         }),
         finalize(() => {
           if (lastResponse.type === HttpEventType.Sent && !error) {
             // last response type was 0, and we haven't received an error
-            // console.log('aborted request');
             this.loadingScreenService.stopLoading();
             return next.handle(request.clone());
           }
