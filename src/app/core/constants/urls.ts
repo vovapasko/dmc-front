@@ -10,5 +10,6 @@ export const urls = {
   CONFIRM: 'confirm',
   CHANGE_PASSWORD: 'change-password',
   CLIENTS: 'clients',
-  PUBLICATIONS: 'publications'
+  PUBLICATIONS: 'publications',
+  CRM_LOGIN: '/account/login'
 };
