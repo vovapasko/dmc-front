@@ -138,10 +138,10 @@ export class ContractorService {
    * Collect and returns data for creating or editing contractor
    */
   public createContractorData(
-    f: { [p: string]: AbstractControl },
+    formControls: { [key: string]: AbstractControl },
     defaultFields: Array<object> = []
-  ): { [p: string]: string | number | null | object } {
-    return collectDataFromForm(f, defaultFields);
+  ): { [key: string]: string | number | null | object } {
+    return collectDataFromForm(formControls, defaultFields);
   }
 
   /**
