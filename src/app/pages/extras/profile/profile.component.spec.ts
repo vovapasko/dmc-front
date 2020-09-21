@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { ExtrasRoutingModule } from '../extras-routing.module';
 import { UIModule } from '../../../shared/ui/ui.module';
 import { NgbAlertModule, NgbProgressbarModule, NgbTabsetModule } from '@ng-bootstrap/ng-bootstrap';
-import { LightboxModule } from 'ngx-lightbox';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../../shared/shared.module';
 import { HttpClient, HttpHandler } from '@angular/common/http';
@@ -39,7 +38,6 @@ describe('ProfileComponent', () => {
         UIModule,
         NgbProgressbarModule,
         NgbTabsetModule,
-        LightboxModule,
         ReactiveFormsModule,
         NgbAlertModule,
         SharedModule,
