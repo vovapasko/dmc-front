@@ -4,5 +4,7 @@ export default {
   zero: 0,
   month: 4,
   days: 28,
-  hours: 1680
+  hours: 1680,
+  one: 1,
+  two: 2
 };

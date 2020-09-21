@@ -1,4 +1,4 @@
-import { NotificationType } from '../models/instances/notification';
+import { NotificationType } from '@models/instances/notification';
 import { Timeouts } from './timeouts';
 
 export const Warnings =  {
@@ -26,13 +26,13 @@ export const Infos = {
     type: NotificationType.info,
     title: 'Процесс начат',
     message: 'Пожалуйста дождитесь оконочания, не закрывайте вкладку',
-    timeout: 3500
+    timeout: Timeouts.notification
   },
   PROCESS_HAS_BEEN_FINISHED: {
     type: NotificationType.info,
     title: 'Процесс завершен',
     message: 'Операция завершена, обновите, пожалуйста страницу, спасибо',
-    timeout: 1500
+    timeout: Timeouts.notificationHasBeeFinished
   },
   IMAGE_HAS_BEEN_LOADED: {
     type: NotificationType.info,
