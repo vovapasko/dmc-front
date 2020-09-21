@@ -1,0 +1,1 @@
+export const errorTitle = 'Error';
