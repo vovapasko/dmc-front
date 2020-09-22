@@ -6,5 +6,6 @@ export default {
   days: 28,
   hours: 1680,
   one: 1,
-  two: 2
+  two: 2,
+  fifty: 50
 };

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -16,6 +15,8 @@ import { DeleteContractorPayload } from '@models/payloads/contractor/delete';
 import { collectDataFromForm } from '@helpers/utility';
 import { endpoints } from '@constants/endpoints';
 import { methods } from '@constants/methods';
+import { BaseService } from '@services/base.service';
+import numbers from '@constants/numbers';
 
 const api = environment.api;
 
@@ -26,18 +27,18 @@ const api = environment.api;
 @Injectable({
   providedIn: 'root'
 })
-export class ContractorService {
+export class ContractorService extends BaseService {
   selectedContractor$: BehaviorSubject<Contractor> = new BehaviorSubject(null);
   checkedContractors$: BehaviorSubject<Array<Contractor>> = new BehaviorSubject([]);
   contractors$: BehaviorSubject<Array<Contractor>> = new BehaviorSubject([]);
   paginatedContractorData$: BehaviorSubject<Array<Contractor>> = new BehaviorSubject([]);
 
   constructor(
-    private http: HttpClient,
     private requestHandler: RequestHandler,
     public formBuilder: FormBuilder,
     private paginationService: PaginationService
   ) {
+    super();
   }
 
   get selectedContractor() {
@@ -64,16 +65,12 @@ export class ContractorService {
     this.contractors$.next(value);
   }
 
-  set paginatedContractorData(value: Array<Contractor>) {
-    this.paginatedContractorData$.next(value);
-  }
-
   /**
    *  Get all users, api returns array of users
    */
   public getAll(page = 1): Observable<Contractor[]> {
     return this.requestHandler.request(
-      `${api}/${endpoints.CONTRACTOR}/?page=${page}`,
+      this.url(api, endpoints.CONTRACTOR, null, { page }),
       methods.GET,
       null,
       (response: GetAllContractorsResponse) => {
@@ -91,14 +88,19 @@ export class ContractorService {
    *  Create contractor, api returns single contractor instance
    */
   public create(payload: CreateContractorPayload): Observable<Contractor> {
-    return this.requestHandler.request(`${api}/${endpoints.CONTRACTOR}/`, methods.POST, payload, (response: CreateContractorResponse) => {
-      if (response && response.contractor) {
-        const contractors = this.contractors;
-        const contractor = response.contractor;
-        this.contractors = [...contractors, contractor];
-        return contractor;
+    return this.requestHandler.request(
+      this.url(api, endpoints.CONTRACTOR),
+      methods.POST,
+      payload,
+      (response: CreateContractorResponse) => {
+        if (response && response.contractor) {
+          const contractors = this.contractors;
+          const contractor = response.contractor;
+          this.contractors = [...contractors, contractor];
+          return contractor;
+        }
       }
-    });
+    );
   }
 
   /**
@@ -106,11 +108,13 @@ export class ContractorService {
    */
   public update(payload: UpdateContractorPayload): Observable<Contractor> {
     return this.requestHandler.request(
-      `${api}/${endpoints.CONTRACTOR}/${payload.id}`,
+      this.url(api, endpoints.CONTRACTOR, payload.id),
       methods.PUT,
       payload,
       (response: Contractor) => {
-        this.contractors = this.contractors.map((el) => (+el.id === +response.id ? response : el));
+        this.contractors = this.contractors.map(
+          (contractor: Contractor) => (+contractor.id === +response.id ? response : contractor)
+        );
         return response;
       }
     );
@@ -121,13 +125,15 @@ export class ContractorService {
    */
   public delete(payload: DeleteContractorPayload): Observable<DeleteContractorPayload> {
     return this.requestHandler.request(
-      `${api}/${endpoints.CONTRACTOR}/${payload.id}`,
+      this.url(api, endpoints.CONTRACTOR, payload.id),
       methods.DELETE,
       null,
       (response: DeleteContractorResponse) => {
         if (response) {
           const contractors = this.contractors;
-          this.contractors = contractors.filter((el) => +el.id !== +payload.id);
+          this.contractors = contractors.filter(
+            (contractor: Contractor) => +contractor.id !== +payload.id
+          );
           return payload;
         }
       }
@@ -165,7 +171,10 @@ export class ContractorService {
     const checkedContractors = this.checkedContractors;
     const checked = checkedContractors.indexOf(contractor) !== -1;
     if (checked) {
-      this.checkedContractors = checkedContractors.filter((el) => el.id !== contractor.id);
+      this.checkedContractors = checkedContractors
+        .filter(
+          (filterContractor: Contractor) => filterContractor.id !== contractor.id
+        );
     } else {
       this.checkedContractors = [...checkedContractors, contractor];
     }
@@ -176,23 +185,19 @@ export class ContractorService {
    */
   public initializeCreateContractorForm(): FormGroup {
     return this.formBuilder.group({
-      editorName: ['', [Validators.required, Validators.minLength(1)]],
-      contactPerson: ['', [Validators.required, Validators.minLength(1)]],
-      phoneNumber: ['', [Validators.required, Validators.pattern('^\\+?3?8?(0\\d{9})$')]],
-      email: [
-        '',
-        [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$')]
-        // [this.isEmailUnique.bind(this), this.isEmailValid.bind(this)]
-      ]
+      editorName: [null, [Validators.required, Validators.minLength(numbers.one)]],
+      contactPerson: [null, [Validators.required, Validators.minLength(numbers.one)]],
+      phoneNumber: [null, [Validators.required, Validators.pattern('^\\+?3?8?(0\\d{9})$')]],
+      email: [null, [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$')]]
     });
   }
 
   public initializeCreateFormatForm(): FormGroup {
     return this.formBuilder.group({
-      postFormat: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
-      newsAmount: [null, [Validators.required, Validators.minLength(1), Validators.min(0)]],
-      arrangedNews: [null, [Validators.required, Validators.minLength(1), Validators.min(0)]],
-      onePostPrice: [null, [Validators.required, Validators.minLength(1), Validators.min(0)]]
+      postFormat: [null, [Validators.required, Validators.minLength(numbers.one), Validators.maxLength(numbers.fifty)]],
+      newsAmount: [null, [Validators.required, Validators.minLength(numbers.one), Validators.min(numbers.zero)]],
+      arrangedNews: [null, [Validators.required, Validators.minLength(numbers.one), Validators.min(numbers.zero)]],
+      onePostPrice: [null, [Validators.required, Validators.minLength(numbers.one), Validators.min(numbers.zero)]]
     });
   }
 
@@ -207,10 +212,10 @@ export class ContractorService {
    */
   public initializeUpdateContractorForm(): FormGroup {
     return this.formBuilder.group({
-      editorName: ['', [Validators.required, Validators.minLength(1)]],
-      contactPerson: ['', [Validators.required, Validators.minLength(1)]],
-      phoneNumber: ['', [Validators.required, Validators.pattern('^\\+?3?8?(0\\d{9})$')]],
-      email: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$')]]
+      editorName: [null, [Validators.required, Validators.minLength(1)]],
+      contactPerson: [null, [Validators.required, Validators.minLength(1)]],
+      phoneNumber: [null, [Validators.required, Validators.pattern('^\\+?3?8?(0\\d{9})$')]],
+      email: [null, [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$')]]
     });
   }
 
@@ -222,6 +227,9 @@ export class ContractorService {
     return of(contractor);
   }
 
+  /**
+   * Handle change page
+   */
   public onPageChange(page: number): void {
     this.getAll(page);
   }
