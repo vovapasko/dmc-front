@@ -37,8 +37,7 @@ import { UpdateNewsProjectPayload } from '@models/payloads/project/news-project/
 import { breadCrumbs } from '@constants/bread-crumbs';
 import { GetClients } from '@store/actions/client.actions';
 import { selectClientList } from '@store/selectors/client.selectors';
-import { Project } from '@models/instances/project';
-import { Contractor, PostFormatListSet } from '@models/instances/contractor';
+import { Contractor } from '@models/instances/contractor';
 import { NewsWavePrice } from '@models/instances/newsWavePrice';
 import { NewsWaves } from '@models/instances/news-waves';
 
@@ -184,7 +183,7 @@ export class ProjectsComponent implements OnInit {
 
   public burstNews(news: NewsWaves): void {
     this.modalService.dismissAll();
-    this.router.navigate(['/crm/burst-news'], { queryParams: { id: news.id } });
+    this.router.navigate([urls.CRM, urls.BURST_NEWS], { queryParams: { id: news.id } });
   }
 
   public selectProject(project: NewsProject): void {

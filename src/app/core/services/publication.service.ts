@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { endpoints } from '@constants/endpoints';
 import { methods } from '@constants/methods';
 import { RequestHandler } from '@helpers/request-handler';
-import { FormBuilder } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { environment } from '../../../environments/environment';
 import { Publication } from '@models/instances/publication';
 import { CreatePublishPayload } from '@models/payloads/publication/publish/create';
@@ -169,6 +169,51 @@ export class PublicationService extends BaseService {
       payload,
       (response: Comment) => response
     );
+  }
+
+  /**
+   * Returns controls for comment
+   */
+  public initCommentControls(list: Array<Comment> = []): null | FormArray {
+    if (!list) {
+      return null;
+    }
+    const toGroups = list.map((entity: Comment) => {
+      return new FormGroup({
+        comment: new FormControl(entity.comment, Validators.required)
+      });
+    });
+    return new FormArray(toGroups);
+  }
+
+  /**
+   * Returns publication controls
+   */
+  public initPublicationControls(list: Array<Publication> = []): null | FormArray {
+    if (!list) {
+      return null;
+    }
+    const toGroups = list.map((entity: Publication) => {
+      return new FormGroup({
+        publish: new FormControl(entity.publish, Validators.required)
+      });
+    });
+    return new FormArray(toGroups);
+  }
+
+  /**
+   * Returns publication controls
+   */
+  public initPreventPublicationControls(list: Array<PublicationBlackList> = []): null | FormArray {
+    if (!list) {
+      return null;
+    }
+    const toGroups = list.map((entity: PublicationBlackList) => {
+      return new FormGroup({
+        notPublish: new FormControl(entity.notPublish, Validators.required)
+      });
+    });
+    return new FormArray(toGroups);
   }
 
   /**

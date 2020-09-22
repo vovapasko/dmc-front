@@ -8,7 +8,6 @@ import { ClientService } from '@services/client.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { IAppState } from '@store/state/app.state';
 import { select, Store } from '@ngrx/store';
-import { selectClientList } from '@store/selectors/client.selectors';
 import { CreateClient, DeleteClient, GetClients, SelectClient, UpdateClient } from '@store/actions/client.actions';
 import { CreateClientPayload } from '@models/payloads/client/create';
 import { breadCrumbs } from '@constants/bread-crumbs';
@@ -18,7 +17,6 @@ import { GetEmails } from '@store/actions/project.actions';
 import { GetProjectConfiguration } from '@store/actions/news.actions';
 import { UpdateClientPayload } from '@models/payloads/client/update';
 import { Client } from '@models/instances/client';
-import { SelectContractor } from '@store/actions/contractor.actions';
 import { setValues } from '@helpers/utility';
 
 @Component({

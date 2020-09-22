@@ -143,7 +143,7 @@
     </div>
     <div class="modal-body p-3">
         <div class="text-left">
-            <form (ngSubmit)="addNotPublication()" [formGroup]="preventPublicationForm">
+            <form (ngSubmit)="addPublicationBlackList()" [formGroup]="publicationBlackListForm">
 
                 <div *ngFor="let publication of publicationsBlackList$ | async;let i = index" class="form-group row mb-3">
                     <div class="col-md-11">
@@ -156,7 +156,7 @@
 
                     </div>
                     <div class="col-md-1 card-widgets">
-                        <a (click)="onDeleteNotPublication(publication)"
+                        <a (click)="onDeletePublicationBlackList(publication)"
                            href="javascript:void(0);">
                             <i class="mdi mdi-close"></i>
                         </a>
@@ -174,7 +174,7 @@
                     </div>
                 </div>
 
-                <a (click)="addNotPublication()"
+                <a (click)="addPublicationBlackList()"
                    href="javascript: void(0);" style="margin-bottom: 10px">
                     <i class="mdi mdi-plus-circle"></i>
                     Добавить
@@ -206,7 +206,7 @@
     </div>
     <div class="modal-body p-3">
         <div class="text-left">
-            <form (ngSubmit)="addNote()" [formGroup]="notesForm">
+            <form (ngSubmit)="addComment()" [formGroup]="commentForm">
 
                 <div *ngFor="let note of comments$ | async;let i = index" class="form-group row mb-3">
                     <div class="col-md-11">
@@ -219,7 +219,7 @@
 
                     </div>
                     <div class="col-md-1 card-widgets">
-                        <a (click)="onDeleteNote(note)"
+                        <a (click)="onDeleteComment(note)"
                            href="javascript:void(0);">
                             <i class="mdi mdi-close"></i>
                         </a>
@@ -237,7 +237,7 @@
                     </div>
                 </div>
 
-                <a (click)="addNote()"
+                <a (click)="addComment()"
                    href="javascript: void(0);" style="margin-bottom: 10px">
                     <i class="mdi mdi-plus-circle"></i>
                     Добавить

@@ -1,19 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Orders } from './orders.model';
-
-import { ordersData } from './data';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Publication } from '@models/instances/publication';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Note } from '@models/instances/note';
 import { GetContractors, SelectContractor } from '@store/actions/contractor.actions';
 import { Store } from '@ngrx/store';
 import { IAppState } from '@store/state/app.state';
 import { selectContractorList, selectSelectedContractor } from '@store/selectors/contractor.selectors';
 import { BehaviorSubject } from 'rxjs';
 import { Contractor } from '@models/instances/contractor';
-import { setValues } from '@helpers/utility';
 import { Comment } from '@models/instances/comment';
 import { PublicationBlackList } from '@models/instances/publication-black-list';
 import { News } from '@models/instances/news';
@@ -41,9 +36,10 @@ import {
 import { DeletePublishPayload } from '@models/payloads/publication/publish/delete';
 import { DeletePublicationBlackListPayload } from '@models/payloads/publication/notPublish/delete';
 import { DeleteCommentPayload } from '@models/payloads/publication/comment/delete';
-import { CreateNewsProjectPayload } from '@models/payloads/project/news-project/create';
 import { selectCommentList, selectPublicationBlackList, selectPublicationList } from '@store/selectors/publication.selectors';
 import { breadCrumbs } from '@constants/bread-crumbs';
+import { publicationActionTypes } from '@constants/actions';
+import { PublicationService } from '@services/publication.service';
 
 @Component({
   selector: 'app-orders',
@@ -59,7 +55,6 @@ export class PublicationsComponent implements OnInit {
   // bread crumb items
   breadCrumbItems: Array<{}>;
   term: any;
-  ordersData: Orders[];
   // page number
   page = 1;
   // default page size
@@ -72,20 +67,15 @@ export class PublicationsComponent implements OnInit {
   comments$ = this.store.select(selectCommentList);
 
 
-  preventPublicationForm: FormGroup;
-  notesForm: FormGroup;
+  publicationBlackListForm: FormGroup;
+  commentForm: FormGroup;
   publicationForm: FormGroup;
 
   publicationControls: FormArray;
-  preventPublicationControls: FormArray;
-  notesControls: FormArray;
+  publicationBlackListControls: FormArray;
+  commentControls: FormArray;
 
-  publicationList = [];
-  preventPublicationList = [];
-  notesList = [];
-
-
-  actionTypes = { publication: 'publication', preventPublication: 'preventPublication', note: 'note' };
+  actionTypes = publicationActionTypes;
   selectedContractor: Contractor;
   selectedContractor$: BehaviorSubject<Contractor> = new BehaviorSubject(null);
   contractors$ = this.store.select(selectContractorList);
@@ -98,7 +88,8 @@ export class PublicationsComponent implements OnInit {
     private modalService: NgbModal,
     private store: Store<IAppState>,
     private contractorService: ContractorService,
-    public formBuilder: FormBuilder
+    public formBuilder: FormBuilder,
+    private publicationService: PublicationService
   ) {
   }
 
@@ -109,6 +100,9 @@ export class PublicationsComponent implements OnInit {
     this.initForms();
   }
 
+  /**
+   * Dispatch add publication
+   */
   public addPublication(): void {
     if (this.publicationForm.invalid) {
       return;
@@ -119,6 +113,9 @@ export class PublicationsComponent implements OnInit {
     this.publicationForm.controls.publish.setValue(null);
   }
 
+  /**
+   * Dispatch loading publications
+   */
   public loadPublications(contractor: Contractor): void {
     const payload = { contractor: contractor.id };
     this.store.select(selectSelectedContractor).subscribe(this.handleSelectContractor.bind(this));
@@ -127,6 +124,9 @@ export class PublicationsComponent implements OnInit {
     this.store.dispatch(new SelectContractor(contractor));
   }
 
+  /**
+   * Dispatch loading publications black list
+   */
   public loadPublicationBlackList(contractor: Contractor): void {
     const payload = { contractor: contractor.id };
     this.store.select(selectSelectedContractor).subscribe(this.handleSelectContractor.bind(this));
@@ -135,70 +135,93 @@ export class PublicationsComponent implements OnInit {
     this.store.dispatch(new SelectContractor(contractor));
   }
 
+  /**
+   * Dispatch loading comments
+   */
   public loadComments(contractor: Contractor): void {
     const payload = { contractor: contractor.id };
     this.store.select(selectSelectedContractor).subscribe(this.handleSelectContractor.bind(this));
-    this.store.select(selectCommentList).subscribe(this.initNotesControls.bind(this));
+    this.store.select(selectCommentList).subscribe(this.initCommentControls.bind(this));
     this.store.dispatch(new GetComments(payload));
     this.store.dispatch(new SelectContractor(contractor));
   }
 
-  public addNotPublication(): void {
-    if (this.preventPublicationForm.invalid) {
+  /**
+   * Dispatch add new publication
+   */
+  public addPublicationBlackList(): void {
+    if (this.publicationBlackListForm.invalid) {
       return;
     }
-    const data = { notPublish: this.preventPublicationForm.controls.notPublish.value, contractor: this.selectedContractor.id };
+    const data = { notPublish: this.publicationBlackListForm.controls.notPublish.value, contractor: this.selectedContractor.id };
     const payload = { data } as unknown as CreatePublicationBlackListPayload;
     this.preventPublish(payload);
-    this.preventPublicationForm.controls.notPublish.setValue(null);
+    this.publicationBlackListForm.controls.notPublish.setValue(null);
   }
 
-  public addNote(): void {
-    if (this.notesForm.invalid) {
+  /**
+   * Dispatch add comment
+   */
+  public addComment(): void {
+    if (this.commentForm.invalid) {
       return;
     }
-    const data = { comment: this.notesForm.controls.comment.value, contractor: this.selectedContractor.id };
+    const data = { comment: this.commentForm.controls.comment.value, contractor: this.selectedContractor.id };
     const payload = { data } as unknown as CreateCommentPayload;
-    this.note(payload);
-    this.notesForm.controls.comment.setValue(null);
+    this.comment(payload);
+    this.commentForm.controls.comment.setValue(null);
   }
 
+  /**
+   * Init forms
+   */
   public initForms(): void {
     this.initPublicationForm();
-    this.initPreventPublicationForm();
-    this.initNoteForm();
+    this.initPublicationBlackListForm();
+    this.initCommentForm();
   }
 
+  /**
+   * Init publication form
+   */
   public initPublicationForm(): void {
     this.publicationForm = this.formBuilder.group({
       publish: [null, [Validators.required]]
     });
   }
 
-  public initPreventPublicationForm(): void {
-    this.preventPublicationForm = this.formBuilder.group({
+  /**
+   * Init publication blacklist controls
+   */
+  public initPublicationBlackListForm(): void {
+    this.publicationBlackListForm = this.formBuilder.group({
       notPublish: [null, [Validators.required]]
     });
   }
 
-  public initNoteForm(): void {
-    this.notesForm = this.formBuilder.group({
+  /**
+   * Init comment form
+   */
+  public initCommentForm(): void {
+    this.commentForm = this.formBuilder.group({
       comment: [null, [Validators.required]]
     });
   }
 
+  /**
+   * Set publication controls
+   */
   public initPublicationControls(list: Array<Publication> = []): void {
-    if (!list) {
+    const controls = this.publicationService.initPublicationControls(list);
+    if (!controls) {
       return;
     }
-    const toGroups = list.map((entity: Publication) => {
-      return new FormGroup({
-        publish: new FormControl(entity.publish, Validators.required)
-      });
-    });
-    this.publicationControls = new FormArray(toGroups);
+    this.publicationControls = controls;
   }
 
+  /**
+   * Handle selecting contractor
+   */
   public handleSelectContractor(contractor: Contractor): void {
     if (!contractor) {
       return;
@@ -206,16 +229,16 @@ export class PublicationsComponent implements OnInit {
     this.selectedContractor = contractor;
   }
 
-  public initNotesControls(list: Array<Comment> = []): void {
-    if (!list) {
+
+  /**
+   * Set controls for publication black list form
+   */
+  public initCommentControls(list: Array<Comment> = []): void {
+    const controls = this.publicationService.initCommentControls(list);
+    if (!controls) {
       return;
     }
-    const toGroups = list.map((entity: Comment) => {
-      return new FormGroup({
-        comment: new FormControl(entity.comment, Validators.required)
-      });
-    });
-    this.notesControls = new FormArray(toGroups);
+    this.commentControls = controls;
   }
 
 
@@ -227,16 +250,15 @@ export class PublicationsComponent implements OnInit {
     this.modalService.open(content, { centered: true });
   }
 
+  /**
+   * Set controls for publication black list form
+   */
   public initPreventPublicationControls(list: Array<PublicationBlackList> = []): void {
-    if (!list) {
+    const controls = this.publicationService.initPreventPublicationControls(list);
+    if (!controls) {
       return;
     }
-    const toGroups = list.map((entity: PublicationBlackList) => {
-      return new FormGroup({
-        notPublish: new FormControl(entity.notPublish, Validators.required)
-      });
-    });
-    this.preventPublicationControls = new FormArray(toGroups);
+    this.publicationBlackListControls = controls;
   }
 
   /**
@@ -248,42 +270,68 @@ export class PublicationsComponent implements OnInit {
     if (this.endIndex > this.totalRecords) {
       this.endIndex = this.totalRecords;
     }
-    this.ordersData = ordersData.slice(this.startIndex - 1, this.endIndex - 1);
   }
 
+  /**
+   * Dispatch publish
+   */
   public publish(payload: CreatePublishPayload): void {
     this.store.dispatch(new CreatePublication(payload));
   }
 
+  /**
+   * Dispatch publish black list
+   */
   public preventPublish(payload: CreatePublicationBlackListPayload): void {
     this.store.dispatch(new CreateNotPublication(payload));
   }
 
-  public note(payload: CreateCommentPayload): void {
+  /**
+   * Dispatch comment
+   */
+  public comment(payload: CreateCommentPayload): void {
     this.store.dispatch(new CreateComment(payload));
   }
 
+  /**
+   * Dispatch delete publish
+   */
   public deletePublish(payload: DeletePublishPayload): void {
     this.store.dispatch(new DeletePublication(payload));
   }
 
-  public deletePreventPublish(payload: DeletePublicationBlackListPayload): void {
+  /**
+   * Dispatch delete publication black list
+   */
+  public deletePublicationBlackList(payload: DeletePublicationBlackListPayload): void {
     this.store.dispatch(new DeleteNotPublication(payload));
   }
 
-  public deleteNote(payload: DeleteCommentPayload): void {
+  /**
+   * Dispatch delete comment
+   */
+  public deleteComment(payload: DeleteCommentPayload): void {
     this.store.dispatch(new DeleteComment(payload));
   }
 
+  /**
+   * Dispatch update publication
+   */
   public updatePublish(payload: UpdatePublishPayload): void {
     this.store.dispatch(new UpdatePublication(payload));
   }
 
-  public updatePreventPublish(payload: UpdatePublicationBlackListPayload): void {
+  /**
+   * Dispatch update publication black list
+   */
+  public updatePublicationBlackList(payload: UpdatePublicationBlackListPayload): void {
     this.store.dispatch(new UpdateNotPublication(payload));
   }
 
-  public updateNote(payload: UpdateCommentPayload): void {
+  /**
+   * Dispatch update comment
+   */
+  public updateComment(payload: UpdateCommentPayload): void {
     this.store.dispatch(new UpdateComment(payload));
   }
 
@@ -298,10 +346,10 @@ export class PublicationsComponent implements OnInit {
         controls = this.publicationControls;
         break;
       case actions.preventPublication:
-        controls = this.preventPublicationControls;
+        controls = this.publicationBlackListControls;
         break;
       case actions.note:
-        controls = this.notesControls;
+        controls = this.commentControls;
     }
     if (field && controls) {
       return controls.at(index).get(field) as FormControl;
@@ -309,18 +357,30 @@ export class PublicationsComponent implements OnInit {
     return null;
   }
 
+  /**
+   * Handle delete publication
+   */
   public onDeletePublication(publication: Publication): void {
     this.deletePublish({ id: publication.id });
   }
 
-  public onDeleteNotPublication(publication: PublicationBlackList): void {
-    this.deletePreventPublish({ id: publication.id });
+  /**
+   * Dispatch delete publication black list
+   */
+  public onDeletePublicationBlackList(publication: PublicationBlackList): void {
+    this.deletePublicationBlackList({ id: publication.id });
   }
 
-  public onDeleteNote(comment: Comment): void {
-    this.deleteNote({ id: comment.id });
+  /**
+   * fetches the orders value
+   */
+  public onDeleteComment(comment: Comment): void {
+    this.deleteComment({ id: comment.id });
   }
 
+  /**
+   * Update field (publication, comment, publication blacklist)
+   */
   public updateField(index: number, field: string, type: string, publication: Publication | PublicationBlackList | Comment): News[] {
     const control = this.getControl(index, field, type);
     const actions = this.actionTypes;
@@ -333,11 +393,11 @@ export class PublicationsComponent implements OnInit {
           break;
         case actions.preventPublication:
           payload = { id: publication.id, data: { notPublish: control.value } };
-          this.updatePreventPublish(payload);
+          this.updatePublicationBlackList(payload);
           break;
         case actions.note:
           payload = { id: publication.id, data: { comment: control.value } };
-          this.updateNote(payload);
+          this.updateComment(payload);
       }
     }
     return null;
@@ -348,8 +408,6 @@ export class PublicationsComponent implements OnInit {
    * fetches the orders value
    */
   private _fetchData() {
-    this.ordersData = ordersData;
-    this.totalRecords = ordersData.length;
     this.selectedContractor$ = this.contractorService.selectedContractor$;
     this.store.dispatch(new GetContractors());
   }
