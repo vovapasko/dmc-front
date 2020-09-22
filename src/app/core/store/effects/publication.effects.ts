@@ -33,9 +33,9 @@ import { CreatePublishPayload } from '@models/payloads/publication/publish/creat
 import { UpdatePublishPayload } from '@models/payloads/publication/publish/update';
 import { DeletePublishPayload } from '@models/payloads/publication/publish/delete';
 import { PublicationBlackList } from '@models/instances/publication-black-list';
-import { CreateNotPublishPayload } from '@models/payloads/publication/notPublish/create';
-import { UpdateNotPublishPayload } from '@models/payloads/publication/notPublish/update';
-import { DeleteNotPublishPayload } from '@models/payloads/publication/notPublish/delete';
+import { CreatePublicationBlackListPayload } from '@models/payloads/publication/notPublish/create';
+import { UpdatePublicationBlackListPayload } from '@models/payloads/publication/notPublish/update';
+import { DeletePublicationBlackListPayload } from '@models/payloads/publication/notPublish/delete';
 import { CreateCommentPayload } from '@models/payloads/publication/comment/create';
 import { UpdateCommentPayload } from '@models/payloads/publication/comment/update';
 import { DeleteCommentPayload } from '@models/payloads/publication/comment/delete';
@@ -89,22 +89,22 @@ export class PublicationEffects {
   @Effect()
   createNotPublication = this.actions$.pipe(
     ofType<CreateNotPublication>(EPublicationActions.CreateNotPublication),
-    switchMap((action: { payload: CreateNotPublishPayload }) => this.publicationService.createPublicationBlackList(action.payload)),
+    switchMap((action: { payload: CreatePublicationBlackListPayload }) => this.publicationService.createPublicationBlackList(action.payload)),
     switchMap((publication: PublicationBlackList) => of(new CreateNotPublicationSuccess(publication)))
   );
 
   @Effect()
   updateNotPublication$ = this.actions$.pipe(
     ofType<UpdateNotPublication>(EPublicationActions.UpdateNotPublication),
-    switchMap((action: { payload: UpdateNotPublishPayload }) => this.publicationService.updatePublicationBlackList(action.payload)),
+    switchMap((action: { payload: UpdatePublicationBlackListPayload }) => this.publicationService.updatePublicationBlackList(action.payload)),
     switchMap((publication: PublicationBlackList) => of(new UpdateNotPublicationSuccess(publication)))
   );
 
   @Effect()
   deleteNotPublication$ = this.actions$.pipe(
     ofType<DeleteNotPublication>(EPublicationActions.DeleteNotPublication),
-    switchMap((action: { payload: DeleteNotPublishPayload }) => this.publicationService.deletePublicationBlackList(action.payload)),
-    switchMap((payload: DeleteNotPublishPayload) => of(new DeleteNotPublicationSuccess(payload)))
+    switchMap((action: { payload: DeletePublicationBlackListPayload }) => this.publicationService.deletePublicationBlackList(action.payload)),
+    switchMap((payload: DeletePublicationBlackListPayload) => of(new DeleteNotPublicationSuccess(payload)))
   );
 
 

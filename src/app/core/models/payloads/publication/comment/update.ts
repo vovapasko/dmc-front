@@ -1,5 +1,5 @@
 export interface UpdateCommentPayload {
-  id: string;
+  id: number;
   data: {
     comment: string;
     contractor?: number;

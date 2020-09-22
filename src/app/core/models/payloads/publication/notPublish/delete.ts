@@ -1,3 +1,3 @@
-export interface DeleteNotPublishPayload {
+export interface DeletePublicationBlackListPayload {
   id: number;
 }

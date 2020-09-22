@@ -19,10 +19,10 @@ import { PublicationBlackList } from '@models/instances/publication-black-list';
 import { News } from '@models/instances/news';
 import { ContractorService } from '@services/contractor.service';
 import { CreatePublishPayload } from '@models/payloads/publication/publish/create';
-import { CreateNotPublishPayload } from '@models/payloads/publication/notPublish/create';
+import { CreatePublicationBlackListPayload } from '@models/payloads/publication/notPublish/create';
 import { CreateCommentPayload } from '@models/payloads/publication/comment/create';
 import { UpdatePublishPayload } from '@models/payloads/publication/publish/update';
-import { UpdateNotPublishPayload } from '@models/payloads/publication/notPublish/update';
+import { UpdatePublicationBlackListPayload } from '@models/payloads/publication/notPublish/update';
 import { UpdateCommentPayload } from '@models/payloads/publication/comment/update';
 import {
   CreateComment,
@@ -39,7 +39,7 @@ import {
   UpdatePublication
 } from '@store/actions/publication.action';
 import { DeletePublishPayload } from '@models/payloads/publication/publish/delete';
-import { DeleteNotPublishPayload } from '@models/payloads/publication/notPublish/delete';
+import { DeletePublicationBlackListPayload } from '@models/payloads/publication/notPublish/delete';
 import { DeleteCommentPayload } from '@models/payloads/publication/comment/delete';
 import { CreateNewsProjectPayload } from '@models/payloads/project/news-project/create';
 import { selectCommentList, selectPublicationBlackList, selectPublicationList } from '@store/selectors/publication.selectors';
@@ -148,7 +148,7 @@ export class PublicationsComponent implements OnInit {
       return;
     }
     const data = { notPublish: this.preventPublicationForm.controls.notPublish.value, contractor: this.selectedContractor.id };
-    const payload = { data } as unknown as CreateNotPublishPayload;
+    const payload = { data } as unknown as CreatePublicationBlackListPayload;
     this.preventPublish(payload);
     this.preventPublicationForm.controls.notPublish.setValue(null);
   }
@@ -255,7 +255,7 @@ export class PublicationsComponent implements OnInit {
     this.store.dispatch(new CreatePublication(payload));
   }
 
-  public preventPublish(payload: CreateNotPublishPayload): void {
+  public preventPublish(payload: CreatePublicationBlackListPayload): void {
     this.store.dispatch(new CreateNotPublication(payload));
   }
 
@@ -267,7 +267,7 @@ export class PublicationsComponent implements OnInit {
     this.store.dispatch(new DeletePublication(payload));
   }
 
-  public deletePreventPublish(payload: DeleteNotPublishPayload): void {
+  public deletePreventPublish(payload: DeletePublicationBlackListPayload): void {
     this.store.dispatch(new DeleteNotPublication(payload));
   }
 
@@ -279,7 +279,7 @@ export class PublicationsComponent implements OnInit {
     this.store.dispatch(new UpdatePublication(payload));
   }
 
-  public updatePreventPublish(payload: UpdateNotPublishPayload): void {
+  public updatePreventPublish(payload: UpdatePublicationBlackListPayload): void {
     this.store.dispatch(new UpdateNotPublication(payload));
   }
 

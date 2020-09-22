@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { endpoints } from '@constants/endpoints';
 import { methods } from '@constants/methods';
-import { HttpClient } from '@angular/common/http';
 import { RequestHandler } from '@helpers/request-handler';
 import { FormBuilder } from '@angular/forms';
 import { environment } from '../../../environments/environment';
@@ -10,9 +9,9 @@ import { CreatePublishPayload } from '@models/payloads/publication/publish/creat
 import { UpdatePublishPayload } from '@models/payloads/publication/publish/update';
 import { DeletePublishPayload } from '@models/payloads/publication/publish/delete';
 import { PublicationBlackList } from '@models/instances/publication-black-list';
-import { CreateNotPublishPayload } from '@models/payloads/publication/notPublish/create';
-import { UpdateNotPublishPayload } from '@models/payloads/publication/notPublish/update';
-import { DeleteNotPublishPayload } from '@models/payloads/publication/notPublish/delete';
+import { CreatePublicationBlackListPayload } from '@models/payloads/publication/notPublish/create';
+import { UpdatePublicationBlackListPayload } from '@models/payloads/publication/notPublish/update';
+import { DeletePublicationBlackListPayload } from '@models/payloads/publication/notPublish/delete';
 import { UpdateCommentPayload } from '@models/payloads/publication/comment/update';
 import { DeleteCommentPayload } from '@models/payloads/publication/comment/delete';
 import { CreateCommentPayload } from '@models/payloads/publication/comment/create';
@@ -20,130 +19,167 @@ import { Comment } from '@models/instances/comment';
 import { GetPublicationPayload } from '@models/payloads/publication/publish/get';
 import { GetPublicationBlackListPayload } from '@models/payloads/publication/notPublish/get';
 import { GetCommentPayload } from '@models/payloads/publication/comment/get';
+import { BaseService } from '@services/base.service';
 
 const api = environment.api;
+
+/**
+ * This service for handle actions with publications, CRUD
+ */
 
 @Injectable({
   providedIn: 'root'
 })
-export class PublicationService {
+export class PublicationService extends BaseService {
 
   constructor(
-    private http: HttpClient,
     private requestHandler: RequestHandler,
     public formBuilder: FormBuilder
   ) {
+    super();
   }
 
+  /**
+   * Get all publications
+   */
   public getPublications(payload: GetPublicationPayload) {
     return this.requestHandler.request(
-      `${api}/${endpoints.PUBLICATIONS}/?contractor=${payload.contractor}`,
+      this.url(api, endpoints.PUBLICATIONS, null, { contractor: payload.contractor }),
       methods.GET,
       null,
-      (response: {results: Publication[]}) => response.results
+      (response: { results: Publication[] }) => response.results
     );
   }
 
+  /**
+   * Create publication
+   */
   public createPublication(payload: CreatePublishPayload) {
     return this.requestHandler.request(
-      `${api}/${endpoints.PUBLICATIONS}/`,
+      this.url(api, endpoints.PUBLICATIONS),
       methods.POST,
       payload,
       (response: Publication) => response
     );
   }
 
+  /**
+   * Update publication
+   */
   public updatePublication(payload: UpdatePublishPayload) {
     return this.requestHandler.request(
-      `${api}/${endpoints.PUBLICATIONS}/${payload.id}`,
+      this.url(api, endpoints.PUBLICATIONS, payload.id),
       methods.PUT,
       payload,
       (response: Publication) => response
     );
   }
 
+  /**
+   * Delete publication
+   */
   public deletePublication(payload: DeletePublishPayload) {
     return this.requestHandler.request(
-      `${api}/${endpoints.PUBLICATIONS}/${payload.id}`,
+      this.url(api, endpoints.PUBLICATIONS, payload.id),
       methods.DELETE,
       null,
       (response: null) => payload
     );
   }
 
-
+  /**
+   * Get publication black list
+   */
   public getPublicationsBlackList(payload: GetPublicationBlackListPayload) {
     return this.requestHandler.request(
-      `${api}/${endpoints.PUBLICATIONS_BLACKLIST}/?contractor=${payload.contractor}`,
+      this.url(api, endpoints.PUBLICATIONS_BLACKLIST, null, { contractor: payload.contractor }),
       methods.GET,
       null,
-      (response: {results: PublicationBlackList[]}) => response.results
+      (response: { results: PublicationBlackList[] }) => response.results
     );
   }
 
-  public createPublicationBlackList(payload: CreateNotPublishPayload) {
+  /**
+   * Create publication black list
+   */
+  public createPublicationBlackList(payload: CreatePublicationBlackListPayload) {
     return this.requestHandler.request(
-      `${api}/${endpoints.PUBLICATIONS_BLACKLIST}/`,
+      this.url(api, endpoints.PUBLICATIONS_BLACKLIST),
       methods.POST,
       payload,
       (response: PublicationBlackList) => response
     );
   }
 
-  public updatePublicationBlackList(payload: UpdateNotPublishPayload) {
+  /**
+   * Update publication black list
+   */
+  public updatePublicationBlackList(payload: UpdatePublicationBlackListPayload) {
     return this.requestHandler.request(
-      `${api}/${endpoints.PUBLICATIONS_BLACKLIST}/${payload.id}`,
+      this.url(api, endpoints.PUBLICATIONS_BLACKLIST, payload.id),
       methods.PUT,
       payload,
       (response: PublicationBlackList) => response
     );
   }
 
-  public deletePublicationBlackList(payload: DeleteNotPublishPayload) {
+  /**
+   * Delete publication black list
+   */
+  public deletePublicationBlackList(payload: DeletePublicationBlackListPayload) {
     return this.requestHandler.request(
-      `${api}/${endpoints.PUBLICATIONS_BLACKLIST}/${payload.id}`,
+      this.url(api, endpoints.PUBLICATIONS_BLACKLIST, payload.id),
       methods.DELETE,
       null,
       (response: null) => payload
     );
   }
 
-
+  /**
+   * Get all comments
+   */
   public getComments(payload: GetCommentPayload) {
     return this.requestHandler.request(
-      `${api}/${endpoints.COMMENTS}/?contractor=${payload.contractor}`,
+      this.url(api, endpoints.COMMENTS, null, { contractor: payload.contractor }),
       methods.GET,
       null,
-      (response: {results: Comment[]}) => response.results
+      (response: { results: Comment[] }) => response.results
     );
   }
 
+  /**
+   * Create comment
+   */
   public createComment(payload: CreateCommentPayload) {
     return this.requestHandler.request(
-      `${api}/${endpoints.COMMENTS}/`,
+      this.url(api, endpoints.COMMENTS),
       methods.POST,
       payload,
       (response: Comment) => response
     );
   }
 
+  /**
+   * Update comment
+   */
   public updateComment(payload: UpdateCommentPayload) {
     return this.requestHandler.request(
-      `${api}/${endpoints.COMMENTS}/${payload.id}`,
+      this.url(api, endpoints.COMMENTS, payload.id),
       methods.PUT,
       payload,
       (response: Comment) => response
     );
   }
 
+  /**
+   * Delete comment
+   */
   public deleteComment(payload: DeleteCommentPayload) {
     return this.requestHandler.request(
-      `${api}/${endpoints.COMMENTS}/${payload.id}`,
+      this.url(api, endpoints.COMMENTS, payload.id),
       methods.DELETE,
       null,
       (response: null) => payload
     );
   }
-
-
 }

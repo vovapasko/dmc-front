@@ -1,5 +1,5 @@
 export interface UpdatePublishPayload {
-  id: string;
+  id: number;
   data: {
     publish: string;
     contractor?: number;
