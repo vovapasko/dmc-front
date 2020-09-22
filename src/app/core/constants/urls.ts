@@ -13,7 +13,8 @@ export const urls = {
   CLIENTS: 'clients',
   PUBLICATIONS: 'publications',
   CRM_LOGIN: '/account/login',
-  TOKEN_REFRESH: 'token-refresh'
+  TOKEN_REFRESH: 'token-refresh',
+  ROOT: '/'
 };
 
 export const tokenFreeUrls = [urls.LOGIN, urls.CONFIRM_USER, urls.TOKEN_REFRESH];

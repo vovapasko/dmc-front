@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, tap } from 'rxjs/operators';
@@ -16,6 +15,10 @@ import { UserService } from './user.service';
 import { CURRENT_USER } from '@constants/user';
 import { methods } from '@constants/methods';
 import { endpoints } from '@constants/endpoints';
+import { BaseService } from '@services/base.service';
+import { errorMessages, errors } from '@constants/error';
+import numbers from '@constants/numbers';
+import { urls } from '@constants/urls';
 
 const api = environment.api;
 
@@ -24,9 +27,9 @@ const api = environment.api;
  */
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
-export class AuthenticationService {
+export class AuthenticationService extends BaseService {
   public static readonly REFRESH_TOKEN_NAME = TokenTypes.refresh;
   public static readonly ACCESS_TOKEN_NAME = TokenTypes.access;
 
@@ -34,14 +37,14 @@ export class AuthenticationService {
   returnUrl: string;
 
   constructor(
-    private http: HttpClient,
     private cookieService: CookieService,
     private requestHandler: RequestHandler,
     private userService: UserService,
     private route: ActivatedRoute,
     private router: Router
   ) {
-    this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/';
+    super();
+    this.returnUrl = this.route.snapshot.queryParams.returnUrl || urls.ROOT;
   }
 
   /**
@@ -63,19 +66,23 @@ export class AuthenticationService {
     if (currentUser && currentUser.token) {
       currentUser.token[type] = value;
     }
-    this.cookieService.setCookie(CURRENT_USER, JSON.stringify(currentUser), 1);
+    this.cookieService.setCookie(CURRENT_USER, JSON.stringify(currentUser), numbers.one);
   }
 
   /**
    * Performs the auth
    */
   public login(payload: LoginPayload): Observable<User> {
-    return this.requestHandler.request(`${api}/${endpoints.LOGIN}/`, methods.POST, payload, (response: LoginResponse) => {
-      const currentUser = { ...response.user, token: response.token };
-      this.userService.user = currentUser;
-      this.router.navigate([this.returnUrl]);
-      return currentUser;
-    });
+    return this.requestHandler.request(
+      this.url(api, endpoints.LOGIN),
+      methods.POST,
+      payload,
+      (response: LoginResponse) => {
+        const currentUser = { ...response.user, token: response.token };
+        this.userService.user = currentUser;
+        this.router.navigate([this.returnUrl]);
+        return currentUser;
+      });
   }
 
   /**
@@ -92,12 +99,17 @@ export class AuthenticationService {
    */
   public requestAccessToken(): Observable<Token> {
     const refreshToken = this.getToken(AuthenticationService.REFRESH_TOKEN_NAME);
-    return this.http.post(`${api}/${endpoints.TOKEN_REFRESH}/`, { refresh: refreshToken }).pipe(
-      tap((response: RequestAccessTokenResponse) =>
-        this.setToken(AuthenticationService.ACCESS_TOKEN_NAME, response.access)
-      ),
-      catchError(this.unauthorised.bind(this))
-    );
+    return this.requestHandler.request(
+      this.url(api, endpoints.TOKEN_REFRESH),
+      { refresh: refreshToken },
+      null
+    )
+      .pipe(
+        tap((response: RequestAccessTokenResponse) =>
+          this.setToken(AuthenticationService.ACCESS_TOKEN_NAME, response.access)
+        ),
+        catchError(this.unauthorised.bind(this))
+      );
   }
 
   /**
@@ -107,6 +119,7 @@ export class AuthenticationService {
     // auto logout if 401 response returned from api
     this.logout();
     location.reload();
-    return throwError({ status: 401, error: { message: 'Unauthorised' } });
+    const error = { status: errors.UNAUTHORIZED, error: { message: errorMessages.UNAUTHORIZED } };
+    return throwError(error);
   }
 }
