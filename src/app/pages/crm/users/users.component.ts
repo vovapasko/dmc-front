@@ -23,6 +23,7 @@ import {
 import { Title } from '@angular/platform-browser';
 import { selectUserList } from '@store/selectors/user.selectors';
 import { breadCrumbs } from '@constants/bread-crumbs';
+import { emailTitle, usersTitle } from '@constants/titles';
 
 /**
  * Users component - handling the users with sidebar and content
@@ -35,7 +36,7 @@ import { breadCrumbs } from '@constants/bread-crumbs';
 })
 export class UsersComponent implements OnInit {
 
-  title = 'Пользователи';
+  title = usersTitle;
   breadCrumbItems: Array<{}>;
   manage = false;
   loading$: Subject<boolean>;
@@ -149,7 +150,7 @@ export class UsersComponent implements OnInit {
     if (!this.validationform || (this.validationform && this.validationform.invalid) || !this.selectedRole) {
       return;
     }
-    const email = this.validationform.get('email').value as string;
+    const email = this.validationform.get(emailTitle).value as string;
     const group = (this.selectedRole as unknown) as Groups;
     const data = { email, group };
     this.register({ data });

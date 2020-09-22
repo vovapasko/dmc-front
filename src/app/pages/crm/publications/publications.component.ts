@@ -40,6 +40,8 @@ import { selectCommentList, selectPublicationBlackList, selectPublicationList } 
 import { breadCrumbs } from '@constants/bread-crumbs';
 import { publicationActionTypes } from '@constants/actions';
 import { PublicationService } from '@services/publication.service';
+import { Title } from '@angular/platform-browser';
+import { publicationTitle } from '@constants/titles';
 
 @Component({
   selector: 'app-orders',
@@ -53,6 +55,7 @@ import { PublicationService } from '@services/publication.service';
 export class PublicationsComponent implements OnInit {
 
   // bread crumb items
+  title = publicationTitle;
   breadCrumbItems: Array<{}>;
   term: any;
   // page number
@@ -89,7 +92,8 @@ export class PublicationsComponent implements OnInit {
     private store: Store<IAppState>,
     private contractorService: ContractorService,
     public formBuilder: FormBuilder,
-    private publicationService: PublicationService
+    private publicationService: PublicationService,
+    private titleService: Title
   ) {
   }
 
@@ -98,6 +102,14 @@ export class PublicationsComponent implements OnInit {
     this.breadCrumbItems = breadCrumbs.publications;
     this._fetchData();
     this.initForms();
+    this.setTitle(this.title);
+  }
+
+  /**
+   * Set page title
+   */
+  public setTitle(title: string): void {
+    this.titleService.setTitle(title);
   }
 
   /**

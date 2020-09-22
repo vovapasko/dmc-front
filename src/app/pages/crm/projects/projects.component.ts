@@ -40,6 +40,7 @@ import { selectClientList } from '@store/selectors/client.selectors';
 import { Contractor } from '@models/instances/contractor';
 import { NewsWavePrice } from '@models/instances/newsWavePrice';
 import { NewsWaves } from '@models/instances/news-waves';
+import { projectsTitle } from '@constants/titles';
 
 @Component({
   selector: 'app-projects',
@@ -53,7 +54,7 @@ import { NewsWaves } from '@models/instances/news-waves';
 export class ProjectsComponent implements OnInit {
 
   // bread crumb items
-  title = 'Проекты';
+  title = projectsTitle;
   breadCrumbItems: Array<{}>;
   loading$: Subject<boolean>;
   error$: Subject<ServerError>;
