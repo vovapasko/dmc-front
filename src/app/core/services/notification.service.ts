@@ -47,15 +47,17 @@ export class NotificationService {
     this.trackTime(notification);
   }
 
+  /**
+   * Add notification
+   */
   public registerNotification(notification: Notification): void {
-    const notifications = this.notifications;
-    const history = this.history;
-    notifications.push(notification);
-    history.push(notification);
-    this.history = history;
-    this.notifications = notifications;
+    this.notifications.push(notification);
+    this.history.push(notification);
   }
 
+  /**
+   * Tracking timer
+   */
   public trackTime(notification: Notification) {
     if (notification.timeout !== 0) {
       return setTimeout(() => this.close(notification), notification.timeout);
@@ -66,8 +68,7 @@ export class NotificationService {
    * Remove notification from history bar
    */
   public removeFromHistory(notification): void {
-    const history = this.history;
-    this.history = history.filter((el) => el.id !== notification.id);
+    this.history = this.history.filter((el) => el.id !== notification.id);
   }
 
   /**
