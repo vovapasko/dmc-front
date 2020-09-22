@@ -82,7 +82,8 @@ export class AuthenticationService extends BaseService {
         this.userService.user = currentUser;
         this.router.navigate([this.returnUrl]);
         return currentUser;
-      });
+      }
+    );
   }
 
   /**

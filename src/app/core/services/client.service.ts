@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { RequestHandler } from '@helpers/request-handler';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject, Observable, of } from 'rxjs';
@@ -10,22 +9,23 @@ import { environment } from '../../../environments/environment';
 import { CreateClientPayload } from '@models/payloads/client/create';
 import { UpdateClientPayload } from '@models/payloads/client/update';
 import { DeleteClientPayload } from '@models/payloads/client/delete';
+import { BaseService } from '@services/base.service';
 
 const api = environment.api;
 
 @Injectable({
   providedIn: 'root'
 })
-export class ClientService {
+export class ClientService extends BaseService {
 
   clients$: BehaviorSubject<Array<Client>> = new BehaviorSubject([]);
   selectedClient$: BehaviorSubject<Client> = new BehaviorSubject(null);
 
   constructor(
-    private http: HttpClient,
     private requestHandler: RequestHandler,
     public formBuilder: FormBuilder
   ) {
+    super();
   }
 
   get clients() {
@@ -44,11 +44,18 @@ export class ClientService {
     this.selectedClient$.next(value);
   }
 
+  /**
+   *  Select client for update, editing etc
+   *  returns observable
+   */
   public selectClient(client: Client): Observable<Client> {
     this.selectedClient = client;
     return of(client);
   }
 
+  /**
+   *  Returns form group for client form
+   */
   public initializeCreateClientForm(): FormGroup {
     return this.formBuilder.group({
       price: [null, [Validators.required]],
@@ -60,6 +67,9 @@ export class ClientService {
     });
   }
 
+  /**
+   *  Returns form group for update client form
+   */
   public initializeUpdateClientForm(): FormGroup {
     return this.formBuilder.group({
       price: [null, [Validators.required]],
@@ -75,7 +85,8 @@ export class ClientService {
    *  Get all clients, api returns array of clients
    */
   public getAll(): Observable<Client[]> {
-    return this.requestHandler.request(`${api}/${endpoints.CLIENT}/`,
+    return this.requestHandler.request(
+      this.url(api, endpoints.CLIENT),
       methods.GET,
       null,
       (response: { results: Array<Client> }) => {
@@ -90,7 +101,8 @@ export class ClientService {
    *  Create clients
    */
   public create(payload: CreateClientPayload): Observable<Client> {
-    return this.requestHandler.request(`${api}/${endpoints.CLIENT}/`,
+    return this.requestHandler.request(
+      this.url(api, endpoints.CLIENT),
       methods.POST,
       payload,
       (response: Client) => {
@@ -104,7 +116,8 @@ export class ClientService {
    *  Update clients
    */
   public update(payload: UpdateClientPayload): Observable<Client> {
-    return this.requestHandler.request(`${api}/${endpoints.CLIENT}/${payload.id}`,
+    return this.requestHandler.request(
+      this.url(api, endpoints.CLIENT, payload.id),
       methods.PUT,
       payload,
       (response: Client) => {
@@ -118,7 +131,8 @@ export class ClientService {
    *  Delete clients
    */
   public delete(payload: DeleteClientPayload): Observable<null> {
-    return this.requestHandler.request(`${api}/${endpoints.CLIENT}/${payload.id}`,
+    return this.requestHandler.request(
+      this.url(api, endpoints.CLIENT, payload.id),
       methods.DELETE,
       null,
       (response: null) => {
