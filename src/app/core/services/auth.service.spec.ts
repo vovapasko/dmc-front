@@ -75,16 +75,4 @@ describe('AuthenticationService', () => {
       expect(service.user).toBeFalsy();
     });
   });
-
-  describe('#requestToken', () => {
-    it('should return an Observable', () => {
-      service.requestAccessToken().subscribe((token) => {
-        expect(token).toBeTruthy();
-      });
-
-      const req = httpMock.expectOne(`${api}/token-refresh/`);
-      expect(req.request.method).toBe('POST');
-      req.flush({ token: 'token' });
-    });
-  });
 });
