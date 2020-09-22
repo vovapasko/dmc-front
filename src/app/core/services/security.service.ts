@@ -6,6 +6,9 @@ export class SecurityService {
   constructor(private sanitizer: DomSanitizer) {
   }
 
+  /**
+   * Sanitize html
+   */
   getSafeHtml(html: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(html);
   }

@@ -8,7 +8,7 @@ export class BaseService {
   constructor() {
   }
 
-  public url(api: string, endpoint: string, id: number = null, params: object = {}): string {
+  public url(api: string, endpoint: string, id: number | string = null, params: object = {}): string {
     let url = `${api}/${endpoint}/`;
     const keys = params && Object.keys(params);
     if (Number.isInteger(id)) {
