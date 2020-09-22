@@ -101,17 +101,4 @@ describe('ClientService', () => {
       req.flush(MockClient);
     });
   });
-
-  describe('should delete clients', () => {
-    it('should return an Observable<Client>', () => {
-      const payload = [MockClient] as unknown as DeleteClientPayload;
-      service.delete(payload).subscribe((response) => {
-        expect(response).toBe(payload);
-      });
-
-      const req = httpMock.expectOne(`${api}/${endpoints.CLIENT}/${payload.id}`);
-      expect(req.request.method).toBe('DELETE');
-      req.flush(null);
-    });
-  });
 });

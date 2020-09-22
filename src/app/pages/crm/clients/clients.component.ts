@@ -8,7 +8,6 @@ import { ClientService } from '@services/client.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { IAppState } from '@store/state/app.state';
 import { select, Store } from '@ngrx/store';
-import { selectClientList } from '@store/selectors/client.selectors';
 import { CreateClient, DeleteClient, GetClients, SelectClient, UpdateClient } from '@store/actions/client.actions';
 import { CreateClientPayload } from '@models/payloads/client/create';
 import { breadCrumbs } from '@constants/bread-crumbs';
@@ -18,8 +17,9 @@ import { GetEmails } from '@store/actions/project.actions';
 import { GetProjectConfiguration } from '@store/actions/news.actions';
 import { UpdateClientPayload } from '@models/payloads/client/update';
 import { Client } from '@models/instances/client';
-import { SelectContractor } from '@store/actions/contractor.actions';
 import { setValues } from '@helpers/utility';
+import { clientsTitle } from '@constants/titles';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-client',
@@ -27,6 +27,7 @@ import { setValues } from '@helpers/utility';
   styleUrls: ['./clients.component.scss']
 })
 export class ClientsComponent implements OnInit {
+  title = clientsTitle;
   breadCrumbItems: Array<{}>;
   submitted = false;
   cardData: CardData[];
@@ -43,7 +44,8 @@ export class ClientsComponent implements OnInit {
     public service: TicketService,
     private clientService: ClientService,
     private modalService: NgbModal,
-    private store: Store<IAppState>
+    private store: Store<IAppState>,
+    private titleService: Title
   ) {
     this.service.records$ = this.clientService.clients$;
     this.tickets$ = service.tickets$;
@@ -53,7 +55,15 @@ export class ClientsComponent implements OnInit {
   ngOnInit() {
     this.breadCrumbItems = breadCrumbs.clients;
     this.initForms();
+    this.setTitle(this.title);
     this._fetchData();
+  }
+
+  /**
+   * Set page title
+   */
+  public setTitle(title: string): void {
+    this.titleService.setTitle(title);
   }
 
   /**

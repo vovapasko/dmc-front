@@ -4,6 +4,9 @@ import { AuthenticationService } from '@services/auth.service';
 import { Observable, BehaviorSubject, Subject, throwError } from 'rxjs';
 import { switchMap, take, filter, catchError } from 'rxjs/operators';
 import { Token } from '@models/instances/token.model';
+import numbers from '@constants/numbers';
+import { errors } from '@constants/error';
+import { tokenFreeUrls } from '@constants/urls';
 
 /**
  * This interceptor for inject JWT to every, almost, request and refresh token if its needed
@@ -25,7 +28,7 @@ export class JwtInterceptor implements HttpInterceptor {
       catchError(
         // @ts-ignore
         (error) => {
-          if (error.status === 401) {
+          if (error.status === errors.UNAUTHORIZED) {
             return this.refreshToken(request, next);
           } else {
             return throwError(error);
@@ -44,7 +47,7 @@ export class JwtInterceptor implements HttpInterceptor {
     } else {
       return this.processHandlingRequest(request, next);
     }
-  };
+  }
 
   /**
    *   set isRefreshing variable to true and populate null
@@ -69,7 +72,7 @@ export class JwtInterceptor implements HttpInterceptor {
   private processHandlingRequest(request, next) {
     return this.refreshTokenSubject.pipe(
       filter((token) => token != null),
-      take(1),
+      take(numbers.one),
       switchMap((res) => {
         return next.handle(this.injectToken(request));
       })
@@ -80,7 +83,6 @@ export class JwtInterceptor implements HttpInterceptor {
    *   Some endpoints dont require token
    */
   belongToTokenFreeUrls(url) {
-    const tokenFreeUrls = ['login', 'confirm-user', 'token-refresh'];
     return !!tokenFreeUrls.filter((el) => url.indexOf(el) !== -1).length;
   }
 

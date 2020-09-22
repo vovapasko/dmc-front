@@ -75,18 +75,6 @@ describe('UserService', () => {
     });
   });
 
-  describe('#signup', () => {
-    it('should return an Observable<User>', () => {
-      service.signup(mockSignUp).subscribe((user) => {
-        expect(user).toBeTruthy();
-      });
-
-      const req = httpMock.expectOne(`${api}/confirm-user/${mockSignUp.invite}`);
-      expect(req.request.method).toBe('POST');
-      req.flush({ user: mockUser, token: 'token' });
-    });
-  });
-
   describe('#register', () => {
     it('should return an Observable<User>', () => {
       service.register(mockRegister).subscribe((user) => {
@@ -131,18 +119,6 @@ describe('UserService', () => {
 
       const req = httpMock.expectOne(`${api}/change-password-confirm/`);
       expect(req.request.method).toBe('GET');
-      req.flush({ success: true });
-    });
-  });
-
-  describe('#confirmResetPassword', () => {
-    it('should return an Observable<User>', () => {
-      service.confirmResetPassword(mockConfirmResetPassword).subscribe((response) => {
-        expect(response).toBeTruthy();
-      });
-
-      const req = httpMock.expectOne(`${api}/change-pass/${mockConfirmResetPassword.confirm}`);
-      expect(req.request.method).toBe('POST');
       req.flush({ success: true });
     });
   });

@@ -1,9 +1,9 @@
-import { Component, ContentChild, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ContentChild, ElementRef, EventEmitter, Input, OnInit, Output, TemplateRef } from '@angular/core';
 import { ViewModeDirective } from '@shared/directives/view-mode.directive';
 import { EditModeDirective } from '@shared/directives/edit-mode.directive';
 import { fromEvent, Subject } from 'rxjs';
 import { filter, switchMapTo, take } from 'rxjs/operators';
-import { ContractorService } from '@services/contractor.service';
+import { EditableMode } from '@components/editable/editable.model';
 
 @Component({
   selector: 'editable',
@@ -21,22 +21,22 @@ export class EditableComponent implements OnInit {
   editMode = new Subject();
   editMode$ = this.editMode.asObservable();
 
-  mode: 'view' | 'edit' = 'view';
+  mode = EditableMode.view;
 
-  constructor(
-    private host: ElementRef,
-    private contractorService: ContractorService
-  ) {
+  constructor(private host: ElementRef) {
   }
 
-  get currentView() {
+  /**
+   * Returns html template
+   */
+  get currentView(): TemplateRef<any> {
     return this.mode === 'edit' || (this.editing && this.checked) ?
       this.editModeTpl.tpl
       :
       this.viewModeTpl.tpl;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.viewModeHandler();
     this.editModeHandler();
   }
@@ -45,16 +45,22 @@ export class EditableComponent implements OnInit {
     return this.host.nativeElement;
   }
 
-  private viewModeHandler() {
+  /**
+   * Handle view mode
+   */
+  private viewModeHandler(): void {
     fromEvent(this.element, 'click')
       .subscribe(() => {
         this.edit.next(true);
-        this.mode = 'edit';
+        this.mode = EditableMode.edit;
         this.editMode.next(true);
       });
   }
 
-  private editModeHandler() {
+  /**
+   * Handle edit mode
+   */
+  private editModeHandler(): void {
     const clickOutside$ = fromEvent(document, 'dblclick')
       .pipe(
         filter(({ target }) => this.element.contains(target) === false), take(1)
@@ -65,12 +71,15 @@ export class EditableComponent implements OnInit {
       .subscribe((event) => {
         this.edit.next();
         this.update.next();
-        this.mode = 'view';
+        this.mode = EditableMode.view;
       });
   }
 
-  toViewMode() {
+  /**
+   * Switch to view mode
+   */
+  public toViewMode(): void {
     this.update.next();
-    this.mode = 'view';
+    this.mode = EditableMode.view;
   }
 }

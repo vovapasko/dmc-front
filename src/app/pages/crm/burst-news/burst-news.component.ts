@@ -54,7 +54,6 @@ import { getColorByPercentage } from '@helpers/utility';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Contractor, PostFormatListSet } from '@models/instances/contractor';
 import { NewsWavePrice } from '@models/instances/newsWavePrice';
-import { Format } from '@models/instances/format';
 
 /**
  * Form Burst news component - handling the burst news with sidebar and content

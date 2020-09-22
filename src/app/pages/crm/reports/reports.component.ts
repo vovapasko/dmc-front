@@ -11,6 +11,7 @@ import { GetNewsProjects } from '@store/actions/project.actions';
 import { selectProjectsList } from '@store/selectors/project.selectors';
 import { NewsProject } from '@models/instances/news-project';
 import { breadCrumbs } from '@constants/bread-crumbs';
+import { reportsTitle } from '@constants/titles';
 
 @Component({
   selector: 'app-reports',
@@ -20,7 +21,7 @@ import { breadCrumbs } from '@constants/bread-crumbs';
 export class ReportsComponent implements OnInit {
 
   // bread crumb items
-  title = 'Отчёты';
+  title = reportsTitle;
   breadCrumbItems: Array<{}>;
   projects$ = this.store.pipe(select(selectProjectsList));
   loading$: Subject<boolean>;

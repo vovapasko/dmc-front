@@ -20,7 +20,7 @@ import { Project } from '@models/instances/project';
 import { News } from '@models/instances/news';
 import { Hashtag } from '@models/instances/hashtag';
 import { Format } from '@models/instances/format';
-import { setProjectValues } from '../helpers/utility';
+import { setProjectValues } from '@helpers/utility';
 import { Infos, Warnings } from '@constants/notifications';
 import { endpoints } from '@constants/endpoints';
 import { methods } from '@constants/methods';
@@ -49,8 +49,9 @@ import { UserService } from './user.service';
 import { UploadNewsFilePayload } from '@models/payloads/news/news-waves/upload-file';
 import { DeleteNewsFilePayload } from '@models/payloads/news/news-waves/delete-file';
 import { newsFieldsHandler } from '@constants/news';
-import { Email } from '@models/instances/email';
 import { NewsWavePrice } from '@models/instances/newsWavePrice';
+import { BaseService } from '@services/base.service';
+import { budgetMessage } from '@constants/messages';
 
 const api = environment.api;
 
@@ -59,15 +60,15 @@ const api = environment.api;
  */
 
 @Injectable({ providedIn: 'root' })
-export class NewsService {
+export class NewsService extends BaseService {
   constructor(
-    private http: HttpClient,
     private requestHandler: RequestHandler,
     public formBuilder: FormBuilder,
     private notificationService: NotificationService,
     private securityService: SecurityService,
     private userService: UserService
   ) {
+    super();
   }
 
   /**
@@ -80,7 +81,7 @@ export class NewsService {
    */
   public getProjectConfiguration(): Observable<GetAllResponse> {
     return this.requestHandler.request(
-      `${api}/${endpoints.BURST_NEWS}/`,
+      this.url(api, endpoints.BURST_NEWS),
       methods.GET,
       null,
       (response: GetAllResponse) => response);
@@ -100,7 +101,7 @@ export class NewsService {
    */
   public createProject(payload: CreateProjectPayload): Observable<Project> {
     return this.requestHandler.request(
-      `${api}/${endpoints.MANAGE_NEWS_PROJECTS}/`,
+      this.url(api, endpoints.MANAGE_NEWS_PROJECTS),
       methods.POST,
       payload,
       (response: CreateProjectResponse) => response.project
@@ -121,7 +122,7 @@ export class NewsService {
    */
   public getProject(payload: Project): Observable<Project> {
     return this.requestHandler.request(
-      `${api}/${endpoints.MANAGE_NEWS_PROJECTS}/${payload.id}`,
+      this.url(api, endpoints.MANAGE_NEWS_PROJECTS, payload.id),
       methods.GET,
       null,
       (response: GetProjectResponse) => response.project
@@ -134,7 +135,7 @@ export class NewsService {
    */
   public getProjects(): Observable<Project[]> {
     return this.requestHandler.request(
-      `${api}/${endpoints.NEWS_PROJECTS}/`,
+      this.url(api, endpoints.NEWS_PROJECTS),
       methods.GET,
       null,
       (response: GetProjectsResponse) => response ? response.projects : []
@@ -148,7 +149,7 @@ export class NewsService {
    */
   public updateProject(payload: UpdateProjectPayload): Observable<Project> {
     return this.requestHandler.request(
-      `${api}/${endpoints.MANAGE_NEWS_PROJECTS}/${payload.id}`,
+      this.url(api, endpoints.MANAGE_NEWS_PROJECTS, payload.id),
       methods.PUT,
       payload,
       (response: CreateProjectResponse) => response
@@ -160,7 +161,7 @@ export class NewsService {
    */
   public getAllPostFormats(): Observable<PostFormatListSet[]> {
     return this.requestHandler.request(
-      `${api}/${endpoints.POST_FORMATS}/`,
+      this.url(api, endpoints.POST_FORMATS),
       methods.GET,
       null,
       (response: GetAllFormatsResponse) => response.results
@@ -173,7 +174,7 @@ export class NewsService {
    */
   public getPostFormats(payload: GetPostFormatPayload): Observable<PostFormatListSet[]> {
     return this.requestHandler.request(
-      `${api}/${endpoints.POST_FORMATS}/${payload.id}`,
+      this.url(api, endpoints.POST_FORMATS, payload.id),
       methods.GET,
       null,
       (response: GetFormatsResponse) => response.results
@@ -191,7 +192,7 @@ export class NewsService {
    */
   public createPostFormat(payload: CreatePostFormatPayload) {
     return this.requestHandler.request(
-      `${api}/${endpoints.POST_FORMATS}/`,
+      this.url(api, endpoints.POST_FORMATS),
       methods.POST,
       payload,
       (response: CreatePostFormatResponse) => response
@@ -209,7 +210,7 @@ export class NewsService {
    */
   public updatePostFormat(payload: UpdatePostFormatPayload) {
     return this.requestHandler.request(
-      `${api}/${endpoints.POST_FORMATS}/${payload.id}`,
+      this.url(api, endpoints.POST_FORMATS, payload.id),
       methods.PUT,
       payload,
       (response: UpdatePostFormatResponse) => response
@@ -222,7 +223,7 @@ export class NewsService {
    */
   public deletePostFormat(payload: DeletePostFormatPayload) {
     return this.requestHandler.request(
-      `${api}/${endpoints.POST_FORMATS}/${payload.id}`,
+      this.url(api, endpoints.POST_FORMATS, payload.id),
       methods.DELETE,
       null,
       (response: DeletePostFormatResponse) => response
@@ -236,7 +237,7 @@ export class NewsService {
    */
   public createHashtag(payload: CreateHashtagPayload): Observable<Hashtag> {
     return this.requestHandler.request(
-      `${api}/${endpoints.HASHTAGS}/`,
+      this.url(api, endpoints.HASHTAGS),
       methods.POST,
       payload,
       (response: CreateHashtagResponse) => response.hashtag
@@ -250,7 +251,7 @@ export class NewsService {
    */
   public createFormat(payload: CreatePostsFormatPayload): Observable<Format> {
     return this.requestHandler.request(
-      `${api}/${endpoints.POST_FORMAT}/`,
+      this.url(api, endpoints.POST_FORMAT),
       methods.POST,
       payload,
       (response: CreatePostsFormatResponse) => response.postMethod
@@ -264,7 +265,7 @@ export class NewsService {
    */
   public getAllNewsWaves(): Observable<any> {
     return this.requestHandler.request(
-      `${api}/${endpoints.NEWS_WAVES}/`,
+      this.url(api, endpoints.NEWS_WAVES),
       methods.GET,
       null,
       (response: GetAllNewsWavesResponse) => response.results
@@ -278,10 +279,10 @@ export class NewsService {
    */
   public getNewsWave(payload: GetNewsWavesPayload): Observable<NewsWaves> {
     return this.requestHandler.request(
-      `${api}/${endpoints.NEWS_WAVES}/?wave=${payload.id}`,
+      this.url(api, endpoints.NEWS_WAVES, null, { wave: payload.id }),
       methods.GET,
       payload,
-      (response: GetNewsWavesResponse) => response.results[0]
+      (response: GetNewsWavesResponse) => response.results[numbers.zero]
     );
   }
 
@@ -291,7 +292,7 @@ export class NewsService {
    */
   public createNewsWave(payload: CreateNewsWavesPayload): Observable<any> {
     return this.requestHandler.request(
-      `${api}/${endpoints.NEWS_WAVES}/`,
+      this.url(api, endpoints.NEWS_WAVES),
       methods.POST,
       payload,
       (response: NewsWaves) => this.handleFilesUpload(response, payload)
@@ -386,7 +387,7 @@ export class NewsService {
    */
   public updateNewsWave(payload: UpdateNewsWavesPayload): Observable<any> {
     return this.requestHandler.request(
-      `${api}/${endpoints.NEWS_WAVES}/${payload.id}`,
+      this.url(api, endpoints.NEWS_WAVES, payload.id),
       methods.PUT,
       payload,
       (response: NewsWaves) => this.handleFilesUpload(response, payload)
@@ -399,7 +400,7 @@ export class NewsService {
    */
   public deleteNewsWave(payload: DeleteNewsWavesPayload): Observable<DeleteNewsWavesPayload> {
     return this.requestHandler.request(
-      `${api}/${endpoints.NEWS_WAVES}/${payload.id}`,
+      this.url(api, endpoints.NEWS_WAVES, payload.id),
       methods.DELETE,
       null,
       (response: null) => payload
@@ -411,7 +412,7 @@ export class NewsService {
    */
   public uploadNewsFile(payload: UploadNewsFilePayload): Observable<null> {
     return this.requestHandler.request(
-      `${api}/${endpoints.NEWS_FILE_UPLOAD}/`,
+      this.url(api, endpoints.NEWS_FILE_UPLOAD),
       methods.PUT,
       payload,
       (response: null) => payload
@@ -423,7 +424,7 @@ export class NewsService {
    */
   public uploadFormationFile(payload: UploadNewsFilePayload): Observable<null> {
     return this.requestHandler.request(
-      `${api}/${endpoints.FORMATION_FILE_UPLOAD}/`,
+      this.url(api, endpoints.FORMATION_FILE_UPLOAD),
       methods.PUT,
       payload,
       (response: null) => payload
@@ -435,7 +436,7 @@ export class NewsService {
    */
   public deleteNewsFile(payload: DeleteNewsFilePayload): Observable<null> {
     return this.requestHandler.request(
-      `${api}/${endpoints.NEWS_FILE_UPLOAD}/${payload.id}`,
+      this.url(api, endpoints.NEWS_FILE_UPLOAD, payload.id),
       methods.DELETE,
       payload,
       (response: null) => payload
@@ -447,7 +448,7 @@ export class NewsService {
    */
   public deleteFormationFile(payload: DeleteNewsFilePayload): Observable<null> {
     return this.requestHandler.request(
-      `${api}/${endpoints.FORMATION_FILE_UPLOAD}/${payload.id}`,
+      this.url(api, endpoints.FORMATION_FILE_UPLOAD, payload.id),
       methods.DELETE,
       payload,
       (response: null) => payload
@@ -459,7 +460,7 @@ export class NewsService {
    */
   public initializeCreateHashtagForm(): FormGroup {
     return this.formBuilder.group({
-      name: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(20)]]
+      name: [null, [Validators.required, Validators.minLength(numbers.one), Validators.maxLength(numbers.twenty)]]
     });
   }
 
@@ -468,7 +469,7 @@ export class NewsService {
    */
   public initializeCreateFormatForm(): FormGroup {
     return this.formBuilder.group({
-      postFormat: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(20)]]
+      postFormat: [null, [Validators.required, Validators.minLength(numbers.one), Validators.maxLength(numbers.twenty)]]
     });
   }
 
@@ -505,7 +506,7 @@ export class NewsService {
    */
   public initializePreviewForm(): FormGroup {
     return this.formBuilder.group({
-      previewText: ['', Validators.required],
+      previewText: [null, Validators.required],
       previewEmail: [null, Validators.required],
       agreed: [null, Validators.required]
     });
@@ -576,7 +577,7 @@ export class NewsService {
   public budgetValidate(left: number): { [key: string]: boolean } | null {
     if (left < 0) {
       const { type, title, timeout } = Warnings.NO_LEFT;
-      const message = `Вы превысили бюджет на ${left * -1}`;
+      const message = budgetMessage(left * -1);
       this.notificationService.notify(type, title, message, timeout);
       return { budget: true };
     }

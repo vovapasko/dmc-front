@@ -33,6 +33,7 @@ import { CreatePostFormatPayload } from '@models/payloads/news/format/create-pos
 import { selectFormatsList } from '@store/selectors/news.selectors';
 import { DeletePostFormatPayload } from '@models/payloads/news/format/delete-post-format';
 import { breadCrumbs } from '@constants/bread-crumbs';
+import { contractorsTitle } from '@constants/titles';
 
 
 /**
@@ -46,7 +47,7 @@ import { breadCrumbs } from '@constants/bread-crumbs';
 })
 export class ContractorsComponent implements OnInit {
 
-  title = 'Контрагенты';
+  title = contractorsTitle;
   loading$: Subject<boolean>;
   error$: Subject<ServerError>;
 

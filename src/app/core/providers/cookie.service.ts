@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import numbers from '@constants/numbers';
+import { calculateExperience } from '@constants/formula';
 
 @Injectable({
   providedIn: 'root',
@@ -15,15 +17,15 @@ export class CookieService {
       return null;
     }
     const nameEQ = name + '=';
-    const ca = document.cookie.split(';');
+    const cookies = document.cookie.split(';');
     // tslint:disable-next-line: prefer-for-of
-    for (let i = 0; i < ca.length; i++) {
-      let c = ca[i];
-      while (c.charAt(0) === ' ') {
-        c = c.substring(1, c.length);
+    for (let i = numbers.zero; i < cookies.length; i++) {
+      let cookie = cookies[i];
+      while (cookie.charAt(numbers.zero) === ' ') {
+        cookie = cookie.substring(1, cookie.length);
       }
-      if (c.indexOf(nameEQ) === 0) {
-        return c.substring(nameEQ.length, c.length);
+      if (cookie.indexOf(nameEQ) === numbers.zero) {
+        return cookie.substring(nameEQ.length, cookie.length);
       }
     }
     return null;
@@ -48,7 +50,7 @@ export class CookieService {
     let expires = '';
     if (days) {
       const date = new Date();
-      date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+      date.setTime(date.getTime() + calculateExperience(days));
       expires = '; expires=' + date.toUTCString();
     }
     document.cookie = name + '=' + value + expires + '; path=/';
