@@ -429,10 +429,17 @@ Contains reuseable directives for html tags with additional logic
 - tickets-sortable
 	> provide sort by column asc dsc
 - view-mode
+	> returns view mode template
+
+#### Pipes
+Contains reuseable pipes for processing complex logic in html
+
+- contractors-arrangment
+	> returns arrangment 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTU1NjEwNzk5NiwtNTMzNTU4Mjk1LC0yMD
-A5NzY1MTExLDExMTAyMTM0NTAsMjI5MjMyODgxLC0xMTY1Njgw
-MTE3LC0xMDc1NTExNzIxLC0xODc0NDY0NjEzLC0yNTI0MTYyOC
-wtMTYzOTA2ODY0NV19
+eyJoaXN0b3J5IjpbLTEyNzI5NDg5NDcsLTUzMzU1ODI5NSwtMj
+AwOTc2NTExMSwxMTEwMjEzNDUwLDIyOTIzMjg4MSwtMTE2NTY4
+MDExNywtMTA3NTUxMTcyMSwtMTg3NDQ2NDYxMywtMjUyNDE2Mj
+gsLTE2MzkwNjg2NDVdfQ==
 -->
