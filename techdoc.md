@@ -191,10 +191,10 @@ export const endpoints = {
 ```
 
 ### Guards
-Auth guards provide security for routes, redirect to login page. Its like guard you know, you cannot to go inside application if you have not logged in
-
+Auth guards provide security for routes, redirect to login page. Its like  a guard you know, you cannot go inside application if you have not logged in.
+canActivate method checks user and returns boolean, i
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNjU2MzE1NzM4LDIyOTIzMjg4MSwtMTE2NT
+eyJoaXN0b3J5IjpbMzU0NDQ2NTgxLDIyOTIzMjg4MSwtMTE2NT
 Y4MDExNywtMTA3NTUxMTcyMSwtMTg3NDQ2NDYxMywtMjUyNDE2
 MjgsLTE2MzkwNjg2NDVdfQ==
 -->
