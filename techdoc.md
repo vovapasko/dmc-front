@@ -95,7 +95,9 @@ But this file is needed for **Heroku** which does not implement hosting single `
 	> Was generated automaticly by npm
 - README.md
 	> simple how to use
- 
+- tsconfig.json
+	> This file provides ```paths``` for ease import like that ```import smth from '@pages/...'``` 
+
 
 ## Export a file
 
@@ -216,6 +218,6 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTExNzk0MTI4MzMsLTEwNzU1MTE3MjEsLT
-E4NzQ0NjQ2MTMsLTI1MjQxNjI4LC0xNjM5MDY4NjQ1XX0=
+eyJoaXN0b3J5IjpbNzk0Njk5MTksLTEwNzU1MTE3MjEsLTE4Nz
+Q0NjQ2MTMsLTI1MjQxNjI4LC0xNjM5MDY4NjQ1XX0=
 -->
