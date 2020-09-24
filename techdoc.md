@@ -153,15 +153,48 @@ Its reuseable piece of combined ts, html, css etc.
 
 ### Constants
 Export something constant values such as numbers, strings and other primitive types. 
-Examples :
-colors.ts
- ```export const red = '#B80F0A';```
-endpoints.ts
-```````
 
+colors.ts
+
+ ```export const red = '#B80F0A';```
+
+endpoints.ts
+```
+export const endpoints = {  
+  LOGIN: 'login',  
+  TOKEN_REFRESH: 'token-refresh',  
+  CONTRACTOR: 'contractors',  
+  MANAGE_NEWS_PROJECTS: 'manage-news-projects',  
+  BURST_NEWS: 'burst-news',  
+  NEWS_PROJECTS: 'news-projects',  
+  HASHTAGS: 'hashtags',  
+  POST_FORMAT: 'post-format',  
+  USERS: 'users',  
+  CONFIRM_USER: 'confirm-user',  
+  INVITE_NEW_USER: 'invite-new-user',  
+  CHANGE_GROUP: 'change-group',  
+  CHANGE_PASSWORD_CONFIRM: 'change-password-confirm',  
+  CHANGE_PASS: 'change-pass',  
+  PROFILE: 'profile',  
+  POST_FORMATS: 'postformats',  
+  PROJECTS: 'projects',  
+  EMAILS: 'news-emails',  
+  NEWSPROJECTS: 'newsprojects',  
+  NEWS_WAVES: 'news-waves',  
+  NEWS_FILE_UPLOAD: 'news-fileupload',  
+  FORMATION_FILE_UPLOAD: 'wave-formation-fileupload',  
+  CLIENT: 'clients',  
+  PUBLICATIONS: 'publications',  
+  PUBLICATIONS_BLACKLIST: 'publications-blacklist',  
+  COMMENTS: 'comments'  
+};
+```
+
+### Guards
+Auth guards provid
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE1MjkyMDA5NTQsMjI5MjMyODgxLC0xMT
-Y1NjgwMTE3LC0xMDc1NTExNzIxLC0xODc0NDY0NjEzLC0yNTI0
-MTYyOCwtMTYzOTA2ODY0NV19
+eyJoaXN0b3J5IjpbMTYyNDc5ODgwMiwyMjkyMzI4ODEsLTExNj
+U2ODAxMTcsLTEwNzU1MTE3MjEsLTE4NzQ0NjQ2MTMsLTI1MjQx
+NjI4LC0xNjM5MDY4NjQ1XX0=
 -->
