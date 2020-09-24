@@ -217,11 +217,14 @@ Interceptor its a middleware class, processing some logic between requests and r
 	> catch error from server and handle it
 - jwt-interceptor
 	> inject token, update token via refresh token
-- loading-interc
+- loading-interceptor
+	> start and stop loading, notify loading service
+- request-interceptor
+	> 
 	
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTM0NDc0ODc3MiwyMjkyMzI4ODEsLTExNj
+eyJoaXN0b3J5IjpbMjA4Mzk5NjcyOSwyMjkyMzI4ODEsLTExNj
 U2ODAxMTcsLTEwNzU1MTE3MjEsLTE4NzQ0NjQ2MTMsLTI1MjQx
 NjI4LC0xNjM5MDY4NjQ1XX0=
 -->
