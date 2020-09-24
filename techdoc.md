@@ -377,10 +377,10 @@ This module contain confirm, login, password reset, signup pages:
 This module contain burst-news, clients, contractors, projects, publications, reports, users pages
 
 - burst-news
-	> This component do a lot of work. Here we can create news wave which include 
+	> This component do a lot of work. Here we can create news wave which include news. News contain title, contractors and content. Project 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTg4MzkyMDE1OSwtNTMzNTU4Mjk1LC0yMD
+eyJoaXN0b3J5IjpbLTY1MTA2MjI3MiwtNTMzNTU4Mjk1LC0yMD
 A5NzY1MTExLDExMTAyMTM0NTAsMjI5MjMyODgxLC0xMTY1Njgw
 MTE3LC0xMDc1NTExNzIxLC0xODc0NDY0NjEzLC0yNTI0MTYyOC
 wtMTYzOTA2ODY0NV19
