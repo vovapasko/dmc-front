@@ -79,7 +79,8 @@ But this file is needed for **Heroku** which does not implement hosting single `
 
 ## Other
 
-You can delete the current file by clicking the **Remove** button in the file explorer. The file will be moved into the **Trash** folder and automatically deleted after 7 days of inactivity.
+- .browserslistrc
+	> You can read comments to know what he does 
 
 ## Export a file
 
@@ -200,6 +201,6 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTI5OTQxOTQ4NiwtMTA3NTUxMTcyMSwtMT
+eyJoaXN0b3J5IjpbMTk3MzQ0MDE0NywtMTA3NTUxMTcyMSwtMT
 g3NDQ2NDYxMywtMjUyNDE2MjgsLTE2MzkwNjg2NDVdfQ==
 -->
