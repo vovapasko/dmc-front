@@ -293,6 +293,11 @@ Controllers for application, react to components changing, sending api calls.
 	> paginate data, universal class, provide pageSize, currentPage etc
 - project.service
 	> News project CRUD, with initialize forms for project and email
+- publication.service
+	> provides CRUDs for publication, publicationBlackList, comments.
+	Initilization for forms.
+- security.service
+	> 
 
 
 
@@ -300,7 +305,7 @@ Controllers for application, react to components changing, sending api calls.
 	
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTQxNDU1NjkyNSwyMjkyMzI4ODEsLTExNj
+eyJoaXN0b3J5IjpbMTE0Nzc2NzI3NSwyMjkyMzI4ODEsLTExNj
 U2ODAxMTcsLTEwNzU1MTE3MjEsLTE4NzQ0NjQ2MTMsLTI1MjQx
 NjI4LC0xNjM5MDY4NjQ1XX0=
 -->
