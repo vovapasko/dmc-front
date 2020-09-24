@@ -381,11 +381,13 @@ This module contain burst-news, clients, contractors, projects, publications, re
 - clients
 	> This component for comfortable working with clients. Simple CRUD.
 - contractors
-	> This component do crud for contractor and many another actions such as partial update contractor 
+	> This component do crud for contractor and many another actions such as partial update contractor for cost, amount, arrangment fields, multiple edit and delete.
+- projects
+	> Here we create news project for burst news. So we have one project and can create news waves for this project.
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbOTUxMzM5MzE3LC01MzM1NTgyOTUsLTIwMD
-k3NjUxMTEsMTExMDIxMzQ1MCwyMjkyMzI4ODEsLTExNjU2ODAx
-MTcsLTEwNzU1MTE3MjEsLTE4NzQ0NjQ2MTMsLTI1MjQxNjI4LC
-0xNjM5MDY4NjQ1XX0=
+eyJoaXN0b3J5IjpbMTI4NjgwOTE5NywtNTMzNTU4Mjk1LC0yMD
+A5NzY1MTExLDExMTAyMTM0NTAsMjI5MjMyODgxLC0xMTY1Njgw
+MTE3LC0xMDc1NTExNzIxLC0xODc0NDY0NjEzLC0yNTI0MTYyOC
+wtMTYzOTA2ODY0NV19
 -->
