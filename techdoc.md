@@ -211,10 +211,17 @@ Some helper classes for some needs.
 	> some additional functions for do something additional things...
 
 ### Interceptors
-Interceptor its a middleware class, processing so
+Interceptor its a middleware class, processing some logic between requests and requests-handlers.
+
+- error-interceptor
+	> catch error from server and handle it
+- jwt-interceptor
+	> inject token, update token via refresh token
+- loading-interc
+	
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTY3MDc0NzE1LDIyOTIzMjg4MSwtMTE2NT
-Y4MDExNywtMTA3NTUxMTcyMSwtMTg3NDQ2NDYxMywtMjUyNDE2
-MjgsLTE2MzkwNjg2NDVdfQ==
+eyJoaXN0b3J5IjpbLTM0NDc0ODc3MiwyMjkyMzI4ODEsLTExNj
+U2ODAxMTcsLTEwNzU1MTE3MjEsLTE4NzQ0NjQ2MTMsLTI1MjQx
+NjI4LC0xNjM5MDY4NjQ1XX0=
 -->
