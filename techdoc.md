@@ -9,9 +9,9 @@ This project was generated with  [Angular CLI](https://github.com/angular/angula
 
 The project was created by [Themeforest](https://themeforest.net/item/ubold-responsive-web-app-kit/13489470) and included only angular full version. Current Ubold version is 4.1.0 which implement Vue.js, React.js and Angular as well.
 
-## Create files and folders
+## Dependencies
 
-The file explorer is accessible using the button in left corner of the navigation bar. You can create a new file by clicking the **New file** button in the file explorer. You can also create folders by clicking the **New folder** button.
+Let's talk about every dependency in the project.
 
 ## Switch to another file
 
@@ -144,5 +144,5 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTc3NzY0MTg5MiwtMTYzOTA2ODY0NV19
+eyJoaXN0b3J5IjpbMzYwMTE1NTc2LC0xNjM5MDY4NjQ1XX0=
 -->
