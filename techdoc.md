@@ -7,7 +7,7 @@ Hi! This is the documentation to help you in updating, configuration and maintai
 
 This project was generated with  [Angular CLI](https://github.com/angular/angular-cli)  version 7.3.8 and updated to 10.1.1 (latest version).
 
-Thj
+The project was created by [Themeforest](https://themeforest.net/item/ubold-responsive-web-app-kit/13489470) 
 
 ## Create files and folders
 
@@ -144,5 +144,5 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTc3NDc4MjI1NCwtMTYzOTA2ODY0NV19
+eyJoaXN0b3J5IjpbLTcxNTQ0NzA1MiwtMTYzOTA2ODY0NV19
 -->
