@@ -152,12 +152,16 @@ Its reuseable piece of combined ts, html, css etc.
 	> This component for notify user about errors, warnings, info, success. In right top corner, contain title and message and timeout about 1.5s. Injects notifcation service for handling notifications.
 
 ### Constants
-Export something constant values such as numbers, strings and other pri
-
+Export something constant values such as numbers, strings and other primitive types. 
+Examples :
+colors.ts
+ ```export const red = '#B80F0A';```
+endpoints.ts
+```````
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbODc2MzM1OTE2LDIyOTIzMjg4MSwtMTE2NT
-Y4MDExNywtMTA3NTUxMTcyMSwtMTg3NDQ2NDYxMywtMjUyNDE2
-MjgsLTE2MzkwNjg2NDVdfQ==
+eyJoaXN0b3J5IjpbLTE1MjkyMDA5NTQsMjI5MjMyODgxLC0xMT
+Y1NjgwMTE3LC0xMDc1NTExNzIxLC0xODc0NDY0NjEzLC0yNTI0
+MTYyOCwtMTYzOTA2ODY0NV19
 -->
