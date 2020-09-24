@@ -315,14 +315,20 @@ Lets see what is this and what it contains
 	> actions its classes for determine which exactly thing you want to call
 	for example if you want to get all clients you could use GetClients class ```dispatch(new GetClients());```
 - effects
-	> effect its a method you want to call after dispatch GetClients
-	``````
+	> effect its a method you want to call after dispatch GetClients ```@Effect()  
+getClients$ = this.actions$.pipe(  
+  ofType<GetClients>(EClientActions.GetClients),  
+  switchMap(() => this.clientService.getAll()),  
+  switchMap((proxies: Client[]) => of(new GetClientsSuccess(proxies)))  
+);```
+- reducers
+	> its like you want to process something, for exaple if you want to save data you can do next ``````
 
 
 	
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTg5MjYyNjYwOSwxMTEwMjEzNDUwLDIyOT
-IzMjg4MSwtMTE2NTY4MDExNywtMTA3NTUxMTcyMSwtMTg3NDQ2
-NDYxMywtMjUyNDE2MjgsLTE2MzkwNjg2NDVdfQ==
+eyJoaXN0b3J5IjpbLTE0OTA1NjQ4NDgsMTExMDIxMzQ1MCwyMj
+kyMzI4ODEsLTExNjU2ODAxMTcsLTEwNzU1MTE3MjEsLTE4NzQ0
+NjQ2MTMsLTI1MjQxNjI4LC0xNjM5MDY4NjQ1XX0=
 -->
