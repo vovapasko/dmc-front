@@ -107,7 +107,7 @@ My dear friend its not over, its only start of very wonderful adventure in angul
 
 # Source code
 
-Welcome back, lets start from Angular ecosystem: services, components, pipes, modules,
+Welcome back, in this section : components, constants, guards, helpers, interceptors, mocks, models, providers, services, store, layouts, pages, shared.
 
 There are two types of synchronization and they can complement each other:
 
@@ -219,7 +219,7 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTg5NzAxNzg3NywtMTE2NTY4MDExNywtMT
-A3NTUxMTcyMSwtMTg3NDQ2NDYxMywtMjUyNDE2MjgsLTE2Mzkw
-Njg2NDVdfQ==
+eyJoaXN0b3J5IjpbNDYyMTAyODk1LC0xMTY1NjgwMTE3LC0xMD
+c1NTExNzIxLC0xODc0NDY0NjEzLC0yNTI0MTYyOCwtMTYzOTA2
+ODY0NV19
 -->
