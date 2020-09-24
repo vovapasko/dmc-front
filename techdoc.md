@@ -11,7 +11,7 @@ The project was created by [Themeforest](https://themeforest.net/item/ubold-resp
 
 ## Dependencies
 
-Let's talk about every dependency in the project. 
+Let's talk about every dependency in the project. So open `package.json` and  We will not talk about **devDependencies**
 
 
 ## Switch to another file
@@ -145,5 +145,5 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjMyOTAzOTM2LC0xNjM5MDY4NjQ1XX0=
+eyJoaXN0b3J5IjpbNTQ1Nzc0MTM3LC0xNjM5MDY4NjQ1XX0=
 -->
