@@ -1,9 +1,9 @@
 # Welcome to DMC-FRONT!
 
-Hi! This is the documentation for updating, configuration and maintaining the crm system.
+Hi! This is the documentation to help you in updating, configuration and maintaining the crm system.
 
 
-# Files
+# Ecosystem
 
 StackEdit stores your files in your browser, which means all your files are automatically saved locally and are accessible **offline!**
 
@@ -142,5 +142,5 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE2MzkwNjg2NDVdfQ==
+eyJoaXN0b3J5IjpbMTgyODI1NzM2MSwtMTYzOTA2ODY0NV19
 -->
