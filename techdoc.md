@@ -435,11 +435,18 @@ Contains reuseable directives for html tags with additional logic
 Contains reuseable pipes for processing complex logic in html
 
 - contractors-arrangment
-	> returns arrangment 
+	> returns arrangment of all contractors by format
+- contractors-cost
+	> returns cost of all contractors by format
+- contractors-format
+	> returns formats with label
+- contractors-names
+	> returns names of all contractors
+- 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEyNzI5NDg5NDcsLTUzMzU1ODI5NSwtMj
-AwOTc2NTExMSwxMTEwMjEzNDUwLDIyOTIzMjg4MSwtMTE2NTY4
-MDExNywtMTA3NTUxMTcyMSwtMTg3NDQ2NDYxMywtMjUyNDE2Mj
-gsLTE2MzkwNjg2NDVdfQ==
+eyJoaXN0b3J5IjpbMTY2Mjk5MTg2NCwtNTMzNTU4Mjk1LC0yMD
+A5NzY1MTExLDExMTAyMTM0NTAsMjI5MjMyODgxLC0xMTY1Njgw
+MTE3LC0xMDc1NTExNzIxLC0xODc0NDY0NjEzLC0yNTI0MTYyOC
+wtMTYzOTA2ODY0NV19
 -->
