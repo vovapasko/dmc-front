@@ -1,6 +1,6 @@
 # Welcome to DMC-FRONT!
 
-Hi! This is the documentation for updating, configuration 
+Hi! This is the documentation for updating, configuration,
 
 
 # Files
@@ -142,5 +142,5 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEwOTQwNDIzNzEsLTU4Mzk2NDY3MV19
+eyJoaXN0b3J5IjpbMTgzMTI2NTAzMywtNTgzOTY0NjcxXX0=
 -->
