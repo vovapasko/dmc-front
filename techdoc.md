@@ -134,9 +134,9 @@ Welcome back, in this section you will understand how this project works with: c
 - tslint.json
 	> lint code for better code
 
-**environments** 
+**environments** folder contain two files, one for develope other for production, either contain the same structure but with different values.
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTUxMjI3OTE4MiwtMTE2NTY4MDExNywtMT
-A3NTUxMTcyMSwtMTg3NDQ2NDYxMywtMjUyNDE2MjgsLTE2Mzkw
-Njg2NDVdfQ==
+eyJoaXN0b3J5IjpbNzM1NDYwOTY1LC0xMTY1NjgwMTE3LC0xMD
+c1NTExNzIxLC0xODc0NDY0NjEzLC0yNTI0MTYyOCwtMTYzOTA2
+ODY0NV19
 -->
