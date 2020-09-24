@@ -111,7 +111,7 @@ Welcome back, in this section you will understand how this project works with: c
 
 
 ## Before app folder
-**src** folder contain **app**, **environments** directories and some additional configuration files like:
+**src** folder contain **app**, **environments**, **assets** directories and some additional configuration files like:
 
 - index.html
 	> Here you can some links, metas and ```<app-ubold></app-ubold>``` tag which contain our application
@@ -129,9 +129,14 @@ Welcome back, in this section you will understand how this project works with: c
 	> test configuration
 - tsconfig.app.json
 	> another file just for something i realy dont care
+- tsconfig.spec.json
+	> read above
+- tslint.json
+	> lint code for better code
 
+**environments** 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTUyMzQ3MjE0MiwtMTE2NTY4MDExNywtMT
+eyJoaXN0b3J5IjpbLTUxMjI3OTE4MiwtMTE2NTY4MDExNywtMT
 A3NTUxMTcyMSwtMTg3NDQ2NDYxMywtMjUyNDE2MjgsLTE2Mzkw
 Njg2NDVdfQ==
 -->
