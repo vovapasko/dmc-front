@@ -102,7 +102,7 @@ But this file is needed for **Heroku** which does not implement hosting single `
 
 ## Resume
 
-You can export the current file by clicking **Export to disk** in the menu. You can choose to export the file as plain Markdown, as HTML using a Handlebars template or as a PDF.
+My dear friend its not over
 
 
 # Synchronization
@@ -219,6 +219,6 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTU3MTcyOTg3NCwtMTA3NTUxMTcyMSwtMT
+eyJoaXN0b3J5IjpbLTU4OTY5NjkzMSwtMTA3NTUxMTcyMSwtMT
 g3NDQ2NDYxMywtMjUyNDE2MjgsLTE2MzkwNjg2NDVdfQ==
 -->
