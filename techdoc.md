@@ -74,7 +74,8 @@ We see **FROM** command that says download and install node 12.2.0v.
 ## Server
 
 Open ```server.js``` file in your editor. Also you can test this by ```node server.js``` command.
-Here we see simple express configuration. That's it. Nothing inte
+Here we see simple express configuration. That's it. Nothing interesting, just hosting ```index.html```. 
+But this file is needed 
 
 ## Delete a file
 
@@ -199,6 +200,6 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE4NzkzMDQxODAsLTE4NzQ0NjQ2MTMsLT
+eyJoaXN0b3J5IjpbLTEwNzU1MTE3MjEsLTE4NzQ0NjQ2MTMsLT
 I1MjQxNjI4LC0xNjM5MDY4NjQ1XX0=
 -->
