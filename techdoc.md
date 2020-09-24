@@ -301,7 +301,9 @@ Controllers for application, react to components changing, sending api calls.
 - ticket.service
 	> pagination, filtering, highliting searching items
 - user.service
-	> CRUD for users, signup,  
+	> CRUD for users, signup, confirm reset password, update profile etc
+
+So that's it, servicec do a lot of work in app based on Angular methodology.
 
 
 
@@ -309,7 +311,7 @@ Controllers for application, react to components changing, sending api calls.
 	
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTExMDIxMzQ1MCwyMjkyMzI4ODEsLTExNj
-U2ODAxMTcsLTEwNzU1MTE3MjEsLTE4NzQ0NjQ2MTMsLTI1MjQx
-NjI4LC0xNjM5MDY4NjQ1XX0=
+eyJoaXN0b3J5IjpbLTY0ODI0ODI5OCwxMTEwMjEzNDUwLDIyOT
+IzMjg4MSwtMTE2NTY4MDExNywtMTA3NTUxMTcyMSwtMTg3NDQ2
+NDYxMywtMjUyNDE2MjgsLTE2MzkwNjg2NDVdfQ==
 -->
