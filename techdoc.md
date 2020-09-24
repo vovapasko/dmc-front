@@ -80,7 +80,11 @@ But this file is needed for **Heroku** which does not implement hosting single `
 ## Other
 
 - .browserslistrc
-	> You can read comments to know what he does 
+	> You can read comments to know what he does, but you dont need.
+- .dockerignore
+	> .gitignore-like-file
+- .gitignore 
+	> 
 
 ## Export a file
 
@@ -201,6 +205,6 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTk3MzQ0MDE0NywtMTA3NTUxMTcyMSwtMT
+eyJoaXN0b3J5IjpbMTMyMjIxMDQ0NSwtMTA3NTUxMTcyMSwtMT
 g3NDQ2NDYxMywtMjUyNDE2MjgsLTE2MzkwNjg2NDVdfQ==
 -->
