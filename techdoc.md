@@ -286,7 +286,7 @@ Controllers for application, react to components changing, sending api calls.
 - loading.service
 	> start and stop loading for spinners
 - news.service
-	> Big, huge service CRUD for project, news, formats, hasht
+	> Big, huge service CRUD for project, news, formats, hashtag. Initializing forms for this all stuf. Handling and processing data and payload for requests. This is a big servic
 
 
 
@@ -294,7 +294,7 @@ Controllers for application, react to components changing, sending api calls.
 	
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjAzNjYyNDQyMywyMjkyMzI4ODEsLTExNj
+eyJoaXN0b3J5IjpbMTE1OTk0OTgwNywyMjkyMzI4ODEsLTExNj
 U2ODAxMTcsLTEwNzU1MTE3MjEsLTE4NzQ0NjQ2MTMsLTI1MjQx
 NjI4LC0xNjM5MDY4NjQ1XX0=
 -->
