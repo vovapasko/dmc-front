@@ -341,9 +341,12 @@ getClients$ = this.actions$.pipe(
 In out project we have four layouts:
 
 - footer
-	> contain footer info 
+	> contain footer info something like that ```2015 - 2020 © UBold theme by Coderthemes```
+- rightsidebar
+	> we did not use this component at all, but ther
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTIwMDk3NjUxMTEsMTExMDIxMzQ1MCwyMj
-kyMzI4ODEsLTExNjU2ODAxMTcsLTEwNzU1MTE3MjEsLTE4NzQ0
-NjQ2MTMsLTI1MjQxNjI4LC0xNjM5MDY4NjQ1XX0=
+eyJoaXN0b3J5IjpbLTIwNTIwMzM5ODksLTIwMDk3NjUxMTEsMT
+ExMDIxMzQ1MCwyMjkyMzI4ODEsLTExNjU2ODAxMTcsLTEwNzU1
+MTE3MjEsLTE4NzQ0NjQ2MTMsLTI1MjQxNjI4LC0xNjM5MDY4Nj
+Q1XX0=
 -->
