@@ -14,8 +14,9 @@ The project was created by [Themeforest](https://themeforest.net/item/ubold-resp
 Let's talk about every dependency in the project. So open `package.json` and take a look at **dependencies** section. Here we see a lot of angular/* and fullcalendar dependecies they are very important but not interesting. 
 
 
+- ng-bootstrap/ng-bootstrap
 - 
-We will not talk about **devDependencies**
+We will not talk about **devDependencies** because they include develope packages for testing, linting, p and other good things for better developmnet 
 
 
 ## Switch to another file
@@ -149,5 +150,5 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTM2OTY2Njc0MCwtMTYzOTA2ODY0NV19
+eyJoaXN0b3J5IjpbNDIyNTA3NzYwLC0xNjM5MDY4NjQ1XX0=
 -->
