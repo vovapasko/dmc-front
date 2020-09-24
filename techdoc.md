@@ -263,14 +263,21 @@ export interface LoginResponse {
 ```
 So this is what we know about api.
 
-### Models
+### Providers
+Provide connection between application and Web API
+
+- cookie.service
+	> set, get values to cookies + expires
+- storage.service
+	> set, get value to local storage
+
 
 
 
 	
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEwNzQxOTQ5MjIsMjI5MjMyODgxLC0xMT
-Y1NjgwMTE3LC0xMDc1NTExNzIxLC0xODc0NDY0NjEzLC0yNTI0
-MTYyOCwtMTYzOTA2ODY0NV19
+eyJoaXN0b3J5IjpbMTQzMjY3NDc3MiwyMjkyMzI4ODEsLTExNj
+U2ODAxMTcsLTEwNzU1MTE3MjEsLTE4NzQ0NjQ2MTMsLTI1MjQx
+NjI4LC0xNjM5MDY4NjQ1XX0=
 -->
