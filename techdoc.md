@@ -21,7 +21,9 @@ Let's talk about every dependency in the project. So open `package.json` and tak
 - ngrx/core
 	> Redux-like-angular-alternative. If you have used redux in React.js projects you know what it means, but if you have not read [this](https://redux.js.org/introduction/getting-started)
 - alife-file-to-base64
-	> Upload and convert file to base64, as usual its image. We used this to upload avatar in the profile page
+	> Upload and convert file to base64, as usual its image. We used this to upload avatar in the profile page and show user result.
+- angular-archwizard
+	> Moving 
 
 We will not talk about **devDependencies** because they include develope packages for testing, linting, pretify and other good things for better developmnet, you should use them but you dont have to understand them.
 
@@ -157,5 +159,5 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjQ2NjgxMDAxLC0xNjM5MDY4NjQ1XX0=
+eyJoaXN0b3J5IjpbMjQwMTQ2Nzk0LC0xNjM5MDY4NjQ1XX0=
 -->
