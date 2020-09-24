@@ -379,11 +379,13 @@ This module contain burst-news, clients, contractors, projects, publications, re
 - burst-news
 	> This component do a lot of work. Here we can create news wave which include news. News contain title, contractors and content, see **news.wave.model** . We can create one or many news wave for **news project**. 
 - clients
-	> 
+	> This component for comfortable working with clients. Simple CRUD.
+- contractors
+	> This component do crud for contractor and many another actions such as partial update contractor 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE1MTk1MjA3NDEsLTUzMzU1ODI5NSwtMj
-AwOTc2NTExMSwxMTEwMjEzNDUwLDIyOTIzMjg4MSwtMTE2NTY4
-MDExNywtMTA3NTUxMTcyMSwtMTg3NDQ2NDYxMywtMjUyNDE2Mj
-gsLTE2MzkwNjg2NDVdfQ==
+eyJoaXN0b3J5IjpbOTUxMzM5MzE3LC01MzM1NTgyOTUsLTIwMD
+k3NjUxMTEsMTExMDIxMzQ1MCwyMjkyMzI4ODEsLTExNjU2ODAx
+MTcsLTEwNzU1MTE3MjEsLTE4NzQ0NjQ2MTMsLTI1MjQxNjI4LC
+0xNjM5MDY4NjQ1XX0=
 -->
