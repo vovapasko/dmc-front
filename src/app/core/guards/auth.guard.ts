@@ -7,7 +7,7 @@ import { urls } from '@constants/urls';
 export class AuthGuard implements CanActivate {
   constructor(private router: Router, private userService: UserService) {}
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     const currentUser = this.userService.loadCurrentUser();
     if (currentUser) {
       // logged in so return true
