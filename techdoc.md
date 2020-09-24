@@ -19,8 +19,9 @@ Let's talk about every dependency in the project. So open `package.json` and tak
 - ng-select
 	> Prety good select input, well understable
 - ngrx/core
-	> Redux-like-angular-alternative. If you have used redux in React.js projects you know what it means, but if you haven't
-
+	> Redux-like-angular-alternative. If you have used redux in React.js projects you know what it means, but if you have not read [this](https://redux.js.org/introduction/getting-started)
+- alife-file-to-base64
+	> Upload and
 
 We will not talk about **devDependencies** because they include develope packages for testing, linting, pretify and other good things for better developmnet, you should use them but you dont have to understand them.
 
@@ -156,5 +157,5 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTg3MTIxMDkzLC0xNjM5MDY4NjQ1XX0=
+eyJoaXN0b3J5IjpbNTIyMTAyMTQ3LC0xNjM5MDY4NjQ1XX0=
 -->
