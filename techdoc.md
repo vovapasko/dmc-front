@@ -11,7 +11,11 @@ The project was created by [Themeforest](https://themeforest.net/item/ubold-resp
 
 ## Dependencies
 
-Let's talk about every dependency in the project. So open `package.json` and take a look at **dependencies** section. Here we see a lot of angular/* dependecies they are very important but not interesting  .We will not talk about **devDependencies**
+Let's talk about every dependency in the project. So open `package.json` and take a look at **dependencies** section. Here we see a lot of angular/* and fullcalendar dependecies they are very important but not interesting. 
+
+
+- 
+We will not talk about **devDependencies**
 
 
 ## Switch to another file
@@ -145,5 +149,5 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTMzODgwNDE3MSwtMTYzOTA2ODY0NV19
+eyJoaXN0b3J5IjpbMTM2OTY2Njc0MCwtMTYzOTA2ODY0NV19
 -->
