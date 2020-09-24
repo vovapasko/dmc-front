@@ -65,7 +65,8 @@ COPY . /app
 CMD ng serve --host 0.0.0.0
 ```
 We see **FROM** command that says download and install node 12.2.0v.
-**RUN** says to OS to get something from url and start some shell scripts and do update and install chro
+**RUN** says to OS to get something from url and start some shell scripts and do update and install chrome or whatever you want. So this command do whatever you want to do with OS.
+**** 
 ## Rename a file
 
 You can rename the current file by clicking the file name in the navigation bar or by clicking the **Rename** button in the file explorer.
@@ -193,6 +194,6 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTIwNDUyNjg1ODIsLTE4NzQ0NjQ2MTMsLT
-I1MjQxNjI4LC0xNjM5MDY4NjQ1XX0=
+eyJoaXN0b3J5IjpbLTI1NTQ0MzU2MSwtMTg3NDQ2NDYxMywtMj
+UyNDE2MjgsLTE2MzkwNjg2NDVdfQ==
 -->
