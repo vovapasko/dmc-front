@@ -149,15 +149,15 @@ Its reuseable piece of combined ts, html, css etc.
 - errors
 	> Components for 404 and 500 errors
 - notification
-	> This component for notify user about errors, warnings, info, success.
-	In right top corner, contain title and message and timeout about 1.5s.
-	Injects notifcation service 
+	> This component for notify user about errors, warnings, info, success. In right top corner, contain title and message and timeout about 1.5s. Injects notifcation service for handling notifications.
 
+### Constants
+Export something constant values such as numbers, strings and other pri
 
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjAwODcwOTk1LDIyOTIzMjg4MSwtMTE2NT
+eyJoaXN0b3J5IjpbODc2MzM1OTE2LDIyOTIzMjg4MSwtMTE2NT
 Y4MDExNywtMTA3NTUxMTcyMSwtMTg3NDQ2NDYxMywtMjUyNDE2
 MjgsLTE2MzkwNjg2NDVdfQ==
 -->
