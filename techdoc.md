@@ -322,13 +322,23 @@ getClients$ = this.actions$.pipe(
   switchMap((proxies: Client[]) => of(new GetClientsSuccess(proxies)))  
 );```
 - reducers
-	> its like you want to process something, for exaple if you want to save data you can do next ``````
-
-
+	> its like you want to process something, for exaple if you want to save data you can do next ```... case EClientActions.GetClientsSuccess: {  
+  return {  
+    ...state,  
+  clients: action.payload,  
+  };  
+}```
+- selectors
+	> its how you want to get access to your data ```export const selectClientList = createSelector(selectClients, (state: IClientState) => state ? state.clients : []);```
+- state 
+	> says what structure you want ```export const initialClientState: IClientState = {  
+  clients: [],  
+  selectedClient: null,  
+};```
 	
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE0OTA1NjQ4NDgsMTExMDIxMzQ1MCwyMj
+eyJoaXN0b3J5IjpbLTE1NDc3NzY2ODEsMTExMDIxMzQ1MCwyMj
 kyMzI4ODEsLTExNjU2ODAxMTcsLTEwNzU1MTE3MjEsLTE4NzQ0
 NjQ2MTMsLTI1MjQxNjI4LC0xNjM5MDY4NjQ1XX0=
 -->
