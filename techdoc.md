@@ -351,10 +351,19 @@ In out project we have four layouts:
 
 ```layout.component``` is a container for pages, skeleton
 
-### Pag
+### Pages
+Pages contain some modules, its modular arhitecture.
+Structure:
+	
+- account
+- crm
+- email
+- extras
+- form
 
+### Pages
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTIxMjEyMTA1MjMsLTIwMDk3NjUxMTEsMT
+eyJoaXN0b3J5IjpbLTE4NDY1ODk5MTEsLTIwMDk3NjUxMTEsMT
 ExMDIxMzQ1MCwyMjkyMzI4ODEsLTExNjU2ODAxMTcsLTEwNzU1
 MTE3MjEsLTE4NzQ0NjQ2MTMsLTI1MjQxNjI4LC0xNjM5MDY4Nj
 Q1XX0=
