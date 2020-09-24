@@ -312,13 +312,16 @@ So that's it, services do a lot of work in app based on Angular methodology.
 Lets see what is this and what it contains
 
 - actions
-	> actions its classes for determine which exactly thing is happening, 
+	> actions its classes for determine which exactly thing you want to call
+	for example if you want to get all clients you could use GetClients class ```dispatch(new GetClients());```
+- effects
+	> effect it 
 
 
 	
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEyOTE5MjAwMjYsMTExMDIxMzQ1MCwyMj
+eyJoaXN0b3J5IjpbLTE2MzYxNjMyNDQsMTExMDIxMzQ1MCwyMj
 kyMzI4ODEsLTExNjU2ODAxMTcsLTEwNzU1MTE3MjEsLTE4NzQ0
 NjQ2MTMsLTI1MjQxNjI4LC0xNjM5MDY4NjQ1XX0=
 -->
