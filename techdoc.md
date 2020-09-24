@@ -141,12 +141,14 @@ Welcome back, in this section you will understand how this project works with: c
 Here we go to the magic. Before we start I want to say that this code was written with love, its not joke , its realy true. You can find author by this nicknames (tomiho19, Kronus, sa1exx, pussyDestoyer, @sycablyad).
 
 ### Components
+Its reuseable piece of combined ts, html, css etc. 
 - charts
+	> Contain models for charts, in our example 
 
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTk5MjA4OTI3MSwyMjkyMzI4ODEsLTExNj
-U2ODAxMTcsLTEwNzU1MTE3MjEsLTE4NzQ0NjQ2MTMsLTI1MjQx
-NjI4LC0xNjM5MDY4NjQ1XX0=
+eyJoaXN0b3J5IjpbLTE5ODUyNDI2NDMsMjI5MjMyODgxLC0xMT
+Y1NjgwMTE3LC0xMDc1NTExNzIxLC0xODc0NDY0NjEzLC0yNTI0
+MTYyOCwtMTYzOTA2ODY0NV19
 -->
