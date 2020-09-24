@@ -64,7 +64,8 @@ COPY . /app
 # start app  
 CMD ng serve --host 0.0.0.0
 ```
-We see **FROM** command that says 
+We see **FROM** command that says download and install node 12.2.0v.
+**RUN** says ubuntun 
 ## Rename a file
 
 You can rename the current file by clicking the file name in the navigation bar or by clicking the **Rename** button in the file explorer.
@@ -192,6 +193,6 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEwNDIxODIzMTUsLTE4NzQ0NjQ2MTMsLT
+eyJoaXN0b3J5IjpbLTE3OTQ5MDcxOTIsLTE4NzQ0NjQ2MTMsLT
 I1MjQxNjI4LC0xNjM5MDY4NjQ1XX0=
 -->
