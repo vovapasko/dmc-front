@@ -5,7 +5,7 @@ Hi! This is the documentation to help you in updating, configuration and maintai
 
 # Ecosystem
 
-StackEdit stores your files in your browser, which means all your files are automatically saved locally and are accessible **offline!**
+This project was generated with  [Angular CLI](https://github.com/angular/angular-cli)  version 7.3.8 and updated to 10.1.1.
 
 ## Create files and folders
 
@@ -142,5 +142,5 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTgyODI1NzM2MSwtMTYzOTA2ODY0NV19
+eyJoaXN0b3J5IjpbMTE2MjM2NjgwNiwtMTYzOTA2ODY0NV19
 -->
