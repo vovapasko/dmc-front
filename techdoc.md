@@ -121,9 +121,17 @@ Welcome back, in this section you will understand how this project works with: c
 	> providing env and bootstrap
 - manifest.webmanifest
 	> file for caching icons, created for **PWA**
-- 
+- polyfills.ts
+	> just use it 'as it is'
+- styles.css
+	> global styles
+- test.ts
+	> test configuration
+- tsconfig.app.json
+	> another file just for something i realy dont care
+
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbODA0NjYzODI4LC0xMTY1NjgwMTE3LC0xMD
-c1NTExNzIxLC0xODc0NDY0NjEzLC0yNTI0MTYyOCwtMTYzOTA2
-ODY0NV19
+eyJoaXN0b3J5IjpbLTUyMzQ3MjE0MiwtMTE2NTY4MDExNywtMT
+A3NTUxMTcyMSwtMTg3NDQ2NDYxMywtMjUyNDE2MjgsLTE2Mzkw
+Njg2NDVdfQ==
 -->
