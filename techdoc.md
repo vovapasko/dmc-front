@@ -210,8 +210,11 @@ Some helper classes for some needs.
 - utility
 	> some additional functions for do something additional things...
 
+### Interceptors
+Interceptor its a middleware class, processing so
+
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjI1NTUzMTM5LDIyOTIzMjg4MSwtMTE2NT
+eyJoaXN0b3J5IjpbLTY3MDc0NzE1LDIyOTIzMjg4MSwtMTE2NT
 Y4MDExNywtMTA3NTUxMTcyMSwtMTg3NDQ2NDYxMywtMjUyNDE2
 MjgsLTE2MzkwNjg2NDVdfQ==
 -->
