@@ -114,11 +114,13 @@ Welcome back, in this section you will understand how this project works with: c
 **src** folder contain **app**, **environments** directories and some additional configuration files like:
 
 - index.html
-	> Here yo
+	> Here you can some links, metas and ```<app-ubold></app-ubold>``` tag which contain our application
+- karma.conf.js
+	> config for testing
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNzg5MTI3MDM2LC0xMTY1NjgwMTE3LC0xMD
-c1NTExNzIxLC0xODc0NDY0NjEzLC0yNTI0MTYyOCwtMTYzOTA2
-ODY0NV19
+eyJoaXN0b3J5IjpbLTE0MDUwMjE0OTgsLTExNjU2ODAxMTcsLT
+EwNzU1MTE3MjEsLTE4NzQ0NjQ2MTMsLTI1MjQxNjI4LC0xNjM5
+MDY4NjQ1XX0=
 -->
