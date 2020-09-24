@@ -451,9 +451,9 @@ Contains reuseable pipes for processing complex logic in html
 Here we see some ui components which we use in our project.
 
 ## Conclusion
-Thank you mate for reading this, have a nice day, love mom and dont worry about errors. 
+Thank you mate for reading this, have a nice day, love mom and dont worry about errors. And remember it's just a project, but how you do it will determine your future.
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTk1NzM3ODQ0NCwtNTMzNTU4Mjk1LC0yMD
+eyJoaXN0b3J5IjpbLTM0MTM4MjY2NCwtNTMzNTU4Mjk1LC0yMD
 A5NzY1MTExLDExMTAyMTM0NTAsMjI5MjMyODgxLC0xMTY1Njgw
 MTE3LC0xMDc1NTExNzIxLC0xODc0NDY0NjEzLC0yNTI0MTYyOC
 wtMTYzOTA2ODY0NV19
