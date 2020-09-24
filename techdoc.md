@@ -417,11 +417,17 @@ Contain validation reuseable components
  
 ### Shared
 
-This folder for sharing some common directives, pipes and ui**
+This folder for sharing some common **directives**, **pipes** and **ui**
+
+#### Directives
+Contains reuseable directives for html tags with additional logic
+
+- edit-mode
+	> 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE4ODU5NzY0MSwtNTMzNTU4Mjk1LC0yMD
-A5NzY1MTExLDExMTAyMTM0NTAsMjI5MjMyODgxLC0xMTY1Njgw
-MTE3LC0xMDc1NTExNzIxLC0xODc0NDY0NjEzLC0yNTI0MTYyOC
-wtMTYzOTA2ODY0NV19
+eyJoaXN0b3J5IjpbLTE5MzgwODE2NzEsLTUzMzU1ODI5NSwtMj
+AwOTc2NTExMSwxMTEwMjEzNDUwLDIyOTIzMjg4MSwtMTE2NTY4
+MDExNywtMTA3NTUxMTcyMSwtMTg3NDQ2NDYxMywtMjUyNDE2Mj
+gsLTE2MzkwNjg2NDVdfQ==
 -->
