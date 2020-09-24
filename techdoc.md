@@ -68,7 +68,8 @@ We see **FROM** command that says download and install node 12.2.0v.
 **RUN** says to OS to get something from url and start some shell scripts and do update and install chrome or whatever you want. So this command do whatever you want to do with OS.
 **WORKDIR**  define current working directory.
 **ENV** add or edit environment variable.
-**COPY** you can use ```RUN cp smth smth``` instead but better to write like documentation says. And its more readable to use
+**COPY** you can use ```RUN cp smth smth``` instead but better to write like documentation says. And its more readable to use Docker commands instead plenty **RUN**.
+**CMD** it should be your last command in Dockerfile, that command says what this container does and for what this all 
 ## Rename a file
 
 You can rename the current file by clicking the file name in the navigation bar or by clicking the **Rename** button in the file explorer.
@@ -196,6 +197,6 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTIxMzQyMTc4NDYsLTE4NzQ0NjQ2MTMsLT
-I1MjQxNjI4LC0xNjM5MDY4NjQ1XX0=
+eyJoaXN0b3J5IjpbLTU3MjE1NzU1NCwtMTg3NDQ2NDYxMywtMj
+UyNDE2MjgsLTE2MzkwNjg2NDVdfQ==
 -->
