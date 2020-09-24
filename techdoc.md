@@ -15,8 +15,11 @@ Let's talk about every dependency in the project. So open `package.json` and tak
 
 
 - ng-bootstrap/ng-bootstrap
-	> We love bootstrap, its ease to implement 
-- 
+	> We love bootstrap, its ease to implement and use, so its our way.
+- ng-select
+	> Prety good select input, well understabl
+
+
 We will not talk about **devDependencies** because they include develope packages for testing, linting, pretify and other good things for better developmnet 
 
 
@@ -151,5 +154,5 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTYwMDA1MTIxMywtMTYzOTA2ODY0NV19
+eyJoaXN0b3J5IjpbLTI5OTgwMzMzOSwtMTYzOTA2ODY0NV19
 -->
