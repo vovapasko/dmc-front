@@ -191,10 +191,10 @@ export const endpoints = {
 ```
 
 ### Guards
-Auth guards provid
+Auth guards provide security for routes, redirect to login page. Its like guard you know, you cannot to go inside application if you have not logged in
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTYyNDc5ODgwMiwyMjkyMzI4ODEsLTExNj
-U2ODAxMTcsLTEwNzU1MTE3MjEsLTE4NzQ0NjQ2MTMsLTI1MjQx
-NjI4LC0xNjM5MDY4NjQ1XX0=
+eyJoaXN0b3J5IjpbNjU2MzE1NzM4LDIyOTIzMjg4MSwtMTE2NT
+Y4MDExNywtMTA3NTUxMTcyMSwtMTg3NDQ2NDYxMywtMjUyNDE2
+MjgsLTE2MzkwNjg2NDVdfQ==
 -->
