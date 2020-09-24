@@ -86,7 +86,10 @@ But this file is needed for **Heroku** which does not implement hosting single `
 - .gitignore 
 	> Was generated automaticly by https://www.gitignore.io
 - .prettierrc
-	> Pretify your code by shortcut CTRL + ALT + L ubuntu, Webstorm)
+	> Pretify your code by shortcut CTRL + ALT + L in ubuntu, Webstorm.
+- angular.json
+	> Was generated automaticly by angular-cli (maybe)
+- 
 
 ## Export a file
 
@@ -207,6 +210,6 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTYyNzUzNDU0LC0xMDc1NTExNzIxLC0xOD
-c0NDY0NjEzLC0yNTI0MTYyOCwtMTYzOTA2ODY0NV19
+eyJoaXN0b3J5IjpbMTI3NDA3NTQzNywtMTA3NTUxMTcyMSwtMT
+g3NDQ2NDYxMywtMjUyNDE2MjgsLTE2MzkwNjg2NDVdfQ==
 -->
