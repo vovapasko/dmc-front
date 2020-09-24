@@ -198,10 +198,12 @@ canActivate method checks user and returns boolean, if not logged in so redirect
 Some helper classes for some needs.
 
 - convert-case
-	> Convert snake case fro
-
+	> Convert snake case to camel case. In our project we use python and js, so python uses snake_case and js uses camelCase.
+- error-handler
+	> notify user about error, calls notification service and says what to do
+- 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTk0NjAxMzY1NywyMjkyMzI4ODEsLTExNj
-U2ODAxMTcsLTEwNzU1MTE3MjEsLTE4NzQ0NjQ2MTMsLTI1MjQx
-NjI4LC0xNjM5MDY4NjQ1XX0=
+eyJoaXN0b3J5IjpbOTkzMDAyODcxLDIyOTIzMjg4MSwtMTE2NT
+Y4MDExNywtMTA3NTUxMTcyMSwtMTg3NDQ2NDYxMywtMjUyNDE2
+MjgsLTE2MzkwNjg2NDVdfQ==
 -->
