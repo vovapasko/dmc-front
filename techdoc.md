@@ -423,11 +423,16 @@ This folder for sharing some common **directives**, **pipes** and **ui**
 Contains reuseable directives for html tags with additional logic
 
 - edit-mode
-	> 
+	> returns edit mode template
+- editable-on-enter
+	> set host listener and switch mode on event
+- tickets-sortable
+	> provide sort by column asc dsc
+- view-mode
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE5MzgwODE2NzEsLTUzMzU1ODI5NSwtMj
-AwOTc2NTExMSwxMTEwMjEzNDUwLDIyOTIzMjg4MSwtMTE2NTY4
-MDExNywtMTA3NTUxMTcyMSwtMTg3NDQ2NDYxMywtMjUyNDE2Mj
-gsLTE2MzkwNjg2NDVdfQ==
+eyJoaXN0b3J5IjpbLTU1NjEwNzk5NiwtNTMzNTU4Mjk1LC0yMD
+A5NzY1MTExLDExMTAyMTM0NTAsMjI5MjMyODgxLC0xMTY1Njgw
+MTE3LC0xMDc1NTExNzIxLC0xODc0NDY0NjEzLC0yNTI0MTYyOC
+wtMTYzOTA2ODY0NV19
 -->
