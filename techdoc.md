@@ -74,10 +74,10 @@ We see **FROM** command that says download and install node 12.2.0v.
 ## Server
 
 Open ```server.js``` file in your editor. Also you can test this by ```node server.js``` command.
-Here we see simple express configuration. That's it. Nothing interesting, just hosting ```index.html```. 
-But this file is needed for **Heroku** which does not implement hosting single ```index.html``` files
+Here we see a simple express configuration. That's it. Nothing interesting, just hosting ```index.html```. 
+But this file is needed for **Heroku** which does not implement hosting single ```index.html``` files. So we need to wrap our application in express server.
 
-## Delete a file
+## Other
 
 You can delete the current file by clicking the **Remove** button in the file explorer. The file will be moved into the **Trash** folder and automatically deleted after 7 days of inactivity.
 
@@ -200,6 +200,6 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbODU3MjMyMjc2LC0xMDc1NTExNzIxLC0xOD
-c0NDY0NjEzLC0yNTI0MTYyOCwtMTYzOTA2ODY0NV19
+eyJoaXN0b3J5IjpbMTI5OTQxOTQ4NiwtMTA3NTUxMTcyMSwtMT
+g3NDQ2NDYxMywtMjUyNDE2MjgsLTE2MzkwNjg2NDVdfQ==
 -->
