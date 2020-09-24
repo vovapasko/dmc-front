@@ -36,7 +36,7 @@ We will not talk about **devDependencies** because they include develope package
 
 ## Dockerfile
 
-We use docker, we love docker, docker is cool but we dont need docker
+We use docker, we love docker, docker is cool but we dont need docker. So think twice before including docker to your project and 
 
 ## Rename a file
 
@@ -165,5 +165,5 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbODI5MTMzMjE0LC0xNjM5MDY4NjQ1XX0=
+eyJoaXN0b3J5IjpbLTI1MjQxNjI4LC0xNjM5MDY4NjQ1XX0=
 -->
