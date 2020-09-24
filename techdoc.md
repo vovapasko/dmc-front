@@ -373,11 +373,15 @@ This module contain confirm, login, password reset, signup pages:
 - signup
 	> This component for sign up new user
 
-#### Account
+#### CRM
+This module contain burst-news, clients, contractors, projects, publications, reports, users pages
+
+- burst-news
+	> This component do a lot of work. Here we can create news wave which include 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE0MDEzMzAwNzAsLTUzMzU1ODI5NSwtMj
-AwOTc2NTExMSwxMTEwMjEzNDUwLDIyOTIzMjg4MSwtMTE2NTY4
-MDExNywtMTA3NTUxMTcyMSwtMTg3NDQ2NDYxMywtMjUyNDE2Mj
-gsLTE2MzkwNjg2NDVdfQ==
+eyJoaXN0b3J5IjpbLTg4MzkyMDE1OSwtNTMzNTU4Mjk1LC0yMD
+A5NzY1MTExLDExMTAyMTM0NTAsMjI5MjMyODgxLC0xMTY1Njgw
+MTE3LC0xMDc1NTExNzIxLC0xODc0NDY0NjEzLC0yNTI0MTYyOC
+wtMTYzOTA2ODY0NV19
 -->
