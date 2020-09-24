@@ -297,6 +297,10 @@ Controllers for application, react to components changing, sending api calls.
 	> provides CRUDs for publication, publicationBlackList, comments.
 	Initilization for forms.
 - security.service
+	> sanitize html, for security reasons
+- ticket.service
+	> pagination, filtering, highliting searching items
+- user.service
 	> 
 
 
@@ -305,7 +309,7 @@ Controllers for application, react to components changing, sending api calls.
 	
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTE0Nzc2NzI3NSwyMjkyMzI4ODEsLTExNj
-U2ODAxMTcsLTEwNzU1MTE3MjEsLTE4NzQ0NjQ2MTMsLTI1MjQx
-NjI4LC0xNjM5MDY4NjQ1XX0=
+eyJoaXN0b3J5IjpbLTQ0Njk4OTI3LDIyOTIzMjg4MSwtMTE2NT
+Y4MDExNywtMTA3NTUxMTcyMSwtMTg3NDQ2NDYxMywtMjUyNDE2
+MjgsLTE2MzkwNjg2NDVdfQ==
 -->
