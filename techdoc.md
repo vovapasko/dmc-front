@@ -447,9 +447,13 @@ Contains reuseable pipes for processing complex logic in html
 - project-status
 	> returns filtered by confirm
 
+#### UI
+Here we see some ui components which we use in our project.
 
+## Conclusion
+Thank y
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTM5NDAwMTk0MywtNTMzNTU4Mjk1LC0yMD
+eyJoaXN0b3J5IjpbMTA3NjczNzAwOCwtNTMzNTU4Mjk1LC0yMD
 A5NzY1MTExLDExMTAyMTM0NTAsMjI5MjMyODgxLC0xMTY1Njgw
 MTE3LC0xMDc1NTExNzIxLC0xODc0NDY0NjEzLC0yNTI0MTYyOC
 wtMTYzOTA2ODY0NV19
