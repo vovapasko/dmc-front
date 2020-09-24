@@ -244,13 +244,33 @@ export interface Contractor {
 ```
 Its a copy of Contractor model from server.
 **payloads** can be like that:
-``````
+```
+export interface LoginPayload {  
+  data: {  
+    email: string;  
+  password: string;  
+  };  
+}
+```
+**responses** structure can be like that:
+```
+export interface LoginResponse {  
+  success: boolean;  
+  token?: Token;  
+  user?: User;  
+  errors?: object;  
+}
+```
+So this is what we know about api.
+
+### Models
+
 
 
 	
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTMxNzU4NTg0LDIyOTIzMjg4MSwtMTE2NT
-Y4MDExNywtMTA3NTUxMTcyMSwtMTg3NDQ2NDYxMywtMjUyNDE2
-MjgsLTE2MzkwNjg2NDVdfQ==
+eyJoaXN0b3J5IjpbLTEwNzQxOTQ5MjIsMjI5MjMyODgxLC0xMT
+Y1NjgwMTE3LC0xMDc1NTExNzIxLC0xODc0NDY0NjEzLC0yNTI0
+MTYyOCwtMTYzOTA2ODY0NV19
 -->
