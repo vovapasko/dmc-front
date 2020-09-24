@@ -107,7 +107,7 @@ My dear friend its not over, its only start of very wonderful adventure in angul
 
 # Source code
 
-Synchronization is one of the biggest features of StackEdit. It enables you to synchronize any file in your workspace with other files stored in your **Google Drive**, your **Dropbox** and your **GitHub** accounts. This allows you to keep writing on other devices, collaborate with people you share the file with, integrate easily into your workflow... The synchronization mechanism takes place every minute in the background, downloading, merging, and uploading file modifications.
+Welcome back, lets start from Angular ecosystem: services, components, pipes, modules,
 
 There are two types of synchronization and they can complement each other:
 
@@ -219,6 +219,7 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTExNjU2ODAxMTcsLTEwNzU1MTE3MjEsLT
-E4NzQ0NjQ2MTMsLTI1MjQxNjI4LC0xNjM5MDY4NjQ1XX0=
+eyJoaXN0b3J5IjpbLTg5NzAxNzg3NywtMTE2NTY4MDExNywtMT
+A3NTUxMTcyMSwtMTg3NDQ2NDYxMywtMjUyNDE2MjgsLTE2Mzkw
+Njg2NDVdfQ==
 -->
