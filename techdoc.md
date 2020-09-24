@@ -102,7 +102,7 @@ But this file is needed for **Heroku** which does not implement hosting single `
 
 ## Resume
 
-My dear friend its not over
+My dear friend its not over, its only start of very wonderful adventure in angular world.
 
 
 # Synchronization
@@ -219,6 +219,6 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTU4OTY5NjkzMSwtMTA3NTUxMTcyMSwtMT
-g3NDQ2NDYxMywtMjUyNDE2MjgsLTE2MzkwNjg2NDVdfQ==
+eyJoaXN0b3J5IjpbLTE0NjcxOTQ4MTksLTEwNzU1MTE3MjEsLT
+E4NzQ0NjQ2MTMsLTI1MjQxNjI4LC0xNjM5MDY4NjQ1XX0=
 -->
