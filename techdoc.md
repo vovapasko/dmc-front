@@ -361,10 +361,14 @@ Structure:
 - extras
 - form
 
-### Pages
+#### Account
+This module contain confirm, login, password reset, signup pages:
+
+- confirm
+	> 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE4NDY1ODk5MTEsLTIwMDk3NjUxMTEsMT
-ExMDIxMzQ1MCwyMjkyMzI4ODEsLTExNjU2ODAxMTcsLTEwNzU1
-MTE3MjEsLTE4NzQ0NjQ2MTMsLTI1MjQxNjI4LC0xNjM5MDY4Nj
-Q1XX0=
+eyJoaXN0b3J5IjpbLTUzMzU1ODI5NSwtMjAwOTc2NTExMSwxMT
+EwMjEzNDUwLDIyOTIzMjg4MSwtMTE2NTY4MDExNywtMTA3NTUx
+MTcyMSwtMTg3NDQ2NDYxMywtMjUyNDE2MjgsLTE2MzkwNjg2ND
+VdfQ==
 -->
