@@ -5,9 +5,9 @@ Hi! This is the documentation to help you in updating, configuration and maintai
 
 # Ecosystem
 
-This project was generated with  [Angular CLI](https://github.com/angular/angular-cli)  version 7.3.8 and updated to 10.1.1 (latest version).
+This project was generated with  [Angular CLI](https://github.com/angular/angular-cli)  version 7.3.8 and updated to 10.1.1.
 
-The project was created by [Themeforest](https://themeforest.net/item/ubold-responsive-web-app-kit/13489470) and included only angular full pages
+The project was created by [Themeforest](https://themeforest.net/item/ubold-responsive-web-app-kit/13489470) and included only angular full version. Current Ubol
 
 ## Create files and folders
 
@@ -144,5 +144,5 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTcyNjIyMzMzMCwtMTYzOTA2ODY0NV19
+eyJoaXN0b3J5IjpbMTU3OTM3OTQ0OSwtMTYzOTA2ODY0NV19
 -->
