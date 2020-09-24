@@ -400,9 +400,18 @@ This module has three pages such as **composeemail**, **inbox**, **reademail**:
 - inbox
 	> This component contain logic for list all messages
 - reademail
-	> This component for details
+	> This component represent email details
+
+#### Extras
+Extras module has only one profile page:
+
+- profile
+	> User profile page, editing avatar, first name, last name
+
+#### Form
+Contain 	validation reuseable components 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTI0ODc0MjIxMiwtNTMzNTU4Mjk1LC0yMD
+eyJoaXN0b3J5IjpbMTg3NzEyMTc0NCwtNTMzNTU4Mjk1LC0yMD
 A5NzY1MTExLDExMTAyMTM0NTAsMjI5MjMyODgxLC0xMTY1Njgw
 MTE3LC0xMDc1NTExNzIxLC0xODc0NDY0NjEzLC0yNTI0MTYyOC
 wtMTYzOTA2ODY0NV19
