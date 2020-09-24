@@ -11,7 +11,7 @@ The project was created by [Themeforest](https://themeforest.net/item/ubold-resp
 
 ## Dependencies
 
-Let's talk about every dependency in the project. So open `package.json` and take a look at **dependencies** section. Here we see angular/*  .We will not talk about **devDependencies**
+Let's talk about every dependency in the project. So open `package.json` and take a look at **dependencies** section. Here we see a lot of angular/* dependecies, they are very important   .We will not talk about **devDependencies**
 
 
 ## Switch to another file
@@ -145,6 +145,5 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEyNDE1MTgyNDMsLTE2MzkwNjg2NDVdfQ
-==
+eyJoaXN0b3J5IjpbLTE5MTI2NjgzLC0xNjM5MDY4NjQ1XX0=
 -->
