@@ -111,11 +111,14 @@ Welcome back, in this section you will understand how this project works with: c
 
 
 ## Before app folder
+**src** folder contain **app**, **environments** directories and some additional configuration files like:
 
+- index.html
+	> Here yo
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTk3OTgxMTAyOCwtMTE2NTY4MDExNywtMT
-A3NTUxMTcyMSwtMTg3NDQ2NDYxMywtMjUyNDE2MjgsLTE2Mzkw
-Njg2NDVdfQ==
+eyJoaXN0b3J5IjpbNzg5MTI3MDM2LC0xMTY1NjgwMTE3LC0xMD
+c1NTExNzIxLC0xODc0NDY0NjEzLC0yNTI0MTYyOCwtMTYzOTA2
+ODY0NV19
 -->
