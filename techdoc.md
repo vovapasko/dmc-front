@@ -15,8 +15,9 @@ Let's talk about every dependency in the project. So open `package.json` and tak
 
 
 - ng-bootstrap/ng-bootstrap
+	> We love bootstrap, its ease to implement 
 - 
-We will not talk about **devDependencies** because they include develope packages for testing, linting, p and other good things for better developmnet 
+We will not talk about **devDependencies** because they include develope packages for testing, linting, pretify and other good things for better developmnet 
 
 
 ## Switch to another file
@@ -150,5 +151,5 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNDIyNTA3NzYwLC0xNjM5MDY4NjQ1XX0=
+eyJoaXN0b3J5IjpbMTYwMDA1MTIxMywtMTYzOTA2ODY0NV19
 -->
