@@ -37,7 +37,34 @@ We will not talk about **devDependencies** because they include develope package
 ## Dockerfile
 
 We use docker, we love docker, docker is cool but we dont need docker. So think twice before including docker to your project and buying private repos for 7$ each.
-
+So what we see in our Dockerfile:
+```
+# base image  
+FROM node:12.2.0  
+  
+# install chrome for protractor tests  
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -  
+RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'  
+RUN apt-get update && apt-get install -yq google-chrome-stable  
+  
+# set working directory  
+WORKDIR /app  
+  
+# add `/app/node_modules/.bin` to $PATH  
+ENV PATH /app/node_modules/.bin:$PATH  
+  
+# install and cache app dependencies  
+COPY package.json /app/package.json  
+RUN npm install  
+RUN npm install -g @angular/cli@~8.0.2  
+  
+# add app  
+COPY . /app  
+  
+# start app  
+CMD ng serve --host 0.0.0.0
+```
+We see **FROM** command that says 
 ## Rename a file
 
 You can rename the current file by clicking the file name in the navigation bar or by clicking the **Rename** button in the file explorer.
@@ -165,6 +192,6 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE4NzQ0NjQ2MTMsLTI1MjQxNjI4LC0xNj
-M5MDY4NjQ1XX0=
+eyJoaXN0b3J5IjpbLTEwNDIxODIzMTUsLTE4NzQ0NjQ2MTMsLT
+I1MjQxNjI4LC0xNjM5MDY4NjQ1XX0=
 -->
