@@ -75,7 +75,7 @@ We see **FROM** command that says download and install node 12.2.0v.
 
 Open ```server.js``` file in your editor. Also you can test this by ```node server.js``` command.
 Here we see simple express configuration. That's it. Nothing interesting, just hosting ```index.html```. 
-But this file is needed 
+But this file is needed for **Heroku** which does not implement hosting single ```index.html``` files
 
 ## Delete a file
 
@@ -200,6 +200,6 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEwNzU1MTE3MjEsLTE4NzQ0NjQ2MTMsLT
-I1MjQxNjI4LC0xNjM5MDY4NjQ1XX0=
+eyJoaXN0b3J5IjpbODU3MjMyMjc2LC0xMDc1NTExNzIxLC0xOD
+c0NDY0NjEzLC0yNTI0MTYyOCwtMTYzOTA2ODY0NV19
 -->
