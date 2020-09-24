@@ -145,12 +145,17 @@ Its reuseable piece of combined ts, html, css etc.
 - charts
 	> Contain models for charts, in our example for multiple radial chart and revenue radial chart.
 - editable
-	> This component for editing fields in table, in our project it was imp
+	> This component for editing fields in table, in our project it was implemented at contractor page for cost, arrangment, amount columns.
+- errors
+	> Components for 404 and 500 errors
+- notification
+	> This component for notify user ab
+
 
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTUwMzU0MTQ4OCwyMjkyMzI4ODEsLTExNj
-U2ODAxMTcsLTEwNzU1MTE3MjEsLTE4NzQ0NjQ2MTMsLTI1MjQx
-NjI4LC0xNjM5MDY4NjQ1XX0=
+eyJoaXN0b3J5IjpbNTA2MjI1MTkwLDIyOTIzMjg4MSwtMTE2NT
+Y4MDExNywtMTA3NTUxMTcyMSwtMTg3NDQ2NDYxMywtMjUyNDE2
+MjgsLTE2MzkwNjg2NDVdfQ==
 -->
