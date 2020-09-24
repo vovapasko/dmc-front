@@ -23,7 +23,7 @@ Let's talk about every dependency in the project. So open `package.json` and tak
 - alife-file-to-base64
 	> Upload and convert file to base64, as usual its image. We used this to upload avatar in the profile page and show user result.
 - angular-archwizard
-	>  
+	> Its like you used to install games in 2009, step by step selecting folder for a game and installing DirectX
 
 We will not talk about **devDependencies** because they include develope packages for testing, linting, pretify and other good things for better developmnet, you should use them but you dont have to understand them.
 
@@ -159,6 +159,5 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE2NjI5MjMwNzYsLTE2MzkwNjg2NDVdfQ
-==
+eyJoaXN0b3J5IjpbMTMzNzg1NDgxMiwtMTYzOTA2ODY0NV19
 -->
