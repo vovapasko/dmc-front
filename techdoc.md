@@ -97,9 +97,10 @@ But this file is needed for **Heroku** which does not implement hosting single `
 	> simple how to use
 - tsconfig.json
 	> This file provides ```paths``` for ease import like that ```import smth from '@pages/...'``` 
+- tslint.json
+	> linter for better coding, rules and other rules
 
-
-## Export a file
+## Resume
 
 You can export the current file by clicking **Export to disk** in the menu. You can choose to export the file as plain Markdown, as HTML using a Handlebars template or as a PDF.
 
@@ -218,6 +219,6 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNzk0Njk5MTksLTEwNzU1MTE3MjEsLTE4Nz
-Q0NjQ2MTMsLTI1MjQxNjI4LC0xNjM5MDY4NjQ1XX0=
+eyJoaXN0b3J5IjpbMTU3MTcyOTg3NCwtMTA3NTUxMTcyMSwtMT
+g3NDQ2NDYxMywtMjUyNDE2MjgsLTE2MzkwNjg2NDVdfQ==
 -->
