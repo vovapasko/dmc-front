@@ -442,10 +442,14 @@ Contains reuseable pipes for processing complex logic in html
 	> returns formats with label
 - contractors-names
 	> returns names of all contractors
-- 
+- contractors-news-amount
+	> returns news amount of all contractors by format
+- project-status
+	> returns filtered by confirm
+
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTY2Mjk5MTg2NCwtNTMzNTU4Mjk1LC0yMD
+eyJoaXN0b3J5IjpbMTM5NDAwMTk0MywtNTMzNTU4Mjk1LC0yMD
 A5NzY1MTExLDExMTAyMTM0NTAsMjI5MjMyODgxLC0xMTY1Njgw
 MTE3LC0xMDc1NTExNzIxLC0xODc0NDY0NjEzLC0yNTI0MTYyOC
 wtMTYzOTA2ODY0NV19
