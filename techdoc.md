@@ -280,7 +280,9 @@ Controllers for application, react to components changing, sending api calls.
 	> initialize forms for create and update client, client CRUD,
 	select client for updating.
 - contractor.service
-	> initialize forms for create, update contractor, format. Contractor CRUD, check methods
+	> initialize forms for create, update contractor, format. Contractor CRUD, check contractor methods (checkbox), collect and process data for requests
+- error.service
+	> set and clear error
 
 
 
@@ -288,7 +290,7 @@ Controllers for application, react to components changing, sending api calls.
 	
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTY5NDEzMTQ0OCwyMjkyMzI4ODEsLTExNj
+eyJoaXN0b3J5IjpbMTE1Mzc4MjYyOCwyMjkyMzI4ODEsLTExNj
 U2ODAxMTcsLTEwNzU1MTE3MjEsLTE4NzQ0NjQ2MTMsLTI1MjQx
 NjI4LC0xNjM5MDY4NjQ1XX0=
 -->
