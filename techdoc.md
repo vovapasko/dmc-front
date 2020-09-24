@@ -309,15 +309,16 @@ So that's it, services do a lot of work in app based on Angular methodology.
 
 "Store is RxJS powered global state management for Angular applications, inspired by Redux. Store is a controlled state container designed to help write performant, consistent applications on top of Angular."
 
-Lets see what is this
+Lets see what is this and what it contains
 
-- 
+- actions
+	> actions its classes for determine which exactly thing is happening, 
 
 
 	
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTExNzUwNTk1NTIsMTExMDIxMzQ1MCwyMj
+eyJoaXN0b3J5IjpbLTEyOTE5MjAwMjYsMTExMDIxMzQ1MCwyMj
 kyMzI4ODEsLTExNjU2ODAxMTcsLTEwNzU1MTE3MjEsLTE4NzQ0
 NjQ2MTMsLTI1MjQxNjI4LC0xNjM5MDY4NjQ1XX0=
 -->
