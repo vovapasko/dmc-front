@@ -69,10 +69,11 @@ We see **FROM** command that says download and install node 12.2.0v.
 **WORKDIR**  define current working directory.
 **ENV** add or edit environment variable.
 **COPY** you can use ```RUN cp smth smth``` instead but better to write like documentation says. And its more readable to use Docker commands instead plenty **RUN**.
-**CMD** it should be your last command in Dockerfile, that command says what this container does and for what this all 
-## Rename a file
+**CMD** it should be your last command in Dockerfile, that command says what this container does and for what all this stuff.
 
-You can rename the current file by clicking the file name in the navigation bar or by clicking the **Rename** button in the file explorer.
+## Server
+
+Lets 
 
 ## Delete a file
 
@@ -197,6 +198,6 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTU3MjE1NzU1NCwtMTg3NDQ2NDYxMywtMj
+eyJoaXN0b3J5IjpbMjAxODUyMjA2NywtMTg3NDQ2NDYxMywtMj
 UyNDE2MjgsLTE2MzkwNjg2NDVdfQ==
 -->
