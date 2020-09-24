@@ -143,12 +143,14 @@ Here we go to the magic. Before we start I want to say that this code was writte
 ### Components
 Its reuseable piece of combined ts, html, css etc. 
 - charts
-	> Contain models for charts, in our example 
+	> Contain models for charts, in our example for multiple radial chart and revenue radial chart.
+- editable
+	> This component for editing fields in table, in our project it was imp
 
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE5ODUyNDI2NDMsMjI5MjMyODgxLC0xMT
-Y1NjgwMTE3LC0xMDc1NTExNzIxLC0xODc0NDY0NjEzLC0yNTI0
-MTYyOCwtMTYzOTA2ODY0NV19
+eyJoaXN0b3J5IjpbLTUwMzU0MTQ4OCwyMjkyMzI4ODEsLTExNj
+U2ODAxMTcsLTEwNzU1MTE3MjEsLTE4NzQ0NjQ2MTMsLTI1MjQx
+NjI4LC0xNjM5MDY4NjQ1XX0=
 -->
