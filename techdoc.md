@@ -315,13 +315,14 @@ Lets see what is this and what it contains
 	> actions its classes for determine which exactly thing you want to call
 	for example if you want to get all clients you could use GetClients class ```dispatch(new GetClients());```
 - effects
-	> effect it 
+	> effect its a method you want to call after dispatch GetClients
+	``````
 
 
 	
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE2MzYxNjMyNDQsMTExMDIxMzQ1MCwyMj
-kyMzI4ODEsLTExNjU2ODAxMTcsLTEwNzU1MTE3MjEsLTE4NzQ0
-NjQ2MTMsLTI1MjQxNjI4LC0xNjM5MDY4NjQ1XX0=
+eyJoaXN0b3J5IjpbLTg5MjYyNjYwOSwxMTEwMjEzNDUwLDIyOT
+IzMjg4MSwtMTE2NTY4MDExNywtMTA3NTUxMTcyMSwtMTg3NDQ2
+NDYxMywtMjUyNDE2MjgsLTE2MzkwNjg2NDVdfQ==
 -->
