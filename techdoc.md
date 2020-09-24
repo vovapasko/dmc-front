@@ -409,9 +409,18 @@ Extras module has only one profile page:
 	> User profile page, editing avatar, first name, last name
 
 #### Form
-Contain 	validation reuseable components 
+Contain validation reuseable components
+
+- validation
+	> regex, patterns, error-highlight
+
+ 
+### Shared
+
+This folder for sharing some common directives, pipes and ui**
+
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTg3NzEyMTc0NCwtNTMzNTU4Mjk1LC0yMD
+eyJoaXN0b3J5IjpbLTE4ODU5NzY0MSwtNTMzNTU4Mjk1LC0yMD
 A5NzY1MTExLDExMTAyMTM0NTAsMjI5MjMyODgxLC0xMTY1Njgw
 MTE3LC0xMDc1NTExNzIxLC0xODc0NDY0NjEzLC0yNTI0MTYyOC
 wtMTYzOTA2ODY0NV19
