@@ -1,42 +1,42 @@
 # Welcome to DMC-FRONT!
 
-Hi! This is the documentation to help you in updating, configuration and maintaining the crm system.
+Hi! This is the documentation to help you in updating, configuration, and maintaining the CRM system.
 
 
 # Ecosystem
 
 This project was generated with  [Angular CLI](https://github.com/angular/angular-cli)  version 7.3.8 and updated to 10.1.1.
 
-The project was created by [Themeforest](https://themeforest.net/item/ubold-responsive-web-app-kit/13489470) and included only angular full version. Current Ubold version is 4.1.0 which implement Vue.js, React.js and Angular as well.
+The project was created by [Themeforest](https://themeforest.net/item/ubold-responsive-web-app-kit/13489470) and included only angular full version. The current Ubold version is 4.1.0 which implements Vue.js, React.js, and Angular as well.
 
 ## Dependencies
 
-Let's talk about every dependency in the project. So open `package.json` and take a look at **dependencies** section. Here we see a lot of angular/* and fullcalendar/* dependecies they are very important but not interesting. Interesting dependencies looks like that:
+Let's talk about every dependency in the project. So open `package.json` and take a look at **dependencies** section. Here we see a lot of angular/* and fullcalendar/* dependecies they are very important but not interesting. Interesting dependencies look like that:
 
 
 - ng-bootstrap/ng-bootstrap
-	> We love bootstrap, its ease to implement and use, so its our way.
+	> We love bootstrap, its easy to implement and use, so it's our way.
 - ng-select
-	> Prety good select input, well understable
+	> Prety good select input, well understandable
 - ngrx/core
 	> Redux-like-angular-alternative. If you have used redux in React.js projects you know what it means, but if you have not read [this](https://redux.js.org/introduction/getting-started)
 - alife-file-to-base64
-	> Upload and convert file to base64, as usual its image. We used this to upload avatar in the profile page and show user result.
+	> Upload and convert file to base64, as usual, its image. We used this to upload the avatar on the profile page and show user results.
 - angular-archwizard
-	> Its like you used to install games in 2009, step by step selecting folder for a game and installing DirectX and launching.
+	> It's like you used to install games in 2009, step by step selecting a folder for a game and installing DirectX and launching.
 - angularx-social-login
-	> Awesome package for integration with Google and Facebook OAuth2, ease to set and use.
+	> Awesome package for the integration with Google and Facebook OAuth2, ease to set and use.
 - ngx-quill
-	> Beauty word-like editor, well designed and ease to implement
+	> Beauty word-like editor, well designed and easy to implement
 
-This a list of interesting and 'need to explain' dependecies. Its how 'it is', battle-tested tools.
+This a list of interesting and 'need to explain' dependencies. Its how 'it is', battle-tested tools.
 
-We will not talk about **devDependencies** because they include develope packages for testing, linting, pretify and other good things for better developmnet, you should use them but you dont have to understand them.
+We will not talk about **devDependencies** because they include developing packages for testing, linting, prettify, and other good things for better development, you should use them but you don't have to understand them.
 
 
 ## Dockerfile
 
-We use docker, we love docker, docker is cool but we dont need docker. So think twice before including docker to your project and buying private repos for 7$ each.
+We use docker, we love docker, docker is cool but we don't need docker. So think twice before including docker to your project and buying private repos for 7$ each.
 So what we see in our Dockerfile:
 ```
 # base image  
@@ -47,7 +47,7 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
 RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'  
 RUN apt-get update && apt-get install -yq google-chrome-stable  
   
-# set working directory  
+# set the working directory  
 WORKDIR /app  
   
 # add `/app/node_modules/.bin` to $PATH  
@@ -65,15 +65,15 @@ COPY . /app
 CMD ng serve --host 0.0.0.0
 ```
 We see **FROM** command that says download and install node 12.2.0v.
-**RUN** says to OS to get something from url and start some shell scripts and do update and install chrome or whatever you want. So this command do whatever you want to do with OS.
-**WORKDIR**  define current working directory.
-**ENV** add or edit environment variable.
-**COPY** you can use ```RUN cp smth smth``` instead but better to write like documentation says. And its more readable to use Docker commands instead plenty **RUN**.
+**RUN** says to OS to get something from url and start some shell scripts and do an update and install chrome or whatever you want. So this command does whatever you want to do with OS.
+**WORKDIR** defines the current working directory.
+**ENV** add or edit the environment variable.
+**COPY** you can use ```RUN cp smth smth``` instead-but better to write like the documentation says. And it's more readable to use Docker commands instead plenty **RUN**.
 **CMD** it should be your last command in Dockerfile, that command says what this container does and for what all this stuff.
 
 ## Server
 
-Open ```server.js``` file in your editor. Also you can test this by ```node server.js``` command.
+Open ```server.js``` file in your editor. Also, you can test this by ```node server.js``` command.
 Here we see a simple express configuration. That's it. Nothing interesting, just hosting ```index.html```. 
 But this file is needed for **Heroku** which does not implement hosting single ```index.html``` files. So we need to wrap our application in express server.
 
@@ -102,7 +102,7 @@ But this file is needed for **Heroku** which does not implement hosting single `
 
 ## Resume
 
-My dear friend its not over, its only start of very wonderful adventure in angular world. If you're tired or dont want to spend your time in reading how it works you can skip next section. Its not problem if you dont read explanation, explanation for scared boys and I hope you are not scared boy. So dont read how to code, close this doc and just go to coding. "Luck loves the brave"
+My dear friend its not over, its only the start of a very wonderful adventure in angular world. If you're tired or don't want to spend your time reading how it works you can skip the next section. It's not a problem if you don't read an explanation, explanation for scared boys and I hope you are not scared, boy. So don't read how to code, close this doc and just go to coding. "Luck loves the brave"
 
 
 # Source code
@@ -128,31 +128,31 @@ Welcome back, in this section you will understand how this project works with: c
 - test.ts
 	> test configuration
 - tsconfig.app.json
-	> another file just for something i realy dont care
+	> another file just for something i really don't care
 - tsconfig.spec.json
 	> read above
 - tslint.json
 	> lint code for better code
 
-**environments** folder contain two files, one for develope other for production, either contain the same structure but with different values.
-**assets** folder contain fonts, icons, images, sccs files.
+**environments** folder contains two files, one for develop other for production, either contain the same structure but with different values.
+**assets** folder contains fonts, icons, images, sccs files.
 
-## Inside application
-Here we go to the magic. Before we start I want to say that this code was written with love, its not joke , its realy true. You can find author by this nicknames (tomiho19, Kronus, sa1exx, pussyDestoyer, @sycablyad).
+## Inside the application
+Here we go to the magic. Before we start I want to say that this code was written with love, its no joke, it's really true. You can find the author by these nicknames (tomiho19, Kronus, sa1exx, pussyDestoyer, @sycablyad).
 
 ### Components
-Its reuseable piece of combined ts, html, css etc. 
+It's a reuseable piece of combined ts, html, css etc. 
 - charts
 	> Contain models for charts, in our example for multiple radial chart and revenue radial chart.
 - editable
-	> This component for editing fields in table, in our project it was implemented at contractor page for cost, arrangment, amount columns.
+	> This component for editing fields in table, in our project it was implemented at contractor page for cost, arrangement, amount columns.
 - errors
 	> Components for 404 and 500 errors
 - notification
-	> This component for notify user about errors, warnings, info, success. In right top corner, contain title and message and timeout about 1.5s. Injects notifcation service for handling notifications.
+	> This component for notifying a user about errors, warnings, info, success. In the right top corner, containing title and message and timeout about 1.5s. Injects notification service for handling notifications.
 
 ### Constants
-Export something constant values such as numbers, strings and other primitive types. 
+Export something constant values such as numbers, strings, and other primitive types. 
 
 colors.ts
 
@@ -191,8 +191,8 @@ export const endpoints = {
 ```
 
 ### Guards
-Auth guards provide security for routes, redirect to login page. Its like  a guard you know, you cannot go inside application if you have not logged in.
-canActivate method checks user and returns boolean, if not logged in so redirect to login page with the return url.
+Auth guards provide security for routes, redirect to the login page. It's like a guard you know, you cannot go inside the application if you have not logged in.
+canActivate method checks the user and returns boolean, if not logged in so redirect to the login page with the return URL.
 
 ### Helpers
 Some helper classes for some needs.
@@ -202,13 +202,13 @@ Some helper classes for some needs.
 - error-handler
 	> notify user about error, calls notification service and says what to do
 - request-handler
-	> convert camelCase to snake_case before sending to api, and process callback
+	> convert camelCase to snake_case before sending to API, and process callback
 - response-handler
-	> notify user about success, clear any errors that happend before
+	> notify a user about success, clear any errors that happened before
 - router-stub
 	> returns string url, was created for testing services
 - utility
-	> some additional functions for do something additional things...
+	> some additional functions to do something additional things...
 
 ### Interceptors
 Interceptor its a middleware class, processing some logic between requests and requests-handlers.
@@ -223,7 +223,7 @@ Interceptor its a middleware class, processing some logic between requests and r
 	> do prevent waiting for closed requests
 
 ### Mocks
-Mock data for testing services, components. Export mock data generated by backend server. Mock files contain exactly copy of returned data from api.
+Mock data for testing services, components. Export mock data generated by the backend server. Mock files contain exactly a copy of returned data from API.
 
 ### Models
 Contain **instances**, **payloads**, **responses** folders. This folders include interfaces. For example instances can be like that:
@@ -264,7 +264,7 @@ export interface LoginResponse {
 So this is what we know about api.
 
 ### Providers
-Provide connection between application and Web API
+Provide connection between the application and Web API
 
 - cookie.service
 	> set, get values to cookies + expires
@@ -275,7 +275,7 @@ Provide connection between application and Web API
 Controllers for application, react to components changing, sending api calls.
 
 - auth.service
-	> service for authentication user. Getting, setting, removing user, token, instance. Request access token by refresh token, handle unauthorised.
+	> service for authentication users. Getting, setting, removing user, token, instance. Request access token by refresh token, handle unauthorized.
 - client.service
 	> initialize forms for create and update client, client CRUD,
 	select client for updating.
@@ -286,7 +286,7 @@ Controllers for application, react to components changing, sending api calls.
 - loading.service
 	> start and stop loading for spinners
 - news.service
-	> Big, huge service CRUD for project, news, formats, hashtag. Initializing forms for this all stuf. Handling and processing data and payload for requests. This is a big service.
+	> Big, huge service CRUD for a project, news, formats, hashtag. Initializing forms for this all stuff. Handling and processing data and payload for requests. This is a big service.
 - notification.service
 	> notify methods, store notifications and notification history, tracking time for notification
 - pagination.service
@@ -303,13 +303,13 @@ Controllers for application, react to components changing, sending api calls.
 - user.service
 	> CRUD for users, signup, confirm reset password, update profile etc
 
-So that's it, services do a lot of work in app based on Angular methodology.
+So that's it, services do a lot of work in an app based on Angular methodology.
 
 ### Store
 
-"Store is RxJS powered global state management for Angular applications, inspired by Redux. Store is a controlled state container designed to help write performant, consistent applications on top of Angular."
+"Store is RxJS powered global state management for Angular applications, inspired by Redux. The store is a controlled state container designed to help write performant, consistent applications on top of Angular."
 
-Lets see what is this and what it contains
+Let's see what is this and what it contains
 
 - actions
 	> actions its classes for determine which exactly thing you want to call
@@ -338,21 +338,21 @@ getClients$ = this.actions$.pipe(
 
 	
 ### Layouts
-In out project we have four layouts:
+In the out project we have four layouts:
 
 - footer
 	> contain footer info something like that ```2015 - 2020 © UBold theme by Coderthemes```
 - rightsidebar
-	> we did not use this component at all, but there is some configurations for theme, styles etc
+	> we did not use this component at all, but there are some configurations for theme, styles etc
 - sidebar
-	> menu, links for navigate to pages
+	> menu, links for navigating to pages
 - topbar
 	> notification menu, create new email tools etc
 
 ```layout.component``` is a container for pages, skeleton
 
 ### Pages
-Pages contain some modules, its modular arhitecture.
+Pages contain some modules, its modular architecture.
 Structure:
 	
 - account
@@ -362,10 +362,10 @@ Structure:
 - form
 
 #### Account
-This module contain confirm, login, password reset, signup pages:
+This module contains confirm, login, password reset, signup pages:
 
 - confirm
-	> Informs a user that him password was changed
+	> Informs a user that his password was changed
 - login
 	> This component for login user in crm
 - reset-password
@@ -374,22 +374,22 @@ This module contain confirm, login, password reset, signup pages:
 	> This component for sign up new user
 
 #### CRM
-This module contain burst-news, clients, contractors, projects, publications, reports, users pages
+This module contains burst-news, clients, contractors, projects, publications, reports, users pages
 
 - burst-news
-	> This component do a lot of work. Here we can create news wave which include news. News contain title, contractors and content, see **news.wave.model** . We can create one or many news wave for **news project**. 
+	> This component does a lot of work. Here we can create a news wave that includes news. News contains title, contractors, and content, see **news.wave.model** . We can create one or many news waves for **news project**. 
 - clients
 	> This component for comfortable working with clients. Simple CRUD.
 - contractors
-	> This component do crud for contractor and many another actions such as partial update contractor for cost, amount, arrangment fields, multiple edit and delete.
+	> This component does crud for a contractor and many other actions such as partial update contractor for cost, amount, arrangement fields, multiple edits and delete.
 - projects
-	> Here we create news project for burst news. So we have one project and can create news waves for this project.
+	> Here we create a news project for burst news. So we have one project and can create news waves for this project.
 - publications
-	> This component informs us about contractor preferences such as what contractor can publish or what contractor cannot publish or another special information
+	> This component informs us about contractor preferences such as what the contractor can publish or what contractor cannot publish or another special information
 - reports
 	> Here we see data of project and we can download, upload or remove report.xls file
 - users
-	> This component for watch full list of users in system, downgrade or upgrade user privileges
+	> This component for watching the full list of users in the system, downgrade or upgrade user privileges
 
 #### Email
 
@@ -409,7 +409,7 @@ Extras module has only one profile page:
 	> User profile page, editing avatar, first name, last name
 
 #### Form
-Contain validation reuseable components
+Contain validation reusable components
 
 - validation
 	> regex, patterns, error-highlight
@@ -420,7 +420,7 @@ Contain validation reuseable components
 This folder for sharing some common **directives**, **pipes** and **ui**
 
 #### Directives
-Contains reuseable directives for html tags with additional logic
+Contains reusable directives for html tags with additional logic
 
 - edit-mode
 	> returns edit mode template
@@ -432,7 +432,7 @@ Contains reuseable directives for html tags with additional logic
 	> returns view mode template
 
 #### Pipes
-Contains reuseable pipes for processing complex logic in html
+Contains reusable pipes for processing complex logic in html
 
 - contractors-arrangment
 	> returns arrangment of all contractors by format
@@ -451,10 +451,4 @@ Contains reuseable pipes for processing complex logic in html
 Here we see some ui components which we use in our project.
 
 ## Conclusion
-Thank you mate for reading this, have a nice day, love mom and dont worry about errors. And remember it's just a project, but how you do it will determine your future.
-<!--stackedit_data:
-eyJoaXN0b3J5IjpbLTM0MTM4MjY2NCwtNTMzNTU4Mjk1LC0yMD
-A5NzY1MTExLDExMTAyMTM0NTAsMjI5MjMyODgxLC0xMTY1Njgw
-MTE3LC0xMDc1NTExNzIxLC0xODc0NDY0NjEzLC0yNTI0MTYyOC
-wtMTYzOTA2ODY0NV19
--->
+Thank you mate for reading this, have a nice day, love mom and don't worry about errors. And remember it's just a project, but how you do it will determine your future.
