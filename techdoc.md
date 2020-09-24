@@ -102,7 +102,7 @@ But this file is needed for **Heroku** which does not implement hosting single `
 
 ## Resume
 
-My dear friend its not over, its only start of very wonderful adventure in angular world. If you're tired or dont want to spend your time in reading how it works you can skip next section. Its not problem if you are like author you will not read explanation, explanation for scared boys and I hope you are not scared boy. So dont read how to code close this doc and just go to coding. "Luck loves the brave"
+My dear friend its not over, its only start of very wonderful adventure in angular world. If you're tired or dont want to spend your time in reading how it works you can skip next section. Its not problem if you dont read explanation, explanation for scared boys and I hope you are not scared boy. So dont read how to code, close this doc and just go to coding. "Luck loves the brave"
 
 
 # Source code
@@ -219,6 +219,6 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE1NTU5NzkzOTQsLTEwNzU1MTE3MjEsLT
+eyJoaXN0b3J5IjpbLTExNjU2ODAxMTcsLTEwNzU1MTE3MjEsLT
 E4NzQ0NjQ2MTMsLTI1MjQxNjI4LC0xNjM5MDY4NjQ1XX0=
 -->
