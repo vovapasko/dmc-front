@@ -89,7 +89,13 @@ But this file is needed for **Heroku** which does not implement hosting single `
 	> Pretify your code by shortcut CTRL + ALT + L in ubuntu, Webstorm.
 - angular.json
 	> Was generated automaticly by angular-cli (maybe)
-- 
+- ngsw-config.json
+	> Realy dont know what is this, something valuable maybe
+- package-lock.json
+	> Was generated automaticly by npm
+- README.md
+	> simple how to use
+ 
 
 ## Export a file
 
@@ -210,6 +216,6 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTI3NDA3NTQzNywtMTA3NTUxMTcyMSwtMT
-g3NDQ2NDYxMywtMjUyNDE2MjgsLTE2MzkwNjg2NDVdfQ==
+eyJoaXN0b3J5IjpbLTExNzk0MTI4MzMsLTEwNzU1MTE3MjEsLT
+E4NzQ0NjQ2MTMsLTI1MjQxNjI4LC0xNjM5MDY4NjQ1XX0=
 -->
