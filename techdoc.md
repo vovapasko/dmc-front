@@ -201,9 +201,12 @@ Some helper classes for some needs.
 	> Convert snake case to camel case. In our project we use python and js, so python uses snake_case and js uses camelCase.
 - error-handler
 	> notify user about error, calls notification service and says what to do
-- 
+- request-handler
+	> convert camelCase to snake_case before sending to api, and process callback
+- response-handler
+	> notify user about success, clear any errors that happend before
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbOTkzMDAyODcxLDIyOTIzMjg4MSwtMTE2NT
-Y4MDExNywtMTA3NTUxMTcyMSwtMTg3NDQ2NDYxMywtMjUyNDE2
-MjgsLTE2MzkwNjg2NDVdfQ==
+eyJoaXN0b3J5IjpbLTE2NjI0MzY3MzQsMjI5MjMyODgxLC0xMT
+Y1NjgwMTE3LC0xMDc1NTExNzIxLC0xODc0NDY0NjEzLC0yNTI0
+MTYyOCwtMTYzOTA2ODY0NV19
 -->
