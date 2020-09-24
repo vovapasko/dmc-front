@@ -349,8 +349,12 @@ In out project we have four layouts:
 - topbar
 	> notification menu, create new email tools etc
 
+```layout.component``` is a container for pages, skeleton
+
+### Pag
+
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE0NjMwMzk0NDUsLTIwMDk3NjUxMTEsMT
+eyJoaXN0b3J5IjpbLTIxMjEyMTA1MjMsLTIwMDk3NjUxMTEsMT
 ExMDIxMzQ1MCwyMjkyMzI4ODEsLTExNjU2ODAxMTcsLTEwNzU1
 MTE3MjEsLTE4NzQ0NjQ2MTMsLTI1MjQxNjI4LC0xNjM5MDY4Nj
 Q1XX0=
