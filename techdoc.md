@@ -389,11 +389,14 @@ This module contain burst-news, clients, contractors, projects, publications, re
 - reports
 	> Here we see data of project and we can download, upload or remove report.xls file
 - users
-	> This component for watch full list of users in system, downgrade or upgrade user previligie
+	> This component for watch full list of users in system, downgrade or upgrade user privileges
 
+#### Email
+
+This module has three pages such as **composeemail**, **inbox**, **reademail**
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTA5MjQ5MjA2LC01MzM1NTgyOTUsLTIwMD
-k3NjUxMTEsMTExMDIxMzQ1MCwyMjkyMzI4ODEsLTExNjU2ODAx
-MTcsLTEwNzU1MTE3MjEsLTE4NzQ0NjQ2MTMsLTI1MjQxNjI4LC
-0xNjM5MDY4NjQ1XX0=
+eyJoaXN0b3J5IjpbLTU4MjIzNjA2NywtNTMzNTU4Mjk1LC0yMD
+A5NzY1MTExLDExMTAyMTM0NTAsMjI5MjMyODgxLC0xMTY1Njgw
+MTE3LC0xMDc1NTExNzIxLC0xODc0NDY0NjEzLC0yNTI0MTYyOC
+wtMTYzOTA2ODY0NV19
 -->
