@@ -343,9 +343,14 @@ In out project we have four layouts:
 - footer
 	> contain footer info something like that ```2015 - 2020 © UBold theme by Coderthemes```
 - rightsidebar
-	> we did not use this component at all, but ther
+	> we did not use this component at all, but there is some configurations for theme, styles etc
+- sidebar
+	> menu, links for navigate to pages
+- topbar
+	> notification menu, create new email tools etc
+
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTIwNTIwMzM5ODksLTIwMDk3NjUxMTEsMT
+eyJoaXN0b3J5IjpbLTE0NjMwMzk0NDUsLTIwMDk3NjUxMTEsMT
 ExMDIxMzQ1MCwyMjkyMzI4ODEsLTExNjU2ODAxMTcsLTEwNzU1
 MTE3MjEsLTE4NzQ0NjQ2MTMsLTI1MjQxNjI4LC0xNjM5MDY4Nj
 Q1XX0=
