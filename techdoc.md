@@ -290,7 +290,9 @@ Controllers for application, react to components changing, sending api calls.
 - notification.service
 	> notify methods, store notifications and notification history, tracking time for notification
 - pagination.service
-	> paginate data, universal class, 
+	> paginate data, universal class, provide pageSize, currentPage etc
+- project.service
+	> News project CRUD, with initialize forms for project and email
 
 
 
@@ -298,7 +300,7 @@ Controllers for application, react to components changing, sending api calls.
 	
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTE5MzgyNTcxNSwyMjkyMzI4ODEsLTExNj
+eyJoaXN0b3J5IjpbMTQxNDU1NjkyNSwyMjkyMzI4ODEsLTExNj
 U2ODAxMTcsLTEwNzU1MTE3MjEsLTE4NzQ0NjQ2MTMsLTI1MjQx
 NjI4LC0xNjM5MDY4NjQ1XX0=
 -->
