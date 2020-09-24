@@ -303,15 +303,21 @@ Controllers for application, react to components changing, sending api calls.
 - user.service
 	> CRUD for users, signup, confirm reset password, update profile etc
 
-So that's it, servicec do a lot of work in app based on Angular methodology.
+So that's it, services do a lot of work in app based on Angular methodology.
 
+### Store
 
+"Store is RxJS powered global state management for Angular applications, inspired by Redux. Store is a controlled state container designed to help write performant, consistent applications on top of Angular."
+
+Lets see what is this
+
+- 
 
 
 	
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTY0ODI0ODI5OCwxMTEwMjEzNDUwLDIyOT
-IzMjg4MSwtMTE2NTY4MDExNywtMTA3NTUxMTcyMSwtMTg3NDQ2
-NDYxMywtMjUyNDE2MjgsLTE2MzkwNjg2NDVdfQ==
+eyJoaXN0b3J5IjpbLTExNzUwNTk1NTIsMTExMDIxMzQ1MCwyMj
+kyMzI4ODEsLTExNjU2ODAxMTcsLTEwNzU1MTE3MjEsLTE4NzQ0
+NjQ2MTMsLTI1MjQxNjI4LC0xNjM5MDY4NjQ1XX0=
 -->
