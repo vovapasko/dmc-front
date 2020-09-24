@@ -25,7 +25,9 @@ Let's talk about every dependency in the project. So open `package.json` and tak
 - angular-archwizard
 	> Its like you used to install games in 2009, step by step selecting folder for a game and installing DirectX and launching.
 - angularx-social-login
-	> Awesome package for integration with Google and 
+	> Awesome package for integration with Google and Facebook OAuth2, ease to set and use.
+- ngx-quill
+	> Beauty
 
 We will not talk about **devDependencies** because they include develope packages for testing, linting, pretify and other good things for better developmnet, you should use them but you dont have to understand them.
 
@@ -161,6 +163,5 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE2NTgxNjA1NjMsLTE2MzkwNjg2NDVdfQ
-==
+eyJoaXN0b3J5IjpbMTg3NTMyOTg1MywtMTYzOTA2ODY0NV19
 -->
