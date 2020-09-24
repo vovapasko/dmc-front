@@ -1,11 +1,6 @@
-import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
-import { NewsWaves } from '@models/instances/news-waves';
-import { NewsProject } from '@models/instances/news-project';
-import { News } from '@models/instances/news';
+import { AbstractControl } from '@angular/forms';
 import { Project } from '@models/instances/project';
-import { blue, green, red, yellow } from '@constants/colors';
 import { matchColor, percentage } from '@constants/formula';
-import { Contractor } from '@models/instances/contractor';
 
 export const toCamel = (str: string): string => {
   return str.replace(/([-_][a-z])/gi, (element: string) => {
