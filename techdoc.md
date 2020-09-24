@@ -192,9 +192,16 @@ export const endpoints = {
 
 ### Guards
 Auth guards provide security for routes, redirect to login page. Its like  a guard you know, you cannot go inside application if you have not logged in.
-canActivate method checks user and returns boolean, i
+canActivate method checks user and returns boolean, if not logged in so redirect to login page with the return url.
+
+### Helpers
+Some helper classes for some needs.
+
+- convert-case
+	> Convert snake case fro
+
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMzU0NDQ2NTgxLDIyOTIzMjg4MSwtMTE2NT
-Y4MDExNywtMTA3NTUxMTcyMSwtMTg3NDQ2NDYxMywtMjUyNDE2
-MjgsLTE2MzkwNjg2NDVdfQ==
+eyJoaXN0b3J5IjpbLTk0NjAxMzY1NywyMjkyMzI4ODEsLTExNj
+U2ODAxMTcsLTEwNzU1MTE3MjEsLTE4NzQ0NjQ2MTMsLTI1MjQx
+NjI4LC0xNjM5MDY4NjQ1XX0=
 -->
