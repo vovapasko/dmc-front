@@ -366,9 +366,10 @@ This module contain confirm, login, password reset, signup pages:
 
 - confirm
 	> 
+- 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTUzMzU1ODI5NSwtMjAwOTc2NTExMSwxMT
-EwMjEzNDUwLDIyOTIzMjg4MSwtMTE2NTY4MDExNywtMTA3NTUx
-MTcyMSwtMTg3NDQ2NDYxMywtMjUyNDE2MjgsLTE2MzkwNjg2ND
-VdfQ==
+eyJoaXN0b3J5IjpbMjAyMzU2OTY0LC01MzM1NTgyOTUsLTIwMD
+k3NjUxMTEsMTExMDIxMzQ1MCwyMjkyMzI4ODEsLTExNjU2ODAx
+MTcsLTEwNzU1MTE3MjEsLTE4NzQ0NjQ2MTMsLTI1MjQxNjI4LC
+0xNjM5MDY4NjQ1XX0=
 -->
