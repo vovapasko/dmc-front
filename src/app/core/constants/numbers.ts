@@ -8,5 +8,8 @@ export default {
   hours: 1680,
   one: 1,
   two: 2,
-  fifty: 50
+  fifty: 50,
+  six: 6,
+  five: 5,
+  ten: 10
 };

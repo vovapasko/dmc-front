@@ -17,6 +17,7 @@ import { endpoints } from '@constants/endpoints';
 import { methods } from '@constants/methods';
 import { BaseService } from '@services/base.service';
 import numbers from '@constants/numbers';
+import { emailPattern, phoneNumberPattern } from '@constants/regex';
 
 const api = environment.api;
 
@@ -187,8 +188,8 @@ export class ContractorService extends BaseService {
     return this.formBuilder.group({
       editorName: [null, [Validators.required, Validators.minLength(numbers.one)]],
       contactPerson: [null, [Validators.required, Validators.minLength(numbers.one)]],
-      phoneNumber: [null, [Validators.required, Validators.pattern('^\\+?3?8?(0\\d{9})$')]],
-      email: [null, [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$')]]
+      phoneNumber: [null, [Validators.required, Validators.pattern(phoneNumberPattern)]],
+      email: [null, [Validators.required, Validators.pattern(emailPattern)]]
     });
   }
 
@@ -214,8 +215,8 @@ export class ContractorService extends BaseService {
     return this.formBuilder.group({
       editorName: [null, [Validators.required, Validators.minLength(1)]],
       contactPerson: [null, [Validators.required, Validators.minLength(1)]],
-      phoneNumber: [null, [Validators.required, Validators.pattern('^\\+?3?8?(0\\d{9})$')]],
-      email: [null, [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$')]]
+      phoneNumber: [null, [Validators.required, Validators.pattern(phoneNumberPattern)]],
+      email: [null, [Validators.required, Validators.pattern(emailPattern)]]
     });
   }
 

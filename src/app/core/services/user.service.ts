@@ -28,6 +28,7 @@ import { endpoints } from '@constants/endpoints';
 import { methods } from '@constants/methods';
 import { BaseService } from '@services/base.service';
 import { urls } from '@constants/urls';
+import { emailPattern } from '@constants/regex';
 
 const api = environment.api;
 
@@ -232,7 +233,7 @@ export class UserService extends BaseService {
    */
   public initializeInviteUserForm(): FormGroup {
     return this.formBuilder.group({
-      email: [null, [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$')]]
+      email: [null, [Validators.required, Validators.pattern(emailPattern)]]
     });
   }
 
