@@ -102,10 +102,10 @@ But this file is needed for **Heroku** which does not implement hosting single `
 
 ## Resume
 
-My dear friend its not over, its only start of very wonderful adventure in angular world.
+My dear friend its not over, its only start of very wonderful adventure in angular world. If you're tired or dont want to spend your time in reading how it works you can skip next section
 
 
-# Synchronization
+# Source code
 
 Synchronization is one of the biggest features of StackEdit. It enables you to synchronize any file in your workspace with other files stored in your **Google Drive**, your **Dropbox** and your **GitHub** accounts. This allows you to keep writing on other devices, collaborate with people you share the file with, integrate easily into your workflow... The synchronization mechanism takes place every minute in the background, downloading, merging, and uploading file modifications.
 
@@ -219,6 +219,6 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE0NjcxOTQ4MTksLTEwNzU1MTE3MjEsLT
-E4NzQ0NjQ2MTMsLTI1MjQxNjI4LC0xNjM5MDY4NjQ1XX0=
+eyJoaXN0b3J5IjpbMTY1MDY2MTY0OCwtMTA3NTUxMTcyMSwtMT
+g3NDQ2NDYxMywtMjUyNDE2MjgsLTE2MzkwNjg2NDVdfQ==
 -->
