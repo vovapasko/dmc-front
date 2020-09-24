@@ -387,10 +387,12 @@ This module contain burst-news, clients, contractors, projects, publications, re
 - publications
 	> This component informs us about contractor preferences such as what contractor can publish or what contractor cannot publish or another special information
 - reports
-	> Here we see 
+	> Here we see data of project and we can download, upload or remove report.xls file
+- users
+	> This component for watch full list of users in system, downgrade or upgrade user previligie
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTc2MTI0MjAzLC01MzM1NTgyOTUsLTIwMD
+eyJoaXN0b3J5IjpbMTA5MjQ5MjA2LC01MzM1NTgyOTUsLTIwMD
 k3NjUxMTEsMTExMDIxMzQ1MCwyMjkyMzI4ODEsLTExNjU2ODAx
 MTcsLTEwNzU1MTE3MjEsLTE4NzQ0NjQ2MTMsLTI1MjQxNjI4LC
 0xNjM5MDY4NjQ1XX0=
