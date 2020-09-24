@@ -365,11 +365,19 @@ Structure:
 This module contain confirm, login, password reset, signup pages:
 
 - confirm
-	> 
-- 
+	> Informs a user that him password was changed
+- login
+	> This component for login user in crm
+- reset-password
+	> This component for change user password
+- signup
+	> This component for sign up new user
+
+#### Account
+
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjAyMzU2OTY0LC01MzM1NTgyOTUsLTIwMD
-k3NjUxMTEsMTExMDIxMzQ1MCwyMjkyMzI4ODEsLTExNjU2ODAx
-MTcsLTEwNzU1MTE3MjEsLTE4NzQ0NjQ2MTMsLTI1MjQxNjI4LC
-0xNjM5MDY4NjQ1XX0=
+eyJoaXN0b3J5IjpbLTE0MDEzMzAwNzAsLTUzMzU1ODI5NSwtMj
+AwOTc2NTExMSwxMTEwMjEzNDUwLDIyOTIzMjg4MSwtMTE2NTY4
+MDExNywtMTA3NTUxMTcyMSwtMTg3NDQ2NDYxMywtMjUyNDE2Mj
+gsLTE2MzkwNjg2NDVdfQ==
 -->
