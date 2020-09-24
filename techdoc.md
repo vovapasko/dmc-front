@@ -138,10 +138,10 @@ Welcome back, in this section you will understand how this project works with: c
 **assets** folder contain fonts, icons, images, sccs files.
 
 ## Inside application
-
+Here we go to magic. Before we start I want to say that this code was written with love 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTgwMDYyMjI3NywtMTE2NTY4MDExNywtMT
-A3NTUxMTcyMSwtMTg3NDQ2NDYxMywtMjUyNDE2MjgsLTE2Mzkw
-Njg2NDVdfQ==
+eyJoaXN0b3J5IjpbLTE5NjY5MDMyMzUsLTExNjU2ODAxMTcsLT
+EwNzU1MTE3MjEsLTE4NzQ0NjQ2MTMsLTI1MjQxNjI4LC0xNjM5
+MDY4NjQ1XX0=
 -->
