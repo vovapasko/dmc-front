@@ -11,7 +11,7 @@ The project was created by [Themeforest](https://themeforest.net/item/ubold-resp
 
 ## Dependencies
 
-Let's talk about every dependency in the project. So open `package.json` and take a look at **dependencies** section. Here we see a lot of angular/* and fullcalendar dependecies they are very important but not interesting. 
+Let's talk about every dependency in the project. So open `package.json` and take a look at **dependencies** section. Here we see a lot of angular/* and fullcalendar/* dependecies they are very important but not interesting. 
 
 
 - ng-bootstrap/ng-bootstrap
@@ -29,7 +29,7 @@ Let's talk about every dependency in the project. So open `package.json` and tak
 - ngx-quill
 	> Beauty word-like editor, well designed and ease to implement
 
-This a list of interesting and 'need to explain' dependecies, 
+This a list of interesting and 'need to explain' dependecies.
 
 We will not talk about **devDependencies** because they include develope packages for testing, linting, pretify and other good things for better developmnet, you should use them but you dont have to understand them.
 
@@ -165,5 +165,5 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTgzMjY3Njg4MCwtMTYzOTA2ODY0NV19
+eyJoaXN0b3J5IjpbLTQ5MjQ0MzY4NSwtMTYzOTA2ODY0NV19
 -->
