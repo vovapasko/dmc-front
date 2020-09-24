@@ -205,8 +205,13 @@ Some helper classes for some needs.
 	> convert camelCase to snake_case before sending to api, and process callback
 - response-handler
 	> notify user about success, clear any errors that happend before
+- router-stub
+	> returns string url, was created for testing services
+- utility
+	> some additional functions for do something additional things...
+
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE2NjI0MzY3MzQsMjI5MjMyODgxLC0xMT
-Y1NjgwMTE3LC0xMDc1NTExNzIxLC0xODc0NDY0NjEzLC0yNTI0
-MTYyOCwtMTYzOTA2ODY0NV19
+eyJoaXN0b3J5IjpbMjI1NTUzMTM5LDIyOTIzMjg4MSwtMTE2NT
+Y4MDExNywtMTA3NTUxMTcyMSwtMTg3NDQ2NDYxMywtMjUyNDE2
+MjgsLTE2MzkwNjg2NDVdfQ==
 -->
