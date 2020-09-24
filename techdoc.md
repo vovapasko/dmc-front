@@ -275,7 +275,10 @@ Provide connection between application and Web API
 Controllers for application, react to components changing, sending api calls.
 
 - auth.service
-	> service for authentication user, getting, setting, removing user instance, request access token by refresh token, handle unauthorised
+	> service for authentication user. Getting, setting, removing user, token, instance. Request access token by refresh token, handle unauthorised.
+- client.service
+	> initialize forms for create and update client, client CRUD,
+	select client for updating
 
 
 
@@ -283,7 +286,7 @@ Controllers for application, react to components changing, sending api calls.
 	
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTM5MzI4MTQwOSwyMjkyMzI4ODEsLTExNj
+eyJoaXN0b3J5IjpbLTk5NjU4Mjc3MywyMjkyMzI4ODEsLTExNj
 U2ODAxMTcsLTEwNzU1MTE3MjEsLTE4NzQ0NjQ2MTMsLTI1MjQx
 NjI4LC0xNjM5MDY4NjQ1XX0=
 -->
