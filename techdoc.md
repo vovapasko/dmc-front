@@ -27,7 +27,9 @@ Let's talk about every dependency in the project. So open `package.json` and tak
 - angularx-social-login
 	> Awesome package for integration with Google and Facebook OAuth2, ease to set and use.
 - ngx-quill
-	> Beauty
+	> Beauty word-like editor, well designed and ease to implement
+
+This a list of interesting and 'need to explain' dependecies, 
 
 We will not talk about **devDependencies** because they include develope packages for testing, linting, pretify and other good things for better developmnet, you should use them but you dont have to understand them.
 
@@ -163,5 +165,5 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTg3NTMyOTg1MywtMTYzOTA2ODY0NV19
+eyJoaXN0b3J5IjpbMTgzMjY3Njg4MCwtMTYzOTA2ODY0NV19
 -->
