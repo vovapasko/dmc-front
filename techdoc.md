@@ -335,10 +335,15 @@ getClients$ = this.actions$.pipe(
   clients: [],  
   selectedClient: null,  
 };```
-	
 
+	
+### Layouts
+In out project we have four layouts:
+
+- footer
+	> contain footer info 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE1NDc3NzY2ODEsMTExMDIxMzQ1MCwyMj
+eyJoaXN0b3J5IjpbLTIwMDk3NjUxMTEsMTExMDIxMzQ1MCwyMj
 kyMzI4ODEsLTExNjU2ODAxMTcsLTEwNzU1MTE3MjEsLTE4NzQ0
 NjQ2MTMsLTI1MjQxNjI4LC0xNjM5MDY4NjQ1XX0=
 -->
