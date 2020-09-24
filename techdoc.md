@@ -393,9 +393,16 @@ This module contain burst-news, clients, contractors, projects, publications, re
 
 #### Email
 
-This module has three pages such as **composeemail**, **inbox**, **reademail**
+This module has three pages such as **composeemail**, **inbox**, **reademail**:
+
+- composeemail
+	> Here we can create our message to send it to the api
+- inbox
+	> This component contain logic for list all messages
+- reademail
+	> This component for details
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTU4MjIzNjA2NywtNTMzNTU4Mjk1LC0yMD
+eyJoaXN0b3J5IjpbMTI0ODc0MjIxMiwtNTMzNTU4Mjk1LC0yMD
 A5NzY1MTExLDExMTAyMTM0NTAsMjI5MjMyODgxLC0xMTY1Njgw
 MTE3LC0xMDc1NTExNzIxLC0xODc0NDY0NjEzLC0yNTI0MTYyOC
 wtMTYzOTA2ODY0NV19
