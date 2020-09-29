@@ -7,3 +7,7 @@ export interface Email {
   signature: string;
   codeword: string;
 }
+
+export interface EmailEntity {
+  id?: number;
+}
