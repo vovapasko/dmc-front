@@ -20,7 +20,6 @@ import { ReademailComponent } from './reademail/reademail.component';
 import { ComposeemailComponent } from './composeemail/composeemail.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgApexchartsModule } from 'ng-apexcharts';
-import { CRMRoutingModule } from '@pages/crm/crm-routing.module';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { QuillModule } from 'ngx-quill';
