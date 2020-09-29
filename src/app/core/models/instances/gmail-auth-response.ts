@@ -1,4 +1,4 @@
-export interface GmailAuth {
+export interface GmailAuthResponse {
   authenticationUrl: string;
   state: string;
 }

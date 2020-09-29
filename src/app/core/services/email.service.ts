@@ -7,7 +7,7 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { endpoints } from '@constants/endpoints';
 import { methods } from '@constants/methods';
 import { Email, EmailEntity } from '@models/instances/email';
-import { GmailAuth } from '@models/instances/gmail-auth';
+import { GmailAuthResponse } from '@models/instances/gmail-auth-response';
 import { AuthPayload } from '@models/payloads/email/auth';
 
 const api = environment.api;
@@ -87,12 +87,12 @@ export class EmailService extends BaseService {
   /**
    *  Auth gmail
    */
-  public gmailAuth(): Observable<GmailAuth> {
+  public gmailAuth(): Observable<GmailAuthResponse> {
     return this.requestHandler.request(
       this.url(api, endpoints.GMAIL_AUTH),
       methods.POST,
       null,
-      (response: GmailAuth) => {
+      (response: GmailAuthResponse) => {
         return response;
       }
     );
