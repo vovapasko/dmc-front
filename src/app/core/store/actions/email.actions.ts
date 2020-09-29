@@ -31,7 +31,7 @@ export class GetNewsEmailsSuccess implements Action {
 export class GmailAuth implements Action {
   public readonly type = EEmailActions.GmailAuth;
 
-  constructor() {
+  constructor(public payload: AuthPayload) {
   }
 }
 

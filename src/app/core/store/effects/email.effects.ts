@@ -29,7 +29,7 @@ export class EmailEffects {
   @Effect()
   gmailAuth$ = this.actions$.pipe(
     ofType<GmailAuth>(EEmailActions.GmailAuth),
-    switchMap(() => this.emailService.gmailAuth()),
+    switchMap((action: { payload: AuthPayload }) => this.emailService.gmailAuth(action.payload)),
     switchMap((response: GmailAuthResponse) => of(new GmailAuthSuccess(response)))
   );
 

@@ -87,11 +87,11 @@ export class EmailService extends BaseService {
   /**
    *  Auth gmail
    */
-  public gmailAuth(): Observable<GmailAuthResponse> {
+  public gmailAuth(payload: AuthPayload): Observable<GmailAuthResponse> {
     return this.requestHandler.request(
       this.url(api, endpoints.GMAIL_AUTH),
       methods.POST,
-      null,
+      payload,
       (response: GmailAuthResponse) => {
         return response;
       }

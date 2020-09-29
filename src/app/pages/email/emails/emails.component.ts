@@ -3,7 +3,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { select, Store } from '@ngrx/store';
 import { IAppState } from '@store/state/app.state';
 import { GetNewsEmails, GmailAuth, GmailCredsClear, GmailTokenRevoke } from '@store/actions/email.actions';
-import { selectNewsEmails } from '@store/selectors/email.selectors';
+import { selectAuthenticationUrl, selectNewsEmails } from '@store/selectors/email.selectors';
 import { breadCrumbs } from '@constants/bread-crumbs';
 import { Email } from '@models/instances/email';
 
@@ -35,18 +35,23 @@ export class EmailsComponent implements OnInit {
     this._fetchData();
   }
 
+  public processAuthenticationUrl(authenticationUrl: string): void {
+    console.log(authenticationUrl);
+  }
 
-  public gmailAuth(): void {
-    this.store.dispatch(new GmailAuth());
+  public gmailAuth(email: Email): void {
+    const payload = {data: { email: email.email }};
+    this.store.pipe(select(selectAuthenticationUrl)).subscribe(this.processAuthenticationUrl.bind(this));
+    this.store.dispatch(new GmailAuth(payload));
   }
 
   public gmailCredsClear(email: Email): void {
-    const payload = { email: email.email };
+    const payload = {data: { email: email.email }};
     this.store.dispatch(new GmailCredsClear(payload));
   }
 
   public gmailTokenRevoke(email: Email): void {
-    const payload = { email: email.email };
+    const payload = {data: { email: email.email }};
     this.store.dispatch(new GmailTokenRevoke(payload));
   }
 
