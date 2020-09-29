@@ -28,7 +28,7 @@ export class GmailAuthSuccess implements Action {
 export class GmailCredsClear implements Action {
   public readonly type = EEmailActions.GmailCredsClear;
 
-  constructor(payload: AuthPayload) {
+  constructor(public payload: AuthPayload) {
   }
 }
 
@@ -42,7 +42,7 @@ export class GmailCredsClearSuccess implements Action {
 export class GmailTokenRevoke implements Action {
   public readonly type = EEmailActions.GmailTokenRevoke;
 
-  constructor(payload: AuthPayload) {
+  constructor(public payload: AuthPayload) {
   }
 }
 
