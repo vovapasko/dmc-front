@@ -36,22 +36,21 @@ export class EmailsComponent implements OnInit {
   }
 
   public processAuthenticationUrl(authenticationUrl: string): void {
+    if (!authenticationUrl) {
+      return;
+    }
+    window.location.href = authenticationUrl;
     console.log(authenticationUrl);
   }
 
   public gmailAuth(email: Email): void {
-    const payload = {data: { email: email.email }};
+    const payload = { data: { email: email.email } };
     this.store.pipe(select(selectAuthenticationUrl)).subscribe(this.processAuthenticationUrl.bind(this));
     this.store.dispatch(new GmailAuth(payload));
   }
 
-  public gmailCredsClear(email: Email): void {
-    const payload = {data: { email: email.email }};
-    this.store.dispatch(new GmailCredsClear(payload));
-  }
-
   public gmailTokenRevoke(email: Email): void {
-    const payload = {data: { email: email.email }};
+    const payload = { data: { email: email.email } };
     this.store.dispatch(new GmailTokenRevoke(payload));
   }
 
