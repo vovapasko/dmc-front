@@ -66,7 +66,7 @@ export class GmailTokenRevoke implements Action {
 export class GmailTokenRevokeSuccess implements Action {
   public readonly type = EEmailActions.GmailTokenRevokeSuccess;
 
-  constructor() {
+  constructor(public payload: AuthPayload) {
   }
 }
 

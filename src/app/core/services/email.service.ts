@@ -121,7 +121,7 @@ export class EmailService extends BaseService {
       methods.POST,
       payload,
       (response: null) => {
-        return response;
+        return payload;
       }
     );
   }

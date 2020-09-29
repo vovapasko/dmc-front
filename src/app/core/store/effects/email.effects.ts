@@ -44,7 +44,7 @@ export class EmailEffects {
   gmailTokenRevoke$ = this.actions$.pipe(
     ofType<GmailTokenRevoke>(EEmailActions.GmailTokenRevoke),
     switchMap((action: { payload: AuthPayload }) => this.emailService.gmailTokenRevoke(action.payload)),
-    switchMap((response: null) => of(new GmailTokenRevokeSuccess()))
+    switchMap((payload: AuthPayload) => of(new GmailTokenRevokeSuccess(payload)))
   );
 
 

@@ -17,6 +17,15 @@ export const emailReducers = (state = initialEmailState, action: EmailActions): 
         authenticationUrl: action.payload.authenticationUrl
       };
     }
+    case EEmailActions.GmailTokenRevokeSuccess: {
+      return {
+        ...state,
+        newsEmails: state.newsEmails.map(newsEmail => newsEmail.email === action.payload.data.email ? {
+          ...newsEmail,
+          gmailCredentials: null
+        } : newsEmail)
+      };
+    }
     default:
       return state;
   }
