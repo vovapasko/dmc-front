@@ -11,6 +11,12 @@ export const emailReducers = (state = initialEmailState, action: EmailActions): 
         newsEmails: action.payload
       };
     }
+    case EEmailActions.GmailAuthSuccess: {
+      return {
+        ...state,
+        authenticationUrl: action.payload.authenticationUrl
+      };
+    }
     default:
       return state;
   }

@@ -22,9 +22,18 @@
           </div>
           <div class="col-sm-6">
             <div class="text-sm-right">
-              <a href="javascript: void(0);" class="btn- btn-xs btn-secondary">Авторизироваться</a>
-              <a href="javascript: void(0);" class="btn- btn-xs btn-secondary">Удалить токен</a>
-              <a href="javascript: void(0);" class="btn- btn-xs btn-secondary">Удалить приложение</a>
+              <a href="javascript: void(0);"
+                 (click)="gmailAuth()"
+                 class="btn- btn-xs btn-secondary"
+              >Авторизироваться</a>
+              <a href="javascript: void(0);"
+                 (click)="gmailTokenRevoke(email)"
+                 class="btn- btn-xs btn-secondary"
+              >Очистить токен</a>
+              <a href="javascript: void(0);"
+                 (click)="gmailCredsClear(email)"
+                 class="btn- btn-xs btn-secondary"
+              >Удалить приложение</a>
             </div>
           </div> <!-- end col-->
         </div> <!-- end row -->
