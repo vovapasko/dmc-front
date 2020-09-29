@@ -59,7 +59,7 @@ export class EmailService extends BaseService {
    */
   public getNewsEmails(): Observable<Array<Email>> {
     return this.requestHandler.request(
-      this.url(api, endpoints.MAILS),
+      this.url(api, endpoints.EMAILS),
       methods.GET,
       null,
       (response: Array<Email>) => {

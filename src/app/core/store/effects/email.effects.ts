@@ -4,7 +4,7 @@ import { of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { EmailService } from '@services/email.service';
 import {
-  EEmailActions,
+  EEmailActions, GetNewsEmails, GetNewsEmailsSuccess,
   GmailAuth,
   GmailAuthSuccess,
   GmailCredsClear,
@@ -13,11 +13,19 @@ import {
 } from '@store/actions/email.actions';
 import { GmailAuthResponse } from '@models/instances/gmail-auth-response';
 import { AuthPayload } from '@models/payloads/email/auth';
+import { Email } from '@models/instances/email';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EmailEffects {
+  @Effect()
+  getNewsEmails$ = this.actions$.pipe(
+    ofType<GetNewsEmails>(EEmailActions.GetNewsEmails),
+    switchMap(() => this.emailService.getNewsEmails()),
+    switchMap((response: Email[]) => of(new GetNewsEmailsSuccess(response)))
+  );
+
   @Effect()
   gmailAuth$ = this.actions$.pipe(
     ofType<GmailAuth>(EEmailActions.GmailAuth),

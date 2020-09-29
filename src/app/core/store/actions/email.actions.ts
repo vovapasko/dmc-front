@@ -1,14 +1,31 @@
 import { Action } from '@ngrx/store';
 import { GmailAuthResponse } from '@models/instances/gmail-auth-response';
 import { AuthPayload } from '@models/payloads/email/auth';
+import { Email } from '@models/instances/email';
 
 export enum EEmailActions {
+  GetNewsEmails = '[Email] Get news emails',
+  GetNewsEmailsSuccess = '[Email] Get news emails success',
   GmailAuth = '[Email] Gmail auth',
   GmailAuthSuccess = '[Email] Gmail auth success',
   GmailCredsClear = '[Email] Gmail credentials clear',
   GmailCredsClearSuccess = '[Email] Gmail credentials clear success',
   GmailTokenRevoke = '[Email] Gmail token revoke',
   GmailTokenRevokeSuccess = '[Email] Gmail token revoke success',
+}
+
+export class GetNewsEmails implements Action {
+  public readonly type = EEmailActions.GetNewsEmails;
+
+  constructor() {
+  }
+}
+
+export class GetNewsEmailsSuccess implements Action {
+  public readonly type = EEmailActions.GetNewsEmailsSuccess;
+
+  constructor(public payload: Array<Email>) {
+  }
 }
 
 export class GmailAuth implements Action {
@@ -60,4 +77,6 @@ export type EmailActions =
   | GmailCredsClear
   | GmailCredsClearSuccess
   | GmailTokenRevoke
-  | GmailTokenRevokeSuccess;
+  | GmailTokenRevokeSuccess
+  | GetNewsEmails
+  | GetNewsEmailsSuccess;
