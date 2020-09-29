@@ -9,6 +9,7 @@ import { methods } from '@constants/methods';
 import { Email, EmailEntity } from '@models/instances/email';
 import { GmailAuthResponse } from '@models/instances/gmail-auth-response';
 import { AuthPayload } from '@models/payloads/email/auth';
+import { CreateEmailPayload } from '@models/payloads/project/email/create';
 
 const api = environment.api;
 
@@ -62,7 +63,7 @@ export class EmailService extends BaseService {
       this.url(api, endpoints.EMAILS),
       methods.GET,
       null,
-      (response: {results: Array<Email>}) => {
+      (response: { results: Array<Email> }) => {
         this.newsEmails = [...this.newsEmails, ...response.results];
         return response.results;
       }
@@ -85,6 +86,18 @@ export class EmailService extends BaseService {
   }
 
   /**
+   * Create email
+   */
+  public createEmail(payload: CreateEmailPayload) {
+    return this.requestHandler.request(
+      this.url(api, endpoints.EMAILS),
+      methods.POST,
+      payload,
+      (response: Email) => response
+    );
+  }
+
+  /**
    *  Auth gmail
    */
   public gmailAuth(payload: AuthPayload): Observable<GmailAuthResponse> {
@@ -93,7 +106,7 @@ export class EmailService extends BaseService {
       methods.POST,
       payload,
       (response: GmailAuthResponse) => {
-        return {...response, ...payload.data};
+        return { ...response, ...payload.data };
       }
     );
   }
