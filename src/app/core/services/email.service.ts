@@ -93,7 +93,7 @@ export class EmailService extends BaseService {
       methods.POST,
       payload,
       (response: GmailAuthResponse) => {
-        return response;
+        return {...response, ...payload.data};
       }
     );
   }

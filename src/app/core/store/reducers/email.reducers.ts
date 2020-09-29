@@ -14,7 +14,7 @@ export const emailReducers = (state = initialEmailState, action: EmailActions): 
     case EEmailActions.GmailAuthSuccess: {
       return {
         ...state,
-        authenticationUrl: action.payload.authenticationUrl
+        authenticationUrl: action.payload.authenticationUrl,
       };
     }
     case EEmailActions.GmailTokenRevokeSuccess: {
