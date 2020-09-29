@@ -62,9 +62,9 @@ export class EmailService extends BaseService {
       this.url(api, endpoints.EMAILS),
       methods.GET,
       null,
-      (response: Array<Email>) => {
-        this.newsEmails = [...this.newsEmails, ...response];
-        return response;
+      (response: {results: Array<Email>}) => {
+        this.newsEmails = [...this.newsEmails, ...response.results];
+        return response.results;
       }
     );
   }

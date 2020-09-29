@@ -82,7 +82,7 @@ export const breadCrumbs = {
       path: '/'
     },
     {
-      label: 'Почта',
+      label: 'Почты',
       path: '/email',
       active: true
     }

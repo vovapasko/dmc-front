@@ -6,6 +6,12 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { opportunityData, simplePieChart } from './data';
 
 import { Opportunities, ChartType } from './emails.model';
+import { select, Store } from '@ngrx/store';
+import { IAppState } from '@store/state/app.state';
+import { GetNewsEmails } from '@store/actions/email.actions';
+import { selectHashtags } from '@store/selectors/news.selectors';
+import { selectNewsEmails } from '@store/selectors/email.selectors';
+import { breadCrumbs } from '@constants/bread-crumbs';
 
 @Component({
   selector: 'app-opportunities',
@@ -24,15 +30,22 @@ export class EmailsComponent implements OnInit {
   simplePieChart: ChartType;
   term: any;
   submitted: boolean;
+  newsEmails$ = this.store.pipe(select(selectNewsEmails));
+
 
   // validation form
   validationform: FormGroup;
 
-  constructor(private modalService: NgbModal, public formBuilder: FormBuilder) { }
+  constructor(
+    private modalService: NgbModal,
+    public formBuilder: FormBuilder,
+    private store: Store<IAppState>
+  ) {
+  }
 
   ngOnInit() {
     // tslint:disable-next-line: max-line-length
-    this.breadCrumbItems = [{ label: 'UBold', path: '/' }, { label: 'CRM', path: '/' }, { label: 'Opportunities', path: '/', active: true }];
+    this.breadCrumbItems = breadCrumbs.emails;
 
     /**
      * form validation
@@ -41,19 +54,21 @@ export class EmailsComponent implements OnInit {
       name: ['', [Validators.required]],
       phone: ['', [Validators.required]],
       category: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')]],
+      email: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')]]
     });
     /**
      * fetches data
      */
     this._fetchData();
   }
+
   /**
    * Returns form
    */
   get form() {
     return this.validationform.controls;
   }
+
   /**
    * Modal Open
    * @param content modal content
@@ -92,12 +107,13 @@ export class EmailsComponent implements OnInit {
     }
     this.submitted = true;
   }
+
   /**
    * fetches the emails value
    */
   private _fetchData() {
     this.opportunityData = opportunityData;
-
+    this.store.dispatch(new GetNewsEmails());
     this.simplePieChart = simplePieChart;
   }
 }
