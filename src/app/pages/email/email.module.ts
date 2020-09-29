@@ -30,11 +30,11 @@ import { ArchwizardModule } from 'angular-archwizard';
 import { NgxMaskModule } from 'ngx-mask';
 import { NestableModule } from 'ngx-nestable';
 import { SharedModule } from '@shared/shared.module';
-import { OpportunitiesComponent } from '@pages/email/opportunities/opportunities.component';
+import { EmailsComponent } from '@pages/email/emails/emails.component';
 
 
 @NgModule({
-  declarations: [InboxComponent, ReademailComponent, ComposeemailComponent, OpportunitiesComponent],
+  declarations: [InboxComponent, ReademailComponent, ComposeemailComponent, EmailsComponent],
   imports: [
     CommonModule,
     EmailRoutingModule,

@@ -1,4 +1,4 @@
-import { ChartType } from './opportunities.model';
+import { ChartType } from './emails.model';
 
 const opportunityData = [
     {

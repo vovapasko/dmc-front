@@ -4,12 +4,12 @@ import { Routes, RouterModule } from '@angular/router';
 import { InboxComponent } from './inbox/inbox.component';
 import { ReademailComponent } from './reademail/reademail.component';
 import { ComposeemailComponent } from './composeemail/composeemail.component';
-import { OpportunitiesComponent } from '@pages/email/opportunities/opportunities.component';
+import { EmailsComponent } from '@pages/email/emails/emails.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: OpportunitiesComponent
+    component: EmailsComponent
   },
   {
     path: 'inbox',

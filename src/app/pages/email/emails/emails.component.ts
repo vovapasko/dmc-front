@@ -5,18 +5,18 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { opportunityData, simplePieChart } from './data';
 
-import { Opportunities, ChartType } from './opportunities.model';
+import { Opportunities, ChartType } from './emails.model';
 
 @Component({
   selector: 'app-opportunities',
-  templateUrl: './opportunities.component.html',
-  styleUrls: ['./opportunities.component.scss']
+  templateUrl: './emails.component.html',
+  styleUrls: ['./emails.component.scss']
 })
 
 /**
- * Opportunities component - handling the opportunities with sidebar and content
+ * Opportunities component - handling the emails with sidebar and content
  */
-export class OpportunitiesComponent implements OnInit {
+export class EmailsComponent implements OnInit {
   // bread crumb items
   breadCrumbItems: Array<{}>;
 
@@ -93,7 +93,7 @@ export class OpportunitiesComponent implements OnInit {
     this.submitted = true;
   }
   /**
-   * fetches the opportunities value
+   * fetches the emails value
    */
   private _fetchData() {
     this.opportunityData = opportunityData;
