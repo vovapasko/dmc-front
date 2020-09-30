@@ -1,8 +1,8 @@
 export const errorTitle = 'Error';
 export const errors = {
-  UNAUTHORIZED: '401',
-  FORBIDDEN: '403',
-  NOT_FOUND: '404'
+  UNAUTHORIZED: 401,
+  FORBIDDEN: 403,
+  NOT_FOUND: 404
 };
 
 export const errorMessages = {
