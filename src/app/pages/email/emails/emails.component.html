@@ -8,11 +8,11 @@
         <div class="row align-items-center">
           <div class="col-sm-4">
             <div class="media">
-              <img class="d-flex align-self-center mr-3 rounded-circle" src="assets/images/companies/google.png"
+              <img class="d-flex align-self-center mr-3" [src]="getMailImage(email)"
                 alt="Generic placeholder image" height="64">
               <div class="media-body">
-                <p class="mb-1"><b>Template:</b> {{ email.template}}</p>
-                <p class="mb-0"><b>Signature:</b> {{ email.signature }}</p>
+                <p class="mb-1"><b>Шаблон:</b> {{ email.template}}</p>
+                <p class="mb-0"><b>Подпись:</b> {{ email.signature }}</p>
               </div>
             </div>
           </div>

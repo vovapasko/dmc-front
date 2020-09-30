@@ -6,6 +6,7 @@ import { GetNewsEmails, GmailAuth, GmailCredsClear, GmailTokenRevoke } from '@st
 import { selectAuthenticationUrl, selectNewsEmails } from '@store/selectors/email.selectors';
 import { breadCrumbs } from '@constants/bread-crumbs';
 import { Email } from '@models/instances/email';
+import { getMailImageIcon } from '@constants/images';
 
 @Component({
   selector: 'app-opportunities',
@@ -19,7 +20,6 @@ import { Email } from '@models/instances/email';
 export class EmailsComponent implements OnInit {
   // bread crumb items
   breadCrumbItems: Array<{}>;
-
   term: any;
   submitted: boolean;
   newsEmails$ = this.store.pipe(select(selectNewsEmails));
@@ -41,6 +41,10 @@ export class EmailsComponent implements OnInit {
     }
     window.location.href = authenticationUrl;
     console.log(authenticationUrl);
+  }
+
+  public getMailImage(email: Email): string {
+    return getMailImageIcon(email);
   }
 
   public gmailAuth(email: Email): void {
