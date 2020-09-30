@@ -19,3 +19,5 @@ export const matchColor = (percent: string): string => {
 export const calculateExperience = (days: number) => {
   return days * 24 * 60 * 60 * 1000;
 };
+
+export const stringType = 'string';

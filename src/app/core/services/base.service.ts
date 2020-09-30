@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { endpoints } from '@constants/endpoints';
+import { stringType } from '@constants/formula';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class BaseService {
   public url(api: string, endpoint: string, id: number | string = null, params: object = {}): string {
     let url = `${api}/${endpoint}/`;
     const keys = params && Object.keys(params);
-    if (Number.isInteger(id)) {
+    if (Number.isInteger(id) || typeof id === stringType) {
       url += id;
     }
     if (keys && keys.length) {
