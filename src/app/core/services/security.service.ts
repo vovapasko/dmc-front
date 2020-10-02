@@ -9,7 +9,7 @@ export class SecurityService {
   /**
    * Sanitize html
    */
-  getSafeHtml(html: string): SafeHtml {
+  public getSafeHtml(html: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(html);
   }
 }
