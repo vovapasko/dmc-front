@@ -24,5 +24,10 @@ export const endpoints = {
   CLIENT: 'clients',
   PUBLICATIONS: 'publications',
   PUBLICATIONS_BLACKLIST: 'publications-blacklist',
-  COMMENTS: 'comments'
+  COMMENTS: 'comments',
+  MAILS: 'emails',
+  GMAIL_AUTH: 'emails/gmail-auth',
+  GMAIL_CREDS_CLEAR: 'emails/gmail-creds-clear',
+  GMAIL_TOKEN_REVOKE: 'emails/gmail-token-revoke',
+  GMAIL_REGISTERED: 'email-registered'
 };

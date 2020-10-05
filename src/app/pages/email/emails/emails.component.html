@@ -1,0 +1,48 @@
+<div class="container-fluid">
+  <app-page-title title="Почты" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+
+  <div class="row">
+    <div class="col-xl-12 order-xl-1 order-2">
+
+      <div class="card-box mb-2" [ngClass]="{'bg-soft-success': email.gmailCredentials}" *ngFor="let email of newsEmails$ | async | filter:term">
+        <div class="row align-items-center">
+          <div class="col-sm-4">
+            <div class="media">
+              <img class="d-flex align-self-center mr-3" [src]="getMailImage(email)"
+                alt="Generic placeholder image" height="64">
+              <div class="media-body">
+                <p class="mb-1"><b>Шаблон:</b> {{ email.template}}</p>
+                <p class="mb-0"><b>Подпись:</b> {{ email.signature }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <p class="mb-1 mt-3 mt-sm-0">
+              <i class="mdi mdi-email mr-1"></i>
+              <span *ngIf="email.gmailCredentials" class="authorized-info">
+                <i class="fa fa-check-circle" aria-hidden="true"></i>
+                Авторизовано
+              </span>
+              {{ email.email }}
+            </p>
+            <p class="mb-0"><i class="fa fa-hashtag" aria-hidden="true"></i>{{ email.codeword }}</p>
+          </div>
+          <div class="col-sm-6">
+            <div class="text-sm-right">
+              <a *ngIf="!email.gmailCredentials"
+                 href="javascript: void(0);"
+                 (click)="gmailAuth(email)"
+                 class="btn- btn-xs btn-secondary"
+              >Авторизироваться</a>
+              <a *ngIf="email.gmailCredentials"
+                 href="javascript: void(0);"
+                 (click)="gmailTokenRevoke(email)"
+                 class="btn- btn-xs btn-secondary"
+              >Удалить приложение</a>
+            </div>
+          </div> <!-- end col-->
+        </div> <!-- end row -->
+      </div> <!-- end card-box-->
+    </div>
+  </div>
+</div>

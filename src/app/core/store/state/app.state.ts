@@ -6,6 +6,7 @@ import { INewsState, initialNewsState } from './news.state';
 import { initialProjectsState, IProjectsState } from './project.state';
 import { IClientState, initialClientState} from '@store/state/client.state';
 import { initialPublicationState, IPublicationState } from '@store/state/publication.state';
+import { IEmailState, initialEmailState } from '@store/state/email.state';
 
 export interface IAppState {
   router?: RouterReducerState;
@@ -15,6 +16,7 @@ export interface IAppState {
   projects: IProjectsState;
   clients: IClientState;
   publications: IPublicationState;
+  emails: IEmailState;
 }
 
 export const initialAppState: IAppState = {
@@ -23,7 +25,8 @@ export const initialAppState: IAppState = {
   news: initialNewsState,
   projects: initialProjectsState,
   clients: initialClientState,
-  publications: initialPublicationState
+  publications: initialPublicationState,
+  emails: initialEmailState
 };
 
 export function getInitialState(): IAppState {

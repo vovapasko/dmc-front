@@ -88,7 +88,7 @@ describe('ProfileComponent', () => {
 
   it('should handle onSubmit', () => {
     component.onSubmit();
-    expect(component.submitted).toBeFalsy();
+    expect(component.submitted).toBeTruthy();
   });
 
   it('should call submit', () => {

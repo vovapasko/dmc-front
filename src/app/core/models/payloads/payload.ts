@@ -28,6 +28,7 @@ import { UpdatePublishPayload } from '@models/payloads/publication/publish/updat
 import { UpdatePublicationBlackListPayload } from '@models/payloads/publication/notPublish/update';
 import { CreateCommentPayload } from '@models/payloads/publication/comment/create';
 import { UpdateCommentPayload } from '@models/payloads/publication/comment/update';
+import { AuthPayload } from '@models/payloads/email/auth';
 
 export type Payloads =
   | LoginPayload
@@ -59,4 +60,5 @@ export type Payloads =
   | UpdatePublishPayload
   | UpdatePublicationBlackListPayload
   | CreateCommentPayload
-  | UpdateCommentPayload;
+  | UpdateCommentPayload
+  | AuthPayload;

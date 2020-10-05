@@ -1,24 +1,24 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, tap } from 'rxjs/operators';
 
 import { CookieService } from '../providers/cookie.service';
-import { User } from '@models/instances/user.models';
-import { Token, TokenTypes } from '@models/instances/token.model';
+import { User } from '../models/instances/user.models';
+import { Token, TokenTypes } from '../models/instances/token.model';
 import { environment } from '../../../environments/environment';
-import { RequestAccessTokenResponse } from '@models/responses/auth/request-access-token-response';
-import { LoginResponse } from '@models/responses/auth/login-response';
-import { LoginPayload } from '@models/payloads/auth/login';
-import { RequestHandler } from '@helpers/request-handler';
+import { RequestAccessTokenResponse } from '../models/responses/auth/request-access-token-response';
+import { LoginResponse } from '../models/responses/auth/login-response';
+import { LoginPayload } from '../models/payloads/auth/login';
+import { RequestHandler } from '../helpers/request-handler';
 import { UserService } from './user.service';
-import { CURRENT_USER } from '@constants/user';
-import { methods } from '@constants/methods';
-import { endpoints } from '@constants/endpoints';
-import { BaseService } from '@services/base.service';
-import { errorMessages, errors } from '@constants/error';
+import { CURRENT_USER } from '../constants/user';
+import { errorMessages, errors, errorTitle } from '@constants/error';
 import numbers from '@constants/numbers';
+import { endpoints } from '@constants/endpoints';
 import { urls } from '@constants/urls';
+import { methods } from '@constants/methods';
 
 const api = environment.api;
 
@@ -29,7 +29,7 @@ const api = environment.api;
 @Injectable({
   providedIn: 'root'
 })
-export class AuthenticationService extends BaseService {
+export class AuthenticationService {
   public static readonly REFRESH_TOKEN_NAME = TokenTypes.refresh;
   public static readonly ACCESS_TOKEN_NAME = TokenTypes.access;
 
@@ -37,13 +37,13 @@ export class AuthenticationService extends BaseService {
   returnUrl: string;
 
   constructor(
+    private http: HttpClient,
     private cookieService: CookieService,
     private requestHandler: RequestHandler,
     private userService: UserService,
     private route: ActivatedRoute,
     private router: Router
   ) {
-    super();
     this.returnUrl = this.route.snapshot.queryParams.returnUrl || urls.ROOT;
   }
 
@@ -74,7 +74,7 @@ export class AuthenticationService extends BaseService {
    */
   public login(payload: LoginPayload): Observable<User> {
     return this.requestHandler.request(
-      this.url(api, endpoints.LOGIN),
+      `${api}/${urls.LOGIN}/`,
       methods.POST,
       payload,
       (response: LoginResponse) => {
@@ -82,8 +82,7 @@ export class AuthenticationService extends BaseService {
         this.userService.user = currentUser;
         this.router.navigate([this.returnUrl]);
         return currentUser;
-      }
-    );
+      });
   }
 
   /**
@@ -100,18 +99,18 @@ export class AuthenticationService extends BaseService {
    */
   public requestAccessToken(): Observable<Token> {
     const refreshToken = this.getToken(AuthenticationService.REFRESH_TOKEN_NAME);
-    return this.requestHandler.request(
-      this.url(api, endpoints.TOKEN_REFRESH),
-      { refresh: refreshToken },
-      null
-    )
-      .pipe(
-        tap((response: RequestAccessTokenResponse) =>
-          this.setToken(AuthenticationService.ACCESS_TOKEN_NAME, response.access)
-        ),
-        catchError(this.unauthorised.bind(this))
-      );
+    return this.http.post(
+      `${api}/${urls.TOKEN_REFRESH}/`,
+      { refresh: refreshToken }
+    ).pipe(
+      tap((response: RequestAccessTokenResponse) =>
+        this.setToken(AuthenticationService.ACCESS_TOKEN_NAME, response.access)
+      ),
+      catchError(this.unauthorised.bind(this))
+    );
   }
+
+
 
   /**
    *  Logout user from crm
