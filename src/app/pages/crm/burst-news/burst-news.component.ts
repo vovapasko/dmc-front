@@ -54,6 +54,7 @@ import { getColorByPercentage } from '@helpers/utility';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Contractor, PostFormatListSet } from '@models/instances/contractor';
 import { NewsWavePrice } from '@models/instances/newsWavePrice';
+import { ATTACHMENTS, PREVIEW_TEXT, TEXT } from '@constants/titles';
 
 /**
  * Form Burst news component - handling the burst news with sidebar and content
@@ -331,6 +332,16 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   /**
+   * Returns controls for news form in editor step
+   */
+  get editorFormControls() {
+    if (!this.editorForm) {
+      return;
+    }
+    return this.editorForm.controls;
+  }
+
+  /**
    * Returns controls for preview form in preview step
    */
   get previewFormControls() {
@@ -455,6 +466,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
    */
   public blur(value: boolean): void {
     this.blured = value;
+    this.onChangeFormationText();
   }
 
   /**
@@ -513,11 +525,9 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
    */
   public updateField(index: number, field: string, value?: string | number | object): void {
     const control = this.getControl(index, field);
+    const previewControl = this.getControl(index, 'previewText');
     this.newsList = this.newsService.updateField(index, field, value, control, this.newsList);
-    this.updatePreviewText(index, control);
-    if (field === 'attachments') {
-      this.onChangeDistributionFiles(control);
-    }
+    this.setContent(control, previewControl, field);
   }
 
   public updatePriceField(index: number, field: string, value?: string | number): void {
@@ -530,44 +540,48 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     // console.log(control);
   }
 
-  public onChangeFormationFiles(event): void {
-    // console.log(event);
+  public onChangeFormationText(): void {
+    const control = this.editorFormControls.text;
+    const previewControl = this.previewFormControls.previewText;
+    this.setContent(control, previewControl, TEXT);
   }
 
-  /**
-   * Process update preview text in last step
-   */
-  public updatePreviewText(index: number, control: FormControl): void {
-    this.setContent(index);
+  public onChangeFormationFiles(event): void {
+    const control = this.editorFormControls.attachments;
+    const previewControl = this.previewFormControls.previewText;
+    this.setContent(control, previewControl, ATTACHMENTS);
   }
 
   /**
    * Collect all data in one content string value
    */
-  public setContent(index: number): void {
-    const control = this.getControl(index, 'attachments');
-    const previewControl = this.getControl(index, 'previewText');
-    this.setInfoContent(control, previewControl, index);
-    this.setImageContent(control, previewControl);
+  public setContent(control: AbstractControl, previewControl: AbstractControl, field: string): void {
+    this.setInfoContent(control, previewControl, field);
+    this.setImageContent(control, previewControl, field);
   }
 
-  public setInfoContent(control: AbstractControl, previewControl: AbstractControl, index: number): void {
-    const fields = Object.keys(newsFields);
+  public setInfoContent(control: AbstractControl, previewControl: AbstractControl, field: string): void {
+    if (field === ATTACHMENTS) {
+      return;
+    }
     const format = this.getProjectFormat();
-    fields.forEach(field => this.processContent(field, index, previewControl, format));
+    this.processContent(field, control, previewControl, format);
   }
 
-  public processContent(field, index, previewControl, format): void {
+  public processContent(field: string, control: AbstractControl, previewControl: AbstractControl, format: string): void {
     const handler = newsFieldsHandler[field];
     const replacer = newsFieldReplacer[field];
-    const processingControl = this.getControl(index, field);
-    const value = processingControl.value;
+    const value = control.value;
     if (!value) {
       return;
     }
-    const text = handler(value, format) + separators.newLine;
+    const text = handler(value, format);
     const content = this.handlePreviewContent(previewControl.value);
-    previewControl.setValue(replacer(content, text));
+    const replacedText = replacer(content, text);
+    if (!replacedText) {
+      return;
+    }
+    previewControl.setValue(replacedText);
   }
 
   public handlePreviewContent(value: string): string {
@@ -585,7 +599,10 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     return changedContractor ? changedContractor.price : format.onePostPrice;
   }
 
-  public setImageContent(control: AbstractControl, previewControl: AbstractControl): void {
+  public setImageContent(control: AbstractControl, previewControl: AbstractControl, field: string): void {
+    if (field !== ATTACHMENTS) {
+      return;
+    }
     const images = control.value.filter((file: File) => file.type.includes('image'));
     images.forEach((image: File) => this.handleImage(image, previewControl));
   }
@@ -594,11 +611,12 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     const reader = new FileReader();
     reader.readAsDataURL(image);
     reader.onload = () => {
-      if (control.value.includes(reader.result)) {
+      if (control.value && control.value.includes(reader.result)) {
         return;
       }
-      control.setValue(control.value + newsFieldsHandler.image(reader.result));
-      console.log(reader.result);
+      const text = control.value || '';
+      const handledImage = newsFieldsHandler.image(reader.result) || '';
+      control.setValue(text + handledImage);
     };
     reader.onerror = (error) => {
       console.log('Error: ', error);

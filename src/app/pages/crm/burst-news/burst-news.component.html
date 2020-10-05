@@ -372,6 +372,7 @@
                                         (onFocus)="onEvent($event, true)"
                                         (onBlur)="onEvent($event, false)"
                                         formControlName="text"
+                                        (change)="onChangeFormationText()"
                                         (onEditorCreated)="created($event)"
                                 ></quill-editor>
 

@@ -19,7 +19,7 @@ import { Project } from '@models/instances/project';
 import { News } from '@models/instances/news';
 import { Hashtag } from '@models/instances/hashtag';
 import { Format } from '@models/instances/format';
-import { setProjectValues } from '@helpers/utility';
+import { blobToUint8Array, setProjectValues } from '@helpers/utility';
 import { Infos, Warnings } from '@constants/notifications';
 import { endpoints } from '@constants/endpoints';
 import { methods } from '@constants/methods';
@@ -51,6 +51,7 @@ import { newsFieldsHandler } from '@constants/news';
 import { NewsWavePrice } from '@models/instances/newsWavePrice';
 import { BaseService } from '@services/base.service';
 import { budgetMessage } from '@constants/messages';
+import { ConvertToFormData } from '@helpers/convert-to-form-data';
 
 const api = environment.api;
 
@@ -65,7 +66,8 @@ export class NewsService extends BaseService {
     public formBuilder: FormBuilder,
     private notificationService: NotificationService,
     private securityService: SecurityService,
-    private userService: UserService
+    private userService: UserService,
+    private convertToFormDateService: ConvertToFormData
   ) {
     super();
   }
@@ -624,6 +626,13 @@ export class NewsService extends BaseService {
     return null;
   }
 
+  public processAttachments(attachments: File[]): any {
+    if (!attachments) {
+      return;
+    }
+    return attachments.map(attachment => blobToUint8Array(attachment));
+  }
+
   /**
    * Collect all data from forms in burst-news page, returns payload for create or update
    * news-wave:
@@ -665,7 +674,7 @@ export class NewsService extends BaseService {
     const waveFormation = {
       email: previewForm.controls.previewEmail.value || controls.at(0).get('previewEmail').value,
       content: previewForm.controls.previewText.value || controls.at(0).get('previewText').value,
-      attachments: editorForm.controls.attachments.value,
+      attachments: this.processAttachments(editorForm.controls.attachments.value),
       id: newsWave ? newsWave.waveFormation.id : null
     };
     const newsInProject = newsList.map((news: News, i: number) => ({
@@ -673,7 +682,7 @@ export class NewsService extends BaseService {
       email: controls.at(i).get('previewEmail').value,
       title: news.title || title,
       content: controls.at(i).get('previewText').value,
-      attachments: controls.at(i).get('attachments').value,
+      attachments: this.processAttachments(controls.at(i).get('attachments').value),
       id: news.id
     }));
 

@@ -9,6 +9,7 @@ import { ConvertCase } from './convert-case';
 import { Payloads } from '@models/payloads/payload';
 import { dataTitle } from '@constants/data';
 import { Observable } from 'rxjs';
+import { ConvertToFormData } from '@helpers/convert-to-form-data';
 
 /**
  * This service handle request from clients, process and send to server
@@ -22,14 +23,15 @@ export class RequestHandler {
     private http: HttpClient,
     private responseHandler: ResponseHandler,
     private errorHandler: ErrorHandler,
-    private convertCase: ConvertCase
+    private convertCase: ConvertCase,
+    private convertToFormDataService: ConvertToFormData
   ) {
   }
 
   /**
    * Converts to snake_case, pass form data.
    */
-  public processPayload(payload: Payloads | {data: object | FormData}) {
+  public processPayload(payload: Payloads | { data: object | FormData }) {
     if (!payload) {
       return {};
     }
@@ -45,7 +47,8 @@ export class RequestHandler {
   /**
    * Converts to snake_case, pass form data.
    */
-  public request(url, method, payload?: Payloads, mapHandler = (_) => {}): Observable<any> {
+  public request(url, method, payload?: Payloads, mapHandler = (_) => {
+  }): Observable<any> {
     return this.http[method](url, this.processPayload(payload))
       .pipe(
         tap((response: ServerResponse) => this.responseHandler.handle(response)),

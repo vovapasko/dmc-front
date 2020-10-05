@@ -12,13 +12,13 @@ export const newsFieldReplacer = {
   },
   content(value, replacer): string {
     return value.replace(/<p>(.*?)<\/p>/g, replacer);
+  },
+  text(value, replacer): string {
+    return value.replace(/^.+?<img/g, replacer).replace('> src=', '> <img src=');
   }
 };
 
-export const template = `
-<h1></h1>
-<p></p>
-`;
+export const template = `<h1></h1><p></p>`;
 
 export const h1 = `<h1>`;
 export const p = `<h1>`;
@@ -29,6 +29,9 @@ export const newsFieldsHandler = {
     const links = attachments.filter(attachment => !(attachment instanceof File)).map((attachment, index) => `\n Файл ${index + 1} - <p><a href="${attachment.file}"/></p>\n`);
     const files = attachments.filter(attachment => attachment instanceof File).map((attachment, index) => `\n Файл ${index + 1} - <p>${attachment.name}</p> \n`);
     return [...links, ...files];
+  },
+  text(value: string): string {
+    return value;
   },
   image(image: string | ArrayBuffer): string {
     return `<img src=${image}>`;
