@@ -5,3 +5,7 @@ export const publicationTitle = 'Публикации';
 export const contractorsTitle = 'Контрагенты';
 export const projectsTitle = 'Проекты';
 export const clientsTitle = 'Клиенты';
+export const ATTACHMENTS = 'attachments';
+export const PREVIEW_TEXT = 'previewText';
+export const TITLE = 'title';
+export const TEXT = 'text';

@@ -1,6 +1,7 @@
-import { AbstractControl } from '@angular/forms';
+import { AbstractControl, Form } from '@angular/forms';
 import { Project } from '@models/instances/project';
 import { matchColor, percentage } from '@constants/formula';
+import { Payloads } from '@models/payloads/payload';
 
 export const toCamel = (str: string): string => {
   return str.replace(/([-_][a-z])/gi, (element: string) => {
@@ -78,4 +79,78 @@ export const collectDataFromForm = (formControls: { [key: string]: AbstractContr
 export const getColorByPercentage = (value: number, arg: number): string => {
   const percent = percentage(value, arg);
   return matchColor(percent);
+};
+
+export const objectToFormData = (obj: object, form: FormData, namespace: string): Payloads => {
+
+  const fd = form || new FormData();
+  let formKey = null;
+
+  for (const property in obj) {
+    if (obj.hasOwnProperty(property)) {
+
+      if (namespace) {
+        formKey = namespace + '[' + property + ']';
+      } else {
+        formKey = property;
+      }
+
+      // if the property is an object, but not a File,
+      // use recursive.
+      if (typeof obj[property] === 'object' && !(obj[property] instanceof File)) {
+
+        objectToFormData(obj[property], fd, property);
+
+      } else {
+
+        // if it's a string or a File object
+        fd.append(formKey, obj[property]);
+      }
+
+    }
+  }
+
+  // @ts-ignore
+  return fd;
+
+};
+
+function buildFormData(formData, data, parentKey) {
+  if (data && typeof data === 'object' && !(data instanceof Date) && !(data instanceof File)) {
+    Object.keys(data).forEach(key => {
+      buildFormData(formData, data[key], parentKey ? `${parentKey}[${key}]` : key);
+    });
+  } else {
+    const value = data == null ? '' : data;
+
+    formData.append(parentKey, value);
+  }
+}
+
+export function jsonToFormData(data): Payloads {
+  const formData = new FormData();
+
+  buildFormData(formData, data, null);
+  // @ts-ignore
+  return formData;
+}
+
+export const  blobToUint8Array = (b) => {
+  const uri = URL.createObjectURL(b);
+  const xhr = new XMLHttpRequest();
+  let i;
+  let ui8;
+
+  xhr.open('GET', uri, false);
+  xhr.send();
+
+  URL.revokeObjectURL(uri);
+
+  ui8 = new Uint8Array(xhr.response.length);
+
+  for (i = 0; i < xhr.response.length; ++i) {
+    ui8[i] = xhr.response.charCodeAt(i);
+  }
+
+  return ui8;
 };

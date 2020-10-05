@@ -19,7 +19,7 @@ import { Project } from '@models/instances/project';
 import { News } from '@models/instances/news';
 import { Hashtag } from '@models/instances/hashtag';
 import { Format } from '@models/instances/format';
-import { setProjectValues } from '@helpers/utility';
+import { blobToUint8Array, setProjectValues } from '@helpers/utility';
 import { Infos, Warnings } from '@constants/notifications';
 import { endpoints } from '@constants/endpoints';
 import { methods } from '@constants/methods';
@@ -51,6 +51,7 @@ import { newsFieldsHandler } from '@constants/news';
 import { NewsWavePrice } from '@models/instances/newsWavePrice';
 import { BaseService } from '@services/base.service';
 import { budgetMessage } from '@constants/messages';
+import { ConvertToFormData } from '@helpers/convert-to-form-data';
 
 const api = environment.api;
 
@@ -65,7 +66,8 @@ export class NewsService extends BaseService {
     public formBuilder: FormBuilder,
     private notificationService: NotificationService,
     private securityService: SecurityService,
-    private userService: UserService
+    private userService: UserService,
+    private convertToFormDateService: ConvertToFormData
   ) {
     super();
   }
@@ -294,89 +296,8 @@ export class NewsService extends BaseService {
       this.url(api, endpoints.NEWS_WAVES),
       methods.POST,
       payload,
-      (response: NewsWaves) => this.handleFilesUpload(response, payload)
+      (response: NewsWaves) => response
     );
-  }
-
-  /**
-   * Handle delete and update files from formation or news
-   */
-  public handleFilesUpload(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
-    // TODO REFACTOR THIS PIECE OF CODE
-    const formationFormData = this.collectUploadFormationFiles(newsWave, payload);
-    const newsFormData = this.collectUploadNewsFiles(newsWave, payload);
-    const deleteNewsData = this.collectDeleteNewsFiles(newsWave, payload);
-    const deleteFormationData = this.collectDeleteFormationFiles(newsWave, payload);
-    return { newsWave, formationFormData, newsFormData, deleteNewsData, deleteFormationData };
-  }
-
-  /**
-   * Collects delete news files
-   */
-  public collectDeleteNewsFiles(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
-    // TODO REFACTOR THIS PIECE OF CODE
-    return newsWave.newsInProject
-      .map(
-        (news: News) => news.attachments
-          // @ts-ignore
-          .filter(newsAttachment => newsAttachment.id && !payload.data.newsInProject.find(
-            payloadNews => payloadNews.id === news.id).attachments.find(
-            // @ts-ignore
-            payloadAttachment => payloadAttachment.id === newsAttachment.id
-            )
-            // @ts-ignore
-          ).map(el => ({ id: el.id }))
-        // @ts-ignore
-      ).flat();
-  }
-
-  /**
-   * Collects upload formation files
-   */
-  public collectUploadFormationFiles(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
-    // TODO REFACTOR THIS PIECE OF CODE
-    if (!payload.data.waveFormation.attachments) {
-      return [];
-    }
-    const formationFormData = new FormData();
-    // @ts-ignore
-    formationFormData.append('wave_formation_id', newsWave.waveFormation.id);
-    // @ts-ignore
-    payload.data.waveFormation.attachments
-      // @ts-ignore
-      .filter(file => file instanceof File && !file.id)
-      .forEach(file => formationFormData.append('file', file, file.name));
-    return formationFormData;
-  }
-
-  /**
-   * Collects upload news files
-   */
-  public collectUploadNewsFiles(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload): FormData[] {
-    // TODO REFACTOR THIS PIECE OF CODE
-    return payload.data.newsInProject.map((news: any, index: number) => {
-      const formData = new FormData();
-      // @ts-ignore
-      // tslint:disable-next-line:no-bitwise
-      formData.append('news_id', news.id | newsWave.newsInProject[index].id);
-      // @ts-ignore
-      news.attachments
-        // @ts-ignore
-        .filter(file => file instanceof File && !file.id)
-        .forEach(file => formData.append('file', file, file.name));
-      return formData;
-    });
-  }
-
-  public collectDeleteFormationFiles(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
-    // TODO REFACTOR THIS PIECE OF CODE
-    return newsWave.waveFormation.attachments
-      // @ts-ignore
-      .filter(attachment => !(attachment instanceof File) && attachment.id && !payload.data.waveFormation.attachments
-        // @ts-ignore
-        .find(formationAttachment => formationAttachment.id === attachment.id))
-      // @ts-ignore
-      .map(el => ({ id: el.id }));
   }
 
   /**
@@ -389,7 +310,7 @@ export class NewsService extends BaseService {
       this.url(api, endpoints.NEWS_WAVES, payload.id),
       methods.PUT,
       payload,
-      (response: NewsWaves) => this.handleFilesUpload(response, payload)
+      (response: NewsWaves) => response
     );
   }
 
@@ -705,6 +626,13 @@ export class NewsService extends BaseService {
     return null;
   }
 
+  public processAttachments(attachments: File[]): any {
+    if (!attachments) {
+      return;
+    }
+    return attachments.map(attachment => blobToUint8Array(attachment));
+  }
+
   /**
    * Collect all data from forms in burst-news page, returns payload for create or update
    * news-wave:
@@ -746,7 +674,7 @@ export class NewsService extends BaseService {
     const waveFormation = {
       email: previewForm.controls.previewEmail.value || controls.at(0).get('previewEmail').value,
       content: previewForm.controls.previewText.value || controls.at(0).get('previewText').value,
-      attachments: editorForm.controls.attachments.value,
+      attachments: this.processAttachments(editorForm.controls.attachments.value),
       id: newsWave ? newsWave.waveFormation.id : null
     };
     const newsInProject = newsList.map((news: News, i: number) => ({
@@ -754,7 +682,7 @@ export class NewsService extends BaseService {
       email: controls.at(i).get('previewEmail').value,
       title: news.title || title,
       content: controls.at(i).get('previewText').value,
-      attachments: controls.at(i).get('attachments').value,
+      attachments: this.processAttachments(controls.at(i).get('attachments').value),
       id: news.id
     }));
 
