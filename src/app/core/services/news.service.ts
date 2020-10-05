@@ -294,89 +294,8 @@ export class NewsService extends BaseService {
       this.url(api, endpoints.NEWS_WAVES),
       methods.POST,
       payload,
-      (response: NewsWaves) => this.handleFilesUpload(response, payload)
+      (response: NewsWaves) => response
     );
-  }
-
-  /**
-   * Handle delete and update files from formation or news
-   */
-  public handleFilesUpload(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
-    // TODO REFACTOR THIS PIECE OF CODE
-    const formationFormData = this.collectUploadFormationFiles(newsWave, payload);
-    const newsFormData = this.collectUploadNewsFiles(newsWave, payload);
-    const deleteNewsData = this.collectDeleteNewsFiles(newsWave, payload);
-    const deleteFormationData = this.collectDeleteFormationFiles(newsWave, payload);
-    return { newsWave, formationFormData, newsFormData, deleteNewsData, deleteFormationData };
-  }
-
-  /**
-   * Collects delete news files
-   */
-  public collectDeleteNewsFiles(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
-    // TODO REFACTOR THIS PIECE OF CODE
-    return newsWave.newsInProject
-      .map(
-        (news: News) => news.attachments
-          // @ts-ignore
-          .filter(newsAttachment => newsAttachment.id && !payload.data.newsInProject.find(
-            payloadNews => payloadNews.id === news.id).attachments.find(
-            // @ts-ignore
-            payloadAttachment => payloadAttachment.id === newsAttachment.id
-            )
-            // @ts-ignore
-          ).map(el => ({ id: el.id }))
-        // @ts-ignore
-      ).flat();
-  }
-
-  /**
-   * Collects upload formation files
-   */
-  public collectUploadFormationFiles(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
-    // TODO REFACTOR THIS PIECE OF CODE
-    if (!payload.data.waveFormation.attachments) {
-      return [];
-    }
-    const formationFormData = new FormData();
-    // @ts-ignore
-    formationFormData.append('wave_formation_id', newsWave.waveFormation.id);
-    // @ts-ignore
-    payload.data.waveFormation.attachments
-      // @ts-ignore
-      .filter(file => file instanceof File && !file.id)
-      .forEach(file => formationFormData.append('file', file, file.name));
-    return formationFormData;
-  }
-
-  /**
-   * Collects upload news files
-   */
-  public collectUploadNewsFiles(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload): FormData[] {
-    // TODO REFACTOR THIS PIECE OF CODE
-    return payload.data.newsInProject.map((news: any, index: number) => {
-      const formData = new FormData();
-      // @ts-ignore
-      // tslint:disable-next-line:no-bitwise
-      formData.append('news_id', news.id | newsWave.newsInProject[index].id);
-      // @ts-ignore
-      news.attachments
-        // @ts-ignore
-        .filter(file => file instanceof File && !file.id)
-        .forEach(file => formData.append('file', file, file.name));
-      return formData;
-    });
-  }
-
-  public collectDeleteFormationFiles(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
-    // TODO REFACTOR THIS PIECE OF CODE
-    return newsWave.waveFormation.attachments
-      // @ts-ignore
-      .filter(attachment => !(attachment instanceof File) && attachment.id && !payload.data.waveFormation.attachments
-        // @ts-ignore
-        .find(formationAttachment => formationAttachment.id === attachment.id))
-      // @ts-ignore
-      .map(el => ({ id: el.id }));
   }
 
   /**
@@ -389,7 +308,7 @@ export class NewsService extends BaseService {
       this.url(api, endpoints.NEWS_WAVES, payload.id),
       methods.PUT,
       payload,
-      (response: NewsWaves) => this.handleFilesUpload(response, payload)
+      (response: NewsWaves) => response
     );
   }
 

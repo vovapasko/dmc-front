@@ -181,12 +181,7 @@ export class NewsEffects {
   createNewsWave$ = this.actions$.pipe(
     ofType<CreateNewsWave>(ENewsActions.CreateNewsWave),
     switchMap((action: { payload: CreateNewsWavesPayload }) => this.newsService.createNewsWave(action.payload)),
-    switchMap((uploadData: any) => [
-      // TODO REFACTOR THIS PIECE OF CODE
-      new CreateNewsWaveSuccess(uploadData.newsWave),
-      new UploadFormationFile({data: uploadData.formationFormData}),
-      ...uploadData.newsFormData.map(formData => new UploadNewsFile({data: formData})),
-    ])
+    switchMap((newsWave: NewsWaves) => of(new CreateNewsWaveSuccess(newsWave)))
   );
 
 
@@ -194,14 +189,7 @@ export class NewsEffects {
   updateNewsWave$ = this.actions$.pipe(
     ofType<UpdateNewsWave>(ENewsActions.UpdateNewsWave),
     switchMap((action: { payload: UpdateNewsWavesPayload }) => this.newsService.updateNewsWave(action.payload)),
-    mergeMap((uploadData: any) => [
-      // TODO REFACTOR THIS PIECE OF CODE
-      new UpdateNewsWaveSuccess(uploadData.newsWave),
-      new UploadFormationFile({data: uploadData.formationFormData}),
-      ...uploadData.newsFormData.map(formData => new UploadNewsFile({data: formData})),
-      ...uploadData.deleteFormationData.map(payload => new DeleteFormationFile(payload)),
-      ...uploadData.deleteNewsData.map(payload => new DeleteNewsFile(payload)),
-    ])
+    switchMap((newsWave: NewsWaves) => of(new UpdateNewsWaveSuccess(newsWave)))
   );
 
 
