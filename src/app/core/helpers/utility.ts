@@ -1,4 +1,4 @@
-import { AbstractControl } from '@angular/forms';
+import { AbstractControl, Form } from '@angular/forms';
 import { Project } from '@models/instances/project';
 import { matchColor, percentage } from '@constants/formula';
 
@@ -78,4 +78,37 @@ export const collectDataFromForm = (formControls: { [key: string]: AbstractContr
 export const getColorByPercentage = (value: number, arg: number): string => {
   const percent = percentage(value, arg);
   return matchColor(percent);
+};
+
+export const objectToFormData = (obj: object, form: FormData, namespace: string) => {
+
+  const fd = form || new FormData();
+  let formKey = null;
+
+  for (const property in obj) {
+    if (obj.hasOwnProperty(property)) {
+
+      if (namespace) {
+        formKey = namespace + '[' + property + ']';
+      } else {
+        formKey = property;
+      }
+
+      // if the property is an object, but not a File,
+      // use recursivity.
+      if (typeof obj[property] === 'object' && !(obj[property] instanceof File)) {
+
+        objectToFormData(obj[property], fd, property);
+
+      } else {
+
+        // if it's a string or a File object
+        fd.append(formKey, obj[property]);
+      }
+
+    }
+  }
+
+  return fd;
+
 };

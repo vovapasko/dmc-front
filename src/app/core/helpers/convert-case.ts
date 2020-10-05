@@ -16,14 +16,14 @@ export class ConvertCase {
   /**
    * Object keys converting from camelCase to snake_case
    */
-  public convertFromCamelToSnakeCase(obj) {
+  public convertFromCamelToSnakeCase(obj: object): object {
     return keysToCase(obj, snakeCase);
   }
 
   /**
    * Deep object keys converting from snake_case to camelCase
    */
-  public convertFromSnakeToCamelCase(obj) {
+  public convertFromSnakeToCamelCase(obj: object): object {
     return keysToCase(obj, toCamel);
   }
 }
