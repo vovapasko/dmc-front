@@ -53,6 +53,7 @@ describe('ComposeemailComponent', () => {
         ReactiveFormsModule,
         RouterTestingModule,
         StoreModule.forRoot({}),
+        RouterModule.forRoot([]),
         FormsModule,
         NgbPaginationModule,
         NgApexchartsModule,
@@ -68,6 +69,7 @@ describe('ComposeemailComponent', () => {
         FileUploadModule,
         ArchwizardModule,
         NgxMaskModule.forRoot(),
+
         NestableModule,
         NgbPopoverModule,
         SharedModule,

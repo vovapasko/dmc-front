@@ -8,7 +8,7 @@ import { HIDE } from '@constants/titles';
 export class LabelFilterPipe implements PipeTransform {
 
   transform(value: Label[], ...args: unknown[]): unknown {
-    return value.filter(label => label.messageListVisibility !== HIDE);
+    return value ? value.filter(label => label.messageListVisibility !== HIDE) : [];
   }
 
 }

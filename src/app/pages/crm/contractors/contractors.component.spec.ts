@@ -1,7 +1,6 @@
 import { ContractorsComponent } from './contractors.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CommonModule } from '@angular/common';
-import { GetContractors } from '../../../core/store/actions/contractor.actions';
 import { mockContractor } from '../../../core/mocks/contractor.mock';
 import { Contractor } from '../../../core/models/instances/contractor';
 import { CreateContractorPayload } from '../../../core/models/payloads/contractor/create';
