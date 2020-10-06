@@ -1,8 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-
-import { Email } from './inbox.model';
-import { emailData } from './data';
 import { breadCrumbs } from '@constants/bread-crumbs';
+import { select, Store } from '@ngrx/store';
+import { IAppState } from '@store/state/app.state';
+import { selectEmailsList } from '@store/selectors/email.selectors';
+import { Subject } from 'rxjs';
+import { LoadingService } from '@services/loading.service';
+import { EmailEntity } from '@models/instances/email';
+import { EmailService } from '@services/email.service';
+import { Router } from '@angular/router';
+import { urls } from '@constants/urls';
 
 @Component({
   selector: 'app-inbox',
@@ -19,7 +25,10 @@ export class InboxComponent implements OnInit {
   breadCrumbItems: Array<{}>;
 
   // paginated email data
-  emailData: Array<Email>;
+  emailData: Array<EmailEntity>;
+  emails$ = this.store.pipe(select(selectEmailsList));
+  loading$: Subject<boolean>;
+
 
   // page number
   page = 1;
@@ -33,12 +42,36 @@ export class InboxComponent implements OnInit {
   endIndex = 15;
 
 
-  constructor() { }
+  constructor(
+    private store: Store<IAppState>,
+    private loadingService: LoadingService,
+    private emailService: EmailService,
+    private router: Router
+  ) {
+  }
+
+  public processEmails(emails: EmailEntity[]): void {
+    if (!emails) {
+      return;
+    }
+    this.emailData = emails;
+    this.totalRecords = emails.length;
+  }
 
   ngOnInit() {
     this.breadCrumbItems = breadCrumbs.emails;
-    // gets the data
-    this._fetchData();
+    this.initSubscriptions();
+    if (!this.emailService.selectedNewsEmail) {
+      this.router.navigate([urls.EMAILS]);
+    }
+  }
+
+  /**
+   * Subscribe to subject
+   */
+  public initSubscriptions(): void {
+    this.loading$ = this.loadingService.loading$;
+    this.store.pipe(select(selectEmailsList)).subscribe(this.processEmails.bind(this));
   }
 
   /**
@@ -50,15 +83,6 @@ export class InboxComponent implements OnInit {
     if (this.endIndex > this.totalRecords) {
       this.endIndex = this.totalRecords;
     }
-    this.emailData = emailData.slice(this.startIndex - 1, this.endIndex - 1);
-  }
-
-  /**
-   * Gets the email data
-   * Note: In real application - you might want to call some api to get the email records
-   */
-  private _fetchData() {
-    this.emailData = emailData;
-    this.totalRecords = emailData.length;
+    this.emailData = this.emailService.emails.slice(this.startIndex - 1, this.endIndex - 1);
   }
 }

@@ -17,7 +17,8 @@ export const urls = {
   ROOT: '/',
   PROFILE: 'profile',
   ACCOUNT_CONFIRM: '/account/confirm',
-  INBOX: '/email/inbox'
+  INBOX: '/email/inbox',
+  EMAILS: '/email'
 };
 
 export const tokenFreeUrls = [urls.LOGIN, urls.CONFIRM_USER, urls.TOKEN_REFRESH];
