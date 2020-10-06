@@ -20,9 +20,9 @@ export class ErrorInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
       catchError((err) => {
-        const message = err.error.message;
+        const error = err.error;
         const status = err.status;
-        return this.error(message, status);
+        return this.processError(error, status);
       })
     );
   }
@@ -30,8 +30,8 @@ export class ErrorInterceptor implements HttpInterceptor {
   /**
    * Handling errors
    */
-  error(message: string | null, status: number): Observable<never> {
-    const errorEntity: ServerError = { status, error: { message } };
+  public processError(error: object, status: number): Observable<never> {
+    const errorEntity: ServerError = { status, error };
     this.errorHandler.handle(errorEntity);
     return throwError(errorEntity);
   }
