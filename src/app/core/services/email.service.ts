@@ -11,6 +11,8 @@ import { GmailAuthResponse } from '@models/instances/gmail-auth-response';
 import { AuthPayload } from '@models/payloads/email/auth';
 import { CreateEmailPayload } from '@models/payloads/project/email/create';
 import { GetEmailsPayload } from '@models/payloads/email/get-emails';
+import { GetEmailsResponse } from '@models/responses/email/get-emails';
+import { Label } from '@models/instances/labels';
 
 const api = environment.api;
 
@@ -29,8 +31,17 @@ export class EmailService extends BaseService {
 
   newsEmails$: BehaviorSubject<Array<Email>> = new BehaviorSubject([]);
   emails$: BehaviorSubject<Array<EmailEntity>> = new BehaviorSubject([]);
+  labels$: BehaviorSubject<Array<Label>> = new BehaviorSubject([]);
   selectedEmail$: BehaviorSubject<EmailEntity> = new BehaviorSubject(null);
   selectedNewsEmail$: BehaviorSubject<Email> = new BehaviorSubject(null);
+
+  get labels() {
+    return this.labels$.getValue();
+  }
+
+  set labels(value: Array<Label>) {
+    this.labels$.next(value);
+  }
 
   get newsEmails() {
     return this.newsEmails$.getValue();
@@ -82,14 +93,15 @@ export class EmailService extends BaseService {
   /**
    *  Get emails
    */
-  public getEmails(payload: GetEmailsPayload): Observable<Array<EmailEntity>> {
+  public getEmails(payload: GetEmailsPayload): Observable<GetEmailsResponse> {
     return this.requestHandler.request(
       this.url(api, endpoints.MAILS, null, payload),
       methods.GET,
       null,
-      (response: {messages: Array<EmailEntity>}) => {
+      (response: GetEmailsResponse ) => {
         this.emails = [...this.emails, ...response.messages];
-        return response.messages;
+        this.labels = [...this.labels, ...response.labels];
+        return response;
       }
     );
   }

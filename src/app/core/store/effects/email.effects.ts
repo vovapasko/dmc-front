@@ -17,6 +17,7 @@ import { AuthPayload } from '@models/payloads/email/auth';
 import { Email, EmailEntity } from '@models/instances/email';
 import { CreateEmailPayload } from '@models/payloads/project/email/create';
 import { GetEmailsPayload } from '@models/payloads/email/get-emails';
+import { GetEmailsResponse } from '@models/responses/email/get-emails';
 
 @Injectable({
   providedIn: 'root'
@@ -47,7 +48,7 @@ export class EmailEffects {
   getEmails$ = this.actions$.pipe(
     ofType<GetEmails>(EEmailActions.GetEmails),
     switchMap((action: { payload: GetEmailsPayload }) => this.emailService.getEmails(action.payload)),
-    switchMap((response: EmailEntity[]) => of(new GetEmailsSuccess(response)))
+    switchMap((response: GetEmailsResponse) => of(new GetEmailsSuccess(response)))
   );
 
   @Effect()

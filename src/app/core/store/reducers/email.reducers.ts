@@ -20,7 +20,8 @@ export const emailReducers = (state = initialEmailState, action: EmailActions): 
     case EEmailActions.GetEmailsSuccess: {
       return {
         ...state,
-        emails: action.payload
+        emails: action.payload.messages,
+        labels: action.payload.labels
       };
     }
     case EEmailActions.GetNewsEmailsSuccess: {

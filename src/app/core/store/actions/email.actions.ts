@@ -4,6 +4,7 @@ import { AuthPayload } from '@models/payloads/email/auth';
 import { Email, EmailEntity } from '@models/instances/email';
 import { CreateEmailPayload } from '@models/payloads/project/email/create';
 import { GetEmailsPayload } from '@models/payloads/email/get-emails';
+import { GetEmailsResponse } from '@models/responses/email/get-emails';
 
 export enum EEmailActions {
   GetEmails = '[Email] Get emails',
@@ -62,7 +63,7 @@ export class GetEmails implements Action {
 export class GetEmailsSuccess implements Action {
   public readonly type = EEmailActions.GetEmailsSuccess;
 
-  constructor(public payload: Array<EmailEntity>) {
+  constructor(public payload: GetEmailsResponse) {
   }
 }
 
