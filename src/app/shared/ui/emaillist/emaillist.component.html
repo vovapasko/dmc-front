@@ -6,15 +6,6 @@
           [ngClass]="{ 'text-danger font-weight-bold': list.text === 'danger' }"
   >
     <i class="{{ list.icon }} font-18 align-middle mr-2"></i>{{ list.label }}
-    <span
-            class="badge bagde-danger float-right ml-2 mt-1"
-            [ngClass]="{
-        'badge-danger': list.text === 'danger',
-        'badge-info': list.text === 'info'
-      }"
-    >
-      {{ list.value }}</span
-    >
   </a>
 </div>
 

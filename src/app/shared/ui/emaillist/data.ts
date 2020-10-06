@@ -2,7 +2,6 @@ const emailList = [
   {
     icon: 'mdi mdi-inbox',
     label: 'Inbox',
-    value: 8,
     text: 'danger',
     id: 'INBOX',
     name: 'INBOX',
@@ -18,7 +17,6 @@ const emailList = [
   {
     icon: 'mdi mdi-file-document-box',
     label: 'Draft',
-    value: 32,
     text: 'info',
     id: 'DRAFT',
     name: 'DRAFT',
