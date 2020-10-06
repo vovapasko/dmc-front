@@ -43,8 +43,8 @@ export class EmailsComponent implements OnInit {
     if (!authenticationUrl) {
       return;
     }
-    window.location.href = authenticationUrl;
-    console.log(authenticationUrl);
+    const win = window.open(authenticationUrl, '_blank');
+    win.focus();
   }
 
   public getMailImage(email: Email): string {
