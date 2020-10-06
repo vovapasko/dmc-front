@@ -3,6 +3,7 @@ export interface List {
   name: string;
   value?: number;
   text?: string;
+  label?: string;
 }
 
 export interface Label {

@@ -1,51 +1,45 @@
 const emailList = [
   {
     icon: 'mdi mdi-inbox',
-    name: 'Inbox',
+    label: 'Inbox',
     value: 8,
     text: 'danger',
+    id: 'INBOX',
+    name: 'INBOX',
+    type: 'system'
   },
   {
     icon: 'mdi mdi-star',
-    name: 'Starred',
+    label: 'Starred',
+    id: 'STARRED',
+    name: 'STARRED',
+    type: 'system'
   },
   {
     icon: 'mdi mdi-file-document-box',
-    name: 'Draft',
+    label: 'Draft',
     value: 32,
     text: 'info',
+    id: 'DRAFT',
+    name: 'DRAFT',
+    type: 'system'
   },
   {
     icon: 'mdi mdi-send ',
-    name: 'Sent Mail',
+    label: 'Sent Mail',
+    id: 'SENT',
+    name: 'SENT',
+    type: 'system'
   },
   {
     icon: 'mdi mdi-delete',
-    name: 'Trash',
+    label: 'Trash',
+    id: 'TRASH',
+    name: 'TRASH',
+    messageListVisibility: 'hide',
+    labelListVisibility: 'labelHide',
+    type: 'system'
   },
 ];
+export { emailList };
 
-const emailLabel = [
-  {
-    text: 'info',
-    name: 'Web App',
-  },
-  {
-    text: 'warning',
-    name: 'Recharge',
-  },
-  {
-    text: 'dark',
-    name: 'Wallet Balance',
-  },
-  {
-    text: 'primary',
-    name: 'Friends',
-  },
-  {
-    text: 'success',
-    name: 'Family',
-  },
-];
-
-export { emailList, emailLabel };

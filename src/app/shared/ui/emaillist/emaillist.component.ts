@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-
-import { List, Label } from './email-list.model';
-
-import { emailList, emailLabel } from './data';
+import { EmailService } from '@services/email.service';
+import { select, Store } from '@ngrx/store';
+import { selectEmailsList, selectLabels } from '@store/selectors/email.selectors';
+import { IAppState } from '@store/state/app.state';
+import { List } from '@shared/ui/emaillist/email-list.model';
+import { emailList } from '@shared/ui/emaillist/data';
 
 @Component({
   selector: 'app-emaillist',
@@ -12,24 +14,14 @@ import { emailList, emailLabel } from './data';
 export class EmaillistComponent implements OnInit {
   // Email left sidebar data
   emailList: List[];
-  emailLabel: Label[];
+  labels$ = this.store.pipe(select(selectLabels));
 
-  constructor() {}
+  constructor(
+    private emailService: EmailService,
+    private store: Store<IAppState>,
+  ) {}
 
   ngOnInit() {
-    /**
-     * Fetches data
-     */
-    this._fetchData();
-  }
-
-  /**
-   * fetches the list and label value
-   */
-  private _fetchData() {
-    // leftbar list
     this.emailList = emailList;
-    // leftbar label
-    this.emailLabel = emailLabel;
   }
 }
