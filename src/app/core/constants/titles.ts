@@ -9,3 +9,5 @@ export const ATTACHMENTS = 'attachments';
 export const PREVIEW_TEXT = 'previewText';
 export const TITLE = 'title';
 export const TEXT = 'text';
+export const HIDE = 'hide';
+export const FROM = 'From';

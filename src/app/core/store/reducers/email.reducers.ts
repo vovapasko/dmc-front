@@ -21,7 +21,9 @@ export const emailReducers = (state = initialEmailState, action: EmailActions): 
       return {
         ...state,
         emails: action.payload.messages,
-        labels: action.payload.labels
+        labels: action.payload.labels,
+        previousPageToken: state.nextPageToken,
+        nextPageToken: action.payload.nextPageToken,
       };
     }
     case EEmailActions.GetNewsEmailsSuccess: {

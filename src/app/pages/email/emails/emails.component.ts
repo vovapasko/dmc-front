@@ -9,6 +9,7 @@ import { Email } from '@models/instances/email';
 import { getMailImageIcon } from '@constants/images';
 import { urls } from '@constants/urls';
 import { Router } from '@angular/router';
+import numbers from '@constants/numbers';
 
 @Component({
   selector: 'app-opportunities',
@@ -57,7 +58,7 @@ export class EmailsComponent implements OnInit {
   }
 
   public openInbox(email: Email): void {
-    const payload = { email: email.email };
+    const payload = { email: email.email, pagination: numbers.pageSize };
     this.store.dispatch(new GetEmails(payload));
     this.store.dispatch(new SelectNewsEmail(email));
     this.router.navigate([urls.INBOX]);

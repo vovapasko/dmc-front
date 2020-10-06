@@ -8,6 +8,8 @@ export interface IEmailState {
   selectNewsEmail: Email;
   authenticationUrl: string;
   labels: Label[];
+  previousPageToken: string;
+  nextPageToken: string;
 }
 
 export const initialEmailState: IEmailState = {
@@ -16,5 +18,7 @@ export const initialEmailState: IEmailState = {
   labels: [],
   selectedEmail: null,
   selectNewsEmail: null,
-  authenticationUrl: null
+  authenticationUrl: null,
+  previousPageToken: null,
+  nextPageToken: null
 };

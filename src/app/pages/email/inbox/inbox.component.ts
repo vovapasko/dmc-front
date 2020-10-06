@@ -9,6 +9,8 @@ import { EmailEntity } from '@models/instances/email';
 import { EmailService } from '@services/email.service';
 import { Router } from '@angular/router';
 import { urls } from '@constants/urls';
+import { GetEmails } from '@store/actions/email.actions';
+import numbers from '@constants/numbers';
 
 @Component({
   selector: 'app-inbox',
@@ -74,15 +76,17 @@ export class InboxComponent implements OnInit {
     this.store.pipe(select(selectEmailsList)).subscribe(this.processEmails.bind(this));
   }
 
-  /**
-   * Handle on page click event
-   */
-  onPageChange(page: any): void {
-    this.startIndex = (page - 1) * this.pageSize + 1;
-    this.endIndex = (page - 1) * this.pageSize + this.pageSize;
-    if (this.endIndex > this.totalRecords) {
-      this.endIndex = this.totalRecords;
-    }
-    this.emailData = this.emailService.emails.slice(this.startIndex - 1, this.endIndex - 1);
+  public next(): void {
+    const email = this.emailService.selectedNewsEmail.email;
+    const nextPageToken = this.emailService.nextPageToken;
+    const pagination = numbers.pageSize;
+    this.store.dispatch(new GetEmails({ email, nextPageToken, pagination }));
+  }
+
+  public previous(): void {
+    const email = this.emailService.selectedNewsEmail.email;
+    const previousPageToken = this.emailService.previousPageToken;
+    const pagination = numbers.pageSize;
+    this.store.dispatch(new GetEmails({ email, nextPageToken: previousPageToken, pagination }));
   }
 }

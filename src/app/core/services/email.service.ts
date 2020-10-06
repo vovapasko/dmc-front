@@ -34,6 +34,9 @@ export class EmailService extends BaseService {
   labels$: BehaviorSubject<Array<Label>> = new BehaviorSubject([]);
   selectedEmail$: BehaviorSubject<EmailEntity> = new BehaviorSubject(null);
   selectedNewsEmail$: BehaviorSubject<Email> = new BehaviorSubject(null);
+  nextPageToken$: BehaviorSubject<string> = new BehaviorSubject(null);
+  previousPageToken$: BehaviorSubject<string> = new BehaviorSubject(null);
+
 
   get labels() {
     return this.labels$.getValue();
@@ -41,6 +44,22 @@ export class EmailService extends BaseService {
 
   set labels(value: Array<Label>) {
     this.labels$.next(value);
+  }
+
+  get nextPageToken() {
+    return this.nextPageToken$.getValue();
+  }
+
+  set nextPageToken(value: string) {
+    this.nextPageToken$.next(value);
+  }
+
+  get previousPageToken() {
+    return this.previousPageToken$.getValue();
+  }
+
+  set previousPageToken(value: string) {
+    this.previousPageToken$.next(value);
   }
 
   get newsEmails() {
@@ -98,9 +117,11 @@ export class EmailService extends BaseService {
       this.url(api, endpoints.MAILS, null, payload),
       methods.GET,
       null,
-      (response: GetEmailsResponse ) => {
+      (response: GetEmailsResponse) => {
         this.emails = [...this.emails, ...response.messages];
         this.labels = [...this.labels, ...response.labels];
+        this.previousPageToken = this.nextPageToken$.getValue();
+        this.nextPageToken = response.nextPageToken;
         return response;
       }
     );

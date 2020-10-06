@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { endpoints } from '@constants/endpoints';
 import { stringType } from '@constants/formula';
+import { separators } from '@constants/separators';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,8 @@ export class BaseService {
       url += id;
     }
     if (keys && keys.length) {
-      keys.forEach(key => url += `?${key}=${params[key]}`);
+      url += separators.questionMark;
+      keys.forEach(key => url += `${key}=${params[key]}${separators.ampersand}`);
     }
     return url;
   }

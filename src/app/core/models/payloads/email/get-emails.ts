@@ -1,4 +1,5 @@
 export interface GetEmailsPayload {
   email: string;
-  page?: number;
+  pagination?: number;
+  nextPageToken?: string;
 }

@@ -17,12 +17,6 @@ export class EmaillistComponent implements OnInit {
   labels$ = this.store.pipe(select(selectLabels));
   emails$ = this.store.pipe(select(selectEmailsList));
 
-  public processEmails(emails: EmailEntity[]): void {
-    if (!emails) {
-      return;
-    }
-  }
-
   constructor(
     private emailService: EmailService,
     private store: Store<IAppState>

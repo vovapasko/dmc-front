@@ -11,7 +11,7 @@
 
 <!-- Label -->
 <h6 class="mt-4">Labels</h6>
-<div class="list-group b-0 mail-list" *ngFor="let label of labels$ | async">
+<div class="list-group b-0 mail-list" *ngFor="let label of labels$ | async | labelFilter">
   <a href="javascript: void(0);" class="list-group-item border-0"
     ><span class="mdi mdi-circle text-{{ label.name }} mr-2"></span>{{ label.name }}</a
   >
