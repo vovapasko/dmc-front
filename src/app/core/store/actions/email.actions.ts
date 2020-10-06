@@ -1,11 +1,12 @@
 import { Action } from '@ngrx/store';
 import { GmailAuthResponse } from '@models/instances/gmail-auth-response';
 import { AuthPayload } from '@models/payloads/email/auth';
-import { Email } from '@models/instances/email';
+import { Email, EmailEntity } from '@models/instances/email';
 import { CreateEmailPayload } from '@models/payloads/project/email/create';
-import { EProjectActions } from '@store/actions/project.actions';
 
 export enum EEmailActions {
+  GetEmails = '[Email] Get emails',
+  GetEmailsSuccess = '[Email] Get emails success',
   GetNewsEmails = '[Email] Get news emails',
   GetNewsEmailsSuccess = '[Email] Get news emails success',
   CreateNewsEmail = '[Email] Create news email',
@@ -17,6 +18,21 @@ export enum EEmailActions {
   GmailTokenRevoke = '[Email] Gmail token revoke',
   GmailTokenRevokeSuccess = '[Email] Gmail token revoke success',
 }
+
+export class GetEmails implements Action {
+  public readonly type = EEmailActions.GetEmails;
+
+  constructor() {
+  }
+}
+
+export class GetEmailsSuccess implements Action {
+  public readonly type = EEmailActions.GetEmailsSuccess;
+
+  constructor(public payload: Array<EmailEntity>) {
+  }
+}
+
 
 export class GetNewsEmails implements Action {
   public readonly type = EEmailActions.GetNewsEmails;
@@ -100,4 +116,6 @@ export type EmailActions =
   | GetNewsEmails
   | GetNewsEmailsSuccess
   | CreateNewsEmail
-  | CreateNewsEmailSuccess;
+  | CreateNewsEmailSuccess
+  | GetEmails
+  | GetEmailsSuccess;
