@@ -5,7 +5,7 @@ import { switchMap } from 'rxjs/operators';
 import { EmailService } from '@services/email.service';
 import {
   CreateNewsEmail, CreateNewsEmailSuccess,
-  EEmailActions, GetNewsEmails, GetNewsEmailsSuccess,
+  EEmailActions, GetEmails, GetEmailsSuccess, GetNewsEmails, GetNewsEmailsSuccess,
   GmailAuth,
   GmailAuthSuccess,
   GmailCredsClear,
@@ -14,8 +14,9 @@ import {
 } from '@store/actions/email.actions';
 import { GmailAuthResponse } from '@models/instances/gmail-auth-response';
 import { AuthPayload } from '@models/payloads/email/auth';
-import { Email } from '@models/instances/email';
+import { Email, EmailEntity } from '@models/instances/email';
 import { CreateEmailPayload } from '@models/payloads/project/email/create';
+import { GetEmailsPayload } from '@models/payloads/email/get-emails';
 
 @Injectable({
   providedIn: 'root'
@@ -29,9 +30,16 @@ export class EmailEffects {
   );
 
   @Effect()
+  getEmails$ = this.actions$.pipe(
+    ofType<GetEmails>(EEmailActions.GetEmails),
+    switchMap((action: {payload: GetEmailsPayload}) => this.emailService.getEmails(action.payload)),
+    switchMap((response: EmailEntity[]) => of(new GetEmailsSuccess(response)))
+  );
+
+  @Effect()
   createNewsEmail$ = this.actions$.pipe(
     ofType<CreateNewsEmail>(EEmailActions.CreateNewsEmail),
-    switchMap((action: {payload: CreateEmailPayload}) => this.emailService.createEmail(action.payload)),
+    switchMap((action: { payload: CreateEmailPayload }) => this.emailService.createEmail(action.payload)),
     switchMap((response: Email) => of(new CreateNewsEmailSuccess(response)))
   );
 

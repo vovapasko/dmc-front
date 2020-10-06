@@ -10,6 +10,7 @@ import { Email, EmailEntity } from '@models/instances/email';
 import { GmailAuthResponse } from '@models/instances/gmail-auth-response';
 import { AuthPayload } from '@models/payloads/email/auth';
 import { CreateEmailPayload } from '@models/payloads/project/email/create';
+import { GetEmailsPayload } from '@models/payloads/email/get-emails';
 
 const api = environment.api;
 
@@ -73,10 +74,10 @@ export class EmailService extends BaseService {
   /**
    *  Get emails
    */
-  public getEmails(): Observable<Array<EmailEntity>> {
+  public getEmails(payload: GetEmailsPayload): Observable<Array<EmailEntity>> {
     return this.requestHandler.request(
-      this.url(api, endpoints.MAILS),
-      methods.POST,
+      this.url(api, endpoints.MAILS, null, payload),
+      methods.GET,
       null,
       (response: Array<EmailEntity>) => {
         this.emails = [...this.emails, ...response];

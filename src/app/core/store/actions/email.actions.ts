@@ -3,6 +3,7 @@ import { GmailAuthResponse } from '@models/instances/gmail-auth-response';
 import { AuthPayload } from '@models/payloads/email/auth';
 import { Email, EmailEntity } from '@models/instances/email';
 import { CreateEmailPayload } from '@models/payloads/project/email/create';
+import { GetEmailsPayload } from '@models/payloads/email/get-emails';
 
 export enum EEmailActions {
   GetEmails = '[Email] Get emails',
@@ -22,7 +23,7 @@ export enum EEmailActions {
 export class GetEmails implements Action {
   public readonly type = EEmailActions.GetEmails;
 
-  constructor() {
+  constructor(public payload: GetEmailsPayload) {
   }
 }
 
