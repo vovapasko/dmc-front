@@ -25,7 +25,7 @@ export const endpoints = {
   PUBLICATIONS: 'publications',
   PUBLICATIONS_BLACKLIST: 'publications-blacklist',
   COMMENTS: 'comments',
-  MAILS: 'emails/inbox/',
+  MAILS: 'emails/inbox',
   GMAIL_AUTH: 'emails/gmail-auth',
   GMAIL_CREDS_CLEAR: 'emails/gmail-creds-clear',
   GMAIL_TOKEN_REVOKE: 'emails/gmail-token-revoke',

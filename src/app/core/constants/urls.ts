@@ -16,7 +16,8 @@ export const urls = {
   TOKEN_REFRESH: 'token-refresh',
   ROOT: '/',
   PROFILE: 'profile',
-  ACCOUNT_CONFIRM: '/account/confirm'
+  ACCOUNT_CONFIRM: '/account/confirm',
+  INBOX: '/email/inbox'
 };
 
 export const tokenFreeUrls = [urls.LOGIN, urls.CONFIRM_USER, urls.TOKEN_REFRESH];

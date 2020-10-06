@@ -2,11 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { select, Store } from '@ngrx/store';
 import { IAppState } from '@store/state/app.state';
-import { GetEmails, GetNewsEmails, GmailAuth, GmailCredsClear, GmailTokenRevoke } from '@store/actions/email.actions';
+import { GetEmails, GetNewsEmails, GmailAuth, GmailCredsClear, GmailTokenRevoke, SelectNewsEmail } from '@store/actions/email.actions';
 import { selectAuthenticationUrl, selectNewsEmails } from '@store/selectors/email.selectors';
 import { breadCrumbs } from '@constants/bread-crumbs';
 import { Email } from '@models/instances/email';
 import { getMailImageIcon } from '@constants/images';
+import { urls } from '@constants/urls';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-opportunities',
@@ -26,7 +28,8 @@ export class EmailsComponent implements OnInit {
 
   constructor(
     private modalService: NgbModal,
-    private store: Store<IAppState>
+    private store: Store<IAppState>,
+    private router: Router
   ) {
   }
 
@@ -54,8 +57,10 @@ export class EmailsComponent implements OnInit {
   }
 
   public openInbox(email: Email): void {
-    const payload = {email: email.email};
+    const payload = { email: email.email };
     this.store.dispatch(new GetEmails(payload));
+    this.store.dispatch(new SelectNewsEmail(email));
+    this.router.navigate([urls.INBOX]);
   }
 
   public gmailTokenRevoke(email: Email): void {
