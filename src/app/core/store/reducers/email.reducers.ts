@@ -5,6 +5,18 @@ import { EClientActions } from '@store/actions/client.actions';
 export const emailReducers = (state = initialEmailState, action: EmailActions): IEmailState => {
   // console.log(action);
   switch (action.type) {
+    case EEmailActions.SelectEmailSuccess: {
+      return {
+        ...state,
+        selectedEmail: action.payload
+      };
+    }
+    case EEmailActions.SelectNewsEmailSuccess: {
+      return {
+        ...state,
+        selectedEmail: action.payload
+      };
+    }
     case EEmailActions.GetEmailsSuccess: {
       return {
         ...state,

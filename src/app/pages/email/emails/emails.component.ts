@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { select, Store } from '@ngrx/store';
 import { IAppState } from '@store/state/app.state';
-import { GetNewsEmails, GmailAuth, GmailCredsClear, GmailTokenRevoke } from '@store/actions/email.actions';
+import { GetEmails, GetNewsEmails, GmailAuth, GmailCredsClear, GmailTokenRevoke } from '@store/actions/email.actions';
 import { selectAuthenticationUrl, selectNewsEmails } from '@store/selectors/email.selectors';
 import { breadCrumbs } from '@constants/bread-crumbs';
 import { Email } from '@models/instances/email';
@@ -53,6 +53,11 @@ export class EmailsComponent implements OnInit {
     this.store.dispatch(new GmailAuth(payload));
   }
 
+  public openInbox(email: Email): void {
+    const payload = {email: email.email};
+    this.store.dispatch(new GetEmails(payload));
+  }
+
   public gmailTokenRevoke(email: Email): void {
     const payload = { data: { email: email.email } };
     this.store.dispatch(new GmailTokenRevoke(payload));
@@ -70,7 +75,6 @@ export class EmailsComponent implements OnInit {
    * save the Opportunities data
    */
   saveData() {
-
     this.submitted = true;
   }
 

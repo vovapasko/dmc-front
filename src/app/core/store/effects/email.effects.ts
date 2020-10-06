@@ -10,7 +10,7 @@ import {
   GmailAuthSuccess,
   GmailCredsClear,
   GmailCredsClearSuccess,
-  GmailTokenRevoke, GmailTokenRevokeSuccess
+  GmailTokenRevoke, GmailTokenRevokeSuccess, SelectEmail, SelectEmailSuccess, SelectNewsEmail, SelectNewsEmailSuccess
 } from '@store/actions/email.actions';
 import { GmailAuthResponse } from '@models/instances/gmail-auth-response';
 import { AuthPayload } from '@models/payloads/email/auth';
@@ -23,6 +23,20 @@ import { GetEmailsPayload } from '@models/payloads/email/get-emails';
 })
 export class EmailEffects {
   @Effect()
+  selectNewsEmail$ = this.actions$.pipe(
+    ofType<SelectNewsEmail>(EEmailActions.SelectNewsEmail),
+    switchMap((action: { payload: Email }) => this.emailService.selectNewsEmail(action.payload)),
+    switchMap((response: Email) => of(new SelectNewsEmailSuccess(response)))
+  );
+
+  @Effect()
+  selectEmail$ = this.actions$.pipe(
+    ofType<SelectEmail>(EEmailActions.SelectEmail),
+    switchMap((action: { payload: EmailEntity }) => this.emailService.selectEmail(action.payload)),
+    switchMap((response: EmailEntity) => of(new SelectEmailSuccess(response)))
+  );
+
+  @Effect()
   getNewsEmails$ = this.actions$.pipe(
     ofType<GetNewsEmails>(EEmailActions.GetNewsEmails),
     switchMap(() => this.emailService.getNewsEmails()),
@@ -32,7 +46,7 @@ export class EmailEffects {
   @Effect()
   getEmails$ = this.actions$.pipe(
     ofType<GetEmails>(EEmailActions.GetEmails),
-    switchMap((action: {payload: GetEmailsPayload}) => this.emailService.getEmails(action.payload)),
+    switchMap((action: { payload: GetEmailsPayload }) => this.emailService.getEmails(action.payload)),
     switchMap((response: EmailEntity[]) => of(new GetEmailsSuccess(response)))
   );
 

@@ -18,6 +18,38 @@ export enum EEmailActions {
   GmailCredsClearSuccess = '[Email] Gmail credentials clear success',
   GmailTokenRevoke = '[Email] Gmail token revoke',
   GmailTokenRevokeSuccess = '[Email] Gmail token revoke success',
+  SelectNewsEmail = '[Email] Select news email',
+  SelectNewsEmailSuccess = '[Email] Select news email success',
+  SelectEmail = '[Email] Select email',
+  SelectEmailSuccess = '[Email] Select email success',
+}
+
+export class SelectNewsEmail implements Action {
+  public readonly type = EEmailActions.SelectNewsEmail;
+
+  constructor(public payload: Email) {
+  }
+}
+
+export class SelectNewsEmailSuccess implements Action {
+  public readonly type = EEmailActions.SelectNewsEmailSuccess;
+
+  constructor(public payload: Email) {
+  }
+}
+
+export class SelectEmail implements Action {
+  public readonly type = EEmailActions.SelectEmail;
+
+  constructor(public payload: EmailEntity) {
+  }
+}
+
+export class SelectEmailSuccess implements Action {
+  public readonly type = EEmailActions.SelectEmailSuccess;
+
+  constructor(public payload: EmailEntity) {
+  }
 }
 
 export class GetEmails implements Action {
@@ -119,4 +151,8 @@ export type EmailActions =
   | CreateNewsEmail
   | CreateNewsEmailSuccess
   | GetEmails
-  | GetEmailsSuccess;
+  | GetEmailsSuccess
+  | SelectEmail
+  | SelectEmailSuccess
+  | SelectNewsEmail
+  | SelectNewsEmailSuccess;

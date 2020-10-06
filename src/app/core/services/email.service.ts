@@ -30,7 +30,7 @@ export class EmailService extends BaseService {
   newsEmails$: BehaviorSubject<Array<Email>> = new BehaviorSubject([]);
   emails$: BehaviorSubject<Array<EmailEntity>> = new BehaviorSubject([]);
   selectedEmail$: BehaviorSubject<EmailEntity> = new BehaviorSubject(null);
-
+  selectedNewsEmail$: BehaviorSubject<Email> = new BehaviorSubject(null);
 
   get newsEmails() {
     return this.newsEmails$.getValue();
@@ -54,6 +54,14 @@ export class EmailService extends BaseService {
 
   set selectedEmail(value: EmailEntity) {
     this.selectedEmail$.next(value);
+  }
+
+  get selectedNewsEmail() {
+    return this.selectedNewsEmail$.getValue();
+  }
+
+  set selectedNewsEmail(value: Email) {
+    this.selectedNewsEmail$.next(value);
   }
 
   /**
@@ -147,6 +155,15 @@ export class EmailService extends BaseService {
   public selectEmail(emailEntity: EmailEntity): Observable<EmailEntity> {
     this.selectedEmail = emailEntity;
     return of(emailEntity);
+  }
+
+  /**
+   *  Select email for read
+   *  returns observable
+   */
+  public selectNewsEmail(email: Email): Observable<Email> {
+    this.selectedNewsEmail = email;
+    return of(email);
   }
 
 }
