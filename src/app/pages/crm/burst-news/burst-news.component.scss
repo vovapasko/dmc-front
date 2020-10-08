@@ -1,11 +1,19 @@
 .btn.btn-secondary {
   background-color: #f99c3d;
+  border-color: #f99c3d;
 }
 
 .btn.btn-primary.btn-block.mt-3.waves-effect.waves-light.ng-star-inserted {
   background-color: #3CB371 !important;
+  border-color: #3CB371;
 }
 
 .nav-link.active{
   background-color: #3CB371 !important;
+  border-color: #3CB371;
+}
+
+.btn-secondary:not(:disabled):not(.disabled):active, .btn-secondary:not(:disabled):not(.disabled).active, .show > .btn-secondary.dropdown-toggle {
+  background-color: #f99c3d;
+  border-color: #f99c3d;
 }
