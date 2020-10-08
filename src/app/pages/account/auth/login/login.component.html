@@ -112,5 +112,6 @@
 <!-- end page -->
 
 <footer class="footer footer-alt">
-    2015 - 2020 &copy; UBold theme by <a href="" class="text-white-50">Coderthemes</a>
+    <span *ngIf="startYear !== currentYear">2020 - {{currentYear}} © TSG-CRM</span>
+    <span *ngIf="startYear === currentYear">{{currentYear}} © TSG-CRM</span>
 </footer>
