@@ -10,6 +10,9 @@ import { Email, EmailEntity } from '@models/instances/email';
 import { GmailAuthResponse } from '@models/instances/gmail-auth-response';
 import { AuthPayload } from '@models/payloads/email/auth';
 import { CreateEmailPayload } from '@models/payloads/project/email/create';
+import { GetEmailsPayload } from '@models/payloads/email/get-emails';
+import { GetEmailsResponse } from '@models/responses/email/get-emails';
+import { Label } from '@models/instances/labels';
 
 const api = environment.api;
 
@@ -28,8 +31,36 @@ export class EmailService extends BaseService {
 
   newsEmails$: BehaviorSubject<Array<Email>> = new BehaviorSubject([]);
   emails$: BehaviorSubject<Array<EmailEntity>> = new BehaviorSubject([]);
+  labels$: BehaviorSubject<Array<Label>> = new BehaviorSubject([]);
   selectedEmail$: BehaviorSubject<EmailEntity> = new BehaviorSubject(null);
+  selectedNewsEmail$: BehaviorSubject<Email> = new BehaviorSubject(null);
+  nextPageToken$: BehaviorSubject<string> = new BehaviorSubject(null);
+  previousPageToken$: BehaviorSubject<string> = new BehaviorSubject(null);
 
+
+  get labels() {
+    return this.labels$.getValue();
+  }
+
+  set labels(value: Array<Label>) {
+    this.labels$.next(value);
+  }
+
+  get nextPageToken() {
+    return this.nextPageToken$.getValue();
+  }
+
+  set nextPageToken(value: string) {
+    this.nextPageToken$.next(value);
+  }
+
+  get previousPageToken() {
+    return this.previousPageToken$.getValue();
+  }
+
+  set previousPageToken(value: string) {
+    this.previousPageToken$.next(value);
+  }
 
   get newsEmails() {
     return this.newsEmails$.getValue();
@@ -55,6 +86,14 @@ export class EmailService extends BaseService {
     this.selectedEmail$.next(value);
   }
 
+  get selectedNewsEmail() {
+    return this.selectedNewsEmail$.getValue();
+  }
+
+  set selectedNewsEmail(value: Email) {
+    this.selectedNewsEmail$.next(value);
+  }
+
   /**
    *  Get news emails
    */
@@ -73,13 +112,16 @@ export class EmailService extends BaseService {
   /**
    *  Get emails
    */
-  public getEmails(): Observable<Array<EmailEntity>> {
+  public getEmails(payload: GetEmailsPayload): Observable<GetEmailsResponse> {
     return this.requestHandler.request(
-      this.url(api, endpoints.MAILS),
-      methods.POST,
+      this.url(api, endpoints.MAILS, null, payload),
+      methods.GET,
       null,
-      (response: Array<EmailEntity>) => {
-        this.emails = [...this.emails, ...response];
+      (response: GetEmailsResponse) => {
+        this.emails = [...this.emails, ...response.messages];
+        this.labels = [...this.labels, ...response.labels];
+        this.previousPageToken = this.nextPageToken$.getValue();
+        this.nextPageToken = response.nextPageToken;
         return response;
       }
     );
@@ -146,6 +188,15 @@ export class EmailService extends BaseService {
   public selectEmail(emailEntity: EmailEntity): Observable<EmailEntity> {
     this.selectedEmail = emailEntity;
     return of(emailEntity);
+  }
+
+  /**
+   *  Select email for read
+   *  returns observable
+   */
+  public selectNewsEmail(email: Email): Observable<Email> {
+    this.selectedNewsEmail = email;
+    return of(email);
   }
 
 }

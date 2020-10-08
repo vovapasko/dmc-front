@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { breadCrumbs } from '@constants/bread-crumbs';
+import { EmailService } from '@services/email.service';
+import { urls } from '@constants/urls';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-composeemail',
@@ -15,12 +18,17 @@ export class ComposeemailComponent implements OnInit {
   // bread crumb items
   breadCrumbItems: Array<{}>;
 
-  constructor() { }
+  constructor(
+    private emailService: EmailService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
     // tslint:disable-next-line: max-line-length
     this.breadCrumbItems = breadCrumbs.emails;
-
+    if (!this.emailService.selectedNewsEmail) {
+      this.router.navigate([urls.EMAILS]);
+    }
   }
 
 }

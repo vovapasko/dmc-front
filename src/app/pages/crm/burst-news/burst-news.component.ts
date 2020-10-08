@@ -541,6 +541,9 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   public onChangeFormationText(): void {
+    if (!this.editorForm) {
+      return;
+    }
     const control = this.editorFormControls.text;
     const previewControl = this.previewFormControls.previewText;
     this.setContent(control, previewControl, TEXT);

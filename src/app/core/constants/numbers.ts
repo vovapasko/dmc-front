@@ -11,5 +11,6 @@ export default {
   fifty: 50,
   six: 6,
   five: 5,
-  ten: 10
+  ten: 10,
+  oneHundred: 100
 };

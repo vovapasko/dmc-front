@@ -11,4 +11,17 @@ export interface Email {
 
 export interface EmailEntity {
   id?: number;
+  threadId?: string;
+  snippet?: string;
+  internalDate?: string;
+  payload?: EmailPayload;
+}
+
+export interface EmailPayload {
+  headers: Header[];
+}
+
+export interface Header {
+  name?: string;
+  value?: string;
 }

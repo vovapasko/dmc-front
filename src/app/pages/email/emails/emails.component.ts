@@ -2,11 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { select, Store } from '@ngrx/store';
 import { IAppState } from '@store/state/app.state';
-import { GetNewsEmails, GmailAuth, GmailCredsClear, GmailTokenRevoke } from '@store/actions/email.actions';
+import { GetEmails, GetNewsEmails, GmailAuth, GmailCredsClear, GmailTokenRevoke, SelectNewsEmail } from '@store/actions/email.actions';
 import { selectAuthenticationUrl, selectNewsEmails } from '@store/selectors/email.selectors';
 import { breadCrumbs } from '@constants/bread-crumbs';
 import { Email } from '@models/instances/email';
 import { getMailImageIcon } from '@constants/images';
+import { urls } from '@constants/urls';
+import { Router } from '@angular/router';
+import numbers from '@constants/numbers';
 
 @Component({
   selector: 'app-opportunities',
@@ -26,7 +29,8 @@ export class EmailsComponent implements OnInit {
 
   constructor(
     private modalService: NgbModal,
-    private store: Store<IAppState>
+    private store: Store<IAppState>,
+    private router: Router
   ) {
   }
 
@@ -39,8 +43,8 @@ export class EmailsComponent implements OnInit {
     if (!authenticationUrl) {
       return;
     }
-    window.location.href = authenticationUrl;
-    console.log(authenticationUrl);
+    const win = window.open(authenticationUrl, '_blank');
+    win.focus();
   }
 
   public getMailImage(email: Email): string {
@@ -51,6 +55,13 @@ export class EmailsComponent implements OnInit {
     const payload = { data: { email: email.email } };
     this.store.pipe(select(selectAuthenticationUrl)).subscribe(this.processAuthenticationUrl.bind(this));
     this.store.dispatch(new GmailAuth(payload));
+  }
+
+  public openInbox(email: Email): void {
+    const payload = { email: email.email, pagination: numbers.pageSize };
+    this.store.dispatch(new GetEmails(payload));
+    this.store.dispatch(new SelectNewsEmail(email));
+    this.router.navigate([urls.INBOX]);
   }
 
   public gmailTokenRevoke(email: Email): void {
@@ -70,7 +81,6 @@ export class EmailsComponent implements OnInit {
    * save the Opportunities data
    */
   saveData() {
-
     this.submitted = true;
   }
 

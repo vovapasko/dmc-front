@@ -7,14 +7,13 @@
       <div class="card-box">
         <!-- Left sidebar -->
         <div class="inbox-leftbar">
-          <a routerLink="/email/compose" class="btn btn-danger btn-block mb-4">Compose</a>
+          <a routerLink="/email/inbox" class="btn btn-danger btn-block mb-4">Inbox</a>
 
           <app-emaillist></app-emaillist><!--Leftbar emaillist and label -->
         </div>
         <!-- End Left sidebar -->
 
         <div class="inbox-rightbar">
-            <app-widget></app-widget><!-- Button Group -->
             <div class="mt-4">
                 <h5 class="font-18">Hi Bro, How are you?</h5>
 
@@ -51,18 +50,6 @@
                 </div>
                 <a href="https://dribbble.com/BalkanBrothers" target="_blank" class="text-muted font-13"><i>images used</i></a>
 
-            </div> 
-            <div class="media mb-0 mt-4">
-                <div class="media-body">
-                    <div class="mb-2">
-                      <!-- Editor -->
-                      <app-ngx-editor [placeholder]="'Enter text '" [spellcheck]="true" [height]="'170px'"></app-ngx-editor>
-                    </div>
-                </div>
-              
-            </div>
-            <div class="text-right">
-                <button type="button" class="btn btn-primary btn-rounded width-sm">Send</button>
             </div>
         </div>
         <!-- end inbox-rightbar-->

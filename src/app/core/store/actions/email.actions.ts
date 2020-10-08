@@ -1,11 +1,14 @@
 import { Action } from '@ngrx/store';
 import { GmailAuthResponse } from '@models/instances/gmail-auth-response';
 import { AuthPayload } from '@models/payloads/email/auth';
-import { Email } from '@models/instances/email';
+import { Email, EmailEntity } from '@models/instances/email';
 import { CreateEmailPayload } from '@models/payloads/project/email/create';
-import { EProjectActions } from '@store/actions/project.actions';
+import { GetEmailsPayload } from '@models/payloads/email/get-emails';
+import { GetEmailsResponse } from '@models/responses/email/get-emails';
 
 export enum EEmailActions {
+  GetEmails = '[Email] Get emails',
+  GetEmailsSuccess = '[Email] Get emails success',
   GetNewsEmails = '[Email] Get news emails',
   GetNewsEmailsSuccess = '[Email] Get news emails success',
   CreateNewsEmail = '[Email] Create news email',
@@ -16,7 +19,54 @@ export enum EEmailActions {
   GmailCredsClearSuccess = '[Email] Gmail credentials clear success',
   GmailTokenRevoke = '[Email] Gmail token revoke',
   GmailTokenRevokeSuccess = '[Email] Gmail token revoke success',
+  SelectNewsEmail = '[Email] Select news email',
+  SelectNewsEmailSuccess = '[Email] Select news email success',
+  SelectEmail = '[Email] Select email',
+  SelectEmailSuccess = '[Email] Select email success',
 }
+
+export class SelectNewsEmail implements Action {
+  public readonly type = EEmailActions.SelectNewsEmail;
+
+  constructor(public payload: Email) {
+  }
+}
+
+export class SelectNewsEmailSuccess implements Action {
+  public readonly type = EEmailActions.SelectNewsEmailSuccess;
+
+  constructor(public payload: Email) {
+  }
+}
+
+export class SelectEmail implements Action {
+  public readonly type = EEmailActions.SelectEmail;
+
+  constructor(public payload: EmailEntity) {
+  }
+}
+
+export class SelectEmailSuccess implements Action {
+  public readonly type = EEmailActions.SelectEmailSuccess;
+
+  constructor(public payload: EmailEntity) {
+  }
+}
+
+export class GetEmails implements Action {
+  public readonly type = EEmailActions.GetEmails;
+
+  constructor(public payload: GetEmailsPayload) {
+  }
+}
+
+export class GetEmailsSuccess implements Action {
+  public readonly type = EEmailActions.GetEmailsSuccess;
+
+  constructor(public payload: GetEmailsResponse) {
+  }
+}
+
 
 export class GetNewsEmails implements Action {
   public readonly type = EEmailActions.GetNewsEmails;
@@ -100,4 +150,10 @@ export type EmailActions =
   | GetNewsEmails
   | GetNewsEmailsSuccess
   | CreateNewsEmail
-  | CreateNewsEmailSuccess;
+  | CreateNewsEmailSuccess
+  | GetEmails
+  | GetEmailsSuccess
+  | SelectEmail
+  | SelectEmailSuccess
+  | SelectNewsEmail
+  | SelectNewsEmailSuccess;

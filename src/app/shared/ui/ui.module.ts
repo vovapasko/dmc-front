@@ -18,6 +18,8 @@ import { PagetitleComponent } from './pagetitle/pagetitle.component';
 import { PortletComponent } from './portlet/portlet.component';
 import { EmaillistComponent } from './emaillist/emaillist.component';
 import { WidgetComponent } from './widget/widget.component';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   // tslint:disable-next-line: max-line-length
@@ -38,6 +40,8 @@ import { WidgetComponent } from './widget/widget.component';
     NgbDatepickerModule,
     NgbTimepickerModule,
     NgbDropdownModule,
+    Ng2SearchPipeModule,
+    SharedModule
   ],
   // tslint:disable-next-line: max-line-length
   exports: [

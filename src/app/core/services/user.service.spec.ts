@@ -69,7 +69,7 @@ describe('UserService', () => {
         expect(users.length).toBe(mockUsers.length);
       });
 
-      const req = httpMock.expectOne(`${api}/users/?page=1`);
+      const req = httpMock.expectOne(`${api}/users/?page=1&`);
       expect(req.request.method).toBe('GET');
       req.flush({ results: mockUsers });
     });

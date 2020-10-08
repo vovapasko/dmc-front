@@ -1,5 +1,6 @@
 <div class="container-fluid">
     <app-page-title title="Почта" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+    <app-ui-preloader [display]="loading$ | async"></app-ui-preloader>
 
     <div class="row">
 
@@ -18,25 +19,24 @@
 
                 <!--Right Sidebar-->
                 <div class="inbox-rightbar">
-                    <app-widget></app-widget>
                     <!--Button Group-->
                     <div class="mt-3">
                         <ul class="message-list">
                             <a routerLink="/email/read">
-                                <li class="unread" *ngFor="let email of emailData | slice:0:15; let i = index; "
-                                    [ngClass]="{ 'unread': email.unread === true }">
+                                <li class="unread" *ngFor="let email of emailData | slice:0:15; let i = index; ">
                                     <div class="col-mail col-mail-1">
                                         <div class="checkbox-wrapper-mail">
                                             <input type="checkbox" id="chk-{{i}}"/>
                                             <label for="chk-{{i}}"></label>
                                         </div>
-                                        <span class="star-toggle far fa-star text-{{email.text}}"></span>
-                                        <a href="" class="title">{{email.title}}</a>
+                                        <span class="star-toggle far fa-star text"></span>
+                                        <a href="" class="title">{{email | fromEmail}}</a>
                                     </div>
                                     <div class="col-mail col-mail-2">
-                                        <a href="" class="subject">{{email.subject}}
+
+                                        <a href="" class="subject">{{email.snippet}}
                                         </a>
-                                        <div class="date">{{email.date | date:'MMM d'}}</div>
+                                        <div class="date">{{email.internalDate | date: 'dd/MM/yyyy'}}</div>
                                     </div>
                                 </li>
                             </a>
@@ -44,13 +44,19 @@
                     </div>
                     <div class="row justify-content-md-between align-items-md-center">
                         <div class="col-7">
-                            Showing {{startIndex}} - {{endIndex}} of {{totalRecords}}
                         </div> <!-- end col-->
                         <div class="col-5">
                             <div class="text-md-right float-md-right mt-2">
-                                <ngb-pagination [collectionSize]="totalRecords" (pageChange)="onPageChange($event)"
-                                                [(page)]="page" [pageSize]="pageSize">
-                                </ngb-pagination>
+
+<!--                                        <a href="javascript: void(0);"-->
+<!--                                           (click)="previous()">-->
+<!--                                            Prev-->
+<!--                                        </a>-->
+                                        <a href="javascript: void(0);"
+                                              (click)="next()">
+                                            Next
+                                        </a>
+
                                 <!--Pagination-->
                             </div>
                         </div> <!-- end col-->
