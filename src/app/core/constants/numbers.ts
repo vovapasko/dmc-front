@@ -12,5 +12,6 @@ export default {
   six: 6,
   five: 5,
   ten: 10,
-  oneHundred: 100
+  oneHundred: 100,
+  startYear: 2020
 };
