@@ -10,3 +10,12 @@
 .ng-select.ng-invalid.ng-touched .ng-select-container .ng-placeholder{
   color: red !important;
 }
+
+.btn-danger {
+  background-color: #f57877;
+}
+
+
+ngb-pagination ::ng-deep ul > li.active > a {
+  background-color: #228B22 !important;
+}

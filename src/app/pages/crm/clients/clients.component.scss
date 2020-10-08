@@ -1,0 +1,13 @@
+
+.btn.btn-primary {
+  background-color: #228B22 !important;
+}
+
+.btn.btn-sm.btn-blue.float-right {
+  background-color: #f57877;
+}
+
+
+ngb-pagination ::ng-deep ul > li.active > a {
+  background-color: #228B22 !important;
+}

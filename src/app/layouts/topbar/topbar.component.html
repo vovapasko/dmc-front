@@ -1,6 +1,22 @@
 <!-- Topbar Start -->
 <div class="navbar-custom">
     <ul class="list-unstyled topnav-menu float-right mb-0">
+
+        <li class="d-none d-sm-block">
+            <form class="app-search" (ngSubmit)="submitCreateFormatForm()" [formGroup]="createFormatForm">
+                <div class="app-search-box">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Поиск...">
+                        <div class="input-group-append">
+                            <button class="btn" type="submit">
+                                <i class="fe-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </li>
+
         <li class="dropdown notification-list" ngbDropdown>
             <a
                     class="nav-link dropdown-toggle waves-effect waves-light"
@@ -99,7 +115,7 @@
     <div class="logo-box">
         <a href="/" class="logo text-center">
       <span class="logo-lg">
-        <img src="assets/images/img/Logotype_TSG.svg" alt="" height="50"/>
+        <img src="assets/images/img/logo%20(3).jpg" alt="" height="50"/>
           <!-- <span class="logo-lg-text-light">Xeria</span> -->
       </span>
             <span class="logo-sm">
