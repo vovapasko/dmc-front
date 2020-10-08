@@ -1,5 +1,8 @@
 body { padding: 2em; }
 
+.authentication-bg.authentication-bg-pattern {
+  background-color: #358dcd;
+}
 
 /* Shared */
 .loginBtn {
@@ -67,4 +70,9 @@ body { padding: 2em; }
 
 .social-button {
  margin-top: 15px;
+}
+
+.btn.btn-primary {
+  background-color: #358dcd;;
+  border-color: #358dcd;;
 }
