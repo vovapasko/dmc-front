@@ -15,5 +15,40 @@
 
 #side-menu li a:hover {
   color: white;
+  border-radius: 6px;
 }
 
+#side-menu li a.active {
+  color: white;
+  border-radius: 6px;
+}
+
+#side-menu li a:hover {
+  color: white;
+  border-radius: 6px;
+  background-color: #358dcd;
+}
+
+
+
+#sidebar-menu li:hover {
+  background-color: #358dcd;
+  color: white;
+}
+
+
+#sidebar-menu a.active{
+  background-color: #358dcd;
+  color: white;
+}
+
+.side-nav-link-ref.active {
+  background-color: #358dcd;
+  color: white;
+}
+
+
+#sidebar-menu[_ngcontent-nvo-c111] li[_ngcontent-nvo-c111]:hover {
+  background-color: #358dcd;
+  color: white;
+}
