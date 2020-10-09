@@ -39,3 +39,7 @@
 ngb-pagination ::ng-deep ul > li.active > a {
   background-color: #3CB371 !important;
 }
+
+tr {
+  cursor: pointer;
+}
