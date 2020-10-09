@@ -4,61 +4,81 @@
   <div id="sidebar-menu">
     <ul class="metismenu" id="side-menu" #sideMenu>
 
-      <li>
-        <a routerLink="/crm/users" routerLinkActive="active" class="side-nav-link-ref">
-          <i class="fe-users"></i>
-          <span> Пользователи </span>
-        </a>
-      </li>
+      <!--- first section -->
 
-      <li>
-        <a routerLink="/crm/contractors" routerLinkActive="active" class="side-nav-link-ref">
-          <i class="fa fa-user-circle" aria-hidden="true"></i>
-          <span> Контрагенты </span>
-        </a>
-      </li>
-
-      <li>
+      <li id="burst-news-link">
         <a routerLink="/crm/burst-news" routerLinkActive="active" class="side-nav-link-ref">
           <i class="fe-trending-up"></i>
           <span> Разгон </span>
         </a>
       </li>
 
-      <li>
+      <li id="publications-link">
+        <a routerLink="/crm/publications" routerLinkActive="active" class="side-nav-link-ref">
+          <i class="fas fa-file-alt" aria-hidden="true"></i>
+          <span> Публикации </span>
+        </a>
+      </li>
+
+      <li id="hashtags-link">
+        <a routerLink="/crm/hashtags" routerLinkActive="active" class="side-nav-link-ref">
+          <i class="fas fa-hashtag" aria-hidden="true"></i>
+          <span> Хештеги </span>
+        </a>
+      </li>
+
+      <!--- end first section -->
+
+      <!--- seconds section -->
+
+      <li id="projects-link">
         <a routerLink="/crm/projects" routerLinkActive="active" class="side-nav-link-ref">
           <i class="fe-folder-minus"></i>
           <span> Проекты </span>
         </a>
       </li>
 
-      <li>
-        <a routerLink="/email" routerLinkActive="active" class="side-nav-link-ref">
-          <i class="fe-mail"></i>
-          <span> Почты </span>
-        </a>
-      </li>
-
-      <li>
-        <a routerLink="/crm/reports" routerLinkActive="active" class="side-nav-link-ref">
-          <i class="fas fa-chart-line" aria-hidden="true"></i>
-          <span> Отчёты </span>
-        </a>
-      </li>
-
-      <li>
+      <li id="clients-link">
         <a routerLink="/crm/clients" routerLinkActive="active" class="side-nav-link-ref">
           <i class="fas fa-users" aria-hidden="true"></i>
           <span> Клиенты </span>
         </a>
       </li>
 
-      <li>
-        <a routerLink="/crm/publications" routerLinkActive="active" class="side-nav-link-ref">
-          <i class="fas fa-file-alt" aria-hidden="true"></i>
-          <span> Публикации </span>
+      <li id="contractors-link">
+        <a routerLink="/crm/contractors" routerLinkActive="active" class="side-nav-link-ref">
+          <i class="fa fa-user-circle" aria-hidden="true"></i>
+          <span> Контрагенты </span>
         </a>
       </li>
+
+      <!--- end second section -->
+
+      <!--- third section -->
+
+      <li id="users-link">
+        <a routerLink="/crm/users" routerLinkActive="active" class="side-nav-link-ref">
+          <i class="fe-users"></i>
+          <span> Пользователи </span>
+        </a>
+      </li>
+
+      <li id="emails-link">
+        <a routerLink="/email" routerLinkActive="active" class="side-nav-link-ref">
+          <i class="fe-mail"></i>
+          <span> Почты </span>
+        </a>
+      </li>
+
+      <li id="reports-link">
+        <a routerLink="/crm/reports" routerLinkActive="active" class="side-nav-link-ref">
+          <i class="fas fa-chart-line" aria-hidden="true"></i>
+          <span> Отчёты </span>
+        </a>
+      </li>
+      <!--- end third section -->
+
+
     </ul>
   </div>
   <!-- End Sidebar -->
