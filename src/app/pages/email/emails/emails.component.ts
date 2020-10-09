@@ -2,7 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { select, Store } from '@ngrx/store';
 import { IAppState } from '@store/state/app.state';
-import { GetEmails, GetNewsEmails, GmailAuth, GmailCredsClear, GmailTokenRevoke, SelectNewsEmail } from '@store/actions/email.actions';
+import {
+  CreateNewsEmail,
+  GetEmails,
+  GetNewsEmails,
+  GmailAuth,
+  GmailCredsClear,
+  GmailTokenRevoke,
+  SelectNewsEmail
+} from '@store/actions/email.actions';
 import { selectAuthenticationUrl, selectNewsEmails } from '@store/selectors/email.selectors';
 import { breadCrumbs } from '@constants/bread-crumbs';
 import { Email } from '@models/instances/email';
@@ -10,6 +18,15 @@ import { getMailImageIcon } from '@constants/images';
 import { urls } from '@constants/urls';
 import { Router } from '@angular/router';
 import numbers from '@constants/numbers';
+import { AbstractControl, FormGroup } from '@angular/forms';
+import { ProjectService } from '@services/project.service';
+import { CreateEmailPayload } from '@models/payloads/project/email/create';
+import { CreateHashtagPayload } from '@models/payloads/news/hashtag/create';
+import { CreatePostsFormatPayload } from '@models/payloads/news/format/create';
+import { Subject } from 'rxjs';
+import { ServerError } from '@models/responses/server/error';
+import { LoadingService } from '@services/loading.service';
+import { ErrorService } from '@services/error.service';
 
 @Component({
   selector: 'app-opportunities',
@@ -26,18 +43,62 @@ export class EmailsComponent implements OnInit {
   term: any;
   submitted: boolean;
   newsEmails$ = this.store.pipe(select(selectNewsEmails));
+  createEmailForm: FormGroup;
+
+  loading$: Subject<boolean>;
+  error$: Subject<ServerError>;
 
   constructor(
     private modalService: NgbModal,
     private store: Store<IAppState>,
-    private router: Router
+    private router: Router,
+    private projectService: ProjectService,
+    private loadingService: LoadingService,
+    private errorService: ErrorService
   ) {
   }
 
   ngOnInit() {
     this.breadCrumbItems = breadCrumbs.emails;
+    this.loading$ = this.loadingService.loading$;
+    this.error$ = this.errorService.error$;
     this._fetchData();
+    this.initCreateEmailForm();
   }
+
+  public initCreateEmailForm(): void {
+    this.createEmailForm = this.projectService.initializeCreateEmailForm();
+  }
+
+  public submitCreateEmailForm(): void {
+    const data = this.createEmailForm.value;
+    const payload = { data } as unknown as CreateEmailPayload;
+    this.submit(this.createEmailForm, this.createEmail.bind(this), payload);
+  }
+
+  public createEmail(payload: CreateEmailPayload): void {
+    this.store.dispatch(new CreateNewsEmail(payload));
+  }
+
+  public submit(form: FormGroup, handler, payload: CreateHashtagPayload | CreatePostsFormatPayload | CreateEmailPayload): void {
+    this.submitted = true;
+
+    if (form && form.invalid) {
+      return;
+    }
+
+    handler(payload);
+    this.submitted = false;
+    form.reset();
+    this.modalService.dismissAll();
+    this.submitted = false;
+  }
+
+  // convenience getter for easy access to form fields
+  get createEmailControls(): { [p: string]: AbstractControl } {
+    return this.createEmailForm.controls;
+  }
+
 
   public processAuthenticationUrl(authenticationUrl: string): void {
     if (!authenticationUrl) {
