@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ComposeemailComponent } from './composeemail.component';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import {
   NgbAlertModule,
   NgbDatepickerModule,
@@ -35,6 +35,11 @@ import { ErrorService } from '@services/error.service';
 import { LoadingService } from '@services/loading.service';
 import { NotificationService } from '@services/notification.service';
 import { NewsService } from '@services/news.service';
+import { EmailsComponent } from '@pages/email/emails/emails.component';
+
+const routes: Routes = [
+  { path: 'email', component: EmailsComponent }
+];
 
 describe('ComposeemailComponent', () => {
   let component: ComposeemailComponent;
@@ -53,7 +58,6 @@ describe('ComposeemailComponent', () => {
         ReactiveFormsModule,
         RouterTestingModule,
         StoreModule.forRoot({}),
-        RouterModule.forRoot([]),
         FormsModule,
         NgbPaginationModule,
         NgApexchartsModule,
