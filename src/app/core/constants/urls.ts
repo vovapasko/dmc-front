@@ -15,6 +15,7 @@ export const urls = {
   CRM_LOGIN: '/account/login',
   TOKEN_REFRESH: 'token-refresh',
   ROOT: '/',
+  HASHTAGS: 'hashtags',
   PROFILE: 'profile',
   ACCOUNT_CONFIRM: '/account/confirm',
   INBOX: '/email/inbox',

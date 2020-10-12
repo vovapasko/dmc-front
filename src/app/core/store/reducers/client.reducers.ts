@@ -3,6 +3,7 @@ import { UserActions } from '../actions/user.actions';
 import { initialUserState, IUserState } from '../state/user.state';
 import { initialClientState, IClientState } from '@store/state/client.state';
 import { EClientActions, ClientActions } from '@store/actions/client.actions';
+import { Client } from '@models/instances/client';
 
 export const clientReducers = (state = initialClientState, action: ClientActions): IClientState => {
   // console.log(action);
@@ -22,13 +23,13 @@ export const clientReducers = (state = initialClientState, action: ClientActions
     case EClientActions.UpdateClientSuccess: {
       return {
         ...state,
-        clients: state.clients.map((el) => (el.id === action.payload.id ? action.payload : el)),
+        clients: state.clients.map((client: Client) => (client.id === action.payload.id ? action.payload : client)),
       };
     }
     case EClientActions.DeleteClientSuccess: {
       return {
         ...state,
-        clients: state.clients.filter((el) => el.id !== action.payload.id),
+        clients: state.clients.filter((client: Client) => client.id !== action.payload.id),
       };
     }
     case EClientActions.SelectClientSuccess: {

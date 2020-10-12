@@ -86,5 +86,16 @@ export const breadCrumbs = {
       path: '/email',
       active: true
     }
+  ],
+  hashtags: [
+    {
+      label: 'Главная',
+      path: '/'
+    },
+    {
+      label: 'Хештеги',
+      path: '/hashtags',
+      active: true
+    }
   ]
 };

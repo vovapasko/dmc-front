@@ -37,6 +37,7 @@ import { ProjectsComponent } from './projects/projects.component';
 import { ReportsComponent } from './reports/reports.component';
 import { ClientsComponent } from '@pages/crm/clients/clients.component';
 import { PublicationsComponent } from '@pages/crm/publications/publications.component';
+import { HashtagsComponent } from '@pages/crm/hashtags/hashtags.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { PublicationsComponent } from '@pages/crm/publications/publications.comp
     ProjectsComponent,
     ClientsComponent,
     ReportsComponent,
-    PublicationsComponent
+    PublicationsComponent,
+    HashtagsComponent
   ],
   imports: [
     FormsModule,

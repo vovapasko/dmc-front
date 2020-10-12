@@ -10,6 +10,7 @@ import { projectReducer } from './project.reducers';
 import { clientReducers } from '@store/reducers/client.reducers';
 import { publicationReducer } from '@store/reducers/publication.reducers';
 import { emailReducers } from '@store/reducers/email.reducers';
+import { hashtagReducers } from '@store/reducers/hashtag.reducers';
 
 export const reducerToken: InjectionToken<ActionReducerMap<IAppState>> = new InjectionToken<
   ActionReducerMap<IAppState>
@@ -24,7 +25,8 @@ export function appReducers(): ActionReducerMap<IAppState, any> {
     projects: projectReducer,
     clients: clientReducers,
     publications: publicationReducer,
-    emails: emailReducers
+    emails: emailReducers,
+    hashtags: hashtagReducers
   };
 }
 
