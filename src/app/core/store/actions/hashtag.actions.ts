@@ -14,6 +14,8 @@ export enum EHashtagActions {
   UpdateHashtagSuccess = '[Hashtag] Update hashtag success',
   DeleteHashtag = '[Hashtag] Delete hashtag',
   DeleteHashtagSuccess = '[Hashtag] Delete hashtag success',
+  SelectHashtag = '[Hashtag] Select hashtag',
+  SelectHashtagSuccess = '[Hashtag] Select hashtag success',
 }
 
 export class GetHashtags implements Action {
@@ -74,6 +76,21 @@ export class DeleteHashtagSuccess implements Action {
   }
 }
 
+
+export class SelectHashtag implements Action {
+  public readonly type = EHashtagActions.SelectHashtag;
+
+  constructor(public payload: Hashtag) {
+  }
+}
+
+export class SelectHashtagSuccess implements Action {
+  public readonly type = EHashtagActions.SelectHashtagSuccess;
+
+  constructor(public payload: Hashtag) {
+  }
+}
+
 export type HashtagActions =
   | GetHashtags
   | GetHashtagsSuccess
@@ -82,4 +99,6 @@ export type HashtagActions =
   | UpdateHashtag
   | UpdateHashtagSuccess
   | DeleteHashtag
-  | DeleteHashtagSuccess;
+  | DeleteHashtagSuccess
+  | SelectHashtag
+  | SelectHashtagSuccess;

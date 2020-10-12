@@ -22,7 +22,7 @@ import {
   CreateHashtagSuccess, DeleteHashtag, DeleteHashtagSuccess,
   EHashtagActions,
   GetHashtags,
-  GetHashtagsSuccess,
+  GetHashtagsSuccess, SelectHashtag, SelectHashtagSuccess,
   UpdateHashtag, UpdateHashtagSuccess
 } from '@store/actions/hashtag.actions';
 import { Hashtag } from '@models/instances/hashtag';
@@ -60,6 +60,13 @@ export class HashtagEffects {
     ofType<DeleteHashtag>(EHashtagActions.DeleteHashtag),
     switchMap((action: { payload: DeleteHashtagPayload }) => this.hashtagService.delete(action.payload)),
     switchMap((payload: DeleteHashtagPayload) => of(new DeleteHashtagSuccess(payload)))
+  );
+
+  @Effect()
+  selectHashtag$ = this.actions$.pipe(
+    ofType<SelectHashtag>(EHashtagActions.SelectHashtag),
+    switchMap((action: { payload: Hashtag }) => this.hashtagService.selectHashtag(action.payload)),
+    switchMap((payload: Hashtag) => of(new SelectHashtagSuccess(payload)))
   );
 
   constructor(

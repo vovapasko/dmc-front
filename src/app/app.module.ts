@@ -35,6 +35,7 @@ import { ClientEffects } from '@store/effects/client.effects';
 import { PublicationEffects } from '@store/effects/publication.effects';
 import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
 import { EmailEffects } from '@store/effects/email.effects';
+import { HashtagEffects } from '@store/effects/hashtag.effects';
 
 @NgModule({
   declarations: [AppComponent, Error404Component, Error500Component, NotificationComponent],
@@ -48,7 +49,16 @@ import { EmailEffects } from '@store/effects/email.effects';
     LayoutsModule,
     AppRoutingModule,
     StoreModule.forRoot(reducerToken),
-    EffectsModule.forRoot([UserEffects, ContractorEffects, NewsEffects, ProjectEffects, ClientEffects, PublicationEffects, EmailEffects]),
+    EffectsModule.forRoot([
+      UserEffects,
+      ContractorEffects,
+      NewsEffects,
+      ProjectEffects,
+      ClientEffects,
+      PublicationEffects,
+      EmailEffects,
+      HashtagEffects
+    ]),
     StoreRouterConnectingModule.forRoot({ stateKey: 'router' }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
@@ -67,14 +77,14 @@ import { EmailEffects } from '@store/effects/email.effects';
         providers: [
           {
             id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider(environment.googleClientId),
+            provider: new GoogleLoginProvider(environment.googleClientId)
           },
           {
             id: FacebookLoginProvider.PROVIDER_ID,
-            provider: new FacebookLoginProvider(environment.fbAppId),
-          },
-        ],
-      } as SocialAuthServiceConfig,
+            provider: new FacebookLoginProvider(environment.fbAppId)
+          }
+        ]
+      } as SocialAuthServiceConfig
     }
   ],
   bootstrap: [AppComponent]
