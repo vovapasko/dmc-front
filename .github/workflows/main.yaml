@@ -31,6 +31,3 @@ jobs:
         run: |
           npm ci
           npm run build:ci
-
-      - name: Comment Test Coverage
-        uses: AthleticNet/comment-test-coverage@1.1
