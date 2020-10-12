@@ -1,4 +1,5 @@
 [![build status](https://github.com/korporativi/dmc-front/workflows/Build/badge.svg)](https://github.com/korporativi/dmc-front/actions)
+[![codecov](https://codecov.io/gh/korporativi/dmc-front/branch/develop/graph/badge.svg?token=H5U7021SU8)](https://codecov.io/gh/korporativi/dmc-front)
 
 # Ubold Angular - Vertical Layout
 
