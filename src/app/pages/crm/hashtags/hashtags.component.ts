@@ -18,7 +18,7 @@ import { GetProjectConfiguration } from '@store/actions/news.actions';
 import { UpdateClientPayload } from '@models/payloads/client/update';
 import { Client } from '@models/instances/client';
 import { setValues } from '@helpers/utility';
-import { clientsTitle } from '@constants/titles';
+import { clientsTitle, hashtagsTitle } from '@constants/titles';
 import { Title } from '@angular/platform-browser';
 
 @Component({
@@ -27,7 +27,7 @@ import { Title } from '@angular/platform-browser';
   styleUrls: ['./hashtags.component.scss']
 })
 export class HashtagsComponent implements OnInit {
-  title = clientsTitle;
+  title = hashtagsTitle;
   breadCrumbItems: Array<{}>;
   submitted = false;
   cardData: CardData[];
