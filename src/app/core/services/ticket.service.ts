@@ -7,6 +7,7 @@ import { debounceTime, delay, switchMap, tap } from 'rxjs/operators';
 import { SortDirection } from '@shared/directives/tickets-sortable.directive';
 
 import { SearchResult } from '@models/instances/tickets.model';
+import { Hashtag } from '@models/instances/hashtag';
 
 interface State {
   page: number;
@@ -47,13 +48,17 @@ function sort(tickets: TableData[], column: string, direction: string): TableDat
  * @param ticket Table field value fetch
  * @param term Search the value
  */
-function proxyMatches(ticket: TableData, term: string) {
+export function clientMatches(ticket: TableData, term: string) {
   return ticket.price.toString().toLowerCase().includes(term)
     || ticket.emails.toLowerCase().includes(term)
     || ticket.numbers.toLowerCase().includes(term)
     || ticket.amountPublications === +term
     || ticket.name.toLowerCase().includes(term)
     || ticket.id === +term;
+}
+
+export function hashtagMatches(ticket: Hashtag, term: string) {
+  return ticket.name.toString().toLowerCase().includes(term);
 }
 
 @Injectable({
@@ -72,7 +77,7 @@ export class TicketService {
   // tslint:disable-next-line: variable-name
   private _total$ = new BehaviorSubject<number>(0);
   // tslint:disable-next-line: variable-name
-  private _matches = proxyMatches;
+  private _matches = clientMatches;
 
   // tslint:disable-next-line: variable-name
   private _state: State = {
@@ -138,11 +143,11 @@ export class TicketService {
     return this._state.totalRecords;
   }
 
-  set matches(func: (ticket: TableData, term: string) => boolean) {
+  set matches(func: (ticket: TableData | Hashtag, term: string) => boolean) {
     this._matches = func;
   }
 
-  get matches(): (ticket: TableData, term: string) => boolean {
+  get matches(): (ticket: TableData  | Hashtag, term: string) => boolean {
     return this._matches;
   }
 

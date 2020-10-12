@@ -1,5 +1,5 @@
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { CardData, TableData } from '@models/instances/tickets.model';
+import { TableData } from '@models/instances/tickets.model';
 import { Observable } from 'rxjs';
 import { SortEvent, TicketsSortableDirective } from '@shared/directives/tickets-sortable.directive';
 import { TicketService } from '@services/ticket.service';
@@ -30,7 +30,6 @@ export class ClientsComponent implements OnInit {
   title = clientsTitle;
   breadCrumbItems: Array<{}>;
   submitted = false;
-  cardData: CardData[];
   createClientForm: FormGroup;
   updateClientForm: FormGroup;
   tickets$: Observable<TableData[]>;
