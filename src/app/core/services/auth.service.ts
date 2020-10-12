@@ -5,18 +5,17 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, tap } from 'rxjs/operators';
 
 import { CookieService } from '../providers/cookie.service';
-import { User } from '../models/instances/user.models';
-import { Token, TokenTypes } from '../models/instances/token.model';
+import { User } from '@models/instances/user.models';
+import { Token, TokenTypes } from '@models/instances/token.model';
 import { environment } from '../../../environments/environment';
-import { RequestAccessTokenResponse } from '../models/responses/auth/request-access-token-response';
-import { LoginResponse } from '../models/responses/auth/login-response';
-import { LoginPayload } from '../models/payloads/auth/login';
-import { RequestHandler } from '../helpers/request-handler';
+import { RequestAccessTokenResponse } from '@models/responses/auth/request-access-token-response';
+import { LoginResponse } from '@models/responses/auth/login-response';
+import { LoginPayload } from '@models/payloads/auth/login';
+import { RequestHandler } from '@helpers/request-handler';
 import { UserService } from './user.service';
-import { CURRENT_USER } from '../constants/user';
+import { CURRENT_USER } from '@constants/user';
 import { errorMessages, errors, errorTitle } from '@constants/error';
 import numbers from '@constants/numbers';
-import { endpoints } from '@constants/endpoints';
 import { urls } from '@constants/urls';
 import { methods } from '@constants/methods';
 
