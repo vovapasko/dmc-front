@@ -9,6 +9,7 @@ import { urls } from '@constants/urls';
 import { ReportsComponent } from './reports/reports.component';
 import { ClientsComponent } from '@pages/crm/clients/clients.component';
 import { PublicationsComponent } from '@pages/crm/publications/publications.component';
+import { HashtagsComponent } from '@pages/crm/hashtags/hashtags.component';
 
 const routes: Routes = [
   {
@@ -38,6 +39,10 @@ const routes: Routes = [
   {
     path: urls.PUBLICATIONS,
     component: PublicationsComponent,
+  },
+  {
+    path: urls.HASHTAGS,
+    component: HashtagsComponent,
   },
 ];
 

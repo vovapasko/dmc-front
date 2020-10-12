@@ -1,0 +1,390 @@
+<div class="container-fluid">
+    <app-page-title title="Клиенты" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card-box">
+                <button type="button"
+                        (click)="openModal(createClient)"
+                        class="btn btn-sm btn-blue float-right"
+                >
+                    <i class="mdi mdi-plus-circle"></i> Добавить клиента
+                </button>
+                <h4 class="header-title mb-4">Управление клиентами</h4>
+                <div class="clearfix mt-4"></div>
+                <div class="row mb-md-2">
+                    <div class="col-sm-12 col-md-6">
+                        <div class="dataTables_length" id="tickets-table_length"><label
+                                class="d-inline-flex align-items-center">Показать
+                            <select name="tickets-table_length" aria-controls="tickets-table" name="pageSize"
+                                    [(ngModel)]="service.pageSize"
+                                    class="custom-select custom-select-sm form-control form-control-sm mx-2">
+                                <option [ngValue]="10">10</option>
+                                <option [ngValue]="25">25</option>
+                                <option [ngValue]="50">50</option>
+                                <option [ngValue]="100">100</option>
+                            </select> элементов</label></div>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <!-- Search -->
+                        <div id="tickets-table_filter" class="dataTables_filter text-md-right"><label
+                                class="d-inline-flex align-items-center">Поиск:
+                            <input type="text" name="searchTerm" class="form-control form-control-sm ml-2"
+                                   aria-controls="tickets-table" [(ngModel)]="service.searchTerm"></label></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <!-- Table -->
+                        <div class="table-responsive">
+                            <table class="table datatables table-hover m-0 table-centered dt-responsive nowrap w-100"
+                                   cellspacing="0"
+                                   id="tickets-table">
+                                <thead class="bg-light">
+                                <tr>
+                                    <th class="font-weight-medium" sortable="id" (sort)="onSort($event)">ID</th>
+                                    <th class="font-weight-medium" sortable="client" (sort)="onSort($event)">Клиент</th>
+                                    <th class="font-weight-medium" sortable="phone" (sort)="onSort($event)">Телефон</th>
+                                    <th class="font-weight-medium" sortable="email" (sort)="onSort($event)">Почта</th>
+                                    <th class="font-weight-medium" sortable="arrangedNews" (sort)="onSort($event)">Размещения</th>
+                                    <th class="font-weight-medium" sortable="onePostPrice" (sort)="onSort($event)">Стоимость</th>
+                                    <th class="font-weight-medium">Действия</th>
+                                </tr>
+                                </thead>
+
+                                <tbody class="font-14">
+                                <tr *ngFor="let client of tickets$ | async">
+                                    <td><b>{{client.id }}</b></td>
+
+
+                                    <td>
+                                        <ngb-highlight [result]="client.name"
+                                                       [term]="service.searchTerm"></ngb-highlight>
+                                    </td>
+
+                                    <td>
+                                        <ngb-highlight [result]="client.numbers"
+                                                       [term]="service.searchTerm"></ngb-highlight>
+                                    </td>
+
+                                    <td>
+                                        <ngb-highlight [result]="client.emails"
+                                                       [term]="service.searchTerm"></ngb-highlight>
+                                    </td>
+
+                                    <td>
+                                        <ngb-highlight [result]="client?.amountPublications?.toString()"
+                                                       [term]="service.searchTerm"></ngb-highlight>
+                                    </td>
+
+                                    <td>
+                                        <ngb-highlight [result]="client.price"
+                                                       [term]="service.searchTerm"></ngb-highlight>
+                                    </td>
+
+
+                                    <td>
+                                        <a
+                                                class="action-icon"
+                                                id="openEditModal"
+                                                href="javascript: void(0);"
+                                                role="button"
+                                                (click)="selectClient(client); openModal(editClient)"
+                                        >
+                                            <i class="mdi mdi-square-edit-outline"></i
+                                            ></a>
+                                        <a
+                                                id="deleteContractor"
+                                                href="javascript: void(0);"
+                                                role="button"
+                                                (click)="delete(client)"
+                                                class="action-icon"
+                                        >
+                                            <i class="mdi mdi-delete"></i
+                                            ></a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- End table -->
+                    </div>
+                </div>
+                <div class="row justify-content-md-between align-items-md-center mt-2">
+                    <div class="col-sm-12 col-md-5">
+                        <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                            Showing
+                            {{service.startIndex}} to
+                            {{service.endIndex}} of {{service.totalRecords}}
+                            entries
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-5">
+                        <div class="text-md-right float-md-right">
+                            <!-- Pagination -->
+                            <ul class="pagination pagination-rounded">
+                                <ngb-pagination [collectionSize]="total$ | async" [(page)]="service.page"
+                                                [pageSize]="service.pageSize">
+                                </ngb-pagination>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Table Action -->
+</div>
+
+
+<!-- add clients model  -->
+<ng-template #createClient role="document" let-modal="close">
+    <div class="modal-header bg-dark" id="add-proxy-modal">
+        <h4 class="modal-title text-white">Добавить клиента</h4>
+        <button
+                type="button"
+                class="close text-white"
+                aria-label="Close"
+                id="closeAddClient"
+                (click)="modal('Cross click')"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body p-3">
+        <div class="text-left">
+            <form (ngSubmit)="addClient()" [formGroup]="createClientForm">
+                <div class="form-group mb-3">
+                    <label for="name">Клиент</label>
+                    <input class="form-control"
+                           id="name"
+                           type="text"
+                           placeholder="Введите клиента"
+                           [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
+                           formControlName="name"
+                    />
+                    <div *ngIf="submitted && f.name.errors" style="display: block" class="invalid-feedback">
+                        <div *ngIf="f.name.errors.required">Клиент обязателен</div>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="numbers">Телефон</label>
+                    <input id="numbers"
+                           formControlName="numbers"
+                           type="text"
+                           class="form-control"
+                           placeholder="Введите телефон"
+                           [ngClass]="{ 'is-invalid': submitted && f.numbers.errors }"
+                    >
+                    <span class="font-13 text-muted">e.g "xxx.xxx.xxx.xxx"</span>
+                    <div *ngIf="submitted && f.numbers.errors" style="display: block" class="invalid-feedback">
+                        <div *ngIf="f.numbers.errors.required">Телефон обязателен</div>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="emails">Почты</label>
+                    <input class="form-control"
+                           id="emails"
+                           type="text"
+                           placeholder="Введите почта"
+                           [ngClass]="{ 'is-invalid': submitted && f.emails.errors }"
+                           formControlName="emails"
+                    />
+                    <div *ngIf="submitted && f.emails.errors" style="display: block" class="invalid-feedback">
+                        <div *ngIf="f.emails.errors.required">Клиент обязателен</div>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="projectHashtags"> Хештеги </label>
+
+                    <ng-select
+                            id="projectHashtags"
+                            [items]="hashtags$ | async"
+                            bindLabel="name"
+                            [multiple]="true"
+                            [closeOnSelect]="false"
+                            [hideSelected]="true"
+                            placeholder="Выберите ключевые слова"
+                            formControlName="hashtags"
+                            [ngClass]="{ 'is-invalid': submitted && f.hashtags.errors }"
+                    ></ng-select>
+                    <div *ngIf="submitted && f.hashtags.errors" style="display: block" class="invalid-feedback">
+                        <span *ngIf="f.hashtags.errors.required">Хештеги обязательны</span>
+                    </div>
+
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="amountPublications"> Количество размещений </label>
+                    <input type="number"
+                           min="0"
+                           id="amountPublications"
+                           formControlName="amountPublications"
+                           class="form-control"
+                           placeholder="Введите количество размещений"
+                           [ngClass]="{ 'is-invalid': submitted && f.amountPublications.errors }"
+                    />
+                    <div *ngIf="submitted && f.amountPublications.errors" class="invalid-feedback">
+                        <span *ngIf="f.amountPublications.errors.required">Выберите количество</span>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="price"> Цена </label>
+                    <input type="number"
+                           min="0"
+                           id="price"
+                           formControlName="price"
+                           class="form-control"
+                           placeholder="Введите бюджет"
+                           [ngClass]="{ 'is-invalid': submitted && f.price.errors }"
+                    />
+                    <div *ngIf="submitted && f.price.errors" class="invalid-feedback">
+                        <span *ngIf="f.price.errors.required"></span>
+                    </div>
+                </div>
+
+                <div class="text-right">
+                    <button type="submit" id="save-edit-user-button" class="btn btn-success">Добавить</button>
+                    <button type="button" id="cancel-edit-user-button" class="btn btn-danger ml-1"
+                            (click)="modal('close click')">
+                        Отменить
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</ng-template>
+
+
+
+
+<!-- edit clients model  -->
+<ng-template #editClient role="document" let-modal="close">
+    <div class="modal-header bg-dark" id="edit-client-modal">
+        <h4 class="modal-title text-white">Обновить клиента</h4>
+        <button
+                type="button"
+                class="close text-white"
+                aria-label="Close"
+                id="closeUpdateClient"
+                (click)="modal('Cross click')"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body p-3">
+        <div class="text-left">
+            <form (ngSubmit)="updateClient()" [formGroup]="updateClientForm">
+                <div class="form-group mb-3">
+                    <label for="updateName">Клиент</label>
+                    <input class="form-control"
+                           id="updateName"
+                           type="text"
+                           placeholder="Введите клиента"
+                           [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
+                           formControlName="name"
+                    />
+                    <div *ngIf="submitted && f.name.errors" style="display: block" class="invalid-feedback">
+                        <div *ngIf="f.name.errors.required">Клиент обязателен</div>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="updateNumbers">Телефон</label>
+                    <input id="updateNumbers"
+                           formControlName="numbers"
+                           type="text"
+                           class="form-control"
+                           placeholder="Введите телефон"
+                           [ngClass]="{ 'is-invalid': submitted && f.numbers.errors }"
+                    >
+                    <span class="font-13 text-muted">e.g "xxx.xxx.xxx.xxx"</span>
+                    <div *ngIf="submitted && f.numbers.errors" style="display: block" class="invalid-feedback">
+                        <div *ngIf="f.numbers.errors.required">Телефон обязателен</div>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="updateEmails">Почты</label>
+                    <input class="form-control"
+                           id="updateEmails"
+                           type="text"
+                           placeholder="Введите почта"
+                           [ngClass]="{ 'is-invalid': submitted && f.emails.errors }"
+                           formControlName="emails"
+                    />
+                    <div *ngIf="submitted && f.emails.errors" style="display: block" class="invalid-feedback">
+                        <div *ngIf="f.emails.errors.required">Клиент обязателен</div>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="updateHashtags"> Хештеги </label>
+                    <ng-select
+                            id="updateHashtags"
+                            [items]="hashtags$ | async"
+                            bindLabel="name"
+                            [multiple]="true"
+                            [closeOnSelect]="false"
+                            [hideSelected]="true"
+                            placeholder="Выберите ключевые слова"
+                            formControlName="hashtags"
+                            [ngClass]="{ 'is-invalid': submitted && f.hashtags.errors }"
+                    ></ng-select>
+                    <div *ngIf="submitted && f.hashtags.errors" style="display: block" class="invalid-feedback">
+                        <span *ngIf="f.hashtags.errors.required">Хештеги обязательны</span>
+                    </div>
+
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="updateAmountPublications"> Количество размещений </label>
+                    <input type="number"
+                           min="0"
+                           id="updateAmountPublications"
+                           formControlName="amountPublications"
+                           class="form-control"
+                           placeholder="Введите количество размещений"
+                           [ngClass]="{ 'is-invalid': submitted && f.amountPublications.errors }"
+                    />
+                    <div *ngIf="submitted && f.amountPublications.errors" class="invalid-feedback">
+                        <span *ngIf="f.amountPublications.errors.required">Выберите количество</span>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="updatePrice"> Цена </label>
+                    <input type="number"
+                           min="0"
+                           id="updatePrice"
+                           formControlName="price"
+                           class="form-control"
+                           placeholder="Введите бюджет"
+                           [ngClass]="{ 'is-invalid': submitted && f.price.errors }"
+                    />
+                    <div *ngIf="submitted && f.price.errors" class="invalid-feedback">
+                        <span *ngIf="f.price.errors.required"></span>
+                    </div>
+                </div>
+
+                <div class="text-right">
+                    <button type="submit" id="save-new-user-button" class="btn btn-success">Добавить</button>
+                    <button type="button" id="cancel-new-user-button" class="btn btn-danger ml-1"
+                            (click)="modal('close click')">
+                        Отменить
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</ng-template>
+
+
+
+
