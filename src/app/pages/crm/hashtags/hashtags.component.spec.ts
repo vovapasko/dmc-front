@@ -35,14 +35,15 @@ import { TicketService } from '@services/ticket.service';
 import { ClientService } from '@services/client.service';
 import { IAppState } from '@store/state/app.state';
 import { ClientsComponent } from '@pages/crm/clients/clients.component';
+import { HashtagsComponent } from '@pages/crm/hashtags/hashtags.component';
 
 describe('ProxyComponent', () => {
-  let component: ClientsComponent;
-  let fixture: ComponentFixture<ClientsComponent>;
+  let component: HashtagsComponent;
+  let fixture: ComponentFixture<HashtagsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ClientsComponent],
+      declarations: [HashtagsComponent],
       imports: [
         StoreModule.forRoot({}),
         RouterModule.forRoot([]),
@@ -94,7 +95,7 @@ describe('ProxyComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ClientsComponent);
+    fixture = TestBed.createComponent(HashtagsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -104,7 +105,7 @@ describe('ProxyComponent', () => {
   });
 
   it('should initForm', () => {
-    expect(component.createClientForm).toBeTruthy();
+    expect(component.createHashtagForm).toBeTruthy();
   });
 
   it('should init bread crumb items', () => {
@@ -112,7 +113,7 @@ describe('ProxyComponent', () => {
   });
 
   it('should init create clients form', () => {
-    expect(component.createClientForm).toBeTruthy();
+    expect(component.createHashtagForm).toBeTruthy();
   });
 
 });

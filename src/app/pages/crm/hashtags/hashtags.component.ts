@@ -2,24 +2,23 @@ import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { TableData } from '@models/instances/tickets.model';
 import { Observable } from 'rxjs';
 import { SortEvent, TicketsSortableDirective } from '@shared/directives/tickets-sortable.directive';
-import { TicketService } from '@services/ticket.service';
+import { hashtagMatches, TicketService } from '@services/ticket.service';
 import { FormGroup } from '@angular/forms';
-import { ClientService } from '@services/client.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { IAppState } from '@store/state/app.state';
 import { select, Store } from '@ngrx/store';
-import { CreateClient, DeleteClient, GetClients, SelectClient, UpdateClient } from '@store/actions/client.actions';
-import { CreateClientPayload } from '@models/payloads/client/create';
 import { breadCrumbs } from '@constants/bread-crumbs';
-import { selectHashtags } from '@store/selectors/news.selectors';
-import { selectEmailsList } from '@store/selectors/project.selectors';
 import { GetEmails } from '@store/actions/project.actions';
 import { GetProjectConfiguration } from '@store/actions/news.actions';
-import { UpdateClientPayload } from '@models/payloads/client/update';
-import { Client } from '@models/instances/client';
 import { setValues } from '@helpers/utility';
-import { clientsTitle, hashtagsTitle } from '@constants/titles';
+import { hashtagsTitle } from '@constants/titles';
 import { Title } from '@angular/platform-browser';
+import { selectHashtagList } from '@store/selectors/hashtag.selectors';
+import { HashtagService } from '@services/hashtag.service';
+import { Hashtag } from '@models/instances/hashtag';
+import { CreateHashtag, DeleteHashtag, GetHashtags, SelectHashtag, UpdateHashtag } from '@store/actions/hashtag.actions';
+import { CreateHashtagPayload } from '@models/payloads/news/hashtag/create';
+import { UpdateHashtagPayload } from '@models/payloads/news/hashtag/update';
 
 @Component({
   selector: 'app-hashtags',
@@ -30,23 +29,23 @@ export class HashtagsComponent implements OnInit {
   title = hashtagsTitle;
   breadCrumbItems: Array<{}>;
   submitted = false;
-  createClientForm: FormGroup;
-  updateClientForm: FormGroup;
+  createHashtagForm: FormGroup;
+  updateHashtagForm: FormGroup;
   tickets$: Observable<TableData[]>;
-  hashtags$ = this.store.pipe(select(selectHashtags));
-  emails$ = this.store.pipe(select(selectEmailsList));
+  hashtags$ = this.store.pipe(select(selectHashtagList));
   total$: Observable<number>;
 
   @ViewChildren(TicketsSortableDirective) headers: QueryList<TicketsSortableDirective>;
 
   constructor(
     public service: TicketService,
-    private clientService: ClientService,
     private modalService: NgbModal,
+    private hashtagService: HashtagService,
     private store: Store<IAppState>,
     private titleService: Title
   ) {
-    this.service.records$ = this.clientService.clients$;
+    this.service.matches = hashtagMatches;
+    this.service.records$ = this.hashtagService.hashtags$;
     this.tickets$ = service.tickets$;
     this.total$ = service.total$;
   }
@@ -66,51 +65,51 @@ export class HashtagsComponent implements OnInit {
   }
 
   /**
-   * Set controllers to create clients form
+   * Set controllers to create hashtags form
    */
-  public addClient(): void {
+  public addHashtag(): void {
     this.submitted = true;
-    if (this.createClientForm.invalid) {
+    if (this.createHashtagForm.invalid) {
       return;
     }
-    const data = this.createClientForm.value;
+    const data = this.createHashtagForm.value;
     this.add({ data });
     this.modalService.dismissAll();
     this.submitted = false;
   }
 
-  public selectClient(client: Client): void {
-    this.store.dispatch(new SelectClient(client));
-    setValues(this.updateClientForm.controls, client);
+  public selectHashtag(hashtag: Hashtag): void {
+    this.store.dispatch(new SelectHashtag(hashtag));
+    setValues(this.updateHashtagForm.controls, hashtag);
   }
 
   /**
-   * Set controllers to create clients form
+   * Set controllers to create hashtags form
    */
-  public updateClient(): void {
+  public updateHashtag(): void {
     this.submitted = true;
-    if (this.updateClientForm.invalid) {
+    if (this.updateHashtagForm.invalid) {
       return;
     }
-    const id = this.clientService.selectedClient.id;
-    const data = this.updateClientForm.value;
+    const id = this.hashtagService.selectedHashtag.id;
+    const data = this.updateHashtagForm.value;
     this.update({ data, id });
     this.modalService.dismissAll();
     this.submitted = false;
   }
 
   /**
-   * Dispatch create new clients
+   * Dispatch create new hashtags
    */
-  public add(payload: CreateClientPayload): void {
-    this.store.dispatch(new CreateClient(payload));
+  public add(payload: CreateHashtagPayload): void {
+    this.store.dispatch(new CreateHashtag(payload));
   }
 
   /**
-   * Dispatch update client
+   * Dispatch update hashtag
    */
-  public update(payload: UpdateClientPayload): void {
-    this.store.dispatch(new UpdateClient(payload));
+  public update(payload: UpdateHashtagPayload): void {
+    this.store.dispatch(new UpdateHashtag(payload));
   }
 
   /**
@@ -122,37 +121,37 @@ export class HashtagsComponent implements OnInit {
   }
 
 
-  public delete(client: Client): void {
-    this.store.dispatch(new DeleteClient({ id: client.id }));
+  public delete(hashtag: Hashtag): void {
+    this.store.dispatch(new DeleteHashtag({ id: hashtag.id }));
   }
 
   /**
-   * Get controls form create clients form
+   * Get controls form create hashtags form
    */
   get f() {
-    return this.createClientForm.controls;
+    return this.createHashtagForm.controls;
   }
 
   /**
-   * Set controllers to create clients form
+   * Set controllers to create hashtags form
    */
-  public initCreateClientForm(): void {
-    this.createClientForm = this.clientService.initializeCreateClientForm();
+  public initCreateHashtagForm(): void {
+    this.createHashtagForm = this.hashtagService.initializeCreateHashtagForm();
   }
 
   /**
-   * Set controllers to update clients form
+   * Set controllers to update hashtags form
    */
-  public initUpdateClientForm(): void {
-    this.updateClientForm = this.clientService.initializeUpdateClientForm();
+  public initUpdateHashtagForm(): void {
+    this.updateHashtagForm = this.hashtagService.initializeUpdateHashtagForm();
   }
 
   /**
    * Set controllers to forms
    */
   public initForms(): void {
-    this.initCreateClientForm();
-    this.initUpdateClientForm();
+    this.initCreateHashtagForm();
+    this.initUpdateHashtagForm();
   }
 
   /**
@@ -175,8 +174,6 @@ export class HashtagsComponent implements OnInit {
    * Dispatch getting data
    */
   public _fetchData() {
-    this.store.dispatch(new GetClients());
-    this.store.dispatch(new GetEmails());
-    this.store.dispatch(new GetProjectConfiguration());
+    this.store.dispatch(new GetHashtags());
   }
 }

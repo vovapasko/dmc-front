@@ -6,7 +6,7 @@
         <div class="col-12">
             <div class="card-box">
                 <button type="button"
-                        (click)="openModal(createClient)"
+                        (click)="openModal(createHashtag)"
                         class="btn btn-sm btn-blue float-right"
                 >
                     <i class="mdi mdi-plus-circle"></i> Добавить хештег
@@ -44,45 +44,20 @@
                                 <thead class="bg-light">
                                 <tr>
                                     <th class="font-weight-medium" sortable="id" (sort)="onSort($event)">ID</th>
-                                    <th class="font-weight-medium" sortable="client" (sort)="onSort($event)">Клиент</th>
-                                    <th class="font-weight-medium" sortable="phone" (sort)="onSort($event)">Телефон</th>
-                                    <th class="font-weight-medium" sortable="email" (sort)="onSort($event)">Почта</th>
-                                    <th class="font-weight-medium" sortable="arrangedNews" (sort)="onSort($event)">Размещения</th>
-                                    <th class="font-weight-medium" sortable="onePostPrice" (sort)="onSort($event)">Стоимость</th>
+                                    <th class="font-weight-medium" sortable="client" (sort)="onSort($event)">Название</th>
                                     <th class="font-weight-medium">Действия</th>
                                 </tr>
                                 </thead>
 
                                 <tbody class="font-14">
-                                <tr *ngFor="let client of tickets$ | async">
-                                    <td><b>{{client.id }}</b></td>
+                                <tr *ngFor="let hashtag of tickets$ | async">
+                                    <td><b>{{hashtag.id }}</b></td>
 
 
                                     <td>
-                                        <ngb-highlight [result]="client.name"
+                                        <ngb-highlight [result]="hashtag.name"
                                                        [term]="service.searchTerm"></ngb-highlight>
                                     </td>
-
-                                    <td>
-                                        <ngb-highlight [result]="client.numbers"
-                                                       [term]="service.searchTerm"></ngb-highlight>
-                                    </td>
-
-                                    <td>
-                                        <ngb-highlight [result]="client.emails"
-                                                       [term]="service.searchTerm"></ngb-highlight>
-                                    </td>
-
-                                    <td>
-                                        <ngb-highlight [result]="client?.amountPublications?.toString()"
-                                                       [term]="service.searchTerm"></ngb-highlight>
-                                    </td>
-
-                                    <td>
-                                        <ngb-highlight [result]="client.price"
-                                                       [term]="service.searchTerm"></ngb-highlight>
-                                    </td>
-
 
                                     <td>
                                         <a
@@ -90,7 +65,7 @@
                                                 id="openEditModal"
                                                 href="javascript: void(0);"
                                                 role="button"
-                                                (click)="selectClient(client); openModal(editClient)"
+                                                (click)="selectHashtag(hashtag); openModal(editHashtag)"
                                         >
                                             <i class="mdi mdi-square-edit-outline"></i
                                             ></a>
@@ -98,7 +73,7 @@
                                                 id="deleteContractor"
                                                 href="javascript: void(0);"
                                                 role="button"
-                                                (click)="delete(client)"
+                                                (click)="delete(hashtag)"
                                                 class="action-icon"
                                         >
                                             <i class="mdi mdi-delete"></i
@@ -140,9 +115,9 @@
 
 
 <!-- add clients model  -->
-<ng-template #createClient role="document" let-modal="close">
+<ng-template #createHashtag role="document" let-modal="close">
     <div class="modal-header bg-dark" id="add-proxy-modal">
-        <h4 class="modal-title text-white">Добавить клиента</h4>
+        <h4 class="modal-title text-white">Добавить хештег</h4>
         <button
                 type="button"
                 class="close text-white"
@@ -155,97 +130,18 @@
     </div>
     <div class="modal-body p-3">
         <div class="text-left">
-            <form (ngSubmit)="addClient()" [formGroup]="createClientForm">
+            <form (ngSubmit)="addHashtag()" [formGroup]="createHashtagForm">
                 <div class="form-group mb-3">
-                    <label for="name">Клиент</label>
+                    <label for="name">Название</label>
                     <input class="form-control"
                            id="name"
                            type="text"
-                           placeholder="Введите клиента"
+                           placeholder="Введите название"
                            [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
                            formControlName="name"
                     />
                     <div *ngIf="submitted && f.name.errors" style="display: block" class="invalid-feedback">
-                        <div *ngIf="f.name.errors.required">Клиент обязателен</div>
-                    </div>
-                </div>
-
-                <div class="form-group mb-3">
-                    <label for="numbers">Телефон</label>
-                    <input id="numbers"
-                           formControlName="numbers"
-                           type="text"
-                           class="form-control"
-                           placeholder="Введите телефон"
-                           [ngClass]="{ 'is-invalid': submitted && f.numbers.errors }"
-                    >
-                    <span class="font-13 text-muted">e.g "xxx.xxx.xxx.xxx"</span>
-                    <div *ngIf="submitted && f.numbers.errors" style="display: block" class="invalid-feedback">
-                        <div *ngIf="f.numbers.errors.required">Телефон обязателен</div>
-                    </div>
-                </div>
-
-                <div class="form-group mb-3">
-                    <label for="emails">Почты</label>
-                    <input class="form-control"
-                           id="emails"
-                           type="text"
-                           placeholder="Введите почта"
-                           [ngClass]="{ 'is-invalid': submitted && f.emails.errors }"
-                           formControlName="emails"
-                    />
-                    <div *ngIf="submitted && f.emails.errors" style="display: block" class="invalid-feedback">
-                        <div *ngIf="f.emails.errors.required">Клиент обязателен</div>
-                    </div>
-                </div>
-
-                <div class="form-group mb-3">
-                    <label for="projectHashtags"> Хештеги </label>
-
-                    <ng-select
-                            id="projectHashtags"
-                            [items]="hashtags$ | async"
-                            bindLabel="name"
-                            [multiple]="true"
-                            [closeOnSelect]="false"
-                            [hideSelected]="true"
-                            placeholder="Выберите ключевые слова"
-                            formControlName="hashtags"
-                            [ngClass]="{ 'is-invalid': submitted && f.hashtags.errors }"
-                    ></ng-select>
-                    <div *ngIf="submitted && f.hashtags.errors" style="display: block" class="invalid-feedback">
-                        <span *ngIf="f.hashtags.errors.required">Хештеги обязательны</span>
-                    </div>
-
-                </div>
-
-                <div class="form-group mb-3">
-                    <label for="amountPublications"> Количество размещений </label>
-                    <input type="number"
-                           min="0"
-                           id="amountPublications"
-                           formControlName="amountPublications"
-                           class="form-control"
-                           placeholder="Введите количество размещений"
-                           [ngClass]="{ 'is-invalid': submitted && f.amountPublications.errors }"
-                    />
-                    <div *ngIf="submitted && f.amountPublications.errors" class="invalid-feedback">
-                        <span *ngIf="f.amountPublications.errors.required">Выберите количество</span>
-                    </div>
-                </div>
-
-                <div class="form-group mb-3">
-                    <label for="price"> Цена </label>
-                    <input type="number"
-                           min="0"
-                           id="price"
-                           formControlName="price"
-                           class="form-control"
-                           placeholder="Введите бюджет"
-                           [ngClass]="{ 'is-invalid': submitted && f.price.errors }"
-                    />
-                    <div *ngIf="submitted && f.price.errors" class="invalid-feedback">
-                        <span *ngIf="f.price.errors.required"></span>
+                        <div *ngIf="f.name.errors.required">Название обязательно</div>
                     </div>
                 </div>
 
@@ -265,9 +161,9 @@
 
 
 <!-- edit clients model  -->
-<ng-template #editClient role="document" let-modal="close">
+<ng-template #editHashtag role="document" let-modal="close">
     <div class="modal-header bg-dark" id="edit-client-modal">
-        <h4 class="modal-title text-white">Обновить клиента</h4>
+        <h4 class="modal-title text-white">Обновить хештег</h4>
         <button
                 type="button"
                 class="close text-white"
@@ -280,9 +176,9 @@
     </div>
     <div class="modal-body p-3">
         <div class="text-left">
-            <form (ngSubmit)="updateClient()" [formGroup]="updateClientForm">
+            <form (ngSubmit)="updateHashtag()" [formGroup]="updateHashtagForm">
                 <div class="form-group mb-3">
-                    <label for="updateName">Клиент</label>
+                    <label for="updateName">Название</label>
                     <input class="form-control"
                            id="updateName"
                            type="text"
@@ -291,85 +187,7 @@
                            formControlName="name"
                     />
                     <div *ngIf="submitted && f.name.errors" style="display: block" class="invalid-feedback">
-                        <div *ngIf="f.name.errors.required">Клиент обязателен</div>
-                    </div>
-                </div>
-
-                <div class="form-group mb-3">
-                    <label for="updateNumbers">Телефон</label>
-                    <input id="updateNumbers"
-                           formControlName="numbers"
-                           type="text"
-                           class="form-control"
-                           placeholder="Введите телефон"
-                           [ngClass]="{ 'is-invalid': submitted && f.numbers.errors }"
-                    >
-                    <span class="font-13 text-muted">e.g "xxx.xxx.xxx.xxx"</span>
-                    <div *ngIf="submitted && f.numbers.errors" style="display: block" class="invalid-feedback">
-                        <div *ngIf="f.numbers.errors.required">Телефон обязателен</div>
-                    </div>
-                </div>
-
-                <div class="form-group mb-3">
-                    <label for="updateEmails">Почты</label>
-                    <input class="form-control"
-                           id="updateEmails"
-                           type="text"
-                           placeholder="Введите почта"
-                           [ngClass]="{ 'is-invalid': submitted && f.emails.errors }"
-                           formControlName="emails"
-                    />
-                    <div *ngIf="submitted && f.emails.errors" style="display: block" class="invalid-feedback">
-                        <div *ngIf="f.emails.errors.required">Клиент обязателен</div>
-                    </div>
-                </div>
-
-                <div class="form-group mb-3">
-                    <label for="updateHashtags"> Хештеги </label>
-                    <ng-select
-                            id="updateHashtags"
-                            [items]="hashtags$ | async"
-                            bindLabel="name"
-                            [multiple]="true"
-                            [closeOnSelect]="false"
-                            [hideSelected]="true"
-                            placeholder="Выберите ключевые слова"
-                            formControlName="hashtags"
-                            [ngClass]="{ 'is-invalid': submitted && f.hashtags.errors }"
-                    ></ng-select>
-                    <div *ngIf="submitted && f.hashtags.errors" style="display: block" class="invalid-feedback">
-                        <span *ngIf="f.hashtags.errors.required">Хештеги обязательны</span>
-                    </div>
-
-                </div>
-
-                <div class="form-group mb-3">
-                    <label for="updateAmountPublications"> Количество размещений </label>
-                    <input type="number"
-                           min="0"
-                           id="updateAmountPublications"
-                           formControlName="amountPublications"
-                           class="form-control"
-                           placeholder="Введите количество размещений"
-                           [ngClass]="{ 'is-invalid': submitted && f.amountPublications.errors }"
-                    />
-                    <div *ngIf="submitted && f.amountPublications.errors" class="invalid-feedback">
-                        <span *ngIf="f.amountPublications.errors.required">Выберите количество</span>
-                    </div>
-                </div>
-
-                <div class="form-group mb-3">
-                    <label for="updatePrice"> Цена </label>
-                    <input type="number"
-                           min="0"
-                           id="updatePrice"
-                           formControlName="price"
-                           class="form-control"
-                           placeholder="Введите бюджет"
-                           [ngClass]="{ 'is-invalid': submitted && f.price.errors }"
-                    />
-                    <div *ngIf="submitted && f.price.errors" class="invalid-feedback">
-                        <span *ngIf="f.price.errors.required"></span>
+                        <div *ngIf="f.name.errors.required">Название обязательно</div>
                     </div>
                 </div>
 
