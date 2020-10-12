@@ -2,20 +2,6 @@ import { Injectable } from '@angular/core';
 import { Effect, ofType, Actions } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { AuthenticationService } from '@services/auth.service';
-import { ClientService } from '@services/client.service';
-import {
-  CreateClient,
-  CreateClientSuccess, DeleteClient, DeleteClientSuccess,
-  EClientActions,
-  GetClients,
-  GetClientsSuccess, SelectClient, SelectClientSuccess, UpdateClient,
-  UpdateClientSuccess
-} from '@store/actions/client.actions';
-import { Client } from '@models/instances/client';
-import { CreateClientPayload } from '@models/payloads/client/create';
-import { UpdateClientPayload } from '@models/payloads/client/update';
-import { DeleteClientPayload } from '@models/payloads/client/delete';
 import { HashtagService } from '@services/hashtag.service';
 import {
   CreateHashtag,
