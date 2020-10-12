@@ -53,7 +53,7 @@ export class HashtagsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.breadCrumbItems = breadCrumbs.clients;
+    this.breadCrumbItems = breadCrumbs.hashtags;
     this.initForms();
     this.setTitle(this.title);
     this._fetchData();
