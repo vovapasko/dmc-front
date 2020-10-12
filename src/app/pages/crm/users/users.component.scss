@@ -10,3 +10,38 @@
 .ng-select.ng-invalid.ng-touched .ng-select-container .ng-placeholder{
   color: red !important;
 }
+
+.btn-danger {
+  background-color: #f99c3d;
+  border-color: #f99c3d;
+}
+
+.btn-danger:active {
+  background-color: #f99c3d;
+  border-color: #f99c3d;
+}
+
+#openAddNewUserModal:active {
+  background-color: #f99c3d;
+  border-color: #f99c3d;
+}
+
+#cancel-new-user-button:active {
+  background-color: #f99c3d;
+  border-color: #f99c3d;
+}
+
+.btn-danger:active {
+  background-color: #f99c3d;
+  border-color: #f99c3d;
+}
+
+ngb-pagination ::ng-deep ul > li.active > a {
+  background-color: #3CB371 !important;
+}
+
+tr {
+  cursor: pointer;
+}
+
+

@@ -14,6 +14,7 @@ import { LoginPayload } from '@models/payloads/auth/login';
 import { ServerError } from '@models/responses/server/error';
 import { FacebookLoginProvider, GoogleLoginProvider } from 'angularx-social-login';
 import { SocialAuthService } from 'angularx-social-login';
+import numbers from '@constants/numbers';
 
 /**
  * This component for login user in crm
@@ -31,6 +32,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
   loading$: Subject<boolean>;
   error$: Subject<ServerError>;
   visible = false;
+  currentYear: number;
+  startYear: number;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -48,6 +51,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
     this.initSubscriptions();
     this.setTitle(this.title);
     this.authenticationService.logout();
+    this.currentYear = new Date().getFullYear();
+    this.startYear = numbers.startYear;
   }
 
   /**

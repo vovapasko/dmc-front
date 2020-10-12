@@ -1,3 +1,18 @@
 td {
   //padding-left: 0;
 }
+
+
+ngb-pagination ::ng-deep ul > li.active > a {
+  background-color: #3CB371 !important;
+}
+
+#cancel-new-user-button {
+  background-color: #f99c3d;
+  border-color: #f99c3d;
+}
+
+#cancel-new-user-button:active {
+  background-color: #f99c3d;
+  border-color: #f99c3d;
+}

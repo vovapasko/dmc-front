@@ -14,6 +14,7 @@ import { LoadingService } from '@services/loading.service';
 import { setAuthClasses } from '@helpers/utility';
 import { ConfirmResetPasswordPayload } from '@models/payloads/user/confirm-reset-password';
 import { ServerError } from '@models/responses/server/error';
+import numbers from '@constants/numbers';
 
 /**
  * This component for change user password
@@ -34,6 +35,8 @@ export class PasswordResetComponent implements OnInit, AfterViewInit, OnDestroy 
   error$: Subject<ServerError>;
   success = '';
   visible = false;
+  currentYear: number;
+  startYear: number;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -51,6 +54,8 @@ export class PasswordResetComponent implements OnInit, AfterViewInit, OnDestroy 
     this.initSubscriptions();
     this.initForm();
     this.setTitle(this.title);
+    this.currentYear = new Date().getFullYear();
+    this.startYear = numbers.startYear;
   }
 
   /**
