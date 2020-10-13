@@ -22,7 +22,7 @@ import { Format } from '@models/instances/format';
 import { blobToUint8Array, setProjectValues } from '@helpers/utility';
 import { Infos, Warnings } from '@constants/notifications';
 import { endpoints } from '@constants/endpoints';
-import { methods } from '@constants/methods';
+import { burstMethods, methods } from '@constants/methods';
 import { SecurityService } from './security.service';
 import { GetAllFormatsResponse } from '@models/responses/news/format/get-all';
 import { GetFormatsResponse } from '@models/responses/news/format/get';
@@ -671,21 +671,26 @@ export class NewsService extends BaseService {
     const postFormat = validationForm.controls.projectPostFormat.value.postFormat;
     const isConfirmed = !!newsWaveId;
     const createdBy = this.userService.user;
-    const waveFormation = {
-      email: previewForm.controls.previewEmail.value || controls.at(0).get('previewEmail').value,
-      content: previewForm.controls.previewText.value || controls.at(0).get('previewText').value,
-      attachments: this.processAttachments(editorForm.controls.attachments.value),
-      id: newsWave ? newsWave.waveFormation.id : null
-    };
-    const newsInProject = newsList.map((news: News, i: number) => ({
-      contractors: news.contractors,
-      email: controls.at(i).get('previewEmail').value,
-      title: news.title || title,
-      content: controls.at(i).get('previewText').value,
-      attachments: this.processAttachments(controls.at(i).get('attachments').value),
-      id: news.id
-    }));
-
+    let waveFormation = null;
+    let newsInProject = [];
+    if (burstMethod.method === burstMethods.BAYER) {
+      waveFormation = {
+        email: previewForm.controls.previewEmail.value || controls.at(0).get('previewEmail').value,
+        content: previewForm.controls.previewText.value || controls.at(0).get('previewText').value,
+        attachments: this.processAttachments(editorForm.controls.attachments.value),
+        id: newsWave ? newsWave.waveFormation.id : null
+      };
+    }
+    if (burstMethod.method === burstMethods.DIRECT) {
+      newsInProject = newsList.map((news: News, i: number) => ({
+        contractors: news.contractors,
+        email: controls.at(i).get('previewEmail').value,
+        title: news.title || title,
+        content: controls.at(i).get('previewText').value,
+        attachments: this.processAttachments(controls.at(i).get('attachments').value),
+        id: news.id
+      }));
+    }
 
     const data = {
       newsCharacter,
