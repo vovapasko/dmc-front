@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ReademailComponent } from './reademail.component';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import {
   NgbAlertModule,
   NgbDatepickerModule,
@@ -27,7 +27,7 @@ import { FileUploadModule } from '@iplab/ngx-file-upload';
 import { ArchwizardModule } from 'angular-archwizard';
 import { NgxMaskModule } from 'ngx-mask';
 import { NestableModule } from 'ngx-nestable';
-import { SharedModule } from '../../../shared/shared.module';
+import { SharedModule } from '@shared/shared.module';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { AuthenticationService } from '@services/auth.service';
 import { Title } from '@angular/platform-browser';
@@ -35,6 +35,12 @@ import { ErrorService } from '@services/error.service';
 import { LoadingService } from '@services/loading.service';
 import { NotificationService } from '@services/notification.service';
 import { NewsService } from '@services/news.service';
+import { EmailsComponent } from '@pages/email/emails/emails.component';
+
+
+const routes: Routes = [
+  { path: 'email', component: EmailsComponent }
+];
 
 describe('ReademailComponent', () => {
   let component: ReademailComponent;
@@ -53,6 +59,7 @@ describe('ReademailComponent', () => {
         ReactiveFormsModule,
         RouterTestingModule,
         StoreModule.forRoot({}),
+        RouterModule.forRoot(routes),
         FormsModule,
         NgbPaginationModule,
         NgApexchartsModule,

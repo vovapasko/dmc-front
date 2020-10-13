@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EmailsComponent } from './emails.component';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import {
   NgbAlertModule,
   NgbDatepickerModule,
@@ -36,6 +36,11 @@ import { LoadingService } from '@services/loading.service';
 import { NotificationService } from '@services/notification.service';
 import { NewsService } from '@services/news.service';
 
+const routes: Routes = [
+  { path: 'email', component: EmailsComponent }
+];
+
+
 describe('EmailsComponent', () => {
   let component: EmailsComponent;
   let fixture: ComponentFixture<EmailsComponent>;
@@ -51,7 +56,7 @@ describe('EmailsComponent', () => {
         NgbAlertModule,
         NgbModalModule,
         ReactiveFormsModule,
-        RouterTestingModule,
+        RouterModule.forRoot(routes),
         StoreModule.forRoot({}),
         FormsModule,
         NgbPaginationModule,

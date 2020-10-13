@@ -61,6 +61,7 @@ describe('ComposeemailComponent', () => {
         FormsModule,
         NgbPaginationModule,
         NgApexchartsModule,
+        RouterModule.forRoot(routes),
         NgbTypeaheadModule,
         Ng2SearchPipeModule,
         NgSelectModule,
