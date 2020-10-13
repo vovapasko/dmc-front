@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { IAppState } from '@store/state/app.state';
-import { selectHashtags } from '@store/selectors/news.selectors';
+import { selectHashtags, selectNewsWave } from '@store/selectors/news.selectors';
 import { Router } from '@angular/router';
 import { ErrorService } from '@services/error.service';
 import { LoadingService } from '@services/loading.service';
@@ -9,7 +9,7 @@ import { Subject } from 'rxjs';
 import { Orders } from '@constants/orders';
 import { ServerError } from '@models/responses/server/error';
 import { urls } from '@constants/urls';
-import { GetProjectConfiguration } from '@store/actions/news.actions';
+import { GetNewsWave, GetProjectConfiguration } from '@store/actions/news.actions';
 import { Title } from '@angular/platform-browser';
 import { FormGroup } from '@angular/forms';
 import { ProjectService } from '@services/project.service';
@@ -41,6 +41,7 @@ import { Contractor } from '@models/instances/contractor';
 import { NewsWavePrice } from '@models/instances/newsWavePrice';
 import { NewsWaves } from '@models/instances/news-waves';
 import { projectsTitle } from '@constants/titles';
+import { burstMethods } from '@constants/methods';
 
 @Component({
   selector: 'app-projects',
@@ -54,6 +55,7 @@ import { projectsTitle } from '@constants/titles';
 export class ProjectsComponent implements OnInit {
 
   // bread crumb items
+  methods = burstMethods;
   title = projectsTitle;
   breadCrumbItems: Array<{}>;
   loading$: Subject<boolean>;
