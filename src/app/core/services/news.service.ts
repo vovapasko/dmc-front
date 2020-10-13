@@ -748,7 +748,7 @@ export class NewsService extends BaseService {
     validationForm.controls.projectTitle.setValue(newsWave.title);
     validationForm.controls.projectBudget.setValue(newsWave.budget);
     editorForm.controls.attachments.setValue(this.handleFiles(newsWave.waveFormation.attachments));
-    editorForm.controls.text.setValue(newsFieldsHandler.attachments(newsWave.waveFormation.attachments).join());
+    editorForm.controls.text.setValue(newsWave.waveFormation.content);
     previewForm.controls.previewEmail.setValue(newsWave.waveFormation.email);
     previewForm.controls.previewText.setValue(newsWave.waveFormation.content);
     // @ts-ignore
