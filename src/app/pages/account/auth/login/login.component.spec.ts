@@ -28,24 +28,39 @@ describe('LoginComponent', () => {
       // * imports, and providers necessary to this component
       imports: [
         SocialLoginModule,
-        CommonModule, ReactiveFormsModule, NgbAlertModule, UIModule, RouterTestingModule, StoreModule.forRoot({})
+        CommonModule,
+        ReactiveFormsModule,
+        NgbAlertModule,
+        UIModule,
+        RouterTestingModule,
+        StoreModule.forRoot({})
       ],
-      providers: [{
-        provide: 'SocialAuthServiceConfig',
-        useValue: {
-          autoLogin: false,
-          providers: [
-            {
-              id: GoogleLoginProvider.PROVIDER_ID,
-              provider: new GoogleLoginProvider(environment.googleClientId),
-            },
-            {
-              id: FacebookLoginProvider.PROVIDER_ID,
-              provider: new FacebookLoginProvider(environment.fbAppId),
-            },
-          ],
-        } as SocialAuthServiceConfig,
-      }, HttpClient, HttpHandler, FormBuilder, AuthenticationService, Title, ErrorService, LoadingService, Store],
+      providers: [
+        {
+          provide: 'SocialAuthServiceConfig',
+          useValue: {
+            autoLogin: false,
+            providers: [
+              {
+                id: GoogleLoginProvider.PROVIDER_ID,
+                provider: new GoogleLoginProvider(environment.googleClientId)
+              },
+              {
+                id: FacebookLoginProvider.PROVIDER_ID,
+                provider: new FacebookLoginProvider(environment.fbAppId)
+              }
+            ]
+          } as SocialAuthServiceConfig
+        },
+        HttpClient,
+        HttpHandler,
+        FormBuilder,
+        AuthenticationService,
+        Title,
+        ErrorService,
+        LoadingService,
+        Store
+      ],
       declarations: [LoginComponent]
     }).compileComponents();
 
