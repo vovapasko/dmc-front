@@ -3,19 +3,35 @@ import { SetLoadingPayload } from '@models/payloads/loading/set';
 
 
 export enum ELoadingActions {
-  SetLoading = '[Loading] Set loading',
-  SetLoadingSuccess = '[Loading] Set loading success',
+  StartLoading = '[Loading] Start loading',
+  StartLoadingSuccess = '[Loading] Start loading success',
+  StopLoading = '[Loading] Stop loading',
+  StopLoadingSuccess = '[Loading] Stop loading success',
 }
 
-export class SetLoading implements Action {
-  public readonly type = ELoadingActions.SetLoading;
+export class StartLoading implements Action {
+  public readonly type = ELoadingActions.StartLoading;
 
   constructor(public payload: SetLoadingPayload) {
   }
 }
 
-export class SetLoadingSuccess implements Action {
-  public readonly type = ELoadingActions.SetLoadingSuccess;
+export class StartLoadingSuccess implements Action {
+  public readonly type = ELoadingActions.StartLoadingSuccess;
+
+  constructor(public payload: SetLoadingPayload) {
+  }
+}
+
+export class StopLoading implements Action {
+  public readonly type = ELoadingActions.StopLoading;
+
+  constructor(public payload: SetLoadingPayload) {
+  }
+}
+
+export class StopLoadingSuccess implements Action {
+  public readonly type = ELoadingActions.StopLoadingSuccess;
 
   constructor(public payload: SetLoadingPayload) {
   }
@@ -23,5 +39,7 @@ export class SetLoadingSuccess implements Action {
 
 
 export type LoadingActions =
-  | SetLoading
-  | SetLoadingSuccess;
+  | StartLoading
+  | StartLoadingSuccess
+  | StopLoading
+  | StopLoadingSuccess;

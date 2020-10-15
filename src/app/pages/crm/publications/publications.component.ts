@@ -42,6 +42,7 @@ import { publicationActionTypes } from '@constants/actions';
 import { PublicationService } from '@services/publication.service';
 import { Title } from '@angular/platform-browser';
 import { publicationTitle } from '@constants/titles';
+import { selectLoading } from '@store/selectors/loading.selectors';
 
 @Component({
   selector: 'app-orders',
@@ -64,6 +65,7 @@ export class PublicationsComponent implements OnInit {
   pageSize = 10;
   // total number of records
   totalRecords = 0;
+  loading$ = this.store.select(selectLoading);
 
   publications$ = this.store.select(selectPublicationList);
   publicationsBlackList$ = this.store.select(selectPublicationBlackList);

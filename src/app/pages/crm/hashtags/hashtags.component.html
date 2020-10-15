@@ -1,6 +1,7 @@
 <div class="container-fluid">
     <app-page-title title="Хештеги" [breadcrumbItems]="breadCrumbItems"></app-page-title>
     <div class="row">
+        <app-ui-preloader [display]="loading$ | async"></app-ui-preloader>
         <div class="col-12">
             <div class="card-box">
                 <button type="button"
