@@ -71,6 +71,11 @@ export class InboxComponent implements OnInit {
     }
   }
 
+  public reload(): void {
+    const payload = { email: this.emailService.selectedNewsEmail.email, pagination: numbers.pageSize };
+    this.store.dispatch(new GetEmails(payload));
+  }
+
   public processLoading(value: boolean): void {
     this.loading = value;
   }
