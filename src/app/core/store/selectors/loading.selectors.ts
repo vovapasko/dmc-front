@@ -6,5 +6,5 @@ import { ILoadingState } from '@store/state/loading.state';
 
 const selectLoadingState = (state: IAppState) => state.loading;
 
-export const selectLoading = createSelector(selectLoadingState, (state: ILoadingState) => state.loading);
+export const selectLoading = createSelector(selectLoadingState, (state: ILoadingState) => state ? state.loading : false);
 

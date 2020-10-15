@@ -20,7 +20,8 @@ describe('LoadingService', () => {
       expect(loading).toBeTruthy();
       done();
     });
-    service.startLoading();
+    const payload = {data: {value: true}};
+    service.startLoading(payload);
   });
 
   it('should stop loading', (done: DoneFn) => {
@@ -28,6 +29,7 @@ describe('LoadingService', () => {
       expect(loading).toBeFalsy();
       done();
     });
-    service.stopLoading();
+    const payload = {data: {value: false}};
+    service.stopLoading(payload);
   });
 });
