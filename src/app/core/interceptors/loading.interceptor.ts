@@ -20,7 +20,8 @@ export class LoadingInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (this.activeRequests === numbers.zero) {
-      this.loadingScreenService.startLoading();
+      const payload = {data: {value: true}};
+      this.loadingScreenService.startLoading(payload);
     }
 
     this.activeRequests++;
@@ -29,7 +30,8 @@ export class LoadingInterceptor {
       finalize(() => {
         this.activeRequests--;
         if (this.activeRequests === numbers.zero) {
-          this.loadingScreenService.stopLoading();
+          const payload = {data: {value: false}};
+          this.loadingScreenService.stopLoading(payload);
         }
       })
     );
