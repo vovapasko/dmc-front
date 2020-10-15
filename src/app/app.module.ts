@@ -36,6 +36,7 @@ import { PublicationEffects } from '@store/effects/publication.effects';
 import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
 import { EmailEffects } from '@store/effects/email.effects';
 import { HashtagEffects } from '@store/effects/hashtag.effects';
+import { LoadingEffects } from '@store/effects/loading.effects';
 
 @NgModule({
   declarations: [AppComponent, Error404Component, Error500Component, NotificationComponent],
@@ -57,7 +58,8 @@ import { HashtagEffects } from '@store/effects/hashtag.effects';
       ClientEffects,
       PublicationEffects,
       EmailEffects,
-      HashtagEffects
+      HashtagEffects,
+      LoadingEffects
     ]),
     StoreRouterConnectingModule.forRoot({ stateKey: 'router' }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],

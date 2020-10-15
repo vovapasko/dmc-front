@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { breadCrumbs } from '@constants/bread-crumbs';
 import { select, Store } from '@ngrx/store';
 import { IAppState } from '@store/state/app.state';
@@ -11,6 +11,8 @@ import { Router } from '@angular/router';
 import { urls } from '@constants/urls';
 import { GetEmails } from '@store/actions/email.actions';
 import numbers from '@constants/numbers';
+import { selectPublicationList } from '@store/selectors/publication.selectors';
+import { selectLoading } from '@store/selectors/loading.selectors';
 
 @Component({
   selector: 'app-inbox',
@@ -29,8 +31,8 @@ export class InboxComponent implements OnInit {
   // paginated email data
   emailData: Array<EmailEntity>;
   emails$ = this.store.pipe(select(selectEmailsList));
-  loading$: Subject<boolean>;
-
+  loading$ = this.store.select(selectLoading);
+  loading = false;
 
   // page number
   page = 1;
@@ -62,10 +64,15 @@ export class InboxComponent implements OnInit {
 
   ngOnInit() {
     this.breadCrumbItems = breadCrumbs.emails;
+    this.store.select(selectLoading).subscribe(this.processLoading.bind(this));
     this.initSubscriptions();
     if (!this.emailService.selectedNewsEmail) {
       this.router.navigate([urls.EMAILS]);
     }
+  }
+
+  public processLoading(value: boolean): void {
+    this.loading = value;
   }
 
   /**

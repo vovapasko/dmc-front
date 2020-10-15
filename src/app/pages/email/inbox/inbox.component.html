@@ -1,11 +1,10 @@
 <div class="container-fluid">
     <app-page-title title="Почта" [breadcrumbItems]="breadCrumbItems"></app-page-title>
-    <app-ui-preloader [display]="loading$ | async"></app-ui-preloader>
 
     <div class="row">
-
+        <app-ui-preloader [display]="loading"></app-ui-preloader>
         <!-- Right Sidebar -->
-        <div class="col-12">
+        <div class="col-12" *ngIf="!loading">
             <div class="card-box">
                 <!-- Left sidebar -->
                 <div class="inbox-leftbar">
@@ -21,6 +20,7 @@
                 <div class="inbox-rightbar">
                     <!--Button Group-->
                     <div class="mt-3">
+
                         <ul class="message-list">
                             <a routerLink="/email/read">
                                 <li class="unread" *ngFor="let email of emailData | slice:0:15; let i = index; ">

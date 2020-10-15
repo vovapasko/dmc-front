@@ -19,6 +19,7 @@ import { Hashtag } from '@models/instances/hashtag';
 import { CreateHashtag, DeleteHashtag, GetHashtags, SelectHashtag, UpdateHashtag } from '@store/actions/hashtag.actions';
 import { CreateHashtagPayload } from '@models/payloads/news/hashtag/create';
 import { UpdateHashtagPayload } from '@models/payloads/news/hashtag/update';
+import { selectLoading } from '@store/selectors/loading.selectors';
 
 @Component({
   selector: 'app-hashtags',
@@ -34,6 +35,7 @@ export class HashtagsComponent implements OnInit {
   tickets$: Observable<TableData[]>;
   hashtags$ = this.store.pipe(select(selectHashtagList));
   total$: Observable<number>;
+  loading$ = this.store.select(selectLoading);
 
   @ViewChildren(TicketsSortableDirective) headers: QueryList<TicketsSortableDirective>;
 
