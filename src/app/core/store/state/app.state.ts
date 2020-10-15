@@ -8,6 +8,7 @@ import { IClientState, initialClientState} from '@store/state/client.state';
 import { initialPublicationState, IPublicationState } from '@store/state/publication.state';
 import { IEmailState, initialEmailState } from '@store/state/email.state';
 import { IHashtagState, initialHashtagState } from '@store/state/hashtag.state';
+import { ILoadingState, initialLoadingState } from '@store/state/loading.state';
 
 export interface IAppState {
   router?: RouterReducerState;
@@ -19,6 +20,7 @@ export interface IAppState {
   publications: IPublicationState;
   emails: IEmailState;
   hashtags: IHashtagState;
+  loading: ILoadingState;
 }
 
 export const initialAppState: IAppState = {
@@ -29,7 +31,8 @@ export const initialAppState: IAppState = {
   clients: initialClientState,
   publications: initialPublicationState,
   emails: initialEmailState,
-  hashtags: initialHashtagState
+  hashtags: initialHashtagState,
+  loading: initialLoadingState
 };
 
 export function getInitialState(): IAppState {
