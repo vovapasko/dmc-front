@@ -52,6 +52,7 @@ import { NewsWavePrice } from '@models/instances/newsWavePrice';
 import { BaseService } from '@services/base.service';
 import { budgetMessage } from '@constants/messages';
 import { ConvertToFormData } from '@helpers/convert-to-form-data';
+import { Attachment } from '@models/instances/attachment';
 
 const api = environment.api;
 
@@ -626,11 +627,12 @@ export class NewsService extends BaseService {
     return null;
   }
 
-  public processAttachments(attachments: File[]): any {
-    if (!attachments) {
+  public processAttachments(files: File[]): Attachment[] {
+    if (!files) {
       return;
     }
-    return attachments.map(attachment => blobToUint8Array(attachment));
+    // @ts-ignore
+    return files.map((file: File) => ({name: file.name, base64: file.base64, type: file.type}));
   }
 
   /**

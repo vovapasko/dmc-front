@@ -50,11 +50,12 @@ import { breadCrumbs } from '@constants/bread-crumbs';
 import { revenueRadialChart } from '@components/charts/data';
 import { selectClientList } from '@store/selectors/client.selectors';
 import { GetClients } from '@store/actions/client.actions';
-import { getColorByPercentage } from '@helpers/utility';
+import { convertFileToBase64, getColorByPercentage } from '@helpers/utility';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Contractor, PostFormatListSet } from '@models/instances/contractor';
 import { NewsWavePrice } from '@models/instances/newsWavePrice';
 import { ATTACHMENTS, PREVIEW_TEXT, TEXT } from '@constants/titles';
+import { Infos } from '@constants/notifications';
 
 /**
  * Form Burst news component - handling the burst news with sidebar and content
@@ -552,7 +553,13 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   public onChangeFormationFiles(event): void {
     const control = this.editorFormControls.attachments;
     const previewControl = this.previewFormControls.previewText;
+    this.onChangeFiles(control.value);
     this.setContent(control, previewControl, ATTACHMENTS);
+  }
+
+  public onChangeFiles(files: Array<File>): void {
+    // @ts-ignore
+    files.forEach(file => convertFileToBase64(file));
   }
 
   /**

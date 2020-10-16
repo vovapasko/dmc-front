@@ -3,6 +3,8 @@ import { Project } from '@models/instances/project';
 import { matchColor, percentage } from '@constants/formula';
 import { Payloads } from '@models/payloads/payload';
 
+import { encode, decode } from 'js-base64';
+
 export const toCamel = (str: string): string => {
   return str.replace(/([-_][a-z])/gi, (element: string) => {
     return element
@@ -135,7 +137,7 @@ export function jsonToFormData(data): Payloads {
   return formData;
 }
 
-export const  blobToUint8Array = (b) => {
+export const blobToUint8Array = (b) => {
   const uri = URL.createObjectURL(b);
   const xhr = new XMLHttpRequest();
   let i;
@@ -154,3 +156,21 @@ export const  blobToUint8Array = (b) => {
 
   return ui8;
 };
+
+export const fileToBase64 = (file: File): string => {
+
+  return '';
+};
+
+const toBase64 = file => new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onload = () => resolve(reader.result);
+  reader.onerror = error => reject(error);
+});
+
+export async function convertFileToBase64(file) {
+  file.base64 = await toBase64(file);
+  return file;
+}
+
