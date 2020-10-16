@@ -674,12 +674,17 @@ export class NewsService extends BaseService {
     let waveFormation = null;
     let newsInProject = [];
     if (burstMethod.method === burstMethods.BAYER) {
-      waveFormation = {
-        email: previewForm.controls.previewEmail.value || controls.at(0).get('previewEmail').value,
-        content: previewForm.controls.previewText.value || controls.at(0).get('previewText').value,
-        attachments: this.processAttachments(editorForm.controls.attachments.value),
-        id: newsWave ? newsWave.waveFormation.id : null
-      };
+      // waveFormation = {
+      //   email: previewForm.controls.previewEmail.value || controls.at(0).get('previewEmail').value,
+      //   content: previewForm.controls.previewText.value || controls.at(0).get('previewText').value,
+      //   attachments: this.processAttachments(editorForm.controls.attachments.value),
+      //   id: newsWave ? newsWave.waveFormation.id : null
+      // };
+      waveFormation = new FormData();
+      waveFormation.append('email', previewForm.controls.previewEmail.value || controls.at(0).get('previewEmail').value);
+      waveFormation.append('content', previewForm.controls.previewText.value || controls.at(0).get('previewText').value);
+      waveFormation.append('attachments', editorForm.controls.attachments.value);
+      waveFormation.append('id', newsWave ? newsWave.waveFormation.id : null);
     }
     if (burstMethod.method === burstMethods.DIRECT) {
       newsInProject = newsList.map((news: News, i: number) => ({
