@@ -526,6 +526,9 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
    */
   public updateField(index: number, field: string, value?: string | number | object): void {
     const control = this.getControl(index, field);
+    if (field === ATTACHMENTS) {
+      this.onChangeFiles(control.value);
+    }
     const previewControl = this.getControl(index, 'previewText');
     this.newsList = this.newsService.updateField(index, field, value, control, this.newsList);
     this.setContent(control, previewControl, field);
