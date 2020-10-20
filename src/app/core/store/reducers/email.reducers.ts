@@ -1,6 +1,5 @@
-import { CreateNewsEmailSuccess, EEmailActions, EmailActions } from '@store/actions/email.actions';
+import { EEmailActions, EmailActions } from '@store/actions/email.actions';
 import { IEmailState, initialEmailState } from '@store/state/email.state';
-import { EClientActions } from '@store/actions/client.actions';
 
 export const emailReducers = (state = initialEmailState, action: EmailActions): IEmailState => {
   // console.log(action);

@@ -19,7 +19,7 @@ import { Project } from '@models/instances/project';
 import { News } from '@models/instances/news';
 import { Hashtag } from '@models/instances/hashtag';
 import { Format } from '@models/instances/format';
-import { blobToUint8Array, setProjectValues } from '@helpers/utility';
+import { setProjectValues } from '@helpers/utility';
 import { Infos, Warnings } from '@constants/notifications';
 import { endpoints } from '@constants/endpoints';
 import { burstMethods, methods } from '@constants/methods';
@@ -47,7 +47,6 @@ import { NewsProject } from '@models/instances/news-project';
 import { UserService } from './user.service';
 import { UploadNewsFilePayload } from '@models/payloads/news/news-waves/upload-file';
 import { DeleteNewsFilePayload } from '@models/payloads/news/news-waves/delete-file';
-import { newsFieldsHandler } from '@constants/news';
 import { NewsWavePrice } from '@models/instances/newsWavePrice';
 import { BaseService } from '@services/base.service';
 import { budgetMessage } from '@constants/messages';
@@ -68,7 +67,6 @@ export class NewsService extends BaseService {
     private notificationService: NotificationService,
     private securityService: SecurityService,
     private userService: UserService,
-    private convertToFormDateService: ConvertToFormData
   ) {
     super();
   }

@@ -38,7 +38,6 @@ import { selectEmailsList, selectNewsProject, selectProjectsList } from '@store/
 import { NewsProject } from '@models/instances/news-project';
 import { GetNewsProjectPayload } from '@models/payloads/project/news-project/get';
 import { Methods } from '@models/instances/method';
-import { separators } from '@constants/separators';
 import { burstSteps, h1, newsFieldReplacer, newsFields, newsFieldsHandler, p, template } from '@constants/news';
 import { Email } from '@models/instances/email';
 import { UpdateNewsWavesPayload } from '@models/payloads/news/news-waves/update';
@@ -55,7 +54,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Contractor, PostFormatListSet } from '@models/instances/contractor';
 import { NewsWavePrice } from '@models/instances/newsWavePrice';
 import { ATTACHMENTS, PREVIEW_TEXT, TEXT } from '@constants/titles';
-import { Infos } from '@constants/notifications';
 
 /**
  * Form Burst news component - handling the burst news with sidebar and content

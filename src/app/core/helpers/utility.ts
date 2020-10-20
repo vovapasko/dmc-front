@@ -3,8 +3,6 @@ import { Project } from '@models/instances/project';
 import { matchColor, percentage } from '@constants/formula';
 import { Payloads } from '@models/payloads/payload';
 
-import { encode, decode } from 'js-base64';
-
 export const toCamel = (str: string): string => {
   return str.replace(/([-_][a-z])/gi, (element: string) => {
     return element

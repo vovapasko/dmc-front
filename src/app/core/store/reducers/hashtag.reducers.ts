@@ -1,10 +1,6 @@
-import { EUserActions } from '../actions/user.actions';
-import { UserActions } from '../actions/user.actions';
-import { initialUserState, IUserState } from '../state/user.state';
 import { IHashtagState, initialHashtagState } from '@store/state/hashtag.state';
 import { EHashtagActions, HashtagActions } from '@store/actions/hashtag.actions';
 import { Hashtag } from '@models/instances/hashtag';
-import { EClientActions } from '@store/actions/client.actions';
 
 export const hashtagReducers = (state = initialHashtagState, action: HashtagActions): IHashtagState => {
   // console.log(action);

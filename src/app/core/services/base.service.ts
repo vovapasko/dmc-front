@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { endpoints } from '@constants/endpoints';
 import { stringType } from '@constants/formula';
 import { separators } from '@constants/separators';
 

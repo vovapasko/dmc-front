@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { IAppState } from '@store/state/app.state';
-import { selectHashtags, selectNewsWave } from '@store/selectors/news.selectors';
+import { selectHashtags } from '@store/selectors/news.selectors';
 import { Router } from '@angular/router';
 import { ErrorService } from '@services/error.service';
 import { LoadingService } from '@services/loading.service';
@@ -9,7 +9,7 @@ import { Subject } from 'rxjs';
 import { Orders } from '@constants/orders';
 import { ServerError } from '@models/responses/server/error';
 import { urls } from '@constants/urls';
-import { GetNewsWave, GetProjectConfiguration } from '@store/actions/news.actions';
+import { GetProjectConfiguration } from '@store/actions/news.actions';
 import { Title } from '@angular/platform-browser';
 import { FormGroup } from '@angular/forms';
 import { ProjectService } from '@services/project.service';

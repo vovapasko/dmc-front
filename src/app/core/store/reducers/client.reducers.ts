@@ -1,6 +1,3 @@
-import { EUserActions } from '../actions/user.actions';
-import { UserActions } from '../actions/user.actions';
-import { initialUserState, IUserState } from '../state/user.state';
 import { initialClientState, IClientState } from '@store/state/client.state';
 import { EClientActions, ClientActions } from '@store/actions/client.actions';
 import { Client } from '@models/instances/client';

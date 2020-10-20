@@ -4,7 +4,6 @@ import { NotificationType } from '@models/instances/notification';
 import { NotificationService } from '@services/notification.service';
 import { ErrorService } from '@services/error.service';
 import { ServerError } from '@models/responses/server/error';
-import { errorTitle } from '@constants/error';
 
 /**
  * This service for handling errors from server, notify user about error

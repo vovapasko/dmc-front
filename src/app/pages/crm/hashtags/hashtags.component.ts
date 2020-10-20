@@ -8,8 +8,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { IAppState } from '@store/state/app.state';
 import { select, Store } from '@ngrx/store';
 import { breadCrumbs } from '@constants/bread-crumbs';
-import { GetEmails } from '@store/actions/project.actions';
-import { GetProjectConfiguration } from '@store/actions/news.actions';
 import { setValues } from '@helpers/utility';
 import { hashtagsTitle } from '@constants/titles';
 import { Title } from '@angular/platform-browser';

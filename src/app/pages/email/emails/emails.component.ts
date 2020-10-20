@@ -7,7 +7,6 @@ import {
   GetEmails,
   GetNewsEmails,
   GmailAuth,
-  GmailCredsClear,
   GmailTokenRevoke,
   SelectNewsEmail
 } from '@store/actions/email.actions';

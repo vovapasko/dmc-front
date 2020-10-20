@@ -1,9 +1,8 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { breadCrumbs } from '@constants/bread-crumbs';
 import { select, Store } from '@ngrx/store';
 import { IAppState } from '@store/state/app.state';
 import { selectEmailsList } from '@store/selectors/email.selectors';
-import { Subject } from 'rxjs';
 import { LoadingService } from '@services/loading.service';
 import { EmailEntity } from '@models/instances/email';
 import { EmailService } from '@services/email.service';
@@ -11,7 +10,6 @@ import { Router } from '@angular/router';
 import { urls } from '@constants/urls';
 import { GetEmails } from '@store/actions/email.actions';
 import numbers from '@constants/numbers';
-import { selectPublicationList } from '@store/selectors/publication.selectors';
 import { selectLoading } from '@store/selectors/loading.selectors';
 
 @Component({
