@@ -76,17 +76,63 @@ export const breadCrumbs = {
       active: true
     }
   ],
-  emails: [
-    {
-      label: 'Главная',
-      path: '/'
-    },
-    {
-      label: 'Почты',
-      path: '/email',
-      active: true
-    }
-  ],
+  emails: {
+    inbox: [
+      {
+        label: 'Главная',
+        path: '/inbox'
+      },
+      {
+        label: 'Почты',
+        path: '/inbox',
+        active: true
+      }
+    ],
+    email: [
+      {
+        label: 'Главная',
+        path: '/'
+      },
+      {
+        label: 'Почты',
+        path: '/',
+        active: true
+      }
+    ],
+    sent: [
+      {
+        label: 'Главная',
+        path: '/'
+      },
+      {
+        label: 'Почты',
+        path: '/sent',
+        active: true
+      }
+    ],
+    trash: [
+      {
+        label: 'Главная',
+        path: '/'
+      },
+      {
+        label: 'Почты',
+        path: '/trash',
+        active: true
+      }
+    ],
+    read: [
+      {
+        label: 'Главная',
+        path: '/'
+      },
+      {
+        label: 'Почты',
+        path: '/read',
+        active: true
+      }
+    ],
+  },
   hashtags: [
     {
       label: 'Главная',

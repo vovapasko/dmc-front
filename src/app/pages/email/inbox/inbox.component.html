@@ -29,7 +29,7 @@
 
                         <ul class="message-list">
                             <a routerLink="/email/read">
-                                <li class="unread" *ngFor="let email of emailData | slice:0:15; let i = index; ">
+                                <li class="unread" *ngFor="let email of tickets$ | async | slice:0:15; let i = index; ">
                                     <div class="col-mail col-mail-1">
                                         <div class="checkbox-wrapper-mail">
                                             <input type="checkbox" id="chk-{{i}}"/>

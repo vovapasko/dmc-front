@@ -11,6 +11,9 @@ import { urls } from '@constants/urls';
 import { GetEmails } from '@store/actions/email.actions';
 import numbers from '@constants/numbers';
 import { selectLoading } from '@store/selectors/loading.selectors';
+import { emailMatches, hashtagMatches, TicketService } from '@services/ticket.service';
+import { Observable } from 'rxjs';
+import { TableData } from '@models/instances/tickets.model';
 
 @Component({
   selector: 'app-inbox',
@@ -28,6 +31,7 @@ export class InboxComponent implements OnInit {
 
   // paginated email data
   emailData: Array<EmailEntity>;
+  tickets$: Observable<EmailEntity[]>;
   emails$ = this.store.pipe(select(selectEmailsList));
   loading$ = this.store.select(selectLoading);
   loading = false;
@@ -47,6 +51,7 @@ export class InboxComponent implements OnInit {
 
   constructor(
     private store: Store<IAppState>,
+    public service: TicketService,
     private loadingService: LoadingService,
     private emailService: EmailService,
     private router: Router
@@ -62,6 +67,9 @@ export class InboxComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.service.matches = emailMatches;
+    this.service.records$ = this.emailService.emails$;
+    this.tickets$ = this.service.tickets$;
     this.breadCrumbItems = breadCrumbs.emails;
     this.store.select(selectLoading).subscribe(this.processLoading.bind(this));
     this.initSubscriptions();
@@ -95,6 +103,7 @@ export class InboxComponent implements OnInit {
   }
 
   public search(value: string | null) {
+    this.service.searchTerm = value;
     this.term = value;
   }
 

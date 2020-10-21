@@ -8,6 +8,8 @@ import { SortDirection } from '@shared/directives/tickets-sortable.directive';
 
 import { SearchResult } from '@models/instances/tickets.model';
 import { Hashtag } from '@models/instances/hashtag';
+import { EmailEntity } from '@models/instances/email';
+import { getSender } from '@helpers/utility';
 
 interface State {
   page: number;
@@ -57,8 +59,14 @@ export function clientMatches(ticket: TableData, term: string) {
     || ticket.id === +term;
 }
 
-export function hashtagMatches(ticket: Hashtag, term: string) {
+export function hashtagMatches(ticket: Hashtag, term: string): boolean {
   return ticket.name.toString().toLowerCase().includes(term);
+}
+
+export function emailMatches(ticket: EmailEntity, term: string) {
+  return ticket.snippet.toString().toLowerCase().includes(term)
+    || getSender(ticket).toLowerCase().includes(term)
+    || ticket.internalDate.toString().toLowerCase().includes(term);
 }
 
 @Injectable({
@@ -147,7 +155,7 @@ export class TicketService {
     this._matches = func;
   }
 
-  get matches(): (ticket: TableData  | Hashtag, term: string) => boolean {
+  get matches(): (ticket: TableData | Hashtag, term: string) => boolean {
     return this._matches;
   }
 
