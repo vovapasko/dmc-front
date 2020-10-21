@@ -42,7 +42,7 @@ export class TrashComponent implements OnInit {
   // start and end index
   startIndex = 1;
   endIndex = 15;
-
+  term = null;
 
   constructor(
     private store: Store<IAppState>,
@@ -67,6 +67,10 @@ export class TrashComponent implements OnInit {
     if (!this.emailService.selectedNewsEmail) {
       this.router.navigate([urls.EMAILS]);
     }
+  }
+
+  public search(value: string | null) {
+    this.term = value;
   }
 
   public reload(): void {

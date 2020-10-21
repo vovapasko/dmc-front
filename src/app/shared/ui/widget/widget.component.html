@@ -9,7 +9,7 @@
     <form class="app-search" (ngSubmit)="search()" [formGroup]="searchForm">
       <div class="app-search-box">
         <div class="input-group">
-          <input type="text" class="form-control" placeholder="Поиск...">
+          <input type="text" formControlName="term" class="form-control" placeholder="Поиск...">
         </div>
       </div>
     </form>

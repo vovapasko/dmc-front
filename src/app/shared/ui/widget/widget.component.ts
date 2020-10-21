@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import numbers from '@constants/numbers';
+import { Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-widget',
@@ -10,6 +10,9 @@ import numbers from '@constants/numbers';
 export class WidgetComponent implements OnInit {
 
   searchForm: FormGroup;
+  @Output() reloadEvent = new EventEmitter<null>();
+  @Output() searchEvent = new EventEmitter<string>();
+
 
   constructor(
     public formBuilder: FormBuilder
@@ -23,10 +26,13 @@ export class WidgetComponent implements OnInit {
   }
 
   public reload(): void {
-
+    this.reloadEvent.emit();
   }
 
   public search(): void {
-
+    if (this.searchForm.invalid && !this.searchForm.dirty) {
+      return;
+    }
+    this.searchEvent.emit(this.searchForm.value.term);
   }
 }

@@ -42,7 +42,7 @@ export class SentComponent implements OnInit {
   // start and end index
   startIndex = 1;
   endIndex = 15;
-
+  term = null;
 
   constructor(
     private store: Store<IAppState>,
@@ -58,6 +58,11 @@ export class SentComponent implements OnInit {
     }
     this.emailData = emails;
     this.totalRecords = emails.length;
+  }
+
+
+  public search(value: string | null) {
+    this.term = value;
   }
 
   ngOnInit() {

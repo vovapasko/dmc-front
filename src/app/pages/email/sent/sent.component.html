@@ -18,7 +18,9 @@
 
                 <!--Right Sidebar-->
                 <div class="inbox-rightbar">
-                    <app-widget></app-widget>
+                    <app-widget (reloadEvent)="this.reload()"
+                                (searchEvent)="this.search($event)"
+                    ></app-widget>
 
                     <!--Button Group-->
                     <div class="mt-3">

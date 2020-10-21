@@ -42,6 +42,7 @@ export class InboxComponent implements OnInit {
   // start and end index
   startIndex = 1;
   endIndex = 15;
+  term = null;
 
 
   constructor(
@@ -91,6 +92,10 @@ export class InboxComponent implements OnInit {
     const nextPageToken = this.emailService.nextPageToken;
     const pagination = numbers.pageSize;
     this.store.dispatch(new GetEmails({ email, nextPageToken, pagination }));
+  }
+
+  public search(value: string | null) {
+    this.term = value;
   }
 
   public previous(): void {
