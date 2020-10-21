@@ -1,19 +1,32 @@
 <!-- List  -->
-<div class="mail-list" *ngFor="let list of emailList">
-  <a
-          href="javascript: void(0);"
-          class="list-group-item border-0"
-          [ngClass]="{ 'text-danger font-weight-bold': list.text === 'danger' }"
-  >
-    <i class="{{ list.icon }} font-18 align-middle mr-2"></i>{{ list.label }}
+<div class="mail-list">
+  <a href="javascript: void(0);" class="list-group-item border-0">
+    <i class="mdi mdi-inbox font-18 align-middle mr-2"></i>
+    Письма
   </a>
 </div>
 
-<!-- Label -->
-<h6 class="mt-4">Labels</h6>
-<div class="list-group b-0 mail-list" *ngFor="let label of labels$ | async | labelFilter">
-  <a href="javascript: void(0);" class="list-group-item border-0"
-    ><span class="mdi mdi-circle text-{{ label.name }} mr-2"></span>{{ label.name }}</a
-  >
+<div class="mail-list">
+  <a href="javascript: void(0);" class="list-group-item border-0">
+    <i class="mdi mdi-delete font-18 align-middle mr-2"></i>
+    Корзина
+  </a>
 </div>
+
+<div class="mail-list">
+  <a href="javascript: void(0);" class="list-group-item border-0">
+    <i class="mdi mdi-send font-18 align-middle mr-2"></i>
+    Отправленные
+  </a>
+</div>
+
+
+
+<!-- Label -->
+<!--<h6 class="mt-4">Labels</h6>-->
+<!--<div class="list-group b-0 mail-list" *ngFor="let label of labels$ | async | labelFilter">-->
+<!--  <a href="javascript: void(0);" class="list-group-item border-0"-->
+<!--    ><span class="mdi mdi-circle text-{{ label.name }} mr-2"></span>{{ label.name }}</a-->
+<!--  >-->
+<!--</div>-->
 <!-- End label -->
