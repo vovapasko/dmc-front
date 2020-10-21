@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import numbers from '@constants/numbers';
 
 @Component({
   selector: 'app-widget',
@@ -6,13 +8,25 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./widget.component.scss']
 })
 export class WidgetComponent implements OnInit {
-  constructor() {
+
+  searchForm: FormGroup;
+
+  constructor(
+    public formBuilder: FormBuilder
+  ) {
   }
 
   ngOnInit() {
+    this.searchForm = this.formBuilder.group({
+      term: [null, [Validators.required]]
+    });
   }
 
   public reload(): void {
+
+  }
+
+  public search(): void {
 
   }
 }

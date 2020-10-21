@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import {
   NgbCollapseModule,
@@ -43,7 +43,8 @@ import { RouterModule } from '@angular/router';
     NgbDropdownModule,
     Ng2SearchPipeModule,
     SharedModule,
-    RouterModule
+    RouterModule,
+    ReactiveFormsModule
   ],
   // tslint:disable-next-line: max-line-length
   exports: [

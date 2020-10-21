@@ -1,3 +1,19 @@
-<div class="btn-group">
-  <button type="button" (click)="reload()" class="btn btn-sm btn-light waves-effect"><i class="mdi mdi-reload font-18"></i></button>
+<div class="row">
+  <div class="col-md-1">
+    <div class="btn-group">
+      <button type="button" (click)="reload()" class="btn btn-sm btn-light waves-effect"><i class="mdi mdi-reload font-18"></i></button>
+    </div>
+  </div>
+
+  <div class="col-md-11">
+    <form class="app-search" (ngSubmit)="search()" [formGroup]="searchForm">
+      <div class="app-search-box">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Поиск...">
+        </div>
+      </div>
+    </form>
+  </div>
+
+
 </div>
