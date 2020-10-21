@@ -58,7 +58,7 @@ export class EmailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.breadCrumbItems = breadCrumbs.emails;
+    this.breadCrumbItems = breadCrumbs.emails.email;
     this.loading$ = this.loadingService.loading$;
     this.error$ = this.errorService.error$;
     this._fetchData();

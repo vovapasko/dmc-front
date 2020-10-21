@@ -70,7 +70,7 @@ export class InboxComponent implements OnInit {
     this.service.matches = emailMatches;
     this.service.records$ = this.emailService.emails$;
     this.tickets$ = this.service.tickets$;
-    this.breadCrumbItems = breadCrumbs.emails;
+    this.breadCrumbItems = breadCrumbs.emails.inbox;
     this.store.select(selectLoading).subscribe(this.processLoading.bind(this));
     this.initSubscriptions();
     if (!this.emailService.selectedNewsEmail) {

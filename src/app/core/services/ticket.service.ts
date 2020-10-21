@@ -64,9 +64,9 @@ export function hashtagMatches(ticket: Hashtag, term: string): boolean {
 }
 
 export function emailMatches(ticket: EmailEntity, term: string) {
-  return ticket.snippet.toString().toLowerCase().includes(term)
-    || getSender(ticket).toLowerCase().includes(term)
-    || ticket.internalDate.toString().toLowerCase().includes(term);
+  return ticket.snippet.toString().toLowerCase().includes(term.toString().toLowerCase())
+    || getSender(ticket).toLowerCase().includes(term.toString().toLowerCase())
+    || ticket.internalDate.toString().toLowerCase().includes(term.toString().toLowerCase());
 }
 
 @Injectable({
