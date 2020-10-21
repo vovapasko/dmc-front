@@ -68,6 +68,7 @@ export class InboxComponent implements OnInit {
 
   ngOnInit() {
     this.service.matches = emailMatches;
+    this.service.searchTerm = '';
     this.service.records$ = this.emailService.emails$;
     this.tickets$ = this.service.tickets$;
     this.breadCrumbItems = breadCrumbs.emails.inbox;

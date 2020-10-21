@@ -11,6 +11,8 @@ import { urls } from '@constants/urls';
 import { GetEmails } from '@store/actions/email.actions';
 import numbers from '@constants/numbers';
 import { selectLoading } from '@store/selectors/loading.selectors';
+import { Observable } from 'rxjs';
+import { emailMatches, TicketService } from '@services/ticket.service';
 
 @Component({
   selector: 'app-trash',
@@ -22,12 +24,12 @@ import { selectLoading } from '@store/selectors/loading.selectors';
  * Inbox component - handling the email inbox with sidebar and content
  */
 export class TrashComponent implements OnInit {
-
-  // bread crumb items
+// bread crumb items
   breadCrumbItems: Array<{}>;
 
   // paginated email data
   emailData: Array<EmailEntity>;
+  tickets$: Observable<EmailEntity[]>;
   emails$ = this.store.pipe(select(selectEmailsList));
   loading$ = this.store.select(selectLoading);
   loading = false;
@@ -44,8 +46,10 @@ export class TrashComponent implements OnInit {
   endIndex = 15;
   term = null;
 
+
   constructor(
     private store: Store<IAppState>,
+    public service: TicketService,
     private loadingService: LoadingService,
     private emailService: EmailService,
     private router: Router
@@ -61,16 +65,16 @@ export class TrashComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.breadCrumbItems = breadCrumbs.emails;
+    this.service.matches = emailMatches;
+    this.service.searchTerm = '';
+    this.service.records$ = this.emailService.emails$;
+    this.tickets$ = this.service.tickets$;
+    this.breadCrumbItems = breadCrumbs.emails.trash;
     this.store.select(selectLoading).subscribe(this.processLoading.bind(this));
     this.initSubscriptions();
     if (!this.emailService.selectedNewsEmail) {
       this.router.navigate([urls.EMAILS]);
     }
-  }
-
-  public search(value: string | null) {
-    this.term = value;
   }
 
   public reload(): void {
@@ -95,6 +99,11 @@ export class TrashComponent implements OnInit {
     const nextPageToken = this.emailService.nextPageToken;
     const pagination = numbers.pageSize;
     this.store.dispatch(new GetEmails({ email, nextPageToken, pagination }));
+  }
+
+  public search(value: string | null) {
+    this.service.searchTerm = value;
+    this.term = value;
   }
 
   public previous(): void {

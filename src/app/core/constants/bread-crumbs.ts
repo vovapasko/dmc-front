@@ -83,7 +83,7 @@ export const breadCrumbs = {
         path: '/inbox'
       },
       {
-        label: 'Почты',
+        label: 'Письма',
         path: '/inbox',
         active: true
       }
@@ -105,7 +105,7 @@ export const breadCrumbs = {
         path: '/'
       },
       {
-        label: 'Почты',
+        label: 'Отправленные',
         path: '/sent',
         active: true
       }
@@ -116,7 +116,7 @@ export const breadCrumbs = {
         path: '/'
       },
       {
-        label: 'Почты',
+        label: 'Корзина',
         path: '/trash',
         active: true
       }
@@ -127,8 +127,19 @@ export const breadCrumbs = {
         path: '/'
       },
       {
-        label: 'Почты',
+        label: 'Письмо',
         path: '/read',
+        active: true
+      }
+    ],
+    compose: [
+      {
+        label: 'Главная',
+        path: '/'
+      },
+      {
+        label: 'Написать',
+        path: '/compose',
         active: true
       }
     ],

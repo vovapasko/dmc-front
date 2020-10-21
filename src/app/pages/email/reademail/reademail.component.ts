@@ -18,7 +18,7 @@ export class ReademailComponent implements OnInit {
 
   ngOnInit() {
     // tslint:disable-next-line: max-line-length
-    this.breadCrumbItems = breadCrumbs.emails;
+    this.breadCrumbItems = breadCrumbs.emails.read;
 
   }
 
