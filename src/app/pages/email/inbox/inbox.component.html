@@ -9,7 +9,8 @@
                 <!-- Left sidebar -->
                 <div class="inbox-leftbar">
                     <a routerLink="/email/compose"
-                       class="btn btn-danger btn-block mb-4">Compose</a>
+                       class="btn btn-danger btn-block mb-4">Написать
+                    </a>
 
                     <app-emaillist></app-emaillist>
                     <!--Leftbar email label and list-->
@@ -18,9 +19,9 @@
 
                 <!--Right Sidebar-->
                 <div class="inbox-rightbar">
-                    <div class="btn-group">
-                        <button type="button" (click)="reload()" class="btn btn-sm btn-light waves-effect"><i class="mdi mdi-reload font-18"></i></button>
-                    </div>
+                    <app-widget></app-widget>
+
+
                     <!--Button Group-->
                     <div class="mt-3">
 

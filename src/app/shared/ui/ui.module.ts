@@ -20,6 +20,7 @@ import { EmaillistComponent } from './emaillist/emaillist.component';
 import { WidgetComponent } from './widget/widget.component';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { SharedModule } from '@shared/shared.module';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   // tslint:disable-next-line: max-line-length
@@ -41,7 +42,8 @@ import { SharedModule } from '@shared/shared.module';
     NgbTimepickerModule,
     NgbDropdownModule,
     Ng2SearchPipeModule,
-    SharedModule
+    SharedModule,
+    RouterModule
   ],
   // tslint:disable-next-line: max-line-length
   exports: [

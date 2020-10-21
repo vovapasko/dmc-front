@@ -1,5 +1,5 @@
 <div class="container-fluid">
-    <app-page-title title="Почта" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+    <app-page-title title="Корзина" [breadcrumbItems]="breadCrumbItems"></app-page-title>
 
     <div class="row">
         <app-ui-preloader [display]="loading"></app-ui-preloader>
@@ -18,9 +18,8 @@
 
                 <!--Right Sidebar-->
                 <div class="inbox-rightbar">
-                    <div class="btn-group">
-                        <button type="button" (click)="reload()" class="btn btn-sm btn-light waves-effect"><i class="mdi mdi-reload font-18"></i></button>
-                    </div>
+                    <app-widget></app-widget>
+
                     <!--Button Group-->
                     <div class="mt-3">
 
