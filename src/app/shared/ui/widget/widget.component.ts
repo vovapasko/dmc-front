@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Output, EventEmitter } from '@angular/core';
 
@@ -8,6 +8,10 @@ import { Output, EventEmitter } from '@angular/core';
   styleUrls: ['./widget.component.scss']
 })
 export class WidgetComponent implements OnInit {
+
+  @Input() showResetButton: boolean;
+  @Input() showRemoveButton: boolean;
+  @Input() showMoveToTrashButton: boolean;
 
   searchForm: FormGroup;
   @Output() reloadEvent = new EventEmitter<null>();

@@ -1,20 +1,32 @@
 <div class="row">
-  <div class="col-md-1">
-    <div class="btn-group">
-      <button type="button" (click)="reload()" class="btn btn-sm btn-light waves-effect"><i class="mdi mdi-reload font-18"></i></button>
-      <button type="button" (click)="remove()" class="btn btn-sm btn-light waves-effect"><i class="mdi mdi-trash-can-outline"></i></button>
+    <div class="col-md-9">
+        <form class="app-search" (ngSubmit)="search()" [formGroup]="searchForm">
+            <div class="app-search-box">
+                <div class="input-group">
+                    <input type="text" formControlName="term" class="form-control" placeholder="Введите текст">
+                </div>
+            </div>
+        </form>
     </div>
-  </div>
 
-  <div class="col-md-11">
-    <form class="app-search" (ngSubmit)="search()" [formGroup]="searchForm">
-      <div class="app-search-box">
-        <div class="input-group">
-          <input type="text" formControlName="term" class="form-control" placeholder="Поиск...">
+    <div class="col-md-3">
+        <div class="btn-group">
+            <!--      <button type="button" (click)="reload()" class="btn btn-sm btn-light waves-effect"><i class="mdi mdi-reload font-18"></i></button>-->
+
+            <button *ngIf="showMoveToTrashButton" type="button" (click)="remove()" class="btn btn-sm btn-light waves-effect"><i
+                    class="mdi mdi-trash-can-outline"></i> Переместить в корзину
+            </button>
+
+            <button *ngIf="showRemoveButton" type="button" (click)="remove()" class="btn btn-sm btn-light waves-effect"><i
+                    class="mdi mdi-trash-can-outline"></i> Удалить письма
+            </button>
+
+            <button *ngIf="showResetButton" type="button" (click)="remove()" class="btn btn-sm btn-light waves-effect"><i
+                    class="mdi mdi-reload"></i> Вернуть в почту
+            </button>
+
         </div>
-      </div>
-    </form>
-  </div>
+    </div>
 
 
 </div>

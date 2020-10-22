@@ -18,6 +18,7 @@
                 <div class="inbox-rightbar">
                     <app-widget (reloadEvent)="this.reload()"
                                 (searchEvent)="this.search($event)"
+                                [showMoveToTrashButton]="true"
                     ></app-widget>
 
                     <!--Button Group-->
