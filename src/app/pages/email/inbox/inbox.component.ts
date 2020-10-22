@@ -11,9 +11,9 @@ import { urls } from '@constants/urls';
 import { GetEmails } from '@store/actions/email.actions';
 import numbers from '@constants/numbers';
 import { selectLoading } from '@store/selectors/loading.selectors';
-import { emailMatches, hashtagMatches, TicketService } from '@services/ticket.service';
-import { Observable } from 'rxjs';
-import { TableData } from '@models/instances/tickets.model';
+import { emailMatches, TicketService } from '@services/ticket.service';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { Contractor } from '@models/instances/contractor';
 
 @Component({
   selector: 'app-inbox',
@@ -28,6 +28,7 @@ export class InboxComponent implements OnInit {
 
   // bread crumb items
   breadCrumbItems: Array<{}>;
+  checkedEmails$: BehaviorSubject<Array<EmailEntity>> = new BehaviorSubject([]);
 
   // paginated email data
   emailData: Array<EmailEntity>;
@@ -58,6 +59,21 @@ export class InboxComponent implements OnInit {
   ) {
   }
 
+  /**
+   * Mark as checked all contractors in table
+   */
+  public checkAll(): void {
+    this.emailService.checkAll();
+  }
+
+  /**
+   * Mark as checked contractor in table
+   */
+  public check(email: EmailEntity): void {
+    this.emailService.check(email);
+  }
+
+
   public processEmails(emails: EmailEntity[]): void {
     if (!emails) {
       return;
@@ -67,6 +83,7 @@ export class InboxComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.checkedEmails$ = this.emailService.checkedEmails$;
     this.service.matches = emailMatches;
     this.service.searchTerm = '';
     this.service.records$ = this.emailService.emails$;
