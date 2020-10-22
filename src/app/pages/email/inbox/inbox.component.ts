@@ -84,6 +84,7 @@ export class InboxComponent implements OnInit {
 
   ngOnInit() {
     this.checkedEmails$ = this.emailService.checkedEmails$;
+    this.emailService.checkedEmails = [];
     this.service.matches = emailMatches;
     this.service.searchTerm = '';
     this.service.records$ = this.emailService.emails$;

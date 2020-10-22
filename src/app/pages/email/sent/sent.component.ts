@@ -81,6 +81,7 @@ export class SentComponent implements OnInit {
 
   ngOnInit() {
     this.service.matches = emailMatches;
+    this.emailService.checkedEmails = [];
     this.checkedEmails$ = this.emailService.checkedEmails$;
     this.service.searchTerm = '';
     this.service.records$ = this.emailService.emails$;
