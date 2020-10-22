@@ -11,7 +11,7 @@ import { urls } from '@constants/urls';
 import { GetEmails } from '@store/actions/email.actions';
 import numbers from '@constants/numbers';
 import { selectLoading } from '@store/selectors/loading.selectors';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { emailMatches, TicketService } from '@services/ticket.service';
 
 @Component({
@@ -26,6 +26,7 @@ import { emailMatches, TicketService } from '@services/ticket.service';
 export class SentComponent implements OnInit {
 // bread crumb items
   breadCrumbItems: Array<{}>;
+  checkedEmails$: BehaviorSubject<Array<EmailEntity>> = new BehaviorSubject([]);
 
   // paginated email data
   emailData: Array<EmailEntity>;
@@ -64,8 +65,23 @@ export class SentComponent implements OnInit {
     this.totalRecords = emails.length;
   }
 
+  /**
+   * Mark as checked all contractors in table
+   */
+  public checkAll(): void {
+    this.emailService.checkAll();
+  }
+
+  /**
+   * Mark as checked contractor in table
+   */
+  public check(email: EmailEntity): void {
+    this.emailService.check(email);
+  }
+
   ngOnInit() {
     this.service.matches = emailMatches;
+    this.checkedEmails$ = this.emailService.checkedEmails$;
     this.service.searchTerm = '';
     this.service.records$ = this.emailService.emails$;
     this.tickets$ = this.service.tickets$;
