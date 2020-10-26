@@ -58,15 +58,23 @@
                 </div>
                 <!-- Title-->
                 <h4 class="mt-0">
-                    <a href="javascript: void(0);" class="text-dark">{{ project?.name }}</a>
+                    <ngb-highlight [result]="project?.name" [term]="ticketService.searchTerm"></ngb-highlight>
                 </h4>
                 <p class="text-muted text-uppercase">
                     <span>Менеджер проекта </span> <i class="mdi mdi-account-circle"></i>
-                    <small>{{ project?.manager?.firstName }} {{ project?.manager?.lastName }}</small>
+                    <small>
+                        <ngb-highlight [result]="project?.manager?.firstName" [term]="ticketService.searchTerm"></ngb-highlight>
+                    </small>
+                    <small>
+                        <ngb-highlight [result]="project?.manager?.lastName" [term]="ticketService.searchTerm"></ngb-highlight>
+                    </small>
                 </p>
                 <!-- Desc-->
                 <p class="text-muted font-13 mb-3 sp-line-2">
-                    {{ project?.client?.name }}
+                    <span>Клиент </span> <i class="fas fa-users"></i>
+                    <small>
+                        <ngb-highlight [result]="project?.client?.name" [term]="ticketService.searchTerm"></ngb-highlight>
+                    </small>
                 </p>
                 <!-- Task info-->
 
