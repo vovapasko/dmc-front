@@ -17,6 +17,7 @@ import { Warnings } from '@constants/notifications';
 import { ServerError } from '@models/responses/server/error';
 import numbers from '@constants/numbers';
 import { SIGNUP } from '@constants/titles';
+import { DateService } from '@services/date.service';
 
 /**
  * This component for sign up new user
@@ -47,7 +48,8 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
     private store: Store<IAppState>,
     private errorService: ErrorService,
     private loadingService: LoadingService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private dateService: DateService
   ) {
   }
 
@@ -55,8 +57,8 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
     this.initSubscriptions();
     this.initForm();
     this.setTitle(this.title);
-    this.currentYear = new Date().getFullYear();
-    this.startYear = numbers.startYear;
+    this.currentYear = this.dateService.currentYear;
+    this.startYear = this.dateService.startYear;
   }
 
   /**

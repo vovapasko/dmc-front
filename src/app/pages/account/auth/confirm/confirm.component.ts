@@ -3,6 +3,7 @@ import { Title } from '@angular/platform-browser';
 import { setAuthClasses } from '@helpers/utility';
 import numbers from '@constants/numbers';
 import { CONFIRM_EMAIL } from '@constants/titles';
+import { DateService } from '@services/date.service';
 
 /**
  * This component informs a user that him password was changed
@@ -18,12 +19,12 @@ export class ConfirmComponent implements OnInit, AfterViewInit {
   currentYear: number;
   startYear: number;
 
-  constructor(private titleService: Title) {}
+  constructor(private titleService: Title, private dateService: DateService) {}
 
   ngOnInit() {
     this.setTitle(this.title);
-    this.currentYear = new Date().getFullYear();
-    this.startYear = numbers.startYear;
+    this.currentYear = this.dateService.currentYear;
+    this.startYear = this.dateService.startYear;
   }
 
   /**
