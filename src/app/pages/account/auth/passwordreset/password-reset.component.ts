@@ -15,6 +15,8 @@ import { setAuthClasses } from '@helpers/utility';
 import { ConfirmResetPasswordPayload } from '@models/payloads/user/confirm-reset-password';
 import { ServerError } from '@models/responses/server/error';
 import numbers from '@constants/numbers';
+import { RESET_PASSWORD } from '@constants/titles';
+import { DateService } from '@services/date.service';
 
 /**
  * This component for change user password
@@ -28,7 +30,7 @@ import numbers from '@constants/numbers';
 export class PasswordResetComponent implements OnInit, AfterViewInit, OnDestroy {
   routeSubscription: Subscription;
   confirm = '';
-  title = 'Reset password';
+  title = RESET_PASSWORD;
   resetForm: FormGroup;
   submitted = false;
   loading$: Subject<boolean>;
@@ -46,7 +48,8 @@ export class PasswordResetComponent implements OnInit, AfterViewInit, OnDestroy 
     private userService: UserService,
     private store: Store<IAppState>,
     private errorService: ErrorService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private dateService: DateService
   ) {
   }
 
@@ -54,8 +57,8 @@ export class PasswordResetComponent implements OnInit, AfterViewInit, OnDestroy 
     this.initSubscriptions();
     this.initForm();
     this.setTitle(this.title);
-    this.currentYear = new Date().getFullYear();
-    this.startYear = numbers.startYear;
+    this.currentYear = this.dateService.currentYear;
+    this.startYear = this.dateService.startYear;
   }
 
   /**

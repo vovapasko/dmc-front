@@ -1,5 +1,5 @@
 <div class="container-fluid">
-    <app-page-title title="Почта" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+    <app-page-title title="Отправленные" [breadcrumbItems]="breadCrumbItems"></app-page-title>
 
     <div class="row">
         <app-ui-preloader [display]="loading"></app-ui-preloader>
@@ -8,6 +8,7 @@
             <div class="card-box">
                 <!-- Left sidebar -->
                 <div class="inbox-leftbar">
+
                     <app-emaillist></app-emaillist>
                     <!--Leftbar email label and list-->
                 </div>
@@ -19,7 +20,6 @@
                                 (searchEvent)="this.search($event)"
                                 [showMoveToTrashButton]="!!(checkedEmails$ | async)?.length"
                     ></app-widget>
-
 
                     <div class="checkbox-wrapper-mail">
                         <input type="checkbox"

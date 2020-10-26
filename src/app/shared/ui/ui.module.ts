@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import {
   NgbCollapseModule,
@@ -20,6 +20,7 @@ import { EmaillistComponent } from './emaillist/emaillist.component';
 import { WidgetComponent } from './widget/widget.component';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { SharedModule } from '@shared/shared.module';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   // tslint:disable-next-line: max-line-length
@@ -41,7 +42,9 @@ import { SharedModule } from '@shared/shared.module';
     NgbTimepickerModule,
     NgbDropdownModule,
     Ng2SearchPipeModule,
-    SharedModule
+    SharedModule,
+    RouterModule,
+    ReactiveFormsModule
   ],
   // tslint:disable-next-line: max-line-length
   exports: [

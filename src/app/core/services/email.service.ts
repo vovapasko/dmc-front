@@ -13,6 +13,7 @@ import { CreateEmailPayload } from '@models/payloads/project/email/create';
 import { GetEmailsPayload } from '@models/payloads/email/get-emails';
 import { GetEmailsResponse } from '@models/responses/email/get-emails';
 import { Label } from '@models/instances/labels';
+import { Contractor } from '@models/instances/contractor';
 
 const api = environment.api;
 
@@ -36,7 +37,16 @@ export class EmailService extends BaseService {
   selectedNewsEmail$: BehaviorSubject<Email> = new BehaviorSubject(null);
   nextPageToken$: BehaviorSubject<string> = new BehaviorSubject(null);
   previousPageToken$: BehaviorSubject<string> = new BehaviorSubject(null);
+  checkedEmails$: BehaviorSubject<Array<EmailEntity>> = new BehaviorSubject([]);
 
+
+  get checkedEmails() {
+    return this.checkedEmails$.getValue();
+  }
+
+  set checkedEmails(value: Array<EmailEntity>) {
+    this.checkedEmails$.next(value);
+  }
 
   get labels() {
     return this.labels$.getValue();
@@ -188,6 +198,36 @@ export class EmailService extends BaseService {
   public selectEmail(emailEntity: EmailEntity): Observable<EmailEntity> {
     this.selectedEmail = emailEntity;
     return of(emailEntity);
+  }
+
+  /**
+   * Mark as checked all emails
+   */
+  public checkAll(): void {
+    const emails = this.emails;
+    const checkedEmails = this.checkedEmails;
+    const checkedAll = checkedEmails.length === emails.length;
+    if (checkedAll) {
+      this.checkedEmails = [];
+    } else {
+      this.checkedEmails = emails;
+    }
+  }
+
+  /**
+   * Mark contractor as check
+   */
+  public check(email: EmailEntity): void {
+    const checkedEmails = this.checkedEmails;
+    const checked = checkedEmails.indexOf(email) !== -1;
+    if (checked) {
+      this.checkedEmails = checkedEmails
+        .filter(
+          (filterEmail: EmailEntity) => filterEmail.id !== email.id
+        );
+    } else {
+      this.checkedEmails = [...checkedEmails, email];
+    }
   }
 
   /**

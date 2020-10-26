@@ -5,6 +5,8 @@ import { InboxComponent } from './inbox/inbox.component';
 import { ReademailComponent } from './reademail/reademail.component';
 import { ComposeemailComponent } from './composeemail/composeemail.component';
 import { EmailsComponent } from '@pages/email/emails/emails.component';
+import { SentComponent } from '@pages/email/sent/sent.component';
+import { TrashComponent } from '@pages/email/trash/trash.component';
 
 const routes: Routes = [
   {
@@ -22,6 +24,14 @@ const routes: Routes = [
   {
     path: 'compose',
     component: ComposeemailComponent
+  },
+  {
+    path: 'sent',
+    component: SentComponent
+  },
+  {
+    path: 'trash',
+    component: TrashComponent
   }
 ];
 

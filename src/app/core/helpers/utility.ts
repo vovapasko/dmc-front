@@ -2,6 +2,8 @@ import { AbstractControl, Form } from '@angular/forms';
 import { Project } from '@models/instances/project';
 import { matchColor, percentage } from '@constants/formula';
 import { Payloads } from '@models/payloads/payload';
+import { EmailEntity } from '@models/instances/email';
+import { FROM } from '@constants/titles';
 
 export const toCamel = (str: string): string => {
   return str.replace(/([-_][a-z])/gi, (element: string) => {
@@ -11,6 +13,10 @@ export const toCamel = (str: string): string => {
       .replace('_', '');
   });
 };
+
+export function getSender(email: EmailEntity): string | null {
+  return email.payload.headers.find(header => header.name === FROM).value;
+}
 
 export const setAuthClasses = (): void => {
   const classes = ['authentication-bg', 'authentication-bg-pattern'];

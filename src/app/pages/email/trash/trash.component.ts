@@ -11,24 +11,21 @@ import { urls } from '@constants/urls';
 import { GetEmails } from '@store/actions/email.actions';
 import numbers from '@constants/numbers';
 import { selectLoading } from '@store/selectors/loading.selectors';
-import { emailMatches, TicketService } from '@services/ticket.service';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Contractor } from '@models/instances/contractor';
+import { emailMatches, TicketService } from '@services/ticket.service';
 
 @Component({
-  selector: 'app-inbox',
-  templateUrl: './inbox.component.html',
-  styleUrls: ['./inbox.component.scss']
+  selector: 'app-trash',
+  templateUrl: './trash.component.html',
+  styleUrls: ['./trash.component.scss']
 })
 
 /**
  * Inbox component - handling the email inbox with sidebar and content
  */
-export class InboxComponent implements OnInit {
-
-  // bread crumb items
+export class TrashComponent implements OnInit {
+// bread crumb items
   breadCrumbItems: Array<{}>;
-  checkedEmails$: BehaviorSubject<Array<EmailEntity>> = new BehaviorSubject([]);
 
   // paginated email data
   emailData: Array<EmailEntity>;
@@ -36,6 +33,7 @@ export class InboxComponent implements OnInit {
   emails$ = this.store.pipe(select(selectEmailsList));
   loading$ = this.store.select(selectLoading);
   loading = false;
+  checkedEmails$: BehaviorSubject<Array<EmailEntity>> = new BehaviorSubject([]);
 
   // page number
   page = 1;
@@ -59,6 +57,14 @@ export class InboxComponent implements OnInit {
   ) {
   }
 
+  public processEmails(emails: EmailEntity[]): void {
+    if (!emails) {
+      return;
+    }
+    this.emailData = emails;
+    this.totalRecords = emails.length;
+  }
+
   /**
    * Mark as checked all contractors in table
    */
@@ -73,15 +79,6 @@ export class InboxComponent implements OnInit {
     this.emailService.check(email);
   }
 
-
-  public processEmails(emails: EmailEntity[]): void {
-    if (!emails) {
-      return;
-    }
-    this.emailData = emails;
-    this.totalRecords = emails.length;
-  }
-
   ngOnInit() {
     this.checkedEmails$ = this.emailService.checkedEmails$;
     this.emailService.checkedEmails = [];
@@ -89,7 +86,7 @@ export class InboxComponent implements OnInit {
     this.service.searchTerm = '';
     this.service.records$ = this.emailService.emails$;
     this.tickets$ = this.service.tickets$;
-    this.breadCrumbItems = breadCrumbs.emails.inbox;
+    this.breadCrumbItems = breadCrumbs.emails.trash;
     this.store.select(selectLoading).subscribe(this.processLoading.bind(this));
     this.initSubscriptions();
     if (!this.emailService.selectedNewsEmail) {

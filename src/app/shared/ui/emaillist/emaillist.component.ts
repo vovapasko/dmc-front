@@ -3,8 +3,6 @@ import { EmailService } from '@services/email.service';
 import { select, Store } from '@ngrx/store';
 import { selectEmailsList, selectLabels } from '@store/selectors/email.selectors';
 import { IAppState } from '@store/state/app.state';
-import { emailList } from '@shared/ui/emaillist/data';
-import { EmailEntity } from '@models/instances/email';
 
 @Component({
   selector: 'app-emaillist',
@@ -13,7 +11,6 @@ import { EmailEntity } from '@models/instances/email';
 })
 export class EmaillistComponent implements OnInit {
   // Email left sidebar data
-  emailList = [];
   labels$ = this.store.pipe(select(selectLabels));
   emails$ = this.store.pipe(select(selectEmailsList));
 
@@ -24,6 +21,5 @@ export class EmaillistComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.emailList = emailList;
   }
 }

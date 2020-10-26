@@ -11,22 +11,20 @@ import { urls } from '@constants/urls';
 import { GetEmails } from '@store/actions/email.actions';
 import numbers from '@constants/numbers';
 import { selectLoading } from '@store/selectors/loading.selectors';
-import { emailMatches, TicketService } from '@services/ticket.service';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Contractor } from '@models/instances/contractor';
+import { emailMatches, TicketService } from '@services/ticket.service';
 
 @Component({
-  selector: 'app-inbox',
-  templateUrl: './inbox.component.html',
-  styleUrls: ['./inbox.component.scss']
+  selector: 'app-sent',
+  templateUrl: './sent.component.html',
+  styleUrls: ['./sent.component.scss']
 })
 
 /**
  * Inbox component - handling the email inbox with sidebar and content
  */
-export class InboxComponent implements OnInit {
-
-  // bread crumb items
+export class SentComponent implements OnInit {
+// bread crumb items
   breadCrumbItems: Array<{}>;
   checkedEmails$: BehaviorSubject<Array<EmailEntity>> = new BehaviorSubject([]);
 
@@ -59,6 +57,14 @@ export class InboxComponent implements OnInit {
   ) {
   }
 
+  public processEmails(emails: EmailEntity[]): void {
+    if (!emails) {
+      return;
+    }
+    this.emailData = emails;
+    this.totalRecords = emails.length;
+  }
+
   /**
    * Mark as checked all contractors in table
    */
@@ -73,23 +79,14 @@ export class InboxComponent implements OnInit {
     this.emailService.check(email);
   }
 
-
-  public processEmails(emails: EmailEntity[]): void {
-    if (!emails) {
-      return;
-    }
-    this.emailData = emails;
-    this.totalRecords = emails.length;
-  }
-
   ngOnInit() {
-    this.checkedEmails$ = this.emailService.checkedEmails$;
-    this.emailService.checkedEmails = [];
     this.service.matches = emailMatches;
+    this.emailService.checkedEmails = [];
+    this.checkedEmails$ = this.emailService.checkedEmails$;
     this.service.searchTerm = '';
     this.service.records$ = this.emailService.emails$;
     this.tickets$ = this.service.tickets$;
-    this.breadCrumbItems = breadCrumbs.emails.inbox;
+    this.breadCrumbItems = breadCrumbs.emails.sent;
     this.store.select(selectLoading).subscribe(this.processLoading.bind(this));
     this.initSubscriptions();
     if (!this.emailService.selectedNewsEmail) {

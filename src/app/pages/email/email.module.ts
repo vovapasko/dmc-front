@@ -31,10 +31,12 @@ import { NgxMaskModule } from 'ngx-mask';
 import { NestableModule } from 'ngx-nestable';
 import { SharedModule } from '@shared/shared.module';
 import { EmailsComponent } from '@pages/email/emails/emails.component';
+import { SentComponent } from '@pages/email/sent/sent.component';
+import { TrashComponent } from '@pages/email/trash/trash.component';
 
 
 @NgModule({
-  declarations: [InboxComponent, ReademailComponent, ComposeemailComponent, EmailsComponent],
+  declarations: [InboxComponent, ReademailComponent, ComposeemailComponent, EmailsComponent, SentComponent, TrashComponent],
   imports: [
     CommonModule,
     EmailRoutingModule,
