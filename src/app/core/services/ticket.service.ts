@@ -10,6 +10,7 @@ import { SearchResult } from '@models/instances/tickets.model';
 import { Hashtag } from '@models/instances/hashtag';
 import { EmailEntity } from '@models/instances/email';
 import { getSender } from '@helpers/utility';
+import { NewsProject } from '@models/instances/news-project';
 
 interface State {
   page: number;
@@ -61,6 +62,15 @@ export function clientMatches(ticket: TableData, term: string) {
 
 export function hashtagMatches(ticket: Hashtag, term: string): boolean {
   return ticket.name.toString().toLowerCase().includes(term);
+}
+
+export function newsProjectMatches(ticket: NewsProject, term: string): boolean {
+  return ticket.name.toString().toLowerCase().includes(term.toString().toLowerCase())
+    || ticket.manager.toString().toLowerCase().includes(term.toString().toLowerCase())
+    || ticket.budget.toString().toLowerCase().includes(term.toString().toLowerCase())
+    || ticket.dateCreated.toString().toLowerCase().includes(term.toString().toLowerCase())
+    || ticket.dateUpdated.toString().toLowerCase().includes(term.toString().toLowerCase())
+    || ticket.client?.name.toString().toLowerCase().includes(term.toString().toLowerCase());
 }
 
 export function emailMatches(ticket: EmailEntity, term: string) {
@@ -151,11 +161,11 @@ export class TicketService {
     return this._state.totalRecords;
   }
 
-  set matches(func: (ticket: TableData | Hashtag, term: string) => boolean) {
+  set matches(func: (ticket: TableData | Hashtag | NewsProject, term: string) => boolean) {
     this._matches = func;
   }
 
-  get matches(): (ticket: TableData | Hashtag, term: string) => boolean {
+  get matches(): (ticket: TableData | Hashtag | NewsProject, term: string) => boolean {
     return this._matches;
   }
 

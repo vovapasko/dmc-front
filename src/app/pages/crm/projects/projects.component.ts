@@ -5,7 +5,7 @@ import { selectHashtags } from '@store/selectors/news.selectors';
 import { Router } from '@angular/router';
 import { ErrorService } from '@services/error.service';
 import { LoadingService } from '@services/loading.service';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Orders } from '@constants/orders';
 import { ServerError } from '@models/responses/server/error';
 import { urls } from '@constants/urls';
@@ -42,6 +42,8 @@ import { NewsWavePrice } from '@models/instances/newsWavePrice';
 import { NewsWaves } from '@models/instances/news-waves';
 import { projectsTitle } from '@constants/titles';
 import { burstMethods } from '@constants/methods';
+import { hashtagMatches, newsProjectMatches, TicketService } from '@services/ticket.service';
+import { TableData } from '@models/instances/tickets.model';
 
 @Component({
   selector: 'app-projects',
@@ -74,6 +76,7 @@ export class ProjectsComponent implements OnInit {
   emails$ = this.store.pipe(select(selectEmailsList));
   news$ = this.store.pipe(select(selectProjectNews));
   project$ = this.store.pipe(select(selectNewsProject));
+  tickets$: Observable<TableData[]>;
   projectId: number;
 
   constructor(
@@ -83,11 +86,15 @@ export class ProjectsComponent implements OnInit {
     private loadingService: LoadingService,
     private titleService: Title,
     private projectService: ProjectService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    public ticketService: TicketService
   ) {
   }
 
   ngOnInit() {
+    this.ticketService.matches = newsProjectMatches;
+    this.ticketService.records$ = this.projectService.newsProjects$;
+    this.tickets$ = this.ticketService.tickets$;
     this.initBreadCrumbItems();
     this.initSubscriptions();
     this.setTitle(this.title);
