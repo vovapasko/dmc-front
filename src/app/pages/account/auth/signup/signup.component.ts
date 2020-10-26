@@ -15,7 +15,6 @@ import { NotificationService } from '@services/notification.service';
 import { SignupPayload } from '@models/payloads/user/signup';
 import { Warnings } from '@constants/notifications';
 import { ServerError } from '@models/responses/server/error';
-import numbers from '@constants/numbers';
 import { SIGNUP } from '@constants/titles';
 import { DateService } from '@services/date.service';
 

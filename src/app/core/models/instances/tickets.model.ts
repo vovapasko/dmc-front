@@ -10,6 +10,7 @@ export interface TableData {
   emails?: string;
   numbers?: string;
   name?: string;
+  isConfirmed?: boolean;
 }
 
 // Search Data

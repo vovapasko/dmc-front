@@ -1,8 +1,11 @@
+import { Hashtag } from '@models/instances/hashtag';
+
 export interface Client {
   id?: number;
-  ip: string;
-  port: number;
-  expire: string;
-  login: string;
-  password: string;
+  price?: string;
+  amountPublications?: number;
+  emails?: string;
+  numbers?: string;
+  name?: string;
+  hashtags?: Array<Hashtag>;
 }

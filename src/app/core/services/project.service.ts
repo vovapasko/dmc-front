@@ -18,9 +18,10 @@ import { DeleteNewsProjectPayload } from '@models/payloads/project/news-project/
 import { GetAllNewsProjectsResponse } from '@models/responses/project/news-project/getAll';
 import { GetNewsWavesPayload } from '@models/payloads/project/news/get';
 import { NewsWaves } from '@models/instances/news-waves';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { BaseService } from '@services/base.service';
 import numbers from '@constants/numbers';
+import { Hashtag } from '@models/instances/hashtag';
 
 const api = environment.api;
 
@@ -30,11 +31,23 @@ const api = environment.api;
 
 @Injectable({ providedIn: 'root' })
 export class ProjectService extends BaseService {
+
+  newsProjects$: BehaviorSubject<Array<NewsProject>> = new BehaviorSubject([]);
+
+
   constructor(
     private requestHandler: RequestHandler,
     public formBuilder: FormBuilder
   ) {
     super();
+  }
+
+  get newsProjects() {
+    return this.newsProjects$.getValue();
+  }
+
+  set newsProjects(value: Array<NewsProject>) {
+    this.newsProjects$.next(value);
   }
 
   /**
@@ -93,7 +106,11 @@ export class ProjectService extends BaseService {
       this.url(api, endpoints.NEWSPROJECTS),
       methods.GET,
       null,
-      (response: GetAllNewsProjectsResponse) => response.results
+      (response: GetAllNewsProjectsResponse) => {
+        const newsProjects = response.results;
+        this.newsProjects = newsProjects;
+        return newsProjects;
+      }
     );
   }
 
