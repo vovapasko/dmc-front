@@ -12,3 +12,7 @@ export const TITLE = 'title';
 export const TEXT = 'text';
 export const HIDE = 'hide';
 export const FROM = 'From';
+export const CONFIRM_EMAIL = 'Confirm email';
+export const LOGIN = 'Login';
+export const RESET_PASSWORD = 'Reset password';
+export const SIGNUP = 'Signup';

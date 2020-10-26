@@ -16,6 +16,7 @@ import { SignupPayload } from '@models/payloads/user/signup';
 import { Warnings } from '@constants/notifications';
 import { ServerError } from '@models/responses/server/error';
 import numbers from '@constants/numbers';
+import { SIGNUP } from '@constants/titles';
 
 /**
  * This component for sign up new user
@@ -28,7 +29,7 @@ import numbers from '@constants/numbers';
 })
 export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
   inviteSubscription: Subscription;
-  title = 'Signup';
+  title = SIGNUP;
   signupForm: FormGroup;
   submitted = false;
   invite = '';

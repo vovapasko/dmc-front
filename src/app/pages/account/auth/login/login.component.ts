@@ -15,6 +15,7 @@ import { ServerError } from '@models/responses/server/error';
 import { FacebookLoginProvider, GoogleLoginProvider } from 'angularx-social-login';
 import { SocialAuthService } from 'angularx-social-login';
 import numbers from '@constants/numbers';
+import { LOGIN } from '@constants/titles';
 
 /**
  * This component for login user in crm
@@ -26,7 +27,7 @@ import numbers from '@constants/numbers';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit, AfterViewInit {
-  title = 'Login';
+  title = LOGIN;
   loginForm: FormGroup;
   submitted = false;
   loading$: Subject<boolean>;

@@ -15,6 +15,7 @@ import { setAuthClasses } from '@helpers/utility';
 import { ConfirmResetPasswordPayload } from '@models/payloads/user/confirm-reset-password';
 import { ServerError } from '@models/responses/server/error';
 import numbers from '@constants/numbers';
+import { RESET_PASSWORD } from '@constants/titles';
 
 /**
  * This component for change user password
@@ -28,7 +29,7 @@ import numbers from '@constants/numbers';
 export class PasswordResetComponent implements OnInit, AfterViewInit, OnDestroy {
   routeSubscription: Subscription;
   confirm = '';
-  title = 'Reset password';
+  title = RESET_PASSWORD;
   resetForm: FormGroup;
   submitted = false;
   loading$: Subject<boolean>;

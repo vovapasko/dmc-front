@@ -2,6 +2,7 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { setAuthClasses } from '@helpers/utility';
 import numbers from '@constants/numbers';
+import { CONFIRM_EMAIL } from '@constants/titles';
 
 /**
  * This component informs a user that him password was changed
@@ -13,7 +14,7 @@ import numbers from '@constants/numbers';
   styleUrls: ['./confirm.component.scss'],
 })
 export class ConfirmComponent implements OnInit, AfterViewInit {
-  title = 'Confirm email';
+  title = CONFIRM_EMAIL;
   currentYear: number;
   startYear: number;
 
