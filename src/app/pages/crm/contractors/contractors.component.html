@@ -17,6 +17,12 @@
                         </div>
                         <div class="col-md-10">
                             <div class="text-md-right">
+                                <div class="btn-group mb-3 ml-1">
+                                    <button type="button" (click)="openModal(createModal)" class="btn btn-danger mb-3">
+                                        <i class="mdi mdi-basket mr-1"></i>
+                                        Добавить контрагента
+                                    </button>
+                                </div>
                                 <div class="dropdown float-right" ngbDropdown>
                                     <a
                                             href="javascript: void(0);"
@@ -27,14 +33,6 @@
                                         <i class="mdi mdi-dots-vertical m-0 text-muted h3"></i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
-                                        <!-- item-->
-                                        <a href="javascript:void(0);"
-                                           class="dropdown-item"
-                                           (click)="openModal(createModal)"
-                                        >
-                                            <i class="mdi mdi-basket mr-1"></i>
-                                            Добавить контрагента
-                                        </a>
                                         <!-- item-->
                                         <a href="javascript:void(0);"
                                            class="dropdown-item"
