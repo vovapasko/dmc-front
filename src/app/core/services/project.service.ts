@@ -212,7 +212,8 @@ export class ProjectService extends BaseService {
       email: [null, Validators.required],
       template: null,
       signature: null,
-      codeword: null
+      codeword: null,
+      password: null
     });
   }
 

@@ -43,7 +43,7 @@ export class EmailsComponent implements OnInit {
   submitted: boolean;
   newsEmails$ = this.store.pipe(select(selectNewsEmails));
   createEmailForm: FormGroup;
-
+  visible: boolean;
   loading$: Subject<boolean>;
   error$: Subject<ServerError>;
 
