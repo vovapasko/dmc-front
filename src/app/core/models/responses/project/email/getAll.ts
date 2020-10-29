@@ -1,5 +1,5 @@
-import { Email } from '../../../instances/email';
+import { Email } from '@models/instances/email';
 
 export interface GetAllEmailsResponse {
-  results: Email[]
+  results: Email[];
 }

@@ -7,6 +7,7 @@ export interface Email {
   signature: string;
   codeword: string;
   gmailCredentials: string | null;
+  password?: string | null;
 }
 
 export interface EmailEntity {

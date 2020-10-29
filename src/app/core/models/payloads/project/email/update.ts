@@ -4,5 +4,6 @@ export interface UpdateEmailPayload {
     email: string;
     template?: string;
     signature?: string;
+    password?: string;
   };
 }

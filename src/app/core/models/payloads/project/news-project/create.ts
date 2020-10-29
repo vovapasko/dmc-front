@@ -1,6 +1,6 @@
-import { Hashtag } from '../../../instances/hashtag';
-import { Contractor } from '../../../instances/contractor';
-import { Email } from '../../../instances/email';
+import { Hashtag } from '@models/instances/hashtag';
+import { Contractor } from '@models/instances/contractor';
+import { Email } from '@models/instances/email';
 
 export interface CreateNewsProjectPayload {
   data: {

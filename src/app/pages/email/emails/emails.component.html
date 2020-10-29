@@ -26,6 +26,9 @@
                 <div class="row align-items-center">
                     <div class="col-sm-4">
                         <div class="media">
+
+                            <!-- Gmail controller -->
+
                             <a *ngIf="email.gmailCredentials;" href="javascript: void(0);"
                                (click)="openInbox(email)"
                             >
@@ -33,8 +36,23 @@
                                      alt="Generic placeholder image" height="64">
                             </a>
 
-                            <img *ngIf="!email.gmailCredentials" class="d-flex align-self-center mr-3"
-                                 [src]="getMailImage(email)" alt="Generic placeholder image" height="64">
+                            <!-- end Gmail controller -->
+
+                            <!-- not Gmail, not Proton controller  -->
+
+                            <img *ngIf="!email.email.includes('protonmail') && !email.gmailCredentials" class="d-flex align-self-center mr-3" [src]="getMailImage(email)" alt="Generic placeholder image" height="64">
+
+                            <!-- end not Gmail, not Proton controller -->
+
+
+                            <!-- Protonmail controller -->
+
+                            <a *ngIf="email.email.includes('protonmail');" target="_blank" href="https://mail.protonmail.com/login">
+                                <img class="d-flex align-self-center mr-3" [src]="getMailImage(email)"
+                                     alt="Generic placeholder image" height="64">
+                            </a>
+
+                            <!-- end Protonmail controller -->
 
 
                             <div class="media-body">
@@ -53,8 +71,14 @@
                             {{ email.email }}
                         </p>
                         <p class="mb-0"><i class="fa fa-hashtag" aria-hidden="true"></i>{{ email.codeword }}</p>
+                        <p *ngIf="email.email.includes('protonmail');" class="mb-0">
+                            <i *ngIf="showPasswordEmails.indexOf(email) === -1" class="fa fa-lock" (click)="showPassword(email)" aria-hidden="true"></i>
+                            <i *ngIf="showPasswordEmails.indexOf(email) !== -1" class="fa fa-lock-open" (click)="hidePassword(email)" aria-hidden="true"></i>
+                            <span *ngIf="showPasswordEmails.indexOf(email) !== -1">{{email.password}}</span>
+                            <span *ngIf="showPasswordEmails.indexOf(email) === -1">********</span>
+                        </p>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-6" *ngIf="email.email.includes('gmail')">
                         <div class="text-sm-right">
                             <a *ngIf="!email.gmailCredentials"
                                href="javascript: void(0);"
@@ -155,6 +179,31 @@
                         <div *ngIf="createEmailControls.signature.errors.required">Поле подписи обязательно</div>
                     </div>
                 </div>
+
+
+                <div class="form-group mb-3">
+                    <label for="password">Пароль (для protonmail)</label>
+
+                    <div class="input-group" data-placement="top" data-align="top">
+                        <input type="text"
+                               formControlName="password"
+                               class="form-control"
+                               [ngClass]="{ 'is-invalid': submitted && createEmailControls.password.errors }"
+                               id="password"
+                               required
+                               [type]="visible ? 'text' : 'password'"
+                               placeholder="Введите пароль"
+                        />
+                        <div class="input-group-append">
+                            <a (click)="visible = !visible">
+                                <span *ngIf="!visible" class="input-group-text"><i class="mdi mdi-eye"></i></span>
+                                <span *ngIf="visible" class="input-group-text"><i
+                                        class="mdi mdi-eye-off"></i></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
 
                 <div class="text-right">
                     <button type="submit" class="btn btn-success">Сохранить</button>
