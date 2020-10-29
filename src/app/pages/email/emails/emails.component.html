@@ -33,9 +33,12 @@
                                      alt="Generic placeholder image" height="64">
                             </a>
 
-                            <img *ngIf="!email.gmailCredentials" class="d-flex align-self-center mr-3"
-                                 [src]="getMailImage(email)" alt="Generic placeholder image" height="64">
+                            <img *ngIf="!email.email.includes('protonmail') && !email.gmailCredentials" class="d-flex align-self-center mr-3" [src]="getMailImage(email)" alt="Generic placeholder image" height="64">
 
+                            <a *ngIf="email.email.includes('protonmail');" target="_blank" href="https://mail.protonmail.com/login">
+                                <img class="d-flex align-self-center mr-3" [src]="getMailImage(email)"
+                                     alt="Generic placeholder image" height="64">
+                            </a>
 
                             <div class="media-body">
                                 <p class="mb-1"><b>Шаблон:</b> {{ email.template}}</p>
