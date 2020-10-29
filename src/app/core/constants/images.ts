@@ -7,7 +7,14 @@ export default {
 };
 
 export const getMailImageIcon = (email: Email) => {
-  return email.email.includes(GMAIL) ? 'assets/images/companies/gmail.png' : 'assets/images/companies/mail2.png';
+  if (email.email.includes(GMAIL)) {
+    return 'assets/images/companies/gmail.png';
+  }
+  if(email.email.includes(PROTON)) {
+    return 'assets/images/companies/proton.png';
+  }
+  return 'assets/images/companies/mail2.png';
 };
 
 export const GMAIL = 'gmail';
+export const PROTON = 'protonmail';
