@@ -46,6 +46,7 @@ export class EmailsComponent implements OnInit {
   visible: boolean;
   loading$: Subject<boolean>;
   error$: Subject<ServerError>;
+  showPasswordEmails = [];
 
   constructor(
     private modalService: NgbModal,
@@ -63,6 +64,18 @@ export class EmailsComponent implements OnInit {
     this.error$ = this.errorService.error$;
     this._fetchData();
     this.initCreateEmailForm();
+  }
+
+  public showPassword(email: Email): void {
+    if (this.showPasswordEmails.indexOf(email) === -1) {
+      this.showPasswordEmails.push(email);
+    }
+  }
+
+  public hidePassword(email: Email): void {
+    if (this.showPasswordEmails.indexOf(email) !== -1) {
+      this.showPasswordEmails = this.showPasswordEmails.filter(emailElement => emailElement.id !== email.id);
+    }
   }
 
   public initCreateEmailForm(): void {
