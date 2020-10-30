@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Contractor } from '../../core/models/instances/contractor';
+import { Contractor } from '@models/instances/contractor';
 
 @Pipe({ name: 'contractorsNames' })
 export class ContractorsNamesPipe implements PipeTransform {

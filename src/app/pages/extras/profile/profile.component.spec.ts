@@ -2,18 +2,18 @@ import { ProfileComponent } from './profile.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CommonModule } from '@angular/common';
 import { ExtrasRoutingModule } from '../extras-routing.module';
-import { UIModule } from '../../../shared/ui/ui.module';
+import { UIModule } from '@shared/ui/ui.module';
 import { NgbAlertModule, NgbProgressbarModule, NgbTabsetModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from '../../../shared/shared.module';
+import { SharedModule } from '@shared/shared.module';
 import { HttpClient, HttpHandler } from '@angular/common/http';
-import { AuthenticationService } from '../../../core/services/auth.service';
+import { AuthenticationService } from '@services/auth.service';
 import { Title } from '@angular/platform-browser';
-import { ErrorService } from '../../../core/services/error.service';
-import { LoadingService } from '../../../core/services/loading.service';
+import { ErrorService } from '@services/error.service';
+import { LoadingService } from '@services/loading.service';
 import { Store, StoreModule } from '@ngrx/store';
-import { NotificationService } from '../../../core/services/notification.service';
-import { UserService } from '../../../core/services/user.service';
+import { NotificationService } from '@services/notification.service';
+import { UserService } from '@services/user.service';
 import { RouterTestingModule } from '@angular/router/testing';
 
 describe('ProfileComponent', () => {

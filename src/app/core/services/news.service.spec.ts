@@ -6,7 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { environment } from '../../../environments/environment';
 import { PaginationService } from './pagination.service';
-import { RequestHandler } from '../helpers/request-handler';
+import { RequestHandler } from '@helpers/request-handler';
 import { NewsService } from './news.service';
 import { NotificationService } from './notification.service';
 

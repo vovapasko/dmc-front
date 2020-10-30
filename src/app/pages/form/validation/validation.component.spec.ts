@@ -4,7 +4,7 @@ import { ValidationComponent } from './validation.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxEditorModule } from 'ngx-editor';
-import { UIModule } from '../../../shared/ui/ui.module';
+import { UIModule } from '@shared/ui/ui.module';
 import { NgbDatepickerModule, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { UiSwitchModule } from 'ngx-ui-switch';

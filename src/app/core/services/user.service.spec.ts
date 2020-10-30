@@ -18,8 +18,8 @@ import {
 import { PaginationService } from './pagination.service';
 import { CookieService } from '../providers/cookie.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RequestHandler } from '../helpers/request-handler';
-import { RouterStub } from '../helpers/router-stub';
+import { RequestHandler } from '@helpers/request-handler';
+import { RouterStub } from '@helpers/router-stub';
 
 describe('UserService', () => {
   let injector: TestBed;

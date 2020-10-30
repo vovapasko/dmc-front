@@ -12,7 +12,7 @@ import {
   NgbTypeaheadModule
 } from '@ng-bootstrap/ng-bootstrap';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { UIModule } from '../../../shared/ui/ui.module';
+import { UIModule } from '@shared/ui/ui.module';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Store, StoreModule } from '@ngrx/store';
@@ -27,7 +27,7 @@ import { FileUploadModule } from '@iplab/ngx-file-upload';
 import { ArchwizardModule } from 'angular-archwizard';
 import { NgxMaskModule } from 'ngx-mask';
 import { NestableModule } from 'ngx-nestable';
-import { SharedModule } from '../../../shared/shared.module';
+import { SharedModule } from '@shared/shared.module';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { AuthenticationService } from '@services/auth.service';
 import { Title } from '@angular/platform-browser';

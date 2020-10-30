@@ -1,8 +1,8 @@
 import { UsersComponent } from './users.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CommonModule } from '@angular/common';
-import { User } from '../../../core/models/instances/user.models';
-import { Groups } from '../../../core/models/instances/groups';
+import { User } from '@models/instances/user.models';
+import { Groups } from '@models/instances/groups';
 import { RouterModule } from '@angular/router';
 import {
   NgbAlertModule, NgbDatepickerModule,
@@ -12,7 +12,7 @@ import {
   NgbTypeaheadModule
 } from '@ng-bootstrap/ng-bootstrap';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { UIModule } from '../../../shared/ui/ui.module';
+import { UIModule } from '@shared/ui/ui.module';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Store, StoreModule } from '@ngrx/store';
@@ -27,14 +27,14 @@ import { FileUploadModule } from '@iplab/ngx-file-upload';
 import { ArchwizardModule } from 'angular-archwizard';
 import { NgxMaskModule } from 'ngx-mask';
 import { NestableModule } from 'ngx-nestable';
-import { SharedModule } from '../../../shared/shared.module';
+import { SharedModule } from '@shared/shared.module';
 import { HttpClient, HttpHandler } from '@angular/common/http';
-import { AuthenticationService } from '../../../core/services/auth.service';
+import { AuthenticationService } from '@services/auth.service';
 import { Title } from '@angular/platform-browser';
-import { ErrorService } from '../../../core/services/error.service';
-import { LoadingService } from '../../../core/services/loading.service';
-import { NotificationService } from '../../../core/services/notification.service';
-import { NewsService } from '../../../core/services/news.service';
+import { ErrorService } from '@services/error.service';
+import { LoadingService } from '@services/loading.service';
+import { NotificationService } from '@services/notification.service';
+import { NewsService } from '@services/news.service';
 
 describe('UsersComponent', () => {
   let component: UsersComponent;

@@ -1,4 +1,4 @@
-import { NewsProject } from '../../../instances/news-project';
+import { NewsProject } from '@models/instances/news-project';
 
 export interface GetAllNewsProjectsResponse {
   results: NewsProject[]

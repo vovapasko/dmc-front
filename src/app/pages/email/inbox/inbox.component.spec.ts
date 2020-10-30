@@ -27,7 +27,7 @@ import { FileUploadModule } from '@iplab/ngx-file-upload';
 import { ArchwizardModule } from 'angular-archwizard';
 import { NgxMaskModule } from 'ngx-mask';
 import { NestableModule } from 'ngx-nestable';
-import { SharedModule } from '../../../shared/shared.module';
+import { SharedModule } from '@shared/shared.module';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { AuthenticationService } from '@services/auth.service';
 import { Title } from '@angular/platform-browser';
