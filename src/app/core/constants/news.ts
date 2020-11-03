@@ -14,7 +14,10 @@ export const newsFieldReplacer = {
     return value.replace(/<p>(.*?)<\/p>/g, replacer);
   },
   text(value, replacer): string {
-    return value.replace(/^.+?<img/g, replacer).replace('> src=', '> <img src=');
+    if (value.indexOf('base64') !== -1) {
+      return value.replace(/^.+?<img/g, replacer).replace('> src=', '> <img src=');
+    }
+    return value.replace(/<p>(.*?)<\/p>/g, replacer);
   }
 };
 
