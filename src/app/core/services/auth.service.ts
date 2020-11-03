@@ -18,6 +18,7 @@ import { errorMessages, errors, errorTitle } from '@constants/error';
 import numbers from '@constants/numbers';
 import { urls } from '@constants/urls';
 import { methods } from '@constants/methods';
+import { NotificationService } from '@services/notification.service';
 
 const api = environment.api;
 
@@ -41,7 +42,8 @@ export class AuthenticationService {
     private requestHandler: RequestHandler,
     private userService: UserService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) {
     this.returnUrl = this.route.snapshot.queryParams.returnUrl || urls.ROOT;
   }
@@ -91,6 +93,8 @@ export class AuthenticationService {
     // remove user from local storage to log user out
     this.cookieService.deleteCookie(CURRENT_USER);
     this.userService.user = null;
+    this.notificationService.history = [];
+    this.notificationService.notifications = [];
   }
 
   /**
