@@ -4,13 +4,29 @@ import { of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { EmailService } from '@services/email.service';
 import {
-  CreateNewsEmail, CreateNewsEmailSuccess,
-  EEmailActions, GetEmails, GetEmailsSuccess, GetNewsEmails, GetNewsEmailsSuccess, GetSent, GetSentSuccess, GetTrash, GetTrashSuccess,
+  CreateNewsEmail,
+  CreateNewsEmailSuccess,
+  EEmailActions,
+  GetEmails,
+  GetEmailsSuccess,
+  GetNewsEmails,
+  GetNewsEmailsSuccess,
+  GetSent,
+  GetSentSuccess,
+  GetTrash,
+  GetTrashSuccess,
   GmailAuth,
   GmailAuthSuccess,
   GmailCredsClear,
   GmailCredsClearSuccess,
-  GmailTokenRevoke, GmailTokenRevokeSuccess, SelectEmail, SelectEmailSuccess, SelectNewsEmail, SelectNewsEmailSuccess
+  GmailTokenRevoke,
+  GmailTokenRevokeSuccess,
+  SelectEmail,
+  SelectEmailSuccess,
+  SelectNewsEmail,
+  SelectNewsEmailSuccess,
+  TrashEmail,
+  TrashEmailSuccess
 } from '@store/actions/email.actions';
 import { GmailAuthResponse } from '@models/instances/gmail-auth-response';
 import { AuthPayload } from '@models/payloads/email/auth';
@@ -18,6 +34,7 @@ import { Email, EmailEntity } from '@models/instances/email';
 import { CreateEmailPayload } from '@models/payloads/project/email/create';
 import { GetEmailsPayload } from '@models/payloads/email/get-emails';
 import { GetEmailsResponse } from '@models/responses/email/get-emails';
+import { TrashPayload } from '@models/payloads/email/trash';
 
 @Injectable({
   providedIn: 'root'
@@ -63,6 +80,13 @@ export class EmailEffects {
     ofType<GetSent>(EEmailActions.GetSent),
     switchMap((action: { payload: GetEmailsPayload }) => this.emailService.getSent(action.payload)),
     switchMap((response: GetEmailsResponse) => of(new GetSentSuccess(response)))
+  );
+
+  @Effect()
+  trashEmail$ = this.actions$.pipe(
+    ofType<TrashEmail>(EEmailActions.TrashEmail),
+    switchMap((action: { payload: TrashPayload }) => this.emailService.trashEmail(action.payload)),
+    switchMap((response: TrashPayload) => of(new TrashEmailSuccess(response)))
   );
 
   @Effect()
