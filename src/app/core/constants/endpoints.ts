@@ -27,6 +27,7 @@ export const endpoints = {
   COMMENTS: 'comments',
   MAILS: 'emails/inbox',
   TRASH: 'emails/trash',
+  SENT: 'emails/sent',
   GMAIL_AUTH: 'emails/gmail-auth',
   GMAIL_CREDS_CLEAR: 'emails/gmail-creds-clear',
   GMAIL_TOKEN_REVOKE: 'emails/gmail-token-revoke',

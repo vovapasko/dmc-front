@@ -32,6 +32,7 @@ export class EmailService extends BaseService {
   newsEmails$: BehaviorSubject<Array<Email>> = new BehaviorSubject([]);
   emails$: BehaviorSubject<Array<EmailEntity>> = new BehaviorSubject([]);
   trash$: BehaviorSubject<Array<EmailEntity>> = new BehaviorSubject([]);
+  sent$: BehaviorSubject<Array<EmailEntity>> = new BehaviorSubject([]);
   labels$: BehaviorSubject<Array<Label>> = new BehaviorSubject([]);
   selectedEmail$: BehaviorSubject<EmailEntity> = new BehaviorSubject(null);
   selectedNewsEmail$: BehaviorSubject<Email> = new BehaviorSubject(null);
@@ -86,6 +87,14 @@ export class EmailService extends BaseService {
 
   set emails(value: Array<EmailEntity>) {
     this.emails$.next(value);
+  }
+
+  get sent() {
+    return this.sent$.getValue();
+  }
+
+  set sent(value: Array<EmailEntity>) {
+    this.sent$.next(value);
   }
 
   get trash() {
@@ -155,6 +164,23 @@ export class EmailService extends BaseService {
       null,
       (response: GetEmailsResponse) => {
         this.trash = [...this.emails, ...response.messages];
+        this.previousPageToken = this.nextPageToken$.getValue();
+        this.nextPageToken = response.nextPageToken;
+        return response;
+      }
+    );
+  }
+
+  /**
+   *  Get emails
+   */
+  public getSent(payload: GetEmailsPayload): Observable<GetEmailsResponse> {
+    return this.requestHandler.request(
+      this.url(api, endpoints.SENT, null, payload),
+      methods.GET,
+      null,
+      (response: GetEmailsResponse) => {
+        this.sent = [...this.emails, ...response.messages];
         this.previousPageToken = this.nextPageToken$.getValue();
         this.nextPageToken = response.nextPageToken;
         return response;
