@@ -48,6 +48,12 @@ export const emailReducers = (state = initialEmailState, action: EmailActions): 
         sent: state.sent.filter(message => action.payload.data.ids.indexOf(message.id) !== -1),
       };
     }
+    case EEmailActions.UntrashEmailSuccess: {
+      return {
+        ...state,
+        trash: state.trash.filter(message => action.payload.data.ids.indexOf(message.id) !== -1),
+      };
+    }
     case EEmailActions.GetNewsEmailsSuccess: {
       return {
         ...state,

@@ -26,7 +26,7 @@ import {
   SelectNewsEmail,
   SelectNewsEmailSuccess,
   TrashEmail,
-  TrashEmailSuccess
+  TrashEmailSuccess, UntrashEmail, UntrashEmailSuccess
 } from '@store/actions/email.actions';
 import { GmailAuthResponse } from '@models/instances/gmail-auth-response';
 import { AuthPayload } from '@models/payloads/email/auth';
@@ -87,6 +87,13 @@ export class EmailEffects {
     ofType<TrashEmail>(EEmailActions.TrashEmail),
     switchMap((action: { payload: TrashPayload }) => this.emailService.trashEmail(action.payload)),
     switchMap((response: TrashPayload) => of(new TrashEmailSuccess(response)))
+  );
+
+  @Effect()
+  untrashEmail$ = this.actions$.pipe(
+    ofType<UntrashEmail>(EEmailActions.UntrashEmail),
+    switchMap((action: { payload: TrashPayload }) => this.emailService.untrashEmail(action.payload)),
+    switchMap((response: TrashPayload) => of(new UntrashEmailSuccess(response)))
   );
 
   @Effect()

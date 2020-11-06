@@ -17,6 +17,7 @@
                 <div class="inbox-rightbar">
                     <app-widget (reloadEvent)="this.reload()"
                                 (searchEvent)="this.search($event)"
+                                (untrashEvent)="this.untrash()"
                                 [showMoveToTrashButton]="false"
                                 [showRemoveButton]="!!(checkedEmails$ | async)?.length"
                                 [showResetButton]="!!(checkedEmails$ | async)?.length"

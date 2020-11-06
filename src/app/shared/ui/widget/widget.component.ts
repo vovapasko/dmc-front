@@ -17,6 +17,7 @@ export class WidgetComponent implements OnInit {
   @Output() reloadEvent = new EventEmitter<null>();
   @Output() removeEvent = new EventEmitter<null>();
   @Output() trashEvent = new EventEmitter<null>();
+  @Output() untrashEvent = new EventEmitter<null>();
   @Output() searchEvent = new EventEmitter<string>();
 
 
@@ -40,7 +41,11 @@ export class WidgetComponent implements OnInit {
   }
 
   public trash(): void {
-    this.removeEvent.emit();
+    this.trashEvent.emit();
+  }
+
+  public untrash(): void {
+    this.untrashEvent.emit();
   }
 
   public search(): void {
