@@ -54,6 +54,14 @@ export const emailReducers = (state = initialEmailState, action: EmailActions): 
         trash: state.trash.filter(message => action.payload.data.ids.indexOf(message.id) !== -1),
       };
     }
+    case EEmailActions.RemoveEmailSuccess: {
+      return {
+        ...state,
+        trash: state.trash.filter(message => action.payload.data.ids.indexOf(message.id) !== -1),
+        sent: state.sent.filter(message => action.payload.data.ids.indexOf(message.id) !== -1),
+        emails: state.emails.filter(message => action.payload.data.ids.indexOf(message.id) !== -1),
+      };
+    }
     case EEmailActions.GetNewsEmailsSuccess: {
       return {
         ...state,

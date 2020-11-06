@@ -20,7 +20,7 @@ import {
   GmailCredsClear,
   GmailCredsClearSuccess,
   GmailTokenRevoke,
-  GmailTokenRevokeSuccess,
+  GmailTokenRevokeSuccess, RemoveEmail, RemoveEmailSuccess,
   SelectEmail,
   SelectEmailSuccess,
   SelectNewsEmail,
@@ -94,6 +94,13 @@ export class EmailEffects {
     ofType<UntrashEmail>(EEmailActions.UntrashEmail),
     switchMap((action: { payload: TrashPayload }) => this.emailService.untrashEmail(action.payload)),
     switchMap((response: TrashPayload) => of(new UntrashEmailSuccess(response)))
+  );
+
+  @Effect()
+  removeEmail$ = this.actions$.pipe(
+    ofType<RemoveEmail>(EEmailActions.RemoveEmail),
+    switchMap((action: { payload: TrashPayload }) => this.emailService.removeEmail(action.payload)),
+    switchMap((response: TrashPayload) => of(new RemoveEmailSuccess(response)))
   );
 
   @Effect()
