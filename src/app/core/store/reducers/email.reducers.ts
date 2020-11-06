@@ -41,6 +41,13 @@ export const emailReducers = (state = initialEmailState, action: EmailActions): 
         nextPageToken: action.payload.nextPageToken
       };
     }
+    case EEmailActions.TrashEmailSuccess: {
+      return {
+        ...state,
+        emails: state.emails.filter(message => message.id !== action.payload.id),
+        sent: state.sent.filter(message => message.id !== action.payload.id),
+      };
+    }
     case EEmailActions.GetNewsEmailsSuccess: {
       return {
         ...state,
