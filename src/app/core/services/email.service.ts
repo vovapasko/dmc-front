@@ -211,6 +211,17 @@ export class EmailService extends BaseService {
     );
   }
 
+  public removeEmail(payload: TrashPayload): Observable<TrashPayload> {
+    return this.requestHandler.request(
+      this.url(api, endpoints.REMOVE),
+      methods.POST,
+      payload,
+      (response: null) => {
+        return payload;
+      }
+    );
+  }
+
   /**
    * Create email
    */
