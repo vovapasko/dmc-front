@@ -11,6 +11,8 @@ export enum EEmailActions {
   GetEmailsSuccess = '[Email] Get emails success',
   GetTrash = '[Email] Get trash',
   GetTrashSuccess = '[Email] Get trash success',
+  GetSent = '[Email] Get sent',
+  GetSentSuccess = '[Email] Get sent success',
   GetNewsEmails = '[Email] Get news emails',
   GetNewsEmailsSuccess = '[Email] Get news emails success',
   CreateNewsEmail = '[Email] Create news email',
@@ -157,6 +159,21 @@ export class GetTrashSuccess implements Action {
 }
 
 
+export class GetSent implements Action {
+  public readonly type = EEmailActions.GetSent;
+
+  constructor(public payload: GetEmailsPayload) {
+  }
+}
+
+export class GetSentSuccess implements Action {
+  public readonly type = EEmailActions.GetSentSuccess;
+
+  constructor(public payload: GetEmailsResponse) {
+  }
+}
+
+
 export type EmailActions =
   | GmailAuth
   | GmailAuthSuccess
@@ -175,4 +192,6 @@ export type EmailActions =
   | SelectNewsEmail
   | SelectNewsEmailSuccess
   | GetTrash
-  | GetTrashSuccess;
+  | GetTrashSuccess
+  | GetSent
+  | GetSentSuccess;
