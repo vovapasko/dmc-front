@@ -8,7 +8,7 @@ import { EmailEntity } from '@models/instances/email';
 import { EmailService } from '@services/email.service';
 import { Router } from '@angular/router';
 import { urls } from '@constants/urls';
-import { GetEmails } from '@store/actions/email.actions';
+import { GetEmails, TrashEmail } from '@store/actions/email.actions';
 import numbers from '@constants/numbers';
 import { selectLoading } from '@store/selectors/loading.selectors';
 import { emailMatches, TicketService } from '@services/ticket.service';
@@ -106,7 +106,8 @@ export class InboxComponent implements OnInit {
   }
 
   public trash(): void {
-    // TODO
+    const payload = { data: { ids: this.emailService.checkedEmails.map((email: EmailEntity) => email.id) } };
+    this.store.dispatch(new TrashEmail(payload));
   }
 
   /**

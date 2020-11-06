@@ -192,7 +192,18 @@ export class EmailService extends BaseService {
   public trashEmail(payload: TrashPayload): Observable<TrashPayload> {
     return this.requestHandler.request(
       this.url(api, endpoints.TRASH),
-      methods.DELETE,
+      methods.POST,
+      payload,
+      (response: null) => {
+        return payload;
+      }
+    );
+  }
+
+  public untrashEmail(payload: TrashPayload): Observable<TrashPayload> {
+    return this.requestHandler.request(
+      this.url(api, endpoints.UNTRASH),
+      methods.POST,
       payload,
       (response: null) => {
         return payload;

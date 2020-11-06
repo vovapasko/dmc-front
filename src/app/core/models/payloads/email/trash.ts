@@ -1,3 +1,5 @@
 export interface TrashPayload {
-  id?: number;
+  data: {
+    ids?: Array<number>
+  };
 }

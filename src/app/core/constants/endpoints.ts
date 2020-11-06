@@ -28,6 +28,7 @@ export const endpoints = {
   MAILS: 'emails/inbox',
   TRASH: 'emails/trash',
   SENT: 'emails/sent',
+  UNTRASH: 'emails/untrash',
   GMAIL_AUTH: 'emails/gmail-auth',
   GMAIL_CREDS_CLEAR: 'emails/gmail-creds-clear',
   GMAIL_TOKEN_REVOKE: 'emails/gmail-token-revoke',

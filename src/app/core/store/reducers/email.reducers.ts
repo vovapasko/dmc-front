@@ -44,8 +44,8 @@ export const emailReducers = (state = initialEmailState, action: EmailActions): 
     case EEmailActions.TrashEmailSuccess: {
       return {
         ...state,
-        emails: state.emails.filter(message => message.id !== action.payload.id),
-        sent: state.sent.filter(message => message.id !== action.payload.id),
+        emails: state.emails.filter(message => action.payload.data.ids.indexOf(message.id) !== -1),
+        sent: state.sent.filter(message => action.payload.data.ids.indexOf(message.id) !== -1),
       };
     }
     case EEmailActions.GetNewsEmailsSuccess: {
