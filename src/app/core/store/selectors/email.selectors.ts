@@ -12,3 +12,4 @@ export const selectSelectedNewsEmail = createSelector(selectEmails, (state: IEma
 export const selectAuthenticationUrl = createSelector(selectEmails, (state: IEmailState) => state.authenticationUrl);
 export const selectNextPageToken = createSelector(selectEmails, (state: IEmailState) => state.nextPageToken);
 export const selectPreviousPageToken = createSelector(selectEmails, (state: IEmailState) => state.previousPageToken);
+export const selectTrashList = createSelector(selectEmails, (state: IEmailState) => state ? state.trash : []);

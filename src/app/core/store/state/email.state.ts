@@ -4,6 +4,7 @@ import { Label } from '@models/instances/labels';
 export interface IEmailState {
   newsEmails: Email[];
   emails: EmailEntity[];
+  trash: EmailEntity[];
   selectedEmail: EmailEntity;
   selectNewsEmail: Email;
   authenticationUrl: string;
@@ -15,6 +16,7 @@ export interface IEmailState {
 export const initialEmailState: IEmailState = {
   newsEmails: [],
   emails: [],
+  trash: [],
   labels: [],
   selectedEmail: null,
   selectNewsEmail: null,

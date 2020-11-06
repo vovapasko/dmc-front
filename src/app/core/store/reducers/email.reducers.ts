@@ -10,6 +10,14 @@ export const emailReducers = (state = initialEmailState, action: EmailActions): 
         selectedEmail: action.payload
       };
     }
+    case EEmailActions.GetTrashSuccess: {
+      return {
+        ...state,
+        trash: action.payload.messages,
+        previousPageToken: state.nextPageToken,
+        nextPageToken: action.payload.nextPageToken
+      };
+    }
     case EEmailActions.SelectNewsEmailSuccess: {
       return {
         ...state,
@@ -22,7 +30,7 @@ export const emailReducers = (state = initialEmailState, action: EmailActions): 
         emails: action.payload.messages,
         labels: action.payload.labels,
         previousPageToken: state.nextPageToken,
-        nextPageToken: action.payload.nextPageToken,
+        nextPageToken: action.payload.nextPageToken
       };
     }
     case EEmailActions.GetNewsEmailsSuccess: {
@@ -34,13 +42,13 @@ export const emailReducers = (state = initialEmailState, action: EmailActions): 
     case EEmailActions.GmailAuthSuccess: {
       return {
         ...state,
-        authenticationUrl: action.payload.authenticationUrl,
+        authenticationUrl: action.payload.authenticationUrl
       };
     }
     case EEmailActions.CreateNewsEmailSuccess: {
       return {
         ...state,
-        newsEmails: [...state.newsEmails, action.payload],
+        newsEmails: [...state.newsEmails, action.payload]
       };
     }
     case EEmailActions.GmailTokenRevokeSuccess: {
