@@ -18,6 +18,7 @@
                     <app-widget (reloadEvent)="this.reload()"
                                 (searchEvent)="this.search($event)"
                                 (untrashEvent)="this.untrash()"
+                                (removeEvent)="this.remove()"
                                 [showMoveToTrashButton]="false"
                                 [showRemoveButton]="!!(checkedEmails$ | async)?.length"
                                 [showResetButton]="!!(checkedEmails$ | async)?.length"

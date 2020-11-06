@@ -8,7 +8,7 @@ import { EmailEntity } from '@models/instances/email';
 import { EmailService } from '@services/email.service';
 import { Router } from '@angular/router';
 import { urls } from '@constants/urls';
-import { GetTrash, TrashEmail, UntrashEmail } from '@store/actions/email.actions';
+import { GetTrash, RemoveEmail, TrashEmail, UntrashEmail } from '@store/actions/email.actions';
 import numbers from '@constants/numbers';
 import { selectLoading } from '@store/selectors/loading.selectors';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -72,10 +72,14 @@ export class TrashComponent implements OnInit {
     this.emailService.checkAll();
   }
 
-
   public untrash(): void {
     const payload = { data: { ids: this.emailService.checkedEmails.map((email: EmailEntity) => email.id) } };
     this.store.dispatch(new UntrashEmail(payload));
+  }
+
+  public remove(): void {
+    const payload = { data: { ids: this.emailService.checkedEmails.map((email: EmailEntity) => email.id) } };
+    this.store.dispatch(new RemoveEmail(payload));
   }
 
   /**
