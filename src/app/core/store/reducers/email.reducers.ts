@@ -18,6 +18,14 @@ export const emailReducers = (state = initialEmailState, action: EmailActions): 
         nextPageToken: action.payload.nextPageToken
       };
     }
+    case EEmailActions.GetSentSuccess: {
+      return {
+        ...state,
+        sent: action.payload.messages,
+        previousPageToken: state.nextPageToken,
+        nextPageToken: action.payload.nextPageToken
+      };
+    }
     case EEmailActions.SelectNewsEmailSuccess: {
       return {
         ...state,
