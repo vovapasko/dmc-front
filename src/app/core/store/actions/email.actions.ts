@@ -5,10 +5,13 @@ import { Email, EmailEntity } from '@models/instances/email';
 import { CreateEmailPayload } from '@models/payloads/project/email/create';
 import { GetEmailsPayload } from '@models/payloads/email/get-emails';
 import { GetEmailsResponse } from '@models/responses/email/get-emails';
+import { TrashPayload } from '@models/payloads/email/trash';
 
 export enum EEmailActions {
   GetEmails = '[Email] Get emails',
   GetEmailsSuccess = '[Email] Get emails success',
+  TrashEmail = '[Email] Trash email',
+  TrashEmailSuccess = '[Email] Trash email success',
   GetTrash = '[Email] Get trash',
   GetTrashSuccess = '[Email] Get trash success',
   GetSent = '[Email] Get sent',
@@ -173,6 +176,20 @@ export class GetSentSuccess implements Action {
   }
 }
 
+export class TrashEmail implements Action {
+  public readonly type = EEmailActions.TrashEmail;
+
+  constructor(public payload: TrashPayload) {
+  }
+}
+
+export class TrashEmailSuccess implements Action {
+  public readonly type = EEmailActions.TrashEmailSuccess;
+
+  constructor(public payload: TrashPayload) {
+  }
+}
+
 
 export type EmailActions =
   | GmailAuth
@@ -194,4 +211,6 @@ export type EmailActions =
   | GetTrash
   | GetTrashSuccess
   | GetSent
-  | GetSentSuccess;
+  | GetSentSuccess
+| TrashEmail
+| TrashEmailSuccess;
