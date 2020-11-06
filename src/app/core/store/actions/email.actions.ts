@@ -9,6 +9,8 @@ import { GetEmailsResponse } from '@models/responses/email/get-emails';
 export enum EEmailActions {
   GetEmails = '[Email] Get emails',
   GetEmailsSuccess = '[Email] Get emails success',
+  GetTrash = '[Email] Get trash',
+  GetTrashSuccess = '[Email] Get trash success',
   GetNewsEmails = '[Email] Get news emails',
   GetNewsEmailsSuccess = '[Email] Get news emails success',
   CreateNewsEmail = '[Email] Create news email',
@@ -140,6 +142,21 @@ export class CreateNewsEmailSuccess {
 }
 
 
+export class GetTrash implements Action {
+  public readonly type = EEmailActions.GetTrash;
+
+  constructor(public payload: GetEmailsPayload) {
+  }
+}
+
+export class GetTrashSuccess implements Action {
+  public readonly type = EEmailActions.GetTrashSuccess;
+
+  constructor(public payload: GetEmailsResponse) {
+  }
+}
+
+
 export type EmailActions =
   | GmailAuth
   | GmailAuthSuccess
@@ -156,4 +173,6 @@ export type EmailActions =
   | SelectEmail
   | SelectEmailSuccess
   | SelectNewsEmail
-  | SelectNewsEmailSuccess;
+  | SelectNewsEmailSuccess
+  | GetTrash
+  | GetTrashSuccess;
