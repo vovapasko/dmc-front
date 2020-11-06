@@ -13,7 +13,6 @@ import { CreateEmailPayload } from '@models/payloads/project/email/create';
 import { GetEmailsPayload } from '@models/payloads/email/get-emails';
 import { GetEmailsResponse } from '@models/responses/email/get-emails';
 import { Label } from '@models/instances/labels';
-import { Contractor } from '@models/instances/contractor';
 
 const api = environment.api;
 
@@ -32,6 +31,7 @@ export class EmailService extends BaseService {
 
   newsEmails$: BehaviorSubject<Array<Email>> = new BehaviorSubject([]);
   emails$: BehaviorSubject<Array<EmailEntity>> = new BehaviorSubject([]);
+  trash$: BehaviorSubject<Array<EmailEntity>> = new BehaviorSubject([]);
   labels$: BehaviorSubject<Array<Label>> = new BehaviorSubject([]);
   selectedEmail$: BehaviorSubject<EmailEntity> = new BehaviorSubject(null);
   selectedNewsEmail$: BehaviorSubject<Email> = new BehaviorSubject(null);
@@ -88,6 +88,14 @@ export class EmailService extends BaseService {
     this.emails$.next(value);
   }
 
+  get trash() {
+    return this.trash$.getValue();
+  }
+
+  set trash(value: Array<EmailEntity>) {
+    this.trash$.next(value);
+  }
+
   get selectedEmail() {
     return this.selectedEmail$.getValue();
   }
@@ -130,6 +138,23 @@ export class EmailService extends BaseService {
       (response: GetEmailsResponse) => {
         this.emails = [...this.emails, ...response.messages];
         this.labels = [...this.labels, ...response.labels];
+        this.previousPageToken = this.nextPageToken$.getValue();
+        this.nextPageToken = response.nextPageToken;
+        return response;
+      }
+    );
+  }
+
+  /**
+   *  Get emails
+   */
+  public getTrash(payload: GetEmailsPayload): Observable<GetEmailsResponse> {
+    return this.requestHandler.request(
+      this.url(api, endpoints.TRASH, null, payload),
+      methods.GET,
+      null,
+      (response: GetEmailsResponse) => {
+        this.trash = [...this.emails, ...response.messages];
         this.previousPageToken = this.nextPageToken$.getValue();
         this.nextPageToken = response.nextPageToken;
         return response;
