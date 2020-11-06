@@ -13,6 +13,7 @@ import { CreateEmailPayload } from '@models/payloads/project/email/create';
 import { GetEmailsPayload } from '@models/payloads/email/get-emails';
 import { GetEmailsResponse } from '@models/responses/email/get-emails';
 import { Label } from '@models/instances/labels';
+import { TrashPayload } from '@models/payloads/email/trash';
 
 const api = environment.api;
 
@@ -184,6 +185,17 @@ export class EmailService extends BaseService {
         this.previousPageToken = this.nextPageToken$.getValue();
         this.nextPageToken = response.nextPageToken;
         return response;
+      }
+    );
+  }
+
+  public trashEmail(payload: TrashPayload): Observable<TrashPayload> {
+    return this.requestHandler.request(
+      this.url(api, endpoints.TRASH),
+      methods.DELETE,
+      payload,
+      (response: null) => {
+        return payload;
       }
     );
   }

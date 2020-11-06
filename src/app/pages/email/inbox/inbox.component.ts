@@ -13,7 +13,6 @@ import numbers from '@constants/numbers';
 import { selectLoading } from '@store/selectors/loading.selectors';
 import { emailMatches, TicketService } from '@services/ticket.service';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Contractor } from '@models/instances/contractor';
 
 @Component({
   selector: 'app-inbox',
@@ -104,6 +103,10 @@ export class InboxComponent implements OnInit {
 
   public processLoading(value: boolean): void {
     this.loading = value;
+  }
+
+  public trash(): void {
+    // TODO
   }
 
   /**

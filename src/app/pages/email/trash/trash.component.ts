@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { breadCrumbs } from '@constants/bread-crumbs';
 import { select, Store } from '@ngrx/store';
 import { IAppState } from '@store/state/app.state';
-import { selectEmailsList } from '@store/selectors/email.selectors';
+import { selectTrashList } from '@store/selectors/email.selectors';
 import { LoadingService } from '@services/loading.service';
 import { EmailEntity } from '@models/instances/email';
 import { EmailService } from '@services/email.service';
 import { Router } from '@angular/router';
 import { urls } from '@constants/urls';
-import { GetEmails, GetTrash } from '@store/actions/email.actions';
+import { GetTrash } from '@store/actions/email.actions';
 import numbers from '@constants/numbers';
 import { selectLoading } from '@store/selectors/loading.selectors';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -30,7 +30,7 @@ export class TrashComponent implements OnInit {
   // paginated email data
   emailData: Array<EmailEntity>;
   tickets$: Observable<EmailEntity[]>;
-  trash$ = this.store.pipe(select(selectEmailsList));
+  trash$ = this.store.pipe(select(selectTrashList));
   loading$ = this.store.select(selectLoading);
   loading = false;
   checkedEmails$: BehaviorSubject<Array<EmailEntity>> = new BehaviorSubject([]);
@@ -90,7 +90,7 @@ export class TrashComponent implements OnInit {
     this.store.select(selectLoading).subscribe(this.processLoading.bind(this));
     this.initSubscriptions();
     if (!this.emailService.selectedNewsEmail) {
-      this.router.navigate([urls.EMAILS]);
+      this.router.navigate([urls.TRASH]);
     }
   }
 
@@ -108,7 +108,7 @@ export class TrashComponent implements OnInit {
    */
   public initSubscriptions(): void {
     this.loading$ = this.loadingService.loading$;
-    this.store.pipe(select(selectEmailsList)).subscribe(this.processEmails.bind(this));
+    this.store.pipe(select(selectTrashList)).subscribe(this.processEmails.bind(this));
   }
 
   public next(): void {

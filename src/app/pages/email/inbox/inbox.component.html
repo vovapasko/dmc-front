@@ -18,6 +18,7 @@
                     <app-widget (reloadEvent)="this.reload()"
                                 (searchEvent)="this.search($event)"
                                 [showMoveToTrashButton]="!!(checkedEmails$ | async)?.length"
+                                (trashEvent)="this.trash()"
                     ></app-widget>
 
 
