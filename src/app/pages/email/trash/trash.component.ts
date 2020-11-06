@@ -8,7 +8,7 @@ import { EmailEntity } from '@models/instances/email';
 import { EmailService } from '@services/email.service';
 import { Router } from '@angular/router';
 import { urls } from '@constants/urls';
-import { GetEmails } from '@store/actions/email.actions';
+import { GetEmails, GetTrash } from '@store/actions/email.actions';
 import numbers from '@constants/numbers';
 import { selectLoading } from '@store/selectors/loading.selectors';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -30,7 +30,7 @@ export class TrashComponent implements OnInit {
   // paginated email data
   emailData: Array<EmailEntity>;
   tickets$: Observable<EmailEntity[]>;
-  emails$ = this.store.pipe(select(selectEmailsList));
+  trash$ = this.store.pipe(select(selectEmailsList));
   loading$ = this.store.select(selectLoading);
   loading = false;
   checkedEmails$: BehaviorSubject<Array<EmailEntity>> = new BehaviorSubject([]);
@@ -84,7 +84,7 @@ export class TrashComponent implements OnInit {
     this.emailService.checkedEmails = [];
     this.service.matches = emailMatches;
     this.service.searchTerm = '';
-    this.service.records$ = this.emailService.emails$;
+    this.service.records$ = this.emailService.trash$;
     this.tickets$ = this.service.tickets$;
     this.breadCrumbItems = breadCrumbs.emails.trash;
     this.store.select(selectLoading).subscribe(this.processLoading.bind(this));
@@ -96,7 +96,7 @@ export class TrashComponent implements OnInit {
 
   public reload(): void {
     const payload = { email: this.emailService.selectedNewsEmail.email, pagination: numbers.pageSize };
-    this.store.dispatch(new GetEmails(payload));
+    this.store.dispatch(new GetTrash(payload));
   }
 
   public processLoading(value: boolean): void {
@@ -115,7 +115,7 @@ export class TrashComponent implements OnInit {
     const email = this.emailService.selectedNewsEmail.email;
     const nextPageToken = this.emailService.nextPageToken;
     const pagination = numbers.pageSize;
-    this.store.dispatch(new GetEmails({ email, nextPageToken, pagination }));
+    this.store.dispatch(new GetTrash({ email, nextPageToken, pagination }));
   }
 
   public search(value: string | null) {
@@ -127,6 +127,6 @@ export class TrashComponent implements OnInit {
     const email = this.emailService.selectedNewsEmail.email;
     const previousPageToken = this.emailService.previousPageToken;
     const pagination = numbers.pageSize;
-    this.store.dispatch(new GetEmails({ email, nextPageToken: previousPageToken, pagination }));
+    this.store.dispatch(new GetTrash({ email, nextPageToken: previousPageToken, pagination }));
   }
 }
