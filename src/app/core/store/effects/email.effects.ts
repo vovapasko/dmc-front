@@ -5,7 +5,7 @@ import { switchMap } from 'rxjs/operators';
 import { EmailService } from '@services/email.service';
 import {
   CreateNewsEmail, CreateNewsEmailSuccess,
-  EEmailActions, GetEmails, GetEmailsSuccess, GetNewsEmails, GetNewsEmailsSuccess,
+  EEmailActions, GetEmails, GetEmailsSuccess, GetNewsEmails, GetNewsEmailsSuccess, GetTrash, GetTrashSuccess,
   GmailAuth,
   GmailAuthSuccess,
   GmailCredsClear,
@@ -49,6 +49,13 @@ export class EmailEffects {
     ofType<GetEmails>(EEmailActions.GetEmails),
     switchMap((action: { payload: GetEmailsPayload }) => this.emailService.getEmails(action.payload)),
     switchMap((response: GetEmailsResponse) => of(new GetEmailsSuccess(response)))
+  );
+
+  @Effect()
+  getTrash$ = this.actions$.pipe(
+    ofType<GetTrash>(EEmailActions.GetTrash),
+    switchMap((action: { payload: GetEmailsPayload }) => this.emailService.getTrash(action.payload)),
+    switchMap((response: GetEmailsResponse) => of(new GetTrashSuccess(response)))
   );
 
   @Effect()
