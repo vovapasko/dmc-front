@@ -206,10 +206,10 @@ export class EmailService extends BaseService {
   public initializeComposeEmailForm(): FormGroup {
     return this.formBuilder.group({
       receiver: [null, [Validators.required]],
-      copy: [null, [Validators.required]],
+      copy: [null, []],
       subject: [null, [Validators.required]],
       content: [null, [Validators.required]],
-      attachments: [null, [Validators.required]],
+      attachments: [null, []],
     });
   }
 

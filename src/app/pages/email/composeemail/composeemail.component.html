@@ -1,49 +1,73 @@
 <div class="container-fluid">
-  <app-page-title title="Отправить email" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+    <app-page-title title="Отправить email" [breadcrumbItems]="breadCrumbItems"></app-page-title>
 
-  <div class="row">
+    <div class="row">
 
-    <!-- Right Sidebar -->
-    <div class="col-12">
-      <div class="card-box">
-        <!-- Left sidebar -->
-        <div class="inbox-leftbar">
-          <app-emaillist></app-emaillist><!-- Leftbar email label and list -->
+        <!-- Right Sidebar -->
+        <div class="col-12">
+            <div class="card-box">
+                <!-- Left sidebar -->
+                <div class="inbox-leftbar">
+                    <app-emaillist></app-emaillist><!-- Leftbar email label and list -->
+                </div>
+                <!-- End Left sidebar -->
+
+                <!-- Right sidebar -->
+                <div class="inbox-rightbar">
+                    <div class="mt-4">
+                        <form [formGroup]="composeEmailForm" (ngSubmit)="onSubmit()">
+                            <div class="form-group">
+                                <input type="email" formControlName="receiver" class="form-control"
+                                       placeholder="Получатель">
+                                <div *ngIf="submitted && composeEmailFormControls.receiver.errors"
+                                     class="invalid-feedback">
+                                    <span *ngIf="composeEmailFormControls.receiver.errors.required">Пожалуйста, введите получателя.</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="text" formControlName="copy" class="form-control" placeholder="Копия">
+                                <span class="font-13 text-muted">e.g "one@gmail.com two@gmail.com three@gmail.com"</span>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="text" formControlName="subject" class="form-control"
+                                       placeholder="Тема письма">
+                                <div *ngIf="submitted && composeEmailFormControls.subject.errors"
+                                     class="invalid-feedback">
+                                    <span *ngIf="composeEmailFormControls.subject.errors.required">Пожалуйста, введите тему письма.</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <!-- Editor -->
+                                <quill-editor [styles]="{ height: '250px'}" formControlName="content"
+                                              placeholder="Введите текст"></quill-editor>
+                            </div>
+
+                            <div class="form-group m-b-0">
+                                <div class="text-right">
+                                    <div class="btn btn-success m-r-5">
+                                        <label for="inputImage" style="margin: 0">
+                                            <input type="file"
+                                                   class="sr-only"
+                                                   id="inputImage"
+                                                   multiple
+                                                   alife-file-to-base64
+                                                   (onFileChanged)="onFileChanges($event)"
+                                            />
+                                            <i class="mdi mdi-attachment"></i>
+                                        </label>
+                                    </div>
+                                    <button class="btn btn-primary ml-1"><span>Отправить</span> <i
+                                            class="mdi mdi-send ml-2"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- End Right Sidebar -->
+                <div class="clearfix"></div>
+            </div>
         </div>
-        <!-- End Left sidebar -->
-
-        <!-- Right sidebar -->
-        <div class="inbox-rightbar">
-          <div class="mt-4">
-            <form>
-              <div class="form-group">
-                <input type="email" class="form-control" placeholder="Получатель">
-              </div>
-
-              <div class="form-group">
-                <input type="text" class="form-control" placeholder="Копия">
-              </div>
-
-              <div class="form-group">
-                <input type="text" class="form-control" placeholder="Тема письма">
-              </div>
-              <div class="form-group">
-                  <!-- Editor -->
-                  <app-ngx-editor [placeholder]="'Enter text '" [spellcheck]="true" [height]="'250px'"></app-ngx-editor>
-              </div>
-
-              <div class="form-group m-b-0">
-                  <div class="text-right">
-                      <button type="button" class="btn btn-success m-r-5"><i class="mdi mdi-attachment"></i></button>
-                      <button class="btn btn-primary ml-1"> <span>Отправить</span> <i class="mdi mdi-send ml-2"></i> </button>
-                  </div>
-              </div>
-            </form>
-          </div>
-        </div>
-        <!-- End Right Sidebar -->
-        <div class="clearfix"></div>
-      </div>
     </div>
-  </div>
 </div>
