@@ -5,6 +5,7 @@ import { urls } from '@constants/urls';
 import { Router } from '@angular/router';
 import { AbstractControl, FormGroup } from '@angular/forms';
 import { Infos } from '@constants/notifications';
+import { separators } from '@constants/separators';
 
 @Component({
   selector: 'app-composeemail',
@@ -49,10 +50,9 @@ export class ComposeemailComponent implements OnInit {
   /**
    * Upload new image to cropper
    */
-  onFileChanges(files) {
+  public onFileChanges(files) {
     if (files && files.length) {
-      const attachments = files.map(file => file.base64);
-      this.composeEmailFormControls.attachments.setValue(attachments);
+      this.composeEmailFormControls.attachments.setValue(files);
     }
   }
 
@@ -62,7 +62,8 @@ export class ComposeemailComponent implements OnInit {
     if (composeEmailForm.invalid) {
       return;
     }
-    const { receiver, copy, subject, content, attachments } = this.composeEmailForm.value;
+    const copy = this.composeEmailFormControls.copy.value.split(separators.whitespace);
+    const { receiver, subject, content, attachments } = this.composeEmailForm.value;
     const data = { receiver, copy, subject, content, attachments };
     this.submit({ data });
   }

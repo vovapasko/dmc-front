@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { RequestHandler } from '@helpers/request-handler';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { BaseService } from '@services/base.service';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { endpoints } from '@constants/endpoints';
@@ -14,6 +14,8 @@ import { GetEmailsPayload } from '@models/payloads/email/get-emails';
 import { GetEmailsResponse } from '@models/responses/email/get-emails';
 import { Label } from '@models/instances/labels';
 import { TrashPayload } from '@models/payloads/email/trash';
+import { emailValidator } from '@helpers/utility';
+import { separators } from '@constants/separators';
 
 const api = environment.api;
 
@@ -206,10 +208,10 @@ export class EmailService extends BaseService {
   public initializeComposeEmailForm(): FormGroup {
     return this.formBuilder.group({
       receiver: [null, [Validators.required]],
-      copy: [null, []],
+      copy: [null, [emailValidator()]],
       subject: [null, [Validators.required]],
       content: [null, [Validators.required]],
-      attachments: [null, []],
+      attachments: [null, []]
     });
   }
 

@@ -1,9 +1,10 @@
-import { AbstractControl, Form } from '@angular/forms';
+import { AbstractControl, Form, ValidatorFn } from '@angular/forms';
 import { Project } from '@models/instances/project';
 import { matchColor, percentage } from '@constants/formula';
 import { Payloads } from '@models/payloads/payload';
 import { EmailEntity } from '@models/instances/email';
 import { FROM } from '@constants/titles';
+import { separators } from '@constants/separators';
 
 export const toCamel = (str: string): string => {
   return str.replace(/([-_][a-z])/gi, (element: string) => {
@@ -13,6 +14,19 @@ export const toCamel = (str: string): string => {
       .replace('_', '');
   });
 };
+
+
+export function emailValidator(): ValidatorFn {
+  return (control: AbstractControl): {[key: string]: any} | null => {
+    const incorrect = control.value ? control.value.trim().split(separators.whitespace).some(invalidEmail) : null;
+    return incorrect ? {incorrectEmail: {value: control.value}} : null;
+  };
+}
+
+export function invalidEmail(email) {
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return !re.test(String(email).toLowerCase());
+}
 
 export function getSender(email: EmailEntity): string | null {
   return email.payload.headers.find(header => header.name === FROM).value;
