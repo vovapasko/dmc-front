@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { RequestHandler } from '@helpers/request-handler';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BaseService } from '@services/base.service';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { endpoints } from '@constants/endpoints';
@@ -198,6 +198,19 @@ export class EmailService extends BaseService {
         return payload;
       }
     );
+  }
+
+  /**
+   *  Returns form group for email form
+   */
+  public initializeComposeEmailForm(): FormGroup {
+    return this.formBuilder.group({
+      receiver: [null, [Validators.required]],
+      copy: [null, [Validators.required]],
+      subject: [null, [Validators.required]],
+      content: [null, [Validators.required]],
+      attachments: [null, [Validators.required]],
+    });
   }
 
   public untrashEmail(payload: TrashPayload): Observable<TrashPayload> {

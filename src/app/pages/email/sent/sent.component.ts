@@ -90,7 +90,7 @@ export class SentComponent implements OnInit {
     this.store.select(selectLoading).subscribe(this.processLoading.bind(this));
     this.initSubscriptions();
     if (!this.emailService.selectedNewsEmail) {
-      this.router.navigate([urls.SENT]);
+      this.router.navigate([urls.EMAILS]);
     }
   }
 
