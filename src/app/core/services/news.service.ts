@@ -676,7 +676,7 @@ export class NewsService extends BaseService {
     if (burstMethod.method === burstMethods.BAYER) {
       waveFormation = {
         email: previewForm.controls.previewEmail.value || controls.at(0).get('previewEmail').value,
-        content: previewForm.controls.previewText.value || controls.at(0).get('previewText').value,
+        content: editorForm.controls.text.value || controls.at(0).get('content').value,
         attachments: this.processAttachments(editorForm.controls.attachments.value),
         id: newsWave ? newsWave.waveFormation.id : null
       };
@@ -686,7 +686,7 @@ export class NewsService extends BaseService {
         contractors: news.contractors,
         email: controls.at(i).get('previewEmail').value,
         title: news.title || title,
-        content: controls.at(i).get('previewText').value,
+        content: controls.at(i).get('content').value,
         attachments: this.processAttachments(controls.at(i).get('attachments').value),
         id: news.id
       }));
