@@ -499,14 +499,12 @@
                                                        class="form-control"
                                                        (change)="updateField(index, 'title')"
                                                 />
-                                                <input type="text"
-                                                       placeholder="Введите содержание"
+                                                <textarea placeholder="Введите содержание"
                                                        [id]="'content' + index"
                                                        [formControl]="getControl(index, 'content')"
                                                        style="margin-bottom: 10px;"
                                                        class="form-control"
-                                                       (change)="updateField(index, 'content')"
-                                                />
+                                                       (change)="updateField(index, 'content')"></textarea>
                                                 <ng-select
                                                         id="news-contractors"
                                                         [items]="commonFormControls.projectContractors.value || []"
