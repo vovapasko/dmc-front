@@ -499,12 +499,17 @@
                                                        class="form-control"
                                                        (change)="updateField(index, 'title')"
                                                 />
-                                                <textarea placeholder="Введите содержание"
-                                                       [id]="'content' + index"
-                                                       [formControl]="getControl(index, 'content')"
-                                                       style="margin-bottom: 10px;"
-                                                       class="form-control"
-                                                       (change)="updateField(index, 'content')"></textarea>
+                                                <quill-editor [styles]="{ height: '200px', 'margin-bottom': '15px' }"
+                                                              [id]="'text-content' + index"
+                                                              [formControl]="getControl(index, 'content')"
+                                                              (onBlur)="updateField(index, 'content')"
+                                                ></quill-editor>
+<!--                                                <textarea placeholder="Введите содержание"-->
+<!--                                                       [id]="'content' + index"-->
+<!--                                                       [formControl]="getControl(index, 'content')"-->
+<!--                                                       style="margin-bottom: 10px;"-->
+<!--                                                       class="form-control"-->
+<!--                                                       (change)="updateField(index, 'content')"></textarea>-->
                                                 <ng-select
                                                         id="news-contractors"
                                                         [items]="commonFormControls.projectContractors.value || []"
