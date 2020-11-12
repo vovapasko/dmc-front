@@ -57,7 +57,7 @@ export class SelectNewsEmailSuccess implements Action {
 export class SelectEmail implements Action {
   public readonly type = EEmailActions.SelectEmail;
 
-  constructor(public payload: EmailEntity) {
+  constructor(public payload: GetEmailPayload) {
   }
 }
 
@@ -93,7 +93,7 @@ export class GetEmail implements Action {
 export class GetEmailSuccess implements Action {
   public readonly type = EEmailActions.GetEmailSuccess;
 
-  constructor(public payload: GetEmailResponse) {
+  constructor(public payload: EmailEntity) {
   }
 }
 

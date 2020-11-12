@@ -5,6 +5,7 @@ import { Payloads } from '@models/payloads/payload';
 import { EmailEntity } from '@models/instances/email';
 import { FROM } from '@constants/titles';
 import { separators } from '@constants/separators';
+import {toByteArray} from 'base64-js';
 
 export const toCamel = (str: string): string => {
   return str.replace(/([-_][a-z])/gi, (element: string) => {
@@ -17,9 +18,9 @@ export const toCamel = (str: string): string => {
 
 
 export function emailValidator(): ValidatorFn {
-  return (control: AbstractControl): {[key: string]: any} | null => {
+  return (control: AbstractControl): { [key: string]: any } | null => {
     const incorrect = control.value ? control.value.trim().split(separators.whitespace).some(invalidEmail) : null;
-    return incorrect ? {incorrectEmail: {value: control.value}} : null;
+    return incorrect ? { incorrectEmail: { value: control.value } } : null;
   };
 }
 
@@ -192,3 +193,6 @@ export async function convertFileToBase64(file) {
   return file;
 }
 
+export function decodeBase64(data: string): string {
+  return new TextDecoder('utf-8').decode(toByteArray(data));
+}

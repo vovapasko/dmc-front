@@ -29,6 +29,7 @@ export const emailReducers = (state = initialEmailState, action: EmailActions): 
     case EEmailActions.SelectNewsEmailSuccess: {
       return {
         ...state,
+        // @ts-ignore
         selectedEmail: action.payload
       };
     }
@@ -44,7 +45,7 @@ export const emailReducers = (state = initialEmailState, action: EmailActions): 
     case EEmailActions.GetEmailSuccess: {
       return {
         ...state,
-        email: action.payload.full,
+        email: action.payload,
       };
     }
     case EEmailActions.TrashEmailSuccess: {

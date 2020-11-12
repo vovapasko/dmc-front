@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { breadCrumbs } from '@constants/bread-crumbs';
+import { select, Store } from '@ngrx/store';
+import { selectEmail } from '@store/selectors/email.selectors';
+import { IAppState } from '@store/state/app.state';
 
 @Component({
   selector: 'app-reademail',
@@ -13,8 +16,11 @@ export class ReademailComponent implements OnInit {
 
   // bread crumb items
   breadCrumbItems: Array<{}>;
+  email$ = this.store.pipe(select(selectEmail));
 
-  constructor() { }
+  constructor(
+    private store: Store<IAppState>,
+  ) { }
 
   ngOnInit() {
     // tslint:disable-next-line: max-line-length

@@ -1,3 +1,10 @@
 export interface GetEmailPayload {
-  id?: string;
+  email: string;
+  messageId: string;
+  messageType: string;
+}
+
+export enum messageType {
+  full = 'full',
+  raw = 'raw'
 }

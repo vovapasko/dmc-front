@@ -95,6 +95,7 @@ export class TrashComponent implements OnInit {
     this.service.matches = emailMatches;
     this.service.searchTerm = '';
     this.service.records$ = this.emailService.trash$;
+    // @ts-ignore
     this.tickets$ = this.service.tickets$;
     this.breadCrumbItems = breadCrumbs.emails.trash;
     this.store.select(selectLoading).subscribe(this.processLoading.bind(this));

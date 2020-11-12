@@ -4,7 +4,7 @@
 import { Hashtag } from '@models/instances/hashtag';
 
 export interface TableData {
-  id?: number;
+  id?: number | string;
   price?: string;
   amountPublications?: number;
   emails?: string;

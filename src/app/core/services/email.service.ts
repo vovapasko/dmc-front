@@ -6,7 +6,7 @@ import { BaseService } from '@services/base.service';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { endpoints } from '@constants/endpoints';
 import { methods } from '@constants/methods';
-import { Email, EmailEntity } from '@models/instances/email';
+import { Email, EmailEntity, mimeTypes } from '@models/instances/email';
 import { GmailAuthResponse } from '@models/instances/gmail-auth-response';
 import { AuthPayload } from '@models/payloads/email/auth';
 import { CreateEmailPayload } from '@models/payloads/project/email/create';
@@ -14,7 +14,7 @@ import { GetEmailsPayload } from '@models/payloads/email/get-emails';
 import { GetEmailsResponse } from '@models/responses/email/get-emails';
 import { Label } from '@models/instances/labels';
 import { TrashPayload } from '@models/payloads/email/trash';
-import { emailValidator } from '@helpers/utility';
+import { decodeBase64, emailValidator } from '@helpers/utility';
 import { separators } from '@constants/separators';
 import { GetEmailPayload } from '@models/payloads/email/get-email';
 import { GetEmailResponse } from '@models/responses/email/get-email';
@@ -162,13 +162,16 @@ export class EmailService extends BaseService {
   /**
    *  Get email
    */
-  public getEmail(payload: GetEmailPayload): Observable<GetEmailResponse> {
+  public getEmail(payload: GetEmailPayload): Observable<EmailEntity> {
     return this.requestHandler.request(
-      this.url(api, endpoints.MAILS, payload.id, payload),
+      this.url(api, endpoints.MESSAGES, null, payload),
       methods.GET,
       null,
-      (response: GetEmailResponse) => {
-        return response.full;
+      (response: EmailEntity) => {
+        response.base64 = response.payload.parts.find(part => part.mimeType === mimeTypes.html).body.data;
+        response.html = decodeBase64(response.base64);
+        this.selectEmail(response);
+        return response;
       }
     );
   }

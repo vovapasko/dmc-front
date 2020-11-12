@@ -8,11 +8,12 @@ import { EmailEntity } from '@models/instances/email';
 import { EmailService } from '@services/email.service';
 import { Router } from '@angular/router';
 import { urls } from '@constants/urls';
-import { GetEmails, TrashEmail } from '@store/actions/email.actions';
+import { GetEmail, GetEmails, SelectEmail, TrashEmail } from '@store/actions/email.actions';
 import numbers from '@constants/numbers';
 import { selectLoading } from '@store/selectors/loading.selectors';
 import { emailMatches, TicketService } from '@services/ticket.service';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { messageType } from '@models/payloads/email/get-email';
 
 @Component({
   selector: 'app-inbox',
@@ -87,6 +88,7 @@ export class InboxComponent implements OnInit {
     this.service.matches = emailMatches;
     this.service.searchTerm = '';
     this.service.records$ = this.emailService.emails$;
+    // @ts-ignore
     this.tickets$ = this.service.tickets$;
     this.breadCrumbItems = breadCrumbs.emails.inbox;
     this.store.select(selectLoading).subscribe(this.processLoading.bind(this));
@@ -108,6 +110,12 @@ export class InboxComponent implements OnInit {
   public trash(): void {
     const payload = { data: { ids: this.emailService.checkedEmails.map((email: EmailEntity) => email.id) } };
     this.store.dispatch(new TrashEmail(payload));
+  }
+
+  public readEmail(email: EmailEntity): void {
+    const pagination = numbers.pageSize;
+    const payload = {messageId: email.id, email: this.emailService.selectedNewsEmail.email, messageType: messageType.full, pagination};
+    this.store.dispatch(new GetEmail(payload));
   }
 
   /**

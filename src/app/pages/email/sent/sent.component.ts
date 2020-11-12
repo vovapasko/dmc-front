@@ -85,6 +85,7 @@ export class SentComponent implements OnInit {
     this.checkedEmails$ = this.emailService.checkedEmails$;
     this.service.searchTerm = '';
     this.service.records$ = this.emailService.sent$;
+    // @ts-ignore
     this.tickets$ = this.service.tickets$;
     this.breadCrumbItems = breadCrumbs.emails.sent;
     this.store.select(selectLoading).subscribe(this.processLoading.bind(this));

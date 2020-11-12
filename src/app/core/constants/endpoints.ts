@@ -26,6 +26,7 @@ export const endpoints = {
   PUBLICATIONS_BLACKLIST: 'publications-blacklist',
   COMMENTS: 'comments',
   MAILS: 'emails/inbox',
+  MESSAGES: 'emails/messages',
   TRASH: 'emails/trash',
   SENT: 'emails/sent',
   UNTRASH: 'emails/untrash',

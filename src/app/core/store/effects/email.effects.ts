@@ -49,12 +49,12 @@ export class EmailEffects {
     switchMap((response: Email) => of(new SelectNewsEmailSuccess(response)))
   );
 
-  @Effect()
-  selectEmail$ = this.actions$.pipe(
-    ofType<SelectEmail>(EEmailActions.SelectEmail),
-    switchMap((action: { payload: EmailEntity }) => this.emailService.selectEmail(action.payload)),
-    switchMap((response: EmailEntity) => of(new SelectEmailSuccess(response)))
-  );
+  // @Effect()
+  // selectEmail$ = this.actions$.pipe(
+  //   ofType<SelectEmail>(EEmailActions.SelectEmail),
+  //   switchMap((action: { payload: EmailEntity }) => this.emailService.selectEmail(action.payload)),
+  //   switchMap((response: EmailEntity) => of(new SelectEmailSuccess(response)))
+  // );
 
   @Effect()
   getNewsEmails$ = this.actions$.pipe(
@@ -74,7 +74,7 @@ export class EmailEffects {
   getEmail$ = this.actions$.pipe(
     ofType<GetEmail>(EEmailActions.GetEmail),
     switchMap((action: { payload: GetEmailPayload }) => this.emailService.getEmail(action.payload)),
-    switchMap((response: GetEmailResponse) => of(new GetEmailSuccess(response)))
+    switchMap((response: EmailEntity) => of(new GetEmailSuccess(response)))
   );
 
   @Effect()

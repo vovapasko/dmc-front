@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { stringType } from '@constants/formula';
 import { separators } from '@constants/separators';
+import snakeCase from 'lodash.snakecase';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class BaseService {
     }
     if (keys && keys.length) {
       url += separators.questionMark;
-      keys.forEach(key => url += `${key}=${params[key]}${separators.ampersand}`);
+      keys.forEach(key => url += `${snakeCase(key)}=${params[key]}${separators.ampersand}`);
     }
     return url;
   }
