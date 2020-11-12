@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { AbstractControl, FormGroup } from '@angular/forms';
 import { Infos } from '@constants/notifications';
 import { separators } from '@constants/separators';
+import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
 
 @Component({
   selector: 'app-composeemail',

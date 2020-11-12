@@ -1,3 +1,5 @@
+import { Attachment } from '@models/instances/attachment';
+
 export interface Email {
   id?: number;
   dateCreated?: Date;
@@ -22,15 +24,18 @@ export interface EmailEntity {
   date?: string;
   from?: string;
   to?: string;
+  attachments?: Attachment[];
 }
 
 export interface Part {
   body: PartBody;
   mimeType: string;
+  filename: string;
 }
 
 export interface PartBody {
   data: string;
+  size: number;
 }
 
 export enum mimeTypes {
