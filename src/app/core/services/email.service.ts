@@ -191,12 +191,15 @@ export class EmailService extends BaseService {
       return email;
     }
     // @ts-ignore
-    email.attachments = email.payload.parts.filter(part => ({
-      name: part.filename,
-      type: part.mimeType,
-      size: part.body.size,
-      base64: null
-    }));
+    email.attachments = email.payload.parts
+      .filter(part => part.filename)
+      .map(part => ({
+        attachmentId: part.body.attachmentId,
+        name: part.filename,
+        type: part.mimeType,
+        size: part.body.size,
+        base64: null
+      }));
     return email;
   }
 

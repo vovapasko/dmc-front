@@ -36,6 +36,7 @@ export interface Part {
 export interface PartBody {
   data: string;
   size: number;
+  attachmentId: string;
 }
 
 export enum mimeTypes {
