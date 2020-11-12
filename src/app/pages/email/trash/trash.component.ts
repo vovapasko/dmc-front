@@ -8,11 +8,12 @@ import { EmailEntity } from '@models/instances/email';
 import { EmailService } from '@services/email.service';
 import { Router } from '@angular/router';
 import { urls } from '@constants/urls';
-import { GetTrash, RemoveEmail, TrashEmail, UntrashEmail } from '@store/actions/email.actions';
+import { GetEmail, GetTrash, RemoveEmail, TrashEmail, UntrashEmail } from '@store/actions/email.actions';
 import numbers from '@constants/numbers';
 import { selectLoading } from '@store/selectors/loading.selectors';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { emailMatches, TicketService } from '@services/ticket.service';
+import { messageType } from '@models/payloads/email/get-email';
 
 @Component({
   selector: 'app-trash',
@@ -74,14 +75,30 @@ export class TrashComponent implements OnInit {
 
   public untrash(): void {
     // tslint:disable-next-line:max-line-length
-    const payload = { data: { email: this.emailService.selectedNewsEmail.email, messageIds: this.emailService.checkedEmails.map((email: EmailEntity) => email.id) } };
+    const payload = {
+      data: {
+        email: this.emailService.selectedNewsEmail.email,
+        messageIds: this.emailService.checkedEmails.map((email: EmailEntity) => email.id)
+      }
+    };
     this.store.dispatch(new UntrashEmail(payload));
   }
 
   public remove(): void {
     // tslint:disable-next-line:max-line-length
-    const payload = { data: { email: this.emailService.selectedNewsEmail.email, messageIds: this.emailService.checkedEmails.map((email: EmailEntity) => email.id) } };
+    const payload = {
+      data: {
+        email: this.emailService.selectedNewsEmail.email,
+        messageIds: this.emailService.checkedEmails.map((email: EmailEntity) => email.id)
+      }
+    };
     this.store.dispatch(new RemoveEmail(payload));
+  }
+
+  public readEmail(email: EmailEntity): void {
+    const pagination = numbers.pageSize;
+    const payload = { messageId: email.id, email: this.emailService.selectedNewsEmail.email, messageType: messageType.full, pagination };
+    this.store.dispatch(new GetEmail(payload));
   }
 
   /**

@@ -51,7 +51,7 @@
                                 </div>
                                 <div class="col-mail col-mail-2">
 
-                                    <a routerLink="/email/read" class="subject">{{email.snippet}}
+                                    <a (click)="readEmail(email)" routerLink="/email/read" class="subject">{{email.snippet}}
                                     </a>
                                     <div class="date">{{email.internalDate | date: 'dd/MM/yyyy'}}</div>
                                 </div>
