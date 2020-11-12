@@ -41,6 +41,12 @@ export const emailReducers = (state = initialEmailState, action: EmailActions): 
         nextPageToken: action.payload.nextPageToken
       };
     }
+    case EEmailActions.GetEmailSuccess: {
+      return {
+        ...state,
+        email: action.payload.full,
+      };
+    }
     case EEmailActions.TrashEmailSuccess: {
       return {
         ...state,
