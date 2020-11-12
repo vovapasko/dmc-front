@@ -6,9 +6,9 @@ import { EmailService } from '@services/email.service';
 import {
   CreateNewsEmail,
   CreateNewsEmailSuccess,
-  EEmailActions,
+  EEmailActions, GetEmail,
   GetEmails,
-  GetEmailsSuccess,
+  GetEmailsSuccess, GetEmailSuccess,
   GetNewsEmails,
   GetNewsEmailsSuccess,
   GetSent,
@@ -35,6 +35,8 @@ import { CreateEmailPayload } from '@models/payloads/project/email/create';
 import { GetEmailsPayload } from '@models/payloads/email/get-emails';
 import { GetEmailsResponse } from '@models/responses/email/get-emails';
 import { TrashPayload } from '@models/payloads/email/trash';
+import { GetEmailPayload } from '@models/payloads/email/get-email';
+import { GetEmailResponse } from '@models/responses/email/get-email';
 
 @Injectable({
   providedIn: 'root'
@@ -66,6 +68,13 @@ export class EmailEffects {
     ofType<GetEmails>(EEmailActions.GetEmails),
     switchMap((action: { payload: GetEmailsPayload }) => this.emailService.getEmails(action.payload)),
     switchMap((response: GetEmailsResponse) => of(new GetEmailsSuccess(response)))
+  );
+
+  @Effect()
+  getEmail$ = this.actions$.pipe(
+    ofType<GetEmail>(EEmailActions.GetEmail),
+    switchMap((action: { payload: GetEmailPayload }) => this.emailService.getEmail(action.payload)),
+    switchMap((response: GetEmailResponse) => of(new GetEmailSuccess(response)))
   );
 
   @Effect()
