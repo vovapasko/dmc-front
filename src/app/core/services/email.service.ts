@@ -16,6 +16,8 @@ import { Label } from '@models/instances/labels';
 import { TrashPayload } from '@models/payloads/email/trash';
 import { emailValidator } from '@helpers/utility';
 import { separators } from '@constants/separators';
+import { GetEmailPayload } from '@models/payloads/email/get-email';
+import { GetEmailResponse } from '@models/responses/email/get-email';
 
 const api = environment.api;
 
@@ -153,6 +155,20 @@ export class EmailService extends BaseService {
         this.previousPageToken = this.nextPageToken$.getValue();
         this.nextPageToken = response.nextPageToken;
         return response;
+      }
+    );
+  }
+
+  /**
+   *  Get email
+   */
+  public getEmail(payload: GetEmailPayload): Observable<GetEmailResponse> {
+    return this.requestHandler.request(
+      this.url(api, endpoints.MAILS, payload.id, payload),
+      methods.GET,
+      null,
+      (response: GetEmailResponse) => {
+        return response.full;
       }
     );
   }
