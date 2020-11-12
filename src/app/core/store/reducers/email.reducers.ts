@@ -51,22 +51,22 @@ export const emailReducers = (state = initialEmailState, action: EmailActions): 
     case EEmailActions.TrashEmailSuccess: {
       return {
         ...state,
-        emails: state.emails.filter(message => action.payload.data.ids.indexOf(message.id) !== -1),
-        sent: state.sent.filter(message => action.payload.data.ids.indexOf(message.id) !== -1),
+        emails: state.emails.filter(message => action.payload.data.messageIds.indexOf(message.id) === -1),
+        sent: state.sent.filter(message => action.payload.data.messageIds.indexOf(message.id) === -1),
       };
     }
     case EEmailActions.UntrashEmailSuccess: {
       return {
         ...state,
-        trash: state.trash.filter(message => action.payload.data.ids.indexOf(message.id) !== -1),
+        trash: state.trash.filter(message => action.payload.data.messageIds.indexOf(message.id) === -1),
       };
     }
     case EEmailActions.RemoveEmailSuccess: {
       return {
         ...state,
-        trash: state.trash.filter(message => action.payload.data.ids.indexOf(message.id) !== -1),
-        sent: state.sent.filter(message => action.payload.data.ids.indexOf(message.id) !== -1),
-        emails: state.emails.filter(message => action.payload.data.ids.indexOf(message.id) !== -1),
+        trash: state.trash.filter(message => action.payload.data.messageIds.indexOf(message.id) === -1),
+        sent: state.sent.filter(message => action.payload.data.messageIds.indexOf(message.id) === -1),
+        emails: state.emails.filter(message => action.payload.data.messageIds.indexOf(message.id) === -1),
       };
     }
     case EEmailActions.GetNewsEmailsSuccess: {

@@ -1,5 +1,6 @@
 export interface TrashPayload {
   data: {
-    ids?: Array<string>
+    messageIds?: Array<string>,
+    email: string;
   };
 }

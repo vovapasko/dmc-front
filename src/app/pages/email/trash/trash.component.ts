@@ -73,12 +73,14 @@ export class TrashComponent implements OnInit {
   }
 
   public untrash(): void {
-    const payload = { data: { ids: this.emailService.checkedEmails.map((email: EmailEntity) => email.id) } };
+    // tslint:disable-next-line:max-line-length
+    const payload = { data: { email: this.emailService.selectedNewsEmail.email, messageIds: this.emailService.checkedEmails.map((email: EmailEntity) => email.id) } };
     this.store.dispatch(new UntrashEmail(payload));
   }
 
   public remove(): void {
-    const payload = { data: { ids: this.emailService.checkedEmails.map((email: EmailEntity) => email.id) } };
+    // tslint:disable-next-line:max-line-length
+    const payload = { data: { email: this.emailService.selectedNewsEmail.email, messageIds: this.emailService.checkedEmails.map((email: EmailEntity) => email.id) } };
     this.store.dispatch(new RemoveEmail(payload));
   }
 

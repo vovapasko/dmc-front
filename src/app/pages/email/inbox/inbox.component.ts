@@ -108,7 +108,8 @@ export class InboxComponent implements OnInit {
   }
 
   public trash(): void {
-    const payload = { data: { ids: this.emailService.checkedEmails.map((email: EmailEntity) => email.id) } };
+    // tslint:disable-next-line:max-line-length
+    const payload = { data: { email: this.emailService.selectedNewsEmail.email, messageIds: this.emailService.checkedEmails.map((email: EmailEntity) => email.id) } };
     this.store.dispatch(new TrashEmail(payload));
   }
 

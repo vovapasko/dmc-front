@@ -253,6 +253,9 @@ export class EmailService extends BaseService {
       methods.POST,
       payload,
       (response: null) => {
+        this.checkedEmails = [];
+        this.emails = this.emails.filter(message => payload.data.messageIds.indexOf(message.id) === -1);
+        this.sent = this.sent.filter(message => payload.data.messageIds.indexOf(message.id) === -1);
         return payload;
       }
     );
@@ -277,6 +280,8 @@ export class EmailService extends BaseService {
       methods.POST,
       payload,
       (response: null) => {
+        this.checkedEmails = [];
+        this.trash = this.trash.filter(message => payload.data.messageIds.indexOf(message.id) === -1);
         return payload;
       }
     );
@@ -288,6 +293,10 @@ export class EmailService extends BaseService {
       methods.POST,
       payload,
       (response: null) => {
+        this.checkedEmails = [];
+        this.trash = this.trash.filter(message => payload.data.messageIds.indexOf(message.id) === -1);
+        this.sent = this.sent.filter(message => payload.data.messageIds.indexOf(message.id) === -1);
+        this.emails = this.emails.filter(message => payload.data.messageIds.indexOf(message.id) === -1);
         return payload;
       }
     );
