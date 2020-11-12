@@ -6,7 +6,7 @@ import { BaseService } from '@services/base.service';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { endpoints } from '@constants/endpoints';
 import { methods } from '@constants/methods';
-import { Email, EmailEntity, mimeTypes } from '@models/instances/email';
+import { Email, EmailEntity, mimeTypes, payloadHeaders } from '@models/instances/email';
 import { GmailAuthResponse } from '@models/instances/gmail-auth-response';
 import { AuthPayload } from '@models/payloads/email/auth';
 import { CreateEmailPayload } from '@models/payloads/project/email/create';
@@ -18,6 +18,7 @@ import { decodeBase64, emailValidator } from '@helpers/utility';
 import { separators } from '@constants/separators';
 import { GetEmailPayload } from '@models/payloads/email/get-email';
 import { GetEmailResponse } from '@models/responses/email/get-email';
+import { escapeXml } from '@angular/compiler/src/i18n/serializers/xml_helper';
 
 const api = environment.api;
 
@@ -168,12 +169,48 @@ export class EmailService extends BaseService {
       methods.GET,
       null,
       (response: EmailEntity) => {
-        response.base64 = response.payload.parts.find(part => part.mimeType === mimeTypes.html).body.data;
-        response.html = decodeBase64(response.base64);
-        this.selectEmail(response);
-        return response;
+        const email = this.processMail(response);
+        this.selectEmail(email);
+        return email;
       }
     );
+  }
+
+  public processMail(email: EmailEntity): EmailEntity {
+    this.processHtml(email);
+    email.subject = email.payload.headers.find(header => header.name === payloadHeaders.subject).value;
+    email.from = email.payload.headers.find(header => header.name === payloadHeaders.from).value;
+    email.to = email.payload.headers.find(header => header.name === payloadHeaders.to).value;
+    email.date = email.payload.headers.find(header => header.name === payloadHeaders.date).value;
+    return email;
+  }
+
+  public processHtml(email: EmailEntity): EmailEntity {
+    this.processPayloadHtml(email);
+    this.processPartHtml(email);
+    return email;
+  }
+
+  public processPartHtml(email: EmailEntity): EmailEntity {
+    if (!email.payload.parts) {
+      return email;
+    }
+    const htmlPayload = email.payload.parts.find(part => part.mimeType === mimeTypes.html);
+    if (!htmlPayload) {
+      return email;
+    }
+    email.base64 = htmlPayload.body.data;
+    email.html = decodeBase64(email.base64);
+    return email;
+  }
+
+  public processPayloadHtml(email: EmailEntity): EmailEntity {
+    if (email.payload.mimeType !== mimeTypes.html) {
+      return email;
+    }
+    email.base64 = email.payload.body.data;
+    email.html = decodeBase64(email.base64);
+    return email;
   }
 
   /**

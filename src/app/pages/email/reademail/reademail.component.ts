@@ -3,6 +3,10 @@ import { breadCrumbs } from '@constants/bread-crumbs';
 import { select, Store } from '@ngrx/store';
 import { selectEmail } from '@store/selectors/email.selectors';
 import { IAppState } from '@store/state/app.state';
+import { selectLoading } from '@store/selectors/loading.selectors';
+import { urls } from '@constants/urls';
+import { EmailService } from '@services/email.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-reademail',
@@ -17,10 +21,22 @@ export class ReademailComponent implements OnInit {
   // bread crumb items
   breadCrumbItems: Array<{}>;
   email$ = this.store.pipe(select(selectEmail));
+  loading = false;
 
   constructor(
     private store: Store<IAppState>,
-  ) { }
+    private emailService: EmailService,
+    private router: Router
+  ) {
+    this.store.select(selectLoading).subscribe(this.processLoading.bind(this));
+    if (!this.emailService.selectedNewsEmail) {
+      this.router.navigate([urls.EMAILS]);
+    }
+  }
+
+  public processLoading(value: boolean): void {
+    this.loading = value;
+  }
 
   ngOnInit() {
     // tslint:disable-next-line: max-line-length

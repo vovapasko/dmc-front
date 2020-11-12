@@ -18,6 +18,10 @@ export interface EmailEntity {
   payload?: EmailPayload;
   base64?: string;
   html?: string;
+  subject?: string;
+  date?: string;
+  from?: string;
+  to?: string;
 }
 
 export interface Part {
@@ -32,6 +36,13 @@ export interface PartBody {
 export enum mimeTypes {
   'text' = 'text/plain',
   'html' = 'text/html'
+}
+
+export enum payloadHeaders {
+  'subject' = 'Subject',
+  'from' = 'From',
+  'to' = 'To',
+  'date' = 'Date'
 }
 
 //{
@@ -110,6 +121,12 @@ export enum mimeTypes {
 export interface EmailPayload {
   headers: Header[];
   parts: Part[];
+  mimeType: string;
+  body: PayloadBody;
+}
+
+export interface PayloadBody {
+  data: string;
 }
 
 export interface Header {
