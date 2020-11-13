@@ -153,8 +153,8 @@ export class EmailService extends BaseService {
       methods.GET,
       null,
       (response: GetEmailsResponse) => {
-        this.emails = [...this.emails, ...response.messages];
-        this.labels = [...this.labels, ...response.labels];
+        this.emails = response.messages;
+        this.labels = response.labels;
         this.previousPageToken = this.nextPageToken$.getValue();
         this.nextPageToken = response.nextPageToken;
         return response;
@@ -256,7 +256,7 @@ export class EmailService extends BaseService {
       methods.GET,
       null,
       (response: GetEmailsResponse) => {
-        this.trash = [...this.trash, ...response.messages];
+        this.trash = response.messages;
         this.previousPageToken = this.nextPageToken$.getValue();
         this.nextPageToken = response.nextPageToken;
         return response;
@@ -273,7 +273,7 @@ export class EmailService extends BaseService {
       methods.GET,
       null,
       (response: GetEmailsResponse) => {
-        this.sent = [...this.sent, ...response.messages];
+        this.sent = response.messages;
         this.previousPageToken = this.nextPageToken$.getValue();
         this.nextPageToken = response.nextPageToken;
         return response;

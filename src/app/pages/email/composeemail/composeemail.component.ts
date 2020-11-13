@@ -7,6 +7,8 @@ import { AbstractControl, FormGroup } from '@angular/forms';
 import { Infos } from '@constants/notifications';
 import { separators } from '@constants/separators';
 import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
+import { Attachment } from '@models/instances/attachment';
+import { urltoFile, bytesToSize } from '@helpers/utility';
 
 @Component({
   selector: 'app-composeemail',
@@ -23,6 +25,8 @@ export class ComposeemailComponent implements OnInit {
   breadCrumbItems: Array<{}>;
   composeEmailForm: FormGroup;
   submitted = false;
+  bytesToSize = bytesToSize;
+  imageTypes = ['']
 
   constructor(
     private emailService: EmailService,
@@ -46,6 +50,19 @@ export class ComposeemailComponent implements OnInit {
   // convenience getter for easy access to form fields
   get composeEmailFormControls(): { [p: string]: AbstractControl } {
     return this.composeEmailForm.controls;
+  }
+
+  public downloadAttachment(attachment: Attachment): void {
+    // @ts-ignore
+    const payload = { attachmentId: attachment.attachemntId };
+    this.emailService.getAttachment(payload).subscribe(
+      (response: Attachment) => {
+        urltoFile(response.base64, response.name, response.type).then(file => {
+          const url = window.URL.createObjectURL(file);
+          window.open(url);
+        });
+      }
+    );
   }
 
   /**

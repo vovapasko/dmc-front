@@ -48,6 +48,15 @@
                                               placeholder="Введите текст"></quill-editor>
                             </div>
 
+                            <div class="row" *ngIf="composeEmailFormControls?.attachments?.value?.length">
+                                <div *ngFor="let attachment of composeEmailFormControls?.attachments?.value" class="col-sm-2">
+                                    <a (click)="downloadAttachment(attachment)" href="javascript: void(0)">
+                                        <img [src]="attachment.type.includes('image') ? attachment.base64 : 'assets/images/attached-files/img-1.jpg'" [alt]="attachment.name" class="img-thumbnail img-responsive">
+                                        <i>{{attachment.name}} ({{bytesToSize(attachment.size)}})</i>
+                                    </a>
+                                </div>
+                            </div>
+
                             <div class="form-group m-b-0">
                                 <div class="text-right">
                                     <div class="btn btn-success m-r-5">
