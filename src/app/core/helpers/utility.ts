@@ -208,12 +208,27 @@ export function bytesToSize(bytes) {
   return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
 }
 
-export function urltoFile(url, filename, mimeType){
+export function urltoFile(url, filename, mimeType) {
   return (fetch(url)
-      .then(function(res){return res.arrayBuffer(); })
-      .then(function(buf){return new File([buf], filename, {type: mimeType}); })
+      .then(function(res) {
+        return res.arrayBuffer();
+      })
+      .then(function(buf) {
+        return new File([buf], filename, { type: mimeType });
+      })
   );
 }
+
+export function base64ToArrayBuffer(base64) {
+  const binaryString = window.atob(base64);
+  const len = binaryString.length;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+  return bytes.buffer;
+}
+
 
 export function saveFile(blob, filename) {
   if (window.navigator.msSaveOrOpenBlob) {

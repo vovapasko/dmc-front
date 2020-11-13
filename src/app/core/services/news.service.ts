@@ -19,7 +19,7 @@ import { Project } from '@models/instances/project';
 import { News } from '@models/instances/news';
 import { Hashtag } from '@models/instances/hashtag';
 import { Format } from '@models/instances/format';
-import { setProjectValues } from '@helpers/utility';
+import { base64ToArrayBuffer, setProjectValues } from '@helpers/utility';
 import { Infos, Warnings } from '@constants/notifications';
 import { endpoints } from '@constants/endpoints';
 import { burstMethods, methods } from '@constants/methods';
@@ -66,7 +66,7 @@ export class NewsService extends BaseService {
     public formBuilder: FormBuilder,
     private notificationService: NotificationService,
     private securityService: SecurityService,
-    private userService: UserService,
+    private userService: UserService
   ) {
     super();
   }
@@ -630,7 +630,7 @@ export class NewsService extends BaseService {
       return;
     }
     // @ts-ignore
-    return files.map((file: File) => ({name: file.name, base64: file.base64, type: file.type}));
+    return files.map((file: File) => ({ name: file.name, base64: file.base64, type: file.type }));
   }
 
   /**
@@ -747,10 +747,12 @@ export class NewsService extends BaseService {
     validationForm.controls.projectHashtags.setValue(newsWave.hashtags);
     validationForm.controls.projectTitle.setValue(newsWave.title);
     validationForm.controls.projectBudget.setValue(newsWave.budget);
-    editorForm.controls.attachments.setValue(this.handleFiles(newsWave.waveFormation.attachments));
-    editorForm.controls.text.setValue(newsWave.waveFormation.content);
-    previewForm.controls.previewEmail.setValue(newsWave.waveFormation.email);
-    previewForm.controls.previewText.setValue(newsWave.waveFormation.content);
+    if (newsWave.waveFormation) {
+      editorForm.controls.attachments.setValue(this.handleFiles(newsWave.waveFormation.attachments));
+      editorForm.controls.text.setValue(newsWave.waveFormation.content);
+      previewForm.controls.previewEmail.setValue(newsWave.waveFormation.email);
+      previewForm.controls.previewText.setValue(newsWave.waveFormation.content);
+    }
     // @ts-ignore
     // tslint:disable-next-line:max-line-length
     const newsList = newsWave.newsInProject.map((el: News) => new News(el.title, el.content, this.handleFiles(el.attachments), el.contractors, el.content, el.email, el.id));
@@ -771,13 +773,12 @@ export class NewsService extends BaseService {
   public handleFiles(attachments: File[]) {
     return attachments.map(attachment => {
       // @ts-ignore
-      const file = new File([''], attachment.file, { type: 'text/plain' });
+      // @ts-ignore
+      const file = new File([''], attachment.name, { type: attachment.type, size: attachment.size });
       // @ts-ignore
       file.id = attachment.id;
       // @ts-ignore
-      file.base64 = attachment.base64;
-      // @ts-ignore
-      file.size = attachment.size;
+      file.base64 = attachment.base_64;
       return file;
     });
   }

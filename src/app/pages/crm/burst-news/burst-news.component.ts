@@ -571,7 +571,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
    */
   public setContent(control: AbstractControl, previewControl: AbstractControl, field: string): void {
     this.setInfoContent(control, previewControl, field);
-    this.setImageContent(control, previewControl, field);
+    // this.setImageContent(control, previewControl, field);
   }
 
   public setInfoContent(control: AbstractControl, previewControl: AbstractControl, field: string): void {
