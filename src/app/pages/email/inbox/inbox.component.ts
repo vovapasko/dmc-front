@@ -8,12 +8,13 @@ import { EmailEntity } from '@models/instances/email';
 import { EmailService } from '@services/email.service';
 import { Router } from '@angular/router';
 import { urls } from '@constants/urls';
-import { GetEmail, GetEmails, SelectEmail, TrashEmail } from '@store/actions/email.actions';
+import { GetEmail, GetEmails, GetSent, SelectEmail, TrashEmail } from '@store/actions/email.actions';
 import numbers from '@constants/numbers';
 import { selectLoading } from '@store/selectors/loading.selectors';
 import { emailMatches, TicketService } from '@services/ticket.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { messageType } from '@models/payloads/email/get-email';
+import { EmailLabels } from '@models/payloads/email/get-emails';
 
 @Component({
   selector: 'app-inbox',
@@ -96,6 +97,7 @@ export class InboxComponent implements OnInit {
     if (!this.emailService.selectedNewsEmail) {
       this.router.navigate([urls.EMAILS]);
     }
+    this.fetchData();
   }
 
   public reload(): void {
@@ -144,5 +146,11 @@ export class InboxComponent implements OnInit {
     const previousPageToken = this.emailService.previousPageToken;
     const pagination = numbers.pageSize;
     this.store.dispatch(new GetEmails({ email, nextPageToken: previousPageToken, pagination }));
+  }
+
+  public fetchData(): void {
+    const email = this.emailService.selectedNewsEmail.email;
+    const pagination = numbers.pageSize;
+    this.store.dispatch(new GetEmails({ email, pagination }));
   }
 }

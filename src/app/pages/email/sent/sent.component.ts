@@ -14,6 +14,7 @@ import { selectLoading } from '@store/selectors/loading.selectors';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { emailMatches, TicketService } from '@services/ticket.service';
 import { messageType } from '@models/payloads/email/get-email';
+import { EmailLabels } from '@models/payloads/email/get-emails';
 
 @Component({
   selector: 'app-sent',
@@ -94,22 +95,28 @@ export class SentComponent implements OnInit {
     if (!this.emailService.selectedNewsEmail) {
       this.router.navigate([urls.EMAILS]);
     }
+    this.fetchData();
   }
 
   public trash(): void {
     // tslint:disable-next-line:max-line-length
-    const payload = { data: { email: this.emailService.selectedNewsEmail.email, messageIds: this.emailService.checkedEmails.map((email: EmailEntity) => email.id) } };
+    const payload = {
+      data: {
+        email: this.emailService.selectedNewsEmail.email,
+        messageIds: this.emailService.checkedEmails.map((email: EmailEntity) => email.id)
+      }
+    };
     this.store.dispatch(new TrashEmail(payload));
   }
 
   public readEmail(email: EmailEntity): void {
     const pagination = numbers.pageSize;
-    const payload = {messageId: email.id, email: this.emailService.selectedNewsEmail.email, messageType: messageType.full, pagination};
+    const payload = { messageId: email.id, email: this.emailService.selectedNewsEmail.email, messageType: messageType.full, pagination };
     this.store.dispatch(new GetEmail(payload));
   }
 
   public reload(): void {
-    const payload = { email: this.emailService.selectedNewsEmail.email, pagination: numbers.pageSize };
+    const payload = { email: this.emailService.selectedNewsEmail.email, pagination: numbers.pageSize, labels: EmailLabels.sent };
     this.store.dispatch(new GetSent(payload));
   }
 
@@ -129,7 +136,7 @@ export class SentComponent implements OnInit {
     const email = this.emailService.selectedNewsEmail.email;
     const nextPageToken = this.emailService.nextPageToken;
     const pagination = numbers.pageSize;
-    this.store.dispatch(new GetSent({ email, nextPageToken, pagination }));
+    this.store.dispatch(new GetSent({ email, nextPageToken, pagination, labels: EmailLabels.sent }));
   }
 
   public search(value: string | null) {
@@ -141,6 +148,12 @@ export class SentComponent implements OnInit {
     const email = this.emailService.selectedNewsEmail.email;
     const previousPageToken = this.emailService.previousPageToken;
     const pagination = numbers.pageSize;
-    this.store.dispatch(new GetSent({ email, nextPageToken: previousPageToken, pagination }));
+    this.store.dispatch(new GetSent({ email, nextPageToken: previousPageToken, pagination, labels: EmailLabels.sent }));
+  }
+
+  public fetchData(): void {
+    const email = this.emailService.selectedNewsEmail.email;
+    const pagination = numbers.pageSize;
+    this.store.dispatch(new GetSent({ email, pagination, labels: EmailLabels.sent }));
   }
 }

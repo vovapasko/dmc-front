@@ -8,12 +8,13 @@ import { EmailEntity } from '@models/instances/email';
 import { EmailService } from '@services/email.service';
 import { Router } from '@angular/router';
 import { urls } from '@constants/urls';
-import { GetEmail, GetTrash, RemoveEmail, TrashEmail, UntrashEmail } from '@store/actions/email.actions';
+import { GetEmail, GetSent, GetTrash, RemoveEmail, TrashEmail, UntrashEmail } from '@store/actions/email.actions';
 import numbers from '@constants/numbers';
 import { selectLoading } from '@store/selectors/loading.selectors';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { emailMatches, TicketService } from '@services/ticket.service';
 import { messageType } from '@models/payloads/email/get-email';
+import { EmailLabels } from '@models/payloads/email/get-emails';
 
 @Component({
   selector: 'app-trash',
@@ -122,10 +123,11 @@ export class TrashComponent implements OnInit {
     if (!this.emailService.selectedNewsEmail) {
       this.router.navigate([urls.EMAILS]);
     }
+    this.fetchData();
   }
 
   public reload(): void {
-    const payload = { email: this.emailService.selectedNewsEmail.email, pagination: numbers.pageSize };
+    const payload = { email: this.emailService.selectedNewsEmail.email, pagination: numbers.pageSize, labels: EmailLabels.sent };
     this.store.dispatch(new GetTrash(payload));
   }
 
@@ -145,7 +147,7 @@ export class TrashComponent implements OnInit {
     const email = this.emailService.selectedNewsEmail.email;
     const nextPageToken = this.emailService.nextPageToken;
     const pagination = numbers.pageSize;
-    this.store.dispatch(new GetTrash({ email, nextPageToken, pagination }));
+    this.store.dispatch(new GetTrash({ email, nextPageToken, pagination, labels: EmailLabels.sent }));
   }
 
   public search(value: string | null) {
@@ -157,6 +159,12 @@ export class TrashComponent implements OnInit {
     const email = this.emailService.selectedNewsEmail.email;
     const previousPageToken = this.emailService.previousPageToken;
     const pagination = numbers.pageSize;
-    this.store.dispatch(new GetTrash({ email, nextPageToken: previousPageToken, pagination }));
+    this.store.dispatch(new GetTrash({ email, nextPageToken: previousPageToken, pagination, labels: EmailLabels.sent }));
+  }
+
+  public fetchData(): void {
+    const email = this.emailService.selectedNewsEmail.email;
+    const pagination = numbers.pageSize;
+    this.store.dispatch(new GetTrash({ email, pagination, labels: EmailLabels.trash }));
   }
 }
