@@ -8,7 +8,7 @@ import { Infos } from '@constants/notifications';
 import { separators } from '@constants/separators';
 import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
 import { Attachment } from '@models/instances/attachment';
-import { urltoFile, bytesToSize } from '@helpers/utility';
+import { urltoFile, bytesToSize, saveFile } from '@helpers/utility';
 
 @Component({
   selector: 'app-composeemail',
@@ -26,7 +26,7 @@ export class ComposeemailComponent implements OnInit {
   composeEmailForm: FormGroup;
   submitted = false;
   bytesToSize = bytesToSize;
-  imageTypes = ['']
+  imageTypes = [''];
 
   constructor(
     private emailService: EmailService,
@@ -53,16 +53,10 @@ export class ComposeemailComponent implements OnInit {
   }
 
   public downloadAttachment(attachment: Attachment): void {
-    // @ts-ignore
-    const payload = { attachmentId: attachment.attachemntId };
-    this.emailService.getAttachment(payload).subscribe(
-      (response: Attachment) => {
-        urltoFile(response.base64, response.name, response.type).then(file => {
-          const url = window.URL.createObjectURL(file);
-          window.open(url);
-        });
-      }
-    );
+    urltoFile(attachment.base64, attachment.name, attachment.type)
+      .then(file => {
+        saveFile(file, attachment.name);
+      });
   }
 
   /**

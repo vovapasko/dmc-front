@@ -7,7 +7,7 @@ import { selectLoading } from '@store/selectors/loading.selectors';
 import { urls } from '@constants/urls';
 import { EmailService } from '@services/email.service';
 import { Router } from '@angular/router';
-import { bytesToSize, urltoFile } from '@helpers/utility';
+import { bytesToSize, saveFile, urltoFile } from '@helpers/utility';
 import { Attachment } from '@models/instances/attachment';
 
 @Component({
@@ -43,8 +43,7 @@ export class ReademailComponent implements OnInit {
     this.emailService.getAttachment(payload).subscribe(
       (response: Attachment) => {
         urltoFile(response.base64, response.name, response.type).then(file => {
-          const url = window.URL.createObjectURL(file);
-          window.open(url);
+          saveFile(file, attachment.name);
         });
       }
     );
