@@ -49,11 +49,13 @@ import { breadCrumbs } from '@constants/bread-crumbs';
 import { revenueRadialChart } from '@components/charts/data';
 import { selectClientList } from '@store/selectors/client.selectors';
 import { GetClients } from '@store/actions/client.actions';
-import { convertFileToBase64, getColorByPercentage } from '@helpers/utility';
+import { convertFileToBase64, getColorByPercentage, saveFile, urltoFile } from '@helpers/utility';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Contractor, PostFormatListSet } from '@models/instances/contractor';
 import { NewsWavePrice } from '@models/instances/newsWavePrice';
 import { ATTACHMENTS, PREVIEW_TEXT, TEXT } from '@constants/titles';
+import { Attachment } from '@models/instances/attachment';
+import {bytesToSize} from '@helpers/utility';
 
 /**
  * Form Burst news component - handling the burst news with sidebar and content
@@ -76,6 +78,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   characters$ = this.store.pipe(select(selectCharacters));
   methods$ = this.store.pipe(select(selectMethods));
   newsProjects$ = this.store.pipe(select(selectProjectsList));
+  bytesToSize = bytesToSize;
   newsSubmit = false;
   newsProject: NewsProject;
   left = numbers.zero;
@@ -734,6 +737,12 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     this.processNewsWave();
   }
 
+  public downloadAttachment(attachment: Attachment): void {
+    urltoFile(attachment.base64, attachment.name, attachment.type)
+      .then(file => {
+        saveFile(file, attachment.name);
+      });
+  }
 
   /**
    * Fetch news wave if news wave id

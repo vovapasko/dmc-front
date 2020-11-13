@@ -8,12 +8,13 @@ import { EmailEntity } from '@models/instances/email';
 import { EmailService } from '@services/email.service';
 import { Router } from '@angular/router';
 import { urls } from '@constants/urls';
-import { GetEmails } from '@store/actions/email.actions';
+import { GetEmail, GetEmails, GetSent, SelectEmail, TrashEmail } from '@store/actions/email.actions';
 import numbers from '@constants/numbers';
 import { selectLoading } from '@store/selectors/loading.selectors';
 import { emailMatches, TicketService } from '@services/ticket.service';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Contractor } from '@models/instances/contractor';
+import { messageType } from '@models/payloads/email/get-email';
+import { EmailLabels } from '@models/payloads/email/get-emails';
 
 @Component({
   selector: 'app-inbox',
@@ -88,6 +89,7 @@ export class InboxComponent implements OnInit {
     this.service.matches = emailMatches;
     this.service.searchTerm = '';
     this.service.records$ = this.emailService.emails$;
+    // @ts-ignore
     this.tickets$ = this.service.tickets$;
     this.breadCrumbItems = breadCrumbs.emails.inbox;
     this.store.select(selectLoading).subscribe(this.processLoading.bind(this));
@@ -95,6 +97,7 @@ export class InboxComponent implements OnInit {
     if (!this.emailService.selectedNewsEmail) {
       this.router.navigate([urls.EMAILS]);
     }
+    this.fetchData();
   }
 
   public reload(): void {
@@ -104,6 +107,18 @@ export class InboxComponent implements OnInit {
 
   public processLoading(value: boolean): void {
     this.loading = value;
+  }
+
+  public trash(): void {
+    // tslint:disable-next-line:max-line-length
+    const payload = { data: { email: this.emailService.selectedNewsEmail.email, messageIds: this.emailService.checkedEmails.map((email: EmailEntity) => email.id) } };
+    this.store.dispatch(new TrashEmail(payload));
+  }
+
+  public readEmail(email: EmailEntity): void {
+    const pagination = numbers.pageSize;
+    const payload = {messageId: email.id, email: this.emailService.selectedNewsEmail.email, messageType: messageType.full, pagination};
+    this.store.dispatch(new GetEmail(payload));
   }
 
   /**
@@ -131,5 +146,11 @@ export class InboxComponent implements OnInit {
     const previousPageToken = this.emailService.previousPageToken;
     const pagination = numbers.pageSize;
     this.store.dispatch(new GetEmails({ email, nextPageToken: previousPageToken, pagination }));
+  }
+
+  public fetchData(): void {
+    const email = this.emailService.selectedNewsEmail.email;
+    const pagination = numbers.pageSize;
+    this.store.dispatch(new GetEmails({ email, pagination }));
   }
 }

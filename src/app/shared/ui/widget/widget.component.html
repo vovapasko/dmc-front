@@ -13,7 +13,7 @@
         <div class="btn-group">
             <!--      <button type="button" (click)="reload()" class="btn btn-sm btn-light waves-effect"><i class="mdi mdi-reload font-18"></i></button>-->
 
-            <button *ngIf="showMoveToTrashButton" type="button" (click)="remove()" class="btn btn-sm btn-light waves-effect"><i
+            <button *ngIf="showMoveToTrashButton" type="button" (click)="trash()" class="btn btn-sm btn-light waves-effect"><i
                     class="mdi mdi-trash-can-outline"></i> Переместить в корзину
             </button>
 
@@ -21,7 +21,7 @@
                     class="mdi mdi-trash-can-outline"></i> Удалить письма
             </button>
 
-            <button *ngIf="showResetButton" type="button" (click)="remove()" class="btn btn-sm btn-light waves-effect"><i
+            <button *ngIf="showResetButton" type="button" (click)="untrash()" class="btn btn-sm btn-light waves-effect"><i
                     class="mdi mdi-reload"></i> Вернуть в почту
             </button>
 

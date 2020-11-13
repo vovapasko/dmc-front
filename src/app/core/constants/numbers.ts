@@ -1,6 +1,6 @@
 export default {
   million: 1000000,
-  pageSize: 10,
+  pageSize: 11,
   twenty: 20,
   zero: 0,
   month: 4,

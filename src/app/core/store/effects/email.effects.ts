@@ -4,13 +4,29 @@ import { of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { EmailService } from '@services/email.service';
 import {
-  CreateNewsEmail, CreateNewsEmailSuccess,
-  EEmailActions, GetEmails, GetEmailsSuccess, GetNewsEmails, GetNewsEmailsSuccess,
+  CreateNewsEmail,
+  CreateNewsEmailSuccess,
+  EEmailActions, GetEmail,
+  GetEmails,
+  GetEmailsSuccess, GetEmailSuccess,
+  GetNewsEmails,
+  GetNewsEmailsSuccess,
+  GetSent,
+  GetSentSuccess,
+  GetTrash,
+  GetTrashSuccess,
   GmailAuth,
   GmailAuthSuccess,
   GmailCredsClear,
   GmailCredsClearSuccess,
-  GmailTokenRevoke, GmailTokenRevokeSuccess, SelectEmail, SelectEmailSuccess, SelectNewsEmail, SelectNewsEmailSuccess
+  GmailTokenRevoke,
+  GmailTokenRevokeSuccess, RemoveEmail, RemoveEmailSuccess,
+  SelectEmail,
+  SelectEmailSuccess,
+  SelectNewsEmail,
+  SelectNewsEmailSuccess,
+  TrashEmail,
+  TrashEmailSuccess, UntrashEmail, UntrashEmailSuccess
 } from '@store/actions/email.actions';
 import { GmailAuthResponse } from '@models/instances/gmail-auth-response';
 import { AuthPayload } from '@models/payloads/email/auth';
@@ -18,6 +34,9 @@ import { Email, EmailEntity } from '@models/instances/email';
 import { CreateEmailPayload } from '@models/payloads/project/email/create';
 import { GetEmailsPayload } from '@models/payloads/email/get-emails';
 import { GetEmailsResponse } from '@models/responses/email/get-emails';
+import { TrashPayload } from '@models/payloads/email/trash';
+import { GetEmailPayload } from '@models/payloads/email/get-email';
+import { GetEmailResponse } from '@models/responses/email/get-email';
 
 @Injectable({
   providedIn: 'root'
@@ -30,12 +49,12 @@ export class EmailEffects {
     switchMap((response: Email) => of(new SelectNewsEmailSuccess(response)))
   );
 
-  @Effect()
-  selectEmail$ = this.actions$.pipe(
-    ofType<SelectEmail>(EEmailActions.SelectEmail),
-    switchMap((action: { payload: EmailEntity }) => this.emailService.selectEmail(action.payload)),
-    switchMap((response: EmailEntity) => of(new SelectEmailSuccess(response)))
-  );
+  // @Effect()
+  // selectEmail$ = this.actions$.pipe(
+  //   ofType<SelectEmail>(EEmailActions.SelectEmail),
+  //   switchMap((action: { payload: EmailEntity }) => this.emailService.selectEmail(action.payload)),
+  //   switchMap((response: EmailEntity) => of(new SelectEmailSuccess(response)))
+  // );
 
   @Effect()
   getNewsEmails$ = this.actions$.pipe(
@@ -49,6 +68,48 @@ export class EmailEffects {
     ofType<GetEmails>(EEmailActions.GetEmails),
     switchMap((action: { payload: GetEmailsPayload }) => this.emailService.getEmails(action.payload)),
     switchMap((response: GetEmailsResponse) => of(new GetEmailsSuccess(response)))
+  );
+
+  @Effect()
+  getEmail$ = this.actions$.pipe(
+    ofType<GetEmail>(EEmailActions.GetEmail),
+    switchMap((action: { payload: GetEmailPayload }) => this.emailService.getEmail(action.payload)),
+    switchMap((response: EmailEntity) => of(new GetEmailSuccess(response)))
+  );
+
+  @Effect()
+  getTrash$ = this.actions$.pipe(
+    ofType<GetTrash>(EEmailActions.GetTrash),
+    switchMap((action: { payload: GetEmailsPayload }) => this.emailService.getTrash(action.payload)),
+    switchMap((response: GetEmailsResponse) => of(new GetTrashSuccess(response)))
+  );
+
+  @Effect()
+  getSent$ = this.actions$.pipe(
+    ofType<GetSent>(EEmailActions.GetSent),
+    switchMap((action: { payload: GetEmailsPayload }) => this.emailService.getSent(action.payload)),
+    switchMap((response: GetEmailsResponse) => of(new GetSentSuccess(response)))
+  );
+
+  @Effect()
+  trashEmail$ = this.actions$.pipe(
+    ofType<TrashEmail>(EEmailActions.TrashEmail),
+    switchMap((action: { payload: TrashPayload }) => this.emailService.trashEmail(action.payload)),
+    switchMap((response: TrashPayload) => of(new TrashEmailSuccess(response)))
+  );
+
+  @Effect()
+  untrashEmail$ = this.actions$.pipe(
+    ofType<UntrashEmail>(EEmailActions.UntrashEmail),
+    switchMap((action: { payload: TrashPayload }) => this.emailService.untrashEmail(action.payload)),
+    switchMap((response: TrashPayload) => of(new UntrashEmailSuccess(response)))
+  );
+
+  @Effect()
+  removeEmail$ = this.actions$.pipe(
+    ofType<RemoveEmail>(EEmailActions.RemoveEmail),
+    switchMap((action: { payload: TrashPayload }) => this.emailService.removeEmail(action.payload)),
+    switchMap((response: TrashPayload) => of(new RemoveEmailSuccess(response)))
   );
 
   @Effect()

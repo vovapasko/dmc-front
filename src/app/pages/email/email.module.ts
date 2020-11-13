@@ -68,7 +68,7 @@ import { TrashComponent } from '@pages/email/trash/trash.component';
     NgbTooltipModule,
     NgbTabsetModule,
     NgbAccordionModule,
-    NgbCollapseModule
+    NgbCollapseModule,
   ]
 })
 export class EmailModule { }

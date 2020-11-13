@@ -5,10 +5,25 @@ import { Email, EmailEntity } from '@models/instances/email';
 import { CreateEmailPayload } from '@models/payloads/project/email/create';
 import { GetEmailsPayload } from '@models/payloads/email/get-emails';
 import { GetEmailsResponse } from '@models/responses/email/get-emails';
+import { TrashPayload } from '@models/payloads/email/trash';
+import { GetEmailPayload } from '@models/payloads/email/get-email';
+import { GetEmailResponse } from '@models/responses/email/get-email';
 
 export enum EEmailActions {
   GetEmails = '[Email] Get emails',
   GetEmailsSuccess = '[Email] Get emails success',
+  GetEmail = '[Email] Get email',
+  GetEmailSuccess = '[Email] Get email success',
+  TrashEmail = '[Email] Trash email',
+  TrashEmailSuccess = '[Email] Trash email success',
+  UntrashEmail = '[Email] Untrash email',
+  UntrashEmailSuccess = '[Email] Untrash email success',
+  RemoveEmail = '[Email] Remove email',
+  RemoveEmailSuccess = '[Email] Remove email success',
+  GetTrash = '[Email] Get trash',
+  GetTrashSuccess = '[Email] Get trash success',
+  GetSent = '[Email] Get sent',
+  GetSentSuccess = '[Email] Get sent success',
   GetNewsEmails = '[Email] Get news emails',
   GetNewsEmailsSuccess = '[Email] Get news emails success',
   CreateNewsEmail = '[Email] Create news email',
@@ -42,7 +57,7 @@ export class SelectNewsEmailSuccess implements Action {
 export class SelectEmail implements Action {
   public readonly type = EEmailActions.SelectEmail;
 
-  constructor(public payload: EmailEntity) {
+  constructor(public payload: GetEmailPayload) {
   }
 }
 
@@ -64,6 +79,21 @@ export class GetEmailsSuccess implements Action {
   public readonly type = EEmailActions.GetEmailsSuccess;
 
   constructor(public payload: GetEmailsResponse) {
+  }
+}
+
+
+export class GetEmail implements Action {
+  public readonly type = EEmailActions.GetEmail;
+
+  constructor(public payload: GetEmailPayload) {
+  }
+}
+
+export class GetEmailSuccess implements Action {
+  public readonly type = EEmailActions.GetEmailSuccess;
+
+  constructor(public payload: EmailEntity) {
   }
 }
 
@@ -140,6 +170,79 @@ export class CreateNewsEmailSuccess {
 }
 
 
+export class GetTrash implements Action {
+  public readonly type = EEmailActions.GetTrash;
+
+  constructor(public payload: GetEmailsPayload) {
+  }
+}
+
+export class GetTrashSuccess implements Action {
+  public readonly type = EEmailActions.GetTrashSuccess;
+
+  constructor(public payload: GetEmailsResponse) {
+  }
+}
+
+
+export class GetSent implements Action {
+  public readonly type = EEmailActions.GetSent;
+
+  constructor(public payload: GetEmailsPayload) {
+  }
+}
+
+export class GetSentSuccess implements Action {
+  public readonly type = EEmailActions.GetSentSuccess;
+
+  constructor(public payload: GetEmailsResponse) {
+  }
+}
+
+export class TrashEmail implements Action {
+  public readonly type = EEmailActions.TrashEmail;
+
+  constructor(public payload: TrashPayload) {
+  }
+}
+
+export class TrashEmailSuccess implements Action {
+  public readonly type = EEmailActions.TrashEmailSuccess;
+
+  constructor(public payload: TrashPayload) {
+  }
+}
+
+
+export class UntrashEmail implements Action {
+  public readonly type = EEmailActions.UntrashEmail;
+
+  constructor(public payload: TrashPayload) {
+  }
+}
+
+export class UntrashEmailSuccess implements Action {
+  public readonly type = EEmailActions.UntrashEmailSuccess;
+
+  constructor(public payload: TrashPayload) {
+  }
+}
+
+export class RemoveEmail implements Action {
+  public readonly type = EEmailActions.RemoveEmail;
+
+  constructor(public payload: TrashPayload) {
+  }
+}
+
+export class RemoveEmailSuccess implements Action {
+  public readonly type = EEmailActions.RemoveEmailSuccess;
+
+  constructor(public payload: TrashPayload) {
+  }
+}
+
+
 export type EmailActions =
   | GmailAuth
   | GmailAuthSuccess
@@ -156,4 +259,16 @@ export type EmailActions =
   | SelectEmail
   | SelectEmailSuccess
   | SelectNewsEmail
-  | SelectNewsEmailSuccess;
+  | SelectNewsEmailSuccess
+  | GetTrash
+  | GetTrashSuccess
+  | GetSent
+  | GetSentSuccess
+  | TrashEmail
+  | TrashEmailSuccess
+  | UntrashEmail
+  | UntrashEmailSuccess
+  | RemoveEmail
+  | RemoveEmailSuccess
+  | GetEmail
+  | GetEmailSuccess;

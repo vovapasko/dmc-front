@@ -132,7 +132,7 @@ export class EmailsComponent implements OnInit {
 
   public openInbox(email: Email): void {
     const payload = { email: email.email, pagination: numbers.pageSize };
-    this.store.dispatch(new GetEmails(payload));
+    // this.store.dispatch(new GetEmails(payload));
     this.store.dispatch(new SelectNewsEmail(email));
     this.router.navigate([urls.INBOX]);
   }

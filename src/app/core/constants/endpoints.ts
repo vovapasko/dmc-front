@@ -26,8 +26,14 @@ export const endpoints = {
   PUBLICATIONS_BLACKLIST: 'publications-blacklist',
   COMMENTS: 'comments',
   MAILS: 'emails/inbox',
+  MESSAGES: 'emails/messages',
+  ATTACHMENTS: 'emails/attachments',
+  TRASH: 'emails/filter-messages',
+  SENT: 'emails/filter-messages',
+  UNTRASH: 'emails/untrash-message',
+  REMOVE: 'emails/remove-message',
   GMAIL_AUTH: 'emails/gmail-auth',
   GMAIL_CREDS_CLEAR: 'emails/gmail-creds-clear',
   GMAIL_TOKEN_REVOKE: 'emails/gmail-token-revoke',
-  GMAIL_REGISTERED: 'email-registered'
+  GMAIL_REGISTERED: 'email-registered',
 };

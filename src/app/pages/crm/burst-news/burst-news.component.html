@@ -472,7 +472,7 @@
                             </ul>
                             <form (ngSubmit)="newsFormSubmit()" [formGroup]="newsForm">
                                 <div class="row">
-                                    <div class="col-md-6 col-xl-3" *ngFor="let news of newsList; index as index">
+                                    <div class="col-md-3 col-xl-6" *ngFor="let news of newsList; index as index">
                                         <!-- Simple card -->
 
                                         <div class="card">
@@ -499,14 +499,17 @@
                                                        class="form-control"
                                                        (change)="updateField(index, 'title')"
                                                 />
-                                                <input type="text"
-                                                       placeholder="Введите содержание"
-                                                       [id]="'content' + index"
-                                                       [formControl]="getControl(index, 'content')"
-                                                       style="margin-bottom: 10px;"
-                                                       class="form-control"
-                                                       (change)="updateField(index, 'content')"
-                                                />
+                                                <quill-editor [styles]="{ height: '200px', 'margin-bottom': '15px' }"
+                                                              [id]="'text-content' + index"
+                                                              [formControl]="getControl(index, 'content')"
+                                                              (onBlur)="updateField(index, 'content')"
+                                                ></quill-editor>
+<!--                                                <textarea placeholder="Введите содержание"-->
+<!--                                                       [id]="'content' + index"-->
+<!--                                                       [formControl]="getControl(index, 'content')"-->
+<!--                                                       style="margin-bottom: 10px;"-->
+<!--                                                       class="form-control"-->
+<!--                                                       (change)="updateField(index, 'content')"></textarea>-->
                                                 <ng-select
                                                         id="news-contractors"
                                                         [items]="commonFormControls.projectContractors.value || []"
@@ -668,6 +671,15 @@
                                                               [formControl]="getControl(i, 'previewText')"
                                                               (onEditorCreated)="created($event)"
                                                 ></quill-editor>
+
+                                                <div class="row" *ngIf="news.attachments.length">
+                                                    <div *ngFor="let attachment of news.attachments" class="col-sm-2">
+                                                        <a (click)="downloadAttachment(attachment)" href="javascript: void(0)">
+                                                            <img [src]="attachment.type.includes('image') ? attachment.base64 : 'assets/images/attached-files/img-1.jpg'" [alt]="attachment.name" class="img-thumbnail img-responsive">
+                                                            <i>{{attachment.name}} ({{bytesToSize(attachment.size)}})</i>
+                                                        </a>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <ng-template #elseBlock>
@@ -718,6 +730,16 @@
                                                     (onBlur)="onEvent($event, false)"
                                                     formControlName="previewText"
                                             ></quill-editor>
+
+                                            <div class="row" *ngIf="editorForm.controls.attachments.value?.length">
+                                                <div *ngFor="let attachment of editorForm.controls.attachments.value" class="col-sm-2">
+                                                    <a (click)="downloadAttachment(attachment)" href="javascript: void(0)">
+                                                        <img [src]="attachment.type.includes('image') ? attachment.base64 : 'assets/images/attached-files/img-1.jpg'" [alt]="attachment.name" class="img-thumbnail img-responsive">
+                                                        <i>{{attachment.name}} ({{bytesToSize(attachment.size)}})</i>
+                                                    </a>
+                                                </div>
+                                            </div>
+
                                         </ng-template>
 
                                         <div class="col-12">

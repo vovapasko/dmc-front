@@ -19,6 +19,8 @@ export const urls = {
   PROFILE: 'profile',
   ACCOUNT_CONFIRM: '/account/confirm',
   INBOX: '/email/inbox',
+  SENT: '/email/sent',
+  TRASH: '/email/trash',
   EMAILS: '/email'
 };
 

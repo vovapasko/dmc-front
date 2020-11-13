@@ -10,9 +10,26 @@ export const emailReducers = (state = initialEmailState, action: EmailActions): 
         selectedEmail: action.payload
       };
     }
+    case EEmailActions.GetTrashSuccess: {
+      return {
+        ...state,
+        trash: action.payload.messages,
+        previousPageToken: state.nextPageToken,
+        nextPageToken: action.payload.nextPageToken
+      };
+    }
+    case EEmailActions.GetSentSuccess: {
+      return {
+        ...state,
+        sent: action.payload.messages,
+        previousPageToken: state.nextPageToken,
+        nextPageToken: action.payload.nextPageToken
+      };
+    }
     case EEmailActions.SelectNewsEmailSuccess: {
       return {
         ...state,
+        // @ts-ignore
         selectedEmail: action.payload
       };
     }
@@ -22,7 +39,34 @@ export const emailReducers = (state = initialEmailState, action: EmailActions): 
         emails: action.payload.messages,
         labels: action.payload.labels,
         previousPageToken: state.nextPageToken,
-        nextPageToken: action.payload.nextPageToken,
+        nextPageToken: action.payload.nextPageToken
+      };
+    }
+    case EEmailActions.GetEmailSuccess: {
+      return {
+        ...state,
+        email: action.payload,
+      };
+    }
+    case EEmailActions.TrashEmailSuccess: {
+      return {
+        ...state,
+        emails: state.emails.filter(message => action.payload.data.messageIds.indexOf(message.id) === -1),
+        sent: state.sent.filter(message => action.payload.data.messageIds.indexOf(message.id) === -1),
+      };
+    }
+    case EEmailActions.UntrashEmailSuccess: {
+      return {
+        ...state,
+        trash: state.trash.filter(message => action.payload.data.messageIds.indexOf(message.id) === -1),
+      };
+    }
+    case EEmailActions.RemoveEmailSuccess: {
+      return {
+        ...state,
+        trash: state.trash.filter(message => action.payload.data.messageIds.indexOf(message.id) === -1),
+        sent: state.sent.filter(message => action.payload.data.messageIds.indexOf(message.id) === -1),
+        emails: state.emails.filter(message => action.payload.data.messageIds.indexOf(message.id) === -1),
       };
     }
     case EEmailActions.GetNewsEmailsSuccess: {
@@ -34,13 +78,13 @@ export const emailReducers = (state = initialEmailState, action: EmailActions): 
     case EEmailActions.GmailAuthSuccess: {
       return {
         ...state,
-        authenticationUrl: action.payload.authenticationUrl,
+        authenticationUrl: action.payload.authenticationUrl
       };
     }
     case EEmailActions.CreateNewsEmailSuccess: {
       return {
         ...state,
-        newsEmails: [...state.newsEmails, action.payload],
+        newsEmails: [...state.newsEmails, action.payload]
       };
     }
     case EEmailActions.GmailTokenRevokeSuccess: {

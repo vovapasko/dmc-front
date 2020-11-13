@@ -1,9 +1,11 @@
-import { AbstractControl, Form } from '@angular/forms';
+import { AbstractControl, Form, ValidatorFn } from '@angular/forms';
 import { Project } from '@models/instances/project';
 import { matchColor, percentage } from '@constants/formula';
 import { Payloads } from '@models/payloads/payload';
 import { EmailEntity } from '@models/instances/email';
 import { FROM } from '@constants/titles';
+import { separators } from '@constants/separators';
+import { toByteArray } from 'base64-js';
 
 export const toCamel = (str: string): string => {
   return str.replace(/([-_][a-z])/gi, (element: string) => {
@@ -13,6 +15,19 @@ export const toCamel = (str: string): string => {
       .replace('_', '');
   });
 };
+
+
+export function emailValidator(): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: any } | null => {
+    const incorrect = control.value ? control.value.trim().split(separators.whitespace).some(invalidEmail) : null;
+    return incorrect ? { incorrectEmail: { value: control.value } } : null;
+  };
+}
+
+export function invalidEmail(email) {
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return !re.test(String(email).toLowerCase());
+}
 
 export function getSender(email: EmailEntity): string | null {
   return email.payload.headers.find(header => header.name === FROM).value;
@@ -178,3 +193,41 @@ export async function convertFileToBase64(file) {
   return file;
 }
 
+export function decodeBase64(data: string): string {
+  return new TextDecoder('utf-8').decode(toByteArray(data));
+}
+
+export function bytesToSize(bytes) {
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  if (bytes === 0) {
+    return '0 Byte';
+  }
+  // @ts-ignore
+  const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10);
+  // @ts-ignore
+  return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+}
+
+export function urltoFile(url, filename, mimeType){
+  return (fetch(url)
+      .then(function(res){return res.arrayBuffer(); })
+      .then(function(buf){return new File([buf], filename, {type: mimeType}); })
+  );
+}
+
+export function saveFile(blob, filename) {
+  if (window.navigator.msSaveOrOpenBlob) {
+    window.navigator.msSaveOrOpenBlob(blob, filename);
+  } else {
+    const a = document.createElement('a');
+    document.body.appendChild(a);
+    const url = window.URL.createObjectURL(blob);
+    a.href = url;
+    a.download = filename;
+    a.click();
+    setTimeout(() => {
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    }, 0);
+  }
+}

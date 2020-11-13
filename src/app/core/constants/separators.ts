@@ -1,5 +1,6 @@
 export const separators = {
   newLine: '\n',
   ampersand: '&',
-  questionMark: '?'
+  questionMark: '?',
+  whitespace: ' '
 };

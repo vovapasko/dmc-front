@@ -4,6 +4,9 @@ import { Label } from '@models/instances/labels';
 export interface IEmailState {
   newsEmails: Email[];
   emails: EmailEntity[];
+  email: EmailEntity;
+  trash: EmailEntity[];
+  sent: EmailEntity[];
   selectedEmail: EmailEntity;
   selectNewsEmail: Email;
   authenticationUrl: string;
@@ -15,10 +18,13 @@ export interface IEmailState {
 export const initialEmailState: IEmailState = {
   newsEmails: [],
   emails: [],
+  trash: [],
+  sent: [],
   labels: [],
   selectedEmail: null,
   selectNewsEmail: null,
   authenticationUrl: null,
   previousPageToken: null,
-  nextPageToken: null
+  nextPageToken: null,
+  email: null
 };

@@ -16,6 +16,8 @@ export class WidgetComponent implements OnInit {
   searchForm: FormGroup;
   @Output() reloadEvent = new EventEmitter<null>();
   @Output() removeEvent = new EventEmitter<null>();
+  @Output() trashEvent = new EventEmitter<null>();
+  @Output() untrashEvent = new EventEmitter<null>();
   @Output() searchEvent = new EventEmitter<string>();
 
 
@@ -36,6 +38,14 @@ export class WidgetComponent implements OnInit {
 
   public remove(): void {
     this.removeEvent.emit();
+  }
+
+  public trash(): void {
+    this.trashEvent.emit();
+  }
+
+  public untrash(): void {
+    this.untrashEvent.emit();
   }
 
   public search(): void {

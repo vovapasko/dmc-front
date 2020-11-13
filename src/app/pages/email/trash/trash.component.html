@@ -17,6 +17,8 @@
                 <div class="inbox-rightbar">
                     <app-widget (reloadEvent)="this.reload()"
                                 (searchEvent)="this.search($event)"
+                                (untrashEvent)="this.untrash()"
+                                (removeEvent)="this.remove()"
                                 [showMoveToTrashButton]="false"
                                 [showRemoveButton]="!!(checkedEmails$ | async)?.length"
                                 [showResetButton]="!!(checkedEmails$ | async)?.length"
@@ -49,7 +51,7 @@
                                 </div>
                                 <div class="col-mail col-mail-2">
 
-                                    <a routerLink="/email/read" class="subject">{{email.snippet}}
+                                    <a (click)="readEmail(email)" routerLink="/email/read" class="subject">{{email.snippet}}
                                     </a>
                                     <div class="date">{{email.internalDate | date: 'dd/MM/yyyy'}}</div>
                                 </div>
