@@ -671,6 +671,15 @@
                                                               [formControl]="getControl(i, 'previewText')"
                                                               (onEditorCreated)="created($event)"
                                                 ></quill-editor>
+
+                                                <div class="row" *ngIf="news.attachments.length">
+                                                    <div *ngFor="let attachment of news.attachments" class="col-sm-2">
+                                                        <a (click)="downloadAttachment(attachment)" href="javascript: void(0)">
+                                                            <img [src]="attachment.type.includes('image') ? attachment.base64 : 'assets/images/attached-files/img-1.jpg'" [alt]="attachment.name" class="img-thumbnail img-responsive">
+                                                            <i>{{attachment.name}} ({{bytesToSize(attachment.size)}})</i>
+                                                        </a>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <ng-template #elseBlock>
@@ -721,6 +730,16 @@
                                                     (onBlur)="onEvent($event, false)"
                                                     formControlName="previewText"
                                             ></quill-editor>
+
+                                            <div class="row" *ngIf="editorForm.controls.attachments.value?.length">
+                                                <div *ngFor="let attachment of editorForm.controls.attachments.value" class="col-sm-2">
+                                                    <a (click)="downloadAttachment(attachment)" href="javascript: void(0)">
+                                                        <img [src]="attachment.type.includes('image') ? attachment.base64 : 'assets/images/attached-files/img-1.jpg'" [alt]="attachment.name" class="img-thumbnail img-responsive">
+                                                        <i>{{attachment.name}} ({{bytesToSize(attachment.size)}})</i>
+                                                    </a>
+                                                </div>
+                                            </div>
+
                                         </ng-template>
 
                                         <div class="col-12">

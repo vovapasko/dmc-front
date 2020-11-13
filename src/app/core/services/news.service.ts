@@ -747,13 +747,13 @@ export class NewsService extends BaseService {
     validationForm.controls.projectHashtags.setValue(newsWave.hashtags);
     validationForm.controls.projectTitle.setValue(newsWave.title);
     validationForm.controls.projectBudget.setValue(newsWave.budget);
-    editorForm.controls.attachments.setValue(this.handleFiles(newsWave.waveFormation.attachments));
+    editorForm.controls.attachments.setValue(newsWave.waveFormation.attachments);
     editorForm.controls.text.setValue(newsWave.waveFormation.content);
     previewForm.controls.previewEmail.setValue(newsWave.waveFormation.email);
     previewForm.controls.previewText.setValue(newsWave.waveFormation.content);
     // @ts-ignore
     // tslint:disable-next-line:max-line-length
-    const newsList = newsWave.newsInProject.map((el: News) => new News(el.title, el.content, this.handleFiles(el.attachments), el.contractors, el.content, el.email, el.id));
+    const newsList = newsWave.newsInProject.map((el: News) => new News(el.title, el.content, el.attachments, el.contractors, el.content, el.email, el.id));
     const priceList = newsWave.newswavepricelistSet;
     return { newsList, priceList, controls: this.initControls(newsList), priceControls: this.fillPriceControls(priceList) };
   }
