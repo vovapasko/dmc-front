@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { NotificationService } from '@services/notification.service';
 import { ErrorService } from '@services/error.service';
 import { ServerResponse } from '@models/responses/server/response';
+import { NotificationType } from '@models/instances/notification';
 
 /**
  * This service for handle response from server, convert response body from snake case to camel case and notify about success
@@ -22,7 +23,7 @@ export class ResponseHandler {
     if (response && response.success) {
       const message = response.message ? response.message.message : '';
       const title = 'success';
-      // return this.notificationService.notify(NotificationType.success, title, message);
+      return this.notificationService.notify(NotificationType.success, title, message);
     }
     // clear any errors
     this.errorService.clear();
