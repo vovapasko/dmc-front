@@ -7,6 +7,8 @@ import { selectLoading } from '@store/selectors/loading.selectors';
 import { urls } from '@constants/urls';
 import { EmailService } from '@services/email.service';
 import { Router } from '@angular/router';
+import { bytesToSize, urltoFile } from '@helpers/utility';
+import { Attachment } from '@models/instances/attachment';
 
 @Component({
   selector: 'app-reademail',
@@ -22,6 +24,7 @@ export class ReademailComponent implements OnInit {
   breadCrumbItems: Array<{}>;
   email$ = this.store.pipe(select(selectEmail));
   loading = false;
+  bytesToSize = bytesToSize;
 
   constructor(
     private store: Store<IAppState>,
@@ -32,6 +35,19 @@ export class ReademailComponent implements OnInit {
     if (!this.emailService.selectedNewsEmail) {
       this.router.navigate([urls.EMAILS]);
     }
+  }
+
+  public downloadAttachment(attachment: Attachment): void {
+    // @ts-ignore
+    const payload = { attachmentId: attachment.attachemntId };
+    this.emailService.getAttachment(payload).subscribe(
+      (response: Attachment) => {
+        urltoFile(response.base64, response.name, response.type).then(file => {
+          const url = window.URL.createObjectURL(file);
+          window.open(url);
+        });
+      }
+    );
   }
 
   public processLoading(value: boolean): void {

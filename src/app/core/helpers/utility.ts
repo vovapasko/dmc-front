@@ -5,7 +5,7 @@ import { Payloads } from '@models/payloads/payload';
 import { EmailEntity } from '@models/instances/email';
 import { FROM } from '@constants/titles';
 import { separators } from '@constants/separators';
-import {toByteArray} from 'base64-js';
+import { toByteArray } from 'base64-js';
 
 export const toCamel = (str: string): string => {
   return str.replace(/([-_][a-z])/gi, (element: string) => {
@@ -195,4 +195,22 @@ export async function convertFileToBase64(file) {
 
 export function decodeBase64(data: string): string {
   return new TextDecoder('utf-8').decode(toByteArray(data));
+}
+
+export function bytesToSize(bytes) {
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  if (bytes === 0) {
+    return '0 Byte';
+  }
+  // @ts-ignore
+  const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10);
+  // @ts-ignore
+  return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+}
+
+export function urltoFile(url, filename, mimeType){
+  return (fetch(url)
+      .then(function(res){return res.arrayBuffer();})
+      .then(function(buf){return new File([buf], filename,{type:mimeType});})
+  );
 }

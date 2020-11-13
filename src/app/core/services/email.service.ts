@@ -19,6 +19,8 @@ import { separators } from '@constants/separators';
 import { GetEmailPayload } from '@models/payloads/email/get-email';
 import { GetEmailResponse } from '@models/responses/email/get-email';
 import { escapeXml } from '@angular/compiler/src/i18n/serializers/xml_helper';
+import { Attachment } from '@models/instances/attachment';
+import { GetAttachmentPayload } from '@models/payloads/email/get-attachment';
 
 const api = environment.api;
 
@@ -229,6 +231,20 @@ export class EmailService extends BaseService {
     email.base64 = email.payload.body.data;
     email.html = decodeBase64(email.base64);
     return email;
+  }
+
+  /**
+   *  Get email
+   */
+  public getAttachment(payload: GetAttachmentPayload): Observable<Attachment> {
+    return this.requestHandler.request(
+      this.url(api, endpoints.ATTACHMENTS, null, payload),
+      methods.GET,
+      null,
+      (response: Attachment) => {
+        return response;
+      }
+    );
   }
 
   /**

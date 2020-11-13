@@ -27,6 +27,7 @@ export const endpoints = {
   COMMENTS: 'comments',
   MAILS: 'emails/inbox',
   MESSAGES: 'emails/messages',
+  ATTACHMENTS: 'emails/attachments',
   TRASH: 'emails/trash-message',
   SENT: 'emails/sent',
   UNTRASH: 'emails/untrash-message',

@@ -31,27 +31,17 @@
 
                         <hr/>
 
-                        <h6><i class="fa fa-paperclip mb-2"></i> Attachments <span>(3)</span></h6>
+                        <h6 *ngIf="(email$ | async)?.attachments?.length"><i class="fa fa-paperclip mb-2"></i> Вложения <span>({{(email$ | async)?.attachments?.length}})</span></h6>
 
-                        <div class="row">
-                            <div class="col-sm-2">
-                                <a href="javascript: void(0)"> <img src="assets/images/attached-files/img-1.jpg"
-                                                                    alt="attachment"
-                                                                    class="img-thumbnail img-responsive"> </a>
-                            </div>
-                            <div class="col-sm-2 mt-3 mt-sm-0">
-                                <a href="javascript: void(0)"> <img src="assets/images/attached-files/img-2.jpg"
-                                                                    alt="attachment"
-                                                                    class="img-thumbnail img-responsive"> </a>
-                            </div>
-                            <div class="col-sm-2 mt-3 mt-sm-0">
-                                <a href="javascript: void(0)"> <img src="assets/images/attached-files/img-3.jpg"
-                                                                    alt="attachment"
-                                                                    class="img-thumbnail img-responsive"> </a>
+                        <div class="row" *ngIf="(email$ | async)?.attachments?.length">
+                            <div *ngFor="let attachment of (email$ | async)?.attachments" class="col-sm-2">
+                                <a (click)="downloadAttachment(attachment)" href="javascript: void(0)">
+                                    <img src="assets/images/attached-files/img-1.jpg" [alt]="attachment.name" class="img-thumbnail img-responsive">
+                                    <i>{{attachment.name}} ({{bytesToSize(attachment.size)}})</i>
+                                </a>
                             </div>
                         </div>
-                        <a href="https://dribbble.com/BalkanBrothers" target="_blank" class="text-muted font-13"><i>images
-                            used</i></a>
+                        <a href="javascript: void(0)" class="text-muted font-13"><i>Нажмите на вложение для загрузки</i></a>
 
                     </div>
                 </div>
