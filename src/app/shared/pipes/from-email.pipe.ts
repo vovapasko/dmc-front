@@ -8,7 +8,7 @@ import { FROM } from '@constants/titles';
 export class FromEmailPipe implements PipeTransform {
 
   transform(value: EmailEntity, ...args: unknown[]): unknown {
-    return value.payload.headers.find(header => header.name === FROM).value;
+    return value.payload.headers.find(header => header.name.toLowerCase() === FROM.toLowerCase()).value;
   }
 
 }
