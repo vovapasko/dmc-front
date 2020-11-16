@@ -84,6 +84,7 @@ export class ComposeemailComponent implements OnInit {
     const { receiver, subject, content, attachments } = this.composeEmailForm.value;
     const data = { email: this.emailService.selectedNewsEmail.email, emailTo: receiver, subject, text: content, attachments };
     if (copy) {
+      // @ts-ignore
       data.cc = copy;
     }
     this.submit({ data });
