@@ -34,7 +34,7 @@ export class ComposeemailComponent implements OnInit {
   constructor(
     private emailService: EmailService,
     private router: Router,
-    private store: Store<IAppState>,
+    private store: Store<IAppState>
   ) {
   }
 
@@ -79,9 +79,13 @@ export class ComposeemailComponent implements OnInit {
     if (composeEmailForm.invalid) {
       return;
     }
-    const copy = this.composeEmailFormControls.copy.value.split(separators.whitespace).join(',');
+    // tslint:disable-next-line:max-line-length
+    const copy = this.composeEmailFormControls.copy.value ? this.composeEmailFormControls.copy.value.split(separators.whitespace).join(',') : null;
     const { receiver, subject, content, attachments } = this.composeEmailForm.value;
-    const data = { email: this.emailService.selectedNewsEmail.email, emailTo: receiver, cc: copy, subject, text: content, attachments };
+    const data = { email: this.emailService.selectedNewsEmail.email, emailTo: receiver, subject, text: content, attachments };
+    if (copy) {
+      data.cc = copy;
+    }
     this.submit({ data });
   }
 
