@@ -209,6 +209,10 @@ export function bytesToSize(bytes) {
 }
 
 export function urltoFile(url, filename, mimeType) {
+  // const prefix = `data:${mimeType};base64,`;
+  // if (!url.includes('data:')) {
+  //   url = prefix + url;
+  // }
   return (fetch(url)
       .then(function(res) {
         return res.arrayBuffer();

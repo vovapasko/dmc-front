@@ -7,8 +7,9 @@ import { selectLoading } from '@store/selectors/loading.selectors';
 import { urls } from '@constants/urls';
 import { EmailService } from '@services/email.service';
 import { Router } from '@angular/router';
-import { bytesToSize, saveFile, urltoFile } from '@helpers/utility';
+import { base64ToArrayBuffer, bytesToSize, saveFile, urltoFile } from '@helpers/utility';
 import { Attachment } from '@models/instances/attachment';
+import { encode, decode, toUint8Array } from 'js-base64';
 
 @Component({
   selector: 'app-reademail',
@@ -39,14 +40,14 @@ export class ReademailComponent implements OnInit {
 
   public downloadAttachment(attachment: Attachment): void {
     const payload = {
-      // @ts-ignore
-      attachmentId: attachment.attachemntId,
+      attachmentId: attachment.attachmentId,
       messageId: this.emailService.selectedEmail.id,
       email: this.emailService.selectedNewsEmail.email
     };
     this.emailService.getAttachment(payload).subscribe(
       (response: Attachment) => {
-        urltoFile(response.data, response.name, response.type).then(file => {
+        const url = URL.createObjectURL(new Blob([toUint8Array(response.data)] , {type: attachment.type}));
+        urltoFile(url, attachment.name, attachment.type).then(file => {
           saveFile(file, attachment.name);
         });
       }
