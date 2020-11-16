@@ -31,6 +31,7 @@ export const endpoints = {
   TRASH: 'emails/filter-messages',
   SENT: 'emails/filter-messages',
   UNTRASH: 'emails/untrash-message',
+  COMPOSE_EMAIL: 'emails/send-message',
   REMOVE: 'emails/remove-message',
   GMAIL_AUTH: 'emails/gmail-auth',
   GMAIL_CREDS_CLEAR: 'emails/gmail-creds-clear',

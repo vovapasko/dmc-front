@@ -21,6 +21,7 @@ import { GetEmailResponse } from '@models/responses/email/get-email';
 import { escapeXml } from '@angular/compiler/src/i18n/serializers/xml_helper';
 import { Attachment } from '@models/instances/attachment';
 import { GetAttachmentPayload } from '@models/payloads/email/get-attachment';
+import { ComposeEmailPayload } from '@models/payloads/email/compose-email';
 
 const api = environment.api;
 
@@ -339,12 +340,24 @@ export class EmailService extends BaseService {
   /**
    * Create email
    */
-  public createEmail(payload: CreateEmailPayload) {
+  public createEmail(payload: CreateEmailPayload): Observable<Email> {
     return this.requestHandler.request(
       this.url(api, endpoints.EMAILS),
       methods.POST,
       payload,
       (response: Email) => response
+    );
+  }
+
+  /**
+   * Compose email
+   */
+  public composeEmail(payload: ComposeEmailPayload): Observable<EmailEntity> {
+    return this.requestHandler.request(
+      this.url(api, endpoints.COMPOSE_EMAIL),
+      methods.POST,
+      payload,
+      (response: EmailEntity) => response
     );
   }
 

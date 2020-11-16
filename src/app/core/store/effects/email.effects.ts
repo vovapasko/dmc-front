@@ -4,6 +4,7 @@ import { of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { EmailService } from '@services/email.service';
 import {
+  ComposeEmail, ComposeEmailSuccess,
   CreateNewsEmail,
   CreateNewsEmailSuccess,
   EEmailActions, GetEmail,
@@ -37,6 +38,7 @@ import { GetEmailsResponse } from '@models/responses/email/get-emails';
 import { TrashPayload } from '@models/payloads/email/trash';
 import { GetEmailPayload } from '@models/payloads/email/get-email';
 import { GetEmailResponse } from '@models/responses/email/get-email';
+import { ComposeEmailPayload } from '@models/payloads/email/compose-email';
 
 @Injectable({
   providedIn: 'root'
@@ -75,6 +77,13 @@ export class EmailEffects {
     ofType<GetEmail>(EEmailActions.GetEmail),
     switchMap((action: { payload: GetEmailPayload }) => this.emailService.getEmail(action.payload)),
     switchMap((response: EmailEntity) => of(new GetEmailSuccess(response)))
+  );
+
+  @Effect()
+  composeEmail$ = this.actions$.pipe(
+    ofType<ComposeEmail>(EEmailActions.ComposeEmail),
+    switchMap((action: { payload: ComposeEmailPayload }) => this.emailService.composeEmail(action.payload)),
+    switchMap((response: EmailEntity) => of(new ComposeEmailSuccess(response)))
   );
 
   @Effect()

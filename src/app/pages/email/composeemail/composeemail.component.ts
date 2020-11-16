@@ -9,6 +9,9 @@ import { separators } from '@constants/separators';
 import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
 import { Attachment } from '@models/instances/attachment';
 import { urltoFile, bytesToSize, saveFile } from '@helpers/utility';
+import { Store } from '@ngrx/store';
+import { IAppState } from '@store/state/app.state';
+import { ComposeEmail } from '@store/actions/email.actions';
 
 @Component({
   selector: 'app-composeemail',
@@ -30,7 +33,8 @@ export class ComposeemailComponent implements OnInit {
 
   constructor(
     private emailService: EmailService,
-    private router: Router
+    private router: Router,
+    private store: Store<IAppState>,
   ) {
   }
 
@@ -71,16 +75,17 @@ export class ComposeemailComponent implements OnInit {
   public onSubmit(): void {
     this.submitted = true;
     const composeEmailForm = this.composeEmailForm;
+    console.log(composeEmailForm);
     if (composeEmailForm.invalid) {
       return;
     }
-    const copy = this.composeEmailFormControls.copy.value.split(separators.whitespace);
+    const copy = this.composeEmailFormControls.copy.value.split(separators.whitespace).join(',');
     const { receiver, subject, content, attachments } = this.composeEmailForm.value;
-    const data = { receiver, copy, subject, content, attachments };
+    const data = { email: this.emailService.selectedNewsEmail.email, emailTo: receiver, cc: copy, subject, text: content };
     this.submit({ data });
   }
 
   public submit(payload): void {
-    console.log(payload);
+    this.store.dispatch(new ComposeEmail(payload));
   }
 }

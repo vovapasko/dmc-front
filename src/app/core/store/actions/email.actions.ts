@@ -7,11 +7,13 @@ import { GetEmailsPayload } from '@models/payloads/email/get-emails';
 import { GetEmailsResponse } from '@models/responses/email/get-emails';
 import { TrashPayload } from '@models/payloads/email/trash';
 import { GetEmailPayload } from '@models/payloads/email/get-email';
-import { GetEmailResponse } from '@models/responses/email/get-email';
+import { ComposeEmailPayload } from '@models/payloads/email/compose-email';
 
 export enum EEmailActions {
   GetEmails = '[Email] Get emails',
   GetEmailsSuccess = '[Email] Get emails success',
+  ComposeEmail = '[Email] Compose emails',
+  ComposeEmailSuccess = '[Email] Compose emails success',
   GetEmail = '[Email] Get email',
   GetEmailSuccess = '[Email] Get email success',
   TrashEmail = '[Email] Trash email',
@@ -51,6 +53,20 @@ export class SelectNewsEmailSuccess implements Action {
   public readonly type = EEmailActions.SelectNewsEmailSuccess;
 
   constructor(public payload: Email) {
+  }
+}
+
+export class ComposeEmail implements Action {
+  public readonly type = EEmailActions.ComposeEmail;
+
+  constructor(public payload: ComposeEmailPayload) {
+  }
+}
+
+export class ComposeEmailSuccess implements Action {
+  public readonly type = EEmailActions.ComposeEmailSuccess;
+
+  constructor(public payload: EmailEntity) {
   }
 }
 
@@ -271,4 +287,6 @@ export type EmailActions =
   | RemoveEmail
   | RemoveEmailSuccess
   | GetEmail
-  | GetEmailSuccess;
+  | GetEmailSuccess
+  | ComposeEmail
+  | ComposeEmailSuccess;
