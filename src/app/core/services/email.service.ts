@@ -253,7 +253,7 @@ export class EmailService extends BaseService {
    */
   public getTrash(payload: GetEmailsPayload): Observable<GetEmailsResponse> {
     return this.requestHandler.request(
-      this.url(api, endpoints.TRASH, null, payload),
+      this.url(api, endpoints.TRASH_MESSAGES, null, payload),
       methods.GET,
       null,
       (response: GetEmailsResponse) => {

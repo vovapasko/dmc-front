@@ -29,6 +29,7 @@ export const endpoints = {
   MESSAGES: 'emails/messages',
   ATTACHMENTS: 'emails/attachments',
   TRASH: 'emails/trash-message',
+  TRASH_MESSAGES: 'emails/filter-messages',
   SENT: 'emails/filter-messages',
   UNTRASH: 'emails/untrash-message',
   COMPOSE_EMAIL: 'emails/send-message',
