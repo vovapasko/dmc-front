@@ -38,11 +38,15 @@ export class ReademailComponent implements OnInit {
   }
 
   public downloadAttachment(attachment: Attachment): void {
-    // @ts-ignore
-    const payload = { attachmentId: attachment.attachemntId };
+    const payload = {
+      // @ts-ignore
+      attachmentId: attachment.attachemntId,
+      messageId: this.emailService.selectedEmail.id,
+      email: this.emailService.selectedNewsEmail.email
+    };
     this.emailService.getAttachment(payload).subscribe(
       (response: Attachment) => {
-        urltoFile(response.base64, response.name, response.type).then(file => {
+        urltoFile(response.data, response.name, response.type).then(file => {
           saveFile(file, attachment.name);
         });
       }
