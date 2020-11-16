@@ -182,10 +182,10 @@ export class EmailService extends BaseService {
   public processMail(email: EmailEntity): EmailEntity {
     this.processHtml(email);
     this.processAttachments(email);
-    email.subject = email.payload.headers.find(header => header.name === payloadHeaders.subject).value;
-    email.from = email.payload.headers.find(header => header.name === payloadHeaders.from).value;
-    email.to = email.payload.headers.find(header => header.name === payloadHeaders.to).value;
-    email.date = email.payload.headers.find(header => header.name === payloadHeaders.date).value;
+    email.subject = email.payload.headers.find(header => header.name.toLowerCase() === payloadHeaders.subject.toLowerCase()).value;
+    email.from = email.payload.headers.find(header => header.name.toLowerCase() === payloadHeaders.from.toLowerCase()).value;
+    email.to = email.payload.headers.find(header => header.name.toLowerCase() === payloadHeaders.to.toLowerCase()).value;
+    email.date = email.payload.headers.find(header => header.name.toLowerCase() === payloadHeaders.date.toLowerCase()).value;
     return email;
   }
 
