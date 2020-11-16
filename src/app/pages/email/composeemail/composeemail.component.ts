@@ -12,6 +12,7 @@ import { urltoFile, bytesToSize, saveFile } from '@helpers/utility';
 import { Store } from '@ngrx/store';
 import { IAppState } from '@store/state/app.state';
 import { ComposeEmail } from '@store/actions/email.actions';
+import { StartLoading } from '@store/actions/loading.actions';
 
 @Component({
   selector: 'app-composeemail',
@@ -75,19 +76,24 @@ export class ComposeemailComponent implements OnInit {
   public onSubmit(): void {
     this.submitted = true;
     const composeEmailForm = this.composeEmailForm;
-    console.log(composeEmailForm);
     if (composeEmailForm.invalid) {
       return;
     }
     // tslint:disable-next-line:max-line-length
     const copy = this.composeEmailFormControls.copy.value ? this.composeEmailFormControls.copy.value.split(separators.whitespace).join(',') : null;
     const { receiver, subject, content, attachments } = this.composeEmailForm.value;
-    const data = { email: this.emailService.selectedNewsEmail.email, emailTo: receiver, subject, text: content, attachments };
+    const data = { email: this.emailService.selectedNewsEmail.email, emailTo: receiver, subject, text: content };
     if (copy) {
       // @ts-ignore
       data.cc = copy;
     }
+    if (attachments) {
+      // @ts-ignore
+      data.attachments = attachments;
+    }
     this.submit({ data });
+    this.submitted = false;
+    this.composeEmailForm.reset();
   }
 
   public submit(payload): void {
