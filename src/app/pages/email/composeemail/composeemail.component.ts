@@ -4,15 +4,12 @@ import { EmailService } from '@services/email.service';
 import { urls } from '@constants/urls';
 import { Router } from '@angular/router';
 import { AbstractControl, FormGroup } from '@angular/forms';
-import { Infos } from '@constants/notifications';
 import { separators } from '@constants/separators';
-import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
 import { Attachment } from '@models/instances/attachment';
 import { urltoFile, bytesToSize, saveFile } from '@helpers/utility';
 import { Store } from '@ngrx/store';
 import { IAppState } from '@store/state/app.state';
 import { ComposeEmail } from '@store/actions/email.actions';
-import { StartLoading } from '@store/actions/loading.actions';
 
 @Component({
   selector: 'app-composeemail',
