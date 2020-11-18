@@ -70,7 +70,10 @@ export class ProjectService extends BaseService {
       this.url(api, endpoints.NEWSPROJECTS),
       methods.POST,
       payload,
-      (response: NewsProject) => response
+      (response: NewsProject) => {
+        this.newsProjects = [...this.newsProjects, response];
+        return response;
+      }
     );
   }
 
@@ -82,7 +85,10 @@ export class ProjectService extends BaseService {
       this.url(api, endpoints.NEWSPROJECTS, payload.id),
       methods.PUT,
       payload,
-      (response: NewsProject) => response
+      (response: NewsProject) => {
+        this.newsProjects = this.newsProjects.map(el => el.id === payload.id ? response : el);
+        return response;
+      }
     );
   }
 
@@ -134,7 +140,10 @@ export class ProjectService extends BaseService {
       this.url(api, endpoints.NEWSPROJECTS, payload.id),
       methods.DELETE,
       null,
-      (response: any) => payload
+      (response: any) => {
+        this.newsProjects = this.newsProjects.filter(project => project.id !== payload.id);
+        return payload;
+      }
     );
   }
 
