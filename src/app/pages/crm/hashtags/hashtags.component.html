@@ -4,8 +4,6 @@
         <app-ui-preloader [display]="loading$ | async"></app-ui-preloader>
         <div class="col-12">
             <div class="card-box">
-                <div class="clearfix mt-4"></div>
-
                 <div class="row mb-2">
                     <div class="col-sm-4">
                         <form class="form-inline">
@@ -20,7 +18,7 @@
                         <div class="text-sm-right">
                             <button type="button"
                                     (click)="openModal(createHashtag)"
-                                    class="btn btn-sm btn-blue float-right"
+                                    class="btn float-right btn-danger mb-3"
                             >
                                 <i class="mdi mdi-plus-circle"></i> Добавить хештег
                             </button>
