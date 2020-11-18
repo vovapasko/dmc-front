@@ -96,9 +96,9 @@ export class HashtagService extends BaseService{
       this.url(api, endpoints.HASHTAGS),
       methods.POST,
       payload,
-      (response: Hashtag) => {
-        this.hashtags = [...this.hashtags, response];
-        return response;
+      (response: {hashtag: Hashtag }) => {
+        this.hashtags = [...this.hashtags, response.hashtag];
+        return response.hashtag;
       }
     );
   }
