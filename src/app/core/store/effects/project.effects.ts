@@ -17,7 +17,7 @@ import {
   GetNewsProject,
   GetNewsProjects,
   GetNewsProjectsSuccess,
-  GetNewsProjectSuccess,
+  GetNewsProjectSuccess, GetNewsWaves, GetNewsWavesSuccess,
   UpdateEmail,
   UpdateEmailSuccess,
   UpdateNewsProject,
@@ -32,9 +32,11 @@ import { CreateNewsProjectPayload } from '@models/payloads/project/news-project/
 import { UpdateNewsProjectPayload } from '@models/payloads/project/news-project/update';
 import { GetNewsProjectPayload } from '@models/payloads/project/news-project/get';
 import { DeleteNewsProjectPayload } from '@models/payloads/project/news-project/delete';
+import { NewsWaves } from '@models/instances/news-waves';
+import { GetNewsWavesPayload } from '@models/payloads/project/news/get';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class ProjectEffects {
   @Effect()
@@ -47,21 +49,21 @@ export class ProjectEffects {
   @Effect()
   createEmail$ = this.actions$.pipe(
     ofType<CreateEmail>(EProjectActions.CreateEmail),
-    switchMap((action: {payload: CreateEmailPayload}) => this.projectService.createEmail(action.payload)),
+    switchMap((action: { payload: CreateEmailPayload }) => this.projectService.createEmail(action.payload)),
     switchMap((email: Email) => of(new CreateEmailSuccess(email)))
   );
 
   @Effect()
   updateEmail$ = this.actions$.pipe(
     ofType<UpdateEmail>(EProjectActions.UpdateEmail),
-    switchMap((action: {payload: UpdateEmailPayload}) => this.projectService.updateEmail(action.payload)),
+    switchMap((action: { payload: UpdateEmailPayload }) => this.projectService.updateEmail(action.payload)),
     switchMap((email: Email) => of(new UpdateEmailSuccess(email)))
   );
 
   @Effect()
   deleteEmail$ = this.actions$.pipe(
     ofType<DeleteEmail>(EProjectActions.DeleteEmail),
-    switchMap((action: {payload: DeleteEmailPayload}) => this.projectService.deleteEmail(action.payload)),
+    switchMap((action: { payload: DeleteEmailPayload }) => this.projectService.deleteEmail(action.payload)),
     switchMap((payload: DeleteEmailPayload) => of(new DeleteEmailSuccess(payload)))
   );
 
@@ -76,7 +78,7 @@ export class ProjectEffects {
   @Effect()
   createNewsProject$ = this.actions$.pipe(
     ofType<CreateNewsProject>(EProjectActions.CreateNewsProject),
-    switchMap((action: {payload: CreateNewsProjectPayload}) => this.projectService.createNewsProject(action.payload)),
+    switchMap((action: { payload: CreateNewsProjectPayload }) => this.projectService.createNewsProject(action.payload)),
     switchMap((payload: NewsProject) => of(new CreateNewsProjectSuccess(payload)))
   );
 
@@ -84,7 +86,7 @@ export class ProjectEffects {
   @Effect()
   updateNewsProjects$ = this.actions$.pipe(
     ofType<UpdateNewsProject>(EProjectActions.UpdateNewsProject),
-    switchMap((action: {payload: UpdateNewsProjectPayload}) => this.projectService.updateNewsProject(action.payload)),
+    switchMap((action: { payload: UpdateNewsProjectPayload }) => this.projectService.updateNewsProject(action.payload)),
     switchMap((payload: NewsProject) => of(new UpdateNewsProjectSuccess(payload)))
   );
 
@@ -92,19 +94,27 @@ export class ProjectEffects {
   @Effect()
   getNewsProject$ = this.actions$.pipe(
     ofType<GetNewsProject>(EProjectActions.GetNewsProject),
-    switchMap((action: {payload: GetNewsProjectPayload}) => this.projectService.getNewsProject(action.payload)),
+    switchMap((action: { payload: GetNewsProjectPayload }) => this.projectService.getNewsProject(action.payload)),
     switchMap((payload: NewsProject) => of(new GetNewsProjectSuccess(payload)))
+  );
+
+
+  @Effect()
+  getNewsWaves$ = this.actions$.pipe(
+    ofType<GetNewsWaves>(EProjectActions.GetNewsWaves),
+    switchMap((action: { payload: GetNewsWavesPayload }) => this.projectService.getNewsWaves(action.payload)),
+    switchMap((payload: NewsWaves[]) => of(new GetNewsWavesSuccess(payload)))
   );
 
 
   @Effect()
   deleteNewsProject$ = this.actions$.pipe(
     ofType<DeleteNewsProject>(EProjectActions.DeleteNewsProject),
-    switchMap((action: {payload: DeleteNewsProjectPayload}) => this.projectService.deleteNewsProject(action.payload)),
+    switchMap((action: { payload: DeleteNewsProjectPayload }) => this.projectService.deleteNewsProject(action.payload)),
     switchMap((payload: DeleteNewsProjectPayload) => of(new DeleteNewsProjectSuccess(payload)))
   );
 
 
-
-  constructor(private projectService: ProjectService, private actions$: Actions) {}
+  constructor(private projectService: ProjectService, private actions$: Actions) {
+  }
 }

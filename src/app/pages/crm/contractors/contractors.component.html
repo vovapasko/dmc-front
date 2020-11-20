@@ -17,6 +17,12 @@
                         </div>
                         <div class="col-md-10">
                             <div class="text-md-right">
+                                <div class="btn-group mb-3 ml-1">
+                                    <button type="button" (click)="openModal(createModal)" class="btn btn-danger mb-3">
+                                        <i class="mdi mdi-basket mr-1"></i>
+                                        Добавить контрагента
+                                    </button>
+                                </div>
                                 <div class="dropdown float-right" ngbDropdown>
                                     <a
                                             href="javascript: void(0);"
@@ -27,14 +33,6 @@
                                         <i class="mdi mdi-dots-vertical m-0 text-muted h3"></i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
-                                        <!-- item-->
-                                        <a href="javascript:void(0);"
-                                           class="dropdown-item"
-                                           (click)="openModal(createModal)"
-                                        >
-                                            <i class="mdi mdi-basket mr-1"></i>
-                                            Добавить контрагента
-                                        </a>
                                         <!-- item-->
                                         <a href="javascript:void(0);"
                                            class="dropdown-item"
@@ -355,6 +353,10 @@
                     <div *ngIf="submitted && createFormatFormControls.postFormat.errors" class="invalid-feedback">
                         <div *ngIf="createFormatFormControls.postFormat.errors.required">Название формата обязательно</div>
                     </div>
+
+                    <div *ngIf="submitted && createFormatFormControls.postFormat.errors" class="invalid-feedback">
+                        <div *ngIf="createFormatFormControls.postFormat.errors.maxlength">Название формата не должно превышать 50 символов</div>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -370,6 +372,12 @@
                     <div *ngIf="submitted && createFormatFormControls.onePostPrice.errors" class="invalid-feedback">
                         <div *ngIf="createFormatFormControls.onePostPrice.errors.required">Это поле обязательно для заполнения</div>
                     </div>
+
+                    <div *ngIf="submitted && createFormatFormControls.onePostPrice.errors" class="invalid-feedback">
+                        <div *ngIf="createFormatFormControls.onePostPrice.errors.min">Значение не может быть меньше 0</div>
+                    </div>
+
+
                 </div>
 
 
@@ -386,6 +394,10 @@
                     <div *ngIf="submitted && createFormatFormControls.newsAmount.errors" class="invalid-feedback">
                         <div *ngIf="createFormatFormControls.newsAmount.errors.required">Это поле обязательно для заполнения</div>
                     </div>
+
+                    <div *ngIf="submitted && createFormatFormControls.newsAmount.errors" class="invalid-feedback">
+                        <div *ngIf="createFormatFormControls.newsAmount.errors.min">Значение не может быть меньше 0</div>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -400,6 +412,10 @@
 
                     <div *ngIf="submitted && createFormatFormControls.arrangedNews.errors" class="invalid-feedback">
                         <div *ngIf="createFormatFormControls.arrangedNews.errors.required">Это поле обязательно для заполнения</div>
+                    </div>
+
+                    <div *ngIf="submitted && createFormatFormControls.arrangedNews.errors" class="invalid-feedback">
+                        <div *ngIf="createFormatFormControls.arrangedNews.errors.min">Значение не может быть меньше 0</div>
                     </div>
                 </div>
 

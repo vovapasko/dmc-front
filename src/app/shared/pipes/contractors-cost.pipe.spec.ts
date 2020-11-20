@@ -1,6 +1,6 @@
 import { ContractorsCostPipe } from './contractors-cost.pipe';
 import {mockContractor} from '../../core/mocks/contractor.mock';
-import { Contractor } from '../../core/models/instances/contractor';
+import { Contractor } from '@models/instances/contractor';
 
 describe('ContractorsCostPipe', () => {
   it('should create', () => {

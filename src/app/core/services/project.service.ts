@@ -1,9 +1,8 @@
 import { environment } from '../../../environments/environment';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { RequestHandler } from '../helpers/request-handler';
+import { RequestHandler } from '@helpers/request-handler';
 import { endpoints } from '@constants/endpoints';
 import { methods } from '@constants/methods';
 import { CreateEmailPayload } from '@models/payloads/project/email/create';
@@ -17,6 +16,12 @@ import { UpdateNewsProjectPayload } from '@models/payloads/project/news-project/
 import { GetNewsProjectPayload } from '@models/payloads/project/news-project/get';
 import { DeleteNewsProjectPayload } from '@models/payloads/project/news-project/delete';
 import { GetAllNewsProjectsResponse } from '@models/responses/project/news-project/getAll';
+import { GetNewsWavesPayload } from '@models/payloads/project/news/get';
+import { NewsWaves } from '@models/instances/news-waves';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { BaseService } from '@services/base.service';
+import numbers from '@constants/numbers';
+import { Hashtag } from '@models/instances/hashtag';
 
 const api = environment.api;
 
@@ -25,95 +30,162 @@ const api = environment.api;
  */
 
 @Injectable({ providedIn: 'root' })
-export class ProjectService {
+export class ProjectService extends BaseService {
+
+  newsProjects$: BehaviorSubject<Array<NewsProject>> = new BehaviorSubject([]);
+
+
   constructor(
-    private http: HttpClient,
     private requestHandler: RequestHandler,
     public formBuilder: FormBuilder
   ) {
+    super();
   }
 
+  get newsProjects() {
+    return this.newsProjects$.getValue();
+  }
+
+  set newsProjects(value: Array<NewsProject>) {
+    this.newsProjects$.next(value);
+  }
+
+  /**
+   * Create email
+   */
   public createEmail(payload: CreateEmailPayload) {
     return this.requestHandler.request(
-      `${api}/${endpoints.EMAILS}/`,
+      this.url(api, endpoints.EMAILS),
       methods.POST,
       payload,
       (response: Email) => response
     );
   }
 
+  /**
+   * Create news project
+   */
   public createNewsProject(payload: CreateNewsProjectPayload) {
     return this.requestHandler.request(
-      `${api}/${endpoints.NEWSPROJECTS}/`,
+      this.url(api, endpoints.NEWSPROJECTS),
       methods.POST,
       payload,
-      (response: NewsProject) => response
+      (response: NewsProject) => {
+        this.newsProjects = [...this.newsProjects, response];
+        return response;
+      }
     );
   }
 
+  /**
+   * Edit news project
+   */
   public updateNewsProject(payload: UpdateNewsProjectPayload) {
     return this.requestHandler.request(
-      `${api}/${endpoints.NEWSPROJECTS}/${payload.id}`,
+      this.url(api, endpoints.NEWSPROJECTS, payload.id),
       methods.PUT,
       payload,
-      (response: NewsProject) => response
+      (response: NewsProject) => {
+        this.newsProjects = this.newsProjects.map(el => el.id === payload.id ? response : el);
+        return response;
+      }
     );
   }
 
+  /**
+   * Get news project
+   */
   public getNewsProject(payload: GetNewsProjectPayload) {
     return this.requestHandler.request(
-      `${api}/${endpoints.NEWSPROJECTS}/?project=${payload.id}`,
+      this.url(api, endpoints.NEWSPROJECTS, null, { project: payload.id }),
       methods.GET,
       payload,
-      (response: GetAllNewsProjectsResponse) => response.results[0]
+      (response: GetAllNewsProjectsResponse) => response.results[numbers.zero]
     );
   }
 
+  /**
+   * Get all news projects
+   */
   public getNewsProjects() {
     return this.requestHandler.request(
-      `${api}/${endpoints.NEWSPROJECTS}/`,
+      this.url(api, endpoints.NEWSPROJECTS),
       methods.GET,
       null,
-      (response: GetAllNewsProjectsResponse) => response.results
+      (response: GetAllNewsProjectsResponse) => {
+        const newsProjects = response.results;
+        this.newsProjects = newsProjects;
+        return newsProjects;
+      }
     );
   }
 
+  /**
+   * Get news waves by project
+   */
+  public getNewsWaves(payload: GetNewsWavesPayload): Observable<NewsWaves[]> {
+    return this.requestHandler.request(
+      this.url(api, endpoints.NEWS_WAVES, null, { project: payload.project }),
+      methods.GET,
+      null,
+      (response: { results: NewsWaves[] }) => response.results
+    );
+  }
+
+  /**
+   * Delete news project by id
+   */
   public deleteNewsProject(payload: DeleteNewsProjectPayload) {
     return this.requestHandler.request(
-      `${api}/${endpoints.NEWSPROJECTS}/${payload.id}`,
+      this.url(api, endpoints.NEWSPROJECTS, payload.id),
       methods.DELETE,
       null,
-      (response: any) => payload
+      (response: any) => {
+        this.newsProjects = this.newsProjects.filter(project => project.id !== payload.id);
+        return payload;
+      }
     );
   }
 
+  /**
+   * Update email
+   */
   public updateEmail(payload: UpdateEmailPayload) {
     return this.requestHandler.request(
-      `${api}/${endpoints.EMAILS}/`,
+      this.url(api, endpoints.EMAILS),
       methods.PUT,
       payload,
       (response: Email) => response
     );
   }
 
+  /**
+   * Get list of email
+   */
   public getEmails() {
     return this.requestHandler.request(
-      `${api}/${endpoints.EMAILS}/`,
+      this.url(api, endpoints.EMAILS),
       methods.GET,
       null,
       (response: GetAllEmailsResponse) => response.results
     );
   }
 
+  /**
+   * Delete email by id
+   */
   public deleteEmail(payload: DeleteEmailPayload) {
     return this.requestHandler.request(
-      `${api}/${endpoints.EMAILS}/${payload.id}`,
+      this.url(api, endpoints.EMAILS, payload.id),
       methods.DELETE,
       null,
       (response: null) => payload
     );
   }
 
+  /**
+   * Returns form group for create project form
+   */
   public initializeCreateProjectForm(): FormGroup {
     return this.formBuilder.group({
       name: [null, Validators.required],
@@ -126,6 +198,9 @@ export class ProjectService {
     });
   }
 
+  /**
+   * Returns form group for edit project form
+   */
   public initializeEditProjectForm(project?: NewsProject): FormGroup {
     return this.formBuilder.group({
       name: [project ? project.name : null, Validators.required],
@@ -138,12 +213,16 @@ export class ProjectService {
     });
   }
 
+  /**
+   * Returns form group for create email form
+   */
   public initializeCreateEmailForm(): FormGroup {
     return this.formBuilder.group({
       email: [null, Validators.required],
       template: null,
       signature: null,
-      codeword: null
+      codeword: null,
+      password: null
     });
   }
 

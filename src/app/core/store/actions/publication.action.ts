@@ -6,9 +6,9 @@ import { DeletePublishPayload } from '@models/payloads/publication/publish/delet
 import { CreateCommentPayload } from '@models/payloads/publication/comment/create';
 import { DeleteCommentPayload } from '@models/payloads/publication/comment/delete';
 import { PublicationBlackList } from '@models/instances/publication-black-list';
-import { CreateNotPublishPayload } from '@models/payloads/publication/notPublish/create';
-import { DeleteNotPublishPayload } from '@models/payloads/publication/notPublish/delete';
-import { UpdateNotPublishPayload } from '@models/payloads/publication/notPublish/update';
+import { CreatePublicationBlackListPayload } from '@models/payloads/publication/notPublish/create';
+import { DeletePublicationBlackListPayload } from '@models/payloads/publication/notPublish/delete';
+import { UpdatePublicationBlackListPayload } from '@models/payloads/publication/notPublish/update';
 import { UpdateCommentPayload } from '@models/payloads/publication/comment/update';
 import { Comment } from '@models/instances/comment';
 import { GetPublicationPayload } from '@models/payloads/publication/publish/get';
@@ -130,7 +130,7 @@ export class GetPublicationBlackListSuccess implements Action {
 export class CreateNotPublication implements Action {
   public readonly type = EPublicationActions.CreateNotPublication;
 
-  constructor(public payload: CreateNotPublishPayload) {
+  constructor(public payload: CreatePublicationBlackListPayload) {
   }
 }
 
@@ -145,7 +145,7 @@ export class CreateNotPublicationSuccess implements Action {
 export class UpdateNotPublication implements Action {
   public readonly type = EPublicationActions.UpdateNotPublication;
 
-  constructor(public payload: UpdateNotPublishPayload) {
+  constructor(public payload: UpdatePublicationBlackListPayload) {
   }
 }
 
@@ -160,14 +160,14 @@ export class UpdateNotPublicationSuccess implements Action {
 export class DeleteNotPublication implements Action {
   public readonly type = EPublicationActions.DeleteNotPublication;
 
-  constructor(public payload: DeleteNotPublishPayload) {
+  constructor(public payload: DeletePublicationBlackListPayload) {
   }
 }
 
 export class DeleteNotPublicationSuccess implements Action {
   public readonly type = EPublicationActions.DeleteNotPublicationSuccess;
 
-  constructor(public payload: DeleteNotPublishPayload) {
+  constructor(public payload: DeletePublicationBlackListPayload) {
   }
 }
 

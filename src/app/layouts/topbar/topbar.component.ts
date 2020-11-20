@@ -22,6 +22,7 @@ import { CreatePostsFormatPayload } from '@models/payloads/news/format/create';
 import { ProjectService } from '@services/project.service';
 import { CreateEmailPayload } from '@models/payloads/project/email/create';
 import { CreateEmail } from '@store/actions/project.actions';
+import { CreateNewsEmail } from '@store/actions/email.actions';
 
 /**
  * Top bar component - history, profile bar, logout and create new items
@@ -140,7 +141,7 @@ export class TopbarComponent implements OnInit {
   }
 
   public createEmail(payload: CreateEmailPayload): void {
-    this.store.dispatch(new CreateEmail(payload));
+    this.store.dispatch(new CreateNewsEmail(payload));
   }
 
   public createFormat(payload: CreatePostsFormatPayload): void {

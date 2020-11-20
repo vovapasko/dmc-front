@@ -3,7 +3,10 @@ import { HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
-import { LoadingService } from '@services/loading.service';
+import numbers from '@constants/numbers';
+import { StartLoading, StopLoading } from '@store/actions/loading.actions';
+import { Store } from '@ngrx/store';
+import { IAppState } from '@store/state/app.state';
 
 /**
  * This interceptor for control que of requests and set loading marker
@@ -15,14 +18,12 @@ import { LoadingService } from '@services/loading.service';
 export class LoadingInterceptor {
   activeRequests = 0;
 
-  constructor(private loadingScreenService: LoadingService) {}
+  constructor(private store: Store<IAppState>) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    // console.log('loading...');
-    // console.log(dmc);
-
-    if (this.activeRequests === 0) {
-      this.loadingScreenService.startLoading();
+    if (this.activeRequests === numbers.zero) {
+      const payload = {data: {value: true}};
+      this.store.dispatch(new StartLoading(payload));
     }
 
     this.activeRequests++;
@@ -30,8 +31,9 @@ export class LoadingInterceptor {
     return next.handle(request).pipe(
       finalize(() => {
         this.activeRequests--;
-        if (this.activeRequests === 0) {
-          this.loadingScreenService.stopLoading();
+        if (this.activeRequests === numbers.zero) {
+          const payload = {data: {value: false}};
+          this.store.dispatch(new StopLoading(payload));
         }
       })
     );

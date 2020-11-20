@@ -5,35 +5,30 @@
     <div class="row">
         <div class="col-12">
             <div class="card-box">
-                <button type="button"
-                        (click)="openModal(createClient)"
-                        class="btn btn-sm btn-blue float-right"
-                >
-                    <i class="mdi mdi-plus-circle"></i> Добавить клиента
-                </button>
-                <h4 class="header-title mb-4">Управление клиентами</h4>
-                <div class="clearfix mt-4"></div>
-                <div class="row mb-md-2">
-                    <div class="col-sm-12 col-md-6">
-                        <div class="dataTables_length" id="tickets-table_length"><label
-                                class="d-inline-flex align-items-center">Показать
-                            <select name="tickets-table_length" aria-controls="tickets-table" name="pageSize"
-                                    [(ngModel)]="service.pageSize"
-                                    class="custom-select custom-select-sm form-control form-control-sm mx-2">
-                                <option [ngValue]="10">10</option>
-                                <option [ngValue]="25">25</option>
-                                <option [ngValue]="50">50</option>
-                                <option [ngValue]="100">100</option>
-                            </select> элементов</label></div>
+
+                <div class="row mb-2">
+                    <div class="col-sm-4">
+                        <form class="form-inline">
+                            <div class="form-group mb-2">
+                                <label class="sr-only">Поиск</label>
+                                <input class="form-control" name="search" placeholder="Поиск..."
+                                       [(ngModel)]="service.searchTerm"/>
+                            </div>
+                        </form>
                     </div>
-                    <div class="col-sm-12 col-md-6">
-                        <!-- Search -->
-                        <div id="tickets-table_filter" class="dataTables_filter text-md-right"><label
-                                class="d-inline-flex align-items-center">Поиск:
-                            <input type="text" name="searchTerm" class="form-control form-control-sm ml-2"
-                                   aria-controls="tickets-table" [(ngModel)]="service.searchTerm"></label></div>
+                    <div class="col-sm-8">
+                        <div class="text-sm-right">
+                            <button type="button"
+                                    (click)="openModal(createClient)"
+                                    class="btn btn-blue float-right md-3"
+                            >
+                                <i class="mdi mdi-plus-circle"></i> Добавить клиента
+                            </button>
+                        </div>
                     </div>
                 </div>
+
+
                 <div class="row">
                     <div class="col-sm-12">
                         <!-- Table -->

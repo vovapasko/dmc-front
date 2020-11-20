@@ -2,7 +2,7 @@ import { initialProjectsState, IProjectsState } from '../state/project.state';
 import { EProjectActions, ProjectActions } from '../actions/project.actions';
 
 export const projectReducer = (state = initialProjectsState, action: ProjectActions): IProjectsState => {
-  // console.log(action);
+  console.log(action);
   switch (action.type) {
     case EProjectActions.GetEmailsSuccess: {
       return {
@@ -10,7 +10,12 @@ export const projectReducer = (state = initialProjectsState, action: ProjectActi
         emails: action.payload
       };
     }
-
+    case EProjectActions.GetNewsWavesSuccess: {
+      return {
+        ...state,
+        news: action.payload
+      };
+    }
     case EProjectActions.GetProjectsSuccess: {
       return {
         ...state,

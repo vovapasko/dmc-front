@@ -1,6 +1,9 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { setAuthClasses } from '@helpers/utility';
+import numbers from '@constants/numbers';
+import { CONFIRM_EMAIL } from '@constants/titles';
+import { DateService } from '@services/date.service';
 
 /**
  * This component informs a user that him password was changed
@@ -12,12 +15,16 @@ import { setAuthClasses } from '@helpers/utility';
   styleUrls: ['./confirm.component.scss'],
 })
 export class ConfirmComponent implements OnInit, AfterViewInit {
-  title = 'Confirm email';
+  title = CONFIRM_EMAIL;
+  currentYear: number;
+  startYear: number;
 
-  constructor(private titleService: Title) {}
+  constructor(private titleService: Title, private dateService: DateService) {}
 
   ngOnInit() {
     this.setTitle(this.title);
+    this.currentYear = this.dateService.currentYear;
+    this.startYear = this.dateService.startYear;
   }
 
   /**

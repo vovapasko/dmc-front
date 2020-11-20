@@ -7,6 +7,10 @@ import { debounceTime, delay, switchMap, tap } from 'rxjs/operators';
 import { SortDirection } from '@shared/directives/tickets-sortable.directive';
 
 import { SearchResult } from '@models/instances/tickets.model';
+import { Hashtag } from '@models/instances/hashtag';
+import { EmailEntity } from '@models/instances/email';
+import { getSender } from '@helpers/utility';
+import { NewsProject } from '@models/instances/news-project';
 
 interface State {
   page: number;
@@ -47,13 +51,32 @@ function sort(tickets: TableData[], column: string, direction: string): TableDat
  * @param ticket Table field value fetch
  * @param term Search the value
  */
-function proxyMatches(ticket: TableData, term: string) {
+export function clientMatches(ticket: TableData, term: string) {
   return ticket.price.toString().toLowerCase().includes(term)
     || ticket.emails.toLowerCase().includes(term)
     || ticket.numbers.toLowerCase().includes(term)
     || ticket.amountPublications === +term
     || ticket.name.toLowerCase().includes(term)
     || ticket.id === +term;
+}
+
+export function hashtagMatches(ticket: Hashtag, term: string): boolean {
+  return ticket.name.toString().toLowerCase().includes(term);
+}
+
+export function newsProjectMatches(ticket: NewsProject, term: string): boolean {
+  return ticket.name.toString().toLowerCase().includes(term.toString().toLowerCase())
+    || ticket.manager.toString().toLowerCase().includes(term.toString().toLowerCase())
+    || ticket.budget.toString().toLowerCase().includes(term.toString().toLowerCase())
+    || ticket.dateCreated.toString().toLowerCase().includes(term.toString().toLowerCase())
+    || ticket.dateUpdated.toString().toLowerCase().includes(term.toString().toLowerCase())
+    || ticket.client?.name.toString().toLowerCase().includes(term.toString().toLowerCase());
+}
+
+export function emailMatches(ticket: EmailEntity, term: string) {
+  return ticket.snippet.toString().toLowerCase().includes(term.toString().toLowerCase())
+    || getSender(ticket).toLowerCase().includes(term.toString().toLowerCase())
+    || ticket.internalDate.toString().toLowerCase().includes(term.toString().toLowerCase());
 }
 
 @Injectable({
@@ -72,7 +95,7 @@ export class TicketService {
   // tslint:disable-next-line: variable-name
   private _total$ = new BehaviorSubject<number>(0);
   // tslint:disable-next-line: variable-name
-  private _matches = proxyMatches;
+  private _matches = clientMatches;
 
   // tslint:disable-next-line: variable-name
   private _state: State = {
@@ -138,11 +161,11 @@ export class TicketService {
     return this._state.totalRecords;
   }
 
-  set matches(func: (ticket: TableData, term: string) => boolean) {
+  set matches(func: (ticket: TableData | Hashtag | NewsProject, term: string) => boolean) {
     this._matches = func;
   }
 
-  get matches(): (ticket: TableData, term: string) => boolean {
+  get matches(): (ticket: TableData | Hashtag | NewsProject, term: string) => boolean {
     return this._matches;
   }
 

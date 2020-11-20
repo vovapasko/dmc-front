@@ -1,4 +1,4 @@
-import { NewsWaves } from '../../../instances/news-waves';
+import { NewsWaves } from '@models/instances/news-waves';
 
 export interface UpdateNewsWavesPayload {
   id: number;

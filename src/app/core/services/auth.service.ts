@@ -11,11 +11,14 @@ import { environment } from '../../../environments/environment';
 import { RequestAccessTokenResponse } from '@models/responses/auth/request-access-token-response';
 import { LoginResponse } from '@models/responses/auth/login-response';
 import { LoginPayload } from '@models/payloads/auth/login';
-import { RequestHandler } from '../helpers/request-handler';
+import { RequestHandler } from '@helpers/request-handler';
 import { UserService } from './user.service';
 import { CURRENT_USER } from '@constants/user';
+import { errorMessages, errors, errorTitle } from '@constants/error';
+import numbers from '@constants/numbers';
+import { urls } from '@constants/urls';
 import { methods } from '@constants/methods';
-import { endpoints } from '@constants/endpoints';
+import { NotificationService } from '@services/notification.service';
 
 const api = environment.api;
 
@@ -24,7 +27,7 @@ const api = environment.api;
  */
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class AuthenticationService {
   public static readonly REFRESH_TOKEN_NAME = TokenTypes.refresh;
@@ -39,9 +42,10 @@ export class AuthenticationService {
     private requestHandler: RequestHandler,
     private userService: UserService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) {
-    this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/';
+    this.returnUrl = this.route.snapshot.queryParams.returnUrl || urls.ROOT;
   }
 
   /**
@@ -63,19 +67,23 @@ export class AuthenticationService {
     if (currentUser && currentUser.token) {
       currentUser.token[type] = value;
     }
-    this.cookieService.setCookie(CURRENT_USER, JSON.stringify(currentUser), 1);
+    this.cookieService.setCookie(CURRENT_USER, JSON.stringify(currentUser), numbers.one);
   }
 
   /**
    * Performs the auth
    */
   public login(payload: LoginPayload): Observable<User> {
-    return this.requestHandler.request(`${api}/${endpoints.LOGIN}/`, methods.POST, payload, (response: LoginResponse) => {
-      const currentUser = { ...response.user, token: response.token };
-      this.userService.user = currentUser;
-      this.router.navigate([this.returnUrl]);
-      return currentUser;
-    });
+    return this.requestHandler.request(
+      `${api}/${urls.LOGIN}/`,
+      methods.POST,
+      payload,
+      (response: LoginResponse) => {
+        const currentUser = { ...response.user, token: response.token };
+        this.userService.user = currentUser;
+        this.router.navigate([this.returnUrl]);
+        return currentUser;
+      });
   }
 
   /**
@@ -85,6 +93,8 @@ export class AuthenticationService {
     // remove user from local storage to log user out
     this.cookieService.deleteCookie(CURRENT_USER);
     this.userService.user = null;
+    this.notificationService.history = [];
+    this.notificationService.notifications = [];
   }
 
   /**
@@ -92,13 +102,18 @@ export class AuthenticationService {
    */
   public requestAccessToken(): Observable<Token> {
     const refreshToken = this.getToken(AuthenticationService.REFRESH_TOKEN_NAME);
-    return this.http.post(`${api}/${endpoints.TOKEN_REFRESH}/`, { refresh: refreshToken }).pipe(
+    return this.http.post(
+      `${api}/${urls.TOKEN_REFRESH}/`,
+      { refresh: refreshToken }
+    ).pipe(
       tap((response: RequestAccessTokenResponse) =>
         this.setToken(AuthenticationService.ACCESS_TOKEN_NAME, response.access)
       ),
       catchError(this.unauthorised.bind(this))
     );
   }
+
+
 
   /**
    *  Logout user from crm
@@ -107,6 +122,7 @@ export class AuthenticationService {
     // auto logout if 401 response returned from api
     this.logout();
     location.reload();
-    return throwError({ status: 401, error: { message: 'Unauthorised' } });
+    const error = { status: errors.UNAUTHORIZED, error: { message: errorMessages.UNAUTHORIZED } };
+    return throwError(error);
   }
 }

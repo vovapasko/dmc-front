@@ -1,10 +1,9 @@
 import { environment } from '../../../environments/environment';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 
-import { RequestHandler } from '../helpers/request-handler';
+import { RequestHandler } from '@helpers/request-handler';
 import { GetAllResponse } from '@models/responses/news/project/get-all-response';
 import { CreateHashtagPayload } from '@models/payloads/news/hashtag/create';
 import { CreateHashtagResponse } from '@models/responses/news/hashtag/create-hashtag';
@@ -20,10 +19,10 @@ import { Project } from '@models/instances/project';
 import { News } from '@models/instances/news';
 import { Hashtag } from '@models/instances/hashtag';
 import { Format } from '@models/instances/format';
-import { setProjectValues } from '../helpers/utility';
+import { base64ToArrayBuffer, setProjectValues } from '@helpers/utility';
 import { Infos, Warnings } from '@constants/notifications';
 import { endpoints } from '@constants/endpoints';
-import { methods } from '@constants/methods';
+import { burstMethods, methods } from '@constants/methods';
 import { SecurityService } from './security.service';
 import { GetAllFormatsResponse } from '@models/responses/news/format/get-all';
 import { GetFormatsResponse } from '@models/responses/news/format/get';
@@ -48,9 +47,11 @@ import { NewsProject } from '@models/instances/news-project';
 import { UserService } from './user.service';
 import { UploadNewsFilePayload } from '@models/payloads/news/news-waves/upload-file';
 import { DeleteNewsFilePayload } from '@models/payloads/news/news-waves/delete-file';
-import { newsFieldsHandler } from '@constants/news';
-import { Email } from '@models/instances/email';
 import { NewsWavePrice } from '@models/instances/newsWavePrice';
+import { BaseService } from '@services/base.service';
+import { budgetMessage } from '@constants/messages';
+import { ConvertToFormData } from '@helpers/convert-to-form-data';
+import { Attachment } from '@models/instances/attachment';
 
 const api = environment.api;
 
@@ -59,15 +60,15 @@ const api = environment.api;
  */
 
 @Injectable({ providedIn: 'root' })
-export class NewsService {
+export class NewsService extends BaseService {
   constructor(
-    private http: HttpClient,
     private requestHandler: RequestHandler,
     public formBuilder: FormBuilder,
     private notificationService: NotificationService,
     private securityService: SecurityService,
     private userService: UserService
   ) {
+    super();
   }
 
   /**
@@ -80,7 +81,7 @@ export class NewsService {
    */
   public getProjectConfiguration(): Observable<GetAllResponse> {
     return this.requestHandler.request(
-      `${api}/${endpoints.BURST_NEWS}/`,
+      this.url(api, endpoints.BURST_NEWS),
       methods.GET,
       null,
       (response: GetAllResponse) => response);
@@ -100,7 +101,7 @@ export class NewsService {
    */
   public createProject(payload: CreateProjectPayload): Observable<Project> {
     return this.requestHandler.request(
-      `${api}/${endpoints.MANAGE_NEWS_PROJECTS}/`,
+      this.url(api, endpoints.MANAGE_NEWS_PROJECTS),
       methods.POST,
       payload,
       (response: CreateProjectResponse) => response.project
@@ -121,7 +122,7 @@ export class NewsService {
    */
   public getProject(payload: Project): Observable<Project> {
     return this.requestHandler.request(
-      `${api}/${endpoints.MANAGE_NEWS_PROJECTS}/${payload.id}`,
+      this.url(api, endpoints.MANAGE_NEWS_PROJECTS, payload.id),
       methods.GET,
       null,
       (response: GetProjectResponse) => response.project
@@ -134,7 +135,7 @@ export class NewsService {
    */
   public getProjects(): Observable<Project[]> {
     return this.requestHandler.request(
-      `${api}/${endpoints.NEWS_PROJECTS}/`,
+      this.url(api, endpoints.NEWS_PROJECTS),
       methods.GET,
       null,
       (response: GetProjectsResponse) => response ? response.projects : []
@@ -148,7 +149,7 @@ export class NewsService {
    */
   public updateProject(payload: UpdateProjectPayload): Observable<Project> {
     return this.requestHandler.request(
-      `${api}/${endpoints.MANAGE_NEWS_PROJECTS}/${payload.id}`,
+      this.url(api, endpoints.MANAGE_NEWS_PROJECTS, payload.id),
       methods.PUT,
       payload,
       (response: CreateProjectResponse) => response
@@ -160,7 +161,7 @@ export class NewsService {
    */
   public getAllPostFormats(): Observable<PostFormatListSet[]> {
     return this.requestHandler.request(
-      `${api}/${endpoints.POST_FORMATS}/`,
+      this.url(api, endpoints.POST_FORMATS),
       methods.GET,
       null,
       (response: GetAllFormatsResponse) => response.results
@@ -173,7 +174,7 @@ export class NewsService {
    */
   public getPostFormats(payload: GetPostFormatPayload): Observable<PostFormatListSet[]> {
     return this.requestHandler.request(
-      `${api}/${endpoints.POST_FORMATS}/${payload.id}`,
+      this.url(api, endpoints.POST_FORMATS, payload.id),
       methods.GET,
       null,
       (response: GetFormatsResponse) => response.results
@@ -191,7 +192,7 @@ export class NewsService {
    */
   public createPostFormat(payload: CreatePostFormatPayload) {
     return this.requestHandler.request(
-      `${api}/${endpoints.POST_FORMATS}/`,
+      this.url(api, endpoints.POST_FORMATS),
       methods.POST,
       payload,
       (response: CreatePostFormatResponse) => response
@@ -209,7 +210,7 @@ export class NewsService {
    */
   public updatePostFormat(payload: UpdatePostFormatPayload) {
     return this.requestHandler.request(
-      `${api}/${endpoints.POST_FORMATS}/${payload.id}`,
+      this.url(api, endpoints.POST_FORMATS, payload.id),
       methods.PUT,
       payload,
       (response: UpdatePostFormatResponse) => response
@@ -222,7 +223,7 @@ export class NewsService {
    */
   public deletePostFormat(payload: DeletePostFormatPayload) {
     return this.requestHandler.request(
-      `${api}/${endpoints.POST_FORMATS}/${payload.id}`,
+      this.url(api, endpoints.POST_FORMATS, payload.id),
       methods.DELETE,
       null,
       (response: DeletePostFormatResponse) => response
@@ -236,7 +237,7 @@ export class NewsService {
    */
   public createHashtag(payload: CreateHashtagPayload): Observable<Hashtag> {
     return this.requestHandler.request(
-      `${api}/${endpoints.HASHTAGS}/`,
+      this.url(api, endpoints.HASHTAGS),
       methods.POST,
       payload,
       (response: CreateHashtagResponse) => response.hashtag
@@ -250,7 +251,7 @@ export class NewsService {
    */
   public createFormat(payload: CreatePostsFormatPayload): Observable<Format> {
     return this.requestHandler.request(
-      `${api}/${endpoints.POST_FORMAT}/`,
+      this.url(api, endpoints.POST_FORMAT),
       methods.POST,
       payload,
       (response: CreatePostsFormatResponse) => response.postMethod
@@ -264,7 +265,7 @@ export class NewsService {
    */
   public getAllNewsWaves(): Observable<any> {
     return this.requestHandler.request(
-      `${api}/${endpoints.NEWS_WAVES}/`,
+      this.url(api, endpoints.NEWS_WAVES),
       methods.GET,
       null,
       (response: GetAllNewsWavesResponse) => response.results
@@ -278,10 +279,10 @@ export class NewsService {
    */
   public getNewsWave(payload: GetNewsWavesPayload): Observable<NewsWaves> {
     return this.requestHandler.request(
-      `${api}/${endpoints.NEWS_WAVES}/?wave=${payload.id}`,
+      this.url(api, endpoints.NEWS_WAVES, null, { wave: payload.id }),
       methods.GET,
       payload,
-      (response: GetNewsWavesResponse) => response.results[0]
+      (response: GetNewsWavesResponse) => response.results[numbers.zero]
     );
   }
 
@@ -291,92 +292,11 @@ export class NewsService {
    */
   public createNewsWave(payload: CreateNewsWavesPayload): Observable<any> {
     return this.requestHandler.request(
-      `${api}/${endpoints.NEWS_WAVES}/`,
+      this.url(api, endpoints.NEWS_WAVES),
       methods.POST,
       payload,
-      (response: NewsWaves) => this.handleFilesUpload(response, payload)
+      (response: NewsWaves) => response
     );
-  }
-
-  /**
-   * Handle delete and update files from formation or news
-   */
-  public handleFilesUpload(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
-    // TODO REFACTOR THIS PIECE OF CODE
-    const formationFormData = this.collectUploadFormationFiles(newsWave, payload);
-    const newsFormData = this.collectUploadNewsFiles(newsWave, payload);
-    const deleteNewsData = this.collectDeleteNewsFiles(newsWave, payload);
-    const deleteFormationData = this.collectDeleteFormationFiles(newsWave, payload);
-    return { newsWave, formationFormData, newsFormData, deleteNewsData, deleteFormationData };
-  }
-
-  /**
-   * Collects delete news files
-   */
-  public collectDeleteNewsFiles(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
-    // TODO REFACTOR THIS PIECE OF CODE
-    return newsWave.newsInProject
-      .map(
-        (news: News) => news.attachments
-          // @ts-ignore
-          .filter(newsAttachment => newsAttachment.id && !payload.data.newsInProject.find(
-            payloadNews => payloadNews.id === news.id).attachments.find(
-            // @ts-ignore
-            payloadAttachment => payloadAttachment.id === newsAttachment.id
-            )
-            // @ts-ignore
-          ).map(el => ({ id: el.id }))
-        // @ts-ignore
-      ).flat();
-  }
-
-  /**
-   * Collects upload formation files
-   */
-  public collectUploadFormationFiles(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
-    // TODO REFACTOR THIS PIECE OF CODE
-    if (!payload.data.waveFormation.attachments) {
-      return [];
-    }
-    const formationFormData = new FormData();
-    // @ts-ignore
-    formationFormData.append('wave_formation_id', newsWave.waveFormation.id);
-    // @ts-ignore
-    payload.data.waveFormation.attachments
-      // @ts-ignore
-      .filter(file => file instanceof File && !file.id)
-      .forEach(file => formationFormData.append('file', file, file.name));
-    return formationFormData;
-  }
-
-  /**
-   * Collects upload news files
-   */
-  public collectUploadNewsFiles(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload): FormData[] {
-    // TODO REFACTOR THIS PIECE OF CODE
-    return payload.data.newsInProject.map((news: any, index: number) => {
-      const formData = new FormData();
-      // @ts-ignore
-      // tslint:disable-next-line:no-bitwise
-      formData.append('news_id', news.id | newsWave.newsInProject[index].id);
-      // @ts-ignore
-      news.attachments
-        // @ts-ignore
-        .filter(file => file instanceof File && !file.id)
-        .forEach(file => formData.append('file', file, file.name));
-      return formData;
-    });
-  }
-
-  public collectDeleteFormationFiles(newsWave: NewsWaves, payload: CreateNewsWavesPayload | UpdateNewsWavesPayload) {
-    // TODO REFACTOR THIS PIECE OF CODE
-    return newsWave.waveFormation.attachments
-      // @ts-ignore
-      .filter(attachment => !(attachment instanceof File) && attachment.id && !payload.data.waveFormation.attachments
-        // @ts-ignore
-        .find(formationAttachment => formationAttachment.id === attachment.id))
-      // @ts-ignore
-      .map(el => ({ id: el.id }));
   }
 
   /**
@@ -386,10 +306,10 @@ export class NewsService {
    */
   public updateNewsWave(payload: UpdateNewsWavesPayload): Observable<any> {
     return this.requestHandler.request(
-      `${api}/${endpoints.NEWS_WAVES}/${payload.id}`,
+      this.url(api, endpoints.NEWS_WAVES, payload.id),
       methods.PUT,
       payload,
-      (response: NewsWaves) => this.handleFilesUpload(response, payload)
+      (response: NewsWaves) => response
     );
   }
 
@@ -399,7 +319,7 @@ export class NewsService {
    */
   public deleteNewsWave(payload: DeleteNewsWavesPayload): Observable<DeleteNewsWavesPayload> {
     return this.requestHandler.request(
-      `${api}/${endpoints.NEWS_WAVES}/${payload.id}`,
+      this.url(api, endpoints.NEWS_WAVES, payload.id),
       methods.DELETE,
       null,
       (response: null) => payload
@@ -411,7 +331,7 @@ export class NewsService {
    */
   public uploadNewsFile(payload: UploadNewsFilePayload): Observable<null> {
     return this.requestHandler.request(
-      `${api}/${endpoints.NEWS_FILE_UPLOAD}/`,
+      this.url(api, endpoints.NEWS_FILE_UPLOAD),
       methods.PUT,
       payload,
       (response: null) => payload
@@ -423,7 +343,7 @@ export class NewsService {
    */
   public uploadFormationFile(payload: UploadNewsFilePayload): Observable<null> {
     return this.requestHandler.request(
-      `${api}/${endpoints.FORMATION_FILE_UPLOAD}/`,
+      this.url(api, endpoints.FORMATION_FILE_UPLOAD),
       methods.PUT,
       payload,
       (response: null) => payload
@@ -435,7 +355,7 @@ export class NewsService {
    */
   public deleteNewsFile(payload: DeleteNewsFilePayload): Observable<null> {
     return this.requestHandler.request(
-      `${api}/${endpoints.NEWS_FILE_UPLOAD}/${payload.id}`,
+      this.url(api, endpoints.NEWS_FILE_UPLOAD, payload.id),
       methods.DELETE,
       payload,
       (response: null) => payload
@@ -447,7 +367,7 @@ export class NewsService {
    */
   public deleteFormationFile(payload: DeleteNewsFilePayload): Observable<null> {
     return this.requestHandler.request(
-      `${api}/${endpoints.FORMATION_FILE_UPLOAD}/${payload.id}`,
+      this.url(api, endpoints.FORMATION_FILE_UPLOAD, payload.id),
       methods.DELETE,
       payload,
       (response: null) => payload
@@ -459,7 +379,7 @@ export class NewsService {
    */
   public initializeCreateHashtagForm(): FormGroup {
     return this.formBuilder.group({
-      name: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(20)]]
+      name: [null, [Validators.required, Validators.minLength(numbers.one), Validators.maxLength(numbers.twenty)]]
     });
   }
 
@@ -468,7 +388,7 @@ export class NewsService {
    */
   public initializeCreateFormatForm(): FormGroup {
     return this.formBuilder.group({
-      postFormat: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(20)]]
+      postFormat: [null, [Validators.required, Validators.minLength(numbers.one), Validators.maxLength(numbers.twenty)]]
     });
   }
 
@@ -505,7 +425,7 @@ export class NewsService {
    */
   public initializePreviewForm(): FormGroup {
     return this.formBuilder.group({
-      previewText: ['', Validators.required],
+      previewText: [null, Validators.required],
       previewEmail: [null, Validators.required],
       agreed: [null, Validators.required]
     });
@@ -576,7 +496,7 @@ export class NewsService {
   public budgetValidate(left: number): { [key: string]: boolean } | null {
     if (left < 0) {
       const { type, title, timeout } = Warnings.NO_LEFT;
-      const message = `Вы превысили бюджет на ${left * -1}`;
+      const message = budgetMessage(left * -1);
       this.notificationService.notify(type, title, message, timeout);
       return { budget: true };
     }
@@ -705,6 +625,14 @@ export class NewsService {
     return null;
   }
 
+  public processAttachments(files: File[]): Attachment[] {
+    if (!files) {
+      return;
+    }
+    // @ts-ignore
+    return files.map((file: File) => ({ name: file.name, base64: file.base64, type: file.type }));
+  }
+
   /**
    * Collect all data from forms in burst-news page, returns payload for create or update
    * news-wave:
@@ -743,21 +671,26 @@ export class NewsService {
     const postFormat = validationForm.controls.projectPostFormat.value.postFormat;
     const isConfirmed = !!newsWaveId;
     const createdBy = this.userService.user;
-    const waveFormation = {
-      email: previewForm.controls.previewEmail.value || controls.at(0).get('previewEmail').value,
-      content: previewForm.controls.previewText.value,
-      attachments: editorForm.controls.attachments.value,
-      id: newsWave ? newsWave.waveFormation.id : null
-    };
-    const newsInProject = newsList.map((news: News, i: number) => ({
-      contractors: news.contractors,
-      email: controls.at(i).get('previewEmail').value,
-      title: news.title || title,
-      content: controls.at(i).get('previewText').value,
-      attachments: controls.at(i).get('attachments').value,
-      id: news.id
-    }));
-
+    let waveFormation = null;
+    let newsInProject = [];
+    if (burstMethod.method === burstMethods.BAYER) {
+      waveFormation = {
+        email: previewForm.controls.previewEmail.value || controls.at(0).get('previewEmail').value,
+        content: editorForm.controls.text.value || controls.at(0).get('content').value,
+        attachments: this.processAttachments(editorForm.controls.attachments.value),
+        id: newsWave ? newsWave.waveFormation.id : null
+      };
+    }
+    if (burstMethod.method === burstMethods.DIRECT) {
+      newsInProject = newsList.map((news: News, i: number) => ({
+        contractors: news.contractors,
+        email: controls.at(i).get('previewEmail').value,
+        title: news.title || title,
+        content: controls.at(i).get('content').value,
+        attachments: this.processAttachments(controls.at(i).get('attachments').value),
+        id: news.id
+      }));
+    }
 
     const data = {
       newsCharacter,
@@ -814,10 +747,12 @@ export class NewsService {
     validationForm.controls.projectHashtags.setValue(newsWave.hashtags);
     validationForm.controls.projectTitle.setValue(newsWave.title);
     validationForm.controls.projectBudget.setValue(newsWave.budget);
-    editorForm.controls.attachments.setValue(this.handleFiles(newsWave.waveFormation.attachments));
-    editorForm.controls.text.setValue(newsFieldsHandler.attachments(newsWave.waveFormation.attachments).join());
-    previewForm.controls.previewEmail.setValue(newsWave.waveFormation.email);
-    previewForm.controls.previewText.setValue(newsWave.waveFormation.content);
+    if (newsWave.waveFormation) {
+      editorForm.controls.attachments.setValue(this.handleFiles(newsWave.waveFormation.attachments));
+      editorForm.controls.text.setValue(newsWave.waveFormation.content);
+      previewForm.controls.previewEmail.setValue(newsWave.waveFormation.email);
+      previewForm.controls.previewText.setValue(newsWave.waveFormation.content);
+    }
     // @ts-ignore
     // tslint:disable-next-line:max-line-length
     const newsList = newsWave.newsInProject.map((el: News) => new News(el.title, el.content, this.handleFiles(el.attachments), el.contractors, el.content, el.email, el.id));
@@ -838,9 +773,12 @@ export class NewsService {
   public handleFiles(attachments: File[]) {
     return attachments.map(attachment => {
       // @ts-ignore
-      const file = new File([''], attachment.file, { type: 'text/plain' });
+      // @ts-ignore
+      const file = new File([''], attachment.name, { type: attachment.type, size: attachment.size });
       // @ts-ignore
       file.id = attachment.id;
+      // @ts-ignore
+      file.base64 = attachment.base_64;
       return file;
     });
   }

@@ -1,76 +1,252 @@
-export const toCamel = (s) => {
-  return s.replace(/([-_][a-z])/gi, ($1) => {
-    return $1.toUpperCase().replace('-', '').replace('_', '');
+import { AbstractControl, Form, ValidatorFn } from '@angular/forms';
+import { Project } from '@models/instances/project';
+import { matchColor, percentage } from '@constants/formula';
+import { Payloads } from '@models/payloads/payload';
+import { EmailEntity } from '@models/instances/email';
+import { FROM } from '@constants/titles';
+import { separators } from '@constants/separators';
+import { toByteArray } from 'base64-js';
+
+export const toCamel = (str: string): string => {
+  return str.replace(/([-_][a-z])/gi, (element: string) => {
+    return element
+      .toUpperCase()
+      .replace('-', '')
+      .replace('_', '');
   });
 };
 
-export const setAuthClasses = () => {
+
+export function emailValidator(): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: any } | null => {
+    const incorrect = control.value ? control.value.trim().split(separators.whitespace).some(invalidEmail) : null;
+    return incorrect ? { incorrectEmail: { value: control.value } } : null;
+  };
+}
+
+export function invalidEmail(email) {
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return !re.test(String(email).toLowerCase());
+}
+
+export function getSender(email: EmailEntity): string | null {
+  return email.payload.headers.find(header => header.name === FROM).value;
+}
+
+export const setAuthClasses = (): void => {
   const classes = ['authentication-bg', 'authentication-bg-pattern'];
-  classes.forEach((cls) => {
-    document.body.classList.add(cls);
+  classes.forEach((element) => {
+    document.body.classList.add(element);
   });
 };
 
-export const isArray = (a) => {
-  return Array.isArray(a);
+export const isArray = (array: any): boolean => {
+  return Array.isArray(array);
 };
 
-export const isObject = (o) => {
-  return o === Object(o) && !isArray(o) && typeof o !== 'function';
+export const isObject = (object: any): boolean => {
+  return object === Object(object) && !isArray(object) && typeof object !== 'function';
 };
 
-export const keysToCase = (o, func) => {
-  if (isObject(o)) {
-    const n = {};
+export const keysToCase = (object: object | Array<any>, func): object | Array<any> => {
+  if (isObject(object)) {
+    const newObject = {};
 
-    Object.keys(o).forEach((k) => {
-      n[func(k)] = keysToCase(o[k], func);
+    Object.keys(object).forEach((key: string) => {
+      newObject[func(key)] = keysToCase(object[key], func);
     });
 
-    return n;
-  } else if (isArray(o)) {
-    return o.map((i) => {
+    return newObject;
+  } else if (isArray(object)) {
+    // @ts-ignore
+    return object.map((i) => {
       return keysToCase(i, func);
     });
   }
 
-  return o;
+  return object;
 };
 
-export const setValues = (target, obj) => {
+export const setValues = (target: { [key: string]: AbstractControl }, obj: any): void => {
   const fields = Object.keys(target);
   fields.forEach((field) =>
-    target[field].setValue(obj[field.replace('update', '').replace(/^\w/, (c) => c.toLowerCase())])
+    target[field]
+      .setValue(
+        obj[field
+          .replace('update', '')
+          .replace(/^\w/, (c) => c.toLowerCase())
+          ]
+      )
   );
 };
 
-export const setProjectValues = (common, editor, project, getSafeHtml) => {
+// tslint:disable-next-line:max-line-length
+export const setProjectValues = (common: { [key: string]: AbstractControl }, editor: { [key: string]: AbstractControl }, project: Project, getSafeHtml) => {
   Object.keys(common).forEach((key) => common[key].setValue(project[key]));
   editor.text.setValue(getSafeHtml(project.content.text).changingThisBreaksApplicationSecurity);
 };
 
-export const collectDataFromForm = (f, defaultFields) => {
-  const fields = Object.keys(f);
+// tslint:disable-next-line:max-line-length
+export const collectDataFromForm = (formControls: { [key: string]: AbstractControl }, defaultFields: Array<object>): { [key: string]: any } => {
+  const fields = Object.keys(formControls);
   // collects all values [{}, {}, {}]
-  const values = fields.map((field) => ({ [field]: f[field].value }));
+  const values = fields.map((field) => ({ [field]: formControls[field].value }));
   if (defaultFields) {
     values.push(...defaultFields);
   }
   return values.reduce((a, n) => ({ ...a, ...n }), {});
 };
 
-export const getColorByPercentage = (value, arg) => {
-  const percentage = ((value / arg) * 100).toFixed(3);
-  const colors = { red: '#B80F0A', yellow: '#DAA520', blue: '#00B4AB', green: '#7CFC00' };
-  if (+percentage > 0 && +percentage < 51) {
-    return colors.green;
-  } else if (+percentage > 51 && +percentage < 71) {
-    return colors.blue;
-  } else if (+percentage > 71 && +percentage < 89) {
-    return colors.yellow;
-  } else if (+percentage > 90 && +percentage < 100) {
-    return colors.red;
+export const getColorByPercentage = (value: number, arg: number): string => {
+  const percent = percentage(value, arg);
+  return matchColor(percent);
+};
+
+export const objectToFormData = (obj: object, form: FormData, namespace: string): Payloads => {
+
+  const fd = form || new FormData();
+  let formKey = null;
+
+  for (const property in obj) {
+    if (obj.hasOwnProperty(property)) {
+
+      if (namespace) {
+        formKey = namespace + '[' + property + ']';
+      } else {
+        formKey = property;
+      }
+
+      // if the property is an object, but not a File,
+      // use recursive.
+      if (typeof obj[property] === 'object' && !(obj[property] instanceof File)) {
+
+        objectToFormData(obj[property], fd, property);
+
+      } else {
+
+        // if it's a string or a File object
+        fd.append(formKey, obj[property]);
+      }
+
+    }
+  }
+
+  // @ts-ignore
+  return fd;
+
+};
+
+function buildFormData(formData, data, parentKey) {
+  if (data && typeof data === 'object' && !(data instanceof Date) && !(data instanceof File)) {
+    Object.keys(data).forEach(key => {
+      buildFormData(formData, data[key], parentKey ? `${parentKey}[${key}]` : key);
+    });
   } else {
-    return '';
+    const value = data == null ? '' : data;
+
+    formData.append(parentKey, value);
+  }
+}
+
+export function jsonToFormData(data): Payloads {
+  const formData = new FormData();
+
+  buildFormData(formData, data, null);
+  // @ts-ignore
+  return formData;
+}
+
+export const blobToUint8Array = (b) => {
+  const uri = URL.createObjectURL(b);
+  const xhr = new XMLHttpRequest();
+  let i;
+  let ui8;
+
+  xhr.open('GET', uri, false);
+  xhr.send();
+
+  URL.revokeObjectURL(uri);
+
+  ui8 = new Uint8Array(xhr.response.length);
+
+  for (i = 0; i < xhr.response.length; ++i) {
+    ui8[i] = xhr.response.charCodeAt(i);
+  }
+
+  return ui8;
+};
+
+export const fileToBase64 = (file: File): string => {
+
+  return '';
+};
+
+const toBase64 = file => new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onload = () => resolve(reader.result);
+  reader.onerror = error => reject(error);
+});
+
+export async function convertFileToBase64(file) {
+  file.base64 = await toBase64(file);
+  return file;
+}
+
+export function decodeBase64(data: string): string {
+  return new TextDecoder('utf-8').decode(toByteArray(data));
+}
+
+export function bytesToSize(bytes) {
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  if (bytes === 0) {
+    return '0 Byte';
+  }
+  // @ts-ignore
+  const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10);
+  // @ts-ignore
+  return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+}
+
+export function urltoFile(url, filename, mimeType) {
+  // const prefix = `data:${mimeType};base64,`;
+  // if (!url.includes('data:')) {
+  //   url = prefix + url;
+  // }
+  return (fetch(url)
+      .then(function(res) {
+        return res.arrayBuffer();
+      })
+      .then(function(buf) {
+        return new File([buf], filename, { type: mimeType });
+      })
+  );
+}
+
+export function base64ToArrayBuffer(base64) {
+  const binaryString = window.atob(base64);
+  const len = binaryString.length;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+  return bytes.buffer;
+}
+
+
+export function saveFile(blob, filename) {
+  if (window.navigator.msSaveOrOpenBlob) {
+    window.navigator.msSaveOrOpenBlob(blob, filename);
+  } else {
+    const a = document.createElement('a');
+    document.body.appendChild(a);
+    const url = window.URL.createObjectURL(blob);
+    a.href = url;
+    a.download = filename;
+    a.click();
+    setTimeout(() => {
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    }, 0);
   }
 }

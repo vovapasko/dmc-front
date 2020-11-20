@@ -1,6 +1,22 @@
 <!-- Topbar Start -->
 <div class="navbar-custom">
     <ul class="list-unstyled topnav-menu float-right mb-0">
+
+        <li class="d-none d-sm-block">
+            <form class="app-search" (ngSubmit)="submitCreateFormatForm()" [formGroup]="createFormatForm">
+                <div class="app-search-box">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Поиск...">
+                        <div class="input-group-append">
+                            <button class="btn" type="submit">
+                                <i class="fe-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </li>
+
         <li class="dropdown notification-list" ngbDropdown>
             <a
                     class="nav-link dropdown-toggle waves-effect waves-light"
@@ -99,12 +115,12 @@
     <div class="logo-box">
         <a href="/" class="logo text-center">
       <span class="logo-lg">
-        <img src="assets/images/logo-light.png" alt="" height="18"/>
+        <img src="assets/images/img/logo%20(3).jpg" alt="" height="50"/>
           <!-- <span class="logo-lg-text-light">Xeria</span> -->
       </span>
             <span class="logo-sm">
         <!-- <span class="logo-sm-text-dark">X</span> -->
-        <img src="assets/images/logo-sm.png" alt="" height="24"/>
+        <img src="assets/images/img/logo-sm.png" alt="" height="24"/>
       </span>
         </a>
     </div>
@@ -114,46 +130,6 @@
             <button class="button-menu-mobile waves-effect waves-light" (click)="toggleMobileMenu($event)">
                 <i class="fe-menu"></i>
             </button>
-        </li>
-
-        <li class="dropdown d-none d-lg-block" ngbDropdown>
-            <a
-                    class="nav-link dropdown-toggle waves-effect waves-light"
-                    href="javascript: void(0);"
-                    ngbDropdownToggle
-                    id="extraMenu"
-                    role="button"
-                    aria-haspopup="false"
-                    aria-expanded="false"
-            >
-                Создать
-                <i class="mdi mdi-chevron-down"></i>
-            </a>
-            <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="extraMenu">
-                <!-- item-->
-                <a routerLink="/contractors" class="dropdown-item">
-                    <i class="fe-briefcase mr-1"></i>
-                    <span>Создать Контрагента</span>
-                </a>
-
-                <!-- item-->
-                <a routerLink="/users" routerLinkActive="active" class="dropdown-item">
-                    <i class="fe-user mr-1"></i>
-                    <span>Создать пользователя</span>
-                </a>
-
-                <!-- item-->
-                <a routerLinkActive="active" (click)="openModal(createHashtag)" class="dropdown-item">
-                    <i class="fe-hash mr-1"></i>
-                    <span>Создать хештег</span>
-                </a>
-
-                <!-- item-->
-                <a routerLinkActive="active" (click)="openModal(createEmail)" class="dropdown-item">
-                    <i class="fe-mail mr-1"></i>
-                    <span>Создать почту</span>
-                </a>
-            </div>
         </li>
     </ul>
 </div>

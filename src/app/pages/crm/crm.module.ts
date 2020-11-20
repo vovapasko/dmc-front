@@ -6,13 +6,14 @@ import { QuillModule } from 'ngx-quill';
 
 import { UIModule } from '@shared/ui/ui.module';
 import {
-  NgbAlertModule,
+  NgbAccordionModule,
+  NgbAlertModule, NgbCollapseModule,
   NgbDatepickerModule,
   NgbDropdownModule,
   NgbModalModule,
   NgbPaginationModule,
   NgbPopoverModule,
-  NgbProgressbarModule,
+  NgbProgressbarModule, NgbTabsetModule,
   NgbTooltipModule,
   NgbTypeaheadModule
 } from '@ng-bootstrap/ng-bootstrap';
@@ -36,6 +37,7 @@ import { ProjectsComponent } from './projects/projects.component';
 import { ReportsComponent } from './reports/reports.component';
 import { ClientsComponent } from '@pages/crm/clients/clients.component';
 import { PublicationsComponent } from '@pages/crm/publications/publications.component';
+import { HashtagsComponent } from '@pages/crm/hashtags/hashtags.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +47,8 @@ import { PublicationsComponent } from '@pages/crm/publications/publications.comp
     ProjectsComponent,
     ClientsComponent,
     ReportsComponent,
-    PublicationsComponent
+    PublicationsComponent,
+    HashtagsComponent
   ],
   imports: [
     FormsModule,
@@ -73,7 +76,10 @@ import { PublicationsComponent } from '@pages/crm/publications/publications.comp
     NgbPopoverModule,
     SharedModule,
     NgbProgressbarModule,
-    NgbTooltipModule
+    NgbTooltipModule,
+    NgbTabsetModule,
+    NgbAccordionModule,
+    NgbCollapseModule
   ]
 })
 export class CRMModule {

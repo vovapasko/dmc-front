@@ -1,7 +1,6 @@
 import { createSelector } from '@ngrx/store';
 
 import { IAppState } from '../state/app.state';
-import { IUserState } from '../state/user.state';
 import { IClientState } from '@store/state/client.state';
 
 const selectClients = (state: IAppState) => state.clients;

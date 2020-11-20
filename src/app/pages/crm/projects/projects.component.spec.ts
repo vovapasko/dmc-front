@@ -3,14 +3,15 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import {
-  NgbAlertModule, NgbDatepickerModule,
+  NgbAccordionModule,
+  NgbAlertModule, NgbCollapseModule, NgbDatepickerModule,
   NgbDropdownModule,
   NgbModalModule,
-  NgbPaginationModule, NgbPopoverModule, NgbProgressbarModule, NgbTooltipModule,
+  NgbPaginationModule, NgbPopoverModule, NgbProgressbarModule, NgbTabsetModule, NgbTooltipModule,
   NgbTypeaheadModule
 } from '@ng-bootstrap/ng-bootstrap';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { UIModule } from '../../../shared/ui/ui.module';
+import { UIModule } from '@shared/ui/ui.module';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Store, StoreModule } from '@ngrx/store';
@@ -26,14 +27,14 @@ import { ArchwizardModule } from 'angular-archwizard';
 import { NgxMaskModule } from 'ngx-mask';
 import { NestableModule } from 'ngx-nestable';
 import { HttpClient, HttpHandler } from '@angular/common/http';
-import { AuthenticationService } from '../../../core/services/auth.service';
+import { AuthenticationService } from '@services/auth.service';
 import { Title } from '@angular/platform-browser';
-import { ErrorService } from '../../../core/services/error.service';
-import { LoadingService } from '../../../core/services/loading.service';
-import { NotificationService } from '../../../core/services/notification.service';
-import { NewsService } from '../../../core/services/news.service';
-import { ProjectStatusPipe } from '../../../shared/pipes/project-status.pipe';
-import { SharedModule } from '../../../shared/shared.module';
+import { ErrorService } from '@services/error.service';
+import { LoadingService } from '@services/loading.service';
+import { NotificationService } from '@services/notification.service';
+import { NewsService } from '@services/news.service';
+import { SharedModule } from '@shared/shared.module';
+import { mockProject } from '../../../core/mocks/project.mock';
 
 describe('ProjectsComponent', () => {
   let component: ProjectsComponent;
@@ -49,6 +50,9 @@ describe('ProjectsComponent', () => {
         CommonModule,
         RouterModule,
         NgbDropdownModule,
+        NgbAccordionModule,
+        NgbCollapseModule,
+        NgbTabsetModule,
         ClickOutsideModule,
         UIModule,
         NgbAlertModule,
@@ -126,7 +130,8 @@ describe('ProjectsComponent', () => {
 
   it('should call onChange', () => {
     spyOn(component, 'onChange');
-    component.onChange(1);
+    // @ts-ignore
+    component.onChange(mockProject);
     expect(component.onChange).toHaveBeenCalled();
   });
 

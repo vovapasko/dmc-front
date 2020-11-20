@@ -1,10 +1,14 @@
+import { Hashtag } from '@models/instances/hashtag';
+
 export interface UpdateClientPayload {
   id: number;
   data: {
-    ip: string;
-    port: number;
-    expire: string;
-    login: string;
-    password: string;
+    id?: number;
+    price?: string;
+    amountPublications?: number;
+    emails?: string;
+    numbers?: string;
+    name?: string;
+    hashtags?: Array<Hashtag>;
   };
 }

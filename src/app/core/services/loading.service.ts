@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
+import { SetLoadingPayload } from '@models/payloads/loading/set';
 
 /**
  * This service for handle global loading
@@ -13,11 +14,13 @@ export class LoadingService {
 
   constructor() {}
 
-  public startLoading(): void {
-    this.loading$.next(true);
+  public startLoading(payload: SetLoadingPayload): Observable<SetLoadingPayload> {
+    this.loading$.next(payload.data.value);
+    return of(payload);
   }
 
-  public stopLoading(): void {
-    this.loading$.next(false);
+  public stopLoading(payload: SetLoadingPayload): Observable<SetLoadingPayload> {
+    this.loading$.next(payload.data.value);
+    return of(payload);
   }
 }

@@ -4,7 +4,7 @@
     <div class="row">
         <app-ui-preloader [display]="loading$ | async"></app-ui-preloader>
 
-        <div class="col-xl-8">
+        <div [ngClass]="{'col-xl-8': (selectedUser$ | async), 'col-xl-12': !(selectedUser$ | async)}">
             <div class="card">
                 <div class="card-body">
                     <div class="row mb-2">
@@ -45,11 +45,10 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr *ngFor="let user of users$ | async | filter: term">
+                            <tr *ngFor="let user of users$ | async | filter: term" (click)="selectUser(user)">
                                 <td class="table-user">
                                     <img [src]="user?.avatar" alt="table-user" class="mr-2 rounded-circle"/>
-                                    <a href="javascript:void(0);" class="text-body font-weight-semibold"
-                                       (click)="selectUser(user)">
+                                    <a href="javascript:void(0);" class="text-body font-weight-semibold">
                                         {{ user?.firstName }}
                                     </a>
                                 </td>
@@ -129,7 +128,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-4">
+        <div class="col-xl-4" *ngIf="(selectedUser$ | async)">
             <div class="card-box">
                 <div class="media mb-3">
                     <img

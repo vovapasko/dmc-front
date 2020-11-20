@@ -1,0 +1,32 @@
+.navbar-custom {
+  background-color: #358dcd;
+  color: white;
+}
+.navbar-custom li a{
+  color: white;
+}
+
+#logout, #profile-link {
+  color: black;
+}
+
+.logo {
+  line-height: 62px;
+}
+
+.logo-lg img {
+  border-radius: 6px;
+}
+
+.logo-sm img {
+  border-radius: 6px;
+}
+
+.app-search-box input::placeholder {
+  color: white;
+}
+
+.app-search-box i {
+  color: white;
+}
+

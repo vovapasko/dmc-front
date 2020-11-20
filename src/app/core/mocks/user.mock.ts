@@ -1,4 +1,4 @@
-import { Groups } from '../models/instances/groups';
+import { Groups } from '@models/instances/groups';
 
 export const mockUsers = [
   {

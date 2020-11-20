@@ -1,8 +1,7 @@
 import { ProjectStatusPipe } from './project-status.pipe';
-import {mockContractor} from '../../core/mocks/contractor.mock';
 import {mockProject} from '../../core/mocks/project.mock';
-import { Project } from '../../core/models/instances/project';
-import { Orders } from '../../core/constants/orders';
+import { Project } from '@models/instances/project';
+import { Orders } from '@constants/orders';
 
 describe('ProjectStatusPipe', () => {
   it('should create', () => {

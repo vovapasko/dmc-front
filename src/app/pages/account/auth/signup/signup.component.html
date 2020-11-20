@@ -7,7 +7,7 @@
                         <!-- Logo-->
                         <div class="text-center w-75 m-auto">
                             <a routerLink="/account/login">
-                                <img src="../../../../../assets/images/logo-dark.png" alt="" height="22"/>
+                                <img src="assets/images/img/Logotype_TSG.svg" alt="" height="50"/>
                             </a>
                             <p *ngIf="!invite" class="text-muted mb-4 mt-3">
                                 Если вы видите этот текст, вам нужно получить приглашение для дальнейшей регистрации в
@@ -132,5 +132,6 @@
 <!-- end page -->
 
 <footer class="footer footer-alt">
-    2015 - 2020 &copy; UBold theme by <a href="" class="text-white-50">Coderthemes</a>
+    <span *ngIf="startYear !== currentYear">2020 - {{currentYear}} © TSG-CRM</span>
+    <span *ngIf="startYear === currentYear">{{currentYear}} © TSG-CRM</span>
 </footer>

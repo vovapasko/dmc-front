@@ -38,8 +38,7 @@ import { selectEmailsList, selectNewsProject, selectProjectsList } from '@store/
 import { NewsProject } from '@models/instances/news-project';
 import { GetNewsProjectPayload } from '@models/payloads/project/news-project/get';
 import { Methods } from '@models/instances/method';
-import { separators } from '@constants/separators';
-import { burstSteps, newsFields, newsFieldsHandler } from '@constants/news';
+import { burstSteps, h1, newsFieldReplacer, newsFields, newsFieldsHandler, p, template } from '@constants/news';
 import { Email } from '@models/instances/email';
 import { UpdateNewsWavesPayload } from '@models/payloads/news/news-waves/update';
 import { CreateNewsWavesPayload } from '@models/payloads/news/news-waves/create';
@@ -50,11 +49,13 @@ import { breadCrumbs } from '@constants/bread-crumbs';
 import { revenueRadialChart } from '@components/charts/data';
 import { selectClientList } from '@store/selectors/client.selectors';
 import { GetClients } from '@store/actions/client.actions';
-import { getColorByPercentage } from '@helpers/utility';
+import { convertFileToBase64, getColorByPercentage, saveFile, urltoFile } from '@helpers/utility';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Contractor, PostFormatListSet } from '@models/instances/contractor';
 import { NewsWavePrice } from '@models/instances/newsWavePrice';
-import { Format } from '@models/instances/format';
+import { ATTACHMENTS, PREVIEW_TEXT, TEXT } from '@constants/titles';
+import { Attachment } from '@models/instances/attachment';
+import {bytesToSize} from '@helpers/utility';
 
 /**
  * Form Burst news component - handling the burst news with sidebar and content
@@ -77,6 +78,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   characters$ = this.store.pipe(select(selectCharacters));
   methods$ = this.store.pipe(select(selectMethods));
   newsProjects$ = this.store.pipe(select(selectProjectsList));
+  bytesToSize = bytesToSize;
   newsSubmit = false;
   newsProject: NewsProject;
   left = numbers.zero;
@@ -106,8 +108,8 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   pairs = pairs;
   getColorByPercentage = getColorByPercentage;
 
-  @ViewChild('wizardForm', { static: false }) wizard: BaseWizardComponent;
-  @ViewChild('tpl', { static: false }) tpl;
+  @ViewChild('wizardForm') wizard: BaseWizardComponent;
+  @ViewChild('tpl') tpl;
 
   constructor(
     private vcr: ViewContainerRef,
@@ -159,7 +161,11 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
       return;
     }
     const controls = this.validationForm.controls;
-    this.pairs.forEach(pair => controls[pair.key].setValue(newsProject[pair.value]));
+    let projectPairs = this.pairs;
+    if (this.newsWaveId) {
+      projectPairs = pairs.filter(el => el.key !== 'projectBudget');
+    }
+    projectPairs.forEach(pair => controls[pair.key].setValue(newsProject[pair.value]));
     this.emails$ = of(newsProject.emails);
     this.newsProject = newsProject;
   }
@@ -328,6 +334,16 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   /**
+   * Returns controls for news form in editor step
+   */
+  get editorFormControls() {
+    if (!this.editorForm) {
+      return;
+    }
+    return this.editorForm.controls;
+  }
+
+  /**
    * Returns controls for preview form in preview step
    */
   get previewFormControls() {
@@ -452,6 +468,7 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
    */
   public blur(value: boolean): void {
     this.blured = value;
+    this.onChangeFormationText();
   }
 
   /**
@@ -510,11 +527,12 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
    */
   public updateField(index: number, field: string, value?: string | number | object): void {
     const control = this.getControl(index, field);
-    this.newsList = this.newsService.updateField(index, field, value, control, this.newsList);
-    this.updatePreviewText(index, control);
-    if (field === 'attachments') {
-      this.onChangeDistributionFiles(control);
+    if (field === ATTACHMENTS) {
+      this.onChangeFiles(control.value);
     }
+    const previewControl = this.getControl(index, 'previewText');
+    this.newsList = this.newsService.updateField(index, field, value, control, this.newsList);
+    this.setContent(control, previewControl, field);
   }
 
   public updatePriceField(index: number, field: string, value?: string | number): void {
@@ -527,44 +545,67 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     // console.log(control);
   }
 
-  public onChangeFormationFiles(event): void {
-    // console.log(event);
+  public onChangeFormationText(): void {
+    if (!this.editorForm) {
+      return;
+    }
+    const control = this.editorFormControls.text;
+    const previewControl = this.previewFormControls.previewText;
+    this.setContent(control, previewControl, TEXT);
   }
 
-  /**
-   * Process update preview text in last step
-   */
-  public updatePreviewText(index: number, control: FormControl): void {
-    this.setContent(index);
+  public onChangeFormationFiles(event): void {
+    const control = this.editorFormControls.attachments;
+    const previewControl = this.previewFormControls.previewText;
+    this.onChangeFiles(control.value);
+    this.setContent(control, previewControl, ATTACHMENTS);
+  }
+
+  public onChangeFiles(files: Array<File>): void {
+    // @ts-ignore
+    files.forEach(file => convertFileToBase64(file));
   }
 
   /**
    * Collect all data in one content string value
    */
-  public setContent(index: number): void {
-    const control = this.getControl(index, 'attachments');
-    const previewControl = this.getControl(index, 'previewText');
-    this.setInfoContent(control, previewControl, index);
-    this.setImageContent(control, previewControl);
+  public setContent(control: AbstractControl, previewControl: AbstractControl, field: string): void {
+    this.setInfoContent(control, previewControl, field);
+    // this.setImageContent(control, previewControl, field);
   }
 
-  public setInfoContent(control: AbstractControl, previewControl: AbstractControl, index: number): void {
-    const fields = Object.keys(newsFields);
-    const format = this.getProjectFormat();
-    let content = '';
-    fields.forEach(field => {
-      const handler = newsFieldsHandler[field];
-      const processingControl = this.getControl(index, field);
-      const value = processingControl.value;
-      const text = handler(value, format) + separators.newLine;
-      if (previewControl.value.indexOf(text) === -1) {
-        content += text;
-      }
-    });
-    if (previewControl.value.includes(content)) {
+  public setInfoContent(control: AbstractControl, previewControl: AbstractControl, field: string): void {
+    if (field === ATTACHMENTS) {
       return;
     }
-    previewControl.setValue(previewControl.value + content);
+    const format = this.getProjectFormat();
+    this.processContent(field, control, previewControl, format);
+  }
+
+  public processContent(field: string, control: AbstractControl, previewControl: AbstractControl, format: string): void {
+    const handler = newsFieldsHandler[field];
+    const replacer = newsFieldReplacer[field];
+    const value = control.value;
+    if (!value) {
+      return;
+    }
+    const text = handler(value, format);
+    const content = this.handlePreviewContent(previewControl.value);
+    const replacedText = replacer(content, text);
+    if (!replacedText) {
+      return;
+    }
+    previewControl.setValue(replacedText);
+  }
+
+  public handlePreviewContent(value: string): string {
+    if (!value) {
+      return template;
+    }
+    if (value && (value.indexOf(h1) === -1 || value.indexOf(p) === -1)) {
+      return template + value;
+    }
+    return value;
   }
 
   public getContractorPrice(contractor: Contractor, format: PostFormatListSet): string | number {
@@ -572,7 +613,10 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     return changedContractor ? changedContractor.price : format.onePostPrice;
   }
 
-  public setImageContent(control: AbstractControl, previewControl: AbstractControl): void {
+  public setImageContent(control: AbstractControl, previewControl: AbstractControl, field: string): void {
+    if (field !== ATTACHMENTS) {
+      return;
+    }
     const images = control.value.filter((file: File) => file.type.includes('image'));
     images.forEach((image: File) => this.handleImage(image, previewControl));
   }
@@ -581,11 +625,12 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     const reader = new FileReader();
     reader.readAsDataURL(image);
     reader.onload = () => {
-      if (control.value.includes(reader.result)) {
+      if (control.value && control.value.includes(reader.result)) {
         return;
       }
-      control.setValue(control.value + newsFieldsHandler.image(reader.result));
-      console.log(reader.result);
+      const text = control.value || '';
+      const handledImage = newsFieldsHandler.image(reader.result) || '';
+      control.setValue(text + handledImage);
     };
     reader.onerror = (error) => {
       console.log('Error: ', error);
@@ -692,6 +737,12 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
     this.processNewsWave();
   }
 
+  public downloadAttachment(attachment: Attachment): void {
+    urltoFile(attachment.base64, attachment.name, attachment.type)
+      .then(file => {
+        saveFile(file, attachment.name);
+      });
+  }
 
   /**
    * Fetch news wave if news wave id

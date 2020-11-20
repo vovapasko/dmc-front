@@ -12,6 +12,8 @@ import { ErrorService } from '@services/error.service';
 import { LoadingService } from '@services/loading.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Store, StoreModule } from '@ngrx/store';
+import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
+import { environment } from '../../../../../environments/environment';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -25,9 +27,40 @@ describe('LoginComponent', () => {
       // * here we configure our testing module with all the declarations,
       // * imports, and providers necessary to this component
       imports: [
-        CommonModule, ReactiveFormsModule, NgbAlertModule, UIModule, RouterTestingModule, StoreModule.forRoot({})
+        SocialLoginModule,
+        CommonModule,
+        ReactiveFormsModule,
+        NgbAlertModule,
+        UIModule,
+        RouterTestingModule,
+        StoreModule.forRoot({})
       ],
-      providers: [HttpClient, HttpHandler, FormBuilder, AuthenticationService, Title, ErrorService, LoadingService, Store],
+      providers: [
+        {
+          provide: 'SocialAuthServiceConfig',
+          useValue: {
+            autoLogin: false,
+            providers: [
+              {
+                id: GoogleLoginProvider.PROVIDER_ID,
+                provider: new GoogleLoginProvider(environment.googleClientId)
+              },
+              {
+                id: FacebookLoginProvider.PROVIDER_ID,
+                provider: new FacebookLoginProvider(environment.fbAppId)
+              }
+            ]
+          } as SocialAuthServiceConfig
+        },
+        HttpClient,
+        HttpHandler,
+        FormBuilder,
+        AuthenticationService,
+        Title,
+        ErrorService,
+        LoadingService,
+        Store
+      ],
       declarations: [LoginComponent]
     }).compileComponents();
 

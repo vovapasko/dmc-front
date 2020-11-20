@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,7 +11,7 @@ import { ResetPassword } from '@models/responses/user/reset-password';
 import { ConfirmResetPasswordResponse } from '@models/responses/user/confirm-reset-password';
 import { UpdateProfileResponse } from '@models/responses/user/update-profile';
 import { GetAllResponse } from '@models/responses/user/get-all';
-import { RequestHandler } from '../helpers/request-handler';
+import { RequestHandler } from '@helpers/request-handler';
 import { CookieService } from '../providers/cookie.service';
 import { CURRENT_USER } from '@constants/user';
 import { PaginationService } from './pagination.service';
@@ -27,6 +26,9 @@ import { ConfirmResetPasswordPayload } from '@models/payloads/user/confirm-reset
 import { ManageGroups } from '@models/instances/groups';
 import { endpoints } from '@constants/endpoints';
 import { methods } from '@constants/methods';
+import { BaseService } from '@services/base.service';
+import { urls } from '@constants/urls';
+import { emailPattern } from '@constants/regex';
 
 const api = environment.api;
 
@@ -35,7 +37,7 @@ const api = environment.api;
  */
 
 @Injectable({ providedIn: 'root' })
-export class UserService {
+export class UserService extends BaseService {
   public user$ = new BehaviorSubject(null);
 
   selectedUser$: BehaviorSubject<User> = new BehaviorSubject(null);
@@ -43,7 +45,6 @@ export class UserService {
   paginatedUserData$: BehaviorSubject<Array<User>> = new BehaviorSubject([]);
 
   constructor(
-    private http: HttpClient,
     private requestHandler: RequestHandler,
     public formBuilder: FormBuilder,
     private paginationService: PaginationService,
@@ -51,6 +52,7 @@ export class UserService {
     private route: ActivatedRoute,
     private router: Router
   ) {
+    super();
   }
 
   set selectedUser(value: User) {
@@ -82,7 +84,8 @@ export class UserService {
    *  Get all users, api returns array of users
    */
   public getAll(page = 1): Observable<User[]> {
-    return this.requestHandler.request(`${api}/${endpoints.USERS}/?page=${page}`,
+    return this.requestHandler.request(
+      this.url(api, endpoints.USERS, null, { page }),
       methods.GET,
       null,
       (response: GetAllResponse) => {
@@ -101,13 +104,13 @@ export class UserService {
    */
   public signup(payload: SignupPayload): Observable<User> {
     return this.requestHandler.request(
-      `${api}/${endpoints.CONFIRM_USER}/${payload.invite}`,
+      this.url(api, endpoints.CONFIRM_USER, payload.invite),
       methods.POST,
       payload,
       (response: SignupResponse) => {
         if (response && response.user) {
           this.user = { ...response.user, token: response.token };
-          this.router.navigate(['/profile']);
+          this.router.navigate([urls.ROOT + urls.PROFILE]);
           return this.user;
         }
       }
@@ -128,25 +131,34 @@ export class UserService {
    *  Register new user aka invite user
    */
   public register(payload: RegisterPayload): Observable<User> {
-    return this.requestHandler.request(`${api}/${endpoints.INVITE_NEW_USER}/`, methods.POST, payload, (response: RegisterResponse) => {
-      if (response && response.user) {
-        const user = response.user;
-        const users = this.users;
-        this.users = [...users, user];
-        return response.user;
+    return this.requestHandler.request(
+      this.url(api, endpoints.INVITE_NEW_USER),
+      methods.POST,
+      payload,
+      (response: RegisterResponse) => {
+        if (response && response.user) {
+          const user = response.user;
+          const users = this.users;
+          this.users = [...users, user];
+          return response.user;
+        }
       }
-    });
+    );
   }
 
   /**
    *  Delete user
    */
   public delete(payload: DeleteUserPayload): Observable<DeleteUserPayload> {
-    return this.requestHandler.request(`${api}/${endpoints.USERS}/${payload.id}`, methods.DELETE, payload, (response: DeleteResponse) => {
-      const users = this.users;
-      this.users = users.filter((el) => +el.id !== +payload.id);
-      return payload;
-    });
+    return this.requestHandler.request(
+      this.url(api, endpoints.USERS, payload.id),
+      methods.DELETE,
+      payload,
+      (response: DeleteResponse) => {
+        const users = this.users;
+        this.users = users.filter((el) => +el.id !== +payload.id);
+        return payload;
+      });
   }
 
   /**
@@ -154,7 +166,7 @@ export class UserService {
    */
   public update(payload: UpdatePayload): Observable<User> {
     return this.requestHandler.request(
-      `${api}/${endpoints.CHANGE_GROUP}/${payload.id}`,
+      this.url(api, endpoints.CHANGE_GROUP, payload.id),
       methods.PUT,
       payload,
       (response: UpdateResponse) => {
@@ -171,11 +183,15 @@ export class UserService {
    *  Get link for reset password on email
    */
   public resetPassword(): Observable<boolean> {
-    return this.requestHandler.request(`${api}/${endpoints.CHANGE_PASSWORD_CONFIRM}/`, methods.GET, null, (response: ResetPassword) => {
-      if (response) {
-        return response.success;
-      }
-    });
+    return this.requestHandler.request(
+      this.url(api, endpoints.CHANGE_PASSWORD_CONFIRM),
+      methods.GET,
+      null,
+      (response: ResetPassword) => {
+        if (response) {
+          return response.success;
+        }
+      });
   }
 
   /**
@@ -183,11 +199,11 @@ export class UserService {
    */
   public confirmResetPassword(payload: ConfirmResetPasswordPayload): Observable<boolean> {
     return this.requestHandler.request(
-      `${api}/${endpoints.CHANGE_PASS}/${payload.confirm}`,
+      this.url(api, endpoints.CHANGE_PASS, payload.confirm),
       methods.POST,
       payload,
       (response: ConfirmResetPasswordResponse) => {
-        this.router.navigate(['/account/confirm']);
+        this.router.navigate([urls.ACCOUNT_CONFIRM]);
         return response.success;
       }
     );
@@ -198,7 +214,7 @@ export class UserService {
    */
   public updateProfile(payload: UpdateProfilePayload): Observable<User> {
     return this.requestHandler.request(
-      `${api}/${endpoints.PROFILE}/${payload.id}`,
+      this.url(api, endpoints.PROFILE, payload.id),
       methods.PUT,
       payload,
       (response: UpdateProfileResponse) => {
@@ -208,19 +224,22 @@ export class UserService {
           this.user = user;
           return user;
         }
-      });
+      }
+    );
   }
 
+  /**
+   *  Returns form group for invite user
+   */
   public initializeInviteUserForm(): FormGroup {
     return this.formBuilder.group({
-      email: [
-        '',
-        [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$')]
-        // [this.isEmailUnique.bind(this), this.isEmailValid.bind(this)]
-      ]
+      email: [null, [Validators.required, Validators.pattern(emailPattern)]]
     });
   }
 
+  /**
+   *  Returns profile form group
+   */
   public initializeProfileForm(): FormGroup {
     const user = this.user;
     return this.formBuilder.group({
@@ -230,18 +249,27 @@ export class UserService {
     });
   }
 
+  /**
+   *  Belong user to managers or not
+   */
   public belongToManage(user: User): boolean {
-    if (!user) {
+    if (!user || (user && !user.groups)) {
       return;
     }
     return !!user.groups.find((group) => ManageGroups.indexOf(group.name) !== -1);
   }
 
+  /**
+   *  Select user, returns observable
+   */
   public selectUser(user: User): Observable<User> {
     this.selectedUser = user;
     return of(user);
   }
 
+  /**
+   *  Handle page change
+   */
   public onPageChange(page: number): void {
     this.getAll(page);
   }

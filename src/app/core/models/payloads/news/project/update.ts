@@ -1,4 +1,4 @@
-import { Project } from '../../../instances/project';
+import { Project } from '@models/instances/project';
 
 export interface UpdateProjectPayload {
   data: Project;

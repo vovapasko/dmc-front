@@ -1,0 +1,40 @@
+
+.btn.btn-primary {
+  background-color: #3CB371 !important;
+  border-color: #3CB371 !important;
+}
+
+.btn.btn-danger.float-right {
+  background-color: #f99c3d;
+  border-color: #f99c3d;
+}
+
+
+ngb-pagination ::ng-deep ul > li.active > a {
+  background-color: #3CB371 !important;
+  border-color: #3CB371 !important;
+}
+
+.bg-dark {
+  background-color: #358dcd !important;
+}
+
+#save-edit-user-button {
+  background-color: #f99c3d !important;
+  border-color: #f99c3d !important;
+}
+
+#cancel-new-user-button {
+  background-color: #e6665e !important;
+  border-color: #e6665e !important;
+}
+
+#save-new-user-button {
+  background-color: #f99c3d !important;
+  border-color: #f99c3d !important;
+}
+
+#cancel-new-user-button {
+  background-color: #e6665e !important;
+  border-color: #e6665e !important;
+}

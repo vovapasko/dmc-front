@@ -60,7 +60,7 @@ describe('ClientService', () => {
   });
 
   it('should be created', () => {
-    service = TestBed.get(ClientService);
+    service = TestBed.inject(ClientService);
     expect(service).toBeTruthy();
   });
 
@@ -99,19 +99,6 @@ describe('ClientService', () => {
       const req = httpMock.expectOne(`${api}/${endpoints.CLIENT}/${MockClient.id}`);
       expect(req.request.method).toBe('PUT');
       req.flush(MockClient);
-    });
-  });
-
-  describe('should delete clients', () => {
-    it('should return an Observable<Client>', () => {
-      const payload = [MockClient] as unknown as DeleteClientPayload;
-      service.delete(payload).subscribe((response) => {
-        expect(response).toBe(payload);
-      });
-
-      const req = httpMock.expectOne(`${api}/${endpoints.CLIENT}/${payload.id}`);
-      expect(req.request.method).toBe('DELETE');
-      req.flush(null);
     });
   });
 });

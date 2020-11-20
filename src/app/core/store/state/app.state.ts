@@ -6,6 +6,9 @@ import { INewsState, initialNewsState } from './news.state';
 import { initialProjectsState, IProjectsState } from './project.state';
 import { IClientState, initialClientState} from '@store/state/client.state';
 import { initialPublicationState, IPublicationState } from '@store/state/publication.state';
+import { IEmailState, initialEmailState } from '@store/state/email.state';
+import { IHashtagState, initialHashtagState } from '@store/state/hashtag.state';
+import { ILoadingState, initialLoadingState } from '@store/state/loading.state';
 
 export interface IAppState {
   router?: RouterReducerState;
@@ -15,6 +18,9 @@ export interface IAppState {
   projects: IProjectsState;
   clients: IClientState;
   publications: IPublicationState;
+  emails: IEmailState;
+  hashtags: IHashtagState;
+  loading: ILoadingState;
 }
 
 export const initialAppState: IAppState = {
@@ -23,7 +29,10 @@ export const initialAppState: IAppState = {
   news: initialNewsState,
   projects: initialProjectsState,
   clients: initialClientState,
-  publications: initialPublicationState
+  publications: initialPublicationState,
+  emails: initialEmailState,
+  hashtags: initialHashtagState,
+  loading: initialLoadingState
 };
 
 export function getInitialState(): IAppState {

@@ -2,6 +2,8 @@
     <app-page-title title="Публикации" [breadcrumbItems]="breadCrumbItems"></app-page-title>
 
     <div class="row">
+        <app-ui-preloader [display]="loading$ | async"></app-ui-preloader>
+
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
@@ -9,8 +11,8 @@
                         <div class="col-lg-8">
                             <form class="form-inline">
                                 <div class="form-group mb-2">
-                                    <label class="sr-only">Search</label>
-                                    <input type="search" class="form-control" name="search" placeholder="Search..."
+                                    <label class="sr-only">Поиск</label>
+                                    <input type="search" class="form-control" name="search" placeholder="Поиск"
                                            [(ngModel)]="term">
                                 </div>
                             </form>
@@ -143,7 +145,7 @@
     </div>
     <div class="modal-body p-3">
         <div class="text-left">
-            <form (ngSubmit)="addNotPublication()" [formGroup]="preventPublicationForm">
+            <form (ngSubmit)="addPublicationBlackList()" [formGroup]="publicationBlackListForm">
 
                 <div *ngFor="let publication of publicationsBlackList$ | async;let i = index" class="form-group row mb-3">
                     <div class="col-md-11">
@@ -156,7 +158,7 @@
 
                     </div>
                     <div class="col-md-1 card-widgets">
-                        <a (click)="onDeleteNotPublication(publication)"
+                        <a (click)="onDeletePublicationBlackList(publication)"
                            href="javascript:void(0);">
                             <i class="mdi mdi-close"></i>
                         </a>
@@ -174,7 +176,7 @@
                     </div>
                 </div>
 
-                <a (click)="addNotPublication()"
+                <a (click)="addPublicationBlackList()"
                    href="javascript: void(0);" style="margin-bottom: 10px">
                     <i class="mdi mdi-plus-circle"></i>
                     Добавить
@@ -206,7 +208,7 @@
     </div>
     <div class="modal-body p-3">
         <div class="text-left">
-            <form (ngSubmit)="addNote()" [formGroup]="notesForm">
+            <form (ngSubmit)="addComment()" [formGroup]="commentForm">
 
                 <div *ngFor="let note of comments$ | async;let i = index" class="form-group row mb-3">
                     <div class="col-md-11">
@@ -219,7 +221,7 @@
 
                     </div>
                     <div class="col-md-1 card-widgets">
-                        <a (click)="onDeleteNote(note)"
+                        <a (click)="onDeleteComment(note)"
                            href="javascript:void(0);">
                             <i class="mdi mdi-close"></i>
                         </a>
@@ -237,7 +239,7 @@
                     </div>
                 </div>
 
-                <a (click)="addNote()"
+                <a (click)="addComment()"
                    href="javascript: void(0);" style="margin-bottom: 10px">
                     <i class="mdi mdi-plus-circle"></i>
                     Добавить

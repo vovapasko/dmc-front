@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import { UIModule } from './ui/ui.module';
 import { AlifeFileToBase64Module } from 'alife-file-to-base64';
 import { ProjectStatusPipe } from './pipes/project-status.pipe';
 import { ContractorsCostPipe } from './pipes/contractors-cost.pipe';
@@ -14,6 +12,8 @@ import { ContractorsFormatsPipe } from './pipes/contractors-formats.pipe';
 import { TicketsSortableDirective } from '@shared/directives/tickets-sortable.directive';
 import { ContractorsArrangementPipe } from './pipes/contractors-arrangement.pipe';
 import { ContractorsNewsAmountPipe } from './pipes/contractors-news-amount.pipe';
+import { LabelFilterPipe } from './pipes/label-filter.pipe';
+import { FromEmailPipe } from './pipes/from-email.pipe';
 
 @NgModule({
   declarations: [
@@ -28,10 +28,11 @@ import { ContractorsNewsAmountPipe } from './pipes/contractors-news-amount.pipe'
     ContractorsFormatsPipe,
     ContractorsArrangementPipe,
     ContractorsNewsAmountPipe,
+    LabelFilterPipe,
+    FromEmailPipe,
   ],
-  imports: [CommonModule, UIModule, AlifeFileToBase64Module],
+  imports: [CommonModule, AlifeFileToBase64Module],
   exports: [
-    UIModule,
     ProjectStatusPipe,
     ContractorsCostPipe,
     ContractorsNamesPipe,
@@ -43,7 +44,9 @@ import { ContractorsNewsAmountPipe } from './pipes/contractors-news-amount.pipe'
     EditableComponent,
     AlifeFileToBase64Module,
     ContractorsArrangementPipe,
-    ContractorsNewsAmountPipe
+    ContractorsNewsAmountPipe,
+    LabelFilterPipe,
+    FromEmailPipe
   ]
 })
 export class SharedModule {

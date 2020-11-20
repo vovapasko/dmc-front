@@ -15,6 +15,8 @@ import { NotificationService } from '@services/notification.service';
 import { SignupPayload } from '@models/payloads/user/signup';
 import { Warnings } from '@constants/notifications';
 import { ServerError } from '@models/responses/server/error';
+import { SIGNUP } from '@constants/titles';
+import { DateService } from '@services/date.service';
 
 /**
  * This component for sign up new user
@@ -27,13 +29,15 @@ import { ServerError } from '@models/responses/server/error';
 })
 export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
   inviteSubscription: Subscription;
-  title = 'Signup';
+  title = SIGNUP;
   signupForm: FormGroup;
   submitted = false;
   invite = '';
   loading$: Subject<boolean>;
   error$: Subject<ServerError>;
   visible = false;
+  currentYear: number;
+  startYear: number;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -43,7 +47,8 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
     private store: Store<IAppState>,
     private errorService: ErrorService,
     private loadingService: LoadingService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private dateService: DateService
   ) {
   }
 
@@ -51,6 +56,8 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
     this.initSubscriptions();
     this.initForm();
     this.setTitle(this.title);
+    this.currentYear = this.dateService.currentYear;
+    this.startYear = this.dateService.startYear;
   }
 
   /**

@@ -5,7 +5,7 @@ import { FormBuilder, FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { environment } from '../../../environments/environment';
-import { RequestHandler } from '../helpers/request-handler';
+import { RequestHandler } from '@helpers/request-handler';
 import { AuthenticationService } from './auth.service';
 import { UserService } from './user.service';
 import { PaginationService } from './pagination.service';
@@ -13,7 +13,7 @@ import { CookieService } from '../providers/cookie.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { mockUser } from '../mocks/user.mock';
 import { mockLogin } from '../mocks/auth.mock';
-import { RouterStub } from '../helpers/router-stub';
+import { RouterStub } from '@helpers/router-stub';
 
 describe('AuthenticationService', () => {
   let injector: TestBed;
@@ -73,18 +73,6 @@ describe('AuthenticationService', () => {
     it('should return an Observable', () => {
       service.logout();
       expect(service.user).toBeFalsy();
-    });
-  });
-
-  describe('#requestToken', () => {
-    it('should return an Observable', () => {
-      service.requestAccessToken().subscribe((token) => {
-        expect(token).toBeTruthy();
-      });
-
-      const req = httpMock.expectOne(`${api}/token-refresh/`);
-      expect(req.request.method).toBe('POST');
-      req.flush({ token: 'token' });
     });
   });
 });

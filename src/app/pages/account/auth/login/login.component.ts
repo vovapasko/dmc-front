@@ -12,6 +12,11 @@ import { LoadingService } from '@services/loading.service';
 import { setAuthClasses } from '@helpers/utility';
 import { LoginPayload } from '@models/payloads/auth/login';
 import { ServerError } from '@models/responses/server/error';
+import { FacebookLoginProvider, GoogleLoginProvider } from 'angularx-social-login';
+import { SocialAuthService } from 'angularx-social-login';
+import numbers from '@constants/numbers';
+import { LOGIN } from '@constants/titles';
+import { DateService } from '@services/date.service';
 
 /**
  * This component for login user in crm
@@ -23,20 +28,24 @@ import { ServerError } from '@models/responses/server/error';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit, AfterViewInit {
-  title = 'Login';
+  title = LOGIN;
   loginForm: FormGroup;
   submitted = false;
   loading$: Subject<boolean>;
   error$: Subject<ServerError>;
   visible = false;
+  currentYear: number;
+  startYear: number;
 
   constructor(
     private formBuilder: FormBuilder,
     private authenticationService: AuthenticationService,
+    private authService: SocialAuthService,
     private titleService: Title,
     private store: Store<IAppState>,
     private errorService: ErrorService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private dateService: DateService
   ) {
   }
 
@@ -45,6 +54,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
     this.initSubscriptions();
     this.setTitle(this.title);
     this.authenticationService.logout();
+    this.currentYear = this.dateService.currentYear;
+    this.startYear = this.dateService.startYear;
   }
 
   /**
@@ -95,6 +106,14 @@ export class LoginComponent implements OnInit, AfterViewInit {
       const data = { email: email.value, password: password.value };
       this.submit({ data });
     }
+  }
+
+  signInWithGoogle(): void {
+    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
+  }
+
+  signInWithFB(): void {
+    this.authService.signIn(FacebookLoginProvider.PROVIDER_ID);
   }
 
   /**

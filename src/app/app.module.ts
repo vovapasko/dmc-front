@@ -33,10 +33,15 @@ import { ProjectEffects } from '@store/effects/project.effects';
 import { RequestInterceptor } from './core/interceptors/request.interceptor';
 import { ClientEffects } from '@store/effects/client.effects';
 import { PublicationEffects } from '@store/effects/publication.effects';
+import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
+import { EmailEffects } from '@store/effects/email.effects';
+import { HashtagEffects } from '@store/effects/hashtag.effects';
+import { LoadingEffects } from '@store/effects/loading.effects';
 
 @NgModule({
   declarations: [AppComponent, Error404Component, Error500Component, NotificationComponent],
   imports: [
+    SocialLoginModule,
     SharedModule,
     CoreModule,
     BrowserAnimationsModule,
@@ -45,10 +50,20 @@ import { PublicationEffects } from '@store/effects/publication.effects';
     LayoutsModule,
     AppRoutingModule,
     StoreModule.forRoot(reducerToken),
-    EffectsModule.forRoot([UserEffects, ContractorEffects, NewsEffects, ProjectEffects, ClientEffects, PublicationEffects]),
+    EffectsModule.forRoot([
+      UserEffects,
+      ContractorEffects,
+      NewsEffects,
+      ProjectEffects,
+      ClientEffects,
+      PublicationEffects,
+      EmailEffects,
+      HashtagEffects,
+      LoadingEffects
+    ]),
     StoreRouterConnectingModule.forRoot({ stateKey: 'router' }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
     reducerProvider,
@@ -57,7 +72,24 @@ import { PublicationEffects } from '@store/effects/publication.effects';
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     NotificationService,
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(environment.googleClientId)
+          },
+          {
+            id: FacebookLoginProvider.PROVIDER_ID,
+            provider: new FacebookLoginProvider(environment.fbAppId)
+          }
+        ]
+      } as SocialAuthServiceConfig
+    }
   ],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule {
+}

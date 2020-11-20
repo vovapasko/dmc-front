@@ -1,6 +1,6 @@
 import { ContractorsNamesPipe } from './contractors-names.pipe';
 import {mockContractor} from '../../core/mocks/contractor.mock';
-import { Contractor } from '../../core/models/instances/contractor';
+import { Contractor } from '@models/instances/contractor';
 
 describe('ContractorsNamesPipe', () => {
   it('should create', () => {

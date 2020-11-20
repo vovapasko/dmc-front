@@ -5,7 +5,7 @@ import { selectHashtags } from '@store/selectors/news.selectors';
 import { Router } from '@angular/router';
 import { ErrorService } from '@services/error.service';
 import { LoadingService } from '@services/loading.service';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Orders } from '@constants/orders';
 import { ServerError } from '@models/responses/server/error';
 import { urls } from '@constants/urls';
@@ -20,7 +20,7 @@ import { GetContractors } from '@store/actions/contractor.actions';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
   selectEmailsList,
-  selectNewsProject,
+  selectNewsProject, selectProjectNews,
   selectProjectsList
 } from '@store/selectors/project.selectors';
 import {
@@ -28,7 +28,7 @@ import {
   DeleteNewsProject,
   GetEmails,
   GetNewsProject,
-  GetNewsProjects,
+  GetNewsProjects, GetNewsWaves,
   UpdateNewsProject
 } from '@store/actions/project.actions';
 import { CreateNewsProjectPayload } from '@models/payloads/project/news-project/create';
@@ -37,6 +37,13 @@ import { UpdateNewsProjectPayload } from '@models/payloads/project/news-project/
 import { breadCrumbs } from '@constants/bread-crumbs';
 import { GetClients } from '@store/actions/client.actions';
 import { selectClientList } from '@store/selectors/client.selectors';
+import { Contractor } from '@models/instances/contractor';
+import { NewsWavePrice } from '@models/instances/newsWavePrice';
+import { NewsWaves } from '@models/instances/news-waves';
+import { projectsTitle } from '@constants/titles';
+import { burstMethods } from '@constants/methods';
+import { hashtagMatches, newsProjectMatches, TicketService } from '@services/ticket.service';
+import { TableData } from '@models/instances/tickets.model';
 
 @Component({
   selector: 'app-projects',
@@ -50,7 +57,8 @@ import { selectClientList } from '@store/selectors/client.selectors';
 export class ProjectsComponent implements OnInit {
 
   // bread crumb items
-  title = 'Проекты';
+  methods = burstMethods;
+  title = projectsTitle;
   breadCrumbItems: Array<{}>;
   loading$: Subject<boolean>;
   error$: Subject<ServerError>;
@@ -59,13 +67,16 @@ export class ProjectsComponent implements OnInit {
   createProjectForm: FormGroup;
   editProjectForm: FormGroup;
   submitted = false;
-
+  isCollapsed = false;
   clients$ = this.store.pipe(select(selectClientList));
   users$ = this.store.pipe(select(selectUserList));
   contractors$ = this.store.pipe(select(selectContractorList));
   projects$ = this.store.pipe(select(selectProjectsList));
   hashtags$ = this.store.pipe(select(selectHashtags));
   emails$ = this.store.pipe(select(selectEmailsList));
+  news$ = this.store.pipe(select(selectProjectNews));
+  project$ = this.store.pipe(select(selectNewsProject));
+  tickets$: Observable<TableData[]>;
   projectId: number;
 
   constructor(
@@ -75,11 +86,15 @@ export class ProjectsComponent implements OnInit {
     private loadingService: LoadingService,
     private titleService: Title,
     private projectService: ProjectService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    public ticketService: TicketService
   ) {
   }
 
   ngOnInit() {
+    this.ticketService.matches = newsProjectMatches;
+    this.ticketService.records$ = this.projectService.newsProjects$;
+    this.tickets$ = this.ticketService.tickets$;
     this.initBreadCrumbItems();
     this.initSubscriptions();
     this.setTitle(this.title);
@@ -138,6 +153,10 @@ export class ProjectsComponent implements OnInit {
     this.store.dispatch(new CreateNewsProject(payload));
   }
 
+  public loadNewsWaves(project: NewsProject): void {
+    this.store.dispatch(new GetNewsWaves({ project: project.id }));
+  }
+
   /**
    * Clean forms
    */
@@ -172,21 +191,35 @@ export class ProjectsComponent implements OnInit {
     this.router.navigate([urls.CRM, urls.BURST_NEWS]);
   }
 
+  public burstNews(news: NewsWaves): void {
+    this.modalService.dismissAll();
+    this.router.navigate([urls.CRM, urls.BURST_NEWS], { queryParams: { id: news.id } });
+  }
+
+  public selectProject(project: NewsProject): void {
+    const payload = { id: project.id };
+    this.projectId = project.id;
+    this.store.dispatch(new GetNewsProject(payload));
+  }
+
   /**
    * Fill edit project modal
    */
-  public onChange(id: number): void {
-    const payload = { id };
-    this.projectId = id;
+  public onChange(project: NewsProject): void {
     this.store.select(selectNewsProject).subscribe(this.initEditProjectForm.bind(this));
-    this.store.dispatch(new GetNewsProject(payload));
+    this.selectProject(project);
+  }
+
+  public getContractorPrice(contractor: Contractor, format: string, priceList: NewsWavePrice[]): string | number {
+    const changedContractor = priceList.find((el: NewsWavePrice) => el.contractor.id === contractor.id);
+    return changedContractor ? changedContractor.price : contractor.postformatlistSet.find(el => el.postFormat === format).onePostPrice;
   }
 
   /**
    * Dispatch delete project
    */
-  public onDelete(id: number): void {
-    const payload = { id };
+  public onDelete(project: NewsProject): void {
+    const payload = { id: project.id };
     this.store.dispatch(new DeleteNewsProject(payload));
   }
 
@@ -222,8 +255,8 @@ export class ProjectsComponent implements OnInit {
   /**
    * Open "create new project" modal
    */
-  public openModal(content: string): void {
-    this.modalService.open(content, { centered: true });
+  public openModal(content: string, options: object = {}): void {
+    this.modalService.open(content, { centered: true, ...options });
   }
 
   /**

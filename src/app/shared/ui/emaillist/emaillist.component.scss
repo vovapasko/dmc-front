@@ -1,0 +1,35 @@
+.list-group-item.active {
+  background-color: #fce8e6 !important;
+  color: red !important;
+  font-weight: bold;
+  border-radius: 0 10px 10px 0;
+}
+
+.list-group-item {
+  padding: 10px;
+  margin: 10px;
+}
+
+#compose-button {
+  background-color: #f99c3d;
+  border-color: #f99c3d;
+  color: white;
+}
+
+#inbox-button {
+  background-color: #358dcd;
+  border-color: #358dcd;
+  color: white;
+}
+
+#sent-button {
+  background-color: #3CB371;
+  border-color: #3CB371;
+  color: white;
+}
+
+#trash-button {
+  background-color: red;
+  border-color: red;
+  color: white;
+}

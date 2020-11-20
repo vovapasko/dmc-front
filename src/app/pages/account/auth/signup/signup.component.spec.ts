@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { SignupPayload } from '@models/payloads/user/signup';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
-import { UIModule } from '../../../../shared/ui/ui.module';
+import { UIModule } from '@shared/ui/ui.module';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Store, StoreModule } from '@ngrx/store';
 import { HttpClient, HttpHandler } from '@angular/common/http';

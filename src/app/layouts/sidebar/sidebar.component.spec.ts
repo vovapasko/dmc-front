@@ -3,7 +3,7 @@ import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core
 import { SidebarComponent } from './sidebar.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
-import { routes } from '../../pages/pages-routing.module';
+import { routes } from '@pages/pages-routing.module';
 
 describe('SidebarComponent', () => {
   let component: SidebarComponent;
@@ -25,7 +25,7 @@ describe('SidebarComponent', () => {
       declarations: [SidebarComponent],
       imports: [RouterTestingModule.withRoutes(routes)],
     }).compileComponents();
-    router = TestBed.get(Router);
+    router = TestBed.inject(Router);
   }));
 
   beforeEach(() => {

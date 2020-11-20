@@ -9,7 +9,9 @@ import {
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
-import { LoadingService } from '@services/loading.service';
+import { Store } from '@ngrx/store';
+import { IAppState } from '@store/state/app.state';
+import { StopLoading } from '@store/actions/loading.actions';
 
 /**
  * This interceptor for process requests from server in rxjs way
@@ -17,7 +19,7 @@ import { LoadingService } from '@services/loading.service';
 @Injectable()
 export class RequestInterceptor implements HttpInterceptor {
 
-  constructor(private loadingScreenService: LoadingService) {
+  constructor(private store: Store<IAppState>) {
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -29,20 +31,16 @@ export class RequestInterceptor implements HttpInterceptor {
       .pipe(
         tap((response: HttpEvent<any>) => {
           lastResponse = response;
-          if (response.type === HttpEventType.Response) {
-            // console.log('success response', response);
-          }
         }),
         catchError((err: any) => {
           error = err;
-          // console.log('error response', err);
           return throwError(err);
         }),
         finalize(() => {
           if (lastResponse.type === HttpEventType.Sent && !error) {
             // last response type was 0, and we haven't received an error
-            // console.log('aborted request');
-            this.loadingScreenService.stopLoading();
+            const payload = { data: { value: false } };
+            this.store.dispatch(new StopLoading(payload));
             return next.handle(request.clone());
           }
         })

@@ -1,8 +1,8 @@
-import { Contractor } from '../../../instances/contractor';
-import { Hashtag } from '../../../instances/hashtag';
-import { Format } from '../../../instances/format';
-import { Character } from '../../../instances/character';
-import { Method } from '../../../instances/method';
+import { Contractor } from '@models/instances/contractor';
+import { Hashtag } from '@models/instances/hashtag';
+import { Format } from '@models/instances/format';
+import { Character } from '@models/instances/character';
+import { Method } from '@models/instances/method';
 
 export interface GetAllResponse {
   success: boolean;

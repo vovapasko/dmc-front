@@ -1,0 +1,69 @@
+.btn .w-sm .btn-light .waves-effect {
+  margin-left: 10px;
+}
+
+#side-menu li {
+  background-color: #f4f5f7;
+  margin: 10px;
+  border-radius: 6px;
+}
+
+
+#side-menu li:hover {
+  background-color: #358dcd;
+}
+
+#side-menu li a:hover {
+  color: white;
+  border-radius: 6px;
+}
+
+#side-menu li a.active {
+  color: white;
+  border-radius: 6px;
+}
+
+#side-menu li a:hover {
+  color: white;
+  border-radius: 6px;
+  background-color: #358dcd;
+}
+
+
+
+#sidebar-menu li:hover {
+  background-color: #358dcd;
+  color: white;
+}
+
+
+#sidebar-menu a.active{
+  background-color: #358dcd;
+  color: white;
+}
+
+.side-nav-link-ref.active {
+  background-color: #358dcd;
+  color: white;
+}
+
+
+
+
+.enlarged .left-side-menu #sidebar-menu > ul > li > a i {
+  margin: 0 -50%;
+}
+
+
+
+#burst-news-link i, #publications-link i, #hashtags-link i{
+  color: #f99c3d;
+}
+
+#projects-link i, #clients-link i, #contractors-link i{
+  color: #3cb371;
+}
+
+#users-link i, #emails-link i, #reports-link i{
+  color: #e6665e;
+}

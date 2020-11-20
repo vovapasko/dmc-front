@@ -1,0 +1,42 @@
+
+.btn-danger {
+  background-color: #f99c3d;
+  border-color: #f99c3d;
+}
+
+.btn-danger:not(:disabled):not(.disabled):active, .btn-danger:not(:disabled):not(.disabled).active, .show > .btn-danger.dropdown-toggle {
+  background-color: #f99c3d;
+  border-color: #f99c3d;
+}
+
+
+ngb-pagination ::ng-deep ul > li.active > a {
+  background-color: #3CB371 !important;
+  border-color: #3CB371 !important;
+}
+
+.btn.btn-sm.btn-blue.waves-effect.waves-light.float-right {
+  background-color: #3CB371 !important;
+  border-color: #3CB371 !important;
+}
+
+.btn.btn-primary {
+  background-color: #3CB371 !important;
+  border-color: #3CB371 !important;
+}
+
+.bg-dark {
+  background-color: #358dcd !important;
+}
+
+.mb-3, .my-3 {
+  margin-bottom: 0 !important;
+}
+
+.btn.btn-danger.btn-rounded.mb-3 {
+  margin-right: 20px;
+}
+
+small {
+  margin-left: 5px;
+}

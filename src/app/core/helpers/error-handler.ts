@@ -10,19 +10,22 @@ import { ServerError } from '@models/responses/server/error';
  */
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class ErrorHandler {
-  constructor(private notificationService: NotificationService, private errorService: ErrorService) {}
+  constructor(
+    private notificationService: NotificationService,
+    private errorService: ErrorService
+  ) {
+  }
 
   /**
    * Handle error.
    */
-  public handle(error: ServerError): ServerError {
-    const errors = error.errors;
-    const errorsTitles = Object.keys(errors);
-    errorsTitles.forEach((title) => this.notificationService.notify(NotificationType.error, title, errors[title]));
-    this.errorService.error = error;
-    return error;
+  public handle(serverError: ServerError): ServerError {
+    const errors = Object.keys(serverError.error);
+    errors.forEach(errorKey => this.notificationService.notify(NotificationType.error, errorKey, serverError.error[errorKey].toString()));
+    this.errorService.error = serverError;
+    return serverError;
   }
 }

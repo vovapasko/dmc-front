@@ -1,8 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-
-import { Email } from './inbox.model';
-import { emailData } from './data';
 import { breadCrumbs } from '@constants/bread-crumbs';
+import { select, Store } from '@ngrx/store';
+import { IAppState } from '@store/state/app.state';
+import { selectEmailsList } from '@store/selectors/email.selectors';
+import { LoadingService } from '@services/loading.service';
+import { EmailEntity } from '@models/instances/email';
+import { EmailService } from '@services/email.service';
+import { Router } from '@angular/router';
+import { urls } from '@constants/urls';
+import { GetEmail, GetEmails, GetSent, SelectEmail, TrashEmail } from '@store/actions/email.actions';
+import numbers from '@constants/numbers';
+import { selectLoading } from '@store/selectors/loading.selectors';
+import { emailMatches, TicketService } from '@services/ticket.service';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { messageType } from '@models/payloads/email/get-email';
+import { EmailLabels } from '@models/payloads/email/get-emails';
 
 @Component({
   selector: 'app-inbox',
@@ -17,9 +29,14 @@ export class InboxComponent implements OnInit {
 
   // bread crumb items
   breadCrumbItems: Array<{}>;
+  checkedEmails$: BehaviorSubject<Array<EmailEntity>> = new BehaviorSubject([]);
 
   // paginated email data
-  emailData: Array<Email>;
+  emailData: Array<EmailEntity>;
+  tickets$: Observable<EmailEntity[]>;
+  emails$ = this.store.pipe(select(selectEmailsList));
+  loading$ = this.store.select(selectLoading);
+  loading = false;
 
   // page number
   page = 1;
@@ -31,34 +48,109 @@ export class InboxComponent implements OnInit {
   // start and end index
   startIndex = 1;
   endIndex = 15;
+  term = null;
 
 
-  constructor() { }
+  constructor(
+    private store: Store<IAppState>,
+    public service: TicketService,
+    private loadingService: LoadingService,
+    private emailService: EmailService,
+    private router: Router
+  ) {
+  }
+
+  /**
+   * Mark as checked all contractors in table
+   */
+  public checkAll(): void {
+    this.emailService.checkAll();
+  }
+
+  /**
+   * Mark as checked contractor in table
+   */
+  public check(email: EmailEntity): void {
+    this.emailService.check(email);
+  }
+
+
+  public processEmails(emails: EmailEntity[]): void {
+    if (!emails) {
+      return;
+    }
+    this.emailData = emails;
+    this.totalRecords = emails.length;
+  }
 
   ngOnInit() {
-    this.breadCrumbItems = breadCrumbs.emails;
-    // gets the data
-    this._fetchData();
-  }
-
-  /**
-   * Handle on page click event
-   */
-  onPageChange(page: any): void {
-    this.startIndex = (page - 1) * this.pageSize + 1;
-    this.endIndex = (page - 1) * this.pageSize + this.pageSize;
-    if (this.endIndex > this.totalRecords) {
-      this.endIndex = this.totalRecords;
+    this.checkedEmails$ = this.emailService.checkedEmails$;
+    this.emailService.checkedEmails = [];
+    this.service.matches = emailMatches;
+    this.service.searchTerm = '';
+    this.service.records$ = this.emailService.emails$;
+    // @ts-ignore
+    this.tickets$ = this.service.tickets$;
+    this.breadCrumbItems = breadCrumbs.emails.inbox;
+    this.store.select(selectLoading).subscribe(this.processLoading.bind(this));
+    this.initSubscriptions();
+    if (!this.emailService.selectedNewsEmail) {
+      this.router.navigate([urls.EMAILS]);
     }
-    this.emailData = emailData.slice(this.startIndex - 1, this.endIndex - 1);
+    this.fetchData();
+  }
+
+  public reload(): void {
+    const payload = { email: this.emailService.selectedNewsEmail.email, pagination: numbers.pageSize };
+    this.store.dispatch(new GetEmails(payload));
+  }
+
+  public processLoading(value: boolean): void {
+    this.loading = value;
+  }
+
+  public trash(): void {
+    // tslint:disable-next-line:max-line-length
+    const payload = { data: { email: this.emailService.selectedNewsEmail.email, messageIds: this.emailService.checkedEmails.map((email: EmailEntity) => email.id) } };
+    this.store.dispatch(new TrashEmail(payload));
+  }
+
+  public readEmail(email: EmailEntity): void {
+    const pagination = numbers.pageSize;
+    const payload = {messageId: email.id, email: this.emailService.selectedNewsEmail.email, messageType: messageType.full, pagination};
+    this.store.dispatch(new GetEmail(payload));
   }
 
   /**
-   * Gets the email data
-   * Note: In real application - you might want to call some api to get the email records
+   * Subscribe to subject
    */
-  private _fetchData() {
-    this.emailData = emailData;
-    this.totalRecords = emailData.length;
+  public initSubscriptions(): void {
+    this.loading$ = this.loadingService.loading$;
+    this.store.pipe(select(selectEmailsList)).subscribe(this.processEmails.bind(this));
+  }
+
+  public next(): void {
+    const email = this.emailService.selectedNewsEmail.email;
+    const nextPageToken = this.emailService.nextPageToken;
+    const pagination = numbers.pageSize;
+    this.store.dispatch(new GetEmails({ email, nextPageToken, pagination }));
+  }
+
+  public search(value: string | null) {
+    this.service.searchTerm = value;
+    this.term = value;
+  }
+
+  public previous(): void {
+    const email = this.emailService.selectedNewsEmail.email;
+    const previousPageToken = this.emailService.previousPageToken;
+    const pagination = numbers.pageSize;
+    this.store.dispatch(new GetEmails({ email, nextPageToken: previousPageToken, pagination }));
+  }
+
+  public fetchData(): void {
+    const email = this.emailService.selectedNewsEmail.email;
+    const pagination = numbers.pageSize;
+    this.store.dispatch(new GetEmails({ email, pagination }));
   }
 }
