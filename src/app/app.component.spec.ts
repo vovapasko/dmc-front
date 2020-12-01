@@ -1,8 +1,8 @@
 import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
-import { NotificationComponent } from './core/components/notification/notification.component';
-import { NotificationService } from './core/services/notification.service';
+import { NotificationComponent } from '@components/notification/notification.component';
+import { NotificationService } from '@services/notification.service';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {

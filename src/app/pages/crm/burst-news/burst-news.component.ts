@@ -53,7 +53,7 @@ import { convertFileToBase64, getColorByPercentage, saveFile, urltoFile } from '
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Contractor, PostFormatListSet } from '@models/instances/contractor';
 import { NewsWavePrice } from '@models/instances/newsWavePrice';
-import { ATTACHMENTS, PREVIEW_TEXT, TEXT } from '@constants/titles';
+import { ATTACHMENTS, TEXT } from '@constants/titles';
 import { Attachment } from '@models/instances/attachment';
 import {bytesToSize} from '@helpers/utility';
 

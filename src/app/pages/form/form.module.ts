@@ -14,7 +14,7 @@ import { NgxMaskModule } from 'ngx-mask';
 
 import { FormRoutingModule } from './form-routing.module';
 
-import { UIModule } from '../../shared/ui/ui.module';
+import { UIModule } from '@shared/ui/ui.module';
 
 import { ValidationComponent } from './validation/validation.component';
 
