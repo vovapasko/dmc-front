@@ -1,6 +1,3 @@
-
-
-// Table Data
 import { Hashtag } from '@models/instances/hashtag';
 
 export interface TableData {

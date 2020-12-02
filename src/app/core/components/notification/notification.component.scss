@@ -7,6 +7,13 @@
   max-width: 400px;
 }
 
+@media only screen and (max-width: 600px) {
+  .notifications {
+    min-width: 200px;
+    max-width: 200px;
+  }
+}
+
 body {
   background: #000e29;
 }

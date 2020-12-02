@@ -42,7 +42,7 @@ import { NewsWavePrice } from '@models/instances/newsWavePrice';
 import { NewsWaves } from '@models/instances/news-waves';
 import { projectsTitle } from '@constants/titles';
 import { burstMethods } from '@constants/methods';
-import { hashtagMatches, newsProjectMatches, TicketService } from '@services/ticket.service';
+import { newsProjectMatches, TicketService } from '@services/ticket.service';
 import { TableData } from '@models/instances/tickets.model';
 
 @Component({
