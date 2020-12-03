@@ -127,8 +127,8 @@ export class ContractorService extends BaseService {
   public delete(payload: DeleteContractorPayload): Observable<DeleteContractorPayload> {
     return this.requestHandler.request(
       this.url(api, endpoints.CONTRACTOR, payload.id),
-      methods.DELETE,
-      null,
+      methods.PUT,
+      payload,
       (response: DeleteContractorResponse) => {
         if (response) {
           const contractors = this.contractors;
