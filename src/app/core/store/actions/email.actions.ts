@@ -8,6 +8,7 @@ import { GetEmailsResponse } from '@models/responses/email/get-emails';
 import { TrashPayload } from '@models/payloads/email/trash';
 import { GetEmailPayload } from '@models/payloads/email/get-email';
 import { ComposeEmailPayload } from '@models/payloads/email/compose-email';
+import { DeleteEmailPayload } from '@models/payloads/project/email/delete';
 
 export enum EEmailActions {
   GetEmails = '[Email] Get emails',
@@ -250,6 +251,20 @@ export class RemoveEmail implements Action {
   public readonly type = EEmailActions.RemoveEmail;
 
   constructor(public payload: TrashPayload) {
+  }
+}
+
+export class RemoveEmailSuccess implements Action {
+  public readonly type = EEmailActions.RemoveEmailSuccess;
+
+  constructor(public payload: TrashPayload) {
+  }
+}
+
+export class DeleteEmail implements Action {
+  public readonly type = EEmailActions.DeleteEmail;
+
+  constructor(public payload: DeleteEmailPayload) {
   }
 }
 
