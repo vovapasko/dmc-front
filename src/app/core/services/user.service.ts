@@ -152,11 +152,11 @@ export class UserService extends BaseService {
   public delete(payload: DeleteUserPayload): Observable<DeleteUserPayload> {
     return this.requestHandler.request(
       this.url(api, endpoints.USERS, payload.id),
-      methods.DELETE,
+      methods.PUT,
       payload,
       (response: DeleteResponse) => {
         const users = this.users;
-        this.users = users.filter((el) => +el.id !== +payload.id);
+        this.users = users.filter((el: User) => +el.id !== +payload.id);
         return payload;
       });
   }
