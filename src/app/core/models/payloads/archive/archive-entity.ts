@@ -1,5 +1,5 @@
 export interface ArchiveEntity {
   data: {
-    isArchive: boolean;
+    isArchived: boolean;
   };
 }
