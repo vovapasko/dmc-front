@@ -1,5 +1,6 @@
 import { EEmailActions, EmailActions } from '@store/actions/email.actions';
 import { IEmailState, initialEmailState } from '@store/state/email.state';
+import { Email } from '@models/instances/email';
 
 export const emailReducers = (state = initialEmailState, action: EmailActions): IEmailState => {
   // console.log(action);
@@ -8,6 +9,12 @@ export const emailReducers = (state = initialEmailState, action: EmailActions): 
       return {
         ...state,
         selectedEmail: action.payload
+      };
+    }
+    case EEmailActions.DeleteEmailSuccess: {
+      return {
+        ...state,
+        newsEmails: state.newsEmails.filter((el: Email) => el.id !== action.payload.id)
       };
     }
     case EEmailActions.GetTrashSuccess: {
