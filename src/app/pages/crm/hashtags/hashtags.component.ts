@@ -122,7 +122,7 @@ export class HashtagsComponent implements OnInit {
 
 
   public delete(hashtag: Hashtag): void {
-    this.store.dispatch(new DeleteHashtag({ id: hashtag.id }));
+    this.store.dispatch(new DeleteHashtag({ id: hashtag.id, data: {isArchived: true} }));
   }
 
   /**
