@@ -130,6 +130,11 @@ export class EmailsComponent implements OnInit {
     this.store.dispatch(new GmailAuth(payload));
   }
 
+  public deleteEmail(email: Email): void {
+    const payload = {id: email.id, data: {isArchived: true}};
+    this.store.dispatch(new )
+  }
+
   public openInbox(email: Email): void {
     const payload = { email: email.email, pagination: numbers.pageSize };
     // this.store.dispatch(new GetEmails(payload));

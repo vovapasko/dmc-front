@@ -40,6 +40,8 @@ export enum EEmailActions {
   SelectNewsEmailSuccess = '[Email] Select news email success',
   SelectEmail = '[Email] Select email',
   SelectEmailSuccess = '[Email] Select email success',
+  DeleteEmail = '[Email] Delete email',
+  DeleteEmailSuccess = '[Email] Delete email success',
 }
 
 export class SelectNewsEmail implements Action {
