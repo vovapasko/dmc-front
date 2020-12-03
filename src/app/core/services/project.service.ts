@@ -138,8 +138,8 @@ export class ProjectService extends BaseService {
   public deleteNewsProject(payload: DeleteNewsProjectPayload) {
     return this.requestHandler.request(
       this.url(api, endpoints.NEWSPROJECTS, payload.id),
-      methods.DELETE,
-      null,
+      methods.PUT,
+      payload,
       (response: any) => {
         this.newsProjects = this.newsProjects.filter(project => project.id !== payload.id);
         return payload;
