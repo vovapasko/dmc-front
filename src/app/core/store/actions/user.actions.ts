@@ -1,6 +1,7 @@
 import { Action } from '@ngrx/store';
 
 import { User } from '@models/instances/user.models';
+import { DeleteUserPayload } from '@models/payloads/user/delete';
 
 export enum EUserActions {
   GetUsers = '[User] Get users',
@@ -46,7 +47,7 @@ export class UpdateUserSuccess implements Action {
 export class DeleteUser implements Action {
   public readonly type = EUserActions.DeleteUser;
 
-  constructor(public payload) {}
+  constructor(public payload: DeleteUserPayload) {}
 }
 
 export class DeleteUserSuccess implements Action {

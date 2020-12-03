@@ -176,7 +176,8 @@ export class UsersComponent implements OnInit {
    * Dispatch delete user
    */
   public delete(user: User) {
-    this.store.dispatch(new DeleteUser(user));
+    const payload = {id: user.id, data: {isArchived: true}};
+    this.store.dispatch(new DeleteUser(payload));
   }
 
   /**
