@@ -133,8 +133,8 @@ export class ClientService extends BaseService {
   public delete(payload: DeleteClientPayload): Observable<null> {
     return this.requestHandler.request(
       this.url(api, endpoints.CLIENT, payload.id),
-      methods.DELETE,
-      null,
+      methods.PUT,
+      payload,
       (response: null) => {
         this.clients = this.clients.filter(el => el.id !== payload.id);
         return payload;

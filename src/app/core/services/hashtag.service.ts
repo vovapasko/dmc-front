@@ -124,8 +124,8 @@ export class HashtagService extends BaseService{
   public delete(payload: DeleteHashtagPayload): Observable<null> {
     return this.requestHandler.request(
       this.url(api, endpoints.HASHTAGS, payload.id),
-      methods.DELETE,
-      null,
+      methods.PUT,
+      payload,
       (response: null) => {
         this.hashtags = this.hashtags.filter(el => el.id !== payload.id);
         return payload;

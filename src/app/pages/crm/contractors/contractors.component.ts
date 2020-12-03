@@ -244,7 +244,8 @@ export class ContractorsComponent implements OnInit {
    * Delete contractor
    */
   public delete(contractor: Contractor): void {
-    this.store.dispatch(new DeleteContractors(contractor));
+    const payload = {id: contractor.id, data: {isArchived: true}};
+    this.store.dispatch(new DeleteContractors(payload));
   }
 
   /**

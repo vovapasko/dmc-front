@@ -23,6 +23,8 @@
 
             <div class="card-box mb-2" [ngClass]="{'bg-soft-success': email.gmailCredentials || email.smtpPassword}"
                  *ngFor="let email of newsEmails$ | async | filter:term">
+                <div class="card-widgets ng-star-inserted"><a (click)="deleteEmail(email)" href="javascript:void(0);"><i
+                        class="mdi mdi-close"></i></a></div>
                 <div class="row align-items-center">
                     <div class="col-sm-4">
                         <div class="media">
@@ -40,14 +42,17 @@
 
                             <!-- not Gmail, not Proton controller  -->
 
-                            <img *ngIf="!email.email.includes('protonmail') && !email.gmailCredentials" class="d-flex align-self-center mr-3" [src]="getMailImage(email)" alt="Generic placeholder image" height="64">
+                            <img *ngIf="!email.email.includes('protonmail') && !email.gmailCredentials"
+                                 class="d-flex align-self-center mr-3" [src]="getMailImage(email)"
+                                 alt="Generic placeholder image" height="64">
 
                             <!-- end not Gmail, not Proton controller -->
 
 
                             <!-- Protonmail controller -->
 
-                            <a *ngIf="email.email.includes('protonmail');" target="_blank" href="https://mail.protonmail.com/login">
+                            <a *ngIf="email.email.includes('protonmail');" target="_blank"
+                               href="https://mail.protonmail.com/login">
                                 <img class="d-flex align-self-center mr-3" [src]="getMailImage(email)"
                                      alt="Generic placeholder image" height="64">
                             </a>
@@ -72,8 +77,10 @@
                         </p>
                         <p class="mb-0"><i class="fa fa-hashtag" aria-hidden="true"></i>{{ email.codeword }}</p>
                         <p *ngIf="email.email.includes('protonmail');" class="mb-0">
-                            <i *ngIf="showPasswordEmails.indexOf(email) === -1" class="fa fa-lock" (click)="showPassword(email)" aria-hidden="true"></i>
-                            <i *ngIf="showPasswordEmails.indexOf(email) !== -1" class="fa fa-lock-open" (click)="hidePassword(email)" aria-hidden="true"></i>
+                            <i *ngIf="showPasswordEmails.indexOf(email) === -1" class="fa fa-lock"
+                               (click)="showPassword(email)" aria-hidden="true"></i>
+                            <i *ngIf="showPasswordEmails.indexOf(email) !== -1" class="fa fa-lock-open"
+                               (click)="hidePassword(email)" aria-hidden="true"></i>
                             <span *ngIf="showPasswordEmails.indexOf(email) !== -1">{{email.password}}</span>
                             <span *ngIf="showPasswordEmails.indexOf(email) === -1">********</span>
                         </p>

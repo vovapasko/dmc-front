@@ -8,6 +8,7 @@ import { GetEmailsResponse } from '@models/responses/email/get-emails';
 import { TrashPayload } from '@models/payloads/email/trash';
 import { GetEmailPayload } from '@models/payloads/email/get-email';
 import { ComposeEmailPayload } from '@models/payloads/email/compose-email';
+import { DeleteEmailPayload } from '@models/payloads/project/email/delete';
 
 export enum EEmailActions {
   GetEmails = '[Email] Get emails',
@@ -40,6 +41,8 @@ export enum EEmailActions {
   SelectNewsEmailSuccess = '[Email] Select news email success',
   SelectEmail = '[Email] Select email',
   SelectEmailSuccess = '[Email] Select email success',
+  DeleteEmail = '[Email] Delete email',
+  DeleteEmailSuccess = '[Email] Delete email success',
 }
 
 export class SelectNewsEmail implements Action {
@@ -258,6 +261,20 @@ export class RemoveEmailSuccess implements Action {
   }
 }
 
+export class DeleteEmail implements Action {
+  public readonly type = EEmailActions.DeleteEmail;
+
+  constructor(public payload: DeleteEmailPayload) {
+  }
+}
+
+export class DeleteEmailSuccess implements Action {
+  public readonly type = EEmailActions.DeleteEmailSuccess;
+
+  constructor(public payload: DeleteEmailPayload) {
+  }
+}
+
 
 export type EmailActions =
   | GmailAuth
@@ -289,4 +306,6 @@ export type EmailActions =
   | GetEmail
   | GetEmailSuccess
   | ComposeEmail
-  | ComposeEmailSuccess;
+  | ComposeEmailSuccess
+  | DeleteEmail
+  | DeleteEmailSuccess;
