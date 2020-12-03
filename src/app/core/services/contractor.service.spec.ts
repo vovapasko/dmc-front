@@ -75,7 +75,7 @@ describe('ContractorService', () => {
       });
 
       const req = httpMock.expectOne(`${api}/contractors/${mockDelete.id}`);
-      expect(req.request.method).toBe('DELETE');
+      expect(req.request.method).toBe('PUT');
       req.flush({ success: true });
     });
   });

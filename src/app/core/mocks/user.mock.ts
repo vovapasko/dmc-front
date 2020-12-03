@@ -92,6 +92,7 @@ export const mockConfirmResetPassword = {
 
 export const mockDelete = {
   id: 1,
+  data: {isArchived: true}
 };
 
 export const mockRegister = {

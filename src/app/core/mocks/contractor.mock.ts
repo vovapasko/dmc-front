@@ -97,4 +97,5 @@ export const mockUpdate = {
 
 export const mockDelete = {
   id: 1,
+  data: {isArchived: true}
 };

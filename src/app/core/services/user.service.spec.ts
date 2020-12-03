@@ -94,7 +94,7 @@ describe('UserService', () => {
       });
 
       const req = httpMock.expectOne(`${api}/users/${mockDelete.id}`);
-      expect(req.request.method).toBe('DELETE');
+      expect(req.request.method).toBe('PUT');
       req.flush(mockDelete);
     });
   });
