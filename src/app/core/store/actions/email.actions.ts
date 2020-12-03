@@ -268,10 +268,10 @@ export class DeleteEmail implements Action {
   }
 }
 
-export class RemoveEmailSuccess implements Action {
-  public readonly type = EEmailActions.RemoveEmailSuccess;
+export class DeleteEmailSuccess implements Action {
+  public readonly type = EEmailActions.DeleteEmailSuccess;
 
-  constructor(public payload: TrashPayload) {
+  constructor(public payload: DeleteEmailPayload) {
   }
 }
 
@@ -306,4 +306,6 @@ export type EmailActions =
   | GetEmail
   | GetEmailSuccess
   | ComposeEmail
-  | ComposeEmailSuccess;
+  | ComposeEmailSuccess
+  | DeleteEmail
+  | DeleteEmailSuccess;
