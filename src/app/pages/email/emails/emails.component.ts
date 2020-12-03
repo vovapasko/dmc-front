@@ -4,7 +4,7 @@ import { select, Store } from '@ngrx/store';
 import { IAppState } from '@store/state/app.state';
 import {
   CreateNewsEmail,
-  GetEmails,
+  DeleteEmail,
   GetNewsEmails,
   GmailAuth,
   GmailTokenRevoke,
@@ -131,8 +131,8 @@ export class EmailsComponent implements OnInit {
   }
 
   public deleteEmail(email: Email): void {
-    const payload = {id: email.id, data: {isArchived: true}};
-    this.store.dispatch(new )
+    const payload = { id: email.id, data: { isArchived: true } };
+    this.store.dispatch(new DeleteEmail(payload));
   }
 
   public openInbox(email: Email): void {

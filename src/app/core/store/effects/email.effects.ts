@@ -6,7 +6,7 @@ import { EmailService } from '@services/email.service';
 import {
   ComposeEmail, ComposeEmailSuccess,
   CreateNewsEmail,
-  CreateNewsEmailSuccess,
+  CreateNewsEmailSuccess, DeleteEmail, DeleteEmailSuccess,
   EEmailActions, GetEmail,
   GetEmails,
   GetEmailsSuccess, GetEmailSuccess,
@@ -39,6 +39,7 @@ import { TrashPayload } from '@models/payloads/email/trash';
 import { GetEmailPayload } from '@models/payloads/email/get-email';
 import { GetEmailResponse } from '@models/responses/email/get-email';
 import { ComposeEmailPayload } from '@models/payloads/email/compose-email';
+import { DeleteEmailPayload } from '@models/payloads/project/email/delete';
 
 @Injectable({
   providedIn: 'root'
@@ -149,6 +150,12 @@ export class EmailEffects {
     switchMap((payload: AuthPayload) => of(new GmailTokenRevokeSuccess(payload)))
   );
 
+  @Effect()
+  deleteEmail$ = this.actions$.pipe(
+    ofType<DeleteEmail>(EEmailActions.DeleteEmail),
+    switchMap((action: { payload: DeleteEmailPayload }) => this.emailService.deleteEmail(action.payload)),
+    switchMap((payload: DeleteEmailPayload) => of(new DeleteEmailSuccess(payload)))
+  );
 
   constructor(
     private emailService: EmailService,

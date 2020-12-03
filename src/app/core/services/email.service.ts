@@ -22,6 +22,7 @@ import { escapeXml } from '@angular/compiler/src/i18n/serializers/xml_helper';
 import { Attachment } from '@models/instances/attachment';
 import { GetAttachmentPayload } from '@models/payloads/email/get-attachment';
 import { ComposeEmailPayload } from '@models/payloads/email/compose-email';
+import { DeleteEmailPayload } from '@models/payloads/project/email/delete';
 
 const api = environment.api;
 
@@ -141,6 +142,18 @@ export class EmailService extends BaseService {
       (response: { results: Array<Email> }) => {
         this.newsEmails = [...this.newsEmails, ...response.results];
         return response.results;
+      }
+    );
+  }
+
+  public deleteEmail(payload: DeleteEmailPayload): Observable<DeleteEmailPayload> {
+    return this.requestHandler.request(
+      this.url(api, endpoints.EMAILS, payload.id),
+      methods.PUT,
+      payload,
+      (response: { results: Array<Email> }) => {
+        this.newsEmails = this.newsEmails.filter((el: Email) => el.id !== payload.id);
+        return payload;
       }
     );
   }
