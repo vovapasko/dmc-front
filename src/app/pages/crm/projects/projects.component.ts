@@ -219,7 +219,7 @@ export class ProjectsComponent implements OnInit {
    * Dispatch delete project
    */
   public onDelete(project: NewsProject): void {
-    const payload = { id: project.id };
+    const payload = { id: project.id, data: {isArchived: true} };
     this.store.dispatch(new DeleteNewsProject(payload));
   }
 
