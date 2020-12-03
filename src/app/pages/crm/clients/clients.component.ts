@@ -123,7 +123,7 @@ export class ClientsComponent implements OnInit {
 
 
   public delete(client: Client): void {
-    this.store.dispatch(new DeleteClient({ id: client.id }));
+    this.store.dispatch(new DeleteClient({ id: client.id, data: {isArchived: true} }));
   }
 
   /**
