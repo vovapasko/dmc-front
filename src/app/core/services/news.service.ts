@@ -161,7 +161,7 @@ export class NewsService extends BaseService {
    */
   public getAllPostFormats(): Observable<PostFormatListSet[]> {
     return this.requestHandler.request(
-      this.url(api, endpoints.POST_FORMATS),
+      this.url(api, `${endpoints.CONTRACTOR}/${endpoints.POST_FORMATS}`),
       methods.GET,
       null,
       (response: GetAllFormatsResponse) => response.results
