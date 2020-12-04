@@ -314,6 +314,12 @@ export class ContractorsComponent implements OnInit {
       if (target.length) {
         const item = target.pop();
         const payload = { ...data, id: item.id };
+        // TODO refactor this
+        // @ts-ignore
+        if (item.contractor) {
+          // @ts-ignore
+          payload.contractor = item.contractor;
+        }
         alias.forEach(al => payload[al.key] = item[al.ali]);
         handler(payload);
       } else {
