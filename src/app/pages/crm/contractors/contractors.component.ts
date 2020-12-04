@@ -522,6 +522,6 @@ export class ContractorsComponent implements OnInit {
     const store = this.store;
     store.select(selectContractorList).subscribe(this.initControls.bind(this));
     store.dispatch(new GetContractors());
-    store.dispatch(new GetPostFormats());
+    // store.dispatch(new GetPostFormats());
   }
 }

@@ -210,7 +210,7 @@ export class NewsService extends BaseService {
    */
   public updatePostFormat(payload: UpdatePostFormatPayload) {
     return this.requestHandler.request(
-      this.url(api, `${endpoints.CONTRACTOR}/${payload.data.contractor}/${endpoints.POST_FORMATS}/${payload.id}`),
+      this.url(api, `${endpoints.CONTRACTOR}/${payload.data.contractor}/${endpoints.POST_FORMATS}`, payload.id),
       methods.PUT,
       payload,
       (response: UpdatePostFormatResponse) => response
@@ -223,7 +223,7 @@ export class NewsService extends BaseService {
    */
   public deletePostFormat(payload: DeletePostFormatPayload) {
     return this.requestHandler.request(
-      this.url(api, `${endpoints.CONTRACTOR}/${payload.contractor}/${endpoints.POST_FORMATS}/${payload.id}`),
+      this.url(api, `${endpoints.CONTRACTOR}/${payload.contractor}/${endpoints.POST_FORMATS}`, payload.id),
       methods.DELETE,
       null,
       (response: DeletePostFormatResponse) => response
