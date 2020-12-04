@@ -244,7 +244,7 @@ export class ContractorsComponent implements OnInit {
    * Delete contractor
    */
   public delete(contractor: Contractor): void {
-    const payload = {id: contractor.id, data: {isArchived: true}};
+    const payload = { id: contractor.id, data: { isArchived: true } };
     this.store.dispatch(new DeleteContractors(payload));
   }
 
@@ -343,7 +343,8 @@ export class ContractorsComponent implements OnInit {
    * Handle deleting new formats
    */
   public deleteFormats(): void {
-    const ids = this.deleteFormatForm.value.deletePostFormat.map(id => ({ id }));
+    const ids = this.deleteFormatForm.value.deletePostFormat
+      .map((format: PostFormatListSet) => ({ id: format.id, contractor: format.contractor }));
     this.processMany(ids, {}, this.deleteFormat.bind(this));
     this.cleanAfterUpdate();
   }
