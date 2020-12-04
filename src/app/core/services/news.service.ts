@@ -192,7 +192,7 @@ export class NewsService extends BaseService {
    */
   public createPostFormat(payload: CreatePostFormatPayload) {
     return this.requestHandler.request(
-      this.url(api, `${endpoints.CONTRACTOR}/${payload.contractor}/${endpoints.POST_FORMATS}`),
+      this.url(api, `${endpoints.CONTRACTOR}/${payload.data.contractor}/${endpoints.POST_FORMATS}`),
       methods.POST,
       payload,
       (response: CreatePostFormatResponse) => response
