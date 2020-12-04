@@ -174,7 +174,7 @@ export class NewsService extends BaseService {
    */
   public getPostFormats(payload: GetPostFormatPayload): Observable<PostFormatListSet[]> {
     return this.requestHandler.request(
-      this.url(api, endpoints.POST_FORMATS, payload.id),
+      this.url(api, `${endpoints.CONTRACTOR}/${payload.id}/${endpoints.POST_FORMATS}`),
       methods.GET,
       null,
       (response: GetFormatsResponse) => response.results
@@ -192,7 +192,7 @@ export class NewsService extends BaseService {
    */
   public createPostFormat(payload: CreatePostFormatPayload) {
     return this.requestHandler.request(
-      this.url(api, endpoints.POST_FORMATS),
+      this.url(api, `${endpoints.CONTRACTOR}/${payload.id}/${endpoints.POST_FORMATS}`),
       methods.POST,
       payload,
       (response: CreatePostFormatResponse) => response
@@ -210,7 +210,7 @@ export class NewsService extends BaseService {
    */
   public updatePostFormat(payload: UpdatePostFormatPayload) {
     return this.requestHandler.request(
-      this.url(api, endpoints.POST_FORMATS, payload.id),
+      this.url(api, `${endpoints.CONTRACTOR}/${payload.id}/${endpoints.POST_FORMATS}`),
       methods.PUT,
       payload,
       (response: UpdatePostFormatResponse) => response
@@ -223,7 +223,7 @@ export class NewsService extends BaseService {
    */
   public deletePostFormat(payload: DeletePostFormatPayload) {
     return this.requestHandler.request(
-      this.url(api, endpoints.POST_FORMATS, payload.id),
+      this.url(api, `${endpoints.CONTRACTOR}/${payload.id}/${endpoints.POST_FORMATS}`),
       methods.DELETE,
       null,
       (response: DeletePostFormatResponse) => response
