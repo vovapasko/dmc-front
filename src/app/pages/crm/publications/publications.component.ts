@@ -402,15 +402,15 @@ export class PublicationsComponent implements OnInit {
       let payload = null;
       switch (type) {
         case actions.publication:
-          payload = { id: publication.id, data: { publish: control.value } };
+          payload = { id: publication.id, data: { publish: control.value, contractor: publication.contractor } };
           this.updatePublish(payload);
           break;
         case actions.preventPublication:
-          payload = { id: publication.id, data: { notPublish: control.value } };
+          payload = { id: publication.id, data: { notPublish: control.value, contractor: publication.contractor } };
           this.updatePublicationBlackList(payload);
           break;
         case actions.note:
-          payload = { id: publication.id, data: { comment: control.value } };
+          payload = { id: publication.id, data: { comment: control.value, contractor: publication.contractor } };
           this.updateComment(payload);
       }
     }
