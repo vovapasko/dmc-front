@@ -116,7 +116,7 @@ export class PublicationService extends BaseService {
    */
   public updatePublicationBlackList(payload: UpdatePublicationBlackListPayload) {
     return this.requestHandler.request(
-      this.url(api, endpoints.PUBLICATIONS_BLACKLIST, payload.id),
+      this.url(api, `${endpoints.CONTRACTOR}/${payload.data.contractor}/${endpoints.PUBLICATIONS_BLACKLIST}`, payload.id),
       methods.PUT,
       payload,
       (response: PublicationBlackList) => response
@@ -128,7 +128,7 @@ export class PublicationService extends BaseService {
    */
   public deletePublicationBlackList(payload: DeletePublicationBlackListPayload) {
     return this.requestHandler.request(
-      this.url(api, endpoints.PUBLICATIONS_BLACKLIST, payload.id),
+      this.url(api, `${endpoints.CONTRACTOR}/${payload.contractor}/${endpoints.PUBLICATIONS_BLACKLIST}`, payload.id),
       methods.DELETE,
       null,
       (response: null) => payload

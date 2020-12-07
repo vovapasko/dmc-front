@@ -382,7 +382,7 @@ export class PublicationsComponent implements OnInit {
    * Dispatch delete publication black list
    */
   public onDeletePublicationBlackList(publication: PublicationBlackList): void {
-    this.deletePublicationBlackList({ id: publication.id });
+    this.deletePublicationBlackList({ id: publication.id, contractor: publication.contractor });
   }
 
   /**
