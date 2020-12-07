@@ -140,7 +140,7 @@ export class PublicationService extends BaseService {
    */
   public getComments(payload: GetCommentPayload) {
     return this.requestHandler.request(
-      this.url(api, endpoints.COMMENTS, null, { contractor: payload.contractor }),
+      this.url(api, endpoints.COMMENTS, payload.contractor ),
       methods.GET,
       null,
       (response: { results: Comment[] }) => response.results
