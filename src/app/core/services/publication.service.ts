@@ -80,7 +80,7 @@ export class PublicationService extends BaseService {
    */
   public deletePublication(payload: DeletePublishPayload) {
     return this.requestHandler.request(
-      this.url(api, endpoints.PUBLICATIONS, payload.id),
+      this.url(api, `${endpoints.CONTRACTOR}/${payload.contractor}/${endpoints.PUBLICATIONS}`, payload.id),
       methods.DELETE,
       null,
       (response: null) => payload
