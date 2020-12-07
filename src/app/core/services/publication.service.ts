@@ -44,7 +44,7 @@ export class PublicationService extends BaseService {
    */
   public getPublications(payload: GetPublicationPayload) {
     return this.requestHandler.request(
-      this.url(api, endpoints.PUBLICATIONS, null, { contractor: payload.contractor }),
+      this.url(api, endpoints.PUBLICATIONS, payload.contractor ),
       methods.GET,
       null,
       (response: { results: Publication[] }) => response.results
@@ -152,7 +152,7 @@ export class PublicationService extends BaseService {
    */
   public createComment(payload: CreateCommentPayload) {
     return this.requestHandler.request(
-      this.url(api, endpoints.COMMENTS),
+      this.url(api, endpoints.COMMENTS, payload.data.contractor),
       methods.POST,
       payload,
       (response: Comment) => response
