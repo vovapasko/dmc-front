@@ -92,7 +92,7 @@ export class PublicationService extends BaseService {
    */
   public getPublicationsBlackList(payload: GetPublicationBlackListPayload) {
     return this.requestHandler.request(
-      this.url(api, endpoints.PUBLICATIONS_BLACKLIST, payload.contractor ),
+      this.url(api, `${endpoints.CONTRACTOR}/${payload.contractor}/${endpoints.PUBLICATIONS_BLACKLIST}` ),
       methods.GET,
       null,
       (response: { results: PublicationBlackList[] }) => response.results
@@ -104,7 +104,7 @@ export class PublicationService extends BaseService {
    */
   public createPublicationBlackList(payload: CreatePublicationBlackListPayload) {
     return this.requestHandler.request(
-      this.url(api, endpoints.PUBLICATIONS_BLACKLIST),
+      this.url(api, `${endpoints.CONTRACTOR}/${payload.data.contractor}/${endpoints.PUBLICATIONS_BLACKLIST}`),
       methods.POST,
       payload,
       (response: PublicationBlackList) => response

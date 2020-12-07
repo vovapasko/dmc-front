@@ -375,7 +375,7 @@ export class PublicationsComponent implements OnInit {
    * Handle delete publication
    */
   public onDeletePublication(publication: Publication): void {
-    this.deletePublish({ id: publication.id });
+    this.deletePublish({ id: publication.id, contractor: publication.contractor });
   }
 
   /**
