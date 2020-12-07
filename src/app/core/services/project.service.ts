@@ -97,7 +97,7 @@ export class ProjectService extends BaseService {
    */
   public getNewsProject(payload: GetNewsProjectPayload) {
     return this.requestHandler.request(
-      this.url(api, endpoints.NEWSPROJECTS, null, { project: payload.id }),
+      this.url(api, endpoints.NEWSPROJECTS, payload.id ),
       methods.GET,
       payload,
       (response: GetAllNewsProjectsResponse) => response.results[numbers.zero]
