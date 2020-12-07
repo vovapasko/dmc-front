@@ -279,7 +279,7 @@ export class NewsService extends BaseService {
    */
   public getNewsWave(payload: GetNewsWavesPayload): Observable<NewsWaves> {
     return this.requestHandler.request(
-      this.url(api, endpoints.NEWS_WAVES, null, { wave: payload.id }),
+      this.url(api, endpoints.NEWS_WAVES, payload.id ),
       methods.GET,
       payload,
       (response: GetNewsWavesResponse) => response.results[numbers.zero]
