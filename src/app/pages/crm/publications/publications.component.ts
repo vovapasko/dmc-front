@@ -389,7 +389,7 @@ export class PublicationsComponent implements OnInit {
    * fetches the orders value
    */
   public onDeleteComment(comment: Comment): void {
-    this.deleteComment({ id: comment.id });
+    this.deleteComment({ id: comment.id, contractor: comment.contractor });
   }
 
   /**

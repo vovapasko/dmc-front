@@ -164,7 +164,7 @@ export class PublicationService extends BaseService {
    */
   public updateComment(payload: UpdateCommentPayload) {
     return this.requestHandler.request(
-      this.url(api, endpoints.COMMENTS, payload.id),
+      this.url(api, `${endpoints.CONTRACTOR}/${payload.data.contractor}/${endpoints.COMMENTS}`, payload.id),
       methods.PUT,
       payload,
       (response: Comment) => response
@@ -221,7 +221,7 @@ export class PublicationService extends BaseService {
    */
   public deleteComment(payload: DeleteCommentPayload) {
     return this.requestHandler.request(
-      this.url(api, endpoints.COMMENTS, payload.id),
+      this.url(api, `${endpoints.CONTRACTOR}/${payload.contractor}/${endpoints.COMMENTS}`, payload.id),
       methods.DELETE,
       null,
       (response: null) => payload
