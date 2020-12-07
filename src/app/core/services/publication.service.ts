@@ -92,7 +92,7 @@ export class PublicationService extends BaseService {
    */
   public getPublicationsBlackList(payload: GetPublicationBlackListPayload) {
     return this.requestHandler.request(
-      this.url(api, endpoints.PUBLICATIONS_BLACKLIST, null, { contractor: payload.contractor }),
+      this.url(api, endpoints.PUBLICATIONS_BLACKLIST, payload.contractor ),
       methods.GET,
       null,
       (response: { results: PublicationBlackList[] }) => response.results
