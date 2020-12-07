@@ -68,7 +68,7 @@ export class PublicationService extends BaseService {
    */
   public updatePublication(payload: UpdatePublishPayload) {
     return this.requestHandler.request(
-      this.url(api, endpoints.PUBLICATIONS, payload.id),
+      this.url(api, `${endpoints.CONTRACTOR}/${payload.data.contractor}/${endpoints.PUBLICATIONS}`, payload.id),
       methods.PUT,
       payload,
       (response: Publication) => response
