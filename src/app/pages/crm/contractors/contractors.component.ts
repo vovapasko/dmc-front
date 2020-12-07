@@ -244,7 +244,7 @@ export class ContractorsComponent implements OnInit {
    * Delete contractor
    */
   public delete(contractor: Contractor): void {
-    const payload = {id: contractor.id, data: {isArchived: true}};
+    const payload = { id: contractor.id, data: { isArchived: true } };
     this.store.dispatch(new DeleteContractors(payload));
   }
 
@@ -314,6 +314,12 @@ export class ContractorsComponent implements OnInit {
       if (target.length) {
         const item = target.pop();
         const payload = { ...data, id: item.id };
+        // TODO refactor this
+        // @ts-ignore
+        if (item.contractor) {
+          // @ts-ignore
+          payload.contractor = item.contractor;
+        }
         alias.forEach(al => payload[al.key] = item[al.ali]);
         handler(payload);
       } else {
@@ -343,7 +349,8 @@ export class ContractorsComponent implements OnInit {
    * Handle deleting new formats
    */
   public deleteFormats(): void {
-    const ids = this.deleteFormatForm.value.deletePostFormat.map(id => ({ id }));
+    const ids = this.deleteFormatForm.value.deletePostFormat
+      .map((format: PostFormatListSet) => ({ id: format.id, contractor: format.contractor }));
     this.processMany(ids, {}, this.deleteFormat.bind(this));
     this.cleanAfterUpdate();
   }
@@ -521,6 +528,6 @@ export class ContractorsComponent implements OnInit {
     const store = this.store;
     store.select(selectContractorList).subscribe(this.initControls.bind(this));
     store.dispatch(new GetContractors());
-    store.dispatch(new GetPostFormats());
+    // store.dispatch(new GetPostFormats());
   }
 }

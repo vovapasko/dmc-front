@@ -7,7 +7,7 @@ import { Contractor, PostFormatListSet } from '@models/instances/contractor';
 export class ContractorsFormatsPipe implements PipeTransform {
 
   transform(data: Contractor[]): any {
-    return data.map(contractor => contractor.postformatlistSet.map(format => ({
+    return data.map(contractor => contractor.postformatlistSet.map((format: PostFormatListSet) => ({
       ...format,
       label: `${format.postFormat} (${contractor.editorName})`
       // @ts-ignore
