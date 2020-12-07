@@ -47,7 +47,7 @@ export class PublicationService extends BaseService {
       this.url(api, `${endpoints.CONTRACTOR}/${payload.contractor}/${endpoints.PUBLICATIONS}` ),
       methods.GET,
       null,
-      (response: { results: Publication[] }) => response.results
+      (response: Publication[]) => response
     );
   }
 
@@ -95,7 +95,7 @@ export class PublicationService extends BaseService {
       this.url(api, `${endpoints.CONTRACTOR}/${payload.contractor}/${endpoints.PUBLICATIONS_BLACKLIST}` ),
       methods.GET,
       null,
-      (response: { results: PublicationBlackList[] }) => response.results
+      (response: PublicationBlackList[] ) => response
     );
   }
 
@@ -143,7 +143,7 @@ export class PublicationService extends BaseService {
       this.url(api, `${endpoints.CONTRACTOR}/${payload.contractor}/${endpoints.COMMENTS}` ),
       methods.GET,
       null,
-      (response: { results: Comment[] }) => response.results
+      (response: Comment[] ) => response
     );
   }
 
