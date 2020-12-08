@@ -14,6 +14,7 @@ import { DateService } from '@services/date.service';
 import { setAuthClasses } from '@helpers/utility';
 import { LoginPayload } from '@models/payloads/auth/login';
 import { Login } from '@store/actions/user.actions';
+import { ForgotPasswordPayload } from '@models/payloads/auth/forgot-password';
 
 @Component({
   selector: 'app-forgot-password',
@@ -22,7 +23,7 @@ import { Login } from '@store/actions/user.actions';
 })
 export class ForgotPasswordComponent implements OnInit, AfterViewInit {
   title = FORGOT_PASSWORD;
-  loginForm: FormGroup;
+  forgotPasswordForm: FormGroup;
   submitted = false;
   loading$: Subject<boolean>;
   error$: Subject<ServerError>;
@@ -63,9 +64,8 @@ export class ForgotPasswordComponent implements OnInit, AfterViewInit {
    * Init form with validators
    */
   public initForm(): void {
-    this.loginForm = this.formBuilder.group({
+    this.forgotPasswordForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
     });
   }
 
@@ -84,8 +84,8 @@ export class ForgotPasswordComponent implements OnInit, AfterViewInit {
   }
 
   // convenience getter for easy access to form fields
-  get loginFormControls(): { [p: string]: AbstractControl } {
-    return this.loginForm.controls;
+  get forgotPasswordFormControls(): { [p: string]: AbstractControl } {
+    return this.forgotPasswordForm.controls;
   }
 
   /**
@@ -93,10 +93,10 @@ export class ForgotPasswordComponent implements OnInit, AfterViewInit {
    */
   public onSubmit(): void {
     this.submitted = true;
-    const loginForm = this.loginForm;
-    if (loginForm && loginForm.valid) {
-      const { email, password } = this.loginFormControls;
-      const data = { email: email.value, password: password.value };
+    const forgotPasswordForm = this.forgotPasswordForm;
+    if (forgotPasswordForm && forgotPasswordForm.valid) {
+      const { email } = this.forgotPasswordFormControls;
+      const data = { email: email.value};
       this.submit({ data });
     }
   }
@@ -112,7 +112,7 @@ export class ForgotPasswordComponent implements OnInit, AfterViewInit {
   /**
    * Dispatch data
    */
-  public submit(payload: LoginPayload): void {
+  public submit(payload: ForgotPasswordPayload): void {
     this.store.dispatch(new Login(payload));
   }
 }
