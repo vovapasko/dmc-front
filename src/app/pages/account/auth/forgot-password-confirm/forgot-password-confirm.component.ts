@@ -67,7 +67,7 @@ export class ForgotPasswordConfirmComponent implements OnInit, AfterViewInit, On
           this.token = params.token;
         }
         if (params.uid) {
-          this.token = params.uid;
+          this.uid = params.uid;
         }
       });
     this.loading$ = this.loadingService.loading$;
