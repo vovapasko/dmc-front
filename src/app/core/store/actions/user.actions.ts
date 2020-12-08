@@ -3,6 +3,7 @@ import { Action } from '@ngrx/store';
 import { User } from '@models/instances/user.models';
 import { DeleteUserPayload } from '@models/payloads/user/delete';
 import { ForgotPasswordPayload } from '@models/payloads/auth/forgot-password';
+import { ForgotPasswordConfirmPayload } from '@models/payloads/auth/forgot-password-confirm';
 
 export enum EUserActions {
   GetUsers = '[User] Get users',
@@ -33,6 +34,13 @@ export class Login implements Action {
   public readonly type = EUserActions.Login;
 
   constructor(public payload) {
+  }
+}
+
+export class ForgotPasswordConfirm implements Action {
+  public readonly type = EUserActions.ForgotPasswordConfirm;
+
+  constructor(public payload: ForgotPasswordConfirmPayload) {
   }
 }
 
@@ -182,4 +190,5 @@ export type UserActions =
   | UpdateUserSuccess
   | DeleteUserSuccess
   | DeleteUser
-  | ForgotPassword;
+  | ForgotPassword
+  | ForgotPasswordConfirm;

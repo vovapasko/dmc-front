@@ -14,7 +14,7 @@ import { DateService } from '@services/date.service';
 import { MustMatch } from '@pages/form/validation/validation.mustmatch';
 import { setAuthClasses } from '@helpers/utility';
 import { ConfirmResetPasswordPayload } from '@models/payloads/user/confirm-reset-password';
-import { PasswordResetConfirm } from '@store/actions/user.actions';
+import { ForgotPasswordConfirm, PasswordResetConfirm } from '@store/actions/user.actions';
 import { ForgotPasswordConfirmPayload } from '@models/payloads/auth/forgot-password-confirm';
 
 @Component({
@@ -111,7 +111,7 @@ export class ForgotPasswordConfirmComponent implements OnInit, AfterViewInit, On
   /**
    * Reset user password with new credentials
    */
-  onSubmit(): void {
+  public onSubmit(): void {
     const forgotPasswordConfirmForm = this.forgotPasswordConfirmForm;
     this.success = '';
     this.submitted = true;
@@ -125,11 +125,11 @@ export class ForgotPasswordConfirmComponent implements OnInit, AfterViewInit, On
   /**
    * Dispatch data
    */
-  submit(payload: ForgotPasswordConfirmPayload): void {
-    this.store.dispatch(new PasswordResetConfirm(payload));
+  public submit(payload: ForgotPasswordConfirmPayload): void {
+    this.store.dispatch(new ForgotPasswordConfirm(payload));
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this.routeSubscription.unsubscribe();
   }
 }
