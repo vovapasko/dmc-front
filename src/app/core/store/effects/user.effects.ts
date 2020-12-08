@@ -24,7 +24,7 @@ import {
   UpdateUser,
   UpdateUserSuccess,
   DeleteUserSuccess,
-  DeleteUser,
+  DeleteUser, ForgotPassword, ForgotPasswordConfirm
 } from '../actions/user.actions';
 import { UserService } from '@services/user.service';
 import { User } from '@models/instances/user.models';
@@ -35,6 +35,8 @@ import { UpdatePayload } from '@models/payloads/user/update';
 import { LoginPayload } from '@models/payloads/auth/login';
 import { SignupPayload } from '@models/payloads/user/signup';
 import { ConfirmResetPasswordPayload } from '@models/payloads/user/confirm-reset-password';
+import { ForgotPasswordPayload } from '@models/payloads/auth/forgot-password';
+import { ForgotPasswordConfirmPayload } from '@models/payloads/auth/forgot-password-confirm';
 
 @Injectable({
   providedIn: 'root',
@@ -94,6 +96,18 @@ export class UserEffects {
     ofType<Login>(EUserActions.Login),
     switchMap((action: {payload: LoginPayload}) => this.authService.login(action.payload)),
     switchMap(() => of(new LoginSuccess()))
+  );
+
+  @Effect()
+  forgotPassword$ = this.actions$.pipe(
+    ofType<ForgotPassword>(EUserActions.ForgotPassword),
+    switchMap((action: {payload: ForgotPasswordPayload}) => this.authService.forgotPassword(action.payload)),
+  );
+
+  @Effect()
+  forgotPasswordConfirm$ = this.actions$.pipe(
+    ofType<ForgotPasswordConfirm>(EUserActions.ForgotPasswordConfirm),
+    switchMap((action: {payload: ForgotPasswordConfirmPayload}) => this.authService.forgotPasswordConfirm(action.payload)),
   );
 
   @Effect()
