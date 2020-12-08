@@ -22,7 +22,8 @@ export const urls = {
   SENT: '/email/sent',
   TRASH: '/email/trash',
   EMAILS: '/email',
-  FORGOT_PASSWORD: 'forgot-password'
+  FORGOT_PASSWORD: 'forgot-password',
+  FORGOT_PASSWORD_CONFIRM: 'forgot-password-confirm'
 };
 
 export const tokenFreeUrls = [urls.LOGIN, urls.CONFIRM_USER, urls.TOKEN_REFRESH];
