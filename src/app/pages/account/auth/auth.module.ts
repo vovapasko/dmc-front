@@ -9,9 +9,11 @@ import { SignupComponent } from './signup/signup.component';
 import { AuthRoutingModule } from './auth-routing';
 import { ConfirmComponent } from './confirm/confirm.component';
 import { PasswordResetComponent } from './passwordreset/password-reset.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ForgotPasswordConfirmComponent } from './forgot-password-confirm/forgot-password-confirm.component';
 
 @NgModule({
-  declarations: [LoginComponent, SignupComponent, ConfirmComponent, PasswordResetComponent],
+  declarations: [LoginComponent, SignupComponent, ConfirmComponent, PasswordResetComponent, ForgotPasswordComponent, ForgotPasswordConfirmComponent],
   imports: [CommonModule, ReactiveFormsModule, NgbAlertModule, UIModule, AuthRoutingModule],
 })
 export class AuthModule {}
