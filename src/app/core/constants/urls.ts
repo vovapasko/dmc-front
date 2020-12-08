@@ -21,7 +21,8 @@ export const urls = {
   INBOX: '/email/inbox',
   SENT: '/email/sent',
   TRASH: '/email/trash',
-  EMAILS: '/email'
+  EMAILS: '/email',
+  FORGOT_PASSWORD: 'forgot-password'
 };
 
 export const tokenFreeUrls = [urls.LOGIN, urls.CONFIRM_USER, urls.TOKEN_REFRESH];

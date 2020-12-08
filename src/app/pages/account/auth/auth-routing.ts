@@ -6,6 +6,7 @@ import { SignupComponent } from './signup/signup.component';
 import { ConfirmComponent } from './confirm/confirm.component';
 import { PasswordResetComponent } from './passwordreset/password-reset.component';
 import { urls } from '@constants/urls';
+import { ForgotPasswordComponent } from '@pages/account/auth/forgot-password/forgot-password.component';
 
 const routes: Routes = [
   {
@@ -23,6 +24,10 @@ const routes: Routes = [
   {
     path: `${urls.CHANGE_PASSWORD}/:confirm`,
     component: PasswordResetComponent,
+  },
+  {
+    path: urls.FORGOT_PASSWORD,
+    component: ForgotPasswordComponent,
   },
 ];
 
