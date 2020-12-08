@@ -13,7 +13,7 @@ import { LoadingService } from '@services/loading.service';
 import { DateService } from '@services/date.service';
 import { setAuthClasses } from '@helpers/utility';
 import { LoginPayload } from '@models/payloads/auth/login';
-import { Login } from '@store/actions/user.actions';
+import { ForgotPassword, Login } from '@store/actions/user.actions';
 import { ForgotPasswordPayload } from '@models/payloads/auth/forgot-password';
 
 @Component({
@@ -113,6 +113,6 @@ export class ForgotPasswordComponent implements OnInit, AfterViewInit {
    * Dispatch data
    */
   public submit(payload: ForgotPasswordPayload): void {
-    this.store.dispatch(new Login(payload));
+    this.store.dispatch(new ForgotPassword(payload));
   }
 }

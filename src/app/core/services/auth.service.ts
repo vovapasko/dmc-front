@@ -19,6 +19,7 @@ import numbers from '@constants/numbers';
 import { urls } from '@constants/urls';
 import { methods } from '@constants/methods';
 import { NotificationService } from '@services/notification.service';
+import { ForgotPasswordPayload } from '@models/payloads/auth/forgot-password';
 
 const api = environment.api;
 
@@ -87,6 +88,19 @@ export class AuthenticationService {
   }
 
   /**
+   * Performs forgot password
+   */
+  public forgotPassword(payload: ForgotPasswordPayload): Observable<ForgotPasswordPayload> {
+    return this.requestHandler.request(
+      `${api}/${urls.FORGOT_PASSWORD}/`,
+      methods.POST,
+      payload,
+      (response: null) => {
+        return payload;
+      });
+  }
+
+  /**
    * Logout the user
    */
   public logout(): void {
@@ -112,7 +126,6 @@ export class AuthenticationService {
       catchError(this.unauthorised.bind(this))
     );
   }
-
 
 
   /**

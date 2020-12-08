@@ -2,6 +2,7 @@ import { Action } from '@ngrx/store';
 
 import { User } from '@models/instances/user.models';
 import { DeleteUserPayload } from '@models/payloads/user/delete';
+import { ForgotPasswordPayload } from '@models/payloads/auth/forgot-password';
 
 export enum EUserActions {
   GetUsers = '[User] Get users',
@@ -24,36 +25,50 @@ export enum EUserActions {
   SignupSuccess = '[User] Signup success',
   PasswordResetConfirm = '[User] Password reset confirm',
   PasswordResetConfirmSuccess = '[User] Password reset confirm success',
+  ForgotPassword = '[User] Forgot password',
+  ForgotPasswordConfirm = '[User] Forgot password confirm',
 }
 
 export class Login implements Action {
   public readonly type = EUserActions.Login;
 
-  constructor(public payload) {}
+  constructor(public payload) {
+  }
+}
+
+export class ForgotPassword implements Action {
+  public readonly type = EUserActions.ForgotPassword;
+
+  constructor(public payload: ForgotPasswordPayload) {
+  }
 }
 
 export class UpdateUser implements Action {
   public readonly type = EUserActions.UpdateUser;
 
-  constructor(public payload) {}
+  constructor(public payload) {
+  }
 }
 
 export class UpdateUserSuccess implements Action {
   public readonly type = EUserActions.UpdateUserSuccess;
 
-  constructor(public payload: User) {}
+  constructor(public payload: User) {
+  }
 }
 
 export class DeleteUser implements Action {
   public readonly type = EUserActions.DeleteUser;
 
-  constructor(public payload: DeleteUserPayload) {}
+  constructor(public payload: DeleteUserPayload) {
+  }
 }
 
 export class DeleteUserSuccess implements Action {
   public readonly type = EUserActions.DeleteUserSuccess;
 
-  constructor(public payload) {}
+  constructor(public payload) {
+  }
 }
 
 export class LoginSuccess implements Action {
@@ -63,7 +78,8 @@ export class LoginSuccess implements Action {
 export class Signup implements Action {
   public readonly type = EUserActions.Signup;
 
-  constructor(public payload) {}
+  constructor(public payload) {
+  }
 }
 
 export class SignupSuccess implements Action {
@@ -73,7 +89,8 @@ export class SignupSuccess implements Action {
 export class PasswordResetConfirm implements Action {
   public readonly type = EUserActions.PasswordResetConfirm;
 
-  constructor(public payload) {}
+  constructor(public payload) {
+  }
 }
 
 export class PasswordResetConfirmSuccess implements Action {
@@ -87,7 +104,8 @@ export class ResetPassword implements Action {
 export class ResetPasswordSuccess implements Action {
   public readonly type = EUserActions.ResetPasswordSuccess;
 
-  constructor(public success: boolean) {}
+  constructor(public success: boolean) {
+  }
 }
 
 export class GetUsers implements Action {
@@ -97,43 +115,50 @@ export class GetUsers implements Action {
 export class GetUsersSuccess implements Action {
   public readonly type = EUserActions.GetUsersSuccess;
 
-  constructor(public payload: User[]) {}
+  constructor(public payload: User[]) {
+  }
 }
 
 export class SelectUser implements Action {
   public readonly type = EUserActions.SelectUser;
 
-  constructor(public payload: User) {}
+  constructor(public payload: User) {
+  }
 }
 
 export class SelectUserSuccess implements Action {
   public readonly type = EUserActions.SelectUserSuccess;
 
-  constructor(public payload: User) {}
+  constructor(public payload: User) {
+  }
 }
 
 export class CreateUser implements Action {
   public readonly type = EUserActions.CreateUser;
 
-  constructor(public payload) {}
+  constructor(public payload) {
+  }
 }
 
 export class CreateUserSuccess implements Action {
   public readonly type = EUserActions.CreateUserSuccess;
 
-  constructor(public payload: User) {}
+  constructor(public payload: User) {
+  }
 }
 
 export class UpdateProfile implements Action {
   public readonly type = EUserActions.UpdateProfile;
 
-  constructor(public payload) {}
+  constructor(public payload) {
+  }
 }
 
 export class UpdateProfileSuccess implements Action {
   public readonly type = EUserActions.UpdateProfileSuccess;
 
-  constructor(public user: User) {}
+  constructor(public user: User) {
+  }
 }
 
 export type UserActions =
@@ -156,4 +181,5 @@ export type UserActions =
   | UpdateUser
   | UpdateUserSuccess
   | DeleteUserSuccess
-  | DeleteUser;
+  | DeleteUser
+  | ForgotPassword;
