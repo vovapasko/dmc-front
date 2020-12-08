@@ -34,7 +34,6 @@ export class ForgotPasswordComponent implements OnInit, AfterViewInit {
   constructor(
     private formBuilder: FormBuilder,
     private authenticationService: AuthenticationService,
-    private authService: SocialAuthService,
     private titleService: Title,
     private store: Store<IAppState>,
     private errorService: ErrorService,
