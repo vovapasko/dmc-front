@@ -101,14 +101,6 @@ export class ForgotPasswordComponent implements OnInit, AfterViewInit {
     }
   }
 
-  signInWithGoogle(): void {
-    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
-  }
-
-  signInWithFB(): void {
-    this.authService.signIn(FacebookLoginProvider.PROVIDER_ID);
-  }
-
   /**
    * Dispatch data
    */

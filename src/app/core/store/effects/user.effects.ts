@@ -101,7 +101,6 @@ export class UserEffects {
   forgotPassword$ = this.actions$.pipe(
     ofType<ForgotPassword>(EUserActions.ForgotPassword),
     switchMap((action: {payload: ForgotPasswordPayload}) => this.authService.forgotPassword(action.payload)),
-    switchMap(() => of(new LoginSuccess()))
   );
 
   @Effect()
