@@ -20,6 +20,7 @@ import { urls } from '@constants/urls';
 import { methods } from '@constants/methods';
 import { NotificationService } from '@services/notification.service';
 import { ForgotPasswordPayload } from '@models/payloads/auth/forgot-password';
+import { ForgotPasswordConfirmPayload } from '@models/payloads/auth/forgot-password-confirm';
 
 const api = environment.api;
 
@@ -93,6 +94,20 @@ export class AuthenticationService {
   public forgotPassword(payload: ForgotPasswordPayload): Observable<ForgotPasswordPayload> {
     return this.requestHandler.request(
       `${api}/${urls.FORGOT_PASSWORD}/`,
+      methods.POST,
+      payload,
+      (response: null) => {
+        return payload;
+      });
+  }
+
+
+  /**
+   * Performs forgot password
+   */
+  public forgotPasswordConfirm(payload: ForgotPasswordConfirmPayload): Observable<ForgotPasswordConfirmPayload> {
+    return this.requestHandler.request(
+      `${api}/${urls.FORGOT_PASSWORD_CONFIRM}/`,
       methods.POST,
       payload,
       (response: null) => {

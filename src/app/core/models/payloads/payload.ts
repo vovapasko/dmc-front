@@ -30,6 +30,8 @@ import { CreateCommentPayload } from '@models/payloads/publication/comment/creat
 import { UpdateCommentPayload } from '@models/payloads/publication/comment/update';
 import { AuthPayload } from '@models/payloads/email/auth';
 import { TrashPayload } from '@models/payloads/email/trash';
+import { ForgotPasswordConfirmPayload } from '@models/payloads/auth/forgot-password-confirm';
+import { ForgotPasswordPayload } from '@models/payloads/auth/forgot-password';
 
 export type Payloads =
   | LoginPayload
@@ -64,3 +66,5 @@ export type Payloads =
   | UpdateCommentPayload
   | AuthPayload
   | TrashPayload
+| ForgotPasswordConfirmPayload
+| ForgotPasswordPayload;
