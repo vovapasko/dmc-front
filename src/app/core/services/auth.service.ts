@@ -128,7 +128,6 @@ export class AuthenticationService {
     this.userService.user = null;
     this.notificationService.history = [];
     this.notificationService.notifications = [];
-    this.router.navigate(['/account/login']);
   }
 
   /**

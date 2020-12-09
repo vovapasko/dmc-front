@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { DEFAULT_INTERRUPTSOURCES, Idle, KeepaliveSvc } from 'ng2-idle-core';
 import { AuthenticationService } from '@services/auth.service';
+import { Timeouts } from '@constants/timeouts';
 
 @Component({
   selector: 'app-ubold',
@@ -18,7 +19,7 @@ export class AppComponent implements OnInit {
     // sets an idle timeout of 5 seconds, for testing purposes.
     idle.setIdle(5);
     // sets a timeout period of 5 seconds. after 10 seconds of inactivity, the user will be considered timed out.
-    idle.setTimeout(5);
+    idle.setTimeout(Timeouts.fifteenMinutesInSeconds);
     // sets the default interrupts, in this case, things like clicks, scrolls, touches to the document
     idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
 
