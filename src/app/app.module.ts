@@ -63,7 +63,7 @@ import { NgIdleModule } from 'ng2-idle-core';
       HashtagEffects,
       LoadingEffects
     ]),
-    NgIdleModule,
+    NgIdleModule.forRoot(),
     StoreRouterConnectingModule.forRoot({ stateKey: 'router' }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
