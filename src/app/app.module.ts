@@ -37,7 +37,7 @@ import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthServiceConfig, So
 import { EmailEffects } from '@store/effects/email.effects';
 import { HashtagEffects } from '@store/effects/hashtag.effects';
 import { LoadingEffects } from '@store/effects/loading.effects';
-import { NgIdleModule } from 'ng2-idle-core';
+import { KeepaliveSvc, NgIdleModule } from 'ng2-idle-core';
 
 
 @NgModule({
@@ -90,7 +90,8 @@ import { NgIdleModule } from 'ng2-idle-core';
           }
         ]
       } as SocialAuthServiceConfig
-    }
+    },
+    {provide: KeepaliveSvc, useValue: undefined}
   ],
   bootstrap: [AppComponent]
 })
