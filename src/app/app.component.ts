@@ -22,15 +22,24 @@ export class AppComponent implements OnInit {
     // sets the default interrupts, in this case, things like clicks, scrolls, touches to the document
     idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
 
-    idle.onIdleEnd.subscribe(() => this.idleState = 'No longer idle.');
+    idle.onIdleEnd.subscribe(() => {
+      this.idleState = 'No longer idle.';
+      console.log(this.idleState);
+    });
     idle.onTimeout.subscribe(() => {
       this.idleState = 'Timed out!';
       this.timedOut = true;
-      console.log('Timed out!');
+      console.log(this.idleState);
       this.authService.logout();
     });
-    idle.onIdleStart.subscribe(() => this.idleState = 'You\'ve gone idle!');
-    idle.onTimeoutWarning.subscribe((countdown) => this.idleState = 'You will time out in ' + countdown + ' seconds!');
+    idle.onIdleStart.subscribe(() => {
+      this.idleState = 'You\'ve gone idle!';
+      console.log(this.idleState);
+    });
+    idle.onTimeoutWarning.subscribe((countdown) => {
+      this.idleState = 'You will time out in ' + countdown + ' seconds!';
+      console.log(this.idleState);
+    });
 
     // sets the ping interval to 15 seconds
     // keepalive.start();
@@ -48,6 +57,7 @@ export class AppComponent implements OnInit {
     this.idle.watch();
     this.idleState = 'Started.';
     this.timedOut = false;
+    console.log(this.idleState);
   }
 
   public setTitle(title: string) {

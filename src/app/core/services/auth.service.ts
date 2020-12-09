@@ -21,7 +21,7 @@ import { methods } from '@constants/methods';
 import { NotificationService } from '@services/notification.service';
 import { ForgotPasswordPayload } from '@models/payloads/auth/forgot-password';
 import { ForgotPasswordConfirmPayload } from '@models/payloads/auth/forgot-password-confirm';
-import { Idle } from 'ng2-idle-core';
+import { DEFAULT_INTERRUPTSOURCES, Idle } from 'ng2-idle-core';
 
 const api = environment.api;
 
@@ -86,6 +86,7 @@ export class AuthenticationService {
         const currentUser = { ...response.user, token: response.token };
         this.userService.user = currentUser;
         this.router.navigate([this.returnUrl]);
+        this.idle.watch();
         return currentUser;
       });
   }
