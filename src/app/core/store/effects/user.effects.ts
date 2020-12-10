@@ -24,7 +24,7 @@ import {
   UpdateUser,
   UpdateUserSuccess,
   DeleteUserSuccess,
-  DeleteUser, ForgotPassword, ForgotPasswordConfirm, SetUserStatus, SetUserStatusSuccess
+  DeleteUser, ForgotPassword, ForgotPasswordConfirm, SetUserStatus, SetUserStatusSuccess, Logout, LogoutSuccess
 } from '../actions/user.actions';
 import { UserService } from '@services/user.service';
 import { User } from '@models/instances/user.models';
@@ -103,8 +103,17 @@ export class UserEffects {
   setUserStatus$ = this.actions$.pipe(
     ofType<SetUserStatus>(EUserActions.SetUserStatus),
     switchMap((action: { payload: UserStatusPayload }) => this.userService.setUserStatus(action.payload)),
-    switchMap(() => of(new SetUserStatusSuccess())),
+    switchMap(() => of(new SetUserStatusSuccess()))
   );
+
+  @Effect()
+  logout$ = this.actions$.pipe(
+    ofType<Logout>(EUserActions.Logout),
+    switchMap((action: { payload: UserStatusPayload }) => this.userService.setUserStatus(action.payload)),
+    switchMap(() => of(this.authService.logout())),
+    switchMap(() => of(new LogoutSuccess()))
+  );
+
 
   @Effect()
   forgotPassword$ = this.actions$.pipe(

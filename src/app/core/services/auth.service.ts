@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, tap } from 'rxjs/operators';
 
@@ -121,13 +121,14 @@ export class AuthenticationService {
   /**
    * Logout the user
    */
-  public logout(): void {
+  public logout(): Observable<null> {
     // remove user from local storage to log user out
     this.idle.stop();
     this.cookieService.deleteCookie(CURRENT_USER);
     this.userService.user = null;
     this.notificationService.history = [];
     this.notificationService.notifications = [];
+    return of(null);
   }
 
   /**
