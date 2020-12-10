@@ -35,6 +35,7 @@ import { ErrorService } from '@services/error.service';
 import { LoadingService } from '@services/loading.service';
 import { NotificationService } from '@services/notification.service';
 import { NewsService } from '@services/news.service';
+import { KeepaliveSvc, NgIdleModule } from 'ng2-idle-core';
 
 describe('UsersComponent', () => {
   let component: UsersComponent;
@@ -58,6 +59,7 @@ describe('UsersComponent', () => {
         ReactiveFormsModule,
         RouterTestingModule,
         StoreModule.forRoot({}),
+        NgIdleModule.forRoot(),
         FormsModule,
         NgbPaginationModule,
         NgApexchartsModule,
@@ -89,7 +91,8 @@ describe('UsersComponent', () => {
         LoadingService,
         Store,
         NotificationService,
-        NewsService
+        NewsService,
+        { provide: KeepaliveSvc, useValue: undefined }
       ],
       declarations: [UsersComponent],
     }).compileComponents();

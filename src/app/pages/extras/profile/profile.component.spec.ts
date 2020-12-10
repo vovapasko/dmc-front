@@ -15,6 +15,7 @@ import { Store, StoreModule } from '@ngrx/store';
 import { NotificationService } from '@services/notification.service';
 import { UserService } from '@services/user.service';
 import { RouterTestingModule } from '@angular/router/testing';
+import { KeepaliveSvc, NgIdleModule } from 'ng2-idle-core';
 
 describe('ProfileComponent', () => {
   let component: ProfileComponent;
@@ -43,6 +44,7 @@ describe('ProfileComponent', () => {
         SharedModule,
         RouterTestingModule,
         StoreModule.forRoot({}),
+        NgIdleModule.forRoot(),
       ],
       providers: [
         HttpClient,
@@ -54,7 +56,8 @@ describe('ProfileComponent', () => {
         LoadingService,
         Store,
         NotificationService,
-        UserService
+        UserService,
+        { provide: KeepaliveSvc, useValue: undefined }
       ],
       declarations: [ProfileComponent]
     }).compileComponents();

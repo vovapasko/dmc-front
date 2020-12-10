@@ -14,6 +14,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { Store, StoreModule } from '@ngrx/store';
 import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
 import { environment } from '../../../../../environments/environment';
+import { KeepaliveSvc, NgIdleModule } from 'ng2-idle-core';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -33,7 +34,8 @@ describe('LoginComponent', () => {
         NgbAlertModule,
         UIModule,
         RouterTestingModule,
-        StoreModule.forRoot({})
+        StoreModule.forRoot({}),
+        NgIdleModule.forRoot(),
       ],
       providers: [
         {
@@ -59,7 +61,8 @@ describe('LoginComponent', () => {
         Title,
         ErrorService,
         LoadingService,
-        Store
+        Store,
+        { provide: KeepaliveSvc, useValue: undefined }
       ],
       declarations: [LoginComponent]
     }).compileComponents();

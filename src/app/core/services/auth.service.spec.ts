@@ -14,6 +14,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { mockUser } from '../mocks/user.mock';
 import { mockLogin } from '../mocks/auth.mock';
 import { RouterStub } from '@helpers/router-stub';
+import { KeepaliveSvc, NgIdleModule } from 'ng2-idle-core';
 
 describe('AuthenticationService', () => {
   let injector: TestBed;
@@ -23,7 +24,7 @@ describe('AuthenticationService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, ReactiveFormsModule, FormsModule],
+      imports: [HttpClientTestingModule, ReactiveFormsModule, FormsModule, NgIdleModule.forRoot()],
       providers: [
         UserService,
         FormBuilder,
@@ -45,6 +46,7 @@ describe('AuthenticationService', () => {
           },
         },
         { provide: Router, useClass: RouterStub },
+        { provide: KeepaliveSvc, useValue: undefined }
       ],
       schemas: [NO_ERRORS_SCHEMA],
     });

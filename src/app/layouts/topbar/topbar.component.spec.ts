@@ -16,6 +16,7 @@ import { Store, StoreModule } from '@ngrx/store';
 import { NotificationService } from '@services/notification.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SharedModule } from '@shared/shared.module';
+import { KeepaliveSvc, NgIdleModule } from 'ng2-idle-core';
 
 describe('TopbarComponent', () => {
   let component: TopbarComponent;
@@ -40,7 +41,8 @@ describe('TopbarComponent', () => {
         ReactiveFormsModule,
         SharedModule,
         RouterTestingModule,
-        StoreModule.forRoot({})
+        StoreModule.forRoot({}),
+        NgIdleModule.forRoot(),
       ],
       providers: [
         HttpClient,
@@ -51,7 +53,8 @@ describe('TopbarComponent', () => {
         ErrorService,
         LoadingService,
         Store,
-        NotificationService
+        NotificationService,
+        { provide: KeepaliveSvc, useValue: undefined }
       ],
       declarations: [TopbarComponent]
     }).compileComponents();
