@@ -20,6 +20,7 @@ import { CookieService } from '../providers/cookie.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RequestHandler } from '@helpers/request-handler';
 import { RouterStub } from '@helpers/router-stub';
+import { KeepaliveSvc, NgIdleModule } from 'ng2-idle-core';
 
 describe('UserService', () => {
   let injector: TestBed;
@@ -29,7 +30,7 @@ describe('UserService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, ReactiveFormsModule, FormsModule],
+      imports: [HttpClientTestingModule, ReactiveFormsModule, FormsModule, NgIdleModule.forRoot()],
       providers: [
         UserService,
         FormBuilder,
@@ -51,6 +52,7 @@ describe('UserService', () => {
           },
         },
         { provide: Router, useClass: RouterStub },
+        { provide: KeepaliveSvc, useValue: undefined }
       ],
       schemas: [NO_ERRORS_SCHEMA],
     });

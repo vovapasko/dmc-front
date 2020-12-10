@@ -23,6 +23,7 @@ import { ProjectService } from '@services/project.service';
 import { CreateEmailPayload } from '@models/payloads/project/email/create';
 import { CreateEmail } from '@store/actions/project.actions';
 import { CreateNewsEmail } from '@store/actions/email.actions';
+import { SetUserStatus } from '@store/actions/user.actions';
 
 /**
  * Top bar component - history, profile bar, logout and create new items
@@ -183,7 +184,8 @@ export class TopbarComponent implements OnInit {
    * Logout the user
    */
   public logout(): void {
-    this.authService.logout();
+    const payload = { id: this.userService.user.id, data: { isOnline: false } };
+    this.store.dispatch(new SetUserStatus(payload));
     this.router.navigate(['/account/login']);
   }
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, tap } from 'rxjs/operators';
 
@@ -21,6 +21,7 @@ import { methods } from '@constants/methods';
 import { NotificationService } from '@services/notification.service';
 import { ForgotPasswordPayload } from '@models/payloads/auth/forgot-password';
 import { ForgotPasswordConfirmPayload } from '@models/payloads/auth/forgot-password-confirm';
+import { DEFAULT_INTERRUPTSOURCES, Idle } from 'ng2-idle-core';
 
 const api = environment.api;
 
@@ -45,7 +46,8 @@ export class AuthenticationService {
     private userService: UserService,
     private route: ActivatedRoute,
     private router: Router,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private idle: Idle
   ) {
     this.returnUrl = this.route.snapshot.queryParams.returnUrl || urls.ROOT;
   }
@@ -84,6 +86,7 @@ export class AuthenticationService {
         const currentUser = { ...response.user, token: response.token };
         this.userService.user = currentUser;
         this.router.navigate([this.returnUrl]);
+        this.idle.watch();
         return currentUser;
       });
   }
@@ -118,12 +121,14 @@ export class AuthenticationService {
   /**
    * Logout the user
    */
-  public logout(): void {
+  public logout(): Observable<null> {
     // remove user from local storage to log user out
+    this.idle.stop();
     this.cookieService.deleteCookie(CURRENT_USER);
     this.userService.user = null;
     this.notificationService.history = [];
     this.notificationService.notifications = [];
+    return of(null);
   }
 
   /**

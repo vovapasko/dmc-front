@@ -14,6 +14,7 @@ import { Title } from '@angular/platform-browser';
 import { ErrorService } from '@services/error.service';
 import { LoadingService } from '@services/loading.service';
 import { SocialAuthService } from 'angularx-social-login';
+import { KeepaliveSvc, NgIdleModule } from 'ng2-idle-core';
 
 describe('ForgotPasswordComponent', () => {
   let component: ForgotPasswordComponent;
@@ -25,11 +26,12 @@ describe('ForgotPasswordComponent', () => {
     TestBed.configureTestingModule({
       // * here we configure our testing module with all the declarations,
       // * imports, and providers necessary to this component
-      imports: [
+      imports: [NgIdleModule.forRoot(),
         CommonModule, ReactiveFormsModule, NgbAlertModule, UIModule, RouterTestingModule, StoreModule.forRoot({})
       ],
-      providers: [HttpClient, SocialAuthService, HttpHandler, FormBuilder, AuthenticationService, Title, ErrorService, LoadingService, Store],
-      declarations: [ForgotPasswordComponent],
+      providers: [HttpClient, { provide: KeepaliveSvc, useValue: undefined }
+        , SocialAuthService, HttpHandler, FormBuilder, AuthenticationService, Title, ErrorService, LoadingService, Store],
+      declarations: [ForgotPasswordComponent]
     }).compileComponents();
 
     fixture = TestBed.createComponent(ForgotPasswordComponent);

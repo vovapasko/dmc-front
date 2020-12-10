@@ -37,6 +37,8 @@ import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthServiceConfig, So
 import { EmailEffects } from '@store/effects/email.effects';
 import { HashtagEffects } from '@store/effects/hashtag.effects';
 import { LoadingEffects } from '@store/effects/loading.effects';
+import { KeepaliveSvc, NgIdleModule } from 'ng2-idle-core';
+
 
 @NgModule({
   declarations: [AppComponent, Error404Component, Error500Component, NotificationComponent],
@@ -61,6 +63,7 @@ import { LoadingEffects } from '@store/effects/loading.effects';
       HashtagEffects,
       LoadingEffects
     ]),
+    NgIdleModule.forRoot(),
     StoreRouterConnectingModule.forRoot({ stateKey: 'router' }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
@@ -87,7 +90,8 @@ import { LoadingEffects } from '@store/effects/loading.effects';
           }
         ]
       } as SocialAuthServiceConfig
-    }
+    },
+    {provide: KeepaliveSvc, useValue: undefined}
   ],
   bootstrap: [AppComponent]
 })

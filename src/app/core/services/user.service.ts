@@ -29,6 +29,7 @@ import { methods } from '@constants/methods';
 import { BaseService } from '@services/base.service';
 import { urls } from '@constants/urls';
 import { emailPattern } from '@constants/regex';
+import { UserStatusPayload } from '@models/payloads/user/status';
 
 const api = environment.api;
 
@@ -224,6 +225,23 @@ export class UserService extends BaseService {
           this.user = user;
           return user;
         }
+      }
+    );
+  }
+
+  /**
+   *  Set user status(online, offline)
+   */
+  public setUserStatus(payload: UserStatusPayload): Observable<User> {
+    return this.requestHandler.request(
+      this.url(api, endpoints.USERS, payload.id),
+      methods.PUT,
+      payload,
+      (response: User) => {
+        const currentUser = this.loadCurrentUser();
+        const user = { ...currentUser, ...response };
+        this.user = user;
+        return user;
       }
     );
   }
