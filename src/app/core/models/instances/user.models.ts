@@ -9,6 +9,7 @@ export class User {
   dateJoined?: Date;
   dateUpdated?: Date;
   isActive?: boolean;
+  isOnline?: boolean;
   isConfirmed?: boolean;
   avatar?: string;
   isStaff?: boolean;

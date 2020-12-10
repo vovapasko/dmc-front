@@ -238,8 +238,10 @@ export class UserService extends BaseService {
       methods.PUT,
       payload,
       (response: User) => {
-        this.user = response;
-        return response;
+        const currentUser = this.loadCurrentUser();
+        const user = { ...currentUser, ...response };
+        this.user = user;
+        return user;
       }
     );
   }

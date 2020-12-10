@@ -24,25 +24,32 @@ export class AppComponent implements OnInit {
     private store: Store,
     private userService: UserService
   ) {
-    // sets an idle timeout of 5 seconds, for testing purposes.
-    idle.setIdle(5);
-    // sets a timeout period of 5 seconds. after 10 seconds of inactivity, the user will be considered timed out.
-    // idle.setTimeout(Timeouts.fifteenMinutesInSeconds);
-    idle.setTimeout(30);
+    // sets an idle timeout of 5 minutes, for testing purposes.
+    // idle.setIdle(60);
+    idle.setIdle(Timeouts.fiveSeconds);
+    // sets a timeout period of 5 minutes. after 15 minutes of inactivity, the user will be considered timed out.
+    idle.setTimeout(Timeouts.fifteenMinutesInSeconds);
+    // idle.setTimeout(30);
     // sets the default interrupts, in this case, things like clicks, scrolls, touches to the document
     idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
 
     idle.onIdleEnd.subscribe(() => {
       this.idleState = 'No longer idle.';
       console.log(this.idleState);
+      if (this.userService.user.isOnline) {
+        return;
+      }
+      const payload = { id: this.userService.user.id, data: { isOnline: true } };
+      this.store.dispatch(new SetUserStatus(payload));
     });
     idle.onTimeout.subscribe(() => {
       this.idleState = 'Timed out!';
       this.timedOut = true;
       console.log(this.idleState);
       // this.authService.logout();
-      const payload = {id: this.userService.user.id, data: {isOnline: false}};
+      const payload = { id: this.userService.user.id, data: { isOnline: false } };
       this.store.dispatch(new SetUserStatus(payload));
+      this.reset();
     });
     idle.onIdleStart.subscribe(() => {
       this.idleState = 'You\'ve gone idle!';
