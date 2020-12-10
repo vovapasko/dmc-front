@@ -29,14 +29,30 @@ export enum EUserActions {
   PasswordResetConfirmSuccess = '[User] Password reset confirm success',
   ForgotPassword = '[User] Forgot password',
   ForgotPasswordConfirm = '[User] Forgot password confirm',
-  SetUserStatus = '[SetUserStatus] Set user status',
-  SetUserStatusSuccess = '[SetUserStatus] Set user status success',
+  SetUserStatus = '[User] Set user status',
+  SetUserStatusSuccess = '[User] Set user status success',
+  Logout = '[User] Logout',
+  LogoutSuccess = '[User] Logout success',
 }
 
 export class Login implements Action {
   public readonly type = EUserActions.Login;
 
   constructor(public payload) {
+  }
+}
+
+export class Logout implements Action {
+  public readonly type = EUserActions.Logout;
+
+  constructor(public payload: UserStatusPayload) {
+  }
+}
+
+export class LogoutSuccess implements Action {
+  public readonly type = EUserActions.LogoutSuccess;
+
+  constructor() {
   }
 }
 
@@ -210,4 +226,6 @@ export type UserActions =
   | ForgotPassword
   | ForgotPasswordConfirm
   | SetUserStatus
-  | SetUserStatusSuccess;
+  | SetUserStatusSuccess
+  | Logout
+  | LogoutSuccess;
