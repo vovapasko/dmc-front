@@ -4,6 +4,7 @@ import { User } from '@models/instances/user.models';
 import { DeleteUserPayload } from '@models/payloads/user/delete';
 import { ForgotPasswordPayload } from '@models/payloads/auth/forgot-password';
 import { ForgotPasswordConfirmPayload } from '@models/payloads/auth/forgot-password-confirm';
+import { UserStatusPayload } from '@models/payloads/user/status';
 
 export enum EUserActions {
   GetUsers = '[User] Get users',
@@ -28,12 +29,20 @@ export enum EUserActions {
   PasswordResetConfirmSuccess = '[User] Password reset confirm success',
   ForgotPassword = '[User] Forgot password',
   ForgotPasswordConfirm = '[User] Forgot password confirm',
+  SetUserStatus = '[SetUserStatus] Set user status',
 }
 
 export class Login implements Action {
   public readonly type = EUserActions.Login;
 
   constructor(public payload) {
+  }
+}
+
+export class SetUserStatus implements Action {
+  public readonly type = EUserActions.SetUserStatus;
+
+  constructor(public payload: UserStatusPayload) {
   }
 }
 
@@ -191,4 +200,5 @@ export type UserActions =
   | DeleteUserSuccess
   | DeleteUser
   | ForgotPassword
-  | ForgotPasswordConfirm;
+  | ForgotPasswordConfirm
+  | SetUserStatus;
