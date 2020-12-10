@@ -3,6 +3,9 @@ import { Title } from '@angular/platform-browser';
 import { DEFAULT_INTERRUPTSOURCES, Idle, KeepaliveSvc } from 'ng2-idle-core';
 import { AuthenticationService } from '@services/auth.service';
 import { Timeouts } from '@constants/timeouts';
+import { Store } from '@ngrx/store';
+import { SetUserStatus } from '@store/actions/user.actions';
+import { UserService } from '@services/user.service';
 
 @Component({
   selector: 'app-ubold',
@@ -15,11 +18,17 @@ export class AppComponent implements OnInit {
   timedOut = false;
   lastPing?: Date = null;
 
-  public constructor(private titleService: Title, private idle: Idle, private authService: AuthenticationService) {
+  public constructor(
+    private titleService: Title,
+    private idle: Idle,
+    private store: Store,
+    private userService: UserService
+  ) {
     // sets an idle timeout of 5 seconds, for testing purposes.
     idle.setIdle(5);
     // sets a timeout period of 5 seconds. after 10 seconds of inactivity, the user will be considered timed out.
-    idle.setTimeout(Timeouts.fifteenMinutesInSeconds);
+    // idle.setTimeout(Timeouts.fifteenMinutesInSeconds);
+    idle.setTimeout(30);
     // sets the default interrupts, in this case, things like clicks, scrolls, touches to the document
     idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
 
@@ -31,7 +40,9 @@ export class AppComponent implements OnInit {
       this.idleState = 'Timed out!';
       this.timedOut = true;
       console.log(this.idleState);
-      this.authService.logout();
+      // this.authService.logout();
+      const payload = {id: this.userService.user.id, data: {isOnline: false}};
+      this.store.dispatch(new SetUserStatus(payload));
     });
     idle.onIdleStart.subscribe(() => {
       this.idleState = 'You\'ve gone idle!';
