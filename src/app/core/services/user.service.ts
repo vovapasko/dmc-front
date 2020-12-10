@@ -229,6 +229,25 @@ export class UserService extends BaseService {
   }
 
   /**
+   *  Set user status(online, offline)
+   */
+  public setUserStatus(payload: UpdateProfilePayload): Observable<User> {
+    return this.requestHandler.request(
+      this.url(api, endpoints.PROFILE, payload.id),
+      methods.PUT,
+      payload,
+      (response: UpdateProfileResponse) => {
+        if (response) {
+          const currentUser = this.loadCurrentUser();
+          const user = { ...currentUser, ...response };
+          this.user = user;
+          return user;
+        }
+      }
+    );
+  }
+
+  /**
    *  Returns form group for invite user
    */
   public initializeInviteUserForm(): FormGroup {
