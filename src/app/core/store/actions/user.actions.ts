@@ -50,7 +50,7 @@ export class SetUserStatus implements Action {
 export class SetUserStatusSuccess implements Action {
   public readonly type = EUserActions.SetUserStatusSuccess;
 
-  constructor(public payload: User) {
+  constructor() {
   }
 }
 
