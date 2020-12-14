@@ -74,7 +74,7 @@ export class ReportsComponent implements OnInit {
   /**
    * Handle upload
    */
-  public onUpload(project: NewsProject): void {
+  public onUpload(event: Event, project: NewsProject): void {
     console.log(project);
   }
 

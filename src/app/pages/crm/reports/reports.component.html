@@ -64,12 +64,15 @@
                                     >
                                         <i class="fe-eye"></i>
                                     </a>
-                                    <a (click)="onUpload(project)"
-                                       href="javascript:void(0);"
-                                       class="action-icon"
-                                    >
+                                    <label for="inputImage">
+                                        <input type="file"
+                                               class="sr-only"
+                                               id="inputImage"
+                                               [multiple]="false"
+                                               (change)="onUpload($event, project)"
+                                        />
                                         <i class="fe-upload"></i>
-                                    </a>
+                                    </label>
                                     <a (click)="onDelete(project)"
                                        href="javascript:void(0);"
                                        class="action-icon"
