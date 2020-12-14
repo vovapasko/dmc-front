@@ -12,6 +12,7 @@ import { selectProjectsList } from '@store/selectors/project.selectors';
 import { NewsProject } from '@models/instances/news-project';
 import { breadCrumbs } from '@constants/bread-crumbs';
 import { reportsTitle } from '@constants/titles';
+import numbers from '@constants/numbers';
 
 @Component({
   selector: 'app-reports',
@@ -75,6 +76,8 @@ export class ReportsComponent implements OnInit {
    * Handle upload
    */
   public onUpload(event: Event, project: NewsProject): void {
+    // @ts-ignore
+    const file = event.currentTarget.files[numbers.zero];
     console.log(project);
   }
 
