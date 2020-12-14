@@ -78,6 +78,9 @@ export class ReportsComponent implements OnInit {
   public onUpload(event: Event, project: NewsProject): void {
     // @ts-ignore
     const file = event.currentTarget.files[numbers.zero];
+    const formData = new FormData();
+    formData.append('report', file);
+    formData.append('id', project.id.toString());
     console.log(project);
   }
 
