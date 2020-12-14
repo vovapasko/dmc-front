@@ -19,8 +19,6 @@ import { reportsTitle } from '@constants/titles';
   styleUrls: ['./reports.component.scss']
 })
 export class ReportsComponent implements OnInit {
-
-  // bread crumb items
   title = reportsTitle;
   breadCrumbItems: Array<{}>;
   projects$ = this.store.pipe(select(selectProjectsList));
@@ -70,21 +68,21 @@ export class ReportsComponent implements OnInit {
    * Handle download
    */
   public onDownload(project: NewsProject): void {
-    // TODO
+    console.log(project);
   }
 
   /**
    * Handle upload
    */
   public onUpload(project: NewsProject): void {
-    // TODO
+    console.log(project);
   }
 
   /**
    * Handle download
    */
   public onDelete(project: NewsProject): void {
-    // TODO
+    console.log(project);
   }
 
   /**
