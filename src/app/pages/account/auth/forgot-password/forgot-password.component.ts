@@ -1,10 +1,9 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { FORGOT_PASSWORD, LOGIN } from '@constants/titles';
+import { FORGOT_PASSWORD } from '@constants/titles';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { ServerError } from '@models/responses/server/error';
 import { AuthenticationService } from '@services/auth.service';
-import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthService } from 'angularx-social-login';
 import { Title } from '@angular/platform-browser';
 import { Store } from '@ngrx/store';
 import { IAppState } from '@store/state/app.state';
@@ -12,8 +11,7 @@ import { ErrorService } from '@services/error.service';
 import { LoadingService } from '@services/loading.service';
 import { DateService } from '@services/date.service';
 import { setAuthClasses } from '@helpers/utility';
-import { LoginPayload } from '@models/payloads/auth/login';
-import { ForgotPassword, Login } from '@store/actions/user.actions';
+import { ForgotPassword } from '@store/actions/user.actions';
 import { ForgotPasswordPayload } from '@models/payloads/auth/forgot-password';
 
 @Component({
