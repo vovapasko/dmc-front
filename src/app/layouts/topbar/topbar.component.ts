@@ -21,7 +21,6 @@ import { CreateHashtagPayload } from '@models/payloads/news/hashtag/create';
 import { CreatePostsFormatPayload } from '@models/payloads/news/format/create';
 import { ProjectService } from '@services/project.service';
 import { CreateEmailPayload } from '@models/payloads/project/email/create';
-import { CreateEmail } from '@store/actions/project.actions';
 import { CreateNewsEmail } from '@store/actions/email.actions';
 import { SetUserStatus } from '@store/actions/user.actions';
 
