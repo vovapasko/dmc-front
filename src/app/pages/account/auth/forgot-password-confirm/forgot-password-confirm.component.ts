@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
-import { FORGOT_PASSWORD, FORGOT_PASSWORD_CONFIRM } from '@constants/titles';
+import { FORGOT_PASSWORD_CONFIRM } from '@constants/titles';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ServerError } from '@models/responses/server/error';
 import { ActivatedRoute, Params, Router } from '@angular/router';
@@ -13,8 +13,7 @@ import { LoadingService } from '@services/loading.service';
 import { DateService } from '@services/date.service';
 import { MustMatch } from '@pages/form/validation/validation.mustmatch';
 import { setAuthClasses } from '@helpers/utility';
-import { ConfirmResetPasswordPayload } from '@models/payloads/user/confirm-reset-password';
-import { ForgotPasswordConfirm, PasswordResetConfirm } from '@store/actions/user.actions';
+import { ForgotPasswordConfirm } from '@store/actions/user.actions';
 import { ForgotPasswordConfirmPayload } from '@models/payloads/auth/forgot-password-confirm';
 
 @Component({
