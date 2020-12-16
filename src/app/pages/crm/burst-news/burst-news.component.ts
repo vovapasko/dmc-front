@@ -730,9 +730,10 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
    */
   public fetchData(): void {
     const store = this.store;
-    store.dispatch(new GetClients());
+    const payload = {page: numbers.one};
+    store.dispatch(new GetClients(payload));
     store.dispatch(new GetProjectConfiguration());
-    store.dispatch(new GetNewsProjects());
+    store.dispatch(new GetNewsProjects(payload));
     store.dispatch(new GetEmails());
     this.processNewsWave();
   }
