@@ -18,6 +18,7 @@ import { methods } from '@constants/methods';
 import { BaseService } from '@services/base.service';
 import numbers from '@constants/numbers';
 import { emailPattern, phoneNumberPattern } from '@constants/regex';
+import { GetContractorsPayload } from '@models/payloads/contractor/get';
 
 const api = environment.api;
 
@@ -69,9 +70,9 @@ export class ContractorService extends BaseService {
   /**
    *  Get all users, api returns array of users
    */
-  public getAll(page = 1): Observable<Contractor[]> {
+  public getAll(payload: GetContractorsPayload): Observable<Contractor[]> {
     return this.requestHandler.request(
-      this.url(api, endpoints.CONTRACTOR, null, { page }),
+      this.url(api, endpoints.CONTRACTOR, null, { page: payload.page }),
       methods.GET,
       null,
       (response: GetAllContractorsResponse) => {
@@ -79,7 +80,7 @@ export class ContractorService extends BaseService {
           const contractors = response.results;
           this.contractors = contractors;
           this.paginationService.totalSize = response.count;
-          this.paginationService.page = page;
+          this.paginationService.page = payload.page;
           return contractors;
         }
       });
@@ -232,6 +233,6 @@ export class ContractorService extends BaseService {
    * Handle change page
    */
   public onPageChange(page: number): void {
-    this.getAll(page);
+    // this.getAll(page);
   }
 }

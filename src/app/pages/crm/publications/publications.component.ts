@@ -43,6 +43,7 @@ import { PublicationService } from '@services/publication.service';
 import { Title } from '@angular/platform-browser';
 import { publicationTitle } from '@constants/titles';
 import { selectLoading } from '@store/selectors/loading.selectors';
+import numbers from '@constants/numbers';
 
 @Component({
   selector: 'app-orders',
@@ -422,8 +423,9 @@ export class PublicationsComponent implements OnInit {
    * fetches the orders value
    */
   private _fetchData() {
+    const payload = { page: numbers.one };
     this.selectedContractor$ = this.contractorService.selectedContractor$;
-    this.store.dispatch(new GetContractors());
+    this.store.dispatch(new GetContractors(payload));
   }
 
 }
