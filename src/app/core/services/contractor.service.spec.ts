@@ -34,7 +34,8 @@ describe('ContractorService', () => {
 
   describe('#getContractors', () => {
     it('should return an Observable<Contractor[]>', () => {
-      service.getAll().subscribe((contractors) => {
+      const payload = {page: 1};
+      service.getAll(payload).subscribe((contractors) => {
         expect(contractors.length).toBe(mockContractors.length);
       });
 
