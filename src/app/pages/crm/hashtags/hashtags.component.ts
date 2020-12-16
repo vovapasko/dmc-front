@@ -20,6 +20,7 @@ import { UpdateHashtagPayload } from '@models/payloads/news/hashtag/update';
 import { selectLoading } from '@store/selectors/loading.selectors';
 import { PaginationService } from '@services/pagination.service';
 import { paginationTotalSize } from '@constants/pagination';
+import { GetContractors } from '@store/actions/contractor.actions';
 
 @Component({
   selector: 'app-hashtags',
@@ -178,6 +179,14 @@ export class HashtagsComponent implements OnInit {
     });
     this.service.sortColumn = column;
     this.service.sortDirection = direction;
+  }
+
+  /**
+   * Handle on page click event
+   */
+  public onPageChange(page: any): void {
+    const payload = { page };
+    this.store.dispatch(new GetContractors(payload));
   }
 
   /**
