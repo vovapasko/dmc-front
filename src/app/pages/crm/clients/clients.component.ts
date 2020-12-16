@@ -20,6 +20,7 @@ import { Client } from '@models/instances/client';
 import { setValues } from '@helpers/utility';
 import { clientsTitle } from '@constants/titles';
 import { Title } from '@angular/platform-browser';
+import numbers from '@constants/numbers';
 
 @Component({
   selector: 'app-client',
@@ -175,7 +176,8 @@ export class ClientsComponent implements OnInit {
    * Dispatch getting data
    */
   public _fetchData() {
-    this.store.dispatch(new GetClients());
+    const payload = {page: numbers.one};
+    this.store.dispatch(new GetClients(payload));
     this.store.dispatch(new GetEmails());
     this.store.dispatch(new GetProjectConfiguration());
   }
