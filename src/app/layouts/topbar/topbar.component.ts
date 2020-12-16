@@ -21,7 +21,6 @@ import { CreateHashtagPayload } from '@models/payloads/news/hashtag/create';
 import { CreatePostsFormatPayload } from '@models/payloads/news/format/create';
 import { ProjectService } from '@services/project.service';
 import { CreateEmailPayload } from '@models/payloads/project/email/create';
-import { CreateEmail } from '@store/actions/project.actions';
 import { CreateNewsEmail } from '@store/actions/email.actions';
 import { SetUserStatus } from '@store/actions/user.actions';
 
@@ -71,6 +70,9 @@ export class TopbarComponent implements OnInit {
     this.openMobileMenu = false;
   }
 
+  /**
+   * Init all subscriptions
+   */
   public initSubscriptions(): void {
     this.loading$ = this.loadingService.loading$;
     this.error$ = this.errorService.error$;
@@ -79,28 +81,46 @@ export class TopbarComponent implements OnInit {
     this.user$ = this.userService.user$;
   }
 
+  /**
+   * Init forms
+   */
   public initFormGroups(): void {
     this.initCreateHashtagForm();
     this.initCreateFormatForm();
     this.initCreateEmailForm();
   }
 
+  /**
+   * Initialize create hashtag
+   */
   public initCreateHashtagForm(): void {
     this.createHashtagForm = this.newsService.initializeCreateHashtagForm();
   }
 
+  /**
+   * Handle open modal
+   */
   public openModal(content: string): void {
     this.modalService.open(content, { centered: true });
   }
 
+  /**
+   * Initialize create format
+   */
   public initCreateFormatForm(): void {
     this.createFormatForm = this.newsService.initializeCreateFormatForm();
   }
 
+  /**
+   * Initialize create email
+   */
   public initCreateEmailForm(): void {
     this.createEmailForm = this.projectService.initializeCreateEmailForm();
   }
 
+  /**
+   * Handle create hashtag
+   */
   public submitCreateHashtagForm(): void {
     const ch = this.ch;
     const name = ch.name.value;
@@ -109,6 +129,9 @@ export class TopbarComponent implements OnInit {
     this.submit(this.createHashtagForm, this.createHashtag.bind(this), payload);
   }
 
+  /**
+   * Form handling controller
+   */
   public submit(form: FormGroup, handler, payload: CreateHashtagPayload | CreatePostsFormatPayload | CreateEmailPayload): void {
     this.submitted = true;
 
@@ -123,10 +146,16 @@ export class TopbarComponent implements OnInit {
     this.submitted = false;
   }
 
+  /**
+   * Create hashtag dispatcher
+   */
   public createHashtag(payload: CreateHashtagPayload): void {
     this.store.dispatch(new CreateHashtag(payload));
   }
 
+  /**
+   * Handle create format
+   */
   public submitCreateFormatForm(): void {
     const cf = this.cf;
     const postFormat = cf.postFormat.value;
@@ -135,16 +164,25 @@ export class TopbarComponent implements OnInit {
     this.submit(this.createFormatForm, this.createFormat.bind(this), payload);
   }
 
+  /**
+   * Handle submit create email
+   */
   public submitCreateEmailForm(): void {
     const data = this.createEmailForm.value;
     const payload = { data } as unknown as CreateEmailPayload;
     this.submit(this.createEmailForm, this.createEmail.bind(this), payload);
   }
 
+  /**
+   * Create email dispatcher
+   */
   public createEmail(payload: CreateEmailPayload): void {
     this.store.dispatch(new CreateNewsEmail(payload));
   }
 
+  /**
+   * Create format dispatcher
+   */
   public createFormat(payload: CreatePostsFormatPayload): void {
     this.store.dispatch(new CreateFormats(payload));
   }

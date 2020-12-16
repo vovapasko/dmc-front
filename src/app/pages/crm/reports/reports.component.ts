@@ -12,6 +12,7 @@ import { selectProjectsList } from '@store/selectors/project.selectors';
 import { NewsProject } from '@models/instances/news-project';
 import { breadCrumbs } from '@constants/bread-crumbs';
 import { reportsTitle } from '@constants/titles';
+import numbers from '@constants/numbers';
 
 @Component({
   selector: 'app-reports',
@@ -19,8 +20,6 @@ import { reportsTitle } from '@constants/titles';
   styleUrls: ['./reports.component.scss']
 })
 export class ReportsComponent implements OnInit {
-
-  // bread crumb items
   title = reportsTitle;
   breadCrumbItems: Array<{}>;
   projects$ = this.store.pipe(select(selectProjectsList));
@@ -70,21 +69,26 @@ export class ReportsComponent implements OnInit {
    * Handle download
    */
   public onDownload(project: NewsProject): void {
-    // TODO
+    console.log(project);
   }
 
   /**
    * Handle upload
    */
-  public onUpload(project: NewsProject): void {
-    // TODO
+  public onUpload(event: Event, project: NewsProject): void {
+    // @ts-ignore
+    const file = event.currentTarget.files[numbers.zero];
+    const formData = new FormData();
+    formData.append('report', file);
+    formData.append('id', project.id.toString());
+    console.log(project);
   }
 
   /**
    * Handle download
    */
   public onDelete(project: NewsProject): void {
-    // TODO
+    console.log(project);
   }
 
   /**
