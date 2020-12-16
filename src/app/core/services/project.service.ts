@@ -24,6 +24,7 @@ import numbers from '@constants/numbers';
 import { Hashtag } from '@models/instances/hashtag';
 import { GetNewsProjectsPayload } from '@models/payloads/news/project/get';
 import { TicketService } from '@services/ticket.service';
+import { PaginationService } from '@services/pagination.service';
 
 const api = environment.api;
 
@@ -40,7 +41,8 @@ export class ProjectService extends BaseService {
   constructor(
     private requestHandler: RequestHandler,
     public formBuilder: FormBuilder,
-    private ticketService: TicketService
+    private ticketService: TicketService,
+    private paginationService: PaginationService
   ) {
     super();
   }
@@ -118,6 +120,8 @@ export class ProjectService extends BaseService {
       (response: GetAllNewsProjectsResponse) => {
         const newsProjects = response.results;
         this.newsProjects = newsProjects;
+        this.paginationService.totalSize = response.count;
+        this.paginationService.page = payload.page;
         this.ticketService.endIndex = payload.page * numbers.pageSize;
         return newsProjects;
       }
