@@ -204,7 +204,8 @@ export class ContractorsComponent implements OnInit {
    * Handle next or previous page click
    */
   public onPageChange(page: number): void {
-    this.contractorService.onPageChange(page);
+    const payload = {page};
+    this.store.dispatch(new GetContractors(payload));
   }
 
   /**
