@@ -27,7 +27,7 @@ import {
   SelectNewsEmail,
   SelectNewsEmailSuccess,
   TrashEmail,
-  TrashEmailSuccess, UntrashEmail, UntrashEmailSuccess
+  TrashEmailSuccess, UntrashEmail, UntrashEmailSuccess, UpdateEmail, UpdateEmailSuccess
 } from '@store/actions/email.actions';
 import { GmailAuthResponse } from '@models/instances/gmail-auth-response';
 import { AuthPayload } from '@models/payloads/email/auth';
@@ -40,6 +40,7 @@ import { GetEmailPayload } from '@models/payloads/email/get-email';
 import { GetEmailResponse } from '@models/responses/email/get-email';
 import { ComposeEmailPayload } from '@models/payloads/email/compose-email';
 import { DeleteEmailPayload } from '@models/payloads/project/email/delete';
+import { UpdateEmailPayload } from '@models/payloads/project/email/update';
 
 @Injectable({
   providedIn: 'root'
@@ -71,6 +72,13 @@ export class EmailEffects {
     ofType<GetEmails>(EEmailActions.GetEmails),
     switchMap((action: { payload: GetEmailsPayload }) => this.emailService.getEmails(action.payload)),
     switchMap((response: GetEmailsResponse) => of(new GetEmailsSuccess(response)))
+  );
+
+  @Effect()
+  updateEmail$ = this.actions$.pipe(
+    ofType<UpdateEmail>(EEmailActions.UpdateEmail),
+    switchMap((action: { payload: UpdateEmailPayload }) => this.emailService.updateEmail(action.payload)),
+    switchMap((email: Email) => of(new UpdateEmailSuccess(email)))
   );
 
   @Effect()

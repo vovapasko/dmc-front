@@ -8,7 +8,7 @@ import {
   GetNewsEmails,
   GmailAuth,
   GmailTokenRevoke,
-  SelectNewsEmail
+  SelectNewsEmail, UpdateEmail
 } from '@store/actions/email.actions';
 import { selectAuthenticationUrl, selectNewsEmails, selectSelectedNewsEmail } from '@store/selectors/email.selectors';
 import { breadCrumbs } from '@constants/bread-crumbs';
@@ -27,7 +27,6 @@ import { ServerError } from '@models/responses/server/error';
 import { LoadingService } from '@services/loading.service';
 import { ErrorService } from '@services/error.service';
 import { UpdateEmailPayload } from '@models/payloads/project/email/update';
-import { UpdateEmail } from '@store/actions/project.actions';
 import { EmailService } from '@services/email.service';
 
 @Component({

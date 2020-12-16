@@ -23,6 +23,7 @@ import { Attachment } from '@models/instances/attachment';
 import { GetAttachmentPayload } from '@models/payloads/email/get-attachment';
 import { ComposeEmailPayload } from '@models/payloads/email/compose-email';
 import { DeleteEmailPayload } from '@models/payloads/project/email/delete';
+import { UpdateEmailPayload } from '@models/payloads/project/email/update';
 
 const api = environment.api;
 
@@ -357,6 +358,18 @@ export class EmailService extends BaseService {
     return this.requestHandler.request(
       this.url(api, endpoints.EMAILS),
       methods.POST,
+      payload,
+      (response: Email) => response
+    );
+  }
+
+  /**
+   * Update email
+   */
+  public updateEmail(payload: UpdateEmailPayload) {
+    return this.requestHandler.request(
+      this.url(api, endpoints.EMAILS, payload.id),
+      methods.PUT,
       payload,
       (response: Email) => response
     );

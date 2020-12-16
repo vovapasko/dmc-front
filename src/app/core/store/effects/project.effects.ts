@@ -54,12 +54,12 @@ export class ProjectEffects {
     switchMap((email: Email) => of(new CreateEmailSuccess(email)))
   );
 
-  @Effect()
-  updateEmail$ = this.actions$.pipe(
-    ofType<UpdateEmail>(EProjectActions.UpdateEmail),
-    switchMap((action: { payload: UpdateEmailPayload }) => this.projectService.updateEmail(action.payload)),
-    switchMap((email: Email) => of(new UpdateEmailSuccess(email)))
-  );
+  // @Effect()
+  // updateEmail$ = this.actions$.pipe(
+  //   ofType<UpdateEmail>(EProjectActions.UpdateEmail),
+  //   switchMap((action: { payload: UpdateEmailPayload }) => this.projectService.updateEmail(action.payload)),
+  //   switchMap((email: Email) => of(new UpdateEmailSuccess(email)))
+  // );
 
   @Effect()
   deleteEmail$ = this.actions$.pipe(
