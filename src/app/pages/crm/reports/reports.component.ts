@@ -13,6 +13,8 @@ import { NewsProject } from '@models/instances/news-project';
 import { breadCrumbs } from '@constants/bread-crumbs';
 import { reportsTitle } from '@constants/titles';
 import numbers from '@constants/numbers';
+import { PaginationService } from '@services/pagination.service';
+import { GetContractors } from '@store/actions/contractor.actions';
 
 @Component({
   selector: 'app-reports',
@@ -29,6 +31,7 @@ export class ReportsComponent implements OnInit {
 
   constructor(
     private store: Store<IAppState>,
+    private paginationService: PaginationService,
     private router: Router,
     private errorService: ErrorService,
     private loadingService: LoadingService,
@@ -92,9 +95,18 @@ export class ReportsComponent implements OnInit {
   }
 
   /**
+   * Handle next or previous page click
+   */
+  public onPageChange(page: number): void {
+    const payload = {page};
+    this.store.dispatch(new GetContractors(payload));
+  }
+
+  /**
    * fetches project value
    */
   public _fetchData() {
-    this.store.dispatch(new GetNewsProjects());
+    const payload = {page: numbers.one};
+    this.store.dispatch(new GetNewsProjects(payload));
   }
 }

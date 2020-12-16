@@ -267,7 +267,7 @@ export class ProjectsComponent implements OnInit {
     const store = this.store;
     const payload = {page: numbers.one};
     store.dispatch(new GetNewsProjects(payload));
-    store.dispatch(new GetClients());
+    store.dispatch(new GetClients(payload));
     store.dispatch(new GetProjectConfiguration());
     store.dispatch(new GetUsers());
     store.dispatch(new GetContractors(payload));
