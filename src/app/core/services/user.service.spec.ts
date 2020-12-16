@@ -67,7 +67,8 @@ describe('UserService', () => {
 
   describe('#getUsers', () => {
     it('should return an Observable<User[]>', () => {
-      service.getAll().subscribe((users) => {
+      const payload = {page: 1};
+      service.getAll(payload).subscribe((users) => {
         expect(users.length).toBe(mockUsers.length);
       });
 

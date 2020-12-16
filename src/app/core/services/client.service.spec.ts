@@ -66,11 +66,12 @@ describe('ClientService', () => {
 
   describe('should get proxies', () => {
     it('should return an Observable<Client[]>', () => {
-      service.getAll().subscribe((proxies) => {
+      const payload = {page: 1};
+      service.getAll(payload).subscribe((proxies) => {
         expect(MockClients.length).toBe(MockClients.length);
       });
 
-      const req = httpMock.expectOne(`${api}/${endpoints.CLIENT}/`);
+      const req = httpMock.expectOne(`${api}/${endpoints.CLIENT}/?page=1&`);
       expect(req.request.method).toBe('GET');
       req.flush({ results: MockClients });
     });
