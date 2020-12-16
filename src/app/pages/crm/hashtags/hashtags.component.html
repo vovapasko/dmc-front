@@ -93,8 +93,11 @@
                         <div class="text-md-right float-md-right">
                             <!-- Pagination -->
                             <ul class="pagination pagination-rounded">
-                                <ngb-pagination [collectionSize]="total$ | async" [(page)]="service.page"
-                                                [pageSize]="service.pageSize">
+                                <ngb-pagination [(page)]="service.page"
+                                                [collectionSize]="totalSize$ | async"
+                                                (pageChange)="onPageChange($event)"
+                                                [pageSize]="pageSize$ | async"
+                                >
                                 </ngb-pagination>
                             </ul>
                         </div>
