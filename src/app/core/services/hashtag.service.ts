@@ -12,6 +12,8 @@ import { UpdateHashtagPayload } from '@models/payloads/news/hashtag/update';
 import { DeleteHashtagPayload } from '@models/payloads/news/hashtag/delete';
 import { GetHashtagsPayload } from '@models/payloads/news/hashtag/get';
 import { PaginationService } from '@services/pagination.service';
+import { TicketService } from '@services/ticket.service';
+import numbers from '@constants/numbers';
 
 const api = environment.api;
 
@@ -27,7 +29,8 @@ export class HashtagService extends BaseService{
   constructor(
     private requestHandler: RequestHandler,
     public formBuilder: FormBuilder,
-    private paginationService: PaginationService
+    private paginationService: PaginationService,
+    public ticketService: TicketService,
   ) {
     super();
   }
@@ -80,14 +83,15 @@ export class HashtagService extends BaseService{
    */
   public getAll(payload: GetHashtagsPayload): Observable<Hashtag[]> {
     return this.requestHandler.request(
-      this.url(api, endpoints.HASHTAGS),
+      this.url(api, endpoints.HASHTAGS, null, { page: payload.page }),
       methods.GET,
       null,
-      (response: { results: Array<Hashtag> }) => {
+      (response: { results: Array<Hashtag>, count: number }) => {
         const hashtags = response.results;
         this.hashtags = hashtags;
-        this.paginationService.totalSize = response.results.length;
+        this.paginationService.totalSize = response.count;
         this.paginationService.page = payload.page;
+        this.ticketService.endIndex = payload.page * numbers.pageSize;
         return hashtags;
       }
     );

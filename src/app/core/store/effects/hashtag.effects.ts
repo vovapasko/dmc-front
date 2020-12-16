@@ -15,6 +15,7 @@ import { Hashtag } from '@models/instances/hashtag';
 import { CreateHashtagPayload } from '@models/payloads/news/hashtag/create';
 import { UpdateHashtagPayload } from '@models/payloads/news/hashtag/update';
 import { DeleteHashtagPayload } from '@models/payloads/news/hashtag/delete';
+import { GetHashtagsPayload } from '@models/payloads/news/hashtag/get';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,7 @@ export class HashtagEffects {
   @Effect()
   getHashtags$ = this.actions$.pipe(
     ofType<GetHashtags>(EHashtagActions.GetHashtags),
-    switchMap(() => this.hashtagService.getAll()),
+    switchMap((action: { payload: GetHashtagsPayload }) => this.hashtagService.getAll(action.payload)),
     switchMap((hashtags: Hashtag[]) => of(new GetHashtagsSuccess(hashtags)))
   );
 
