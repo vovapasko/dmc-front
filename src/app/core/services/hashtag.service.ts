@@ -107,6 +107,7 @@ export class HashtagService extends BaseService{
       payload,
       (response: {hashtag: Hashtag }) => {
         this.hashtags = [...this.hashtags, response.hashtag];
+        this.ticketService.searchTerm = '';
         return response.hashtag;
       }
     );
@@ -122,6 +123,7 @@ export class HashtagService extends BaseService{
       payload,
       (response: Hashtag) => {
         this.hashtags = this.hashtags.map(el => el.id === response.id ? response : el);
+        this.ticketService.searchTerm = '';
         return response;
       }
     );
@@ -137,6 +139,7 @@ export class HashtagService extends BaseService{
       payload,
       (response: null) => {
         this.hashtags = this.hashtags.filter(el => el.id !== payload.id);
+        this.ticketService.searchTerm = '';
         return payload;
       }
     );
