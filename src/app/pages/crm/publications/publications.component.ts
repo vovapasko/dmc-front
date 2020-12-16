@@ -280,11 +280,8 @@ export class PublicationsComponent implements OnInit {
    * Handle on page click event
    */
   onPageChange(page: any): void {
-    this.startIndex = (page - 1) * this.pageSize + 1;
-    this.endIndex = (page - 1) * this.pageSize + this.pageSize;
-    if (this.endIndex > this.totalRecords) {
-      this.endIndex = this.totalRecords;
-    }
+    const payload = {page};
+    this.store.dispatch(new GetContractors(payload));
   }
 
   /**
