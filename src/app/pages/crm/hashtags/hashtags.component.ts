@@ -195,6 +195,6 @@ export class HashtagsComponent implements OnInit {
    */
   public _fetchData() {
     const payload = { page: numbers.one };
-    this.store.dispatch(new GetHashtags());
+    this.store.dispatch(new GetHashtags(payload));
   }
 }
