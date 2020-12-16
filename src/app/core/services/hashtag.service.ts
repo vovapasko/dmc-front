@@ -10,6 +10,8 @@ import { Hashtag } from '@models/instances/hashtag';
 import { CreateHashtagPayload } from '@models/payloads/news/hashtag/create';
 import { UpdateHashtagPayload } from '@models/payloads/news/hashtag/update';
 import { DeleteHashtagPayload } from '@models/payloads/news/hashtag/delete';
+import { GetHashtagsPayload } from '@models/payloads/news/hashtag/get';
+import { PaginationService } from '@services/pagination.service';
 
 const api = environment.api;
 
@@ -24,7 +26,8 @@ export class HashtagService extends BaseService{
 
   constructor(
     private requestHandler: RequestHandler,
-    public formBuilder: FormBuilder
+    public formBuilder: FormBuilder,
+    private paginationService: PaginationService
   ) {
     super();
   }
@@ -75,7 +78,7 @@ export class HashtagService extends BaseService{
   /**
    *  Get all hashtags, api returns array of hashtags
    */
-  public getAll(): Observable<Hashtag[]> {
+  public getAll(payload: GetHashtagsPayload): Observable<Hashtag[]> {
     return this.requestHandler.request(
       this.url(api, endpoints.HASHTAGS),
       methods.GET,
@@ -83,6 +86,8 @@ export class HashtagService extends BaseService{
       (response: { results: Array<Hashtag> }) => {
         const hashtags = response.results;
         this.hashtags = hashtags;
+        this.paginationService.totalSize = response.results.length;
+        this.paginationService.page = payload.page;
         return hashtags;
       }
     );
