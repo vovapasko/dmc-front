@@ -150,6 +150,7 @@
                                 [items]="users$ | async"
                                 bindLabel="email"
                                 bindValue="id"
+                                [clearSearchOnAdd]="true"
                                 required
                                 [closeOnSelect]="true"
                                 [hideSelected]="true"
@@ -169,6 +170,7 @@
 
                     <ng-select
                             id="hashtags"
+                            [clearSearchOnAdd]="true"
                             [items]="hashtags$ | async"
                             bindLabel="name"
                             required
@@ -192,6 +194,7 @@
                             [items]="contractors$ | async"
                             bindLabel="editorName"
                             [multiple]="true"
+                            [clearSearchOnAdd]="true"
                             [closeOnSelect]="false"
                             required
                             [hideSelected]="true"
@@ -229,6 +232,7 @@
                             [items]="emails$ | async"
                             bindLabel="email"
                             [multiple]="true"
+                            [clearSearchOnAdd]="true"
                             required
                             [closeOnSelect]="false"
                             [hideSelected]="true"
@@ -250,6 +254,7 @@
                             [items]="clients$ | async"
                             bindLabel="name"
                             [multiple]="false"
+                            [clearSearchOnAdd]="true"
                             [closeOnSelect]="true"
                             [hideSelected]="true"
                             placeholder="Выберите клиента"
@@ -308,6 +313,7 @@
                     <ng-select
                             id="manager"
                             [items]="users$ | async"
+                            [clearSearchOnAdd]="true"
                             bindLabel="email"
                             bindValue="id"
                             [closeOnSelect]="true"
@@ -328,6 +334,7 @@
                     <ng-select
                             id="projectHashtags"
                             [items]="hashtags$ | async"
+                            [clearSearchOnAdd]="true"
                             bindLabel="name"
                             [multiple]="true"
                             [closeOnSelect]="false"
@@ -347,6 +354,7 @@
                     <ng-select
                             id="projectContractors"
                             [items]="contractors$ | async"
+                            [clearSearchOnAdd]="true"
                             bindLabel="editorName"
                             [multiple]="true"
                             [closeOnSelect]="false"
@@ -383,6 +391,7 @@
                     <ng-select
                             id="projectEmails"
                             [items]="emails$ | async"
+                            [clearSearchOnAdd]="true"
                             bindLabel="email"
                             [multiple]="true"
                             [closeOnSelect]="false"
@@ -403,6 +412,7 @@
                     <ng-select
                             id="projectClient"
                             [items]="clients$ | async"
+                            [clearSearchOnAdd]="true"
                             bindLabel="name"
                             [multiple]="false"
                             [closeOnSelect]="true"
