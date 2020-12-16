@@ -269,7 +269,7 @@ export class ProjectsComponent implements OnInit {
     store.dispatch(new GetNewsProjects(payload));
     store.dispatch(new GetClients(payload));
     store.dispatch(new GetProjectConfiguration());
-    store.dispatch(new GetUsers());
+    store.dispatch(new GetUsers(payload));
     store.dispatch(new GetContractors(payload));
     store.dispatch(new GetEmails());
   }
