@@ -22,6 +22,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { BaseService } from '@services/base.service';
 import numbers from '@constants/numbers';
 import { Hashtag } from '@models/instances/hashtag';
+import { GetNewsProjectsPayload } from '@models/payloads/news/project/get';
+import { TicketService } from '@services/ticket.service';
 
 const api = environment.api;
 
@@ -37,7 +39,8 @@ export class ProjectService extends BaseService {
 
   constructor(
     private requestHandler: RequestHandler,
-    public formBuilder: FormBuilder
+    public formBuilder: FormBuilder,
+    private ticketService: TicketService
   ) {
     super();
   }
@@ -107,14 +110,15 @@ export class ProjectService extends BaseService {
   /**
    * Get all news projects
    */
-  public getNewsProjects() {
+  public getNewsProjects(payload: GetNewsProjectsPayload) {
     return this.requestHandler.request(
-      this.url(api, endpoints.NEWSPROJECTS),
+      this.url(api, endpoints.NEWSPROJECTS, null, { page: payload.page }),
       methods.GET,
       null,
       (response: GetAllNewsProjectsResponse) => {
         const newsProjects = response.results;
         this.newsProjects = newsProjects;
+        this.ticketService.endIndex = payload.page * numbers.pageSize;
         return newsProjects;
       }
     );

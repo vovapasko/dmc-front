@@ -34,6 +34,7 @@ import { GetNewsProjectPayload } from '@models/payloads/project/news-project/get
 import { DeleteNewsProjectPayload } from '@models/payloads/project/news-project/delete';
 import { NewsWaves } from '@models/instances/news-waves';
 import { GetNewsWavesPayload } from '@models/payloads/project/news/get';
+import { GetNewsProjectsPayload } from '@models/payloads/news/project/get';
 
 @Injectable({
   providedIn: 'root'
@@ -70,7 +71,7 @@ export class ProjectEffects {
   @Effect()
   getNewsProjects$ = this.actions$.pipe(
     ofType<GetNewsProjects>(EProjectActions.GetNewsProjects),
-    switchMap((action) => this.projectService.getNewsProjects()),
+    switchMap((action: {payload: GetNewsProjectsPayload}) => this.projectService.getNewsProjects(action.payload)),
     switchMap((payload: NewsProject[]) => of(new GetNewsProjectsSuccess(payload)))
   );
 

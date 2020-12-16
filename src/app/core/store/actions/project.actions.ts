@@ -10,6 +10,7 @@ import { GetNewsProjectPayload } from '@models/payloads/project/news-project/get
 import { DeleteNewsProjectPayload } from '@models/payloads/project/news-project/delete';
 import { GetNewsWavesPayload } from '@models/payloads/project/news/get';
 import { NewsWaves } from '@models/instances/news-waves';
+import { GetNewsProjectsPayload } from '@models/payloads/news/project/get';
 
 export enum EProjectActions {
   GetProjects = '[Project] Get projects',
@@ -176,7 +177,7 @@ export class DeleteNewsProjectSuccess {
 export class GetNewsProjects {
   public readonly type = EProjectActions.GetNewsProjects;
 
-  constructor() {
+  constructor(public payload: GetNewsProjectsPayload) {
   }
 }
 
