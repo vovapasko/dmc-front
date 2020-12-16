@@ -1,6 +1,6 @@
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { TableData } from '@models/instances/tickets.model';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { SortEvent, TicketsSortableDirective } from '@shared/directives/tickets-sortable.directive';
 import { TicketService } from '@services/ticket.service';
 import { FormGroup } from '@angular/forms';
@@ -21,6 +21,9 @@ import { setValues } from '@helpers/utility';
 import { clientsTitle } from '@constants/titles';
 import { Title } from '@angular/platform-browser';
 import numbers from '@constants/numbers';
+import { GetHashtags } from '@store/actions/hashtag.actions';
+import { paginationTotalSize } from '@constants/pagination';
+import { PaginationService } from '@services/pagination.service';
 
 @Component({
   selector: 'app-client',
@@ -37,11 +40,14 @@ export class ClientsComponent implements OnInit {
   hashtags$ = this.store.pipe(select(selectHashtags));
   emails$ = this.store.pipe(select(selectEmailsList));
   total$: Observable<number>;
-
+  totalSize$: BehaviorSubject<number> = new BehaviorSubject<number>(paginationTotalSize);
+  page$: BehaviorSubject<number> = new BehaviorSubject(1);
+  pageSize$: BehaviorSubject<number> = new BehaviorSubject(10);
   @ViewChildren(TicketsSortableDirective) headers: QueryList<TicketsSortableDirective>;
 
   constructor(
     public service: TicketService,
+    private paginationService: PaginationService,
     private clientService: ClientService,
     private modalService: NgbModal,
     private store: Store<IAppState>,
@@ -50,6 +56,9 @@ export class ClientsComponent implements OnInit {
     this.service.records$ = this.clientService.clients$;
     this.tickets$ = service.tickets$;
     this.total$ = service.total$;
+    this.totalSize$ = this.paginationService.totalSize$;
+    this.page$ = this.paginationService.page$;
+    this.pageSize$ = this.paginationService.pageSize$;
   }
 
   ngOnInit() {
@@ -123,8 +132,16 @@ export class ClientsComponent implements OnInit {
   }
 
 
+  /**
+   * Handle on page click event
+   */
+  public onPageChange(page: any): void {
+    const payload = { page };
+    this.store.dispatch(new GetClients(payload));
+  }
+
   public delete(client: Client): void {
-    this.store.dispatch(new DeleteClient({ id: client.id, data: {isArchived: true} }));
+    this.store.dispatch(new DeleteClient({ id: client.id, data: { isArchived: true } }));
   }
 
   /**
@@ -176,7 +193,7 @@ export class ClientsComponent implements OnInit {
    * Dispatch getting data
    */
   public _fetchData() {
-    const payload = {page: numbers.one};
+    const payload = { page: numbers.one };
     this.store.dispatch(new GetClients(payload));
     this.store.dispatch(new GetEmails());
     this.store.dispatch(new GetProjectConfiguration());

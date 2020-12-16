@@ -16,6 +16,7 @@ import { Client } from '@models/instances/client';
 import { CreateClientPayload } from '@models/payloads/client/create';
 import { UpdateClientPayload } from '@models/payloads/client/update';
 import { DeleteClientPayload } from '@models/payloads/client/delete';
+import { GetClientsPayload } from '@models/payloads/client/get';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +25,7 @@ export class ClientEffects {
   @Effect()
   getClients$ = this.actions$.pipe(
     ofType<GetClients>(EClientActions.GetClients),
-    switchMap(() => this.clientService.getAll()),
+    switchMap((action: {payload: GetClientsPayload}) => this.clientService.getAll(action.payload)),
     switchMap((proxies: Client[]) => of(new GetClientsSuccess(proxies)))
   );
 
