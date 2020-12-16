@@ -526,8 +526,9 @@ export class ContractorsComponent implements OnInit {
    */
   public _fetchData(): void {
     const store = this.store;
+    const payload = {page: numbers.one};
     store.select(selectContractorList).subscribe(this.initControls.bind(this));
-    store.dispatch(new GetContractors());
+    store.dispatch(new GetContractors(payload));
     // store.dispatch(new GetPostFormats());
   }
 }
