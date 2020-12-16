@@ -21,6 +21,7 @@ import { selectLoading } from '@store/selectors/loading.selectors';
 import { PaginationService } from '@services/pagination.service';
 import { paginationTotalSize } from '@constants/pagination';
 import { GetContractors } from '@store/actions/contractor.actions';
+import numbers from '@constants/numbers';
 
 @Component({
   selector: 'app-hashtags',
@@ -186,13 +187,14 @@ export class HashtagsComponent implements OnInit {
    */
   public onPageChange(page: any): void {
     const payload = { page };
-    this.store.dispatch(new GetContractors(payload));
+    this.store.dispatch(new GetHashtags(payload));
   }
 
   /**
    * Dispatch getting data
    */
   public _fetchData() {
+    const payload = { page: numbers.one };
     this.store.dispatch(new GetHashtags());
   }
 }
