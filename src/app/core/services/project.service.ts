@@ -160,7 +160,7 @@ export class ProjectService extends BaseService {
    */
   public updateEmail(payload: UpdateEmailPayload) {
     return this.requestHandler.request(
-      this.url(api, endpoints.EMAILS),
+      this.url(api, endpoints.EMAILS, payload.id),
       methods.PUT,
       payload,
       (response: Email) => response
@@ -231,6 +231,19 @@ export class ProjectService extends BaseService {
       signature: null,
       codeword: null,
       password: null
+    });
+  }
+
+  /**
+   * Returns form group for edit project form
+   */
+  public initializeEditEmailForm(email?: Email): FormGroup {
+    return this.formBuilder.group({
+      email: [email ? email.email : null, Validators.required],
+      template: [email ? email.template : null, Validators.required],
+      signature: [email ? email.signature : null, Validators.required],
+      codeword: [email ? email.codeword : null, Validators.required],
+      password: [email ? email.password : null, Validators.required],
     });
   }
 

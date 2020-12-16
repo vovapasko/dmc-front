@@ -9,6 +9,8 @@ import { TrashPayload } from '@models/payloads/email/trash';
 import { GetEmailPayload } from '@models/payloads/email/get-email';
 import { ComposeEmailPayload } from '@models/payloads/email/compose-email';
 import { DeleteEmailPayload } from '@models/payloads/project/email/delete';
+import { UpdateEmailPayload } from '@models/payloads/project/email/update';
+import { EProjectActions } from '@store/actions/project.actions';
 
 export enum EEmailActions {
   GetEmails = '[Email] Get emails',
@@ -43,6 +45,22 @@ export enum EEmailActions {
   SelectEmailSuccess = '[Email] Select email success',
   DeleteEmail = '[Email] Delete email',
   DeleteEmailSuccess = '[Email] Delete email success',
+  UpdateEmail = '[Email] Update email',
+  UpdateEmailSuccess = '[Email] Update email success',
+}
+
+export class UpdateEmail {
+  public readonly type = EEmailActions.UpdateEmail;
+
+  constructor(public payload: UpdateEmailPayload) {
+  }
+}
+
+export class UpdateEmailSuccess {
+  public readonly type = EEmailActions.UpdateEmailSuccess;
+
+  constructor(public payload: Email) {
+  }
 }
 
 export class SelectNewsEmail implements Action {
@@ -308,4 +326,6 @@ export type EmailActions =
   | ComposeEmail
   | ComposeEmailSuccess
   | DeleteEmail
-  | DeleteEmailSuccess;
+  | DeleteEmailSuccess
+  | UpdateEmail
+  | UpdateEmailSuccess;

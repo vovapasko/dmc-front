@@ -1,5 +1,5 @@
 export interface UpdateEmailPayload {
-  id: string;
+  id: number;
   data: {
     email: string;
     template?: string;
