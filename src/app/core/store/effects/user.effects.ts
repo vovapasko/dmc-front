@@ -38,6 +38,7 @@ import { ConfirmResetPasswordPayload } from '@models/payloads/user/confirm-reset
 import { ForgotPasswordPayload } from '@models/payloads/auth/forgot-password';
 import { ForgotPasswordConfirmPayload } from '@models/payloads/auth/forgot-password-confirm';
 import { UserStatusPayload } from '@models/payloads/user/status';
+import { GetUsersPayload } from '@models/payloads/user/get';
 
 @Injectable({
   providedIn: 'root'
@@ -46,7 +47,7 @@ export class UserEffects {
   @Effect()
   getUsers$ = this.actions$.pipe(
     ofType<GetUsers>(EUserActions.GetUsers),
-    switchMap(() => this.userService.getAll()),
+    switchMap((action: {payload: GetUsersPayload}) => this.userService.getAll(action.payload)),
     switchMap((users: User[]) => of(new GetUsersSuccess(users)))
   );
 

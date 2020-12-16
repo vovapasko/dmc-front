@@ -2,6 +2,7 @@ import { Action } from '@ngrx/store';
 
 import { Contractor } from '@models/instances/contractor';
 import { DeleteContractorPayload } from '@models/payloads/contractor/delete';
+import { GetContractorsPayload } from '@models/payloads/contractor/get';
 
 export enum EContractorActions {
   GetContractors = '[Contractor] Get contractors',
@@ -30,6 +31,7 @@ export class SelectContractorSuccess implements Action {
 
 export class GetContractors implements Action {
   public readonly type = EContractorActions.GetContractors;
+  constructor(public payload: GetContractorsPayload) {}
 }
 
 export class GetContractorsSuccess implements Action {

@@ -204,7 +204,8 @@ export class ContractorsComponent implements OnInit {
    * Handle next or previous page click
    */
   public onPageChange(page: number): void {
-    this.contractorService.onPageChange(page);
+    const payload = {page};
+    this.store.dispatch(new GetContractors(payload));
   }
 
   /**
@@ -526,8 +527,9 @@ export class ContractorsComponent implements OnInit {
    */
   public _fetchData(): void {
     const store = this.store;
+    const payload = {page: numbers.one};
     store.select(selectContractorList).subscribe(this.initControls.bind(this));
-    store.dispatch(new GetContractors());
+    store.dispatch(new GetContractors(payload));
     // store.dispatch(new GetPostFormats());
   }
 }

@@ -3,6 +3,7 @@ import { Client } from '@models/instances/client';
 import { CreateClientPayload } from '@models/payloads/client/create';
 import { UpdateClientPayload } from '@models/payloads/client/update';
 import { DeleteClientPayload } from '@models/payloads/client/delete';
+import { GetClientsPayload } from '@models/payloads/client/get';
 
 
 export enum EClientActions {
@@ -21,7 +22,7 @@ export enum EClientActions {
 export class GetClients implements Action {
   public readonly type = EClientActions.GetClients;
 
-  constructor() {
+  constructor(public payload: GetClientsPayload) {
   }
 }
 

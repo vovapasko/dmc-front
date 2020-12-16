@@ -30,6 +30,7 @@ import { BaseService } from '@services/base.service';
 import { urls } from '@constants/urls';
 import { emailPattern } from '@constants/regex';
 import { UserStatusPayload } from '@models/payloads/user/status';
+import { GetUsersPayload } from '@models/payloads/user/get';
 
 const api = environment.api;
 
@@ -84,9 +85,9 @@ export class UserService extends BaseService {
   /**
    *  Get all users, api returns array of users
    */
-  public getAll(page = 1): Observable<User[]> {
+  public getAll(payload: GetUsersPayload): Observable<User[]> {
     return this.requestHandler.request(
-      this.url(api, endpoints.USERS, null, { page }),
+      this.url(api, endpoints.USERS, null, { page: payload.page }),
       methods.GET,
       null,
       (response: GetAllResponse) => {
@@ -94,7 +95,7 @@ export class UserService extends BaseService {
           const users = response.results;
           this.users = users;
           this.paginationService.totalSize = response.count;
-          this.paginationService.page = page;
+          this.paginationService.page = payload.page;
           return users;
         }
       });
@@ -285,10 +286,4 @@ export class UserService extends BaseService {
     return of(user);
   }
 
-  /**
-   *  Handle page change
-   */
-  public onPageChange(page: number): void {
-    this.getAll(page);
-  }
 }

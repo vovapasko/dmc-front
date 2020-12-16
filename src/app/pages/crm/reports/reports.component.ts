@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { ServerError } from '@models/responses/server/error';
 import { IAppState } from '@store/state/app.state';
 import { Router } from '@angular/router';
@@ -13,6 +13,9 @@ import { NewsProject } from '@models/instances/news-project';
 import { breadCrumbs } from '@constants/bread-crumbs';
 import { reportsTitle } from '@constants/titles';
 import numbers from '@constants/numbers';
+import { PaginationService } from '@services/pagination.service';
+import { GetContractors } from '@store/actions/contractor.actions';
+import { paginationTotalSize } from '@constants/pagination';
 
 @Component({
   selector: 'app-reports',
@@ -26,9 +29,13 @@ export class ReportsComponent implements OnInit {
   loading$: Subject<boolean>;
   error$: Subject<ServerError>;
   term = '';
+  totalSize$: BehaviorSubject<number> = new BehaviorSubject<number>(paginationTotalSize);
+  page$: BehaviorSubject<number> = new BehaviorSubject(1);
+  pageSize$: BehaviorSubject<number> = new BehaviorSubject(10);
 
   constructor(
     private store: Store<IAppState>,
+    private paginationService: PaginationService,
     private router: Router,
     private errorService: ErrorService,
     private loadingService: LoadingService,
@@ -56,6 +63,9 @@ export class ReportsComponent implements OnInit {
   public initSubscriptions(): void {
     this.loading$ = this.loadingService.loading$;
     this.error$ = this.errorService.error$;
+    this.totalSize$ = this.paginationService.totalSize$;
+    this.page$ = this.paginationService.page$;
+    this.pageSize$ = this.paginationService.pageSize$;
   }
 
   /**
@@ -92,9 +102,18 @@ export class ReportsComponent implements OnInit {
   }
 
   /**
+   * Handle next or previous page click
+   */
+  public onPageChange(page: number): void {
+    const payload = {page};
+    this.store.dispatch(new GetContractors(payload));
+  }
+
+  /**
    * fetches project value
    */
   public _fetchData() {
-    this.store.dispatch(new GetNewsProjects());
+    const payload = {page: numbers.one};
+    this.store.dispatch(new GetNewsProjects(payload));
   }
 }

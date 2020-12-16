@@ -24,6 +24,8 @@ import { Title } from '@angular/platform-browser';
 import { selectUserList } from '@store/selectors/user.selectors';
 import { breadCrumbs } from '@constants/bread-crumbs';
 import { emailTitle, usersTitle } from '@constants/titles';
+import numbers from '@constants/numbers';
+import { GetContractors } from '@store/actions/contractor.actions';
 
 /**
  * Users component - handling the users with sidebar and content
@@ -169,7 +171,8 @@ export class UsersComponent implements OnInit {
    * Paginate page
    */
   public onPageChange(page: number): void {
-    this.userService.onPageChange(page);
+    const payload = {page};
+    this.store.dispatch(new GetUsers(payload));
   }
 
   /**
@@ -199,6 +202,7 @@ export class UsersComponent implements OnInit {
    * Dispatch getting users
    */
   public _fetchData(): void {
-    this.store.dispatch(new GetUsers());
+    const payload = {page: numbers.one};
+    this.store.dispatch(new GetUsers(payload));
   }
 }

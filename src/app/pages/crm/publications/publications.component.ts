@@ -43,6 +43,9 @@ import { PublicationService } from '@services/publication.service';
 import { Title } from '@angular/platform-browser';
 import { publicationTitle } from '@constants/titles';
 import { selectLoading } from '@store/selectors/loading.selectors';
+import numbers from '@constants/numbers';
+import { paginationTotalSize } from '@constants/pagination';
+import { PaginationService } from '@services/pagination.service';
 
 @Component({
   selector: 'app-orders',
@@ -61,10 +64,9 @@ export class PublicationsComponent implements OnInit {
   term: any;
   // page number
   page = 1;
-  // default page size
-  pageSize = 10;
-  // total number of records
-  totalRecords = 0;
+  totalSize$: BehaviorSubject<number> = new BehaviorSubject<number>(paginationTotalSize);
+  page$: BehaviorSubject<number> = new BehaviorSubject(1);
+  pageSize$: BehaviorSubject<number> = new BehaviorSubject(10);
   loading$ = this.store.select(selectLoading);
 
   publications$ = this.store.select(selectPublicationList);
@@ -92,6 +94,7 @@ export class PublicationsComponent implements OnInit {
   constructor(
     private modalService: NgbModal,
     private store: Store<IAppState>,
+    private paginationService: PaginationService,
     private contractorService: ContractorService,
     public formBuilder: FormBuilder,
     private publicationService: PublicationService,
@@ -104,7 +107,14 @@ export class PublicationsComponent implements OnInit {
     this.breadCrumbItems = breadCrumbs.publications;
     this._fetchData();
     this.initForms();
+    this.initSubscriptions();
     this.setTitle(this.title);
+  }
+
+  public initSubscriptions(): void {
+    this.totalSize$ = this.paginationService.totalSize$;
+    this.page$ = this.paginationService.page$;
+    this.pageSize$ = this.paginationService.pageSize$;
   }
 
   /**
@@ -279,11 +289,8 @@ export class PublicationsComponent implements OnInit {
    * Handle on page click event
    */
   onPageChange(page: any): void {
-    this.startIndex = (page - 1) * this.pageSize + 1;
-    this.endIndex = (page - 1) * this.pageSize + this.pageSize;
-    if (this.endIndex > this.totalRecords) {
-      this.endIndex = this.totalRecords;
-    }
+    const payload = { page };
+    this.store.dispatch(new GetContractors(payload));
   }
 
   /**
@@ -422,8 +429,9 @@ export class PublicationsComponent implements OnInit {
    * fetches the orders value
    */
   private _fetchData() {
+    const payload = { page: numbers.one };
     this.selectedContractor$ = this.contractorService.selectedContractor$;
-    this.store.dispatch(new GetContractors());
+    this.store.dispatch(new GetContractors(payload));
   }
 
 }

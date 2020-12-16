@@ -1,6 +1,6 @@
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { TableData } from '@models/instances/tickets.model';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { SortEvent, TicketsSortableDirective } from '@shared/directives/tickets-sortable.directive';
 import { hashtagMatches, TicketService } from '@services/ticket.service';
 import { FormGroup } from '@angular/forms';
@@ -18,6 +18,10 @@ import { CreateHashtag, DeleteHashtag, GetHashtags, SelectHashtag, UpdateHashtag
 import { CreateHashtagPayload } from '@models/payloads/news/hashtag/create';
 import { UpdateHashtagPayload } from '@models/payloads/news/hashtag/update';
 import { selectLoading } from '@store/selectors/loading.selectors';
+import { PaginationService } from '@services/pagination.service';
+import { paginationTotalSize } from '@constants/pagination';
+import { GetContractors } from '@store/actions/contractor.actions';
+import numbers from '@constants/numbers';
 
 @Component({
   selector: 'app-hashtags',
@@ -33,6 +37,9 @@ export class HashtagsComponent implements OnInit {
   tickets$: Observable<TableData[]>;
   hashtags$ = this.store.pipe(select(selectHashtagList));
   total$: Observable<number>;
+  totalSize$: BehaviorSubject<number> = new BehaviorSubject<number>(paginationTotalSize);
+  page$: BehaviorSubject<number> = new BehaviorSubject(1);
+  pageSize$: BehaviorSubject<number> = new BehaviorSubject(10);
   loading$ = this.store.select(selectLoading);
 
   @ViewChildren(TicketsSortableDirective) headers: QueryList<TicketsSortableDirective>;
@@ -41,6 +48,7 @@ export class HashtagsComponent implements OnInit {
     public service: TicketService,
     private modalService: NgbModal,
     private hashtagService: HashtagService,
+    private paginationService: PaginationService,
     private store: Store<IAppState>,
     private titleService: Title
   ) {
@@ -48,6 +56,10 @@ export class HashtagsComponent implements OnInit {
     this.service.records$ = this.hashtagService.hashtags$;
     this.tickets$ = service.tickets$;
     this.total$ = service.total$;
+
+    this.totalSize$ = this.paginationService.totalSize$;
+    this.page$ = this.paginationService.page$;
+    this.pageSize$ = this.paginationService.pageSize$;
   }
 
   ngOnInit() {
@@ -171,9 +183,18 @@ export class HashtagsComponent implements OnInit {
   }
 
   /**
+   * Handle on page click event
+   */
+  public onPageChange(page: any): void {
+    const payload = { page };
+    this.store.dispatch(new GetHashtags(payload));
+  }
+
+  /**
    * Dispatch getting data
    */
   public _fetchData() {
-    this.store.dispatch(new GetHashtags());
+    const payload = { page: numbers.one };
+    this.store.dispatch(new GetHashtags(payload));
   }
 }

@@ -10,6 +10,10 @@ import { CreateClientPayload } from '@models/payloads/client/create';
 import { UpdateClientPayload } from '@models/payloads/client/update';
 import { DeleteClientPayload } from '@models/payloads/client/delete';
 import { BaseService } from '@services/base.service';
+import { GetClientsPayload } from '@models/payloads/client/get';
+import numbers from '@constants/numbers';
+import { TicketService } from '@services/ticket.service';
+import { PaginationService } from '@services/pagination.service';
 
 const api = environment.api;
 
@@ -23,7 +27,9 @@ export class ClientService extends BaseService {
 
   constructor(
     private requestHandler: RequestHandler,
-    public formBuilder: FormBuilder
+    public formBuilder: FormBuilder,
+    private ticketService: TicketService,
+    private paginationService: PaginationService
   ) {
     super();
   }
@@ -84,14 +90,18 @@ export class ClientService extends BaseService {
   /**
    *  Get all clients, api returns array of clients
    */
-  public getAll(): Observable<Client[]> {
+  public getAll(payload: GetClientsPayload): Observable<Client[]> {
     return this.requestHandler.request(
-      this.url(api, endpoints.CLIENT),
+      this.url(api, endpoints.CLIENT, null, { page: payload.page }),
       methods.GET,
       null,
-      (response: { results: Array<Client> }) => {
+      (response: { results: Array<Client>, count: number }) => {
         const clients = response.results;
         this.clients = clients;
+        this.paginationService.totalSize = response.count;
+        this.paginationService.page = payload.page;
+        this.ticketService.endIndex = payload.page * numbers.pageSize;
+        this.ticketService.endIndex = payload.page * numbers.pageSize;
         return clients;
       }
     );
@@ -107,6 +117,7 @@ export class ClientService extends BaseService {
       payload,
       (response: Client) => {
         this.clients = [...this.clients, response];
+        this.ticketService.searchTerm = '';
         return response;
       }
     );
@@ -122,6 +133,7 @@ export class ClientService extends BaseService {
       payload,
       (response: Client) => {
         this.clients = this.clients.map(el => el.id === response.id ? response : el);
+        this.ticketService.searchTerm = '';
         return response;
       }
     );
@@ -137,6 +149,7 @@ export class ClientService extends BaseService {
       payload,
       (response: null) => {
         this.clients = this.clients.filter(el => el.id !== payload.id);
+        this.ticketService.searchTerm = '';
         return payload;
       }
     );

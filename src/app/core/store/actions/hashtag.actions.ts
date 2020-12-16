@@ -3,6 +3,7 @@ import { Hashtag } from '@models/instances/hashtag';
 import { CreateHashtagPayload } from '@models/payloads/news/hashtag/create';
 import { UpdateHashtagPayload } from '@models/payloads/news/hashtag/update';
 import { DeleteHashtagPayload } from '@models/payloads/news/hashtag/delete';
+import { GetHashtagsPayload } from '@models/payloads/news/hashtag/get';
 
 
 export enum EHashtagActions {
@@ -21,7 +22,7 @@ export enum EHashtagActions {
 export class GetHashtags implements Action {
   public readonly type = EHashtagActions.GetHashtags;
 
-  constructor() {
+  constructor(public payload: GetHashtagsPayload) {
   }
 }
 

@@ -44,6 +44,7 @@ import { projectsTitle } from '@constants/titles';
 import { burstMethods } from '@constants/methods';
 import { newsProjectMatches, TicketService } from '@services/ticket.service';
 import { TableData } from '@models/instances/tickets.model';
+import numbers from '@constants/numbers';
 
 @Component({
   selector: 'app-projects',
@@ -264,11 +265,12 @@ export class ProjectsComponent implements OnInit {
    */
   public _fetchData(): void {
     const store = this.store;
-    store.dispatch(new GetNewsProjects());
-    store.dispatch(new GetClients());
+    const payload = {page: numbers.one};
+    store.dispatch(new GetNewsProjects(payload));
+    store.dispatch(new GetClients(payload));
     store.dispatch(new GetProjectConfiguration());
-    store.dispatch(new GetUsers());
-    store.dispatch(new GetContractors());
+    store.dispatch(new GetUsers(payload));
+    store.dispatch(new GetContractors(payload));
     store.dispatch(new GetEmails());
   }
 

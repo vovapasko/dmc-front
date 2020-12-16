@@ -84,6 +84,14 @@
                             </tbody>
                         </table>
                     </div>
+                    <ul class="pagination pagination-rounded justify-content-end my-2">
+                        <ngb-pagination
+                                [collectionSize]="totalSize$ | async"
+                                (pageChange)="onPageChange($event)"
+                                [page]="page$ | async"
+                                [pageSize]="pageSize$ | async"
+                        ></ngb-pagination>
+                    </ul>
                 </div>
             </div>
         </div>

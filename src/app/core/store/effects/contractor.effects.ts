@@ -21,6 +21,7 @@ import { Contractor } from '@models/instances/contractor';
 import { DeleteContractorPayload } from '@models/payloads/contractor/delete';
 import { UpdateContractorPayload } from '@models/payloads/contractor/update';
 import { CreateContractorPayload } from '@models/payloads/contractor/create';
+import { GetContractorsPayload } from '@models/payloads/contractor/get';
 
 @Injectable({
   providedIn: 'root',
@@ -29,7 +30,7 @@ export class ContractorEffects {
   @Effect()
   getContractors$ = this.actions$.pipe(
     ofType<GetContractors>(EContractorActions.GetContractors),
-    switchMap(() => this.contractorService.getAll()),
+    switchMap((action: {payload: GetContractorsPayload}) => this.contractorService.getAll(action.payload)),
     switchMap((contractors: Contractor[]) => of(new GetContractorsSuccess(contractors)))
   );
 

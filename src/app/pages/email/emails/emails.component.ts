@@ -8,9 +8,9 @@ import {
   GetNewsEmails,
   GmailAuth,
   GmailTokenRevoke,
-  SelectNewsEmail
+  SelectNewsEmail, UpdateEmail
 } from '@store/actions/email.actions';
-import { selectAuthenticationUrl, selectNewsEmails } from '@store/selectors/email.selectors';
+import { selectAuthenticationUrl, selectNewsEmails, selectSelectedNewsEmail } from '@store/selectors/email.selectors';
 import { breadCrumbs } from '@constants/bread-crumbs';
 import { Email } from '@models/instances/email';
 import { getMailImageIcon } from '@constants/images';
@@ -26,6 +26,8 @@ import { Subject } from 'rxjs';
 import { ServerError } from '@models/responses/server/error';
 import { LoadingService } from '@services/loading.service';
 import { ErrorService } from '@services/error.service';
+import { UpdateEmailPayload } from '@models/payloads/project/email/update';
+import { EmailService } from '@services/email.service';
 
 @Component({
   selector: 'app-opportunities',
@@ -43,10 +45,12 @@ export class EmailsComponent implements OnInit {
   submitted: boolean;
   newsEmails$ = this.store.pipe(select(selectNewsEmails));
   createEmailForm: FormGroup;
+  editEmailForm: FormGroup;
   visible: boolean;
   loading$: Subject<boolean>;
   error$: Subject<ServerError>;
   showPasswordEmails = [];
+  newsEmailId: number;
 
   constructor(
     private modalService: NgbModal,
@@ -54,7 +58,8 @@ export class EmailsComponent implements OnInit {
     private router: Router,
     private projectService: ProjectService,
     private loadingService: LoadingService,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private emailService: EmailService
   ) {
   }
 
@@ -64,6 +69,7 @@ export class EmailsComponent implements OnInit {
     this.error$ = this.errorService.error$;
     this._fetchData();
     this.initCreateEmailForm();
+    this.initEditEmailForm();
   }
 
   public showPassword(email: Email): void {
@@ -82,17 +88,31 @@ export class EmailsComponent implements OnInit {
     this.createEmailForm = this.projectService.initializeCreateEmailForm();
   }
 
+  public initEditEmailForm(): void {
+    this.editEmailForm = this.projectService.initializeEditEmailForm();
+  }
+
   public submitCreateEmailForm(): void {
     const data = this.createEmailForm.value;
     const payload = { data } as unknown as CreateEmailPayload;
     this.submit(this.createEmailForm, this.createEmail.bind(this), payload);
   }
 
+  public submitEditEmailForm(): void {
+    const data = this.editEmailForm.value;
+    const payload = { id: this.emailService.selectedNewsEmail.id, data } as unknown as UpdateEmailPayload;
+    this.submit(this.editEmailForm, this.editEmail.bind(this), payload);
+  }
+
+  public editEmail(payload: UpdateEmailPayload): void {
+    this.store.dispatch(new UpdateEmail(payload));
+  }
+
   public createEmail(payload: CreateEmailPayload): void {
     this.store.dispatch(new CreateNewsEmail(payload));
   }
 
-  public submit(form: FormGroup, handler, payload: CreateHashtagPayload | CreatePostsFormatPayload | CreateEmailPayload): void {
+  public submit(form: FormGroup, handler, payload: CreateHashtagPayload | CreatePostsFormatPayload | CreateEmailPayload | UpdateEmailPayload): void {
     this.submitted = true;
 
     if (form && form.invalid) {
@@ -109,6 +129,10 @@ export class EmailsComponent implements OnInit {
   // convenience getter for easy access to form fields
   get createEmailControls(): { [p: string]: AbstractControl } {
     return this.createEmailForm.controls;
+  }
+
+  get editEmailControls() {
+    return this.editEmailForm.controls;
   }
 
 
@@ -128,6 +152,11 @@ export class EmailsComponent implements OnInit {
     const payload = { data: { email: email.email } };
     this.store.pipe(select(selectAuthenticationUrl)).subscribe(this.processAuthenticationUrl.bind(this));
     this.store.dispatch(new GmailAuth(payload));
+  }
+
+  public editNewsEmail(email: Email): void {
+    this.editEmailForm = this.projectService.initializeEditEmailForm(email);
+    this.store.dispatch(new SelectNewsEmail(email));
   }
 
   public deleteEmail(email: Email): void {

@@ -22,6 +22,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { BaseService } from '@services/base.service';
 import numbers from '@constants/numbers';
 import { Hashtag } from '@models/instances/hashtag';
+import { GetNewsProjectsPayload } from '@models/payloads/news/project/get';
+import { TicketService } from '@services/ticket.service';
+import { PaginationService } from '@services/pagination.service';
 
 const api = environment.api;
 
@@ -37,7 +40,9 @@ export class ProjectService extends BaseService {
 
   constructor(
     private requestHandler: RequestHandler,
-    public formBuilder: FormBuilder
+    public formBuilder: FormBuilder,
+    private ticketService: TicketService,
+    private paginationService: PaginationService
   ) {
     super();
   }
@@ -107,14 +112,17 @@ export class ProjectService extends BaseService {
   /**
    * Get all news projects
    */
-  public getNewsProjects() {
+  public getNewsProjects(payload: GetNewsProjectsPayload) {
     return this.requestHandler.request(
-      this.url(api, endpoints.NEWSPROJECTS),
+      this.url(api, endpoints.NEWSPROJECTS, null, { page: payload.page }),
       methods.GET,
       null,
       (response: GetAllNewsProjectsResponse) => {
         const newsProjects = response.results;
         this.newsProjects = newsProjects;
+        this.paginationService.totalSize = response.count;
+        this.paginationService.page = payload.page;
+        this.ticketService.endIndex = payload.page * numbers.pageSize;
         return newsProjects;
       }
     );
@@ -152,7 +160,7 @@ export class ProjectService extends BaseService {
    */
   public updateEmail(payload: UpdateEmailPayload) {
     return this.requestHandler.request(
-      this.url(api, endpoints.EMAILS),
+      this.url(api, endpoints.EMAILS, payload.id),
       methods.PUT,
       payload,
       (response: Email) => response
@@ -223,6 +231,19 @@ export class ProjectService extends BaseService {
       signature: null,
       codeword: null,
       password: null
+    });
+  }
+
+  /**
+   * Returns form group for edit project form
+   */
+  public initializeEditEmailForm(email?: Email): FormGroup {
+    return this.formBuilder.group({
+      email: [email ? email.email : null, Validators.required],
+      template: [email ? email.template : null, Validators.required],
+      signature: [email ? email.signature : null, Validators.required],
+      codeword: [email ? email.codeword : null, Validators.required],
+      password: [email ? email.password : null, Validators.required],
     });
   }
 

@@ -5,6 +5,7 @@ import { DeleteUserPayload } from '@models/payloads/user/delete';
 import { ForgotPasswordPayload } from '@models/payloads/auth/forgot-password';
 import { ForgotPasswordConfirmPayload } from '@models/payloads/auth/forgot-password-confirm';
 import { UserStatusPayload } from '@models/payloads/user/status';
+import { GetUsersPayload } from '@models/payloads/user/get';
 
 export enum EUserActions {
   GetUsers = '[User] Get users',
@@ -151,6 +152,9 @@ export class ResetPasswordSuccess implements Action {
 
 export class GetUsers implements Action {
   public readonly type = EUserActions.GetUsers;
+
+  constructor(public payload: GetUsersPayload) {
+  }
 }
 
 export class GetUsersSuccess implements Action {
