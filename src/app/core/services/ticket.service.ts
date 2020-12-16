@@ -227,16 +227,6 @@ export class TicketService {
     tickets = tickets.filter(ticket => this.matches(ticket, searchTerm));
     const total = tickets.length;
 
-    // // 3. paginate
-    // this.totalRecords = tickets.length;
-    // this._state.startIndex = (page - 1) * this.pageSize + 1;
-    // this._state.endIndex = (page - 1) * this.pageSize + this.pageSize;
-    // if (this.endIndex > this.totalRecords) {
-    //   this.endIndex = this.totalRecords;
-    // }
-    // tickets = tickets.slice(this._state.startIndex - 1, this._state.endIndex);
-    tickets = tickets.slice(this._state.startIndex - 1, this._state.endIndex);
-
     return of({ tickets, total });
   }
 }
