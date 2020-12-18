@@ -668,7 +668,8 @@ export class NewsService extends BaseService {
     const hashtags = validationForm.controls.projectHashtags.value;
     const title = validationForm.controls.projectTitle.value;
     const budget = validationForm.controls.projectBudget.value;
-    const postFormat = validationForm.controls.projectPostFormat.value.postFormat;
+    // const postFormat = validationForm.controls.projectPostFormat.value.postFormat;
+    const postFormat = validationForm.controls.projectPostFormat.value;
     const isConfirmed = !!newsWaveId;
     const createdBy = this.userService.user;
     let waveFormation = null;
