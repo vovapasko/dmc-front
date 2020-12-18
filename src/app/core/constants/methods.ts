@@ -5,9 +5,4 @@ const methods = {
   DELETE: 'delete'
 };
 
-const burstMethods = {
-  DIRECT: 'direct',
-  BAYER: 'bayer'
-};
-
-export {methods, burstMethods}
+export {methods};

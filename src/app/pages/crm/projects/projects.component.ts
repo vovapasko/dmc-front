@@ -41,10 +41,10 @@ import { Contractor } from '@models/instances/contractor';
 import { NewsWavePrice } from '@models/instances/newsWavePrice';
 import { NewsWaves } from '@models/instances/news-waves';
 import { projectsTitle } from '@constants/titles';
-import { burstMethods } from '@constants/methods';
 import { newsProjectMatches, TicketService } from '@services/ticket.service';
 import { TableData } from '@models/instances/tickets.model';
 import numbers from '@constants/numbers';
+import { Methods } from '@models/instances/method';
 
 @Component({
   selector: 'app-projects',
@@ -58,7 +58,7 @@ import numbers from '@constants/numbers';
 export class ProjectsComponent implements OnInit {
 
   // bread crumb items
-  methods = burstMethods;
+  methods = Methods;
   title = projectsTitle;
   breadCrumbItems: Array<{}>;
   loading$: Subject<boolean>;

@@ -19,10 +19,10 @@ import { Project } from '@models/instances/project';
 import { News } from '@models/instances/news';
 import { Hashtag } from '@models/instances/hashtag';
 import { Format } from '@models/instances/format';
-import { base64ToArrayBuffer, setProjectValues } from '@helpers/utility';
+import {  setProjectValues } from '@helpers/utility';
 import { Infos, Warnings } from '@constants/notifications';
 import { endpoints } from '@constants/endpoints';
-import { burstMethods, methods } from '@constants/methods';
+import { methods } from '@constants/methods';
 import { SecurityService } from './security.service';
 import { GetAllFormatsResponse } from '@models/responses/news/format/get-all';
 import { GetFormatsResponse } from '@models/responses/news/format/get';
@@ -52,6 +52,7 @@ import { BaseService } from '@services/base.service';
 import { budgetMessage } from '@constants/messages';
 import { ConvertToFormData } from '@helpers/convert-to-form-data';
 import { Attachment } from '@models/instances/attachment';
+import { Methods } from '@models/instances/method';
 
 const api = environment.api;
 
@@ -674,7 +675,7 @@ export class NewsService extends BaseService {
     const createdBy = this.userService.user;
     let waveFormation = null;
     let newsInProject = [];
-    if (burstMethod.method === burstMethods.BAYER) {
+    if (burstMethod.method === Methods.bayer || burstMethod.method === Methods.topSecret) {
       waveFormation = {
         email: previewForm.controls.previewEmail.value || controls.at(0).get('previewEmail').value,
         content: editorForm.controls.text.value || controls.at(0).get('content').value,
@@ -682,7 +683,7 @@ export class NewsService extends BaseService {
         id: newsWave ? newsWave.waveFormation.id : null
       };
     }
-    if (burstMethod.method === burstMethods.DIRECT) {
+    if (burstMethod.method === Methods.direct) {
       newsInProject = newsList.map((news: News, i: number) => ({
         contractors: news.contractors,
         email: controls.at(i).get('previewEmail').value,
