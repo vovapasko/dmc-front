@@ -689,6 +689,12 @@
                                                         </a>
                                                     </div>
                                                 </div>
+
+                                                <div class="row contractors-list">
+                                                    <span *ngFor="let contractor of news.contractors" class="text-muted mb-4 mt-3">
+                                                        {{contractor.editorName}}
+                                                    </span>&nbsp;
+                                                </div>
                                             </div>
                                         </div>
                                         <ng-template #elseBlock>
