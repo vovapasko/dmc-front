@@ -10,7 +10,7 @@ export interface Method {
 // }
 
 export enum Methods {
-  topSecret = 'на прямую',
+  topSecret = 'топ сикрет',
   bayer = 'на прямую через байера',
-  direct = 'топ сикрет'
+  direct = 'на прямую'
 }

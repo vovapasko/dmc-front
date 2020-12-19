@@ -37,7 +37,7 @@ import { UpdateNewsProjectPayload } from '@models/payloads/project/news-project/
 import { breadCrumbs } from '@constants/bread-crumbs';
 import { GetClients } from '@store/actions/client.actions';
 import { selectClientList } from '@store/selectors/client.selectors';
-import { Contractor } from '@models/instances/contractor';
+import { Contractor, PostFormatListSet } from '@models/instances/contractor';
 import { NewsWavePrice } from '@models/instances/newsWavePrice';
 import { NewsWaves } from '@models/instances/news-waves';
 import { projectsTitle } from '@constants/titles';
@@ -211,16 +211,20 @@ export class ProjectsComponent implements OnInit {
     this.selectProject(project);
   }
 
-  public getContractorPrice(contractor: Contractor, format: string, priceList: NewsWavePrice[]): string | number {
+  public getContractorPrice(contractor: Contractor, priceList: NewsWavePrice[]): string | number {
+    console.log('getContractorPrice');
     const changedContractor = priceList.find((el: NewsWavePrice) => el.contractor.id === contractor.id);
-    return changedContractor ? changedContractor.price : contractor.postformatlistSet.find(el => el.postFormat === format).onePostPrice;
+    if (changedContractor) {
+      return changedContractor.price;
+    }
+    return null;
   }
 
   /**
    * Dispatch delete project
    */
   public onDelete(project: NewsProject): void {
-    const payload = { id: project.id, data: {isArchived: true} };
+    const payload = { id: project.id, data: { isArchived: true } };
     this.store.dispatch(new DeleteNewsProject(payload));
   }
 
@@ -265,7 +269,7 @@ export class ProjectsComponent implements OnInit {
    */
   public _fetchData(): void {
     const store = this.store;
-    const payload = {page: numbers.one};
+    const payload = { page: numbers.one };
     store.dispatch(new GetNewsProjects(payload));
     store.dispatch(new GetClients(payload));
     store.dispatch(new GetProjectConfiguration());
