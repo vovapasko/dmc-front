@@ -405,7 +405,8 @@ export class NewsService extends BaseService {
       projectHashtags: [null, Validators.required],
       projectPostFormat: [null, Validators.required],
       projectBurstMethod: [null, Validators.required],
-      projectBudget: [null, [Validators.required, validator]],
+      amount: [null, [Validators.required, validator]],
+      amountCurrency: [null, [Validators.required, validator]],
       projectContractors: [null, [Validators.required, validator]]
     });
   }
@@ -669,7 +670,10 @@ export class NewsService extends BaseService {
     const contractors = validationForm.controls.projectContractors.value;
     const hashtags = validationForm.controls.projectHashtags.value;
     const title = validationForm.controls.projectTitle.value;
-    const budget = validationForm.controls.projectBudget.value;
+    const budget = {
+      amount: validationForm.controls.amount.value,
+      amountCurrency: validationForm.controls.amountCurrency.value
+    };
     // const postFormat = validationForm.controls.projectPostFormat.value.postFormat;
     const postFormat = validationForm.controls.projectPostFormat.value;
     const isConfirmed = !!newsWaveId;
@@ -749,7 +753,8 @@ export class NewsService extends BaseService {
     validationForm.controls.projectName.setValue(newsWave.project);
     validationForm.controls.projectHashtags.setValue(newsWave.hashtags);
     validationForm.controls.projectTitle.setValue(newsWave.title);
-    validationForm.controls.projectBudget.setValue(newsWave.budget);
+    validationForm.controls.amount.setValue(newsWave.budget.amount);
+    validationForm.controls.amountCurrency.setValue(newsWave.budget.amountCurrency);
     if (newsWave.waveFormation) {
       editorForm.controls.attachments.setValue(this.handleFiles(newsWave.waveFormation.attachments));
       editorForm.controls.text.setValue(newsWave.waveFormation.content);
