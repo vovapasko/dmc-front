@@ -161,11 +161,9 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
       return;
     }
     const controls = this.validationForm.controls;
-    let projectPairs = this.pairs;
-    if (this.newsWaveId) {
-      projectPairs = pairs.filter(el => el.key !== 'projectBudget');
-    }
-    projectPairs.forEach(pair => controls[pair.key].setValue(newsProject[pair.value]));
+    this.pairs.forEach(pair => controls[pair.key].setValue(newsProject[pair.value]));
+    controls['amount'].setValue(newsProject.budget.amount);
+    controls['amountCurrency'].setValue(newsProject.budget.amountCurrency);
     this.emails$ = of(newsProject.emails);
     this.newsProject = newsProject;
   }
@@ -609,8 +607,9 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   public getContractorPrice(contractor: Contractor, format: PostFormatListSet): string | number {
-    const changedContractor = this.priceList.find((el: NewsWavePrice) => el.contractor.id === contractor.id);
-    return changedContractor ? changedContractor.price : format.onePostPrice;
+    // const changedContractor = this.priceList.find((el: NewsWavePrice) => el.contractor.id === contractor.id);
+    // return changedContractor ? changedContractor.price : format.onePostPrice;
+    return 1;
   }
 
   public setImageContent(control: AbstractControl, previewControl: AbstractControl, field: string): void {

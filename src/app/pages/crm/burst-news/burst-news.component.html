@@ -198,10 +198,10 @@
                                                     <span *ngIf="commonFormControls.projectPostFormat.errors.required"></span>
                                                 </div>
                                             </div>
-<!--                                            <div class="col-md-1">-->
-<!--                                                <a (click)="openModal(editPrice)" href="javascript:void(0);"-->
-<!--                                                   class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>-->
-<!--                                            </div>-->
+                                            <!--                                            <div class="col-md-1">-->
+                                            <!--                                                <a (click)="openModal(editPrice)" href="javascript:void(0);"-->
+                                            <!--                                                   class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>-->
+                                            <!--                                            </div>-->
                                         </div>
 
                                         <div class="form-group row mb-3">
@@ -232,14 +232,23 @@
                                                 <input type="number"
                                                        min="0"
                                                        id="projectBudget"
-                                                       formControlName="projectBudget"
+                                                       formControlName="amount"
                                                        class="form-control"
                                                        placeholder="Введите бюджет"
-                                                       [ngClass]="{ 'is-invalid': submitted && commonFormControls.projectBudget.errors }"
+                                                       [ngClass]="{ 'is-invalid': submitted && commonFormControls.amount.errors }"
                                                 />
-                                                <div *ngIf="submitted && commonFormControls.projectBudget.errors"
+                                                <ng-select
+                                                        [items]="['USD', 'UAH']"
+                                                        [clearSearchOnAdd]="true"
+                                                        [style]="{marginTop: '5px'}"
+                                                        placeholder="Выберите валюту"
+                                                        formControlName="amountCurrency"
+                                                        required
+                                                >
+                                                </ng-select>
+                                                <div *ngIf="submitted && commonFormControls.amount.errors"
                                                      class="invalid-feedback">
-                                                    <span *ngIf="commonFormControls.projectBudget.errors.required"></span>
+                                                    <span *ngIf="commonFormControls.amount.errors.required"></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -512,12 +521,12 @@
                                                               [formControl]="getControl(index, 'content')"
                                                               (onBlur)="updateField(index, 'content')"
                                                 ></quill-editor>
-<!--                                                <textarea placeholder="Введите содержание"-->
-<!--                                                       [id]="'content' + index"-->
-<!--                                                       [formControl]="getControl(index, 'content')"-->
-<!--                                                       style="margin-bottom: 10px;"-->
-<!--                                                       class="form-control"-->
-<!--                                                       (change)="updateField(index, 'content')"></textarea>-->
+                                                <!--                                                <textarea placeholder="Введите содержание"-->
+                                                <!--                                                       [id]="'content' + index"-->
+                                                <!--                                                       [formControl]="getControl(index, 'content')"-->
+                                                <!--                                                       style="margin-bottom: 10px;"-->
+                                                <!--                                                       class="form-control"-->
+                                                <!--                                                       (change)="updateField(index, 'content')"></textarea>-->
                                                 <ng-select
                                                         id="news-contractors"
                                                         [items]="commonFormControls.projectContractors.value || []"
@@ -684,15 +693,20 @@
 
                                                 <div class="row" *ngIf="news.attachments.length">
                                                     <div *ngFor="let attachment of news.attachments" class="col-sm-2">
-                                                        <a (click)="downloadAttachment(attachment)" href="javascript: void(0)">
-                                                            <img [src]="attachment.type.includes('image') ? attachment.base64 : 'assets/images/attached-files/img-1.jpg'" [alt]="attachment.name" class="img-thumbnail img-responsive">
-                                                            <i>{{attachment.name}} ({{bytesToSize(attachment.size)}})</i>
+                                                        <a (click)="downloadAttachment(attachment)"
+                                                           href="javascript: void(0)">
+                                                            <img [src]="attachment.type.includes('image') ? attachment.base64 : 'assets/images/attached-files/img-1.jpg'"
+                                                                 [alt]="attachment.name"
+                                                                 class="img-thumbnail img-responsive">
+                                                            <i>{{attachment.name}} ({{bytesToSize(attachment.size)}}
+                                                                )</i>
                                                         </a>
                                                     </div>
                                                 </div>
 
                                                 <div class="row contractors-list">
-                                                    <span *ngFor="let contractor of news.contractors" class="text-muted mb-4 mt-3">
+                                                    <span *ngFor="let contractor of news.contractors"
+                                                          class="text-muted mb-4 mt-3">
                                                         {{contractor.editorName}}
                                                     </span>&nbsp;
                                                 </div>
@@ -749,9 +763,13 @@
                                             ></quill-editor>
 
                                             <div class="row" *ngIf="editorForm.controls.attachments.value?.length">
-                                                <div *ngFor="let attachment of editorForm.controls.attachments.value" class="col-sm-2">
-                                                    <a (click)="downloadAttachment(attachment)" href="javascript: void(0)">
-                                                        <img [src]="attachment.type.includes('image') ? attachment.base64 : 'assets/images/attached-files/img-1.jpg'" [alt]="attachment.name" class="img-thumbnail img-responsive">
+                                                <div *ngFor="let attachment of editorForm.controls.attachments.value"
+                                                     class="col-sm-2">
+                                                    <a (click)="downloadAttachment(attachment)"
+                                                       href="javascript: void(0)">
+                                                        <img [src]="attachment.type.includes('image') ? attachment.base64 : 'assets/images/attached-files/img-1.jpg'"
+                                                             [alt]="attachment.name"
+                                                             class="img-thumbnail img-responsive">
                                                         <i>{{attachment.name}} ({{bytesToSize(attachment.size)}})</i>
                                                     </a>
                                                 </div>

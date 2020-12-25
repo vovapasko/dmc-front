@@ -1,6 +1,6 @@
 import { Character } from './character';
 import { Method } from './method';
-import { NewsProject } from './news-project';
+import { NewsProject, Price } from './news-project';
 import { Contractor } from './contractor';
 import { Hashtag } from './hashtag';
 import { WaveFormation } from './wave-formation';
@@ -22,7 +22,7 @@ export interface NewsWaves {
   newsInProject: News[];
   createdBy: User;
   title: string;
-  budget: number;
+  budget: Price;
   isConfirmed?: boolean;
   newswavepricelistSet: NewsWavePrice[];
 }

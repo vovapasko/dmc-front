@@ -139,14 +139,47 @@
                                         </ng-template>
                                         <ng-template editMode>
                                             <div *ngFor="let format of contractor.postformatlistSet; let idx = index;">
-                                                <label for="format_one_post_price{{ idx }}">
-                                                    {{format.postFormat}}
-                                                </label>
-                                                <input id="format_one_post_price{{ idx }}"
-                                                       type="number"
-                                                       min="0"
-                                                       class="form-control"
-                                                       [formControl]="getControl(format.id, 'onePostPrice')">
+                                                <div class="row">
+                                                    <div class="md-6">
+                                                        <label for="format_inner_one_post_price{{ idx }}">
+                                                            {{format.postFormat}}
+                                                        </label>
+                                                        <input id="format_inner_one_post_price{{ idx }}"
+                                                               type="number"
+                                                               min="0"
+                                                               class="form-control"
+                                                               [formControl]="getControl(format.id, 'innerOnePostPrice')">
+                                                        <ng-select
+                                                                [items]="['USD', 'UAH']"
+                                                                [clearSearchOnAdd]="true"
+                                                                placeholder="Выберите роль"
+                                                                [formControl]="getControl(format.id, 'innerOnePostPriceCurrency')"
+                                                                required
+                                                        >
+                                                        </ng-select>
+                                                    </div>
+
+                                                    <div class="md-6">
+                                                        <label for="format_outer_one_post_price{{ idx }}">
+                                                            {{format.postFormat}}
+                                                        </label>
+                                                        <input id="format_outer_one_post_price{{ idx }}"
+                                                               type="number"
+                                                               min="0"
+                                                               class="form-control"
+                                                               [formControl]="getControl(format.id, 'outerOnePostPrice')">
+                                                        <ng-select
+                                                                [items]="['USD', 'UAH']"
+                                                                [clearSearchOnAdd]="true"
+                                                                placeholder="Выберите роль"
+                                                                [formControl]="getControl(format.id, 'outerOnePostPriceCurrency')"
+                                                                required
+                                                        >
+                                                        </ng-select>
+                                                    </div>
+
+                                                </div>
+
                                             </div>
                                         </ng-template>
                                     </editable>
@@ -267,7 +300,9 @@
                     />
 
                     <div *ngIf="submitted && createContractorFormControls.editorName.errors" class="invalid-feedback">
-                        <div *ngIf="createContractorFormControls.editorName.errors.required">Название редакции обязательно</div>
+                        <div *ngIf="createContractorFormControls.editorName.errors.required">Название редакции
+                            обязательно
+                        </div>
                     </div>
                 </div>
 
@@ -281,8 +316,11 @@
                            placeholder="Введите контактное лицо"
                     />
 
-                    <div *ngIf="submitted && createContractorFormControls.contactPerson.errors" class="invalid-feedback">
-                        <div *ngIf="createContractorFormControls.contactPerson.errors.required">Контактное лицо обязательно</div>
+                    <div *ngIf="submitted && createContractorFormControls.contactPerson.errors"
+                         class="invalid-feedback">
+                        <div *ngIf="createContractorFormControls.contactPerson.errors.required">Контактное лицо
+                            обязательно
+                        </div>
                     </div>
                 </div>
 
@@ -297,7 +335,8 @@
                     <span class="font-13 text-muted">e.g "380992314525"</span>
                     <div *ngIf="submitted && createContractorFormControls.phoneNumber.errors" class="invalid-feedback">
                         <div *ngIf="createContractorFormControls.phoneNumber.errors.required">Введите номер</div>
-                        <div *ngIf="createContractorFormControls.phoneNumber.errors.pattern">Введите корректный номер</div>
+                        <div *ngIf="createContractorFormControls.phoneNumber.errors.pattern">Введите корректный номер
+                        </div>
                     </div>
                 </div>
 
@@ -351,30 +390,80 @@
                     />
 
                     <div *ngIf="submitted && createFormatFormControls.postFormat.errors" class="invalid-feedback">
-                        <div *ngIf="createFormatFormControls.postFormat.errors.required">Название формата обязательно</div>
+                        <div *ngIf="createFormatFormControls.postFormat.errors.required">Название формата обязательно
+                        </div>
                     </div>
 
                     <div *ngIf="submitted && createFormatFormControls.postFormat.errors" class="invalid-feedback">
-                        <div *ngIf="createFormatFormControls.postFormat.errors.maxlength">Название формата не должно превышать 50 символов</div>
+                        <div *ngIf="createFormatFormControls.postFormat.errors.maxlength">Название формата не должно
+                            превышать 50 символов
+                        </div>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="onePostPrice"> Стоимость </label>
+                    <label for="innerOnePostPrice"> Стоимость(внутреняя) </label>
                     <input type="number"
-                           formControlName="onePostPrice"
+                           formControlName="inner"
                            class="form-control"
-                           [ngClass]="{ 'is-invalid': submitted && createFormatFormControls.onePostPrice.errors }"
-                           id="onePostPrice"
+                           [ngClass]="{ 'is-invalid': submitted && createFormatFormControls.inner.errors }"
+                           id="innerOnePostPrice"
                            placeholder="Введите стоимость одного размещения"
                     />
 
-                    <div *ngIf="submitted && createFormatFormControls.onePostPrice.errors" class="invalid-feedback">
-                        <div *ngIf="createFormatFormControls.onePostPrice.errors.required">Это поле обязательно для заполнения</div>
+                    <ng-select
+                            [items]="['USD', 'UAH']"
+                            [style]="{marginTop: '5px'}"
+                            [clearSearchOnAdd]="true"
+                            placeholder="Выберите валюту"
+                            formControlName="innerCurrency"
+                            required
+                    >
+                    </ng-select>
+
+                    <div *ngIf="submitted && createFormatFormControls.inner.errors" class="invalid-feedback">
+                        <div *ngIf="createFormatFormControls.inner.errors.required">Это поле обязательно для
+                            заполнения
+                        </div>
                     </div>
 
-                    <div *ngIf="submitted && createFormatFormControls.onePostPrice.errors" class="invalid-feedback">
-                        <div *ngIf="createFormatFormControls.onePostPrice.errors.min">Значение не может быть меньше 0</div>
+                    <div *ngIf="submitted && createFormatFormControls.inner.errors" class="invalid-feedback">
+                        <div *ngIf="createFormatFormControls.inner.errors.min">Значение не может быть меньше 0
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="form-group">
+                    <label for="outerOnePostPrice"> Стоимость(внешняя) </label>
+                    <input type="number"
+                           formControlName="outer"
+                           class="form-control"
+                           [ngClass]="{ 'is-invalid': submitted && createFormatFormControls.outer.errors }"
+                           id="outerOnePostPrice"
+                           placeholder="Введите стоимость одного размещения"
+                    />
+
+                    <ng-select
+                            [items]="['USD', 'UAH']"
+                            [clearSearchOnAdd]="true"
+                            [style]="{marginTop: '5px'}"
+                            placeholder="Выберите валюту"
+                            formControlName="outerCurrency"
+                            required
+                    >
+                    </ng-select>
+
+                    <div *ngIf="submitted && createFormatFormControls.outer.errors" class="invalid-feedback">
+                        <div *ngIf="createFormatFormControls.outer.errors.required">Это поле обязательно для
+                            заполнения
+                        </div>
+                    </div>
+
+                    <div *ngIf="submitted && createFormatFormControls.outer.errors" class="invalid-feedback">
+                        <div *ngIf="createFormatFormControls.outer.errors.min">Значение не может быть меньше 0
+                        </div>
                     </div>
 
 
@@ -392,11 +481,14 @@
                     />
 
                     <div *ngIf="submitted && createFormatFormControls.newsAmount.errors" class="invalid-feedback">
-                        <div *ngIf="createFormatFormControls.newsAmount.errors.required">Это поле обязательно для заполнения</div>
+                        <div *ngIf="createFormatFormControls.newsAmount.errors.required">Это поле обязательно для
+                            заполнения
+                        </div>
                     </div>
 
                     <div *ngIf="submitted && createFormatFormControls.newsAmount.errors" class="invalid-feedback">
-                        <div *ngIf="createFormatFormControls.newsAmount.errors.min">Значение не может быть меньше 0</div>
+                        <div *ngIf="createFormatFormControls.newsAmount.errors.min">Значение не может быть меньше 0
+                        </div>
                     </div>
                 </div>
 
@@ -411,11 +503,14 @@
                     />
 
                     <div *ngIf="submitted && createFormatFormControls.arrangedNews.errors" class="invalid-feedback">
-                        <div *ngIf="createFormatFormControls.arrangedNews.errors.required">Это поле обязательно для заполнения</div>
+                        <div *ngIf="createFormatFormControls.arrangedNews.errors.required">Это поле обязательно для
+                            заполнения
+                        </div>
                     </div>
 
                     <div *ngIf="submitted && createFormatFormControls.arrangedNews.errors" class="invalid-feedback">
-                        <div *ngIf="createFormatFormControls.arrangedNews.errors.min">Значение не может быть меньше 0</div>
+                        <div *ngIf="createFormatFormControls.arrangedNews.errors.min">Значение не может быть меньше 0
+                        </div>
                     </div>
                 </div>
 
@@ -461,7 +556,8 @@
                                 formControlName="deletePostFormat"
                                 [ngClass]="{ 'is-invalid': submitted && deleteFormatFormControls.deletePostFormat.errors }"
                         ></ng-select>
-                        <div *ngIf="submitted && deleteFormatFormControls.deletePostFormat.errors" class="invalid-feedback">
+                        <div *ngIf="submitted && deleteFormatFormControls.deletePostFormat.errors"
+                             class="invalid-feedback">
                             <span *ngIf="deleteFormatFormControls.deletePostFormat.errors.required"></span>
                         </div>
                     </div>
@@ -504,7 +600,9 @@
                     />
 
                     <div *ngIf="submitted && updateContractorFormControls.editorName.errors" class="invalid-feedback">
-                        <div *ngIf="updateContractorFormControls.editorName.errors.required">Название редакции обязательно</div>
+                        <div *ngIf="updateContractorFormControls.editorName.errors.required">Название редакции
+                            обязательно
+                        </div>
                     </div>
                 </div>
 
@@ -518,8 +616,11 @@
                            placeholder="Введите контактное лицо"
                     />
 
-                    <div *ngIf="submitted && updateContractorFormControls.contactPerson.errors" class="invalid-feedback">
-                        <div *ngIf="updateContractorFormControls.contactPerson.errors.required">Контактное лицо обязательно</div>
+                    <div *ngIf="submitted && updateContractorFormControls.contactPerson.errors"
+                         class="invalid-feedback">
+                        <div *ngIf="updateContractorFormControls.contactPerson.errors.required">Контактное лицо
+                            обязательно
+                        </div>
                     </div>
                 </div>
 
@@ -533,7 +634,8 @@
                     />
                     <span class="font-13 text-muted">e.g "380992314525"</span>
                     <div *ngIf="submitted && updateContractorFormControls.phoneNumber.errors" class="invalid-feedback">
-                        <div *ngIf="updateContractorFormControls.phoneNumber.errors.pattern">Введите корректный номер</div>
+                        <div *ngIf="updateContractorFormControls.phoneNumber.errors.pattern">Введите корректный номер
+                        </div>
                     </div>
                 </div>
 

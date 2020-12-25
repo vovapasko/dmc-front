@@ -204,7 +204,7 @@ export class ContractorsComponent implements OnInit {
    * Handle next or previous page click
    */
   public onPageChange(page: number): void {
-    const payload = {page};
+    const payload = { page };
     this.store.dispatch(new GetContractors(payload));
   }
 
@@ -340,7 +340,25 @@ export class ContractorsComponent implements OnInit {
       return;
     }
     const checkedContractors = this.contractorService.checkedContractors as unknown as Contractor[];
-    const payload = this.collectAddNewFormatsPayload();
+    const data = this.collectAddNewFormatsPayload();
+    const payload = {
+      // @ts-ignore
+      postFormat: data.postFormat,
+      // @ts-ignore
+      arrangedNews: data.arrangedNews,
+      // @ts-ignore
+      newsAmount: data.newsAmount,
+      onePostPrice: {
+        // @ts-ignore
+        inner: data.inner,
+        // @ts-ignore
+        innerCurrency: data.innerCurrency,
+        // @ts-ignore
+        outer: data.outer,
+        // @ts-ignore
+        outerCurrency: data.outerCurrency
+      }
+    };
     const aliases = [{ key: 'contractor', ali: 'id' }];
     this.processMany(checkedContractors.slice(), payload, this.addFormats.bind(this), aliases);
     this.cleanAfterUpdate();
@@ -456,7 +474,31 @@ export class ContractorsComponent implements OnInit {
     const interval = window.setInterval(() => {
       if (postFormatListSet.length) {
         const el = postFormatListSet.pop();
-        const payload = this.collectFormatPayload(contractor, field, el);
+        let fields = [];
+        let controls = [];
+        let payload = null;
+        if (field === 'onePostPrice') {
+          fields = ['innerOnePostPrice', 'innerOnePostPriceCurrency', 'outerOnePostPrice', 'outerOnePostPriceCurrency'];
+          controls = fields.map((controlName: string) => ({ controlName, control: this.getControl(el.id, controlName) }));
+          const data = {
+            id: el.id,
+            postFormat: el.postFormat,
+            contractor: contractor.id,
+            onePostPrice: {
+              id: el.onePostPrice.id,
+              // tslint:disable-next-line:max-line-length
+              inner: controls.find((control: { controlName: string, control: FormControl }) => control.controlName === 'innerOnePostPrice').control.value,
+              innerCurrency: controls.find((control: { controlName: string, control: FormControl }) => control.controlName === 'innerOnePostPriceCurrency').control.value,
+              // tslint:disable-next-line:max-line-length
+              outer: controls.find((control: { controlName: string, control: FormControl }) => control.controlName === 'outerOnePostPrice').control.value,
+              outerCurrency: controls.find((control: { controlName: string, control: FormControl }) => control.controlName === 'outerOnePostPriceCurrency').control.value
+            }
+          };
+          payload = { data } as UpdatePostFormatPayload;
+          payload.id = el.id;
+        } else {
+          payload = this.collectFormatPayload(contractor, field, el);
+        }
         if (payload) {
           updateFormats(payload);
         }
@@ -478,6 +520,7 @@ export class ContractorsComponent implements OnInit {
         contractor: contractor.id,
         [field]: +control.value
       };
+      // @ts-ignore
       const payload = { data } as UpdatePostFormatPayload;
       payload.id = el.id;
       return payload;
@@ -505,10 +548,13 @@ export class ContractorsComponent implements OnInit {
    * Init controls form group for contractor
    */
   public initControlsFormGroup(list: PostFormatListSet[]): FormGroup[] {
-    return list.map((entity, i) => {
+    return list.map((entity: PostFormatListSet, i) => {
       this.initControlPlacement(entity.id, i);
       return new FormGroup({
-        onePostPrice: new FormControl(entity.onePostPrice, Validators.required),
+        innerOnePostPrice: new FormControl(entity.onePostPrice.inner, Validators.required),
+        innerOnePostPriceCurrency: new FormControl(entity.onePostPrice.innerCurrency, Validators.required),
+        outerOnePostPrice: new FormControl(entity.onePostPrice.outer, Validators.required),
+        outerOnePostPriceCurrency: new FormControl(entity.onePostPrice.outerCurrency, Validators.required),
         newsAmount: new FormControl(entity.newsAmount, Validators.required),
         arrangedNews: new FormControl(entity.arrangedNews, Validators.required)
       });
@@ -527,7 +573,7 @@ export class ContractorsComponent implements OnInit {
    */
   public _fetchData(): void {
     const store = this.store;
-    const payload = {page: numbers.one};
+    const payload = { page: numbers.one };
     store.select(selectContractorList).subscribe(this.initControls.bind(this));
     store.dispatch(new GetContractors(payload));
     // store.dispatch(new GetPostFormats());

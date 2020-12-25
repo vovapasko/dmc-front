@@ -4,10 +4,6 @@ export const pairs = [
     value: 'client'
   },
   {
-    key: 'projectBudget',
-    value: 'budget'
-  },
-  {
     key: 'projectContractors',
     value: 'contractors'
   },

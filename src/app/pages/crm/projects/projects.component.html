@@ -214,14 +214,24 @@
                     <input type="number"
                            id="budget"
                            min="0"
-                           formControlName="budget"
+                           formControlName="amount"
                            required
                            class="form-control"
                            placeholder="Введите бюджет"
-                           [ngClass]="{ 'is-invalid': submitted && createProjectFormControls.budget.errors }"
+                           [ngClass]="{ 'is-invalid': submitted && createProjectFormControls.amount.errors }"
                     />
-                    <div *ngIf="submitted && createProjectFormControls.budget.errors" class="invalid-feedback">
-                        <span *ngIf="createProjectFormControls.budget.errors.required">Бюджет обязателен</span>
+
+                    <ng-select
+                            [items]="['USD', 'UAH']"
+                            [clearSearchOnAdd]="true"
+                            [style]="{marginTop: '5px'}"
+                            placeholder="Выберите валюту"
+                            formControlName="amountCurrency"
+                            required
+                    >
+                    </ng-select>
+                    <div *ngIf="submitted && createProjectFormControls.amount.errors" class="invalid-feedback">
+                        <span *ngIf="createProjectFormControls.amount.errors.required">Бюджет обязателен</span>
                     </div>
                 </div>
 
@@ -376,14 +386,24 @@
                     <input type="number"
                            min="0"
                            id="projectBudget"
-                           formControlName="budget"
+                           formControlName="amount"
                            class="form-control"
                            placeholder="Введите бюджет"
-                           [ngClass]="{ 'is-invalid': submitted && editProjectFormControls.budget.errors }"
+                           [ngClass]="{ 'is-invalid': submitted && editProjectFormControls.amount.errors }"
                     />
-                    <div *ngIf="submitted && editProjectFormControls.budget.errors" class="invalid-feedback">
-                        <span *ngIf="editProjectFormControls.budget.errors.required"></span>
+                    <div *ngIf="submitted && editProjectFormControls.amount.errors" class="invalid-feedback">
+                        <span *ngIf="editProjectFormControls.amount.errors.required"></span>
                     </div>
+
+                    <ng-select
+                            [items]="['USD', 'UAH']"
+                            [clearSearchOnAdd]="true"
+                            [style]="{marginTop: '5px'}"
+                            placeholder="Выберите валюту"
+                            formControlName="amountCurrency"
+                            required
+                    >
+                    </ng-select>
                 </div>
 
                 <div class="form-group">
@@ -525,12 +545,12 @@
             <div class="clearfix"></div>
         </div>
         <div *ngIf="news?.burstMethod?.method === methods.direct" class="col-sm-4">
-<!--            <h4>Сколько было потрачено</h4>-->
-<!--            <p *ngFor="let newsInProject of news.newsInProject" class="text-muted">-->
-<!--                <span *ngFor="let contractor of newsInProject.contractors">-->
-<!--                    {{contractor.editorName}} - {{getContractorPrice(contractor, news.newswavepricelistSet)}}-->
-<!--                </span>-->
-<!--            </p>-->
+            <h4>Сколько было потрачено</h4>
+            <p *ngFor="let newsInProject of news.newsInProject" class="text-muted">
+                <span *ngFor="let contractor of newsInProject.contractors">
+                    {{contractor.editorName}} - {{getContractorPrice(contractor, news.newswavepricelistSet)}}
+                </span>
+            </p>
             <div class="clearfix"></div>
         </div>
         <div class="col-sm-4">
