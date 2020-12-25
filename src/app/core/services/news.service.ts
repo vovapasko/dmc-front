@@ -465,7 +465,8 @@ export class NewsService extends BaseService {
 
   public getContractorPrice(contractor: Contractor, format: PostFormatListSet, priceList: NewsWavePrice[]): string | number {
     const changedContractor = priceList.find((el: NewsWavePrice) => el.contractor.id === contractor.id);
-    return changedContractor ? changedContractor.price : format.onePostPrice;
+    // return changedContractor ? changedContractor.price : format.onePostPrice;
+    return 1;
   }
 
   public initPriceControls(contractors: Contractor[], format: Format, priceList: NewsWavePrice[]): FormArray {
