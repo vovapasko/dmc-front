@@ -1,3 +1,5 @@
+import { PriceType } from '@models/instances/contractor';
+
 export interface UpdatePostFormatPayload {
   id: number;
   data: {
@@ -6,6 +8,6 @@ export interface UpdatePostFormatPayload {
     contractor: number;
     newsAmount?: number;
     arrangedNews?: number;
-    onePostPrice?: number;
+    onePostPrice?: PriceType;
   }
 }

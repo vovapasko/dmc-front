@@ -204,7 +204,7 @@ export class ContractorsComponent implements OnInit {
    * Handle next or previous page click
    */
   public onPageChange(page: number): void {
-    const payload = {page};
+    const payload = { page };
     this.store.dispatch(new GetContractors(payload));
   }
 
@@ -456,7 +456,30 @@ export class ContractorsComponent implements OnInit {
     const interval = window.setInterval(() => {
       if (postFormatListSet.length) {
         const el = postFormatListSet.pop();
-        const payload = this.collectFormatPayload(contractor, field, el);
+        let fields = [];
+        let controls = [];
+        let payload = null;
+        if (field === 'onePostPrice') {
+          fields = ['innerOnePostPrice', 'innerOnePostPriceCurrency', 'outerOnePostPrice', 'outerOnePostPriceCurrency'];
+          controls = fields.map((controlName: string) => ({ controlName, control: this.getControl(el.id, controlName) }));
+          const data = {
+            id: el.id,
+            postFormat: el.postFormat,
+            contractor: contractor.id,
+            onePostPrice: {
+              // tslint:disable-next-line:max-line-length
+              inner: controls.find((control: { controlName: string, control: FormControl }) => control.controlName === 'innerOnePostPrice').control.value,
+              innerCurrency: controls.find((control: { controlName: string, control: FormControl }) => control.controlName === 'innerOnePostPriceCurrency').control.value,
+              // tslint:disable-next-line:max-line-length
+              outer: controls.find((control: { controlName: string, control: FormControl }) => control.controlName === 'outerOnePostPrice').control.value,
+              outerCurrency: controls.find((control: { controlName: string, control: FormControl }) => control.controlName === 'outerOnePostPriceCurrency').control.value
+            }
+          };
+          payload = { data } as UpdatePostFormatPayload;
+          payload.id = el.id;
+        } else {
+          payload = this.collectFormatPayload(contractor, field, el);
+        }
         if (payload) {
           updateFormats(payload);
         }
@@ -478,6 +501,7 @@ export class ContractorsComponent implements OnInit {
         contractor: contractor.id,
         [field]: +control.value
       };
+      // @ts-ignore
       const payload = { data } as UpdatePostFormatPayload;
       payload.id = el.id;
       return payload;
@@ -530,7 +554,7 @@ export class ContractorsComponent implements OnInit {
    */
   public _fetchData(): void {
     const store = this.store;
-    const payload = {page: numbers.one};
+    const payload = { page: numbers.one };
     store.select(selectContractorList).subscribe(this.initControls.bind(this));
     store.dispatch(new GetContractors(payload));
     // store.dispatch(new GetPostFormats());
