@@ -340,7 +340,25 @@ export class ContractorsComponent implements OnInit {
       return;
     }
     const checkedContractors = this.contractorService.checkedContractors as unknown as Contractor[];
-    const payload = this.collectAddNewFormatsPayload();
+    const data = this.collectAddNewFormatsPayload();
+    const payload = {
+      // @ts-ignore
+      postFormat: data.postFormat,
+      // @ts-ignore
+      arrangedNews: data.arrangedNews,
+      // @ts-ignore
+      newsAmount: data.newsAmount,
+      onePostPrice: {
+        // @ts-ignore
+        inner: data.inner,
+        // @ts-ignore
+        innerCurrency: data.innerCurrency,
+        // @ts-ignore
+        outer: data.outer,
+        // @ts-ignore
+        outerCurrency: data.outerCurrency
+      }
+    };
     const aliases = [{ key: 'contractor', ali: 'id' }];
     this.processMany(checkedContractors.slice(), payload, this.addFormats.bind(this), aliases);
     this.cleanAfterUpdate();
@@ -467,6 +485,7 @@ export class ContractorsComponent implements OnInit {
             postFormat: el.postFormat,
             contractor: contractor.id,
             onePostPrice: {
+              id: el.onePostPrice.id,
               // tslint:disable-next-line:max-line-length
               inner: controls.find((control: { controlName: string, control: FormControl }) => control.controlName === 'innerOnePostPrice').control.value,
               innerCurrency: controls.find((control: { controlName: string, control: FormControl }) => control.controlName === 'innerOnePostPriceCurrency').control.value,

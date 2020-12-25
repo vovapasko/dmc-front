@@ -28,6 +28,7 @@ export interface PostFormatListSet {
 }
 
 export interface PriceType {
+  id: number;
   inner: string;
   innerCurrency: string;
   outer: string;

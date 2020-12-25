@@ -199,7 +199,10 @@ export class ContractorService extends BaseService {
       postFormat: [null, [Validators.required, Validators.minLength(numbers.one), Validators.maxLength(numbers.fifty)]],
       newsAmount: [null, [Validators.required, Validators.minLength(numbers.one), Validators.min(numbers.zero)]],
       arrangedNews: [null, [Validators.required, Validators.minLength(numbers.one), Validators.min(numbers.zero)]],
-      onePostPrice: [null, [Validators.required, Validators.minLength(numbers.one), Validators.min(numbers.zero)]]
+      inner: [null, [Validators.required, Validators.minLength(numbers.one), Validators.min(numbers.zero)]],
+      innerCurrency: [null, [Validators.required]],
+      outer: [null, [Validators.required, Validators.minLength(numbers.one), Validators.min(numbers.zero)]],
+      outerCurrency: [null, [Validators.required]]
     });
   }
 

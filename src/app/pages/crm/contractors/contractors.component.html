@@ -402,23 +402,67 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="onePostPrice"> Стоимость </label>
+                    <label for="innerOnePostPrice"> Стоимость(внутреняя) </label>
                     <input type="number"
-                           formControlName="onePostPrice"
+                           formControlName="inner"
                            class="form-control"
-                           [ngClass]="{ 'is-invalid': submitted && createFormatFormControls.onePostPrice.errors }"
-                           id="onePostPrice"
+                           [ngClass]="{ 'is-invalid': submitted && createFormatFormControls.inner.errors }"
+                           id="innerOnePostPrice"
                            placeholder="Введите стоимость одного размещения"
                     />
 
-                    <div *ngIf="submitted && createFormatFormControls.onePostPrice.errors" class="invalid-feedback">
-                        <div *ngIf="createFormatFormControls.onePostPrice.errors.required">Это поле обязательно для
+                    <ng-select
+                            [items]="['USD', 'UAH']"
+                            [style]="{marginTop: '5px'}"
+                            [clearSearchOnAdd]="true"
+                            placeholder="Выберите валюту"
+                            formControlName="innerCurrency"
+                            required
+                    >
+                    </ng-select>
+
+                    <div *ngIf="submitted && createFormatFormControls.inner.errors" class="invalid-feedback">
+                        <div *ngIf="createFormatFormControls.inner.errors.required">Это поле обязательно для
                             заполнения
                         </div>
                     </div>
 
-                    <div *ngIf="submitted && createFormatFormControls.onePostPrice.errors" class="invalid-feedback">
-                        <div *ngIf="createFormatFormControls.onePostPrice.errors.min">Значение не может быть меньше 0
+                    <div *ngIf="submitted && createFormatFormControls.inner.errors" class="invalid-feedback">
+                        <div *ngIf="createFormatFormControls.inner.errors.min">Значение не может быть меньше 0
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="form-group">
+                    <label for="outerOnePostPrice"> Стоимость(внешняя) </label>
+                    <input type="number"
+                           formControlName="outer"
+                           class="form-control"
+                           [ngClass]="{ 'is-invalid': submitted && createFormatFormControls.outer.errors }"
+                           id="outerOnePostPrice"
+                           placeholder="Введите стоимость одного размещения"
+                    />
+
+                    <ng-select
+                            [items]="['USD', 'UAH']"
+                            [clearSearchOnAdd]="true"
+                            [style]="{marginTop: '5px'}"
+                            placeholder="Выберите валюту"
+                            formControlName="outerCurrency"
+                            required
+                    >
+                    </ng-select>
+
+                    <div *ngIf="submitted && createFormatFormControls.outer.errors" class="invalid-feedback">
+                        <div *ngIf="createFormatFormControls.outer.errors.required">Это поле обязательно для
+                            заполнения
+                        </div>
+                    </div>
+
+                    <div *ngIf="submitted && createFormatFormControls.outer.errors" class="invalid-feedback">
+                        <div *ngIf="createFormatFormControls.outer.errors.min">Значение не может быть меньше 0
                         </div>
                     </div>
 
