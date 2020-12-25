@@ -14,6 +14,8 @@ import { ContractorsArrangementPipe } from './pipes/contractors-arrangement.pipe
 import { ContractorsNewsAmountPipe } from './pipes/contractors-news-amount.pipe';
 import { LabelFilterPipe } from './pipes/label-filter.pipe';
 import { FromEmailPipe } from './pipes/from-email.pipe';
+import { ContractorsPriceListPipe } from './pipes/contractors-price-list.pipe';
+import { ContractorsPriceListFilterPipe } from './pipes/contractors-price-list-filter.pipe';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,8 @@ import { FromEmailPipe } from './pipes/from-email.pipe';
     ContractorsNewsAmountPipe,
     LabelFilterPipe,
     FromEmailPipe,
+    ContractorsPriceListPipe,
+    ContractorsPriceListFilterPipe,
   ],
   imports: [CommonModule, AlifeFileToBase64Module],
   exports: [
@@ -46,7 +50,9 @@ import { FromEmailPipe } from './pipes/from-email.pipe';
     ContractorsArrangementPipe,
     ContractorsNewsAmountPipe,
     LabelFilterPipe,
-    FromEmailPipe
+    FromEmailPipe,
+    ContractorsPriceListPipe,
+    ContractorsPriceListFilterPipe
   ]
 })
 export class SharedModule {

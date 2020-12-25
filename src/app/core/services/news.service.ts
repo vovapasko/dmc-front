@@ -19,7 +19,7 @@ import { Project } from '@models/instances/project';
 import { News } from '@models/instances/news';
 import { Hashtag } from '@models/instances/hashtag';
 import { Format } from '@models/instances/format';
-import {  setProjectValues } from '@helpers/utility';
+import { setProjectValues } from '@helpers/utility';
 import { Infos, Warnings } from '@constants/notifications';
 import { endpoints } from '@constants/endpoints';
 import { methods } from '@constants/methods';
@@ -280,7 +280,7 @@ export class NewsService extends BaseService {
    */
   public getNewsWave(payload: GetNewsWavesPayload): Observable<NewsWaves> {
     return this.requestHandler.request(
-      this.url(api, endpoints.NEWS_WAVES, payload.id ),
+      this.url(api, endpoints.NEWS_WAVES, payload.id),
       methods.GET,
       payload,
       (response: GetNewsWavesResponse) => response.results[numbers.zero]
@@ -464,33 +464,6 @@ export class NewsService extends BaseService {
     return new FormArray(toGroups);
   }
 
-  public getContractorPrice(contractor: Contractor, format: PostFormatListSet, priceList: NewsWavePrice[]): string | number {
-    const changedContractor = priceList.find((el: NewsWavePrice) => el.contractor.id === contractor.id);
-    // return changedContractor ? changedContractor.price : format.onePostPrice;
-    return 1;
-  }
-
-  public initPriceControls(contractors: Contractor[], format: Format, priceList: NewsWavePrice[]): FormArray {
-    if (!contractors || !format) {
-      return new FormArray([new FormGroup({
-        price: new FormControl(null, Validators.required),
-        contractor: new FormControl(null, Validators.required)
-      })]);
-    }
-    const toGroups = contractors.map((entity: Contractor) => {
-      return new FormGroup({
-        // tslint:disable-next-line:max-line-length
-        price: new FormControl(this.getContractorPrice(entity, entity.postformatlistSet.find(el => el.postFormat === format.postFormat), priceList), Validators.required),
-        contractor: new FormControl(entity, Validators.required)
-      });
-    });
-    return new FormArray(toGroups);
-  }
-
-  public filterPriceList(priceList: NewsWavePrice[], contractors: Contractor[]): NewsWavePrice[] {
-    const result = priceList.slice();
-    return result.filter((el: NewsWavePrice) => contractors.find((contractor: Contractor) => contractor.id === el.contractor.id));
-  }
 
   /**
    * Validates budget and notify user if wrong budget value
@@ -617,17 +590,6 @@ export class NewsService extends BaseService {
     return null;
   }
 
-  // tslint:disable-next-line:max-line-length
-  public updatePriceField(index: number, field: string, value: string | number, control: AbstractControl, priceList: Array<any>, contractorControl: AbstractControl): Array<any> {
-    if (control.valid) {
-      const element = priceList[index];
-      const result = priceList.slice();
-      result[index] = { ...element, [field]: value || control.value, contractor: contractorControl.value };
-      return result;
-    }
-    return null;
-  }
-
   public processAttachments(files: File[]): Attachment[] {
     if (!files) {
       return;
@@ -662,7 +624,7 @@ export class NewsService extends BaseService {
     controls: FormArray,
     newsWave: NewsWaves,
     // tslint:disable-next-line:variable-name
-    newswavepricelist_set: NewsWavePrice[]
+    priceControls: FormArray
   ): UpdateNewsWavesPayload | CreateNewsWavesPayload {
     // TODO REFACTOR THIS PIECE OF CODE
     const newsCharacter = validationForm.controls.newsCharacter.value;
@@ -699,6 +661,12 @@ export class NewsService extends BaseService {
       }));
     }
 
+    const newswavepricelist_set = [];
+    for (let control of priceControls.controls) {
+      if (control.valid) {
+        newswavepricelist_set.push(control.value);
+      }
+    }
     const data = {
       newsCharacter,
       burstMethod,
@@ -744,7 +712,7 @@ export class NewsService extends BaseService {
     editorForm: FormGroup,
     newsForm: FormGroup,
     previewForm: FormGroup
-  ): { newsList: News[], priceList: NewsWavePrice[], controls: FormArray, priceControls: FormArray } {
+  ): { newsList: News[]; controls: FormArray; priceControls: FormArray; priceList: PostFormatListSet[] } {
     // TODO REFACTOR THIS PIECE OF CODE
     validationForm.controls.newsCharacter.setValue(newsWave.newsCharacter);
     validationForm.controls.projectBurstMethod.setValue(newsWave.burstMethod);
@@ -764,18 +732,16 @@ export class NewsService extends BaseService {
     // @ts-ignore
     // tslint:disable-next-line:max-line-length
     const newsList = newsWave.newsInProject.map((el: News) => new News(el.title, el.content, this.handleFiles(el.attachments), el.contractors, el.content, el.email, el.id));
-    const priceList = newsWave.newswavepricelistSet;
-    return { newsList, priceList, controls: this.initControls(newsList), priceControls: this.fillPriceControls(priceList) };
-  }
-
-  public fillPriceControls(priceList: NewsWavePrice[]): FormArray {
-    const toGroups = priceList.map((entity: NewsWavePrice) => {
+    const priceList = newsWave.newswavepricelistSet as unknown as PostFormatListSet[];
+    const toGroups = priceList.map((entity: PostFormatListSet) => {
       return new FormGroup({
-        price: new FormControl(entity.price, Validators.required),
-        contractor: new FormControl(entity.contractor, Validators.required)
+        inner: new FormControl(entity.onePostPrice.inner, Validators.required),
+        innerCurrency: new FormControl(entity.onePostPrice.innerCurrency, Validators.required),
+        outer: new FormControl(entity.onePostPrice.outer, Validators.required),
+        outerCurrency: new FormControl(entity.onePostPrice.outerCurrency, Validators.required)
       });
     });
-    return new FormArray(toGroups);
+    return { newsList, priceList, controls: this.initControls(newsList), priceControls: new FormArray(toGroups) };
   }
 
   public handleFiles(attachments: File[]) {

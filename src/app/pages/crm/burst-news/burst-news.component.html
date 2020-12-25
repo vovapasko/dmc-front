@@ -186,9 +186,9 @@
                                                         [items]="formats$ | async"
                                                         bindLabel="postFormat"
                                                         [clearSearchOnAdd]="true"
-                                                        (change)="initPriceControls()"
                                                         [multiple]="true"
                                                         [closeOnSelect]="false"
+                                                        (change)="initPriceControls()"
                                                         placeholder="Выберите формат"
                                                         formControlName="projectPostFormat"
                                                         [ngClass]="{ 'is-invalid': submitted && commonFormControls.projectPostFormat.errors }"
@@ -198,10 +198,10 @@
                                                     <span *ngIf="commonFormControls.projectPostFormat.errors.required"></span>
                                                 </div>
                                             </div>
-                                            <!--                                            <div class="col-md-1">-->
-                                            <!--                                                <a (click)="openModal(editPrice)" href="javascript:void(0);"-->
-                                            <!--                                                   class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>-->
-                                            <!--                                            </div>-->
+                                                                                        <div class="col-md-1">
+                                                                                            <a (click)="openModal(editPrice)" href="javascript:void(0);"
+                                                                                               class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
+                                                                                        </div>
                                         </div>
 
                                         <div class="form-group row mb-3">
@@ -264,8 +264,8 @@
                                                         [multiple]="true"
                                                         [closeOnSelect]="false"
                                                         [clearSearchOnAdd]="true"
-                                                        [hideSelected]="true"
                                                         (change)="initPriceControls()"
+                                                        [hideSelected]="true"
                                                         placeholder="Выберите контрагентов"
                                                         formControlName="projectContractors"
                                                         [ngClass]="{ 'is-invalid': submitted && commonFormControls.projectContractors.errors }"
@@ -842,21 +842,52 @@
         <div class="text-left">
             <form (ngSubmit)="setPrices()" [formGroup]="priceForm">
 
-                <div *ngFor="let contractor of commonFormControls?.projectContractors?.value; let idx = index"
-                     class="form-group mb-3">
-                    <label [for]="'title' + idx">Цена для {{contractor.editorName}}</label>
-                    <input type="text"
-                           placeholder="Введите цену"
-                           [id]="'title' + idx"
-                           [formControl]="getPriceControl(idx, 'price')"
-                           style="margin-bottom: 10px;"
-                           class="form-control"
-                           (change)="updatePriceField(idx, 'price')"
-                    />
-                    <div *ngIf="submitted && getPriceControl(idx, 'price').errors" style="display: block"
-                         class="invalid-feedback">
-                        <div *ngIf="getPriceControl(idx, 'price').errors.required">Цена обязательна</div>
+                <div *ngFor="let contractor of commonFormControls?.projectContractors?.value | contractorsPriceList:commonFormControls?.projectPostFormat?.value; let idx = index" class="form-group mb-3">
+                    <p>{{contractor.editorName}} </p>
+                    <div *ngFor="let format of contractor.postformatlistSet | contractorsPriceListFilter: commonFormControls?.projectPostFormat?.value; let id = index;">
+                        <label for="format_inner_one_post_price{{ idx }}">
+                            {{format.postFormat}}
+                        </label>
+
+                        <div class="row">
+                            <div class="md-6">
+                                <input id="format_inner_one_post_price{{ idx }}"
+                                       type="number"
+                                       min="0"
+                                       class="form-control"
+                                       [formControl]="getPriceControl(id, 'inner')">
+                                <ng-select
+                                        [items]="['USD', 'UAH']"
+                                        [clearSearchOnAdd]="true"
+                                        [style]="{margin: '5px 0'}"
+                                        placeholder="Выберите валюту"
+                                        required
+                                        [formControl]="getPriceControl(id, 'innerCurrency')">
+                                </ng-select>
+                            </div>
+
+                            <div class="md-6">
+                                <input id="format_outer_one_post_price{{ idx }}"
+                                       type="number"
+                                       min="0"
+                                       [formControl]="getPriceControl(id, 'outer')"
+                                       class="form-control"
+                                >
+                                <ng-select
+                                        [items]="['USD', 'UAH']"
+                                        [clearSearchOnAdd]="true"
+                                        [style]="{margin: '5px 0'}"
+                                        placeholder="Выберите валюту"
+                                        required
+                                        [formControl]="getPriceControl(id, 'outerCurrency')">
+
+                                </ng-select>
+                            </div>
+
+                        </div>
                     </div>
+
+
                 </div>
 
 
