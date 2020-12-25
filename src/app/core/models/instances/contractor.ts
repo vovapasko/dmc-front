@@ -23,13 +23,13 @@ export interface PostFormatListSet {
   postFormat: string;
   newsAmount: number;
   arrangedNews: number;
-  onePostPrice: number;
+  onePostPrice: PriceType;
   contractor: number;
 }
 
-export interface PostType {
+export interface PriceType {
   inner: string;
-  inner_currency: string;
+  innerCurrency: string;
   outer: string;
-  outer_currency: string;
+  outerCurrency: string;
 }

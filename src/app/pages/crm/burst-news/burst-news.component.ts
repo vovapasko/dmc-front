@@ -609,8 +609,9 @@ export class BurstNewsComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   public getContractorPrice(contractor: Contractor, format: PostFormatListSet): string | number {
-    const changedContractor = this.priceList.find((el: NewsWavePrice) => el.contractor.id === contractor.id);
-    return changedContractor ? changedContractor.price : format.onePostPrice;
+    // const changedContractor = this.priceList.find((el: NewsWavePrice) => el.contractor.id === contractor.id);
+    // return changedContractor ? changedContractor.price : format.onePostPrice;
+    return 1;
   }
 
   public setImageContent(control: AbstractControl, previewControl: AbstractControl, field: string): void {
