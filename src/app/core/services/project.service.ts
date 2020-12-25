@@ -199,7 +199,8 @@ export class ProjectService extends BaseService {
       name: [null, Validators.required],
       managerId: [null, Validators.required],
       hashtags: [null, Validators.required],
-      budget: [null, [Validators.required]],
+      amount: [null, [Validators.required]],
+      amountCurrency: [null, [Validators.required]],
       contractors: [null, [Validators.required]],
       emails: [null, Validators.required],
       client: [null, Validators.required]
@@ -214,7 +215,8 @@ export class ProjectService extends BaseService {
       name: [project ? project.name : null, Validators.required],
       managerId: [project ? project.manager.id : null, Validators.required],
       hashtags: [project ? project.hashtags : null, Validators.required],
-      budget: [project ? project.budget : null, [Validators.required]],
+      amount: [project ? project.budget.amount : null, [Validators.required]],
+      amountCurrency: [project ? project.budget.amountCurrency : null, [Validators.required]],
       contractors: [project ? project.contractors : null, [Validators.required]],
       emails: [project ? project.emails : null, Validators.required],
       client: [project ? project.client : null, Validators.required]

@@ -11,8 +11,14 @@ export interface NewsProject {
   contractors: Contractor[];
   emails: Email[];
   name: string;
-  budget: number;
+  budget: Price;
   client: Client;
   dateCreated: Date;
   dateUpdated: Date;
+}
+
+export interface Price {
+  id: number;
+  amount: string;
+  amountCurrency: string;
 }

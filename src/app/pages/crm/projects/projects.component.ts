@@ -142,7 +142,8 @@ export class ProjectsComponent implements OnInit {
       return;
     }
     const data = this.createProjectForm.value;
-    const payload = { data } as unknown as CreateNewsProjectPayload;
+    // tslint:disable-next-line:max-line-length
+    const payload = { data: {...data, budget: {amount: data.amount, amountCurrency: data.amountCurrency} }} as unknown as CreateNewsProjectPayload;
     this.createNewsProject(payload);
     this.cleanAfter();
   }
@@ -238,7 +239,8 @@ export class ProjectsComponent implements OnInit {
     }
     const data = this.editProjectForm.value;
     const id = this.projectId;
-    const payload = { id, data } as unknown as UpdateNewsProjectPayload;
+    // tslint:disable-next-line:max-line-length
+    const payload = { id, data: {...data, budget: {amount: data.amount, amountCurrency: data.amountCurrency}} } as unknown as UpdateNewsProjectPayload;
     this.updateProject(payload);
     this.cleanAfter();
   }
