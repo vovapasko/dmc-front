@@ -505,10 +505,10 @@ export class ContractorsComponent implements OnInit {
    * Init controls form group for contractor
    */
   public initControlsFormGroup(list: PostFormatListSet[]): FormGroup[] {
-    return list.map((entity, i) => {
+    return list.map((entity: PostFormatListSet, i) => {
       this.initControlPlacement(entity.id, i);
       return new FormGroup({
-        onePostPrice: new FormControl(entity.onePostPrice, Validators.required),
+        innerOnePostPrice: new FormControl(entity.onePostPrice, Validators.required),
         newsAmount: new FormControl(entity.newsAmount, Validators.required),
         arrangedNews: new FormControl(entity.arrangedNews, Validators.required)
       });

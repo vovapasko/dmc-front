@@ -26,3 +26,10 @@ export interface PostFormatListSet {
   onePostPrice: number;
   contractor: number;
 }
+
+export interface PostType {
+  inner: string;
+  inner_currency: string;
+  outer: string;
+  outer_currency: string;
+}
