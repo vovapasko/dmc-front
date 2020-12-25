@@ -139,14 +139,23 @@
                                         </ng-template>
                                         <ng-template editMode>
                                             <div *ngFor="let format of contractor.postformatlistSet; let idx = index;">
-                                                <label for="format_one_post_price{{ idx }}">
+                                                <label for="format_inner_one_post_price{{ idx }}">
                                                     {{format.postFormat}}
                                                 </label>
-                                                <input id="format_one_post_price{{ idx }}"
+                                                <input id="format_inner_one_post_price{{ idx }}"
                                                        type="number"
                                                        min="0"
                                                        class="form-control"
-                                                       [formControl]="getControl(format.id, 'onePostPrice')">
+                                                       [formControl]="getControl(format.id, 'innerOnePostPrice')">
+
+                                                <label for="format_outer_one_post_price{{ idx }}">
+                                                    {{format.postFormat}}
+                                                </label>
+                                                <input id="format_outer_one_post_price{{ idx }}"
+                                                       type="number"
+                                                       min="0"
+                                                       class="form-control"
+                                                       [formControl]="getControl(format.id, 'outerOnePostPrice')">
                                             </div>
                                         </ng-template>
                                     </editable>
