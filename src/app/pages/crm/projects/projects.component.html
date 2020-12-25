@@ -545,12 +545,12 @@
             <div class="clearfix"></div>
         </div>
         <div *ngIf="news?.burstMethod?.method === methods.direct" class="col-sm-4">
-<!--            <h4>Сколько было потрачено</h4>-->
-<!--            <p *ngFor="let newsInProject of news.newsInProject" class="text-muted">-->
-<!--                <span *ngFor="let contractor of newsInProject.contractors">-->
-<!--                    {{contractor.editorName}} - {{getContractorPrice(contractor, news.newswavepricelistSet)}}-->
-<!--                </span>-->
-<!--            </p>-->
+            <h4>Сколько было потрачено</h4>
+            <p *ngFor="let newsInProject of news.newsInProject" class="text-muted">
+                <span *ngFor="let contractor of newsInProject.contractors">
+                    {{contractor.editorName}} - {{getContractorPrice(contractor, news.newswavepricelistSet)}}
+                </span>
+            </p>
             <div class="clearfix"></div>
         </div>
         <div class="col-sm-4">
