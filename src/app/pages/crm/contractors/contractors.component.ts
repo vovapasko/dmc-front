@@ -481,9 +481,7 @@ export class ContractorsComponent implements OnInit {
           fields = ['innerOnePostPrice', 'innerOnePostPriceCurrency', 'outerOnePostPrice', 'outerOnePostPriceCurrency'];
           controls = fields.map((controlName: string) => ({ controlName, control: this.getControl(el.id, controlName) }));
           const data = {
-            id: el.id,
-            postFormat: el.postFormat,
-            contractor: contractor.id,
+            ...el,
             onePostPrice: {
               id: el.onePostPrice.id,
               // tslint:disable-next-line:max-line-length
@@ -494,7 +492,7 @@ export class ContractorsComponent implements OnInit {
               outerCurrency: controls.find((control: { controlName: string, control: FormControl }) => control.controlName === 'outerOnePostPriceCurrency').control.value.toString()
             }
           };
-          payload = { data } as UpdatePostFormatPayload;
+          payload = { data } as unknown as UpdatePostFormatPayload;
           payload.id = el.id;
         } else {
           payload = this.collectFormatPayload(contractor, field, el);
