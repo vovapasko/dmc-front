@@ -487,11 +487,11 @@ export class ContractorsComponent implements OnInit {
             onePostPrice: {
               id: el.onePostPrice.id,
               // tslint:disable-next-line:max-line-length
-              inner: controls.find((control: { controlName: string, control: FormControl }) => control.controlName === 'innerOnePostPrice').control.value,
-              innerCurrency: controls.find((control: { controlName: string, control: FormControl }) => control.controlName === 'innerOnePostPriceCurrency').control.value,
+              inner: controls.find((control: { controlName: string, control: FormControl }) => control.controlName === 'innerOnePostPrice').control.value.toString(),
+              innerCurrency: controls.find((control: { controlName: string, control: FormControl }) => control.controlName === 'innerOnePostPriceCurrency').control.value.toString(),
               // tslint:disable-next-line:max-line-length
-              outer: controls.find((control: { controlName: string, control: FormControl }) => control.controlName === 'outerOnePostPrice').control.value,
-              outerCurrency: controls.find((control: { controlName: string, control: FormControl }) => control.controlName === 'outerOnePostPriceCurrency').control.value
+              outer: controls.find((control: { controlName: string, control: FormControl }) => control.controlName === 'outerOnePostPrice').control.value.toString(),
+              outerCurrency: controls.find((control: { controlName: string, control: FormControl }) => control.controlName === 'outerOnePostPriceCurrency').control.value.toString()
             }
           };
           payload = { data } as UpdatePostFormatPayload;

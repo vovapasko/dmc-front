@@ -280,7 +280,7 @@ export class NewsService extends BaseService {
    */
   public getNewsWave(payload: GetNewsWavesPayload): Observable<NewsWaves> {
     return this.requestHandler.request(
-      this.url(api, endpoints.NEWS_WAVES, payload.id),
+      this.url(api, endpoints.NEWS_WAVES, null, {wave: payload.id}),
       methods.GET,
       payload,
       (response: GetNewsWavesResponse) => response.results[numbers.zero]
@@ -662,11 +662,11 @@ export class NewsService extends BaseService {
     }
 
     const newswavepricelist_set = [];
-    for (let control of priceControls.controls) {
-      if (control.valid) {
-        newswavepricelist_set.push(control.value);
-      }
-    }
+    // for (let control of priceControls.controls) {
+    //   if (control.valid) {
+    //     newswavepricelist_set.push(control.value);
+    //   }
+    // }
     const data = {
       newsCharacter,
       burstMethod,
